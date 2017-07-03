@@ -1,31 +1,42 @@
 ﻿namespace HareDu.Tests
 {
+    using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
-    using Internal.Json;
     using Model;
-    using Newtonsoft.Json;
     using NUnit.Framework;
 
     [TestFixture]
-    public class VirtualHostTests //:
-        //HareDuTestBase
+    public class VirtualHostTests :
+        HareDuTestBase
     {
         [Test]
-        public async Task Test()
+        public async Task Verify_GetAll_works()
         {
-//            Result<IEnumerable<VirtualHost>> virtualHosts = await Client
-//                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
-//                .GetAll();
+            Result<IEnumerable<VirtualHost>> virtualHosts = await Client
+                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .GetAll();
 
-            VirtualHost vhost = new VirtualHostImpl("HareDu", "none");
-
-            using (StreamWriter sw = new StreamWriter("/users/albert/documents/git/test.txt"))
-            using (JsonWriter writer = new JsonTextWriter(sw))
+            foreach (var vhost in virtualHosts.Data)
             {
-                SerializerCache.Serializer.Serialize(writer, vhost);
+                Console.WriteLine("Name: {0}", vhost.Name);
+                Console.WriteLine("Tracing: {0}", vhost.Tracing);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
             }
+        }
+
+        [Test]
+        public async Task Verify_Get_works()
+        {
+            Result<VirtualHost> virtualHost = await Client
+                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Get("HareDu");
+
+            Console.WriteLine("Name: {0}", virtualHost.Data.Name);
+            Console.WriteLine("Tracing: {0}", virtualHost.Data.Tracing);
+            Console.WriteLine("****************************************************");
+            Console.WriteLine();
         }
 
         class VirtualHostImpl :

@@ -4,7 +4,7 @@
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Internal.Json;
+    using Internal.Serialization;
     using Model;
     using Newtonsoft.Json;
 

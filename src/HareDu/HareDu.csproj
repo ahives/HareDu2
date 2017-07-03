@@ -63,31 +63,36 @@
   <ItemGroup>
     <Compile Include="BindingResource.cs" />
     <Compile Include="ClientSettings.cs" />
+    <Compile Include="Exceptions\HareDuClientInitException.cs" />
+    <Compile Include="Exceptions\HareDuResourceInitException.cs" />
+    <Compile Include="Exceptions\UserCredentialsMissingException.cs" />
     <Compile Include="ExchangeResource.cs" />
     <Compile Include="HareDuClient.cs" />
+    <Compile Include="HareDuClientBehavior.cs" />
+    <Compile Include="HareDuClientImpl.cs" />
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HttpExtensions.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
-    <Compile Include="Internal\Json\ByteArrayConverter.cs" />
-    <Compile Include="Internal\Json\IMessageSerializer.cs" />
-    <Compile Include="Internal\Json\InterfaceExtensions.cs" />
-    <Compile Include="Internal\Json\InterfaceProxyConverter.cs" />
-    <Compile Include="Internal\Json\InterfaceReflectionCache.cs" />
-    <Compile Include="Internal\Json\ITypeMetadataCache.cs" />
-    <Compile Include="Internal\Json\JsonContractResolver.cs" />
-    <Compile Include="Internal\Json\JsonMessageSerializer.cs" />
-    <Compile Include="Internal\Json\ListConverterCache.cs" />
-    <Compile Include="Internal\Json\ListJsonConverter.cs" />
-    <Compile Include="Internal\Json\MessageDataJsonConverter.cs" />
-    <Compile Include="Internal\Json\SerializerCache.cs" />
-    <Compile Include="Internal\Json\StringDecimalConverter.cs" />
-    <Compile Include="Internal\Json\TypeExtensions.cs" />
-    <Compile Include="Internal\Json\TypeMetadataCache.cs" />
-    <Compile Include="Internal\Json\TypeNameFormatter.cs" />
-    <Compile Include="Internal\Model\VirtualHostSummary.cs" />
+    <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
+    <Compile Include="Internal\Serialization\IMessageSerializer.cs" />
+    <Compile Include="Internal\Serialization\InterfaceExtensions.cs" />
+    <Compile Include="Internal\Serialization\InterfaceProxyConverter.cs" />
+    <Compile Include="Internal\Serialization\InterfaceReflectionCache.cs" />
+    <Compile Include="Internal\Serialization\ITypeMetadataCache.cs" />
+    <Compile Include="Internal\Serialization\JsonContractResolver.cs" />
+    <Compile Include="Internal\Serialization\JsonMessageSerializer.cs" />
+    <Compile Include="Internal\Serialization\ListConverterCache.cs" />
+    <Compile Include="Internal\Serialization\ListJsonConverter.cs" />
+    <Compile Include="Internal\Serialization\MessageDataJsonConverter.cs" />
+    <Compile Include="Internal\Serialization\SerializerCache.cs" />
+    <Compile Include="Internal\Serialization\StringDecimalConverter.cs" />
+    <Compile Include="Internal\Serialization\TypeExtensions.cs" />
+    <Compile Include="Internal\Serialization\TypeMetadataCache.cs" />
+    <Compile Include="Internal\Serialization\TypeNameFormatter.cs" />
     <Compile Include="Internal\Resources\Logging.cs" />
     <Compile Include="Internal\Resources\ResourceBase.cs" />
     <Compile Include="Internal\Resources\VirtualHostResourceImpl.cs" />
+    <Compile Include="Internal\RmqSanitizationExtensions.cs" />
     <Compile Include="LoggerSettings.cs" />
     <Compile Include="Model\Binding.cs" />
     <Compile Include="Model\ResourceSummary.cs" />
@@ -98,6 +103,9 @@
     <Compile Include="Resource.cs" />
     <Compile Include="UserCredentials.cs" />
     <Compile Include="VirtualHostResource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\Model" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

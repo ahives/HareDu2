@@ -8,7 +8,11 @@
         [OneTimeSetUp]
         public void Setup()
         {
-            Client = HareDuFactory.New();
+            Client = HareDuFactory.New(x =>
+            {
+                x.ConnectTo("http://localhost:15672");
+                x.EnableLogging(s => s.Logger(""));
+            });
         }
         
         protected HareDuClient Client { get; set; }

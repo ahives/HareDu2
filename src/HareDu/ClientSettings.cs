@@ -1,13 +1,12 @@
 ﻿namespace HareDu
 {
     using System;
+    using Common.Logging;
 
     public interface ClientSettings
     {
-        void ConnectTo(string host);
-
-        void EnableLogging(Action<LoggerSettings> logger);
-
-        void TimeoutAfter(TimeSpan timeout);
+        string Host { get; }
+        ILog Logger { get; }
+        TimeSpan Timeout { get; }
     }
 }

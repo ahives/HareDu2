@@ -2,41 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e83fd8b9-1a16-4265-ab78-a817969d9e23" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/HttpExtensions.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/AsyncTaskExtensions.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/ByteArrayConverter.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/IMessageSerializer.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/ITypeMetadataCache.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceExtensions.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceProxyConverter.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceReflectionCache.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/JsonContractResolver.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/JsonMessageSerializer.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/ListConverterCache.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/ListJsonConverter.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/MessageDataJsonConverter.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/SerializerCache.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/StringDecimalConverter.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/TypeExtensions.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/TypeMetadataCache.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Json/TypeNameFormatter.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/Model/VirtualHostSummary.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Model/ResourceSummary.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Model/Result.cs" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/HareDu/Model/ServerResponse.cs" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Exceptions/HareDuClientInitException.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Exceptions/HareDuResourceInitException.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Exceptions/UserCredentialsMissingException.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/HareDuClientBehavior.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/HareDuClientImpl.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/RmqSanitizationExtensions.cs" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/HareDu/Internal/Model/VirtualHostSummary.cs" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ByteArrayConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ByteArrayConverter.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/IMessageSerializer.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/IMessageSerializer.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ITypeMetadataCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ITypeMetadataCache.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceExtensions.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceExtensions.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceProxyConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceProxyConverter.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceReflectionCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceReflectionCache.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/JsonContractResolver.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/JsonContractResolver.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/JsonMessageSerializer.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/JsonMessageSerializer.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ListConverterCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ListConverterCache.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ListJsonConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ListJsonConverter.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/MessageDataJsonConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/MessageDataJsonConverter.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/SerializerCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/SerializerCache.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/StringDecimalConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/StringDecimalConverter.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/TypeExtensions.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/TypeExtensions.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/TypeMetadataCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/TypeMetadataCache.cs" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/TypeNameFormatter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/TypeNameFormatter.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.idea.HareDu/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.HareDu/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu.Tests/HareDu.Tests.csproj" afterPath="$PROJECT_DIR$/HareDu.Tests/HareDu.Tests.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs" afterPath="$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs" afterPath="$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu.Tests/packages.config" afterPath="$PROJECT_DIR$/HareDu.Tests/packages.config" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/ClientSettings.cs" afterPath="$PROJECT_DIR$/HareDu/ClientSettings.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HareDu.csproj" afterPath="$PROJECT_DIR$/HareDu/HareDu.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HareDuClient.cs" afterPath="$PROJECT_DIR$/HareDu/HareDuClient.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Internal/Resources/Logging.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Resources/Logging.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HareDuFactory.cs" afterPath="$PROJECT_DIR$/HareDu/HareDuFactory.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HttpExtensions.cs" afterPath="$PROJECT_DIR$/HareDu/HttpExtensions.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Model/ServerTestResponse.cs" afterPath="$PROJECT_DIR$/HareDu/Model/ServerTestResponse.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Model/VirtualHost.cs" afterPath="$PROJECT_DIR$/HareDu/Model/VirtualHost.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/VirtualHostResource.cs" afterPath="$PROJECT_DIR$/HareDu/VirtualHostResource.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/packages.config" afterPath="$PROJECT_DIR$/HareDu/packages.config" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -51,33 +50,12 @@
       <file leaf-file-name="VirtualHostResource.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HareDu/VirtualHostResource.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+            <state relative-caret-position="150">
+              <caret line="13" column="115" lean-forward="false" selection-start-line="13" selection-start-column="115" selection-end-line="13" selection-end-column="115" />
               <folding>
-                <marker date="1499019385000" expanded="true" signature="16:780" ph="{...}" />
-                <marker date="1499019385000" expanded="false" signature="29:135" ph="..." />
-                <marker date="1499019385000" expanded="true" signature="196:778" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JsonMessageSerializer.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/JsonMessageSerializer.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1350">
-              <caret line="118" column="1" lean-forward="false" selection-start-line="118" selection-start-column="1" selection-end-line="118" selection-end-column="1" />
-              <folding>
-                <marker date="1499057187000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-                <marker date="1499057187000" expanded="true" signature="669:4978" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="682:936" ph="..." />
-                <marker date="1499057187000" expanded="true" signature="1005:4976" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="1586:2534" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="2251:2523" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="2638:3422" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="3303:3410" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="3463:3689" ph="{...}" />
-                <marker date="1499057187000" expanded="false" signature="3837:4910" ph="/* public void Serialize&lt;T&gt;(Stream stream, SendContext&lt;T&gt; context) ... */" />
+                <marker date="1499103268000" expanded="true" signature="16:854" ph="{...}" />
+                <marker date="1499103268000" expanded="false" signature="29:135" ph="..." />
+                <marker date="1499103268000" expanded="true" signature="196:852" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -86,43 +64,18 @@
       <file leaf-file-name="VirtualHostResourceImpl.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="34" column="40" lean-forward="false" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+            <state relative-caret-position="56">
+              <caret line="28" column="9" lean-forward="false" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
               <folding>
-                <marker date="1499057230000" expanded="true" signature="35:2663" ph="{...}" />
-                <marker date="1499057230000" expanded="false" signature="48:247" ph="..." />
-                <marker date="1499057230000" expanded="true" signature="343:2661" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="500:576" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="710:1177" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="1298:1374" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="1495:1571" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="1692:1768" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="1875:1895" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="1999:2075" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="2161:2332" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="2224:2322" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="2389:2655" ph="{...}" />
-                <marker date="1499057230000" expanded="true" signature="2473:2561" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VirtualHostTests.cs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-              <folding>
-                <marker date="1499060029000" expanded="true" signature="22:1212" ph="{...}" />
-                <marker date="1499060029000" expanded="false" signature="35:213" ph="..." />
-                <marker date="1499060029000" expanded="true" signature="267:295" ph="/* : ... */" />
-                <marker date="1499060029000" expanded="true" signature="295:1210" ph="{...}" />
-                <marker date="1499060029000" expanded="true" signature="349:887" ph="{...}" />
-                <marker date="1499060029000" expanded="true" signature="360:549" ph="/* Result&lt;IEnumerable&lt;VirtualHost&gt;&gt; virtualHosts = await Client ... */" />
-                <marker date="1499060029000" expanded="true" signature="780:877" ph="{...}" />
-                <marker date="1499060029000" expanded="true" signature="944:1204" ph="{...}" />
-                <marker date="1499060029000" expanded="true" signature="1018:1110" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="35:2303" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="48:207" ph="..." />
+                <marker date="1499103268000" expanded="true" signature="303:2301" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="534:1001" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1135:1577" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1698:1774" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1895:1971" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2092:2168" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2275:2295" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -131,40 +84,121 @@
       <file leaf-file-name="VirtualHost.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HareDu/Model/VirtualHost.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="28" lean-forward="false" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+            <state relative-caret-position="150">
+              <caret line="10" column="33" lean-forward="false" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
               <folding>
-                <marker date="1499060106000" expanded="true" signature="22:261" ph="{...}" />
-                <marker date="1499060106000" expanded="true" signature="111:259" ph="{...}" />
+                <marker date="1499101766000" expanded="true" signature="22:260" ph="{...}" />
+                <marker date="1499101766000" expanded="true" signature="111:258" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VirtualHostSummary.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/HareDu/Internal/Model/VirtualHostSummary.cs">
+      <file leaf-file-name="HareDuFactory.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HareDu/HareDuFactory.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="375">
+              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
-                <marker date="1499021299000" expanded="true" signature="31:257" ph="{...}" />
-                <marker date="1499021299000" expanded="true" signature="97:255" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="16:2611" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="29:112" ph="..." />
+                <marker date="1499097391000" expanded="true" signature="151:2609" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="235:653" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="261:484" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="516:643" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="729:2603" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="948:1087" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="1244:1302" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="1372:1713" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="1769:1833" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="1917:2314" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="2017:2162" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="2386:2593" ph="{...}" />
+                <marker date="1499097391000" expanded="true" signature="2508:2579" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IMessageSerializer.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/IMessageSerializer.cs">
+      <file leaf-file-name="VirtualHostTests.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+            <state relative-caret-position="570">
+              <caret line="38" column="32" lean-forward="false" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
               <folding>
-                <marker date="1499057187000" expanded="true" signature="30:646" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="43:80" ph="..." />
-                <marker date="1499057187000" expanded="true" signature="86:207" ph="/// A message serializer is responsible for serializing a message. Shocking, I know. ... " />
-                <marker date="1499057187000" expanded="true" signature="247:644" ph="{...}" />
-                <marker date="1499057187000" expanded="true" signature="296:638" ph="/*        /// Serialize the message to the stream provided. ... */" />
+                <marker date="1499103268000" expanded="true" signature="22:1687" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="35:158" ph="..." />
+                <marker date="1499103268000" expanded="true" signature="236:1685" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="305:845" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="553:835" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="906:1362" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1419:1679" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1493:1585" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResourceBase.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="36" column="59" lean-forward="false" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="59" />
+              <folding>
+                <marker date="1499103268000" expanded="true" signature="35:3170" ph="{...}" />
+                <marker date="1499103268000" expanded="false" signature="48:223" ph="..." />
+                <marker date="1499103268000" expanded="true" signature="274:3168" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="408:458" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="495:1188" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1339:1667" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1365:1545" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1577:1657" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1821:2152" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="1847:2030" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2062:2142" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2315:2656" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2341:2534" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2566:2646" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2820:3162" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="2846:3040" ph="{...}" />
+                <marker date="1499103268000" expanded="true" signature="3072:3152" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HareDuClientImpl.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HareDu/HareDuClientImpl.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="668">
+              <caret line="54" column="12" lean-forward="false" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+              <folding>
+                <marker date="1499101205000" expanded="true" signature="16:2587" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="29:195" ph="..." />
+                <marker date="1499101205000" expanded="true" signature="272:2585" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="479:533" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="658:2020" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="1101:1208" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="2064:2186" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="2260:2579" ph="{...}" />
+                <marker date="1499101205000" expanded="true" signature="2467:2569" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HttpExtensions.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HareDu/HttpExtensions.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding>
+                <marker date="1499103393000" expanded="true" signature="16:1187" ph="{...}" />
+                <marker date="1499103393000" expanded="false" signature="29:200" ph="..." />
+                <marker date="1499103393000" expanded="true" signature="240:1185" ph="{...}" />
+                <marker date="1499103393000" expanded="true" signature="347:706" ph="{...}" />
+                <marker date="1499103393000" expanded="true" signature="767:1179" ph="{...}" />
+                <marker date="1499103393000" expanded="true" signature="860:1033" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -178,19 +212,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/HareDu/packages.config" />
-        <option value="$PROJECT_DIR$/HareDu/LoggerSettings.cs" />
-        <option value="$PROJECT_DIR$/HareDu/ClientSettings.cs" />
-        <option value="$PROJECT_DIR$/HareDu/VirtualHost.cs" />
-        <option value="$PROJECT_DIR$/HareDu/Queue.cs" />
         <option value="$PROJECT_DIR$/HareDu/Binding.cs" />
         <option value="$PROJECT_DIR$/HareDu/Exchange.cs" />
         <option value="$PROJECT_DIR$/HareDu/ExchangeResource.cs" />
         <option value="$PROJECT_DIR$/HareDu/QueueResource.cs" />
         <option value="$PROJECT_DIR$/HareDu/Model/Binding.cs" />
         <option value="$PROJECT_DIR$/HareDu/BindingResource.cs" />
-        <option value="$PROJECT_DIR$/HareDu/HareDuFactory.cs" />
-        <option value="$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Logging.cs" />
         <option value="$PROJECT_DIR$/HareDu/ResourceBase.cs" />
         <option value="$PROJECT_DIR$/HareDu/VirtualHostResourceImpl.cs" />
@@ -201,12 +228,10 @@
         <option value="$PROJECT_DIR$/HareDu/Internal/AsyncTaskHelper.cs" />
         <option value="$PROJECT_DIR$/HareDu/Model/ResourceSummary.cs" />
         <option value="$PROJECT_DIR$/HareDu/Model/ServerResponse.cs" />
-        <option value="$PROJECT_DIR$/HareDu/VirtualHostResource.cs" />
         <option value="$PROJECT_DIR$/HareDu/Model/Result.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/AsyncTaskExtensions.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Model/VirtualHostSummary.cs" />
         <option value="$PROJECT_DIR$/HareDu/Model/ServerTestResponse.cs" />
-        <option value="$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Json/ListConverterCache.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Json/TypeNameFormatter.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Json/ListJsonConverter.cs" />
@@ -224,9 +249,20 @@
         <option value="$PROJECT_DIR$/HareDu/Internal/Json/IMessageSerializer.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Json/ByteArrayConverter.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Json/JsonMessageSerializer.cs" />
+        <option value="$PROJECT_DIR$/HareDu/HareDuClientBehavior.cs" />
+        <option value="$PROJECT_DIR$/HareDu/ClientSettings.cs" />
+        <option value="$PROJECT_DIR$/HareDu/Exceptions/HareDuClientInitException.cs" />
+        <option value="$PROJECT_DIR$/HareDu/HareDuFactory.cs" />
+        <option value="$PROJECT_DIR$/HareDu/Exceptions/HareDuResourceInitException.cs" />
+        <option value="$PROJECT_DIR$/HareDu/Exceptions/UserCredentialsMissingException.cs" />
+        <option value="$PROJECT_DIR$/HareDu/HareDuClientImpl.cs" />
+        <option value="$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs" />
+        <option value="$PROJECT_DIR$/HareDu/Model/VirtualHost.cs" />
+        <option value="$PROJECT_DIR$/HareDu/Internal/RmqSanitizationExtensions.cs" />
+        <option value="$PROJECT_DIR$/HareDu/VirtualHostResource.cs" />
+        <option value="$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs" />
         <option value="$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs" />
         <option value="$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs" />
-        <option value="$PROJECT_DIR$/HareDu/Model/VirtualHost.cs" />
       </list>
     </option>
   </component>
@@ -239,7 +275,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="807" />
+    <option name="height" value="803" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -257,7 +293,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="SolutionExplorer">
         <subPane>
           <PATH>
@@ -269,10 +304,6 @@
               <option name="myItemId" value="HareDu (2 projects)" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HareDu.Tests" />
-              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -342,7 +373,7 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Model" />
+              <option name="myItemId" value="Resources" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
           </PATH>
@@ -360,11 +391,7 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Internal" />
-              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Json" />
+              <option name="myItemId" value="Exceptions" />
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
           </PATH>
@@ -372,6 +399,7 @@
         <option name="show-file-system" value="false" />
         <option name="show-all-items" value="false" />
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -531,6 +559,8 @@
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue=".NET Project.Default" />
     </list>
+    <configuration />
+    <configuration />
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -548,12 +578,14 @@
       <workItem from="1498881667897" duration="74000" />
       <workItem from="1498882473213" duration="17762000" />
       <workItem from="1498994422176" duration="5879000" />
-      <workItem from="1499017671842" duration="19474000" />
+      <workItem from="1499017671842" duration="20041000" />
+      <workItem from="1499060752880" duration="5770000" />
+      <workItem from="1499076530084" duration="11243000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51489000" />
+    <option name="totallyTimeSpent" value="69069000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -565,20 +597,19 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="807" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="803" extended-state="6" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Unit Tests" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33192685" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32630098" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33286715" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3305204" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2746781" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28183118" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32630098" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -588,6 +619,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -616,59 +648,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/HareDu/VirtualHostResource.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="1" lean-forward="false" selection-start-line="1" selection-start-column="1" selection-end-line="1" selection-end-column="1" />
-          <folding>
-            <marker date="1499019385000" expanded="true" signature="16:780" ph="{...}" />
-            <marker date="1499019385000" expanded="false" signature="29:135" ph="..." />
-            <marker date="1499019385000" expanded="true" signature="196:778" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/ExchangeResource.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="1" lean-forward="false" selection-start-line="1" selection-start-column="1" selection-end-line="1" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/QueueResource.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="1" lean-forward="false" selection-start-line="1" selection-start-column="1" selection-end-line="1" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/BindingResource.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="8" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/ClientSettings.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="1" lean-forward="false" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/LoggerSettings.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="21" lean-forward="false" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/VirtualHostResource.cs">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
           <folding>
-            <marker date="1499019385000" expanded="true" signature="16:780" ph="{...}" />
-            <marker date="1499019385000" expanded="false" signature="29:135" ph="..." />
-            <marker date="1499019385000" expanded="true" signature="196:778" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="16:854" ph="{...}" />
+            <marker date="1499103268000" expanded="false" signature="29:135" ph="..." />
+            <marker date="1499103268000" expanded="true" signature="196:852" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -708,13 +693,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/ClientSettings.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="1" lean-forward="false" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/HareDu/Model/Binding.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -750,44 +728,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/HareDuFactory.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="8" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="49" lean-forward="false" selection-start-line="13" selection-start-column="49" selection-end-line="13" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/HareDuClient.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding>
-            <marker date="1498993430000" expanded="true" signature="71:880" ph="{...}" />
-            <marker date="1498993430000" expanded="true" signature="86:652" ph="/// Creates a new instance of object implemented by T, which encapsulates a group of resources (e.g. Virtual Host ... " />
-            <marker date="1498993430000" expanded="true" signature="788:837" ph="///  ... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/Logging.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="36" lean-forward="false" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
-          <folding>
-            <marker date="1498992321000" expanded="true" signature="48:81" ph="..." />
-            <marker date="1498992321000" expanded="true" signature="118:824" ph="{...}" />
-            <marker date="1498992321000" expanded="true" signature="229:321" ph="{...}" />
-            <marker date="1498992321000" expanded="true" signature="375:530" ph="{...}" />
-            <marker date="1498992321000" expanded="true" signature="587:675" ph="{...}" />
-            <marker date="1498992321000" expanded="true" signature="731:818" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -802,10 +746,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="8" lean-forward="false" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-          <folding>
-            <marker date="1498987069000" expanded="true" signature="16:71" ph="{...}" />
-            <marker date="1498987069000" expanded="true" signature="48:69" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -813,7 +753,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="4" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -821,9 +760,147 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="1" lean-forward="false" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/StringDecimalConverter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-264">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceExtensions.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2178">
+          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/ITypeMetadataCache.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-55">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/JsonContractResolver.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/TypeNameFormatter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/IMessageSerializer.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="8" column="33" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/TypeMetadataCache.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/MessageDataJsonConverter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/ListJsonConverter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/TypeExtensions.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/ListConverterCache.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-182">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceReflectionCache.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceProxyConverter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/HareDuClient.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="21" lean-forward="false" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="33" />
           <folding>
-            <marker date="1499021898000" expanded="true" signature="22:126" ph="{...}" />
-            <marker date="1499021898000" expanded="true" signature="81:124" ph="{...}" />
+            <marker date="1498993430000" expanded="true" signature="16:882" ph="{...}" />
+            <marker date="1498993430000" expanded="true" signature="71:880" ph="{...}" />
+            <marker date="1498993430000" expanded="true" signature="86:652" ph="/// Creates a new instance of object implemented by T, which encapsulates a group of resources (e.g. Virtual Host ... " />
+            <marker date="1498993430000" expanded="true" signature="788:837" ph="///  ... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/HareDuClientBehavior.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="41" lean-forward="false" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="41" />
+          <folding>
+            <marker date="1499095421000" expanded="true" signature="16:236" ph="{...}" />
+            <marker date="1499095421000" expanded="true" signature="79:234" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/SerializerCache.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <marker date="1499103370000" expanded="true" signature="0:602" ph="/* Copyright 2007-2014 Chris Patterson ... */" />
+            <marker date="1499103370000" expanded="true" signature="642:3091" ph="{...}" />
+            <marker date="1499103370000" expanded="false" signature="655:793" ph="..." />
+            <marker date="1499103370000" expanded="true" signature="834:3089" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1347:2189" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1511:2060" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2241:3083" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2407:2954" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -832,397 +909,71 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="32" lean-forward="false" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="9" column="12" lean-forward="false" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/HttpExtensions.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding>
-            <marker date="1499042878000" expanded="true" signature="16:1178" ph="{...}" />
-            <marker date="1499042878000" expanded="true" signature="29:191" ph="..." />
-            <marker date="1499042878000" expanded="true" signature="231:1176" ph="{...}" />
-            <marker date="1499042878000" expanded="true" signature="338:697" ph="{...}" />
-            <marker date="1499042878000" expanded="true" signature="758:1170" ph="{...}" />
-            <marker date="1499042878000" expanded="true" signature="851:1024" ph="{...}" />
+            <marker date="1499020242000" expanded="true" signature="25:582" ph="{...}" />
+            <marker date="1499020242000" expanded="false" signature="38:73" ph="..." />
+            <marker date="1499020242000" expanded="true" signature="120:580" ph="{...}" />
+            <marker date="1499020242000" expanded="true" signature="237:573" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/TypeNameFormatter.cs">
+    <entry file="file://$PROJECT_DIR$/HareDu/Exceptions/HareDuClientInitException.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-431">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state relative-caret-position="345">
+          <caret line="23" column="12" lean-forward="false" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
           <folding>
-            <marker date="1499035791000" expanded="true" signature="0:638" ph="/* Copyright 2007-2014 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499035791000" expanded="true" signature="669:3634" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="682:782" ph="..." />
-            <marker date="1499035791000" expanded="true" signature="818:3632" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="1183:1203" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="1378:1720" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="1766:1844" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="1886:2165" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="2239:3626" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="2358:2592" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="2455:2578" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="2624:2773" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="2823:3526" ph="{...}" />
-            <marker date="1499035791000" expanded="true" signature="3269:3469" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="27:631" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="40:87" ph="..." />
+            <marker date="1499097391000" expanded="true" signature="151:629" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="200:220" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="349:369" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="455:475" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="603:623" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/TypeMetadataCache.cs">
+    <entry file="file://$PROJECT_DIR$/HareDu/ClientSettings.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2290">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state relative-caret-position="150">
+          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding>
-            <marker date="1499056668000" expanded="true" signature="0:638" ph="/* Copyright 2007-2017 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056668000" expanded="true" signature="669:7339" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="682:880" ph="..." />
-            <marker date="1499056668000" expanded="true" signature="923:2218" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="975:1150" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="1204:1269" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="1327:1401" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="1458:1526" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="1556:1725" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="1756:1900" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="1955:2212" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="2290:7337" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="2614:3057" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="4083:4370" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="4443:4757" ph="/// Returns true if the specified type is an allowed message type, i.e. ... " />
-            <marker date="1499056668000" expanded="true" signature="4796:5530" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="5288:5471" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="5598:5866" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="5876:6228" ph="/// Returns all the message types that are available for the specified type. This will ... " />
-            <marker date="1499056668000" expanded="true" signature="6279:6931" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="6514:6642" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="6992:7083" ph="{...}" />
-            <marker date="1499056668000" expanded="true" signature="7113:7331" ph="{...}" />
+            <marker date="1499097151000" expanded="true" signature="16:205" ph="{...}" />
+            <marker date="1499097151000" expanded="true" signature="29:62" ph="..." />
+            <marker date="1499097151000" expanded="true" signature="99:203" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/TypeExtensions.cs">
+    <entry file="file://$PROJECT_DIR$/HareDu/Exceptions/HareDuResourceInitException.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+        <state relative-caret-position="345">
+          <caret line="23" column="12" lean-forward="false" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
           <folding>
-            <marker date="1499056699000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056699000" expanded="true" signature="669:10058" ph="{...}" />
-            <marker date="1499056699000" expanded="false" signature="682:822" ph="..." />
-            <marker date="1499056699000" expanded="true" signature="862:10056" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="1038:1158" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="1248:2215" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="1301:1451" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="1768:2115" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="2303:2909" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="2401:2553" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="2994:3280" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="3290:3562" ph="/// Determines if a type is neither abstract nor an interface and can be constructed. ... " />
-            <marker date="1499056699000" expanded="true" signature="3616:3754" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="3764:4245" ph="/// Determines if a type can be constructed, and if it can, additionally determines ... " />
-            <marker date="1499056699000" expanded="true" signature="4335:4461" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="4471:4947" ph="/// Determines if a type can be constructed, and if it can, additionally determines ... " />
-            <marker date="1499056699000" expanded="true" signature="5019:5140" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="5150:5348" ph="/// Determines if the type is a nullable type ... " />
-            <marker date="1499056699000" expanded="true" signature="5402:5578" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="5588:5871" ph="/// Determines if the type is a nullable type ... " />
-            <marker date="1499056699000" expanded="true" signature="5950:6281" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="6291:6543" ph="/// Determines if the type is an open generic with at least one unspecified generic argument ... " />
-            <marker date="1499056699000" expanded="true" signature="6661:6929" ph="/// Determines if the TypeInfo is an open generic with at least one unspecified generic argument ... " />
-            <marker date="1499056699000" expanded="true" signature="7091:7280" ph="/// Determines if a type can be null ... " />
-            <marker date="1499056699000" expanded="true" signature="7333:7494" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="7504:7682" ph="/// Returns an easy-to-read type name from the specified Type ... " />
-            <marker date="1499056699000" expanded="true" signature="7739:7816" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="7826:8205" ph="/// Returns the first attribute of the specified type for the object specified ... " />
-            <marker date="1499056699000" expanded="true" signature="8330:8443" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="8453:8675" ph="/// Determines if the target has the specified attribute ... " />
-            <marker date="1499056699000" expanded="true" signature="8790:8863" ph="{...}" />
-            <marker date="1499056699000" expanded="true" signature="8873:9039" ph="/// Returns true if the type is an anonymous type ... " />
-            <marker date="1499056699000" expanded="true" signature="9161:9335" ph="/// Returns true if the TypeInfo is an anonymous type ... " />
-            <marker date="1499056699000" expanded="true" signature="9527:9751" ph="/// Returns true if the type is contained within the namespace ... " />
-            <marker date="1499056699000" expanded="true" signature="9826:10050" ph="{...}" />
+            <marker date="1499098899000" expanded="true" signature="27:641" ph="{...}" />
+            <marker date="1499098899000" expanded="true" signature="40:87" ph="..." />
+            <marker date="1499098899000" expanded="true" signature="153:639" ph="{...}" />
+            <marker date="1499098899000" expanded="true" signature="204:224" ph="{...}" />
+            <marker date="1499098899000" expanded="true" signature="355:375" ph="{...}" />
+            <marker date="1499098899000" expanded="true" signature="463:483" ph="{...}" />
+            <marker date="1499098899000" expanded="true" signature="613:633" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/StringDecimalConverter.cs">
+    <entry file="file://$PROJECT_DIR$/HareDu/Exceptions/UserCredentialsMissingException.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-264">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        <state relative-caret-position="75">
+          <caret line="5" column="48" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="48" />
           <folding>
-            <marker date="1499056728000" expanded="true" signature="0:640" ph="/* Copyright 2007-2011 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056728000" expanded="true" signature="671:2453" ph="{...}" />
-            <marker date="1499056728000" expanded="true" signature="684:750" ph="..." />
-            <marker date="1499056728000" expanded="true" signature="815:2451" ph="{...}" />
-            <marker date="1499056728000" expanded="true" signature="1228:1408" ph="{...}" />
-            <marker date="1499056728000" expanded="true" signature="1546:2283" ph="{...}" />
-            <marker date="1499056728000" expanded="true" signature="2034:2093" ph="{...}" />
-            <marker date="1499056728000" expanded="true" signature="2341:2445" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/SerializerCache.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-445">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding>
-            <marker date="1499056756000" expanded="true" signature="0:602" ph="/* Copyright 2007-2014 Chris Patterson ... */" />
-            <marker date="1499056756000" expanded="true" signature="633:3082" ph="{...}" />
-            <marker date="1499056756000" expanded="true" signature="646:784" ph="..." />
-            <marker date="1499056756000" expanded="true" signature="825:3080" ph="{...}" />
-            <marker date="1499056756000" expanded="true" signature="1338:2180" ph="{...}" />
-            <marker date="1499056756000" expanded="true" signature="1502:2051" ph="{...}" />
-            <marker date="1499056756000" expanded="true" signature="2232:3074" ph="{...}" />
-            <marker date="1499056756000" expanded="true" signature="2398:2945" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/MessageDataJsonConverter.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
-          <folding>
-            <marker date="1499039377000" expanded="true" signature="30:1682" ph="{...}" />
-            <marker date="1499039377000" expanded="true" signature="33:1680" ph="/* using System; ... */" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/ByteArrayConverter.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="88" column="1" lean-forward="false" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
-          <folding>
-            <marker date="1499056885000" expanded="true" signature="0:640" ph="/* Copyright 2007-2011 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056885000" expanded="true" signature="671:3038" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="684:788" ph="..." />
-            <marker date="1499056885000" expanded="true" signature="849:3036" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="954:1216" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="995:1059" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="1076:1206" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="1354:1954" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="1416:1473" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="2012:2134" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="2177:2233" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="2282:3030" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="2367:2949" ph="{...}" />
-            <marker date="1499056885000" expanded="true" signature="2423:2935" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/InterfaceExtensions.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2178">
-          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
-          <folding>
-            <marker date="1499056893000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056893000" expanded="true" signature="669:5993" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="682:779" ph="..." />
-            <marker date="1499056893000" expanded="true" signature="824:5991" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="925:998" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="1058:1128" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="1205:1875" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="1935:2005" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="2082:2589" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="2659:4210" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="3079:3609" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="3711:4173" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="4302:5985" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="4722:5271" ph="{...}" />
-            <marker date="1499056893000" expanded="true" signature="5373:5883" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/InterfaceProxyConverter.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <marker date="1499056905000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056905000" expanded="true" signature="669:1791" ph="{...}" />
-            <marker date="1499056905000" expanded="true" signature="682:788" ph="..." />
-            <marker date="1499056905000" expanded="true" signature="854:1789" ph="{...}" />
-            <marker date="1499056905000" expanded="true" signature="982:1133" ph="{...}" />
-            <marker date="1499056905000" expanded="true" signature="1233:1302" ph="{...}" />
-            <marker date="1499056905000" expanded="true" signature="1440:1596" ph="{...}" />
-            <marker date="1499056905000" expanded="true" signature="1654:1783" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/InterfaceReflectionCache.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <marker date="1499056910000" expanded="true" signature="0:638" ph="/* Copyright 2007-2014 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056910000" expanded="true" signature="669:2764" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="682:782" ph="..." />
-            <marker date="1499056910000" expanded="true" signature="825:2762" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="960:1069" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="1141:2059" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="1221:1437" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="1676:1807" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="2115:2379" ph="{...}" />
-            <marker date="1499056910000" expanded="true" signature="2445:2756" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/ITypeMetadataCache.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-55">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding>
-            <marker date="1499056919000" expanded="true" signature="0:638" ph="/* Copyright 2007-2016 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056919000" expanded="true" signature="669:1573" ph="{...}" />
-            <marker date="1499056919000" expanded="true" signature="682:756" ph="..." />
-            <marker date="1499056919000" expanded="true" signature="804:1571" ph="{...}" />
-            <marker date="1499056919000" expanded="true" signature="854:951" ph="/// True if the message type is a valid message type ... " />
-            <marker date="1499056919000" expanded="true" signature="1002:1092" ph="/// True if this message is not a public type ... " />
-            <marker date="1499056919000" expanded="true" signature="1147:1259" ph="/// Returns all valid message types that are contained within the s ... " />
-            <marker date="1499056919000" expanded="true" signature="1306:1419" ph="/// The names of all the message types supported by the message type ... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/JsonContractResolver.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <marker date="1499056929000" expanded="true" signature="0:638" ph="/* Copyright 2007-2012 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499056929000" expanded="true" signature="669:1657" ph="{...}" />
-            <marker date="1499056929000" expanded="true" signature="682:786" ph="..." />
-            <marker date="1499056929000" expanded="true" signature="874:1655" ph="{...}" />
-            <marker date="1499056929000" expanded="true" signature="972:1165" ph="{...}" />
-            <marker date="1499056929000" expanded="true" signature="1281:1649" ph="{...}" />
-            <marker date="1499056929000" expanded="true" signature="1414:1609" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/ListConverterCache.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <marker date="1499035802000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499035802000" expanded="true" signature="669:2386" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="682:795" ph="..." />
-            <marker date="1499035802000" expanded="true" signature="839:2384" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="894:1082" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="1198:1297" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="1360:2026" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="1464:2016" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="1749:1899" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="2063:2236" ph="{...}" />
-            <marker date="1499035802000" expanded="true" signature="2270:2378" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/ListJsonConverter.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding>
-            <marker date="1499035861000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499035861000" expanded="true" signature="669:2432" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="682:813" ph="..." />
-            <marker date="1499035861000" expanded="true" signature="873:2430" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="978:1115" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="1253:1701" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="1299:1482" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="1499:1691" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="1759:2424" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="1856:2072" ph="{...}" />
-            <marker date="1499035861000" expanded="true" signature="2113:2387" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/JsonMessageSerializer.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1350">
-          <caret line="118" column="1" lean-forward="false" selection-start-line="118" selection-start-column="1" selection-end-line="118" selection-end-column="1" />
-          <folding>
-            <marker date="1499057187000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
-            <marker date="1499057187000" expanded="true" signature="669:4978" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="682:936" ph="..." />
-            <marker date="1499057187000" expanded="true" signature="1005:4976" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="1586:2534" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="2251:2523" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="2638:3422" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="3303:3410" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="3463:3689" ph="{...}" />
-            <marker date="1499057187000" expanded="false" signature="3837:4910" ph="/* public void Serialize&lt;T&gt;(Stream stream, SendContext&lt;T&gt; context) ... */" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Json/IMessageSerializer.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding>
-            <marker date="1499057187000" expanded="true" signature="30:646" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="43:80" ph="..." />
-            <marker date="1499057187000" expanded="true" signature="86:207" ph="/// A message serializer is responsible for serializing a message. Shocking, I know. ... " />
-            <marker date="1499057187000" expanded="true" signature="247:644" ph="{...}" />
-            <marker date="1499057187000" expanded="true" signature="296:638" ph="/*        /// Serialize the message to the stream provided. ... */" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/VirtualHostResource.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="21" lean-forward="false" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
-          <folding>
-            <marker date="1499019385000" expanded="true" signature="16:780" ph="{...}" />
-            <marker date="1499019385000" expanded="false" signature="29:135" ph="..." />
-            <marker date="1499019385000" expanded="true" signature="196:778" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="34" column="40" lean-forward="false" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
-          <folding>
-            <marker date="1499057230000" expanded="true" signature="35:2663" ph="{...}" />
-            <marker date="1499057230000" expanded="false" signature="48:247" ph="..." />
-            <marker date="1499057230000" expanded="true" signature="343:2661" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="500:576" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="710:1177" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="1298:1374" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="1495:1571" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="1692:1768" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="1875:1895" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="1999:2075" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="2161:2332" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="2224:2322" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="2389:2655" ph="{...}" />
-            <marker date="1499057230000" expanded="true" signature="2473:2561" ph="{...}" />
+            <marker date="1499100128000" expanded="true" signature="27:661" ph="{...}" />
+            <marker date="1499100128000" expanded="true" signature="40:87" ph="..." />
+            <marker date="1499100128000" expanded="true" signature="157:659" ph="{...}" />
+            <marker date="1499100128000" expanded="true" signature="212:232" ph="{...}" />
+            <marker date="1499100128000" expanded="true" signature="367:387" ph="{...}" />
+            <marker date="1499100128000" expanded="true" signature="479:499" ph="{...}" />
+            <marker date="1499100128000" expanded="true" signature="633:653" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1231,38 +982,212 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/HttpExtensions.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding>
-            <marker date="1499021299000" expanded="true" signature="31:257" ph="{...}" />
-            <marker date="1499021299000" expanded="true" signature="97:255" ph="{...}" />
+            <marker date="1499103393000" expanded="true" signature="16:1187" ph="{...}" />
+            <marker date="1499103393000" expanded="false" signature="29:200" ph="..." />
+            <marker date="1499103393000" expanded="true" signature="240:1185" ph="{...}" />
+            <marker date="1499103393000" expanded="true" signature="347:706" ph="{...}" />
+            <marker date="1499103393000" expanded="true" signature="767:1179" ph="{...}" />
+            <marker date="1499103393000" expanded="true" signature="860:1033" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/HareDu/Model/VirtualHost.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="28" lean-forward="false" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+        <state relative-caret-position="150">
+          <caret line="10" column="33" lean-forward="false" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
           <folding>
-            <marker date="1499060106000" expanded="true" signature="22:261" ph="{...}" />
-            <marker date="1499060106000" expanded="true" signature="111:259" ph="{...}" />
+            <marker date="1499101766000" expanded="true" signature="22:260" ph="{...}" />
+            <marker date="1499101766000" expanded="true" signature="111:258" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="15" lean-forward="false" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+          <folding>
+            <marker date="1499101511000" expanded="true" signature="22:429" ph="{...}" />
+            <marker date="1499101511000" expanded="true" signature="102:427" ph="{...}" />
+            <marker date="1499101511000" expanded="true" signature="159:360" ph="{...}" />
+            <marker date="1499101511000" expanded="true" signature="213:348" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/HareDuClientImpl.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="668">
+          <caret line="54" column="12" lean-forward="false" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+          <folding>
+            <marker date="1499101205000" expanded="true" signature="16:2587" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="29:195" ph="..." />
+            <marker date="1499101205000" expanded="true" signature="272:2585" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="479:533" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="658:2020" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="1101:1208" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="2064:2186" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="2260:2579" ph="{...}" />
+            <marker date="1499101205000" expanded="true" signature="2467:2569" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/JsonMessageSerializer.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="28" column="51" lean-forward="false" selection-start-line="28" selection-start-column="51" selection-end-line="28" selection-end-column="51" />
+          <folding>
+            <marker date="1499103370000" expanded="true" signature="0:638" ph="/* Copyright 2007-2015 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
+            <marker date="1499103370000" expanded="true" signature="678:3749" ph="{...}" />
+            <marker date="1499103370000" expanded="false" signature="691:884" ph="..." />
+            <marker date="1499103370000" expanded="true" signature="953:3747" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1534:2431" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2199:2420" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2535:3268" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="3200:3256" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="3309:3535" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/VirtualHostResource.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="13" column="115" lean-forward="false" selection-start-line="13" selection-start-column="115" selection-end-line="13" selection-end-column="115" />
+          <folding>
+            <marker date="1499103268000" expanded="true" signature="16:854" ph="{...}" />
+            <marker date="1499103268000" expanded="false" signature="29:135" ph="..." />
+            <marker date="1499103268000" expanded="true" signature="196:852" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/RmqSanitizationExtensions.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="38" lean-forward="false" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
+          <folding>
+            <marker date="1499102934000" expanded="true" signature="25:328" ph="{...}" />
+            <marker date="1499102934000" expanded="true" signature="79:326" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="28" column="9" lean-forward="false" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
+          <folding>
+            <marker date="1499103268000" expanded="true" signature="35:2303" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="48:207" ph="..." />
+            <marker date="1499103268000" expanded="true" signature="303:2301" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="534:1001" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1135:1577" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1698:1774" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1895:1971" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2092:2168" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2275:2295" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="36" column="59" lean-forward="false" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="59" />
+          <folding>
+            <marker date="1499103268000" expanded="true" signature="35:3170" ph="{...}" />
+            <marker date="1499103268000" expanded="false" signature="48:223" ph="..." />
+            <marker date="1499103268000" expanded="true" signature="274:3168" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="408:458" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="495:1188" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1339:1667" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1365:1545" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1577:1657" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1821:2152" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1847:2030" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2062:2142" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2315:2656" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2341:2534" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2566:2646" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2820:3162" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="2846:3040" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="3072:3152" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/HareDuFactory.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <marker date="1499097391000" expanded="true" signature="16:2611" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="29:112" ph="..." />
+            <marker date="1499097391000" expanded="true" signature="151:2609" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="235:653" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="261:484" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="516:643" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="729:2603" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="948:1087" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="1244:1302" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="1372:1713" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="1769:1833" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="1917:2314" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="2017:2162" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="2386:2593" ph="{...}" />
+            <marker date="1499097391000" expanded="true" signature="2508:2579" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HareDu/Internal/Serialization/ByteArrayConverter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="88" column="1" lean-forward="false" selection-start-line="88" selection-start-column="1" selection-end-line="88" selection-end-column="1" />
+          <folding>
+            <marker date="1499103370000" expanded="true" signature="0:640" ph="/* Copyright 2007-2011 Chris Patterson, Dru Sellers, Travis Smith, et. al. ... */" />
+            <marker date="1499103370000" expanded="true" signature="680:3047" ph="{...}" />
+            <marker date="1499103370000" expanded="false" signature="693:797" ph="..." />
+            <marker date="1499103370000" expanded="true" signature="858:3045" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="963:1225" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1004:1068" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1085:1215" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1363:1963" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="1425:1482" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2021:2143" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2186:2242" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2291:3039" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2376:2958" ph="{...}" />
+            <marker date="1499103370000" expanded="true" signature="2432:2944" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state relative-caret-position="570">
+          <caret line="38" column="32" lean-forward="false" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
           <folding>
-            <marker date="1499060029000" expanded="true" signature="22:1212" ph="{...}" />
-            <marker date="1499060029000" expanded="false" signature="35:213" ph="..." />
-            <marker date="1499060029000" expanded="true" signature="267:295" ph="/* : ... */" />
-            <marker date="1499060029000" expanded="true" signature="295:1210" ph="{...}" />
-            <marker date="1499060029000" expanded="true" signature="349:887" ph="{...}" />
-            <marker date="1499060029000" expanded="true" signature="360:549" ph="/* Result&lt;IEnumerable&lt;VirtualHost&gt;&gt; virtualHosts = await Client ... */" />
-            <marker date="1499060029000" expanded="true" signature="780:877" ph="{...}" />
-            <marker date="1499060029000" expanded="true" signature="944:1204" ph="{...}" />
-            <marker date="1499060029000" expanded="true" signature="1018:1110" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="22:1687" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="35:158" ph="..." />
+            <marker date="1499103268000" expanded="true" signature="236:1685" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="305:845" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="553:835" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="906:1362" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1419:1679" ph="{...}" />
+            <marker date="1499103268000" expanded="true" signature="1493:1585" ph="{...}" />
           </folding>
         </state>
       </provider>

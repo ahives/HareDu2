@@ -11,7 +11,7 @@
         ExchangeResource Exchange { get; }
         QueueResource Queue { get; }
 
-        Task<VirtualHost> Get(string name);
+        Task<Result<VirtualHost>> Get(string name, CancellationToken cancellationToken = default(CancellationToken));
         Task<Result<IEnumerable<VirtualHost>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         Task<Result> Create(string name, CancellationToken cancellationToken = default(CancellationToken));
         Task<Result> Delete(string name, CancellationToken cancellationToken = default(CancellationToken));

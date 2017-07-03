@@ -5,8 +5,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Logging;
-    using HareDu.Model;
-    using Json;
     using Model;
 
     internal class VirtualHostResourceImpl :
@@ -16,9 +14,18 @@
         public ExchangeResource Exchange { get; }
         public QueueResource Queue { get; }
 
-        public async Task<VirtualHost> Get(string name)
+        public async Task<Result<VirtualHost>> Get(string name, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new System.NotImplementedException();
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = $"api/vhosts/{name.SanitizeVirtualHostName()}";
+
+            LogInfo($"Sent request to return all information corresponding to virtual host {name} on current RabbitMQ server.");
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<VirtualHost> result = await response.Get<VirtualHost>();
+
+            return result;
         }
 
         public async Task<Result<IEnumerable<VirtualHost>>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
@@ -29,10 +36,10 @@
 
             LogInfo("Sent request to return all information on all virtual hosts on current RabbitMQ server.");
 
-            HttpResponseMessage response = await Get(url, cancellationToken);
-            Result<IEnumerable<VirtualHostSummary>> result = await response.Get<IEnumerable<VirtualHostSummary>>();
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<IEnumerable<VirtualHost>> result = await response.Get<IEnumerable<VirtualHost>>();
 
-            return MakeImmutable(result);
+            return result;
         }
 
         public async Task<Result> Create(string name, CancellationToken cancellationToken = default(CancellationToken))
@@ -53,31 +60,6 @@
         public VirtualHostResourceImpl(HttpClient client, ILog logger)
             : base(client, logger)
         {
-        }
-
-        Result<IEnumerable<VirtualHost>> MakeImmutable(Result<IEnumerable<VirtualHostSummary>> result)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        IEnumerable<VirtualHost> MakeImmutable(IEnumerable<VirtualHostSummary> data)
-        {
-            foreach (var virtualHostSummary in data)
-            {
-                yield return new VirtualHostImpl(virtualHostSummary);
-            }
-        }
-
-        class VirtualHostImpl :
-            VirtualHost
-        {
-            public VirtualHostImpl(VirtualHostSummary virtualHostSummary)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public string Name { get; }
-            public string Tracing { get; }
         }
     }
 }

@@ -6,6 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Logging;
+    using HareDu.Model;
 
     internal class ResourceBase :
         Logging
@@ -33,7 +34,7 @@
             setUpdatableFlagsMethod.Invoke(uriParser, new object[] {0});
         }
 
-        protected virtual Task<HttpResponseMessage> Get(string url,
+        protected virtual Task<HttpResponseMessage> HttpGet(string url,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             try
@@ -50,7 +51,7 @@
             }
         }
 
-        protected virtual Task<HttpResponseMessage> Delete(string url,
+        protected virtual Task<HttpResponseMessage> HttpDelete(string url,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             try
@@ -67,7 +68,7 @@
             }
         }
 
-        protected virtual Task<HttpResponseMessage> Put<T>(string url, T value,
+        protected virtual Task<HttpResponseMessage> HttpPut<T>(string url, T value,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             try
@@ -84,7 +85,7 @@
             }
         }
 
-        protected virtual Task<HttpResponseMessage> Post<T>(string url, T value,
+        protected virtual Task<HttpResponseMessage> HttpPost<T>(string url, T value,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             try

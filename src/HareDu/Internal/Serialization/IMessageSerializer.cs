@@ -1,6 +1,5 @@
-﻿namespace HareDu.Internal.Json
+﻿namespace HareDu.Internal.Serialization
 {
-    using System.IO;
     using System.Net.Mime;
 
     /// <summary>

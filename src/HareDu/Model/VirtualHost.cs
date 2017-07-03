@@ -5,7 +5,7 @@
     public interface VirtualHost :
         ResourceSummary
     {
-        [JsonProperty("name1")]
+        [JsonProperty("name")]
         string Name { get; }
         
         [JsonProperty("tracing")]

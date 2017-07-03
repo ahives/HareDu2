@@ -1,4 +1,4 @@
-﻿namespace HareDu.Internal.Json
+﻿namespace HareDu.Internal.Serialization
 {
 //    using System;
 //    using System.Linq;
