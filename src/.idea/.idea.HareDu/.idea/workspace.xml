@@ -1,42 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e83fd8b9-1a16-4265-ab78-a817969d9e23" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Exceptions/HareDuClientInitException.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Exceptions/HareDuResourceInitException.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Exceptions/UserCredentialsMissingException.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/HareDuClientBehavior.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/HareDuClientImpl.cs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HareDu/Internal/RmqSanitizationExtensions.cs" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/HareDu/Internal/Model/VirtualHostSummary.cs" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ByteArrayConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ByteArrayConverter.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/IMessageSerializer.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/IMessageSerializer.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ITypeMetadataCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ITypeMetadataCache.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceExtensions.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceExtensions.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceProxyConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceProxyConverter.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/InterfaceReflectionCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/InterfaceReflectionCache.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/JsonContractResolver.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/JsonContractResolver.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/JsonMessageSerializer.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/JsonMessageSerializer.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ListConverterCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ListConverterCache.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/ListJsonConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/ListJsonConverter.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/MessageDataJsonConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/MessageDataJsonConverter.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/SerializerCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/SerializerCache.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/StringDecimalConverter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/StringDecimalConverter.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/TypeExtensions.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/TypeExtensions.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/TypeMetadataCache.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/TypeMetadataCache.cs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/HareDu/Internal/Json/TypeNameFormatter.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Serialization/TypeNameFormatter.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.idea.HareDu/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.HareDu/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs" afterPath="$PROJECT_DIR$/HareDu.Tests/HareDuTestBase.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs" afterPath="$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/ClientSettings.cs" afterPath="$PROJECT_DIR$/HareDu/ClientSettings.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HareDu.csproj" afterPath="$PROJECT_DIR$/HareDu/HareDu.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HareDuFactory.cs" afterPath="$PROJECT_DIR$/HareDu/HareDuFactory.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/HttpExtensions.cs" afterPath="$PROJECT_DIR$/HareDu/HttpExtensions.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Resources/ResourceBase.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs" afterPath="$PROJECT_DIR$/HareDu/Internal/Resources/VirtualHostResourceImpl.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/Model/VirtualHost.cs" afterPath="$PROJECT_DIR$/HareDu/Model/VirtualHost.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HareDu/VirtualHostResource.cs" afterPath="$PROJECT_DIR$/HareDu/VirtualHostResource.cs" />
-    </list>
+    <list default="true" id="e83fd8b9-1a16-4265-ab78-a817969d9e23" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -123,8 +88,8 @@
       <file leaf-file-name="VirtualHostTests.cs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="38" column="32" lean-forward="false" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+            <state relative-caret-position="450">
+              <caret line="30" column="9" lean-forward="false" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
               <folding>
                 <marker date="1499103268000" expanded="true" signature="22:1687" ph="{...}" />
                 <marker date="1499103268000" expanded="true" signature="35:158" ph="..." />
@@ -580,12 +545,12 @@
       <workItem from="1498994422176" duration="5879000" />
       <workItem from="1499017671842" duration="20041000" />
       <workItem from="1499060752880" duration="5770000" />
-      <workItem from="1499076530084" duration="11243000" />
+      <workItem from="1499076530084" duration="11409000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69069000" />
+    <option name="totallyTimeSpent" value="69235000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -605,9 +570,9 @@
       <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32630098" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3305204" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3305204" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28183118" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28183118" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32630098" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1177,8 +1142,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/HareDu.Tests/VirtualHostTests.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="38" column="32" lean-forward="false" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+        <state relative-caret-position="450">
+          <caret line="30" column="9" lean-forward="false" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
           <folding>
             <marker date="1499103268000" expanded="true" signature="22:1687" ph="{...}" />
             <marker date="1499103268000" expanded="true" signature="35:158" ph="..." />
