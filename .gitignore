@@ -31,3 +31,5 @@ submit.xml
 src/tests/*
 tests/*
 SolutionVersion.cs
+
+src/.idea/*
