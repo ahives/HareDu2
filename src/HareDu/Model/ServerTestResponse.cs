@@ -1,7 +1,7 @@
 ﻿namespace HareDu.Model
 {
     public interface ServerTestResponse :
-        ServerResponse
+        Result
     {
         string Status { get; }
     }

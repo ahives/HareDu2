@@ -2,9 +2,10 @@
 {
     using Newtonsoft.Json;
 
-    public interface VirtualHost
+    public interface VirtualHost :
+        ResourceSummary
     {
-        [JsonProperty("name")]
+        [JsonProperty("name1")]
         string Name { get; }
         
         [JsonProperty("tracing")]

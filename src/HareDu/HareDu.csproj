@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HareDu</RootNamespace>
     <AssemblyName>HareDu</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,6 +42,9 @@
     <Reference Include="Common.Logging.Log4Net1213, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
       <HintPath>..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
     </Reference>
+    <Reference Include="GreenPipes, Version=1.1.0.83, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b">
+      <HintPath>..\packages\GreenPipes.1.0.10\lib\net452\GreenPipes.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -63,21 +66,38 @@
     <Compile Include="ExchangeResource.cs" />
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
+    <Compile Include="HttpExtensions.cs" />
+    <Compile Include="Internal\AsyncTaskExtensions.cs" />
+    <Compile Include="Internal\Json\ByteArrayConverter.cs" />
+    <Compile Include="Internal\Json\IMessageSerializer.cs" />
+    <Compile Include="Internal\Json\InterfaceExtensions.cs" />
+    <Compile Include="Internal\Json\InterfaceProxyConverter.cs" />
+    <Compile Include="Internal\Json\InterfaceReflectionCache.cs" />
+    <Compile Include="Internal\Json\ITypeMetadataCache.cs" />
+    <Compile Include="Internal\Json\JsonContractResolver.cs" />
+    <Compile Include="Internal\Json\JsonMessageSerializer.cs" />
+    <Compile Include="Internal\Json\ListConverterCache.cs" />
+    <Compile Include="Internal\Json\ListJsonConverter.cs" />
+    <Compile Include="Internal\Json\MessageDataJsonConverter.cs" />
+    <Compile Include="Internal\Json\SerializerCache.cs" />
+    <Compile Include="Internal\Json\StringDecimalConverter.cs" />
+    <Compile Include="Internal\Json\TypeExtensions.cs" />
+    <Compile Include="Internal\Json\TypeMetadataCache.cs" />
+    <Compile Include="Internal\Json\TypeNameFormatter.cs" />
+    <Compile Include="Internal\Model\VirtualHostSummary.cs" />
     <Compile Include="Internal\Resources\Logging.cs" />
     <Compile Include="Internal\Resources\ResourceBase.cs" />
     <Compile Include="Internal\Resources\VirtualHostResourceImpl.cs" />
     <Compile Include="LoggerSettings.cs" />
     <Compile Include="Model\Binding.cs" />
-    <Compile Include="Model\ServerResponse.cs" />
+    <Compile Include="Model\ResourceSummary.cs" />
+    <Compile Include="Model\Result.cs" />
     <Compile Include="Model\ServerTestResponse.cs" />
     <Compile Include="Model\VirtualHost.cs" />
     <Compile Include="QueueResource.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="UserCredentials.cs" />
     <Compile Include="VirtualHostResource.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal\Json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
