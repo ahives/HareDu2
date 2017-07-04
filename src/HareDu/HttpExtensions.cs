@@ -8,9 +8,9 @@
     using Model;
     using Newtonsoft.Json;
 
-    public static class HttpExtensions
+    internal static class HttpExtensions
     {
-        public static async Task<Result<TData>> Get<TData>(this HttpResponseMessage responseMessage)
+        internal static async Task<Result<TData>> GetResponse<TData>(this HttpResponseMessage responseMessage)
         {
             string rawResponse = await responseMessage.Content.ReadAsStringAsync();
             TData response = SerializerCache.Deserializer.Deserialize<TData>(new JsonTextReader(new StringReader(rawResponse)));
@@ -20,6 +20,14 @@
             return result;
         }
 
+        internal static Result GetResponse(this HttpResponseMessage responseMessage)
+        {
+            Result result = new ResultImpl(responseMessage);
+
+            return result;
+        }
+
+        
         class ResultImpl<TData> :
             Result<TData>
         {
@@ -31,6 +39,20 @@
             }
 
             public TData Data { get; }
+            public string Reason { get; }
+            public HttpStatusCode StatusCode { get; }
+        }
+
+        
+        class ResultImpl :
+            Result
+        {
+            public ResultImpl(HttpResponseMessage responseMessage)
+            {
+                Reason = responseMessage.ReasonPhrase;
+                StatusCode = responseMessage.StatusCode;
+            }
+
             public string Reason { get; }
             public HttpStatusCode StatusCode { get; }
         }

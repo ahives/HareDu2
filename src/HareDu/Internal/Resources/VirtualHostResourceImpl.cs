@@ -5,6 +5,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Logging;
+    using Exceptions;
     using Model;
 
     internal class VirtualHostResourceImpl :
@@ -18,12 +19,14 @@
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string url = $"api/vhosts/{name.SanitizeVirtualHostName()}";
+            string sanitizedVHostName = name.SanitizeVirtualHostName();
 
-            LogInfo($"Sent request to return all information corresponding to virtual host {name} on current RabbitMQ server.");
+            string url = $"api/vhosts/{sanitizedVHostName}";
+
+            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<VirtualHost> result = await response.Get<VirtualHost>();
+            Result<VirtualHost> result = await response.GetResponse<VirtualHost>();
 
             return result;
         }
@@ -37,24 +40,44 @@
             LogInfo("Sent request to return all information on all virtual hosts on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<VirtualHost>> result = await response.Get<IEnumerable<VirtualHost>>();
+            Result<IEnumerable<VirtualHost>> result = await response.GetResponse<IEnumerable<VirtualHost>>();
 
             return result;
         }
 
         public async Task<Result> Create(string name, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new System.NotImplementedException();
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string sanitizedVHostName = name.SanitizeVirtualHostName();
+
+            string url = $"api/vhosts/{sanitizedVHostName}";
+
+            LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHostName}'.");
+
+            HttpResponseMessage response = await HttpPut(url, new StringContent(string.Empty), cancellationToken);
+            Result result = response.GetResponse();
+
+            return result;
         }
 
         public async Task<Result> Delete(string name, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new System.NotImplementedException();
-        }
+            cancellationToken.RequestCanceled(LogInfo);
 
-        public async Task<ServerTestResponse> IsAlive(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new System.NotImplementedException();
+            string sanitizedVHostName = name.SanitizeVirtualHostName();
+            
+            if (sanitizedVHostName == "2%f")
+                throw new DeleteVirtualHostException("Cannot delete the default virtual host.");
+
+            string url = $"api/vhosts/{sanitizedVHostName}";
+
+            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{name}'.");
+
+            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
+            Result result = response.GetResponse();
+
+            return result;
         }
 
         public VirtualHostResourceImpl(HttpClient client, ILog logger)
