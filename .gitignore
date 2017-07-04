@@ -32,4 +32,4 @@ src/tests/*
 tests/*
 SolutionVersion.cs
 
-src/.idea/*
+src/HareDu/.idea*
