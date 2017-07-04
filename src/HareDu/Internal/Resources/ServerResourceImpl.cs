@@ -1,5 +1,6 @@
 ﻿namespace HareDu.Internal.Resources
 {
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -50,6 +51,25 @@
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<NodeHealthCheck> result = await response.GetResponse<NodeHealthCheck>();
+
+            return result;
+        }
+
+        public async Task<Result<Node>> GetNode(string name, CancellationToken cancellationToken = new CancellationToken())
+        {
+            throw new System.NotImplementedException();
+        }
+
+        async Task<Result<IEnumerable<Node>>> ServerResource.GetAllNodes(CancellationToken cancellationToken)
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = "api/nodes";
+
+            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<IEnumerable<Node>> result = await response.GetResponse<IEnumerable<Node>>();
 
             return result;
         }
