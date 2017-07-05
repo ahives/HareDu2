@@ -81,171 +81,171 @@
         long MemoryUsed { get; }
 
         [JsonProperty("mem_used_details")]
-        MemoryUsedDetails MemoryUsedDetails { get; }
+        Rate MemoryUsedRate { get; }
 
         [JsonProperty("fd_used")]
         long FileDescriptorUsed { get; }
 
         [JsonProperty("fd_used_details")]
-        FileDescriptorUsedDetails FileDescriptorUsedDetails { get; }
+        Rate FileDescriptorUsedRate { get; }
 
         [JsonProperty("sockets_used")]
         long SocketsUsed { get; }
 
         [JsonProperty("sockets_used_details")]
-        SocketsUsedDetails SocketsUsedDetails { get; }
+        Rate SocketsUsedRate { get; }
 
         [JsonProperty("proc_used")]
-        long ProcessorUsed { get; }
+        long ProcessorsUsed { get; }
 
         [JsonProperty("proc_used_details")]
-        ProcessorUsedDetails ProcessorUsedDetails { get; }
+        Rate ProcessorsUsedRate { get; }
 
         [JsonProperty("disk_free")]
         long DiskFree { get; }
 
         [JsonProperty("disk_free_details")]
-        DiskFreeDetails DiskFreeDetails { get; }
+        Rate RateOfFreeDiskSpace { get; }
 
         [JsonProperty("gc_num")]
-        long GarbageCollectionNumber { get; }
+        long NumberOfGarbageCollected { get; }
 
         [JsonProperty("gc_num_details")]
-        GarbageCollectionNumberDetails GarbageCollectionNumberDetails { get; }
+        Rate RateOfGarbageCollected { get; }
 
         [JsonProperty("gc_bytes_reclaimed")]
-        long GarbageCollectionBytesReclaimed { get; }
+        long ReclaimedBytesGarbageCollected { get; }
 
         [JsonProperty("gc_bytes_reclaimed_details")]
-        GarbageCollectionBytesReclaimedDetails GarbageCollectionBytesReclaimedDetails { get; }
+        Rate RateOfReclaimedBytesGarbageCollected { get; }
 
         [JsonProperty("context_switches")]
         long ContextSwitches { get; }
 
         [JsonProperty("context_switches_details")]
-        ContextSwitchesDetails ContextSwitchesDetails { get; }
+        Rate RateOfContextSwitches { get; }
 
         [JsonProperty("io_read_count")]
-        long IOReadCount { get; }
+        long IOReads { get; }
 
         [JsonProperty("io_read_count_details")]
-        IOReadCountDetails IOReadCountDetails { get; }
+        Rate RateOfIOReads { get; }
 
         [JsonProperty("io_read_bytes")]
-        long IOReadBytes { get; }
+        long TotalIOBytesRead { get; }
 
         [JsonProperty("io_read_bytes_details")]
-        IOReadBytesDetails IOReadBytesDetails { get; }
+        Rate RateOfIOBytesRead { get; }
 
         [JsonProperty("io_read_avg_time")]
-        string IOReadAvgTime { get; }
+        string AvgIOReadTime { get; }
 
         [JsonProperty("io_read_avg_time_details")]
-        IOReadAvgTimeDetails IOReadAvgTimeDetails { get; }
+        Rate RateOfAvgIOReadTime { get; }
 
         [JsonProperty("io_write_count")]
-        long IOWriteCount { get; }
+        long TotalIOWrites { get; }
 
         [JsonProperty("io_write_count_details")]
-        IOWriteCountDetails IOWriteCountDetails { get; }
+        Rate RateOfIOWrites { get; }
 
         [JsonProperty("io_write_bytes")]
         long IOWriteBytes { get; }
 
         [JsonProperty("io_write_bytes_details")]
-        IOWriteBytesDetails IOWriteBytesDetails { get; }
+        Rate RateOfIOWritesInBytes { get; }
 
         [JsonProperty("io_write_avg_time")]
         decimal IOWriteAvgTime { get; }
 
         [JsonProperty("io_write_avg_time_details")]
-        IOWriteAvgTimeDetails IOWriteAvgTimeDetails { get; }
+        Rate RateOfAvgIOWriteTime { get; }
 
         [JsonProperty("io_sync_count")]
-        long IOSyncCount { get; }
+        long TotalIOSyncs { get; }
 
         [JsonProperty("io_sync_count_details")]
-        IOSyncCountDetails IOSyncCountDetails { get; }
+        Rate RateOfIOSyncs { get; }
 
         [JsonProperty("io_sync_avg_time")]
-        decimal IOSyncAvgTime { get; }
+        decimal AvgIOSyncTime { get; }
 
         [JsonProperty("io_sync_avg_time_details")]
-        IOSyncAvgTimeDetails IOSyncAvgTimeDetails { get; }
+        Rate RateOfAvgIOSyncTime { get; }
 
         [JsonProperty("io_seek_count")]
-        long IOSeekCount { get; }
+        long TotalIOSeeks { get; }
 
         [JsonProperty("io_seek_count_details")]
-        IOSeekCountDetails IOSeekCountDetails { get; }
+        Rate RateOfIOSeeks { get; }
 
         [JsonProperty("io_seek_avg_time")]
-        decimal IOSeekAvgTime { get; }
+        decimal AvgIOSeekTime { get; }
 
         [JsonProperty("io_seek_avg_time_details")]
-        IOSeekAvgTimeDetails IOSeekAvgTimeDetails { get; }
+        Rate RateOfAvgIOSeekTime { get; }
 
         [JsonProperty("io_reopen_count")]
-        long IOReopenCount { get; }
+        long TotalIOReopened { get; }
 
         [JsonProperty("io_reopen_count_details")]
-        IOReopenCountDetails IOReopenCountDetails { get; }
+        Rate RateOfIOReopened { get; }
 
         [JsonProperty("mnesia_ram_tx_count")]
-        long MnesiaRamTransactionCount { get; }
+        long TotalMnesiaRamTransactions { get; }
 
         [JsonProperty("mnesia_ram_tx_count_details")]
-        MnesiaRamTransactionCountDetails MnesiaRamTransactionCountDetails { get; }
+        Rate RateOfMnesiaRamTransactions { get; }
 
         [JsonProperty("mnesia_disk_tx_count")]
-        long MnesiaDiskTransactionCount { get; }
+        long TotalMnesiaDiskTransactions { get; }
 
         [JsonProperty("mnesia_disk_tx_count_details")]
-        MnesiaDiskTransactionCountDetails MnesiaDiskTransactionCountDetails { get; }
+        Rate RateOfMnesiaDiskTransactions { get; }
 
         [JsonProperty("msg_store_read_count")]
-        long MessageStoreReadCount { get; }
+        long TotalMessageStoreReads { get; }
 
         [JsonProperty("msg_store_read_count_details")]
-        MessageStoreReadCountDetails MessageStoreReadCountDetails { get; }
+        Rate RateOfMessageStoreReads { get; }
 
         [JsonProperty("msg_store_write_count")]
-        long MessageStoreWriteCount { get; }
+        long TotalMessageStoreWrites { get; }
 
         [JsonProperty("msg_store_write_count_details")]
-        MessageStoreWriteCountDetails MessageStoreWriteCountDetails { get; }
+        Rate RateOfMessageStoreWrites { get; }
 
         [JsonProperty("queue_index_journal_write_count")]
-        long QueueIndexJournalWriteCount { get; }
+        long TotalQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_journal_write_count_details")]
-        QueueIndexJournalWriteCountDetails QueueIndexJournalWriteCountDetails { get; }
+        Rate RateOfQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_write_count")]
-        long QueueIndexWriteCount { get; }
+        long TotalQueueIndexWrites { get; }
 
         [JsonProperty("queue_index_write_count_details")]
-        QueueIndexWriteCountDetails QueueIndexWriteCountDetails { get; }
+        Rate RateOfQueueIndexWrites { get; }
 
         [JsonProperty("queue_index_read_count")]
-        long QueueIndexReadCount { get; }
+        long TotalQueueIndexReads { get; }
 
         [JsonProperty("queue_index_read_count_details")]
-        QueueIndexReadCountDetails QueueIndexReadCountDetails { get; }
+        Rate RateOfQueueIndexReads { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count")]
-        long IOFileHandleOpenAttemptCount { get; }
+        long TotalOpenFileHandleAttempts { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count_details")]
-        IOFileHandleOpenAttemptCountDetails IOFileHandleOpenAttemptCountDetails { get; }
+        Rate RateOfOpenFileHandleAttempts { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time")]
-        decimal IOFileHandleOpenAttemptCountAverageTime { get; }
+        decimal OpenFileHandleAttemptsAvgTime { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time_details")]
-        IOFileHandleOpenAttemptCountAvgTimeDetails IOFileHandleOpenAttemptCountAvgTimeDetails { get; }
+        Rate RateOfOpenFileHandleAttemptsAvgTime { get; }
 
         [JsonProperty("metrics_gc_queue_length")]
-        MetricsGarbageCollectionQueueLength MetricsGarbageCollectionQueueLength { get; }
+        GarbageCollectionMetrics GarbageCollectionMetrics { get; }
     }
 }

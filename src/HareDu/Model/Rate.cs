@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public interface IOReopenCountDetails
+    public interface Rate
     {
         [JsonProperty("rate")]
         decimal Rate { get; }

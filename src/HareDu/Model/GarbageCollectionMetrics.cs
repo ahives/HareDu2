@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public interface MetricsGarbageCollectionQueueLength
+    public interface GarbageCollectionMetrics
     {
         [JsonProperty("connection_closed")]
         long ConnectionsClosed { get; }

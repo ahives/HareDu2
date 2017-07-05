@@ -18,5 +18,7 @@
         Task<Result<Node>> GetNode(string name, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Result<IEnumerable<Node>>> GetAllNodes(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result<Cluster>> GetClusterDetails(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

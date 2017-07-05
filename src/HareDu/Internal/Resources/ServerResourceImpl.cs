@@ -57,10 +57,19 @@
 
         public async Task<Result<Node>> GetNode(string name, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new System.NotImplementedException();
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = $"api/nodes/{name}";
+
+            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<Node> result = await response.GetResponse<Node>();
+
+            return result;
         }
 
-        async Task<Result<IEnumerable<Node>>> ServerResource.GetAllNodes(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<Node>>> GetAllNodes(CancellationToken cancellationToken)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -70,6 +79,20 @@
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<Node>> result = await response.GetResponse<IEnumerable<Node>>();
+
+            return result;
+        }
+
+        public async Task<Result<Cluster>> GetClusterDetails(CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = "api/overview";
+
+            LogInfo("Sent request to return information pertaining to the RabbitMQ cluster.");
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<Cluster> result = await response.GetResponse<Cluster>();
 
             return result;
         }

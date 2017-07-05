@@ -41,6 +41,31 @@
         }
 
         [Test]
+        public async Task Verify_GetDefinition_works()
+        {
+            Result<VirtualHostDefinition> result = await Client
+                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .GetDefinition("HareDu");
+
+            foreach (var exchange in result.Data.Exchanges)
+            {
+                Console.WriteLine("Name: {0}", exchange.Name);
+                Console.WriteLine("Type: {0}", exchange.Type);
+                Console.WriteLine("Durable: {0}", exchange.Durable);
+                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
+                Console.WriteLine("Internal: {0}", exchange.Internal);
+
+                foreach (var argument in exchange.Arguments)
+                {
+                    Console.WriteLine("{0} : {1}", argument.Key, argument.Value);
+                }
+//                Console.WriteLine("Arguments: {0}", exchange.Arguments);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+
+        [Test]
         public async Task Verify_Create_works()
         {
             Result result = await Client

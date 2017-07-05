@@ -49,10 +49,37 @@
             {
                 Console.WriteLine("OperatingSystemPid: {0}", node.OperatingSystemPid);
                 Console.WriteLine("TotalFileDescriptors: {0}", node.TotalFileDescriptors);
+                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
+                Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
                 Console.WriteLine("StatusCode: {0}", result.StatusCode);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
+        }
+        
+        [Test]
+        public async Task Verify_GetClusterDetails_works()
+        {
+            Result<Cluster> result = await Client
+                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .GetClusterDetails();
+
+            Console.WriteLine("ClusterName: {0}", result.Data.ClusterName);
+//            Console.WriteLine("TotalQueues: {0}", result.Data.ClusterObjects.TotalQueues);
+//            Console.WriteLine("TotalConsumers: {0}", result.Data.ClusterObjects.TotalConsumers);
+//            Console.WriteLine("TotalExchanges: {0}", result.Data.ClusterObjects.TotalExchanges);
+            Console.WriteLine("RabbitMqVersion: {0}", result.Data.RabbitMqVersion);
+            Console.WriteLine("****************************************************");
+            Console.WriteLine();
+
+//            foreach (var listener in result.Data.Listeners)
+//            {
+//                Console.WriteLine("Node: {0}", listener.Node);
+//                Console.WriteLine("IPAddress: {0}", listener.IPAddress);
+//                Console.WriteLine("Port: {0}", listener.Port);
+//                Console.WriteLine("****************************************************");
+//                Console.WriteLine();
+//            }
         }
     }
 }
