@@ -15,6 +15,6 @@
             });
         }
         
-        protected HareDuClient Client { get; set; }
+        protected HareDuClient Client { get; private set; }
     }
 }

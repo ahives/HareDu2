@@ -81,5 +81,26 @@
             Console.WriteLine();
         }
 
+        [Test, Explicit]
+        public async Task Verify_Create_works()
+        {
+            var args = new Dictionary<string, object> {{"arg1", 5}, {"arg2", true}, {"arg3", "Something"}};
+
+            Result result = await Client
+                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ExchangeResource>()
+                .Create("E6", "HareDu", x =>
+                {
+                    x.IsDurable();
+                    x.IsForInternalUse();
+                    x.UsingRoutingType(r => r.Fanout());
+                    x.WithArguments(args);
+                });
+
+            Console.WriteLine("Reason: {0}", result.Reason);
+            Console.WriteLine("StatusCode: {0}", result.StatusCode);
+            Console.WriteLine("****************************************************");
+            Console.WriteLine();
+        }
     }
 }
