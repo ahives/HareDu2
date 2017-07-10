@@ -20,5 +20,7 @@
         Task<Result<IEnumerable<Node>>> GetAllNodes(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Result<Cluster>> GetClusterDetails(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result<IEnumerable<Channel>>> GetChannels(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

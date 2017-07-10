@@ -12,9 +12,6 @@
         ResourceBase,
         VirtualHostResource
     {
-        public ExchangeResource Exchange { get; }
-        public QueueResource Queue { get; }
-        
         public async Task<Result<Connection>> GetConnections(string vhostName, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
@@ -131,8 +128,6 @@
         public VirtualHostResourceImpl(HttpClient client, ILog logger)
             : base(client, logger)
         {
-            Exchange = new ExchangeResourceImpl(client, logger);
-            Queue = new QueueResourceImpl(client, logger);
         }
     }
 }

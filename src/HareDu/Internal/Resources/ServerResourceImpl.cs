@@ -97,6 +97,20 @@
             return result;
         }
 
+        public async Task<Result<IEnumerable<Channel>>> GetChannels(CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = "api/nodes";
+
+            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<IEnumerable<Channel>> result = await response.GetResponse<IEnumerable<Channel>>();
+
+            return result;
+        }
+
         public ServerResourceImpl(HttpClient client, ILog logger)
             : base(client, logger)
         {

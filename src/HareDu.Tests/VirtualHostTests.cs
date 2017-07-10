@@ -3,15 +3,19 @@
     using System;
     using System.Net;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
+    using Internal.Serialization;
     using Model;
+    using Newtonsoft.Json;
     using NUnit.Framework;
 
     [TestFixture]
     public class VirtualHostTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Verify_GetAll_works()
         {
             Result<IEnumerable<VirtualHost>> result = await Client
@@ -27,7 +31,7 @@
             }
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_Get_works()
         {
             Result<VirtualHost> result = await Client
@@ -40,7 +44,7 @@
             Console.WriteLine();
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_GetDefinition_works()
         {
             Result<VirtualHostDefinition> result = await Client
@@ -65,7 +69,7 @@
             }
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_Create_works()
         {
             Result result = await Client
@@ -78,7 +82,7 @@
             Console.WriteLine();
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_Delete_works()
         {
             Result result = await Client
@@ -89,6 +93,54 @@
             Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
+        }
+
+        [Test, Explicit]
+        public async Task Verify_Exchange_works()
+        {
+            var args = new Dictionary<string, object> {{"arg1", 5}, {"arg2", true}, {"arg3", "Something"}};
+
+            Result result = await Client
+                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ExchangeResource>()
+                .Create("E6", "HareDu", x =>
+                {
+                    x.IsDurable();
+                    x.IsForInternalUse();
+//                    x.UsingRoutingType("fanout");
+//                    x.UsingRoutingType(r => r.Fanout());
+                    x.WithArguments(args);
+                });
+
+            Console.WriteLine("Reason: {0}", result.Reason);
+            Console.WriteLine("StatusCode: {0}", result.StatusCode);
+            Console.WriteLine("****************************************************");
+            Console.WriteLine();
+        }
+
+        [Test]
+        public void Test()
+        {
+            IDictionary<string, object> args = new Dictionary<string, object>
+            {
+                {"key1", 12},
+                {"key2", true},
+                {"key3", "value3"},
+                {"key4", "value4"},
+                {"key5", "value5"}
+            };
+
+//            string serialized = "{'key1':12,'key2':true,'key3':'value3','key4':'value4','key5':'value5'}";
+//            Dictionary<string, object> args2 =
+//                SerializerCache.Deserializer.Deserialize<Dictionary<string, object>>(new JsonTextReader(new StringReader(serialized)));
+//
+//            Assert.AreEqual(args, args2);
+            using (StreamWriter sw = new StreamWriter("/users/albert/documents/git/test.txt"))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                SerializerCache.Serializer.Serialize(writer, args);
+            }
+
         }
     }
 }

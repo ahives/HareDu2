@@ -58,6 +58,25 @@
         }
         
         [Test]
+        public async Task Verify_GetChannels_works()
+        {
+            Result<IEnumerable<Channel>> result = await Client
+                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .GetChannels();
+
+            foreach (var node in result.Data)
+            {
+                Console.WriteLine("Name: {0}", node.Name);
+                Console.WriteLine("PrefetchCount: {0}", node.PrefetchCount);
+//                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
+//                Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
+                Console.WriteLine("StatusCode: {0}", result.StatusCode);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+        
+        [Test]
         public async Task Verify_GetClusterDetails_works()
         {
             Result<Cluster> result = await Client

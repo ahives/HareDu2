@@ -1,22 +1,39 @@
 ﻿namespace HareDu.Internal.Resources
 {
     using System;
+    using System.Linq;
     using System.Net.Http;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Logging;
+    using Exceptions;
     using HareDu.Model;
 
     internal class ResourceBase :
         Logging
     {
         readonly HttpClient _client;
+        readonly ILog _logger;
 
         protected ResourceBase(HttpClient client, ILog logger)
             : base(logger)
         {
             _client = client;
+            _logger = logger;
+        }
+        
+        public virtual TResource Factory<TResource>()
+        {
+            var type = typeof (TResource);
+            var implClass = GetType().Assembly
+                .GetTypes()
+                .FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
+
+            if (implClass == null)
+                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
+            
+            return (TResource) Activator.CreateInstance(implClass, _client, _logger);
         }
 
         void HandleDotsAndSlashes()

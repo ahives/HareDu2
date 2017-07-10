@@ -8,9 +8,7 @@
     public interface VirtualHostResource :
         Resource
     {
-        ExchangeResource Exchange { get; }
-        
-        QueueResource Queue { get; }
+        TResource Factory<TResource>();
 
         Task<Result<Connection>> GetConnections(string vhostName, CancellationToken cancellationToken = default(CancellationToken));
         

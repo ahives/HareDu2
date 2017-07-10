@@ -63,11 +63,18 @@
   <ItemGroup>
     <Compile Include="BindingResource.cs" />
     <Compile Include="ClientSettings.cs" />
+    <Compile Include="DeleteCondition.cs" />
+    <Compile Include="Exceptions\ExchangeMissingException.cs" />
     <Compile Include="Exceptions\DeleteVirtualHostException.cs" />
+    <Compile Include="Exceptions\ExchangeRoutingTypeMissingException.cs" />
     <Compile Include="Exceptions\HareDuClientInitException.cs" />
     <Compile Include="Exceptions\HareDuResourceInitException.cs" />
     <Compile Include="Exceptions\UserCredentialsMissingException.cs" />
+    <Compile Include="Exceptions\VirtualHostMissingException.cs" />
+    <Compile Include="ExchangeBehavior.cs" />
     <Compile Include="ExchangeResource.cs" />
+    <Compile Include="ExchangeRoutingType.cs" />
+    <Compile Include="ExchangeSettings.cs" />
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuClientBehavior.cs" />
     <Compile Include="HareDuClientImpl.cs" />
@@ -106,9 +113,12 @@
     <Compile Include="Model\Cluster.cs" />
     <Compile Include="Model\ClusterObjectsSummary.cs" />
     <Compile Include="Model\Connection.cs" />
+    <Compile Include="Model\ConnectionDetails.cs" />
     <Compile Include="Model\Context.cs" />
+    <Compile Include="Model\Exchange.cs" />
     <Compile Include="Model\ExchangeSummary.cs" />
     <Compile Include="Model\ExchangeType.cs" />
+    <Compile Include="Model\GarbageCollectionDetails.cs" />
     <Compile Include="Model\Listener.cs" />
     <Compile Include="Model\MessageStats.cs" />
     <Compile Include="Model\GarbageCollectionMetrics.cs" />
