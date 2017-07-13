@@ -18,21 +18,21 @@
         {
         }
 
-        public async Task<Result<Exchange>> Get(string exchangeName, string vhostName, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<Exchange>> Get(string exchange, string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(exchangeName))
+            if (string.IsNullOrWhiteSpace(exchange))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            if (string.IsNullOrWhiteSpace(vhostName))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHostName}/{exchangeName}";
+            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<Exchange> result = await response.GetResponse<Exchange>();
@@ -40,18 +40,18 @@
             return result;
         }
 
-        public async Task<Result<IEnumerable<Exchange>>> GetAll(string vhostName, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<Exchange>>> GetAll(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(vhostName))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHostName}";
+            string url = $"api/exchanges/{sanitizedVHost}";
 
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<Exchange>> result = await response.GetResponse<IEnumerable<Exchange>>();
@@ -59,15 +59,15 @@
             return result;
         }
 
-        public async Task<Result> Create(string exchangeName, string vhostName, Action<ExchangeBehavior> settings,
+        public async Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> settings,
             CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(exchangeName))
+            if (string.IsNullOrWhiteSpace(exchange))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            if (string.IsNullOrWhiteSpace(vhostName))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
             var impl = new ExchangeBehaviorImpl();
@@ -78,33 +78,33 @@
             if (string.IsNullOrWhiteSpace(excahngeSettings.RoutingType))
                 throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHostName}/{exchangeName}";
+            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            LogInfo($"Sent request to RabbitMQ server to create exchange '{exchangeName} in virtual host '{sanitizedVHostName}'.");
+            LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange} in virtual host '{sanitizedVHost}'.");
 
-            HttpResponseMessage response = await HttpPut(url, impl.Settings.Value, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, excahngeSettings, cancellationToken);
             Result result = response.GetResponse();
 
             return result;
         }
 
-        public async Task<Result> Delete(string exchangeName, string vhostName, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(string exchange, string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(exchangeName))
+            if (string.IsNullOrWhiteSpace(exchange))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            if (string.IsNullOrWhiteSpace(vhostName))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHostName}/{exchangeName}";
+            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchangeName}' from virtual host '{vhostName}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
@@ -112,27 +112,27 @@
             return result;
         }
 
-        public async Task<Result> Delete(string exchangeName, string vhostName, Action<DeleteCondition> condition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeleteCondition> condition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(exchangeName))
+            if (string.IsNullOrWhiteSpace(exchange))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            if (string.IsNullOrWhiteSpace(vhostName))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            var impl = new DeleteConditionImpl();
+            var impl = new ExchangeDeleteConditionImpl();
             condition(impl);
             
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHostName}/{exchangeName}";
+            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
             if (impl.DeleteIfUnused)
-                url = $"api/exchanges/{sanitizedVHostName}/{exchangeName}?if-unused=true";
+                url = $"api/exchanges/{sanitizedVHost}/{exchange}?if-unused=true";
 
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchangeName}' from virtual host '{vhostName}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
@@ -141,8 +141,8 @@
         }
 
         
-        class DeleteConditionImpl :
-            DeleteCondition
+        class ExchangeDeleteConditionImpl :
+            ExchangeDeleteCondition
         {
             public bool DeleteIfUnused { get; private set; }
             
@@ -161,6 +161,7 @@
             static bool _autoDelete;
             static bool _internal;
             static IDictionary<string, object> _arguments;
+            
             public Lazy<ExchangeSettings> Settings { get; }
 
             public ExchangeBehaviorImpl() => Settings = new Lazy<ExchangeSettings>(Init, LazyThreadSafetyMode.PublicationOnly);

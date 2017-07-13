@@ -24,21 +24,20 @@
         }
         
         public virtual TResource Factory<TResource>()
+            where TResource : Resource
         {
-            var type = typeof (TResource);
-            var implClass = GetType().Assembly
-                .GetTypes()
-                .FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
+            var type = typeof(TResource);
+            var impl = GetType().Assembly.GetTypes().FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
 
-            if (implClass == null)
+            if (impl == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource) Activator.CreateInstance(implClass, _client, _logger);
+            return (TResource) Activator.CreateInstance(impl, _client, _logger);
         }
 
         void HandleDotsAndSlashes()
         {
-            var getSyntaxMethod =  typeof (UriParser).GetMethod("GetSyntax", BindingFlags.Static | BindingFlags.NonPublic);
+            var getSyntaxMethod = typeof(UriParser).GetMethod("GetSyntax", BindingFlags.Static | BindingFlags.NonPublic);
             if (getSyntaxMethod == null)
                 throw new MissingMethodException("UriParser", "GetSyntax");
 
@@ -51,8 +50,7 @@
             setUpdatableFlagsMethod.Invoke(uriParser, new object[] {0});
         }
 
-        protected virtual Task<HttpResponseMessage> HttpGet(string url,
-            CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual Task<HttpResponseMessage> HttpGet(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
@@ -68,8 +66,7 @@
             }
         }
 
-        protected virtual Task<HttpResponseMessage> HttpDelete(string url,
-            CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual Task<HttpResponseMessage> HttpDelete(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
@@ -85,8 +82,7 @@
             }
         }
 
-        protected virtual Task<HttpResponseMessage> HttpPut<T>(string url, T value,
-            CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual Task<HttpResponseMessage> HttpPut<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
@@ -102,8 +98,7 @@
             }
         }
 
-        protected virtual Task<HttpResponseMessage> HttpPost<T>(string url, T value,
-            CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual Task<HttpResponseMessage> HttpPost<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {

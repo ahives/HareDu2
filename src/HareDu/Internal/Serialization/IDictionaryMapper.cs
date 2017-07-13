@@ -12,13 +12,10 @@
 // specific language governing permissions and limitations under the License.
 namespace HareDu.Internal.Serialization
 {
-    using System.Net.Mime;
+    using System.Collections.Generic;
 
-    /// <summary>
-    /// A message serializer is responsible for serializing a message. Shocking, I know.
-    /// </summary>
-    public interface IMessageSerializer
+    public interface IDictionaryMapper<in T>
     {
-        ContentType ContentType { get; }
+        void WritePropertyToDictionary(IDictionary<string, object> dictionary, T obj);
     }
 }

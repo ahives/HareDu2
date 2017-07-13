@@ -14,7 +14,6 @@ namespace HareDu.Internal.Serialization
 {
     using System;
     using System.Reflection;
-    using GreenPipes.Internals.Reflection;
     using Newtonsoft.Json;
 
     public class InterfaceProxyConverter :

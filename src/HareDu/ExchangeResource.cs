@@ -6,18 +6,19 @@
     using System.Threading.Tasks;
     using Model;
 
-    public interface ExchangeResource
+    public interface ExchangeResource :
+        Resource
     {
-        TResource Factory<TResource>();
+        TResource Factory<TResource>() where TResource : Resource;
         
-        Task<Result<Exchange>> Get(string exchangeName, string vhostName, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<Exchange>> Get(string exchange, string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result<IEnumerable<Exchange>>> GetAll(string vhostName, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<Exchange>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(string exchangeName, string vhostName, Action<ExchangeBehavior> settings, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> settings, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string exchangeName, string vhostName, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Delete(string exchange, string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string exchangeName, string vhostName, Action<DeleteCondition> condition, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeleteCondition> condition, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

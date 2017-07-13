@@ -12,15 +12,15 @@
         ResourceBase,
         VirtualHostResource
     {
-        public async Task<Result<Connection>> GetConnections(string vhostName, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<Connection>> GetConnections(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/vhosts/{sanitizedVHostName}/connections";
+            string url = $"api/vhosts/{sanitizedVHost}/connections";
 
-            LogInfo($"Sent request to return all channel information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all channel information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<Connection> result = await response.GetResponse<Connection>();
@@ -28,15 +28,15 @@
             return result;
         }
 
-        public async Task<Result<Channel>> GetChannels(string vhostName, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<Channel>> GetChannels(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/vhosts/{sanitizedVHostName}/channels";
+            string url = $"api/vhosts/{sanitizedVHost}/channels";
 
-            LogInfo($"Sent request to return all channel information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all channel information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<Channel> result = await response.GetResponse<Channel>();
@@ -44,15 +44,15 @@
             return result;
         }
 
-        public async Task<Result<VirtualHostDefinition>> GetDefinition(string vhostName, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<VirtualHostDefinition>> GetDefinition(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/definitions/{sanitizedVHostName}";
+            string url = $"api/definitions/{sanitizedVHost}";
 
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<VirtualHostDefinition> result = await response.GetResponse<VirtualHostDefinition>();
@@ -60,15 +60,15 @@
             return result;
         }
 
-        public async Task<Result<VirtualHost>> Get(string vhostName, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result<VirtualHost>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/vhosts/{sanitizedVHostName}";
+            string url = $"api/vhosts/{sanitizedVHost}";
 
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<VirtualHost> result = await response.GetResponse<VirtualHost>();
@@ -90,15 +90,15 @@
             return result;
         }
 
-        public async Task<Result> Create(string vhostName, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> Create(string vhost, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/vhosts/{sanitizedVHostName}";
+            string url = $"api/vhosts/{sanitizedVHost}";
 
-            LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHostName}'.");
+            LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHost}'.");
 
             HttpResponseMessage response = await HttpPut(url, new StringContent(string.Empty), cancellationToken);
             Result result = response.GetResponse();
@@ -106,18 +106,18 @@
             return result;
         }
 
-        public async Task<Result> Delete(string vhostName, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> Delete(string vhost, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHostName = vhostName.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
             
-            if (sanitizedVHostName == "2%f")
+            if (sanitizedVHost == "2%f")
                 throw new DeleteVirtualHostException("Cannot delete the default virtual host.");
 
-            string url = $"api/vhosts/{sanitizedVHostName}";
+            string url = $"api/vhosts/{sanitizedVHost}";
 
-            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{vhostName}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{vhost}'.");
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();

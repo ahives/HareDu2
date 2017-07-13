@@ -37,7 +37,7 @@
                 Credentials = new NetworkCredential(userCreds.Username, userCreds.Password)
             };
             
-            var client = new HttpClient(handler) {BaseAddress = uri};
+            var client = new HttpClient(handler){BaseAddress = uri};
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             if (_settings.Timeout != TimeSpan.Zero)
@@ -45,15 +45,13 @@
 
             Client = client;
 
-            var type = typeof (TResource);
-            var implClass = GetType().Assembly
-                .GetTypes()
-                .FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
+            var type = typeof(TResource);
+            var impl = GetType().Assembly.GetTypes().FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
 
-            if (implClass == null)
+            if (impl == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource) Activator.CreateInstance(implClass, client, _settings.Logger);
+            return (TResource)Activator.CreateInstance(impl, client, _settings.Logger);
         }
 
         public void CancelPendingRequest()

@@ -17,7 +17,6 @@ namespace HareDu.Internal.Serialization
     using System.Net.Mime;
     using System.Text;
     using System.Threading;
-    using GreenPipes.Internals.Extensions;
     using Newtonsoft.Json;
 
     public class JsonMessageSerializer :
