@@ -14,7 +14,6 @@
         public async Task Verify_Get_works()
         {
             Result<Exchange> result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
                 .Factory<ExchangeResource>()
                 .Get("E2", "HareDu");
  
@@ -33,7 +32,6 @@
         public async Task Verify_GetAll_works()
         {
             Result<IEnumerable<Exchange>> result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
                 .Factory<ExchangeResource>()
                 .GetAll("HareDu");
 
@@ -57,7 +55,6 @@
         public async Task Verify_conditional_Delete_works()
         {
             Result result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
                 .Factory<ExchangeResource>()
                 .Delete("E2", "HareDu", x => x.IfUnused());
  
@@ -71,7 +68,6 @@
         public async Task Verify_Delete_works()
         {
             Result result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
                 .Factory<ExchangeResource>()
                 .Delete("E3", "HareDu");
  
@@ -87,7 +83,6 @@
             var args = new Dictionary<string, object> {{"arg1", 5}, {"arg2", true}, {"arg3", "Something"}};
 
             Result result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
                 .Factory<ExchangeResource>()
                 .Create("E6", "HareDu", x =>
                 {

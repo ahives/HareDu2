@@ -14,7 +14,7 @@
         public async Task Test()
         {
             Result<VirtualHostHealthCheck> result = await Client
-                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ServerResource>()
                 .IsVirtualHostHealthy("HareDu2");
 
             Console.WriteLine("Status: {0}", result.Data.Status);
@@ -28,7 +28,7 @@
         public async Task Verify_IsNodeHealthy_works()
         {
             Result<NodeHealthCheck> result = await Client
-                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ServerResource>()
                 .IsNodeHealthy();
 
             Console.WriteLine("Status: {0}", result.Data.Status);
@@ -42,7 +42,7 @@
         public async Task Verify_GetAllNodes_works()
         {
             Result<IEnumerable<Node>> result = await Client
-                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ServerResource>()
                 .GetAllNodes();
 
             foreach (var node in result.Data)
@@ -61,7 +61,7 @@
         public async Task Verify_GetChannels_works()
         {
             Result<IEnumerable<Channel>> result = await Client
-                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ServerResource>()
                 .GetChannels();
 
             foreach (var node in result.Data)
@@ -80,7 +80,7 @@
         public async Task Verify_GetClusterDetails_works()
         {
             Result<Cluster> result = await Client
-                .Factory<ServerResource>(x => x.Credentials("guest", "guest"))
+                .Factory<ServerResource>()
                 .GetClusterDetails();
 
             Console.WriteLine("ClusterName: {0}", result.Data.ClusterName);

@@ -9,8 +9,6 @@
     public interface ExchangeResource :
         Resource
     {
-        TResource Factory<TResource>() where TResource : Resource;
-        
         Task<Result<Exchange>> Get(string exchange, string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result<IEnumerable<Exchange>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));

@@ -19,7 +19,7 @@
         public async Task Verify_GetAll_works()
         {
             Result<IEnumerable<VirtualHost>> result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<VirtualHostResource>()
                 .GetAll();
 
             foreach (var vhost in result.Data)
@@ -35,7 +35,7 @@
         public async Task Verify_Get_works()
         {
             Result<VirtualHost> result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<VirtualHostResource>()
                 .Get("HareDu");
 
             Console.WriteLine("Name: {0}", result.Data.Name);
@@ -48,7 +48,7 @@
         public async Task Verify_GetDefinition_works()
         {
             Result<VirtualHostDefinition> result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<VirtualHostResource>()
                 .GetDefinition("HareDu");
 
             foreach (var exchange in result.Data.Exchanges)
@@ -73,7 +73,7 @@
         public async Task Verify_Create_works()
         {
             Result result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<VirtualHostResource>()
                 .Create("HareDu3");
 
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -86,7 +86,7 @@
         public async Task Verify_Delete_works()
         {
             Result result = await Client
-                .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
+                .Factory<VirtualHostResource>()
                 .Delete("HareDu2");
 
             Console.WriteLine("Reason: {0}", result.Reason);

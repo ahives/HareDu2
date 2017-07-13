@@ -8,8 +8,6 @@
     public interface VirtualHostResource :
         Resource
     {
-        TResource Factory<TResource>() where TResource : Resource;
-
         Task<Result<Connection>> GetConnections(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result<Channel>> GetChannels(string vhost, CancellationToken cancellationToken = default(CancellationToken));

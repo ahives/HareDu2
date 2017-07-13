@@ -9,5 +9,7 @@
         void EnableLogging(Action<LoggerSettings> logger);
 
         void TimeoutAfter(TimeSpan timeout);
+        
+        void UsingCredentials(string username, string password);
     }
 }

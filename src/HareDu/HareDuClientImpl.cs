@@ -22,19 +22,13 @@
             _settings = settings;
         }
 
-        public TResource Factory<TResource>(Action<UserCredentials> userCredentials)
+        public TResource Factory<TResource>()
             where TResource : Resource
         {
-            var userCreds = new UserCredentialsImpl();
-            userCredentials(userCreds);
-
-            if (string.IsNullOrWhiteSpace(userCreds?.Username) || string.IsNullOrWhiteSpace(userCreds?.Password))
-                throw new UserCredentialsMissingException("Username or password was missing.");
-            
             var uri = new Uri($"{_settings.Host}/");
             var handler = new HttpClientHandler
             {
-                Credentials = new NetworkCredential(userCreds.Username, userCreds.Password)
+                Credentials = new NetworkCredential(_settings.Credentials.Username, _settings.Credentials.Password)
             };
             
             var client = new HttpClient(handler){BaseAddress = uri};
@@ -59,20 +53,6 @@
             LogInfo("Cancelling all pending requests.");
 
             Client.CancelPendingRequests();
-        }
-
-        
-        class UserCredentialsImpl :
-            UserCredentials
-        {
-            public string Username { get; private set; }
-            public string Password { get; private set; }
-            
-            public void Credentials(string username, string password)
-            {
-                Username = username;
-                Password = password;
-            }
         }
     }
 }

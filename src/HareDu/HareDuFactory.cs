@@ -7,13 +7,22 @@
 
     public static class HareDuFactory
     {
-        public static HareDuClient New(Action<HareDuClientBehavior> behavior)
+        public static HareDuClient Create(Action<HareDuClientBehavior> behavior)
         {
             try
             {
                 var init = new HareDuClientBehaviorImpl();
                 behavior(init);
-                var client = new HareDuClientImpl(init.Settings.Value);
+
+                var settings = init.Settings.Value;
+
+                if (string.IsNullOrWhiteSpace(settings.Host))
+                    throw new HostUrlMissingException("Host URL was missing.");
+                
+                if (string.IsNullOrWhiteSpace(settings.Credentials.Username) || string.IsNullOrWhiteSpace(settings.Credentials.Password))
+                    throw new UserCredentialsMissingException("Username or password was missing.");
+
+                var client = new HareDuClientImpl(settings);
 
                 return client;
             }
@@ -30,19 +39,14 @@
             static string _host;
             static ILog _logger;
             static TimeSpan _timeout;
+            static HareDuCredentials _credentials;
             public Lazy<ClientSettings> Settings { get; }
 
-            public HareDuClientBehaviorImpl()
-            {
-                Settings = new Lazy<ClientSettings>(InitClientSettings, LazyThreadSafetyMode.PublicationOnly);
-            }
+            public HareDuClientBehaviorImpl() => Settings = new Lazy<ClientSettings>(InitClientSettings, LazyThreadSafetyMode.PublicationOnly);
 
-            static ClientSettings InitClientSettings() => new ClientSettingsImpl(_host, _logger, _timeout);
+            static ClientSettings InitClientSettings() => new ClientSettingsImpl(_host, _logger, _timeout, _credentials);
 
-            public void ConnectTo(string host)
-            {
-                _host = host;
-            }
+            public void ConnectTo(string host) => _host = host;
 
             public void EnableLogging(Action<LoggerSettings> logger)
             {
@@ -55,25 +59,41 @@
                 _logger = LogManager.GetLogger(loggingCharacteristicsImpl.Target);
             }
 
-            public void TimeoutAfter(TimeSpan timeout)
-            {
-                _timeout = timeout;
-            }
+            public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
+
+            public void UsingCredentials(string username, string password) =>
+                _credentials = new HareDuCredentialsImpl(username, password);
 
             
+            class HareDuCredentialsImpl :
+                HareDuCredentials
+            {
+                public HareDuCredentialsImpl(string username, string password)
+                {
+                    Username = username;
+                    Password = password;
+                }
+
+                public string Username { get; }
+                public string Password { get; }
+            }
+
+
             class ClientSettingsImpl :
                 ClientSettings
             {
-                public ClientSettingsImpl(string host, ILog logger, TimeSpan timeout)
+                public ClientSettingsImpl(string host, ILog logger, TimeSpan timeout, HareDuCredentials credentials)
                 {
                     Host = host;
                     Logger = logger;
                     Timeout = timeout;
+                    Credentials = credentials;
                 }
 
                 public string Host { get; }
                 public ILog Logger { get; }
                 public TimeSpan Timeout { get; }
+                public HareDuCredentials Credentials { get; }
             }
 
 

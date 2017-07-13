@@ -1,6 +1,6 @@
 ﻿namespace HareDu.Internal
 {
-    internal static class RmqSanitizationExtensions
+    internal static class SanitizationExtensions
     {
         internal static string SanitizeVirtualHostName(this string value) => value == @"/" ? value.Replace("/", "%2f") : value;
 

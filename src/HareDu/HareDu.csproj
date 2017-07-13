@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="BindingResource.cs" />
     <Compile Include="ClientSettings.cs" />
+    <Compile Include="Exceptions\HostUrlMissingException.cs" />
     <Compile Include="Exceptions\QueueMissingException.cs" />
     <Compile Include="ExchangeDeleteCondition.cs" />
     <Compile Include="Exceptions\ExchangeMissingException.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuClientBehavior.cs" />
     <Compile Include="HareDuClientImpl.cs" />
+    <Compile Include="HareDuCredentials.cs" />
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HttpExtensions.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
@@ -136,7 +138,7 @@
     <Compile Include="Internal\Resources\Logging.cs" />
     <Compile Include="Internal\Resources\ResourceBase.cs" />
     <Compile Include="Internal\Resources\VirtualHostResourceImpl.cs" />
-    <Compile Include="Internal\RmqSanitizationExtensions.cs" />
+    <Compile Include="Internal\SanitizationExtensions.cs" />
     <Compile Include="Internal\Serialization\ValueArrayObjectMapper.cs" />
     <Compile Include="Internal\Serialization\ValueDictionaryMapper.cs" />
     <Compile Include="Internal\Serialization\ValueListObjectMapper.cs" />
@@ -184,7 +186,6 @@
     <Compile Include="QueueResource.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="ServerResource.cs" />
-    <Compile Include="UserCredentials.cs" />
     <Compile Include="VirtualHostResource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
