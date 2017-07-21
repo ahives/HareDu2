@@ -1,35 +1,50 @@
-build_artifacts/*
 build_output/*
+build_artifacts/*
+build_temp/*
+*.suo
+*.user
+packages
+*.dotCover
 
-**/*.suo
-**/**/*.suo
-**/*.user
-**/**/*.user
+*.ncrunch*
+.vs
+
+.fake
+
+src/logs/*
 
 bin
 obj
 _ReSharper*
-*.dotCover
 
 *.csproj.user
 *.resharper.user
-*.ReSharper.user
+*.resharper
+*.ReSharper
 *.cache
 *~
 *.swp
 *.bak
 *.orig
-*.user
 
-src/packages/**/*
-docs/build/**/*
+NuGet.exe
+packages
 
-.DS_Store
-
+# Tests
 TestResult.xml
 submit.xml
-src/tests/*
 tests/*
 SolutionVersion.cs
+src/SolutionVersion.cs
+tests
+doc/build/*
+*.[lm]df
 
-src/HareDu/.idea*
+# osx noise
+.DS_Store
+*.DS_Store
+
+_book
+/node_modules
+.vscode
+**/.idea/
