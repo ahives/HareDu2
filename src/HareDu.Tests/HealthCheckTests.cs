@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Model;
     using NUnit.Framework;
@@ -11,25 +12,11 @@
         HareDuTestBase
     {
         [Test]
-        public async Task Test()
-        {
-            Result<VirtualHostHealthCheck> result = await Client
-                .Factory<ServerResource>()
-                .IsVirtualHostHealthy("HareDu2");
-
-            Console.WriteLine("Status: {0}", result.Data.Status);
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
-        }
-        
-        [Test]
-        public async Task Verify_IsNodeHealthy_works()
+        public async Task Verify_IsHealthy_works()
         {
             Result<NodeHealthCheck> result = await Client
-                .Factory<ServerResource>()
-                .IsNodeHealthy();
+                .Factory<Node>()
+                .IsHealthy();
 
             Console.WriteLine("Status: {0}", result.Data.Status);
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -41,8 +28,8 @@
         [Test]
         public async Task Verify_GetAllNodes_works()
         {
-            Result<IEnumerable<Node>> result = await Client
-                .Factory<ServerResource>()
+            Result<IEnumerable<NodeInfo>> result = await Client
+                .Factory<Cluster>()
                 .GetAllNodes();
 
             foreach (var node in result.Data)
@@ -60,8 +47,8 @@
         [Test]
         public async Task Verify_GetChannels_works()
         {
-            Result<IEnumerable<Channel>> result = await Client
-                .Factory<ServerResource>()
+            Result<IEnumerable<ChannelInfo>> result = await Client
+                .Factory<Node>()
                 .GetChannels();
 
             foreach (var node in result.Data)
@@ -79,9 +66,9 @@
         [Test]
         public async Task Verify_GetClusterDetails_works()
         {
-            Result<Cluster> result = await Client
-                .Factory<ServerResource>()
-                .GetClusterDetails();
+            Result<ClusterInfo> result = await Client
+                .Factory<Cluster>()
+                .GetDetails();
 
             Console.WriteLine("ClusterName: {0}", result.Data.ClusterName);
 //            Console.WriteLine("TotalQueues: {0}", result.Data.ClusterObjects.TotalQueues);

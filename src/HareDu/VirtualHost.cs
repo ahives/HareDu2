@@ -5,18 +5,16 @@
     using System.Threading.Tasks;
     using Model;
 
-    public interface VirtualHostResource :
+    public interface VirtualHost :
         Resource
     {
-        Task<Result<Connection>> GetConnections(string vhost, CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result<Channel>> GetChannels(string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<VirtualHostHealthCheck>> IsHealthy(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result<VirtualHostDefinition>> GetDefinition(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result<VirtualHost>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<VirtualHostInfo>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result<IEnumerable<VirtualHost>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Create(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         

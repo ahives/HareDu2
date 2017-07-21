@@ -40,6 +40,7 @@
             static ILog _logger;
             static TimeSpan _timeout;
             static HareDuCredentials _credentials;
+            
             public Lazy<ClientSettings> Settings { get; }
 
             public HareDuClientBehaviorImpl() => Settings = new Lazy<ClientSettings>(InitClientSettings, LazyThreadSafetyMode.PublicationOnly);

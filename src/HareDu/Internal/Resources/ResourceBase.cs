@@ -22,18 +22,6 @@
             _client = client;
             _logger = logger;
         }
-        
-        public virtual TResource Factory<TResource>()
-            where TResource : Resource
-        {
-            var type = typeof(TResource);
-            var impl = GetType().Assembly.GetTypes().FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
-
-            if (impl == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
-            
-            return (TResource) Activator.CreateInstance(impl, _client, _logger);
-        }
 
         void HandleDotsAndSlashes()
         {

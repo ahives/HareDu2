@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface Cluster
+    public interface ClusterInfo
     {
         [JsonProperty("management_version")]
         string ManagementVersion { get; }

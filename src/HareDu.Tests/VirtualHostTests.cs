@@ -15,11 +15,25 @@
     public class VirtualHostTests :
         HareDuTestBase
     {
+        [Test]
+        public async Task Verify_IsHealthy_working()
+        {
+            Result<VirtualHostHealthCheck> result = await Client
+                .Factory<VirtualHost>()
+                .IsHealthy("HareDu");
+
+            Console.WriteLine("Status: {0}", result.Data.Status);
+            Console.WriteLine("Reason: {0}", result.Reason);
+            Console.WriteLine("StatusCode: {0}", result.StatusCode);
+            Console.WriteLine("****************************************************");
+            Console.WriteLine();
+        }
+        
         [Test, Explicit]
         public async Task Verify_GetAll_works()
         {
-            Result<IEnumerable<VirtualHost>> result = await Client
-                .Factory<VirtualHostResource>()
+            Result<IEnumerable<VirtualHostInfo>> result = await Client
+                .Factory<VirtualHost>()
                 .GetAll();
 
             foreach (var vhost in result.Data)
@@ -34,8 +48,8 @@
         [Test, Explicit]
         public async Task Verify_Get_works()
         {
-            Result<VirtualHost> result = await Client
-                .Factory<VirtualHostResource>()
+            Result<VirtualHostInfo> result = await Client
+                .Factory<VirtualHost>()
                 .Get("HareDu");
 
             Console.WriteLine("Name: {0}", result.Data.Name);
@@ -48,7 +62,7 @@
         public async Task Verify_GetDefinition_works()
         {
             Result<VirtualHostDefinition> result = await Client
-                .Factory<VirtualHostResource>()
+                .Factory<VirtualHost>()
                 .GetDefinition("HareDu");
 
             foreach (var exchange in result.Data.Exchanges)
@@ -73,7 +87,7 @@
         public async Task Verify_Create_works()
         {
             Result result = await Client
-                .Factory<VirtualHostResource>()
+                .Factory<VirtualHost>()
                 .Create("HareDu3");
 
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -86,7 +100,7 @@
         public async Task Verify_Delete_works()
         {
             Result result = await Client
-                .Factory<VirtualHostResource>()
+                .Factory<VirtualHost>()
                 .Delete("HareDu2");
 
             Console.WriteLine("Reason: {0}", result.Reason);

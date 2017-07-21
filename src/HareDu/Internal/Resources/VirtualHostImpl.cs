@@ -8,38 +8,22 @@
     using Exceptions;
     using Model;
 
-    internal class VirtualHostResourceImpl :
+    internal class VirtualHostImpl :
         ResourceBase,
-        VirtualHostResource
+        VirtualHost
     {
-        public async Task<Result<Connection>> GetConnections(string vhost, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<VirtualHostHealthCheck>> IsHealthy(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string sanitizedVHostName = vhost.SanitizeVirtualHostName();
+            
+            string url = $"api/aliveness-test/{sanitizedVHostName}";
 
-            string url = $"api/vhosts/{sanitizedVHost}/connections";
-
-            LogInfo($"Sent request to return all channel information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<Connection> result = await response.GetResponse<Connection>();
-
-            return result;
-        }
-
-        public async Task<Result<Channel>> GetChannels(string vhost, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/vhosts/{sanitizedVHost}/channels";
-
-            LogInfo($"Sent request to return all channel information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
+            LogInfo($"Sent request to execute an aliveness test on virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<Channel> result = await response.GetResponse<Channel>();
+            Result<VirtualHostHealthCheck> result = await response.GetResponse<VirtualHostHealthCheck>();
 
             return result;
         }
@@ -60,7 +44,7 @@
             return result;
         }
 
-        public async Task<Result<VirtualHost>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result<VirtualHostInfo>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -71,12 +55,12 @@
             LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<VirtualHost> result = await response.GetResponse<VirtualHost>();
+            Result<VirtualHostInfo> result = await response.GetResponse<VirtualHostInfo>();
 
             return result;
         }
 
-        public async Task<Result<IEnumerable<VirtualHost>>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -85,7 +69,7 @@
             LogInfo("Sent request to return all information on all virtual hosts on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<VirtualHost>> result = await response.GetResponse<IEnumerable<VirtualHost>>();
+            Result<IEnumerable<VirtualHostInfo>> result = await response.GetResponse<IEnumerable<VirtualHostInfo>>();
 
             return result;
         }
@@ -125,7 +109,7 @@
             return result;
         }
 
-        public VirtualHostResourceImpl(HttpClient client, ILog logger)
+        public VirtualHostImpl(HttpClient client, ILog logger)
             : base(client, logger)
         {
         }

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface Node
+    public interface NodeInfo
     {
         [JsonProperty("os_pid")]
         string OperatingSystemPid { get; }

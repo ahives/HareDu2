@@ -15,6 +15,5 @@
 
             cancellationToken.ThrowIfCancellationRequested();
         }
-
     }
 }

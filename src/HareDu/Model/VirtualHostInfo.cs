@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public interface VirtualHost :
+    public interface VirtualHostInfo :
         ResourceSummary
     {
         [JsonProperty("name")]

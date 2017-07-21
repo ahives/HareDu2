@@ -59,7 +59,7 @@
             return result;
         }
 
-        public async Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> settings,
+        public async Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> behavior,
             CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
@@ -71,7 +71,7 @@
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
             var impl = new ExchangeBehaviorImpl();
-            settings(impl);
+            behavior(impl);
 
             ExchangeSettings excahngeSettings = impl.Settings.Value;
             

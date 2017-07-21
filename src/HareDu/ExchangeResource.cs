@@ -13,10 +13,12 @@
         
         Task<Result<IEnumerable<Exchange>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> settings, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> behavior,
+            CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Delete(string exchange, string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeleteCondition> condition, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeleteCondition> condition,
+            CancellationToken cancellationToken = default(CancellationToken));
     }
 }

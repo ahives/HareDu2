@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="BindingResource.cs" />
     <Compile Include="ClientSettings.cs" />
+    <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
     <Compile Include="Exceptions\QueueMissingException.cs" />
     <Compile Include="ExchangeDeleteCondition.cs" />
@@ -81,10 +82,12 @@
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HttpExtensions.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
+    <Compile Include="Internal\Resources\BindingResourceImpl.cs" />
+    <Compile Include="Internal\Resources\ClusterImpl.cs" />
     <Compile Include="Internal\Resources\ExchangeResourceImpl.cs" />
     <Compile Include="Internal\Resources\QueueResourceImpl.cs" />
     <Compile Include="Internal\Resources\QueueSettings.cs" />
-    <Compile Include="Internal\Resources\ServerResourceImpl.cs" />
+    <Compile Include="Internal\Resources\NodeImpl.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
     <Compile Include="Internal\Serialization\DictionaryConverterCache.cs" />
     <Compile Include="Internal\Serialization\DictionaryObjectValueProvider.cs" />
@@ -137,7 +140,7 @@
     <Compile Include="Internal\Serialization\TypeNameFormatter.cs" />
     <Compile Include="Internal\Resources\Logging.cs" />
     <Compile Include="Internal\Resources\ResourceBase.cs" />
-    <Compile Include="Internal\Resources\VirtualHostResourceImpl.cs" />
+    <Compile Include="Internal\Resources\VirtualHostImpl.cs" />
     <Compile Include="Internal\SanitizationExtensions.cs" />
     <Compile Include="Internal\Serialization\ValueArrayObjectMapper.cs" />
     <Compile Include="Internal\Serialization\ValueDictionaryMapper.cs" />
@@ -153,10 +156,10 @@
     <Compile Include="Model\AuthenticationMechanism.cs" />
     <Compile Include="Model\Binding.cs" />
     <Compile Include="Model\BindingSummary.cs" />
-    <Compile Include="Model\Channel.cs" />
-    <Compile Include="Model\Cluster.cs" />
+    <Compile Include="Model\ChannelInfo.cs" />
+    <Compile Include="Model\ClusterInfo.cs" />
     <Compile Include="Model\ClusterObjectsSummary.cs" />
-    <Compile Include="Model\Connection.cs" />
+    <Compile Include="Model\ConnectionInfo.cs" />
     <Compile Include="Model\ConnectionDetails.cs" />
     <Compile Include="Model\Context.cs" />
     <Compile Include="Model\Exchange.cs" />
@@ -166,7 +169,7 @@
     <Compile Include="Model\Listener.cs" />
     <Compile Include="Model\MessageStats.cs" />
     <Compile Include="Model\GarbageCollectionMetrics.cs" />
-    <Compile Include="Model\Node.cs" />
+    <Compile Include="Model\NodeInfo.cs" />
     <Compile Include="Model\NodeHealthCheck.cs" />
     <Compile Include="Model\PolicyDefinition.cs" />
     <Compile Include="Model\PolicySummary.cs" />
@@ -180,13 +183,13 @@
     <Compile Include="Model\SocketOptions.cs" />
     <Compile Include="Model\VirtualHostDefinition.cs" />
     <Compile Include="Model\VirtualHostHealthCheck.cs" />
-    <Compile Include="Model\VirtualHost.cs" />
+    <Compile Include="Model\VirtualHostInfo.cs" />
     <Compile Include="QueueBehavior.cs" />
     <Compile Include="QueueDeleteCondition.cs" />
     <Compile Include="QueueResource.cs" />
     <Compile Include="Resource.cs" />
-    <Compile Include="ServerResource.cs" />
-    <Compile Include="VirtualHostResource.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="VirtualHost.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

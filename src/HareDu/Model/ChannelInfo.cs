@@ -3,7 +3,7 @@
     using System;
     using Newtonsoft.Json;
 
-    public interface Channel
+    public interface ChannelInfo
     {
         [JsonProperty("reductions_details")]
         Rate RateOfReduction { get; }
