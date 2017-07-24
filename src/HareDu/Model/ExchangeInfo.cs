@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public interface Exchange
+    public interface ExchangeInfo
     {
         [JsonProperty("name")]
         string Name { get; }

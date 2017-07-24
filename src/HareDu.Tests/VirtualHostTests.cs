@@ -36,6 +36,8 @@
                 .Factory<VirtualHost>()
                 .GetAll();
 
+            Assert.IsTrue(result.HasValue());
+
             foreach (var vhost in result.Data)
             {
                 Console.WriteLine("Name: {0}", vhost.Name);
@@ -43,19 +45,6 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
-        }
-
-        [Test, Explicit]
-        public async Task Verify_Get_works()
-        {
-            Result<VirtualHostInfo> result = await Client
-                .Factory<VirtualHost>()
-                .Get("HareDu");
-
-            Console.WriteLine("Name: {0}", result.Data.Name);
-            Console.WriteLine("Tracing: {0}", result.Data.Tracing);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
         }
 
         [Test, Explicit]

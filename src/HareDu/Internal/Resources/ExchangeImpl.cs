@@ -9,38 +9,16 @@
     using Exceptions;
     using Model;
 
-    internal class ExchangeResourceImpl :
+    internal class ExchangeImpl :
         ResourceBase,
-        ExchangeResource
+        Exchange
     {
-        public ExchangeResourceImpl(HttpClient client, ILog logger)
+        public ExchangeImpl(HttpClient client, ILog logger)
             : base(client, logger)
         {
         }
 
-        public async Task<Result<Exchange>> Get(string exchange, string vhost, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            if (string.IsNullOrWhiteSpace(exchange))
-                throw new ExchangeMissingException("The name of the exchange is missing.");
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
-
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<Exchange> result = await response.GetResponse<Exchange>();
-
-            return result;
-        }
-
-        public async Task<Result<IEnumerable<Exchange>>> GetAll(string vhost, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ExchangeInfo>>> GetAll(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -54,7 +32,7 @@
             LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<Exchange>> result = await response.GetResponse<IEnumerable<Exchange>>();
+            Result<IEnumerable<ExchangeInfo>> result = await response.GetResponse<IEnumerable<ExchangeInfo>>();
 
             return result;
         }

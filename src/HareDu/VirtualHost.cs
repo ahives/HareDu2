@@ -12,8 +12,6 @@
         
         Task<Result<VirtualHostDefinition>> GetDefinition(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result<VirtualHostInfo>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken));
-        
         Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Create(string vhost, CancellationToken cancellationToken = default(CancellationToken));

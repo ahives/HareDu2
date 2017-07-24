@@ -9,8 +9,6 @@
         Resource
     {
         Task<Result<NodeHealthCheck>> IsHealthy(string node, CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result<NodeHealthCheck>> IsHealthy(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default(CancellationToken));
         

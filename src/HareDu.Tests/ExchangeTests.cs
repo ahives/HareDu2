@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Model;
     using NUnit.Framework;
@@ -11,28 +12,10 @@
         HareDuTestBase
     {
         [Test, Explicit]
-        public async Task Verify_Get_works()
-        {
-            Result<Exchange> result = await Client
-                .Factory<ExchangeResource>()
-                .Get("E2", "HareDu");
- 
-            Console.WriteLine("Name: {0}", result.Data.Name);
-            Console.WriteLine("AutoDelete: {0}", result.Data.AutoDelete);
-            Console.WriteLine("Internal: {0}", result.Data.Internal);
-            Console.WriteLine("Durable: {0}", result.Data.Durable);
-            Console.WriteLine("RoutingType: {0}", result.Data.RoutingType);
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
-        }
-        
-        [Test, Explicit]
         public async Task Verify_GetAll_works()
         {
-            Result<IEnumerable<Exchange>> result = await Client
-                .Factory<ExchangeResource>()
+            Result<IEnumerable<ExchangeInfo>> result = await Client
+                .Factory<Exchange>()
                 .GetAll("HareDu");
 
             foreach (var exchange in result.Data)
@@ -55,7 +38,7 @@
         public async Task Verify_conditional_Delete_works()
         {
             Result result = await Client
-                .Factory<ExchangeResource>()
+                .Factory<Exchange>()
                 .Delete("E2", "HareDu", x => x.IfUnused());
  
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -68,7 +51,7 @@
         public async Task Verify_Delete_works()
         {
             Result result = await Client
-                .Factory<ExchangeResource>()
+                .Factory<Exchange>()
                 .Delete("E3", "HareDu");
  
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -83,7 +66,7 @@
             var args = new Dictionary<string, object> {{"arg1", 5}, {"arg2", true}, {"arg3", "Something"}};
 
             Result result = await Client
-                .Factory<ExchangeResource>()
+                .Factory<Exchange>()
                 .Create("E6", "HareDu", x =>
                 {
                     x.IsDurable();

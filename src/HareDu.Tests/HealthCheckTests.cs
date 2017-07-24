@@ -16,7 +16,7 @@
         {
             Result<NodeHealthCheck> result = await Client
                 .Factory<Node>()
-                .IsHealthy();
+                .IsHealthy("");
 
             Console.WriteLine("Status: {0}", result.Data.Status);
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -24,14 +24,26 @@
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }
+
+        [Test]
+        public async Task Test()
+        {
+            Result<VirtualHostHealthCheck> result = await Client
+                .Factory<VirtualHost>()
+                .IsHealthy("HareDu");
+            
+            
+        }
         
         [Test]
         public async Task Verify_GetAllNodes_works()
         {
             Result<IEnumerable<NodeInfo>> result = await Client
                 .Factory<Cluster>()
-                .GetAllNodes();
+                .GetNodes();
 
+            Assert.IsTrue(result.HasValue());
+            
             foreach (var node in result.Data)
             {
                 Console.WriteLine("OperatingSystemPid: {0}", node.OperatingSystemPid);

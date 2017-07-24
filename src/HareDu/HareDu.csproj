@@ -72,7 +72,7 @@
     <Compile Include="Exceptions\UserCredentialsMissingException.cs" />
     <Compile Include="Exceptions\VirtualHostMissingException.cs" />
     <Compile Include="ExchangeBehavior.cs" />
-    <Compile Include="ExchangeResource.cs" />
+    <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeRoutingType.cs" />
     <Compile Include="ExchangeSettings.cs" />
     <Compile Include="HareDuClient.cs" />
@@ -84,7 +84,7 @@
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
     <Compile Include="Internal\Resources\BindingResourceImpl.cs" />
     <Compile Include="Internal\Resources\ClusterImpl.cs" />
-    <Compile Include="Internal\Resources\ExchangeResourceImpl.cs" />
+    <Compile Include="Internal\Resources\ExchangeImpl.cs" />
     <Compile Include="Internal\Resources\QueueResourceImpl.cs" />
     <Compile Include="Internal\Resources\QueueSettings.cs" />
     <Compile Include="Internal\Resources\NodeImpl.cs" />
@@ -162,7 +162,7 @@
     <Compile Include="Model\ConnectionInfo.cs" />
     <Compile Include="Model\ConnectionDetails.cs" />
     <Compile Include="Model\Context.cs" />
-    <Compile Include="Model\Exchange.cs" />
+    <Compile Include="Model\ExchangeInfo.cs" />
     <Compile Include="Model\ExchangeSummary.cs" />
     <Compile Include="Model\ExchangeType.cs" />
     <Compile Include="Model\GarbageCollectionDetails.cs" />
@@ -189,6 +189,7 @@
     <Compile Include="QueueResource.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

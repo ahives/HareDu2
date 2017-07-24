@@ -25,20 +25,6 @@
             return result;
         }
 
-        public async Task<Result<NodeHealthCheck>> IsHealthy(CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-            
-            string url = $"api/healthchecks/node";
-
-            LogInfo($"Sent request to execute an health check on current RabbitMQ server node.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<NodeHealthCheck> result = await response.GetResponse<NodeHealthCheck>();
-
-            return result;
-        }
-
         public async Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);

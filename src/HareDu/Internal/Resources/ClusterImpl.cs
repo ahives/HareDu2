@@ -30,7 +30,7 @@
             return result;
         }
 
-        public async Task<Result<IEnumerable<NodeInfo>>> GetAllNodes(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

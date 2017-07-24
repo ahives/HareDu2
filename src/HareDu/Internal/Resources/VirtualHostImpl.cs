@@ -44,22 +44,6 @@
             return result;
         }
 
-        public async Task<Result<VirtualHostInfo>> Get(string vhost, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/vhosts/{sanitizedVHost}";
-
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<VirtualHostInfo> result = await response.GetResponse<VirtualHostInfo>();
-
-            return result;
-        }
-
         public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);

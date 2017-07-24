@@ -42,6 +42,7 @@
     <Compile Include="ExchangeTests.cs" />
     <Compile Include="HareDuTestBase.cs" />
     <Compile Include="HealthCheckTests.cs" />
+    <Compile Include="ValueExtensionTests.cs" />
     <Compile Include="VirtualHostTests.cs" />
   </ItemGroup>
   <ItemGroup>
