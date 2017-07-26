@@ -2,14 +2,10 @@
 {
     using System.Collections.Generic;
 
-    public interface QueueBehavior
+    public interface BindingBehavior
     {
-        void IsDurable();
-
-        void OnNode(string node);
-
+        void RoutingKey(string routingKey);
         void WithArguments(IDictionary<string, object> arguments);
-
-        void AutoDeleteWhenNotInUse();
+        void BindingType(BindingType bindingType);
     }
 }

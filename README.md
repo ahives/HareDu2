@@ -18,9 +18,9 @@ PM> Install-Package -Version <version> HareDu
 
 Example,
 
-PM> Install-Package -Version 1.1.0 HareDu
+PM> Install-Package -Version 2.0.0 HareDu
 
-Since HareDu 2 was built primarily using Mono 5.x you can now also get HareDu in your preferred .NET environment running multiple operating systems (e.g. macOS, Linux, etc.). 
+Since HareDu 2 was built primarily using Core APIs in Mono 5.x, it is now possible to get it in your preferred .NET environment on your preferred operating systems (e.g. Windows, macOS, Linux, etc.). 
 
 
 Getting Started
@@ -28,7 +28,10 @@ Getting Started
 
 1.) Setup your HareDu client by calling the ConnectTo method and passing in the URL (http://<IP_address>:<port>) to the RabbitMQ server
 
-		var client = HareDuFactory.New(x => x.ConnectTo("http://<IP_address>:<port>"));
+		var client = HareDuFactory.New(x => {
+		    x.ConnectTo("http://<IP_address>:<port>");
+		    x.UsingCredentials("<username>", "<password>");
+		});
 
 The above represents the minimm configuration of the client but HareDu also exposes the EnableLogging method for logging and the TimeoutAfter method for setting the timeout threshold.
 
@@ -37,19 +40,19 @@ The above represents the minimm configuration of the client but HareDu also expo
 
 2.) Setup a resource factory using your user credentials
 
-		var yourResourceFactory = client.Factory<YourResourcesInterface>(x => x.Credentials(<username>, <password>));
+		var yourResourceFactory = client.Factory<YourResourcesInterface>();
 
 Example,
 
-    var virtualHostResources = client.Factory<VirtualHostResources>(x => x.Credentials("guest", "guest"));
+    var resource = client.Factory<VirtualHost>();
 
 Calling the Factory method is essential to accessing HareDu resources as it is responsible for setting up the client for which requests for resources are sent. You must pass an interface that inherits from HareDu.Resources.ResourceClient. 
 
 
 3.) Call your properties and methods that are available to you based on your resource factory you setup in step 2.
 
-        Result result = await yourResourceFactory.Factory<Resource>()
-                                                 .Create(<exchange>, <vhost>,
+        Result result = await resourceFactory.Factory<Resource>()
+                                             .Create(<exchange>, <vhost>,
                                                        x =>
                                                            {
                                                                x.IsDurable();
@@ -58,13 +61,13 @@ Calling the Factory method is essential to accessing HareDu resources as it is r
 
 Example,
 
-        Result result = await yourResourceFactory.Factory<ExchangeResource>()
-                                                 .Create(<exchange>, <vhost>,
-                                                       x =>
-                                                           {
-                                                               x.IsDurable();
-                                                               x.UsingRoutingType(r => r.Fanout());
-                                                           });
+        Result result = await resource.Factory<Exchange>()
+                                      .Create(<exchange>, <vhost>,
+                                            x =>
+                                                {
+                                                   x.IsDurable();
+                                                   x.UsingRoutingType(r => r.Fanout());
+                                                });
 
 
 Developers have the option of either calling the API in steps or all at once via HareDu's fluent methods like so,
@@ -73,11 +76,11 @@ HareDuClient client = HareDuFactory.New(x =>
 								            {
 								                x.ConnectTo("http://localhost:15672");
 								                x.EnableLogging(s => s.Logger("haredu_logger"));
+                                                x.UsingCredentials("guest", "guest");
 								            });
 
 Result result = await client
-    .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
-    .Factory<ExchangeResource>()
+    .Factory<Exchange>()
     .Create("TestExchange", "HareDuVhost", x =>
 									    {
 									        x.IsDurable();
@@ -91,9 +94,9 @@ Result result = await HareDuFactory
             {
                 x.ConnectTo("http://localhost:15672");
                 x.EnableLogging(s => s.Logger("haredu_logger"));
+                x.UsingCredentials("guest", "guest");
             })
-    .Factory<VirtualHostResource>(x => x.Credentials("guest", "guest"))
-    .Factory<ExchangeResource>()
+    .Factory<Exchange>()
     .Create("TestExchange", "HareDuVhost", x =>
 									    {
 									        x.IsDurable();

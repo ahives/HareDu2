@@ -6,11 +6,10 @@
     using System.Threading.Tasks;
     using Model;
 
-    public interface QueueResource
+    public interface Queue :
+        Resource
     {
-        Task<Result<Queue>> Get(string queue, string vhost, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<Result<IEnumerable<Queue>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<QueueInfo>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Create(string queue, string vhost, Action<QueueBehavior> settings,
             CancellationToken cancellationToken = default(CancellationToken));

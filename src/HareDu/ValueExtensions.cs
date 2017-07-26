@@ -41,6 +41,24 @@
 
             return data.Data.SingleOrDefault(predicate);
         }
+
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
+        {
+            var data = source?.Result;
+            if (data?.Data == null || !data.Data.Any())
+                return default(T);
+
+            return data.Data.FirstOrDefault();
+        }
+
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        {
+            var data = source?.Result;
+            if (data?.Data == null || !data.Data.Any())
+                return default(T);
+
+            return data.Data.FirstOrDefault(predicate);
+        }
         
         public static bool Any<T>(this Task<Result<IEnumerable<T>>> source)
         {

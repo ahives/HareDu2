@@ -9,38 +9,16 @@
     using Exceptions;
     using Model;
 
-    internal class QueueResourceImpl :
+    internal class QueueImpl :
         ResourceBase,
-        QueueResource
+        Queue
     {
-        public QueueResourceImpl(HttpClient client, ILog logger)
+        public QueueImpl(HttpClient client, ILog logger)
             : base(client, logger)
         {
         }
 
-        public async Task<Result<Queue>> Get(string queue, string vhost, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            if (string.IsNullOrWhiteSpace(queue))
-                throw new QueueMissingException("The name of the queue is missing.");
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/queues/{sanitizedVHost}/{queue}";
-
-            LogInfo($"Sent request to return all information corresponding to queue '{queue}' on virtual host '{sanitizedVHost}'.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<Queue> result = await response.GetResponse<Queue>();
-
-            return result;
-        }
-
-        public async Task<Result<IEnumerable<Queue>>> GetAll(string vhost, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<QueueInfo>>> GetAll(string vhost, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -54,7 +32,7 @@
             LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<Queue>> result = await response.GetResponse<IEnumerable<Queue>>();
+            Result<IEnumerable<QueueInfo>> result = await response.GetResponse<IEnumerable<QueueInfo>>();
 
             return result;
         }
@@ -183,12 +161,12 @@
 
             public void OnNode(string node) => _node = node;
 
-            public void WithArguments(IDictionary<string, object> args)
+            public void WithArguments(IDictionary<string, object> arguments)
             {
-                if (args == null)
+                if (arguments == null)
                     return;
 
-                _arguments = args;
+                _arguments = arguments;
             }
 
             public void AutoDeleteWhenNotInUse() => _autoDelete = true;

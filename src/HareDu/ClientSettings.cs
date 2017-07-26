@@ -1,7 +1,6 @@
 ﻿namespace HareDu
 {
     using System;
-    using System.Net;
     using Common.Logging;
 
     public interface ClientSettings

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface Queue
+    public interface QueueInfo
     {
         [JsonProperty("messages_details")]
         Rate RateOfMessage { get; }

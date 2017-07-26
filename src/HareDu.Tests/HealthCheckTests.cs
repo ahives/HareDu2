@@ -31,8 +31,6 @@
             Result<VirtualHostHealthCheck> result = await Client
                 .Factory<VirtualHost>()
                 .IsHealthy("HareDu");
-            
-            
         }
         
         [Test]

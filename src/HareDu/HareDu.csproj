@@ -58,7 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindingResource.cs" />
+    <Compile Include="Binding.cs" />
+    <Compile Include="BindingBehavior.cs" />
+    <Compile Include="BindingType.cs" />
     <Compile Include="ClientSettings.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
@@ -82,10 +84,11 @@
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HttpExtensions.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
-    <Compile Include="Internal\Resources\BindingResourceImpl.cs" />
+    <Compile Include="Internal\Resources\BindingImpl.cs" />
+    <Compile Include="Internal\Resources\BindingSetting.cs" />
     <Compile Include="Internal\Resources\ClusterImpl.cs" />
     <Compile Include="Internal\Resources\ExchangeImpl.cs" />
-    <Compile Include="Internal\Resources\QueueResourceImpl.cs" />
+    <Compile Include="Internal\Resources\QueueImpl.cs" />
     <Compile Include="Internal\Resources\QueueSettings.cs" />
     <Compile Include="Internal\Resources\NodeImpl.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
@@ -154,7 +157,7 @@
     <Compile Include="LoggerSettings.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\AuthenticationMechanism.cs" />
-    <Compile Include="Model\Binding.cs" />
+    <Compile Include="Model\BindingInfo.cs" />
     <Compile Include="Model\BindingSummary.cs" />
     <Compile Include="Model\ChannelInfo.cs" />
     <Compile Include="Model\ClusterInfo.cs" />
@@ -173,7 +176,7 @@
     <Compile Include="Model\NodeHealthCheck.cs" />
     <Compile Include="Model\PolicyDefinition.cs" />
     <Compile Include="Model\PolicySummary.cs" />
-    <Compile Include="Model\Queue.cs" />
+    <Compile Include="Model\QueueInfo.cs" />
     <Compile Include="Model\QueueStats.cs" />
     <Compile Include="Model\QueueStatus.cs" />
     <Compile Include="Model\QueueSummary.cs" />
@@ -186,7 +189,7 @@
     <Compile Include="Model\VirtualHostInfo.cs" />
     <Compile Include="QueueBehavior.cs" />
     <Compile Include="QueueDeleteCondition.cs" />
-    <Compile Include="QueueResource.cs" />
+    <Compile Include="Queue.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="ValueExtensions.cs" />
