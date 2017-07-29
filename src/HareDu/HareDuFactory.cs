@@ -17,6 +17,7 @@ namespace HareDu
     using System.Threading;
     using Common.Logging;
     using Exceptions;
+    using Internal;
 
     public static class HareDuFactory
     {

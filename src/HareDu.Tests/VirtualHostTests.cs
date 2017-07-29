@@ -1,10 +1,8 @@
 ﻿namespace HareDu.Tests
 {
     using System;
-    using System.Net;
     using System.Collections.Generic;
     using System.IO;
-    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
     using Internal.Serialization;
     using Model;

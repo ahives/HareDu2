@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string queue, string vhost, Action<QueueBehavior> settings,
+        public async Task<Result> Create(string queue, string vhost, Action<QueueBehavior> behavior,
             CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
@@ -62,7 +62,7 @@ namespace HareDu.Internal.Resources
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
             var impl = new QueueBehaviorImpl();
-            settings(impl);
+            behavior(impl);
 
             QueueSettings queueSettings = impl.Settings.Value;
 

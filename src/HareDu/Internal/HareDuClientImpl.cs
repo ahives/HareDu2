@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal
 {
     using System;
     using System.Linq;
@@ -19,7 +19,7 @@ namespace HareDu
     using System.Net.Http;
     using System.Net.Http.Headers;
     using Exceptions;
-    using Internal.Resources;
+    using Resources;
 
     internal class HareDuClientImpl :
         Logging,

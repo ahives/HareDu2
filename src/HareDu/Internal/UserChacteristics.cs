@@ -11,13 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal.Resources
+namespace HareDu.Internal
 {
-    public static class UserPermissionTag
+    using Newtonsoft.Json;
+
+    public interface UserChacteristics
     {
-        public static readonly string Administrator = "administrator";
-        public static readonly string Monitoring = "monitoring";
-        public static readonly string Management = "management";
-        public static readonly string None = string.Empty;
+        [JsonProperty("password_hash")]
+        string PasswordHash { get; }
+        
+        [JsonProperty("password")]
+        string Password { get; }
+        
+        [JsonProperty("tags")]
+        string Tags { get; }
     }
 }

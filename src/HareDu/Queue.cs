@@ -24,7 +24,7 @@ namespace HareDu
     {
         Task<Result<IEnumerable<QueueInfo>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(string queue, string vhost, Action<QueueBehavior> settings,
+        Task<Result> Create(string queue, string vhost, Action<QueueBehavior> behavior,
             CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Delete(string queue, string vhost, CancellationToken cancellationToken = default(CancellationToken));
