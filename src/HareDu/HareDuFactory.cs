@@ -20,7 +20,7 @@
                     throw new HostUrlMissingException("Host URL was missing.");
                 
                 if (string.IsNullOrWhiteSpace(settings.Credentials.Username) || string.IsNullOrWhiteSpace(settings.Credentials.Password))
-                    throw new UserCredentialsMissingException("Username or password was missing.");
+                    throw new UserCredentialsMissingException("Username and/or password was missing.");
 
                 var client = new HareDuClientImpl(settings);
 

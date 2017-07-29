@@ -91,6 +91,9 @@
     <Compile Include="Internal\Resources\QueueImpl.cs" />
     <Compile Include="Internal\Resources\QueueSettings.cs" />
     <Compile Include="Internal\Resources\NodeImpl.cs" />
+    <Compile Include="Internal\Resources\UserAdminImpl.cs" />
+    <Compile Include="Internal\Resources\UserChacteristics.cs" />
+    <Compile Include="Internal\Resources\UserPermissionTag.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
     <Compile Include="Internal\Serialization\DictionaryConverterCache.cs" />
     <Compile Include="Internal\Serialization\DictionaryObjectValueProvider.cs" />
@@ -184,6 +187,7 @@
     <Compile Include="Model\ResourceSummary.cs" />
     <Compile Include="Model\Result.cs" />
     <Compile Include="Model\SocketOptions.cs" />
+    <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Model\VirtualHostDefinition.cs" />
     <Compile Include="Model\VirtualHostHealthCheck.cs" />
     <Compile Include="Model\VirtualHostInfo.cs" />
@@ -192,6 +196,9 @@
     <Compile Include="Queue.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="UserAccessCharacteristics.cs" />
+    <Compile Include="UserAdmin.cs" />
+    <Compile Include="UserAdminCharacteristics.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
   </ItemGroup>

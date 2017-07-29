@@ -57,7 +57,7 @@
 
             string url = $"api/queues/{sanitizedVHost}/{queue}";
 
-            LogInfo($"Sent request to RabbitMQ server to create queue '{queue} in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create queue '{queue}' in virtual host '{sanitizedVHost}'.");
 
             HttpResponseMessage response = await HttpPut(url, queueSettings, cancellationToken);
             Result result = response.GetResponse();
