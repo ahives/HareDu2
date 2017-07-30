@@ -15,7 +15,7 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    public interface UserChacteristics
+    internal interface UserChacteristics
     {
         [JsonProperty("password_hash")]
         string PasswordHash { get; }

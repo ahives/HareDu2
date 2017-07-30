@@ -11,12 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal
 {
-    public interface UserAccessCharacteristics
+    using System.Collections.Generic;
+
+    public interface BindingSetting
     {
-        void Configure(string pattern);
-        void Write(string pattern);
-        void Read(string pattern);
+        string RoutingKey { get; }
+        IDictionary<string, object> Arguments { get; }
+        BindingType BindingType { get; }
     }
 }

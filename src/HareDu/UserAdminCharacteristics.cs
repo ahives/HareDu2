@@ -19,6 +19,6 @@ namespace HareDu
     {
         void Password(string password);
         void WithPasswordHash(string passwordHash);
-        void WithTags(Action<UserAccessCharacteristics> tags);
+        void WithTags(Action<UserAccessOptions> tags);
     }
 }

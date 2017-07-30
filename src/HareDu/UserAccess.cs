@@ -13,10 +13,20 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface UserAccessCharacteristics
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Model;
+
+    public interface UserAccess :
+        Resource
     {
-        void Configure(string pattern);
-        void Write(string pattern);
-        void Read(string pattern);
+        Task<Result<IEnumerable<UserAccessInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result> Create(string vhost, string username, Action<UserAccessCharacteristics> characteristics,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result> Delete(string vhost, string username, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

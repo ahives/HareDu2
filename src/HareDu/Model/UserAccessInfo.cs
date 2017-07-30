@@ -11,12 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Model
 {
-    public interface UserAccessCharacteristics
+    using Newtonsoft.Json;
+
+    public interface UserAccessInfo
     {
-        void Configure(string pattern);
-        void Write(string pattern);
-        void Read(string pattern);
+        [JsonProperty("user")]
+        string User { get; }
+        
+        [JsonProperty("vhost")]
+        string VirtualHost { get; }
+        
+        [JsonProperty("configure")]
+        string Configure { get; }
+        
+        [JsonProperty("write")]
+        string Write { get; }
+        
+        [JsonProperty("read")]
+        string Read { get; }
     }
 }

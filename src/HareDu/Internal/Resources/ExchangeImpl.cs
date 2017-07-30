@@ -137,10 +137,7 @@ namespace HareDu.Internal.Resources
         {
             public bool DeleteIfUnused { get; private set; }
             
-            public void IfUnused()
-            {
-                DeleteIfUnused = true;
-            }
+            public void IfUnused() => DeleteIfUnused = true;
         }
 
 
@@ -189,35 +186,17 @@ namespace HareDu.Internal.Resources
             {
                 public string RoutingType { get; private set; }
                 
-                public void Fanout()
-                {
-                    RoutingType = "fanout";
-                }
+                public void Fanout() => RoutingType = "fanout";
 
-                public void Direct()
-                {
-                    RoutingType = "direct";
-                }
+                public void Direct() => RoutingType = "direct";
 
-                public void Topic()
-                {
-                    RoutingType = "topic";
-                }
+                public void Topic() => RoutingType = "topic";
 
-                public void Headers()
-                {
-                    RoutingType = "headers";
-                }
+                public void Headers() => RoutingType = "headers";
 
-                public void Federated()
-                {
-                    RoutingType = "federated";
-                }
+                public void Federated() => RoutingType = "federated";
 
-                public void Match()
-                {
-                    RoutingType = "match";
-                }
+                public void Match() => RoutingType = "match";
             }
 
 

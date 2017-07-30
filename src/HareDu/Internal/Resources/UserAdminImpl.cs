@@ -57,7 +57,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserAdminCharacteristicsImpl();
             characteristics(impl);
 
-            UserChacteristics settings = impl.Chacteristics.Value;
+            UserChacteristics settings = impl.Characteristics.Value;
             
             if (string.IsNullOrWhiteSpace(settings.Password) && string.IsNullOrWhiteSpace(settings.PasswordHash))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
@@ -97,10 +97,10 @@ namespace HareDu.Internal.Resources
             static string _passwordHash;
             static string _tags;
             
-            public Lazy<UserChacteristics> Chacteristics { get; }
+            public Lazy<UserChacteristics> Characteristics { get; }
 
             public UserAdminCharacteristicsImpl()
-                => Chacteristics = new Lazy<UserChacteristics>(Init, LazyThreadSafetyMode.PublicationOnly);
+                => Characteristics = new Lazy<UserChacteristics>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             UserChacteristics Init() => new UserChacteristicsImpl(_password, _passwordHash, _tags);
 
@@ -108,9 +108,9 @@ namespace HareDu.Internal.Resources
 
             public void WithPasswordHash(string passwordHash) => _passwordHash = passwordHash;
 
-            public void WithTags(Action<UserAccessCharacteristics> tags)
+            public void WithTags(Action<UserAccessOptions> tags)
             {
-                var impl = new UserAccessCharacteristicsImpl();
+                var impl = new UserAccessOptionsImpl();
 
                 tags(impl);
 
@@ -118,8 +118,8 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class UserAccessCharacteristicsImpl :
-                UserAccessCharacteristics
+            class UserAccessOptionsImpl :
+                UserAccessOptions
             {
                 List<string> Tags { get; } = new List<string>();
                 
