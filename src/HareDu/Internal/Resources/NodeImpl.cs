@@ -70,5 +70,19 @@ namespace HareDu.Internal.Resources
 
             return result;
         }
+
+        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = $"api/consumers";
+
+            LogInfo($"Sent request to return all consumer information on current RabbitMQ server.");
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<IEnumerable<ConsumerInfo>> result = await response.GetResponse<IEnumerable<ConsumerInfo>>();
+
+            return result;
+        }
     }
 }

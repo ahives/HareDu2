@@ -26,5 +26,7 @@ namespace HareDu
         Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default(CancellationToken));
+        
+        Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

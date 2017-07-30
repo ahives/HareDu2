@@ -164,11 +164,13 @@
     <Compile Include="Model\AuthenticationMechanism.cs" />
     <Compile Include="Model\BindingInfo.cs" />
     <Compile Include="Model\BindingSummary.cs" />
+    <Compile Include="Model\ChannelDetails.cs" />
     <Compile Include="Model\ChannelInfo.cs" />
     <Compile Include="Model\ClusterInfo.cs" />
     <Compile Include="Model\ClusterObjectsSummary.cs" />
     <Compile Include="Model\ConnectionInfo.cs" />
     <Compile Include="Model\ConnectionDetails.cs" />
+    <Compile Include="Model\ConsumerInfo.cs" />
     <Compile Include="Model\Context.cs" />
     <Compile Include="Model\ExchangeInfo.cs" />
     <Compile Include="Model\ExchangeSummary.cs" />
@@ -181,6 +183,7 @@
     <Compile Include="Model\NodeHealthCheck.cs" />
     <Compile Include="Model\PolicyDefinition.cs" />
     <Compile Include="Model\PolicySummary.cs" />
+    <Compile Include="Model\QueueDetails.cs" />
     <Compile Include="Model\QueueInfo.cs" />
     <Compile Include="Model\QueueStats.cs" />
     <Compile Include="Model\QueueStatus.cs" />
