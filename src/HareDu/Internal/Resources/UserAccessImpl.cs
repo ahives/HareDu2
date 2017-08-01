@@ -99,22 +99,22 @@ namespace HareDu.Internal.Resources
         class UserAccessCharacteristicsImpl :
             UserAccessCharacteristics
         {
-            static string _configure;
-            static string _write;
-            static string _read;
+            static string _configurePattern;
+            static string _writePattern;
+            static string _readPattern;
             
             public Lazy<UserPermissions> Characteristics { get; }
 
             public UserAccessCharacteristicsImpl()
                 => Characteristics = new Lazy<UserPermissions>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            UserPermissions Init() => new UserPermissionsImpl(_configure, _write, _read);
+            UserPermissions Init() => new UserPermissionsImpl(_configurePattern, _writePattern, _readPattern);
 
-            public void Configure(string pattern) => _configure = pattern;
+            public void Configure(string pattern) => _configurePattern = pattern;
 
-            public void Write(string pattern) => _write = pattern;
+            public void Write(string pattern) => _writePattern = pattern;
 
-            public void Read(string pattern) => _read = pattern;
+            public void Read(string pattern) => _readPattern = pattern;
 
             
             class UserPermissionsImpl :

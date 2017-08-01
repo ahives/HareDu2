@@ -52,7 +52,7 @@
                 .Factory<VirtualHost>()
                 .GetDefinition("HareDu");
 
-            foreach (var exchange in result.Data.Exchanges)
+            foreach (var exchange in result.Data.ExchangeDefinitions)
             {
                 Console.WriteLine("Name: {0}", exchange.Name);
                 Console.WriteLine("Type: {0}", exchange.Type);

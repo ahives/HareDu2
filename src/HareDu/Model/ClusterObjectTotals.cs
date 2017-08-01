@@ -15,7 +15,7 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface ClusterObjectsSummary
+    public interface ClusterObjectTotals
     {
         [JsonProperty("consumers")]
         long TotalConsumers { get; }

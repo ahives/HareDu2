@@ -25,12 +25,12 @@ namespace HareDu.Model
         IEnumerable<PolicySummary> Policies { get; }
         
         [JsonProperty("queues")]
-        IEnumerable<QueueSummary> Queues { get; }
+        IEnumerable<QueueDefinition> QueueDefinitions { get; }
         
         [JsonProperty("exchanges")]
-        IEnumerable<ExchangeSummary> Exchanges { get; }
+        IEnumerable<ExchangeDefinition> ExchangeDefinitions { get; }
         
         [JsonProperty("bindings")]
-        IEnumerable<BindingSummary> Bindings { get; }
+        IEnumerable<BindingDefinition> BindingDefinitions { get; }
     }
 }

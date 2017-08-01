@@ -37,6 +37,6 @@ namespace HareDu.Model
         ChannelDetails ChannelDetails { get; }
         
         [JsonProperty("queue")]
-        QueueDetails QueueDetails { get; }
+        QueueConsumerDetails QueueConsumerDetails { get; }
     }
 }

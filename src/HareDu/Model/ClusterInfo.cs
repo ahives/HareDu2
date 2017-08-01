@@ -46,7 +46,7 @@ namespace HareDu.Model
         QueueStats QueueStats { get; }
 
         [JsonProperty("object_totals")]
-        ClusterObjectsSummary ClusterObjects { get; }
+        ClusterObjectTotals ObjectTotals { get; }
 
         [JsonProperty("statistics_db_event_queue")]
         long StatsDbEventQueue { get; }
