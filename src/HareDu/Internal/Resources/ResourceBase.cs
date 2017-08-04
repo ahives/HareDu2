@@ -14,26 +14,29 @@
 namespace HareDu.Internal.Resources
 {
     using System;
-    using System.Linq;
     using System.Net.Http;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Logging;
-    using Exceptions;
-    using HareDu.Model;
+    using Polly;
+    using Polly.Retry;
 
     internal class ResourceBase :
         Logging
     {
         readonly HttpClient _client;
         readonly ILog _logger;
+        readonly RetryPolicy<Task<HttpResponseMessage>> _policy;
 
-        protected ResourceBase(HttpClient client, ILog logger)
+        protected ResourceBase(HttpClient client, ILog logger, int retryLimit)
             : base(logger)
         {
             _client = client;
             _logger = logger;
+            _policy = Policy<Task<HttpResponseMessage>>
+                .Handle<HttpRequestException>()
+                .Retry(retryLimit, (e, i) => LogError(e.Exception));
         }
 
         void HandleDotsAndSlashes()
@@ -51,14 +54,14 @@ namespace HareDu.Internal.Resources
             setUpdatableFlagsMethod.Invoke(uriParser, new object[] {0});
         }
 
-        protected virtual Task<HttpResponseMessage> HttpGet(string url, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> HttpGet(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return _client.GetAsync(url, cancellationToken);
+                return await _policy.Execute(() => _client.GetAsync(url, cancellationToken));
             }
             catch (Exception e)
             {
@@ -67,14 +70,14 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected virtual Task<HttpResponseMessage> HttpDelete(string url, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> HttpDelete(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return _client.DeleteAsync(url, cancellationToken);
+                return await _policy.Execute(() => _client.DeleteAsync(url, cancellationToken));
             }
             catch (Exception e)
             {
@@ -83,14 +86,14 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected virtual Task<HttpResponseMessage> HttpPut<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> HttpPut<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return _client.PutAsJsonAsync(url, value, cancellationToken);
+                return await _policy.Execute(() => _client.PutAsJsonAsync(url, value, cancellationToken));
             }
             catch (Exception e)
             {
@@ -99,14 +102,14 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected virtual Task<HttpResponseMessage> HttpPost<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> HttpPost<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return _client.PostAsJsonAsync(url, value, cancellationToken);
+                return await _policy.Execute(() => _client.PostAsJsonAsync(url, value, cancellationToken));
             }
             catch (Exception e)
             {

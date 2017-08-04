@@ -26,8 +26,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         UserAccess
     {
-        public UserAccessImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public UserAccessImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
 

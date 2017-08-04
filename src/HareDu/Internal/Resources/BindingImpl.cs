@@ -26,8 +26,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Binding
     {
-        public BindingImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public BindingImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
 

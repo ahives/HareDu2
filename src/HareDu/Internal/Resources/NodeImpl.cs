@@ -24,8 +24,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Node
     {
-        public NodeImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public NodeImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
         

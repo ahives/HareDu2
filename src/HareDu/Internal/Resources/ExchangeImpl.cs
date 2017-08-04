@@ -26,8 +26,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Exchange
     {
-        public ExchangeImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public ExchangeImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
 
@@ -66,7 +66,7 @@ namespace HareDu.Internal.Resources
 
             ExchangeSettings excahngeSettings = impl.Settings.Value;
             
-            if (string.IsNullOrWhiteSpace(excahngeSettings.RoutingType))
+            if (string.IsNullOrWhiteSpace(excahngeSettings?.RoutingType))
                 throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();

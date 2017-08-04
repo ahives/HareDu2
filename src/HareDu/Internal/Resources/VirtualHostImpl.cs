@@ -25,8 +25,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         VirtualHost
     {
-        public VirtualHostImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public VirtualHostImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
         
@@ -80,6 +80,9 @@ namespace HareDu.Internal.Resources
         {
             cancellationToken.RequestCanceled(LogInfo);
 
+            if (string.IsNullOrWhiteSpace(vhost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/vhosts/{sanitizedVHost}";
@@ -95,6 +98,9 @@ namespace HareDu.Internal.Resources
         public async Task<Result> Delete(string vhost, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
             

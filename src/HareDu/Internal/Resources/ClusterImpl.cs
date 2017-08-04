@@ -24,8 +24,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Cluster
     {
-        public ClusterImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public ClusterImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
 

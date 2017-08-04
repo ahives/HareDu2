@@ -52,13 +52,12 @@ namespace HareDu.Internal
 
             Client = client;
 
-            var type = typeof(TResource);
-            var impl = GetType().Assembly.GetTypes().FirstOrDefault(x => type.IsAssignableFrom(x) && !x.IsInterface);
+            Type type = GetType().Assembly.GetTypes().FirstOrDefault(x => typeof(TResource).IsAssignableFrom(x) && !x.IsInterface);
 
-            if (impl == null)
+            if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource)Activator.CreateInstance(impl, client, _settings.Logger);
+            return (TResource)Activator.CreateInstance(type, client, _settings.Logger, _settings.RetryLimit);
         }
 
         public void CancelPendingRequest()

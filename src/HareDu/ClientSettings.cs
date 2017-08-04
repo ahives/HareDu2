@@ -22,5 +22,6 @@ namespace HareDu
         ILog Logger { get; }
         TimeSpan Timeout { get; }
         HareDuCredentials Credentials { get; }
+        int RetryLimit { get; }
     }
 }

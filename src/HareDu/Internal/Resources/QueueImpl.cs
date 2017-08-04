@@ -26,8 +26,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Queue
     {
-        public QueueImpl(HttpClient client, ILog logger)
-            : base(client, logger)
+        public QueueImpl(HttpClient client, ILog logger, int retryLimit)
+            : base(client, logger, retryLimit)
         {
         }
 

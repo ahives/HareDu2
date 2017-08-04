@@ -24,5 +24,12 @@ namespace HareDu
         void TimeoutAfter(TimeSpan timeout);
         
         void UsingCredentials(string username, string password);
+
+        void EnableTransientRetry(Action<TransientRetrySettings> settings);
+    }
+
+    public interface TransientRetrySettings
+    {
+        void RetryLimit(int retryLimit);
     }
 }
