@@ -17,15 +17,14 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Logging;
     using Model;
 
     internal class NodeImpl :
         ResourceBase,
         Node
     {
-        public NodeImpl(HttpClient client, ILog logger, int retryLimit)
-            : base(client, logger, retryLimit)
+        public NodeImpl(HttpClient client, HareDuClientSettings settings)
+            : base(client, settings)
         {
         }
         

@@ -19,17 +19,16 @@ namespace HareDu.Internal
     using System.Net.Http;
     using System.Net.Http.Headers;
     using Exceptions;
-    using Resources;
 
     internal class HareDuClientImpl :
         Logging,
         HareDuClient
     {
-        readonly ClientSettings _settings;
+        readonly HareDuClientSettings _settings;
         
         public HttpClient Client { get; private set; }
 
-        public HareDuClientImpl(ClientSettings settings)
+        public HareDuClientImpl(HareDuClientSettings settings)
             : base(settings.Logger)
         {
             _settings = settings;
@@ -38,6 +37,9 @@ namespace HareDu.Internal
         public TResource Factory<TResource>()
             where TResource : Resource
         {
+            if (_settings == null)
+                throw new HareDuClientInitException("In");
+
             var uri = new Uri($"{_settings.Host}/");
             var handler = new HttpClientHandler
             {
@@ -57,7 +59,7 @@ namespace HareDu.Internal
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource)Activator.CreateInstance(type, client, _settings.Logger, _settings.RetryLimit);
+            return (TResource)Activator.CreateInstance(type, client, _settings);
         }
 
         public void CancelPendingRequest()

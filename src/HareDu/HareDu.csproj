@@ -64,7 +64,7 @@
     <Compile Include="Binding.cs" />
     <Compile Include="BindingBehavior.cs" />
     <Compile Include="BindingType.cs" />
-    <Compile Include="ClientSettings.cs" />
+    <Compile Include="HareDuClientSettings.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
     <Compile Include="Exceptions\QueueMissingException.cs" />

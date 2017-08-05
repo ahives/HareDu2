@@ -55,12 +55,13 @@ namespace HareDu
             static TimeSpan _timeout;
             static HareDuCredentials _credentials;
             static int _retryLimit;
+            static bool _enableTransientRetry;
             
-            public Lazy<ClientSettings> Settings { get; }
+            public Lazy<HareDuClientSettings> Settings { get; }
 
-            public HareDuClientBehaviorImpl() => Settings = new Lazy<ClientSettings>(InitClientSettings, LazyThreadSafetyMode.PublicationOnly);
+            public HareDuClientBehaviorImpl() => Settings = new Lazy<HareDuClientSettings>(InitClientSettings, LazyThreadSafetyMode.PublicationOnly);
 
-            static ClientSettings InitClientSettings() => new ClientSettingsImpl(_host, _logger, _timeout, _credentials, _retryLimit);
+            static HareDuClientSettings InitClientSettings() => new HareDuClientSettingsImpl(_host, _logger, _timeout, _credentials, _enableTransientRetry, _retryLimit);
 
             public void ConnectTo(string host) => _host = host;
 
@@ -80,7 +81,7 @@ namespace HareDu
             public void UsingCredentials(string username, string password) =>
                 _credentials = new HareDuCredentialsImpl(username, password);
 
-            public void EnableTransientRetry(Action<TransientRetrySettings> settings)
+            public void TransientRetry(Action<TransientRetrySettings> settings)
             {
                 if (_retryLimit > 0)
                     return;
@@ -89,6 +90,7 @@ namespace HareDu
                 settings(impl);
 
                 _retryLimit = impl.Limit;
+                _enableTransientRetry = impl.EnableTransientRetry;
             }
 
             
@@ -96,7 +98,10 @@ namespace HareDu
                 TransientRetrySettings
             {
                 public int Limit { get; private set; }
-                
+                public bool EnableTransientRetry { get; private set; }
+
+                public void Enable(bool enableTransientRetry) => EnableTransientRetry = enableTransientRetry;
+
                 public void RetryLimit(int retryLimit) => Limit = retryLimit;
             }
 
@@ -115,22 +120,24 @@ namespace HareDu
             }
 
 
-            class ClientSettingsImpl :
-                ClientSettings
+            class HareDuClientSettingsImpl :
+                HareDuClientSettings
             {
-                public ClientSettingsImpl(string host, ILog logger, TimeSpan timeout, HareDuCredentials credentials, int retryLimit)
+                public HareDuClientSettingsImpl(string host, ILog logger, TimeSpan timeout, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
                 {
                     Host = host;
                     Logger = logger;
                     Timeout = timeout;
                     Credentials = credentials;
                     RetryLimit = retryLimit;
+                    EnableTransientRetry = enableTransientRetry;
                 }
 
                 public string Host { get; }
                 public ILog Logger { get; }
                 public TimeSpan Timeout { get; }
                 public HareDuCredentials Credentials { get; }
+                public bool EnableTransientRetry { get; }
                 public int RetryLimit { get; }
             }
 

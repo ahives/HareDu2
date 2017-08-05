@@ -25,11 +25,12 @@ namespace HareDu
         
         void UsingCredentials(string username, string password);
 
-        void EnableTransientRetry(Action<TransientRetrySettings> settings);
+        void TransientRetry(Action<TransientRetrySettings> settings);
     }
 
     public interface TransientRetrySettings
     {
+        void Enable(bool enableTransientRetry);
         void RetryLimit(int retryLimit);
     }
 }

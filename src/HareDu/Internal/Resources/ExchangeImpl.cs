@@ -18,7 +18,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Logging;
     using Exceptions;
     using Model;
 
@@ -26,8 +25,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Exchange
     {
-        public ExchangeImpl(HttpClient client, ILog logger, int retryLimit)
-            : base(client, logger, retryLimit)
+        public ExchangeImpl(HttpClient client, HareDuClientSettings settings)
+            : base(client, settings)
         {
         }
 

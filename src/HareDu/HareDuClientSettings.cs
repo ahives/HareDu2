@@ -16,12 +16,13 @@ namespace HareDu
     using System;
     using Common.Logging;
 
-    public interface ClientSettings
+    public interface HareDuClientSettings
     {
         string Host { get; }
         ILog Logger { get; }
         TimeSpan Timeout { get; }
         HareDuCredentials Credentials { get; }
+        bool EnableTransientRetry { get; }
         int RetryLimit { get; }
     }
 }

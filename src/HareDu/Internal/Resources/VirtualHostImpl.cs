@@ -17,7 +17,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Logging;
     using Exceptions;
     using Model;
 
@@ -25,8 +24,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         VirtualHost
     {
-        public VirtualHostImpl(HttpClient client, ILog logger, int retryLimit)
-            : base(client, logger, retryLimit)
+        public VirtualHostImpl(HttpClient client, HareDuClientSettings settings)
+            : base(client, settings)
         {
         }
         

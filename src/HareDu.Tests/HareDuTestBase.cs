@@ -13,7 +13,7 @@
                 x.ConnectTo("http://ahives-z620:15672");
                 x.EnableLogging(s => s.Logger("HareDuLogger"));
                 x.UsingCredentials("guest", "guest");
-                x.EnableTransientRetry(s => s.RetryLimit(3));
+                x.TransientRetry(s => s.RetryLimit(3));
             });
         }
         

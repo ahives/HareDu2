@@ -18,7 +18,6 @@ namespace HareDu.Internal.Resources
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Logging;
     using Polly;
     using Polly.Retry;
 
@@ -26,17 +25,17 @@ namespace HareDu.Internal.Resources
         Logging
     {
         readonly HttpClient _client;
-        readonly ILog _logger;
+        readonly HareDuClientSettings _settings;
         readonly RetryPolicy<Task<HttpResponseMessage>> _policy;
 
-        protected ResourceBase(HttpClient client, ILog logger, int retryLimit)
-            : base(logger)
+        protected ResourceBase(HttpClient client, HareDuClientSettings settings)
+            : base(settings.Logger)
         {
             _client = client;
-            _logger = logger;
+            _settings = settings;
             _policy = Policy<Task<HttpResponseMessage>>
                 .Handle<HttpRequestException>()
-                .Retry(retryLimit, (e, i) => LogError(e.Exception));
+                .Retry(_settings.RetryLimit, (e, i) => LogError(e.Exception));
         }
 
         void HandleDotsAndSlashes()
@@ -61,7 +60,9 @@ namespace HareDu.Internal.Resources
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return await _policy.Execute(() => _client.GetAsync(url, cancellationToken));
+                return _settings.EnableTransientRetry
+                    ? await _policy.Execute(() => _client.GetAsync(url, cancellationToken))
+                    : await _client.GetAsync(url, cancellationToken);
             }
             catch (Exception e)
             {
@@ -77,7 +78,9 @@ namespace HareDu.Internal.Resources
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return await _policy.Execute(() => _client.DeleteAsync(url, cancellationToken));
+                return _settings.EnableTransientRetry
+                    ? await _policy.Execute(() => _client.DeleteAsync(url, cancellationToken))
+                    : await _client.DeleteAsync(url, cancellationToken);
             }
             catch (Exception e)
             {
@@ -93,7 +96,9 @@ namespace HareDu.Internal.Resources
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return await _policy.Execute(() => _client.PutAsJsonAsync(url, value, cancellationToken));
+                return _settings.EnableTransientRetry
+                    ? await _policy.Execute(() => _client.PutAsJsonAsync(url, value, cancellationToken))
+                    : await _client.PutAsJsonAsync(url, value, cancellationToken);
             }
             catch (Exception e)
             {
@@ -109,7 +114,9 @@ namespace HareDu.Internal.Resources
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                return await _policy.Execute(() => _client.PostAsJsonAsync(url, value, cancellationToken));
+                return _settings.EnableTransientRetry
+                    ? await _policy.Execute(() => _client.PostAsJsonAsync(url, value, cancellationToken))
+                    : await _client.PostAsJsonAsync(url, value, cancellationToken);
             }
             catch (Exception e)
             {

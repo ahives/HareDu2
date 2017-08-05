@@ -19,7 +19,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Logging;
     using Exceptions;
     using Model;
 
@@ -27,8 +26,8 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         UserAdmin
     {
-        public UserAdminImpl(HttpClient client, ILog logger, int retryLimit)
-            : base(client, logger, retryLimit)
+        public UserAdminImpl(HttpClient client, HareDuClientSettings settings)
+            : base(client, settings)
         {
         }
 
