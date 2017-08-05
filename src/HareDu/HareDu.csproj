@@ -205,6 +205,7 @@
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="TransientRetrySettings.cs" />
     <Compile Include="UserAccess.cs" />
     <Compile Include="UserAccessCharacteristics.cs" />
     <Compile Include="UserAccessOptions.cs" />

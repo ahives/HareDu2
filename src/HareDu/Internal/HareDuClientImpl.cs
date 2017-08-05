@@ -29,7 +29,7 @@ namespace HareDu.Internal
         public HttpClient Client { get; private set; }
 
         public HareDuClientImpl(HareDuClientSettings settings)
-            : base(settings.Logger)
+            : base(settings.LoggerName, settings.Logger, settings.EnableLogger)
         {
             _settings = settings;
         }
@@ -37,9 +37,6 @@ namespace HareDu.Internal
         public TResource Factory<TResource>()
             where TResource : Resource
         {
-            if (_settings == null)
-                throw new HareDuClientInitException("In");
-
             var uri = new Uri($"{_settings.Host}/");
             var handler = new HttpClientHandler
             {

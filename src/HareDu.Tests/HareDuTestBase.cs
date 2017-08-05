@@ -11,9 +11,17 @@
             Client = HareDuFactory.Create(x =>
             {
                 x.ConnectTo("http://ahives-z620:15672");
-                x.EnableLogging(s => s.Logger("HareDuLogger"));
+                x.Logging(s =>
+                {
+                    s.Enable();
+                    s.UseLogger("HareDuLogger");
+                });
                 x.UsingCredentials("guest", "guest");
-                x.TransientRetry(s => s.RetryLimit(3));
+                x.TransientRetry(s =>
+                {
+                    s.Enable();
+                    s.RetryLimit(3);
+                });
             });
         }
         

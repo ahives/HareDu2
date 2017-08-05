@@ -29,7 +29,7 @@ namespace HareDu.Internal.Resources
         readonly RetryPolicy<Task<HttpResponseMessage>> _policy;
 
         protected ResourceBase(HttpClient client, HareDuClientSettings settings)
-            : base(settings.Logger)
+            : base(settings.LoggerName, settings.Logger, settings.EnableLogger)
         {
             _client = client;
             _settings = settings;

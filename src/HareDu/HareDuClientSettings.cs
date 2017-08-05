@@ -19,6 +19,8 @@ namespace HareDu
     public interface HareDuClientSettings
     {
         string Host { get; }
+        bool EnableLogger { get; }
+        string LoggerName { get; }
         ILog Logger { get; }
         TimeSpan Timeout { get; }
         HareDuCredentials Credentials { get; }

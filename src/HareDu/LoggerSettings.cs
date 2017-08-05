@@ -13,8 +13,12 @@
 // limitations under the License.
 namespace HareDu
 {
+    using Common.Logging;
+
     public interface LoggerSettings
     {
-        void Logger(string name);
+        void Enable();
+        void UseLogger(string name);
+        void UseLogger(ILog logger);
     }
 }

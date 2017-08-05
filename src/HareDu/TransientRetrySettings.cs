@@ -13,18 +13,9 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface HareDuClientBehavior
+    public interface TransientRetrySettings
     {
-        void ConnectTo(string host);
-
-        void Logging(Action<LoggerSettings> settings);
-
-        void TimeoutAfter(TimeSpan timeout);
-        
-        void UsingCredentials(string username, string password);
-
-        void TransientRetry(Action<TransientRetrySettings> settings);
+        void Enable();
+        void RetryLimit(int retryLimit);
     }
 }

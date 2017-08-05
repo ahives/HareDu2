@@ -21,10 +21,10 @@ namespace HareDu.Internal
         readonly ILog _logger;
         readonly bool _isEnabled;
 
-        protected Logging(ILog logger)
+        protected Logging(string loggerName, ILog logger, bool enable)
         {
-            _logger = logger;
-            _isEnabled = _logger != null;
+            _logger = logger ?? (!string.IsNullOrWhiteSpace(loggerName) ? LogManager.GetLogger(loggerName) : null);
+            _isEnabled = enable && _logger != null;
         }
 
         protected virtual void LogError(Exception e)

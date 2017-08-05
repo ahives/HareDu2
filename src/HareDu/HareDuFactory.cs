@@ -30,6 +30,9 @@ namespace HareDu
 
                 var settings = init.Settings.Value;
 
+                if (settings == null)
+                    throw new HareDuClientInitException("In");
+
                 if (string.IsNullOrWhiteSpace(settings.Host))
                     throw new HostUrlMissingException("Host URL was missing.");
                 
@@ -56,30 +59,32 @@ namespace HareDu
             static HareDuCredentials _credentials;
             static int _retryLimit;
             static bool _enableTransientRetry;
+            static bool _enableLogger;
+            static string _loggerName;
             
             public Lazy<HareDuClientSettings> Settings { get; }
 
-            public HareDuClientBehaviorImpl() => Settings = new Lazy<HareDuClientSettings>(InitClientSettings, LazyThreadSafetyMode.PublicationOnly);
+            public HareDuClientBehaviorImpl() => Settings = new Lazy<HareDuClientSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            static HareDuClientSettings InitClientSettings() => new HareDuClientSettingsImpl(_host, _logger, _timeout, _credentials, _enableTransientRetry, _retryLimit);
+            static HareDuClientSettings Init()
+                => new HareDuClientSettingsImpl(_host, _enableLogger, _logger, _loggerName, _timeout, _credentials, _enableTransientRetry, _retryLimit);
 
             public void ConnectTo(string host) => _host = host;
 
-            public void EnableLogging(Action<LoggerSettings> logger)
+            public void Logging(Action<LoggerSettings> settings)
             {
-                if (_logger != null)
-                    return;
-                
                 var impl = new LoggerSettingsImpl();
-                logger(impl);
-                    
-                _logger = LogManager.GetLogger(impl.Target);
+                settings(impl);
+
+                _enableLogger = impl.IsEnabled;
+                _logger = impl.Logger;
+                _loggerName = impl.LoggerName;
             }
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 
-            public void UsingCredentials(string username, string password) =>
-                _credentials = new HareDuCredentialsImpl(username, password);
+            public void UsingCredentials(string username, string password)
+                => _credentials = new HareDuCredentialsImpl(username, password);
 
             public void TransientRetry(Action<TransientRetrySettings> settings)
             {
@@ -100,7 +105,7 @@ namespace HareDu
                 public int Limit { get; private set; }
                 public bool EnableTransientRetry { get; private set; }
 
-                public void Enable(bool enableTransientRetry) => EnableTransientRetry = enableTransientRetry;
+                public void Enable() => EnableTransientRetry = true;
 
                 public void RetryLimit(int retryLimit) => Limit = retryLimit;
             }
@@ -123,17 +128,22 @@ namespace HareDu
             class HareDuClientSettingsImpl :
                 HareDuClientSettings
             {
-                public HareDuClientSettingsImpl(string host, ILog logger, TimeSpan timeout, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
+                public HareDuClientSettingsImpl(string host, bool enableLogger, ILog logger, string loggerName,
+                    TimeSpan timeout, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
                 {
                     Host = host;
+                    EnableLogger = enableLogger;
                     Logger = logger;
                     Timeout = timeout;
                     Credentials = credentials;
                     RetryLimit = retryLimit;
                     EnableTransientRetry = enableTransientRetry;
+                    LoggerName = loggerName;
                 }
 
                 public string Host { get; }
+                public bool EnableLogger { get; }
+                public string LoggerName { get; }
                 public ILog Logger { get; }
                 public TimeSpan Timeout { get; }
                 public HareDuCredentials Credentials { get; }
@@ -145,9 +155,15 @@ namespace HareDu
             class LoggerSettingsImpl :
                 LoggerSettings
             {
-                public string Target { get; private set; }
+                public string LoggerName { get; private set; }
+                public bool IsEnabled { get; private set; }
+                public ILog Logger { get; private set; }
 
-                public void Logger(string name) => Target = name;
+                public void Enable() => IsEnabled = true;
+
+                public void UseLogger(string name) => LoggerName = name;
+                
+                public void UseLogger(ILog logger) => Logger = logger;
             }
         }
     }
