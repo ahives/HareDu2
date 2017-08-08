@@ -43,6 +43,8 @@
     <Compile Include="ExchangeTests.cs" />
     <Compile Include="HareDuTestBase.cs" />
     <Compile Include="HealthCheckTests.cs" />
+    <Compile Include="PolicyTests.cs" />
+    <Compile Include="QueueTests.cs" />
     <Compile Include="UserAccessTests.cs" />
     <Compile Include="UserTests.cs" />
     <Compile Include="ValueExtensionTests.cs" />
@@ -58,8 +60,8 @@
     <Reference Include="Common.Logging.Log4Net1213, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
       <HintPath>..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
-      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>

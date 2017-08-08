@@ -1,6 +1,6 @@
 HareDu 2
 ========
-HareDu 2 is a .NET client and library that consumes the RabbitMQ REST API and is used to manage and monitor a RabbitMQ server or cluster.
+HareDu 2 is a .NET client and library that consumes the RabbitMQ REST API and can be used to manage and monitor a RabbitMQ server or cluster.
 
 
 Get It
@@ -40,93 +40,115 @@ The above represents the minimm configuration of the client but HareDu also expo
 
 2.) Setup a resource factory using your user credentials
 
-		var yourResourceFactory = client.Factory<YourResourcesInterface>();
+     var yourResourceFactory = client.Factory<YourResourceInterface>();
 
 Example,
 
-    var resource = client.Factory<VirtualHost>();
+     var resource = client.Factory<VirtualHost>();
 
 Calling the Factory method is essential to accessing HareDu resources as it is responsible for setting up the client for which requests for resources are sent. You must pass an interface that inherits from HareDu.Resources.ResourceClient. 
 
 
 3.) Call your properties and methods that are available to you based on your resource factory you setup in step 2.
 
-        Result result = await resourceFactory.Factory<Resource>()
-                                             .Create(<exchange>, <vhost>,
-                                                       x =>
-                                                           {
-                                                               x.IsDurable();
-                                                               x.UsingRoutingType(r => r.Fanout());
-                                                           });
+            Result result = await client
+                .Factory<Exchange>()
+                .Create(<exchange>, <vhost>, x =>
+                {
+                    x.IsDurable();
+                    x.UsingRoutingType(r => r.Fanout());
+                });
 
 Example,
 
-        Result result = await resource.Factory<Exchange>()
-                                      .Create(<exchange>, <vhost>,
-                                            x =>
-                                                {
-                                                   x.IsDurable();
-                                                   x.UsingRoutingType(r => r.Fanout());
-                                                });
+            Result result = await client
+                .Factory<Exchange>()
+                .Create("TestExchange", "HareDuVhost", x =>
+                {
+                    x.IsDurable();
+                    x.UsingRoutingType(r => r.Fanout());
+                });
 
 
 Developers have the option of either calling the API in steps or all at once via HareDu's fluent methods like so,
 
-HareDuClient client = HareDuFactory.New(x =>
-								            {
-								                x.ConnectTo("http://localhost:15672");
-								                x.EnableLogging(s => s.Logger("haredu_logger"));
-                                                x.UsingCredentials("guest", "guest");
-								            });
+            HareDuClient client = HareDuFactory.Create(x =>
+            {
+                x.ConnectTo("http://localhost:15672");
+                x.Logging(s =>
+                {
+                    s.Enable();
+                    s.UseLogger("HareDuLogger");
+                });
+                x.UsingCredentials("guest", "guest");
+                x.TransientRetry(s =>
+                {
+                    s.Enable();
+                    s.RetryLimit(3);
+                });
+            });
 
-Result result = await client
-    .Factory<Exchange>()
-    .Create("TestExchange", "HareDuVhost", x =>
-									    {
-									        x.IsDurable();
-									        x.UsingRoutingType(r => r.Fanout());
-									    });
+            Result result = await client
+                .Factory<Exchange>()
+                .Create("TestExchange", "HareDuVhost", x =>
+                {
+                    x.IsDurable();
+                    x.UsingRoutingType(r => r.Fanout());
+                });
 
 ...or
 
-Result result = await HareDuFactory
-	.New(x =>
-            {
-                x.ConnectTo("http://localhost:15672");
-                x.EnableLogging(s => s.Logger("haredu_logger"));
-                x.UsingCredentials("guest", "guest");
-            })
-    .Factory<Exchange>()
-    .Create("TestExchange", "HareDuVhost", x =>
-									    {
-									        x.IsDurable();
-									        x.UsingRoutingType(r => r.Fanout());
-									    });
+            Result result = await HareDuFactory.Create(x =>
+                {
+                    x.ConnectTo("http://localhost:15672");
+                    x.Logging(s =>
+                    {
+                        s.Enable();
+                        s.UseLogger("HareDuLogger");
+                    });
+                    x.UsingCredentials("guest", "guest");
+                    x.TransientRetry(s =>
+                    {
+                        s.Enable();
+                        s.RetryLimit(3);
+                    });
+                })
+                .Factory<Exchange>()
+                .Create("TestExchange", "HareDuVhost", x =>
+                {
+                    x.IsDurable();
+                    x.UsingRoutingType(r => r.Fanout());
+                });
 
 
 Assumptions
 ===========
 1.) You have RabbitMQ running in some environment that is reachable from the machine that you are running HareDu applications on
 
-2.) You know the URL and port to access the RabbitMQ REST API you want to interact with
+2.) You know the URL and port (ex: localhost:15672) to access the RabbitMQ REST API you want to interact with
 
-3.) You have some valid credentials to communite with the RabbitMQ server (default credentials are: username => guest, password => guest)
+3.) You have valid user credentials to communicate with the RabbitMQ server (default credentials are: username => guest, password => guest)
 
 
 Dependencies
 ============
-.NET Framework 4.5.2
+.NET Framework 4.5.2 or above
 
-JSON.NET
+JSON.NET 10.0.3 or above
 
-ASP.NET WebAPI
+ASP.NET WebAPI 5.2.3 or above
 
-Common.Logging
+Common.Logging 3.3.1
+
+Polly 5.3.0
+
+Log4Net 2.0.8
 
 
 Tested
 ======
 macOS Sierra 10.12.5
+
 Windows Server 2008 R2
 
 RabbitMQ 3.6.9

@@ -64,6 +64,7 @@
     <Compile Include="Binding.cs" />
     <Compile Include="BindingBehavior.cs" />
     <Compile Include="BindingType.cs" />
+    <Compile Include="Exceptions\PolicyMissingException.cs" />
     <Compile Include="HareDuClientSettings.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
@@ -87,12 +88,14 @@
     <Compile Include="HttpExtensions.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
     <Compile Include="Internal\BindingSetting.cs" />
+    <Compile Include="Internal\DefinedPolicy.cs" />
     <Compile Include="Internal\HareDuClientImpl.cs" />
     <Compile Include="Internal\Logging.cs" />
     <Compile Include="Internal\QueueSettings.cs" />
     <Compile Include="Internal\Resources\BindingImpl.cs" />
     <Compile Include="Internal\Resources\ClusterImpl.cs" />
     <Compile Include="Internal\Resources\ExchangeImpl.cs" />
+    <Compile Include="Internal\Resources\PolicyImpl.cs" />
     <Compile Include="Internal\Resources\QueueImpl.cs" />
     <Compile Include="Internal\Resources\NodeImpl.cs" />
     <Compile Include="Internal\Resources\UserAccessImpl.cs" />
@@ -184,7 +187,8 @@
     <Compile Include="Model\GarbageCollectionMetrics.cs" />
     <Compile Include="Model\NodeInfo.cs" />
     <Compile Include="Model\NodeHealthCheck.cs" />
-    <Compile Include="Model\PolicyDefinition.cs" />
+    <Compile Include="Model\PolicyDescription.cs" />
+    <Compile Include="Model\PolicyInfo.cs" />
     <Compile Include="Model\PolicySummary.cs" />
     <Compile Include="Model\QueueConsumerDetails.cs" />
     <Compile Include="Model\QueueInfo.cs" />
@@ -199,6 +203,8 @@
     <Compile Include="Model\VirtualHostDefinition.cs" />
     <Compile Include="Model\VirtualHostHealthCheck.cs" />
     <Compile Include="Model\VirtualHostInfo.cs" />
+    <Compile Include="Policy.cs" />
+    <Compile Include="PolicyDefinition.cs" />
     <Compile Include="QueueBehavior.cs" />
     <Compile Include="QueueDeleteCondition.cs" />
     <Compile Include="Queue.cs" />

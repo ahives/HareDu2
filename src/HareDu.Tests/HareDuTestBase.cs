@@ -10,7 +10,7 @@
         {
             Client = HareDuFactory.Create(x =>
             {
-                x.ConnectTo("http://ahives-z620:15672");
+                x.ConnectTo("http://localhost:15672");
                 x.Logging(s =>
                 {
                     s.Enable();

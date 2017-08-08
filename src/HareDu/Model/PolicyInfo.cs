@@ -13,17 +13,18 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface PolicyDefinition
+    public interface PolicyInfo
     {
-        [JsonProperty("ha-mode")]
-        string HighAvailabilityMode { get; }
-        
-        [JsonProperty("ha-params")]
-        long HighAvailabilityParams { get; }
-        
-        [JsonProperty("ha-sync-mode")]
-        string HighAvailabilitySyncMode { get; }
+        [JsonProperty("pattern")]
+        string Pattern { get; }
+
+        [JsonProperty("definition")]
+        IDictionary<string, string> Definition { get; }
+
+        [JsonProperty("priority")]
+        int Priority { get; }
     }
 }

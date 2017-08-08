@@ -30,8 +30,8 @@ namespace HareDu
 
                 var settings = init.Settings.Value;
 
-                if (settings == null)
-                    throw new HareDuClientInitException("In");
+                if (init.Settings == null || settings == null)
+                    throw new HareDuClientInitException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
                 if (string.IsNullOrWhiteSpace(settings.Host))
                     throw new HostUrlMissingException("Host URL was missing.");
@@ -88,9 +88,6 @@ namespace HareDu
 
             public void TransientRetry(Action<TransientRetrySettings> settings)
             {
-                if (_retryLimit > 0)
-                    return;
-
                 var impl = new TransientRetrySettingsImpl();
                 settings(impl);
 

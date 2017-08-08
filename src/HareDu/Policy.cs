@@ -11,28 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu
 {
-    using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Model;
 
-    public interface PolicySummary
+    public interface Policy :
+        Resource
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
+        Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
-        [JsonProperty("name")]
-        string Name { get; }
+        Task<Result> Create(string vhost, string policy, Action<PolicyDefinition> definition,
+            CancellationToken cancellationToken = default(CancellationToken));
         
-        [JsonProperty("pattern")]
-        string Pattern { get; }
-        
-        [JsonProperty("apply-to")]
-        string ApplyTo { get; }
-        
-        [JsonProperty("definition")]
-        PolicyDescription Description { get; }
-        
-        [JsonProperty("priority")]
-        long Priority { get; }
+        Task<Result> Delete(string vhost, string policy, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

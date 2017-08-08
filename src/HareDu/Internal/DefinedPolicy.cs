@@ -11,28 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu.Internal
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface PolicySummary
+    public interface DefinedPolicy
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
-        
-        [JsonProperty("name")]
-        string Name { get; }
-        
         [JsonProperty("pattern")]
         string Pattern { get; }
-        
+
+        [JsonProperty("definition")]
+        IDictionary<string, object> Definition { get; }
+
+        [JsonProperty("priority")]
+        int Priority { get; }
+
         [JsonProperty("apply-to")]
         string ApplyTo { get; }
-        
-        [JsonProperty("definition")]
-        PolicyDescription Description { get; }
-        
-        [JsonProperty("priority")]
-        long Priority { get; }
     }
 }

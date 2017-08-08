@@ -15,24 +15,15 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface PolicySummary
+    public interface PolicyDescription
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
+        [JsonProperty("ha-mode")]
+        string HighAvailabilityMode { get; }
         
-        [JsonProperty("name")]
-        string Name { get; }
+        [JsonProperty("ha-params")]
+        long HighAvailabilityParams { get; }
         
-        [JsonProperty("pattern")]
-        string Pattern { get; }
-        
-        [JsonProperty("apply-to")]
-        string ApplyTo { get; }
-        
-        [JsonProperty("definition")]
-        PolicyDescription Description { get; }
-        
-        [JsonProperty("priority")]
-        long Priority { get; }
+        [JsonProperty("ha-sync-mode")]
+        string HighAvailabilitySyncMode { get; }
     }
 }

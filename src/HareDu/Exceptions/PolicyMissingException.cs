@@ -11,28 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu.Exceptions
 {
-    using Newtonsoft.Json;
+    using System;
+    using System.Runtime.Serialization;
 
-    public interface PolicySummary
+    public class PolicyMissingException :
+        Exception
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
-        
-        [JsonProperty("name")]
-        string Name { get; }
-        
-        [JsonProperty("pattern")]
-        string Pattern { get; }
-        
-        [JsonProperty("apply-to")]
-        string ApplyTo { get; }
-        
-        [JsonProperty("definition")]
-        PolicyDescription Description { get; }
-        
-        [JsonProperty("priority")]
-        long Priority { get; }
+        public PolicyMissingException()
+        {
+        }
+
+        protected PolicyMissingException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public PolicyMissingException(string message)
+            : base(message)
+        {
+        }
+
+        public PolicyMissingException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }
