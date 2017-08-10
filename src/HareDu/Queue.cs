@@ -22,7 +22,7 @@ namespace HareDu
     public interface Queue :
         Resource
     {
-        Task<Result<IEnumerable<QueueInfo>>> GetAll(string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<QueueInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Create(string queue, string vhost, Action<QueueBehavior> behavior,
             CancellationToken cancellationToken = default(CancellationToken));

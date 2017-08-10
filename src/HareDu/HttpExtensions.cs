@@ -18,7 +18,6 @@ namespace HareDu
     using System.Net.Http;
     using System.Threading.Tasks;
     using Internal.Serialization;
-    using Model;
     using Newtonsoft.Json;
 
     internal static class HttpExtensions

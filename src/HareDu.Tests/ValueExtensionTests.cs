@@ -54,8 +54,8 @@
         {
             ExchangeInfo exchange = Client
                 .Factory<Exchange>()
-                .GetAll("HareDu")
-                .Where(x => x.Name == "E2")
+                .GetAll()
+                .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")
                 .FirstOrDefault();
  
             Console.WriteLine("Name: {0}", exchange.Name);

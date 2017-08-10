@@ -17,7 +17,6 @@ namespace HareDu
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Model;
 
     public static class ValueExtensions
     {
@@ -91,9 +90,16 @@ namespace HareDu
             return data.Data.Any(predicate);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="predicate"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static IEnumerable<T> Where<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
         {
-            var data = source?.Result;
+            Result<IEnumerable<T>> data = source?.Result;
             if (data?.Data == null || !data.Data.Any())
                 return Enumerable.Empty<T>();
             

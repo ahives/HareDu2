@@ -11,13 +11,14 @@
         HareDuTestBase
     {
         [Test, Explicit]
-        public async Task Verify_GetAll_works()
+        public void Verify_GetAll_works()
         {
-            Result<IEnumerable<ExchangeInfo>> result = await Client
+            IEnumerable<ExchangeInfo> result = Client
                 .Factory<Exchange>()
-                .GetAll("HareDu");
+                .GetAll()
+                .Where(x => x.Name == "HareDu");
 
-            foreach (var exchange in result.Data)
+            foreach (var exchange in result)
             {
                 Console.WriteLine("Name: {0}", exchange.Name);
                 Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
@@ -27,10 +28,6 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
-            
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine();
         }
         
         [Test, Explicit]

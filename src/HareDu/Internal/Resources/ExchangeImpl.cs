@@ -30,18 +30,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ExchangeInfo>>> GetAll(string vhost, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            string url = $"api/exchanges";
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/exchanges/{sanitizedVHost}";
-
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
+            LogInfo($"Sent request to return all information on current RabbitMQ server.");
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<ExchangeInfo>> result = await response.GetResponse<IEnumerable<ExchangeInfo>>();
