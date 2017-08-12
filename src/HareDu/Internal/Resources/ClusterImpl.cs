@@ -17,6 +17,7 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Configuration;
     using Model;
 
     internal class ClusterImpl :

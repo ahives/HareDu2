@@ -11,20 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Configuration
 {
-    using System;
-
-    public interface HareDuClientBehavior
+    public interface HareDuCredentials
     {
-        void ConnectTo(string host);
-
-        void Logging(Action<LoggerSettings> settings);
-
-        void TimeoutAfter(TimeSpan timeout);
-        
-        void UsingCredentials(string username, string password);
-
-        void TransientRetry(Action<TransientRetrySettings> settings);
+        string Username { get; }
+        string Password { get; }
     }
 }

@@ -5,6 +5,7 @@
     using System.IO;
     using System.Threading.Tasks;
     using Common.Logging;
+    using Configuration;
     using Internal.Serialization;
     using Model;
     using Newtonsoft.Json;

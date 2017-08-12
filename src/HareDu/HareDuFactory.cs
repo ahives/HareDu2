@@ -15,8 +15,12 @@ namespace HareDu
 {
     using System;
     using System.IO;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading;
     using Common.Logging;
+    using Configuration;
     using Exceptions;
     using Internal;
     using Internal.Serialization;
@@ -36,7 +40,9 @@ namespace HareDu
                 if (init.Settings == null || settings == null)
                     throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                var client = new HareDuClientImpl(settings);
+                HttpClient httpClient = GetHttpClient(settings);
+                
+                var client = new HareDuClientImpl(httpClient, settings);
 
                 return client;
             }
@@ -55,7 +61,9 @@ namespace HareDu
                 if (clientSettings == null)
                     throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                var client = new HareDuClientImpl(clientSettings);
+                HttpClient httpClient = GetHttpClient(clientSettings);
+                
+                var client = new HareDuClientImpl(httpClient, clientSettings);
 
                 return client;
             }
@@ -74,7 +82,9 @@ namespace HareDu
                 
                 HareDuClientSettings clientSettings = settings();
 
-                var client = new HareDuClientImpl(clientSettings);
+                HttpClient httpClient = GetHttpClient(clientSettings);
+                
+                var client = new HareDuClientImpl(httpClient, clientSettings);
 
                 return client;
             }
@@ -82,6 +92,23 @@ namespace HareDu
             {
                 throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
             }
+        }
+
+        static HttpClient GetHttpClient(HareDuClientSettings settings)
+        {
+            var uri = new Uri($"{settings.Host}/");
+            var handler = new HttpClientHandler
+            {
+                Credentials = new NetworkCredential(settings.Credentials.Username, settings.Credentials.Password)
+            };
+            
+            var client = new HttpClient(handler){BaseAddress = uri};
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (settings.Timeout != TimeSpan.Zero)
+                client.Timeout = settings.Timeout;
+
+            return client;
         }
 
 

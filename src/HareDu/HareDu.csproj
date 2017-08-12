@@ -64,11 +64,15 @@
     <Compile Include="Binding.cs" />
     <Compile Include="BindingBehavior.cs" />
     <Compile Include="BindingType.cs" />
+    <Compile Include="Configuration\HareDuClientBehavior.cs" />
+    <Compile Include="Configuration\HareDuClientSettings.cs" />
+    <Compile Include="Configuration\HareDuCredentials.cs" />
+    <Compile Include="Configuration\LoggerSettings.cs" />
+    <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="Exceptions\HareDuClientConfigurationException.cs" />
     <Compile Include="Exceptions\PolicyDefinitionException.cs" />
     <Compile Include="Exceptions\PolicyMissingException.cs" />
     <Compile Include="Exceptions\QueueArgumentException.cs" />
-    <Compile Include="HareDuClientSettings.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
     <Compile Include="Exceptions\QueueMissingException.cs" />
@@ -85,8 +89,6 @@
     <Compile Include="ExchangeRoutingType.cs" />
     <Compile Include="ExchangeSettings.cs" />
     <Compile Include="HareDuClient.cs" />
-    <Compile Include="HareDuClientBehavior.cs" />
-    <Compile Include="HareDuCredentials.cs" />
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
     <Compile Include="Internal\BindingSetting.cs" />
@@ -168,7 +170,6 @@
     <Compile Include="Internal\UserChacteristics.cs" />
     <Compile Include="Internal\UserPermissions.cs" />
     <Compile Include="Internal\UserPermissionTag.cs" />
-    <Compile Include="LoggerSettings.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\AuthenticationMechanism.cs" />
     <Compile Include="Model\BindingInfo.cs" />
@@ -216,7 +217,6 @@
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Result.cs" />
-    <Compile Include="TransientRetrySettings.cs" />
     <Compile Include="UserAccess.cs" />
     <Compile Include="UserAccessCharacteristics.cs" />
     <Compile Include="UserAccessOptions.cs" />
@@ -224,9 +224,6 @@
     <Compile Include="UserAdminCharacteristics.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -15,55 +15,43 @@ namespace HareDu.Internal
 {
     using System;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
+    using Configuration;
     using Exceptions;
 
     internal class HareDuClientImpl :
         Logging,
         HareDuClient
     {
+        readonly HttpClient _httpClient;
         readonly HareDuClientSettings _settings;
-        
-        public HttpClient Client { get; private set; }
 
-        public HareDuClientImpl(HareDuClientSettings settings)
+        public HareDuClientImpl(HttpClient httpClient, HareDuClientSettings settings)
             : base(settings.LoggerName, settings.Logger, settings.EnableLogger)
         {
+            _httpClient = httpClient;
             _settings = settings;
         }
 
         public TResource Factory<TResource>()
             where TResource : Resource
         {
-            var uri = new Uri($"{_settings.Host}/");
-            var handler = new HttpClientHandler
-            {
-                Credentials = new NetworkCredential(_settings.Credentials.Username, _settings.Credentials.Password)
-            };
-            
-            var client = new HttpClient(handler){BaseAddress = uri};
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            if (_settings.Timeout != TimeSpan.Zero)
-                client.Timeout = _settings.Timeout;
-
-            Client = client;
-
-            Type type = GetType().Assembly.GetTypes().FirstOrDefault(x => typeof(TResource).IsAssignableFrom(x) && !x.IsInterface);
+            Type type = GetType()
+                .Assembly
+                .GetTypes()
+                .FirstOrDefault(x => typeof(TResource).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource)Activator.CreateInstance(type, client, _settings);
+            return (TResource)Activator.CreateInstance(type, _httpClient, _settings);
         }
 
         public void CancelPendingRequest()
         {
             LogInfo("Cancelling all pending requests.");
 
-            Client.CancelPendingRequests();
+            _httpClient.CancelPendingRequests();
         }
     }
 }

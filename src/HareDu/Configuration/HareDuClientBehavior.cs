@@ -11,11 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Configuration
 {
-    public interface TransientRetrySettings
+    using System;
+
+    public interface HareDuClientBehavior
     {
-        void Enable();
-        void RetryLimit(int retryLimit);
+        void ConnectTo(string host);
+
+        void Logging(Action<LoggerSettings> settings);
+
+        void TimeoutAfter(TimeSpan timeout);
+        
+        void UsingCredentials(string username, string password);
+
+        void TransientRetry(Action<TransientRetrySettings> settings);
     }
 }

@@ -18,6 +18,7 @@ namespace HareDu.Internal.Resources
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using Configuration;
     using Polly;
     using Polly.Retry;
 
