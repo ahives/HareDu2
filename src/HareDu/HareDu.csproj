@@ -64,7 +64,9 @@
     <Compile Include="Binding.cs" />
     <Compile Include="BindingBehavior.cs" />
     <Compile Include="BindingType.cs" />
+    <Compile Include="Exceptions\PolicyDefinitionException.cs" />
     <Compile Include="Exceptions\PolicyMissingException.cs" />
+    <Compile Include="Exceptions\QueueArgumentException.cs" />
     <Compile Include="HareDuClientSettings.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
@@ -205,6 +207,8 @@
     <Compile Include="Model\VirtualHostInfo.cs" />
     <Compile Include="Policy.cs" />
     <Compile Include="PolicyDefinition.cs" />
+    <Compile Include="PolicyDefinitionArguments.cs" />
+    <Compile Include="QueueArguments.cs" />
     <Compile Include="QueueBehavior.cs" />
     <Compile Include="QueueDeleteCondition.cs" />
     <Compile Include="Queue.cs" />

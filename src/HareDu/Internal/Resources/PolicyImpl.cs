@@ -44,8 +44,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string vhost, string policy, Action<PolicyDefinition> definition,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(string policy, string vhost, Action<PolicyDefinition> definition, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -99,7 +98,7 @@ namespace HareDu.Internal.Resources
             PolicyDefinition
         {
             static string _pattern;
-            static IDictionary<string, object> _definition;
+            static IDictionary<string, object> _arguments;
             static int _priority;
             static string _applyTo;
             
@@ -107,30 +106,99 @@ namespace HareDu.Internal.Resources
 
             public PolicyDefinitionImpl() => DefinedPolicy = new Lazy<DefinedPolicy>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            DefinedPolicy Init() => new DefinedPolicyImpl(_pattern, _definition, _priority, _applyTo);
+            DefinedPolicy Init() => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo);
 
             public void UsePattern(string pattern) => _pattern = pattern;
+            
+            public void WithArguments(Action<PolicyDefinitionArguments> arguments)
+            {
+                var impl = new PolicyDefinitionArgumentsImpl();
+                arguments(impl);
 
-            public void DefinedAs(IDictionary<string, object> definitions) => _definition = definitions;
+                _arguments = impl.Arguments;
+            }
 
             public void Priority(int priority) => _priority = priority;
 
             public void AppliedTo(string applyTo) => _applyTo = applyTo;
 
             
+            class PolicyDefinitionArgumentsImpl :
+                PolicyDefinitionArguments
+            {
+                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                
+                public void Set<T>(string arg, T value)
+                {
+                    Validate(arg.Trim(), "federation-upstream", "federation-upstream-set");
+                    Validate("ha-mode");
+                    
+                    Arguments.Add(arg.Trim(), value);
+                }
+
+                public void SetExpiry(long milliseconds)
+                {
+                    Validate("expires");
+                    
+                    Arguments.Add("expires", milliseconds);
+                }
+
+                public void SetFederationUpstreamSet(string upstreamSet)
+                {
+                    Validate("federation-upstream-set", "federation-upstream");
+                    
+                    Arguments.Add("federation-upstream-set", upstreamSet.Trim());
+                }
+
+                public void SetFederationUpstream(string upstream)
+                {
+                    Validate("federation-upstream", "federation-upstream-set");
+                    
+                    Arguments.Add("federation-upstream", upstream.Trim());
+                }
+
+                public void SetHighAvailabilityMode(string mode)
+                {
+                    Validate("ha-mode");
+                    
+                    Arguments.Add("ha-mode", mode);
+                }
+
+                void Validate(string arg)
+                {
+                    if (Arguments.ContainsKey(arg))
+                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
+                }
+
+                void Validate(string arg, string targetArg)
+                {
+                    if (Arguments.ContainsKey(arg) && Arguments.ContainsKey(targetArg))
+                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set or would conflict with argument '{targetArg}'");
+                }
+
+                void Validate(string arg, string targetArg, string conflictingArg)
+                {
+                    if (Arguments.ContainsKey(arg) ||
+                        (arg == conflictingArg && Arguments.ContainsKey(targetArg)) ||
+                        (arg == targetArg && Arguments.ContainsKey(conflictingArg)))
+                        throw new PolicyDefinitionException($"Argument '{conflictingArg}' has already been set or would conflict with argument '{arg}'");
+                }
+            }
+
+            
             class DefinedPolicyImpl :
                 DefinedPolicy
             {
-                public DefinedPolicyImpl(string pattern, IDictionary<string, object> definition, int priority, string applyTo)
+                public DefinedPolicyImpl(string pattern, IDictionary<string, object> arguments, int priority, string applyTo)
                 {
                     Pattern = pattern;
-                    Definition = definition;
+                    Arguments = arguments;
                     Priority = priority;
                     ApplyTo = applyTo;
                 }
 
                 public string Pattern { get; }
-                public IDictionary<string, object> Definition { get; }
+                public IDictionary<string, object> Arguments { get; }
                 public int Priority { get; }
                 public string ApplyTo { get; }
             }

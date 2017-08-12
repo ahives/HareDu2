@@ -11,23 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu
 {
-    using System.Collections.Generic;
-    using Newtonsoft.Json;
-
-    public interface DefinedPolicy
+    public interface PolicyDefinitionArguments
     {
-        [JsonProperty("pattern")]
-        string Pattern { get; }
+        void Set<T>(string arg, T value);
 
-        [JsonProperty("definition")]
-        IDictionary<string, object> Arguments { get; }
+        void SetExpiry(long milliseconds);
 
-        [JsonProperty("priority")]
-        int Priority { get; }
+        void SetFederationUpstreamSet(string upstreamSet);
 
-        [JsonProperty("apply-to")]
-        string ApplyTo { get; }
+        void SetFederationUpstream(string upstream);
+
+        void SetHighAvailabilityMode(string mode);
     }
 }

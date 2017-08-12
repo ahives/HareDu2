@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System.Collections.Generic;
+    using System;
 
     public interface QueueBehavior
     {
@@ -21,7 +21,7 @@ namespace HareDu
 
         void OnNode(string node);
 
-        void WithArguments(IDictionary<string, object> arguments);
+        void WithArguments(Action<QueueArguments> arguments);
 
         void AutoDeleteWhenNotInUse();
     }

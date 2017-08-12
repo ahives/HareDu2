@@ -167,16 +167,81 @@ namespace HareDu.Internal.Resources
             public void IsDurable() => _durable = true;
 
             public void OnNode(string node) => _node = node;
-
-            public void WithArguments(IDictionary<string, object> arguments)
+            
+            public void WithArguments(Action<QueueArguments> arguments)
             {
-                if (arguments == null)
-                    return;
+                var impl = new QueueArgumentsImpl();
+                arguments(impl);
 
-                _arguments = arguments;
+                _arguments = impl.Arguments;
             }
 
             public void AutoDeleteWhenNotInUse() => _autoDelete = true;
+
+            
+            class QueueArgumentsImpl :
+                QueueArguments
+            {
+                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+
+                public void Set<T>(string arg, T value)
+                {
+                    Validate(arg.Trim(), "x-expires");
+                    Validate(arg.Trim(), "x-message-ttl");
+                    Validate(arg.Trim(), "x-dead-letter-exchange");
+                    Validate(arg.Trim(), "x-dead-letter-routing-key");
+                    Validate(arg.Trim(), "alternate-exchange");
+                    
+                    Arguments.Add(arg, value);
+                }
+
+                public void SetQueueExpiration(long milliseconds)
+                {
+                    Validate("x-expires");
+                    
+                    Arguments.Add("x-expires", milliseconds);
+                }
+
+                public void SetPerQueuedMessageExpiration(long milliseconds)
+                {
+                    Validate("x-message-ttl");
+                    
+                    Arguments.Add("x-message-ttl", milliseconds);
+                }
+
+                public void SetDeadLetterExchange(string exchange)
+                {
+                    Validate("x-dead-letter-exchange");
+                    
+                    Arguments.Add("x-dead-letter-exchange", exchange);
+                }
+
+                public void SetDeadLetterExchangeRoutingKey(string routingKey)
+                {
+                    Validate("x-dead-letter-routing-key");
+                    
+                    Arguments.Add("x-dead-letter-routing-key", routingKey);
+                }
+
+                public void SetAlternateExchange(string exchange)
+                {
+                    Validate("alternate-exchange");
+                    
+                    Arguments.Add("alternate-exchange", exchange);
+                }
+
+                void Validate(string arg, string targetArg)
+                {
+                    if (arg == targetArg && Arguments.ContainsKey(targetArg))
+                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
+                }
+
+                void Validate(string arg)
+                {
+                    if (Arguments.ContainsKey(arg))
+                        throw new QueueArgumentException($"Argument '{arg}' has already been set");
+                }
+            }
 
 
             class QueueSettingsImpl :

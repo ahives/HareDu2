@@ -16,6 +16,12 @@
                 .Create("Q1", "HareDu", x =>
                 {
                     x.IsDurable();
+                    x.WithArguments(a =>
+                    {
+                        a.SetDeadLetterExchange("E1");
+                        a.SetQueueExpiration(1000);
+                        a.SetPerQueuedMessageExpiration(1000);
+                    });
                 });
         }
 

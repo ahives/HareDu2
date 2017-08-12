@@ -12,11 +12,14 @@
         {
             var result = Client
                 .Factory<Policy>()
-                .Create("HareDu", "P1", x =>
+                .Create("P1", "HareDu", x =>
                 {
                     x.UsePattern("^amq.");
                     x.Priority(0);
-                    x.DefinedAs(new Dictionary<string, object> {{"federation-upstream-set", "all"}});
+                    x.WithArguments(d =>
+                    {
+                        d.SetFederationUpstreamSet("all");
+                    });
                     x.AppliedTo("all");
                 });
         }

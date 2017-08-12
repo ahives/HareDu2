@@ -11,18 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Exceptions
 {
     using System;
+    using System.Runtime.Serialization;
 
-    public interface PolicyDefinition
+    public class PolicyDefinitionException :
+        Exception
     {
-        void UsePattern(string pattern);
-        
-        void WithArguments(Action<PolicyDefinitionArguments> arguments);
-        
-        void Priority(int priority);
-        
-        void AppliedTo(string applyTo);
+        public PolicyDefinitionException()
+        {
+        }
+
+        protected PolicyDefinitionException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public PolicyDefinitionException(string message)
+            : base(message)
+        {
+        }
+
+        public PolicyDefinitionException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }
