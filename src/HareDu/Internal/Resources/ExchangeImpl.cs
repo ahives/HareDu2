@@ -97,7 +97,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeleteCondition> condition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(string exchange, string vhost, Action<DeleteExchangeCondition> condition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -107,7 +107,7 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            var impl = new ExchangeDeleteConditionImpl();
+            var impl = new DeleteExchangeConditionImpl();
             condition(impl);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
@@ -126,8 +126,8 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class ExchangeDeleteConditionImpl :
-            ExchangeDeleteCondition
+        class DeleteExchangeConditionImpl :
+            DeleteExchangeCondition
         {
             public bool DeleteIfUnused { get; private set; }
             

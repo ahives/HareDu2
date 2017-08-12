@@ -29,7 +29,7 @@ namespace HareDu
         
         Task<Result> Delete(string exchange, string vhost, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeleteCondition> condition,
+        Task<Result> Delete(string exchange, string vhost, Action<DeleteExchangeCondition> condition,
             CancellationToken cancellationToken = default(CancellationToken));
     }
 }

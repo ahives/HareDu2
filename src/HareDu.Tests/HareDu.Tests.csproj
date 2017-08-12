@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="BindingsTests.cs" />
     <Compile Include="ExchangeTests.cs" />
+    <Compile Include="HareDuClientTests.cs" />
     <Compile Include="HareDuTestBase.cs" />
     <Compile Include="HealthCheckTests.cs" />
     <Compile Include="PolicyTests.cs" />

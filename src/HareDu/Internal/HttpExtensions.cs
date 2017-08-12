@@ -11,14 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal
 {
     using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Internal.Serialization;
     using Newtonsoft.Json;
+    using Serialization;
 
     internal static class HttpExtensions
     {

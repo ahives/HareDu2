@@ -14,10 +14,13 @@
 namespace HareDu
 {
     using System;
+    using System.IO;
     using System.Threading;
     using Common.Logging;
     using Exceptions;
     using Internal;
+    using Internal.Serialization;
+    using Newtonsoft.Json;
 
     public static class HareDuFactory
     {
@@ -28,18 +31,50 @@ namespace HareDu
                 var init = new HareDuClientBehaviorImpl();
                 behavior(init);
 
-                var settings = init.Settings.Value;
+                HareDuClientSettings settings = init.Settings.Value;
 
                 if (init.Settings == null || settings == null)
-                    throw new HareDuClientInitException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                if (string.IsNullOrWhiteSpace(settings.Host))
-                    throw new HostUrlMissingException("Host URL was missing.");
-                
-                if (string.IsNullOrWhiteSpace(settings.Credentials.Username) || string.IsNullOrWhiteSpace(settings.Credentials.Password))
-                    throw new UserCredentialsMissingException("Username and/or password was missing.");
+                    throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
                 var client = new HareDuClientImpl(settings);
+
+                return client;
+            }
+            catch (Exception e)
+            {
+                throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
+            }
+        }
+
+        public static HareDuClient Create(string settings)
+        {
+            try
+            {
+                var clientSettings = SerializerCache.Deserializer.Deserialize<HareDuClientSettings>(new JsonTextReader(new StringReader(settings)));
+
+                if (clientSettings == null)
+                    throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                var client = new HareDuClientImpl(clientSettings);
+
+                return client;
+            }
+            catch (Exception e)
+            {
+                throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
+            }
+        }
+
+        public static HareDuClient Create(Func<HareDuClientSettings> settings)
+        {
+            try
+            {
+                if (settings == null)
+                    throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+                
+                HareDuClientSettings clientSettings = settings();
+
+                var client = new HareDuClientImpl(clientSettings);
 
                 return client;
             }
@@ -56,20 +91,27 @@ namespace HareDu
             static string _host;
             static ILog _logger;
             static TimeSpan _timeout;
-            static HareDuCredentials _credentials;
             static int _retryLimit;
             static bool _enableTransientRetry;
             static bool _enableLogger;
             static string _loggerName;
-            
+            static string _username;
+            static string _password;
+
             public Lazy<HareDuClientSettings> Settings { get; }
 
             public HareDuClientBehaviorImpl() => Settings = new Lazy<HareDuClientSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             static HareDuClientSettings Init()
-                => new HareDuClientSettingsImpl(_host, _enableLogger, _logger, _loggerName, _timeout, _credentials, _enableTransientRetry, _retryLimit);
+                => new HareDuClientSettingsImpl(_host, _enableLogger, _logger, _loggerName, _timeout, _username, _password, _enableTransientRetry, _retryLimit);
 
-            public void ConnectTo(string host) => _host = host;
+            public void ConnectTo(string host)
+            {
+                if (string.IsNullOrWhiteSpace(host))
+                    throw new HostUrlMissingException("Host URL is required and cannot be empty.");
+                
+                _host = host;
+            }
 
             public void Logging(Action<LoggerSettings> settings)
             {
@@ -84,7 +126,13 @@ namespace HareDu
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 
             public void UsingCredentials(string username, string password)
-                => _credentials = new HareDuCredentialsImpl(username, password);
+            {
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                    throw new UserCredentialsMissingException("Username and password are required and cannot be empty.");
+                
+                _username = username;
+                _password = password;
+            }
 
             public void TransientRetry(Action<TransientRetrySettings> settings)
             {
@@ -108,31 +156,17 @@ namespace HareDu
             }
 
 
-            class HareDuCredentialsImpl :
-                HareDuCredentials
-            {
-                public HareDuCredentialsImpl(string username, string password)
-                {
-                    Username = username;
-                    Password = password;
-                }
-
-                public string Username { get; }
-                public string Password { get; }
-            }
-
-
             class HareDuClientSettingsImpl :
                 HareDuClientSettings
             {
                 public HareDuClientSettingsImpl(string host, bool enableLogger, ILog logger, string loggerName,
-                    TimeSpan timeout, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
+                    TimeSpan timeout, string username, string password, bool enableTransientRetry, int retryLimit)
                 {
                     Host = host;
                     EnableLogger = enableLogger;
                     Logger = logger;
                     Timeout = timeout;
-                    Credentials = credentials;
+                    Credentials = new HareDuCredentialsImpl(username, password);
                     RetryLimit = retryLimit;
                     EnableTransientRetry = enableTransientRetry;
                     LoggerName = loggerName;
@@ -146,6 +180,20 @@ namespace HareDu
                 public HareDuCredentials Credentials { get; }
                 public bool EnableTransientRetry { get; }
                 public int RetryLimit { get; }
+            }
+
+
+            class HareDuCredentialsImpl :
+                HareDuCredentials
+            {
+                public HareDuCredentialsImpl(string username, string password)
+                {
+                    Username = username;
+                    Password = password;
+                }
+
+                public string Username { get; }
+                public string Password { get; }
             }
 
 

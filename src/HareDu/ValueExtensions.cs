@@ -102,8 +102,10 @@ namespace HareDu
             Result<IEnumerable<T>> data = source?.Result;
             if (data?.Data == null || !data.Data.Any())
                 return Enumerable.Empty<T>();
+
+            IEnumerable<T> list = source.Result.Data.Where(predicate);
             
-            return source.Result.Data.Where(predicate);
+            return list;
         }
     }
 }

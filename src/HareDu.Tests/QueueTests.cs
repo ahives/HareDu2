@@ -36,6 +36,7 @@
             foreach (var queue in result)
             {
                 Console.WriteLine("Name: {0}", queue.Name);
+                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
                 Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();

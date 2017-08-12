@@ -13,8 +13,10 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface ExchangeDeleteCondition
+    public interface DeleteQueueCondition
     {
         void IfUnused();
+        
+        void IfEmpty();
     }
 }

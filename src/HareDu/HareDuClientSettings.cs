@@ -15,13 +15,17 @@ namespace HareDu
 {
     using System;
     using Common.Logging;
+    using Newtonsoft.Json;
 
     public interface HareDuClientSettings
     {
         string Host { get; }
         bool EnableLogger { get; }
         string LoggerName { get; }
+        
+        [JsonIgnore]
         ILog Logger { get; }
+        
         TimeSpan Timeout { get; }
         HareDuCredentials Credentials { get; }
         bool EnableTransientRetry { get; }

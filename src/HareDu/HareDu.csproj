@@ -64,6 +64,7 @@
     <Compile Include="Binding.cs" />
     <Compile Include="BindingBehavior.cs" />
     <Compile Include="BindingType.cs" />
+    <Compile Include="Exceptions\HareDuClientConfigurationException.cs" />
     <Compile Include="Exceptions\PolicyDefinitionException.cs" />
     <Compile Include="Exceptions\PolicyMissingException.cs" />
     <Compile Include="Exceptions\QueueArgumentException.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
     <Compile Include="Exceptions\QueueMissingException.cs" />
-    <Compile Include="ExchangeDeleteCondition.cs" />
+    <Compile Include="DeleteExchangeCondition.cs" />
     <Compile Include="Exceptions\ExchangeMissingException.cs" />
     <Compile Include="Exceptions\DeleteVirtualHostException.cs" />
     <Compile Include="Exceptions\ExchangeRoutingTypeMissingException.cs" />
@@ -87,11 +88,11 @@
     <Compile Include="HareDuClientBehavior.cs" />
     <Compile Include="HareDuCredentials.cs" />
     <Compile Include="HareDuFactory.cs" />
-    <Compile Include="HttpExtensions.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
     <Compile Include="Internal\BindingSetting.cs" />
     <Compile Include="Internal\DefinedPolicy.cs" />
     <Compile Include="Internal\HareDuClientImpl.cs" />
+    <Compile Include="Internal\HttpExtensions.cs" />
     <Compile Include="Internal\Logging.cs" />
     <Compile Include="Internal\QueueSettings.cs" />
     <Compile Include="Internal\Resources\BindingImpl.cs" />
@@ -210,7 +211,7 @@
     <Compile Include="PolicyDefinitionArguments.cs" />
     <Compile Include="QueueArguments.cs" />
     <Compile Include="QueueBehavior.cs" />
-    <Compile Include="QueueDeleteCondition.cs" />
+    <Compile Include="DeleteQueueCondition.cs" />
     <Compile Include="Queue.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />
@@ -223,6 +224,9 @@
     <Compile Include="UserAdminCharacteristics.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Configuration" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
