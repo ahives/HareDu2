@@ -24,25 +24,25 @@ namespace HareDu.Model
         long TotalReductions { get; }
 
         [JsonProperty("recv_oct")]
-        long ReceivedOctet { get; }
+        long OctetsReceived { get; }
 
         [JsonProperty("recv_oct_details")]
-        Rate RateOfReceviedOctet { get; }
+        Rate RateOfOctetsRecevied { get; }
 
         [JsonProperty("send_oct_details")]
-        Rate RateOfSentOctet { get; }
+        Rate RateOfOctetsSent { get; }
 
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }
 
         [JsonProperty("channel_max")]
-        long ChannelMax { get; }
+        long MaxChannels { get; }
 
         [JsonProperty("frame_max")]
-        long FrameMax { get; }
+        long MaxFrameSizeInBytes { get; }
 
         [JsonProperty("timeout")]
-        long Timeout { get; }
+        long ConnectionTimeout { get; }
 
         [JsonProperty("vhost")]
         string VirtualHost { get; }
@@ -57,10 +57,10 @@ namespace HareDu.Model
         long SendPending { get; }
 
         [JsonProperty("send_cnt")]
-        long SendCount { get; }
+        long PacketsSent { get; }
 
         [JsonProperty("recv_cnt")]
-        long ReceivedCount { get; }
+        long PacketsReceived { get; }
 
         [JsonProperty("type")]
         string Type { get; }
@@ -72,13 +72,13 @@ namespace HareDu.Model
         string State { get; }
 
         [JsonProperty("ssl_hash")]
-        string SslHash { get; }
+        string SslHashFunction { get; }
 
         [JsonProperty("ssl_cipher")]
-        string SslCipher { get; }
+        string SslCipherAlgorithm { get; }
 
         [JsonProperty("ssl_key_exchange")]
-        string SslKeyExchange { get; }
+        string SslKeyExchangeAlgorithm { get; }
 
         [JsonProperty("ssl_protocol")]
         string SslProtocol { get; }
@@ -87,7 +87,7 @@ namespace HareDu.Model
         string AuthenticationMechanism { get; }
 
         [JsonProperty("peer_cert_validity")]
-        string PeerCertificateValidity { get; }
+        string TimePeriodPeerCertificateValid { get; }
 
         [JsonProperty("peer_cert_issuer")]
         string PeerCertificateIssuer { get; }
@@ -96,7 +96,7 @@ namespace HareDu.Model
         string PeerCertificateSubject { get; }
 
         [JsonProperty("ssl")]
-        bool Ssl { get; }
+        bool IsSecure { get; }
 
         [JsonProperty("peer_host")]
         string PeerHost { get; }

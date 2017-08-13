@@ -28,6 +28,6 @@ namespace HareDu.Model
         bool IsAutoDelete { get; }
 
         [JsonProperty("arguments")]
-        IDictionary<string, string> Arguments { get; }
+        IDictionary<string, object> Arguments { get; }
     }
 }

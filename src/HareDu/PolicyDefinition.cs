@@ -17,7 +17,7 @@ namespace HareDu
 
     public interface PolicyDefinition
     {
-        void UsePattern(string pattern);
+        void UsingPattern(string pattern);
         
         void WithArguments(Action<PolicyDefinitionArguments> arguments);
         

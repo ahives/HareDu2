@@ -23,19 +23,19 @@ namespace HareDu.Model
         Rate RateOfMessage { get; }
         
         [JsonProperty("messages")]
-        long Messages { get; }
+        long TotalMessages { get; }
         
         [JsonProperty("messages_unacknowledged_details")]
         Rate RateOfMessagesUnacknowledged { get; }
         
         [JsonProperty("messages_unacknowledged")]
-        long MessagesUnacknowledged { get; }
+        long UnacknowledgedDeliveredMessages { get; }
         
         [JsonProperty("messages_ready_details")]
         Rate RateOfMessagesReady { get; }
         
         [JsonProperty("messages_ready")]
-        long TotalMessages { get; }
+        long MessagesReadyForDelivery { get; }
         
         [JsonProperty("reductions_details")]
         Rate RateOfReductions { get; }
@@ -83,25 +83,25 @@ namespace HareDu.Model
         long MessageBytesInRam { get; }
         
         [JsonProperty("message_bytes_unacknowledged")]
-        long MessageBytesUnacknowledged { get; }
+        long TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
         
         [JsonProperty("message_bytes_ready")]
-        long MessageBytesReady { get; }
+        long TotalBytesOfMessagesReadyForDelivery { get; }
         
         [JsonProperty("message_bytes")]
-        long MessageBytes { get; }
+        long TotalBytesOfAllMessages { get; }
         
         [JsonProperty("messages_persistent")]
-        long MessagePersisted { get; }
+        long MessagesPersisted { get; }
         
         [JsonProperty("messages_unacknowledged_ram")]
-        long MessagesInRamUnacknowledged { get; }
+        long UnacknowledgedDeliveredMessagesInRam { get; }
         
         [JsonProperty("messages_ready_ram")]
-        long MessageInRamReady { get; }
+        long MessagesReadyForDeliveryInRam { get; }
         
         [JsonProperty("messages_ram")]
-        long MessageInRam { get; }
+        long MessagesInRam { get; }
         
         [JsonProperty("garbage_collection")]
         GarbageCollectionDetails GC { get; }

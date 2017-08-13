@@ -14,7 +14,7 @@
                 .Factory<Policy>()
                 .Create("P1", "HareDu", x =>
                 {
-                    x.UsePattern("^amq.");
+                    x.UsingPattern("^amq.");
                     x.Priority(0);
                     x.WithArguments(d =>
                     {

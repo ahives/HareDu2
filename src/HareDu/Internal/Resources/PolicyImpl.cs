@@ -109,7 +109,7 @@ namespace HareDu.Internal.Resources
 
             DefinedPolicy Init() => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo);
 
-            public void UsePattern(string pattern) => _pattern = pattern;
+            public void UsingPattern(string pattern) => _pattern = pattern;
             
             public void WithArguments(Action<PolicyDefinitionArguments> arguments)
             {
