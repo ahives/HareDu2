@@ -97,29 +97,60 @@
             Console.WriteLine();
         }
 
+        public interface ParamTest
+        {
+            [JsonProperty("name")]
+            string Name { get; }
+            
+            [JsonProperty("value")]
+            IDictionary<string, object> Value { get; }
+        }
+        
         [Test]
         public void Test()
         {
-            IDictionary<string, object> args = new Dictionary<string, object>
-            {
-                {"key1", 12},
-                {"key2", true},
-                {"key3", "value3"},
-                {"key4", "value4"},
-                {"key5", "value5"}
-            };
+//            IDictionary<string, object> args = new Dictionary<string, object>
+//            {
+//                {"key1", 12},
+//                {"key2", true},
+//                {"key3", "value3"},
+//                {"key4", "value4"},
+//                {"key5", "value5"}
+//            };
 
+            
 //            string serialized = "{'key1':12,'key2':true,'key3':'value3','key4':'value4','key5':'value5'}";
 //            Dictionary<string, object> args2 =
 //                SerializerCache.Deserializer.Deserialize<Dictionary<string, object>>(new JsonTextReader(new StringReader(serialized)));
 //
 //            Assert.AreEqual(args, args2);
-            using (StreamWriter sw = new StreamWriter("/users/albert/documents/git/test.txt"))
+
+            IDictionary<string, object> args = new Dictionary<string, object>
+            {
+                {"guest", "/"},
+                {"rabbit", "warren"}
+            };
+
+            ParamTest obj = new ParamTestImpl("user_vhost_mapping", args);
+            using (StreamWriter sw = new StreamWriter("/users/albert/documents/git/test2.txt"))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
-                SerializerCache.Serializer.Serialize(writer, args);
+                SerializerCache.Serializer.Serialize(writer, obj);
             }
 
+        }
+
+        class ParamTestImpl :
+            ParamTest
+        {
+            public ParamTestImpl(string name, IDictionary<string, object> value)
+            {
+                Name = name;
+                Value = value;
+            }
+
+            public string Name { get; }
+            public IDictionary<string, object> Value { get; }
         }
     }
 }
