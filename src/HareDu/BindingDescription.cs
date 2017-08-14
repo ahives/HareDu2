@@ -13,12 +13,16 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System.Collections.Generic;
+    using System;
 
-    public interface BindingBehavior
+    public interface BindingDescription
     {
-        void RoutingKey(string routingKey);
-        void WithArguments(IDictionary<string, object> arguments);
-        void BindingType(BindingType bindingType);
+        void Bind(string source);
+
+        void To(string destination);
+        
+        void WithRoutingKey(string routingKey);
+        
+        void WithArguments(Action<BindingArguments> arguments);
     }
 }

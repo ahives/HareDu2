@@ -11,23 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal
 {
-    using System;
     using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
 
-    public interface Binding :
-        Resource
+    public interface BindingCreationSettings
     {
-        Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<Result> Create(Action<BindingDefinition> definition, BindingType bindingType,
-            CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<Result> Delete(string vhost, string exchange, string queue,
-            CancellationToken cancellationToken = default(CancellationToken));
+        string RoutingKey { get; }
+        IDictionary<string, object> Arguments { get; }
+        string SourceBinding { get; }
+        string DestinationBinding { get; }
+        string VirtualHost { get; }
     }
 }

@@ -62,13 +62,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding.cs" />
-    <Compile Include="BindingBehavior.cs" />
+    <Compile Include="BindingArguments.cs" />
+    <Compile Include="BindingDefinition.cs" />
+    <Compile Include="BindingDescription.cs" />
     <Compile Include="BindingType.cs" />
     <Compile Include="Configuration\HareDuClientBehavior.cs" />
     <Compile Include="Configuration\HareDuClientSettings.cs" />
     <Compile Include="Configuration\HareDuCredentials.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
+    <Compile Include="Exceptions\BindingException.cs" />
     <Compile Include="Exceptions\HareDuClientConfigurationException.cs" />
     <Compile Include="Exceptions\ParameterDefinitionException.cs" />
     <Compile Include="Exceptions\ParameterMissingException.cs" />
@@ -96,7 +99,7 @@
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
-    <Compile Include="Internal\BindingSetting.cs" />
+    <Compile Include="Internal\BindingCreationSettings.cs" />
     <Compile Include="Internal\DefinedPolicy.cs" />
     <Compile Include="Internal\GlobalParameterDescription.cs" />
     <Compile Include="Internal\HareDuClientImpl.cs" />

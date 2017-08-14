@@ -11,23 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Exceptions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
+    using System.Runtime.Serialization;
 
-    public interface Binding :
-        Resource
+    public class BindingException :
+        Exception
     {
-        Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        public BindingException()
+        {
+        }
 
-        Task<Result> Create(Action<BindingDefinition> definition, BindingType bindingType,
-            CancellationToken cancellationToken = default(CancellationToken));
+        protected BindingException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
 
-        Task<Result> Delete(string vhost, string exchange, string queue,
-            CancellationToken cancellationToken = default(CancellationToken));
+        public BindingException(string message)
+            : base(message)
+        {
+        }
+
+        public BindingException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using Configuration;
     using Exceptions;
     using Model;
+    using BindingDefinition = HareDu.BindingDefinition;
 
     internal class BindingImpl :
         ResourceBase,
@@ -45,32 +46,23 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string vhost, string source, string destination, Action<BindingBehavior> behavior,
+        public async Task<Result> Create(Action<BindingDefinition> definition, BindingType bindingType,
             CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(source))
-                throw new ExchangeMissingException("The name of the source exchange is missing.");
+            var impl = new BindingDefinitionImpl();
+            definition(impl);
 
-            if (string.IsNullOrWhiteSpace(destination))
-                throw new ExchangeMissingException("The name of the destination exchange is missing.");
+            BindingCreationSettings settings = impl.Settings.Value;
 
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
-            var impl = new BindingBehaviorImpl();
-            behavior(impl);
+            string sanitizedVHost = settings.VirtualHost.SanitizeVirtualHostName();
 
-            BindingSetting settings = impl.Settings.Value;
+            string url = bindingType == BindingType.Exchange
+                ? $"api/bindings/{sanitizedVHost}/e/{settings.SourceBinding}/e/{settings.DestinationBinding}"
+                : $"api/bindings/{sanitizedVHost}/e/{settings.SourceBinding}/q/{settings.DestinationBinding}";
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = settings.BindingType == BindingType.Exchange
-                ? $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}"
-                : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
-
-            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{source}' and '{destination}' on virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{settings.SourceBinding}' and '{settings.DestinationBinding}' on virtual host '{sanitizedVHost}'.");
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
@@ -104,45 +96,116 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class BindingBehaviorImpl :
-            BindingBehavior
+        class BindingDefinitionImpl :
+            BindingDefinition
         {
             static string _routingKey;
             static IDictionary<string, object> _arguments;
-            static BindingType _bindingType;
+            static string _vhost;
+            static string _source;
+            static string _destination;
             
-            public Lazy<BindingSetting> Settings { get; }
+            public Lazy<BindingCreationSettings> Settings { get; }
 
-            public BindingBehaviorImpl() => Settings = new Lazy<BindingSetting>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public BindingDefinitionImpl() => Settings = new Lazy<BindingCreationSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            BindingSetting Init() => new BindingSettingImpl(_routingKey, _arguments, _bindingType);
+            BindingCreationSettings Init() => new BindingCreationSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination);
 
-            public void RoutingKey(string routingKey) => _routingKey = routingKey;
-
-            public void WithArguments(IDictionary<string, object> arguments)
+            public void Binding(Action<BindingDescription> description)
             {
-                if (arguments == null)
-                    return;
+                var impl = new BindingDescriptionImpl();
+                description(impl);
 
-                _arguments = arguments;
+                _source = impl.Source;
+                _destination = impl.Destination;
+                _arguments = impl.Arguments;
+                _routingKey = impl.RoutingKey;
             }
-            
-            public void BindingType(BindingType bindingType) => _bindingType = bindingType;
 
-
-            class BindingSettingImpl :
-                BindingSetting
+            public void On(string vhost)
             {
-                public BindingSettingImpl(string routingKey, IDictionary<string, object> arguments, BindingType bindingType)
+                if (string.IsNullOrWhiteSpace(vhost))
+                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+                _vhost = vhost;
+            }
+
+
+            class BindingDescriptionImpl :
+                BindingDescription
+            {
+                public string Source { get; private set; }
+                public string Destination { get; private set; }
+                public string RoutingKey { get; private set; }
+                public IDictionary<string, object> Arguments { get; private set; }
+                
+                public void Bind(string source)
+                {
+                    if (string.IsNullOrWhiteSpace(source))
+                        throw new BindingException("The name of the binding source is missing.");
+
+                    Source = source;
+                }
+
+                public void To(string destination)
+                {
+                    if (string.IsNullOrWhiteSpace(destination))
+                        throw new BindingException("The name of the binding destination is missing.");
+            
+                    Destination = destination;
+                }
+
+                public void WithRoutingKey(string routingKey) => RoutingKey = routingKey;
+
+                public void WithArguments(Action<BindingArguments> arguments)
+                {
+                    var impl = new BindingArgumentsImpl();
+                    arguments(impl);
+
+                    Arguments = impl.Arguments;
+                }
+            }
+
+            
+            class BindingArgumentsImpl :
+                BindingArguments
+            {
+                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+
+                public void Set<T>(string arg, T value)
+                {
+                    Validate(arg);
+                    
+                    Arguments.Add(arg.Trim(), value);
+                }
+
+                void Validate(string arg)
+                {
+                    if (Arguments.ContainsKey(arg))
+                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
+                }
+            }
+
+
+            class BindingCreationSettingsImpl :
+                BindingCreationSettings
+            {
+                public BindingCreationSettingsImpl(string routingKey, IDictionary<string, object> arguments,
+                    string vhost, string source, string destination)
                 {
                     RoutingKey = routingKey;
                     Arguments = arguments;
-                    BindingType = bindingType;
+                    SourceBinding = source;
+                    DestinationBinding = destination;
+                    VirtualHost = vhost;
                 }
 
                 public string RoutingKey { get; }
                 public IDictionary<string, object> Arguments { get; }
                 public BindingType BindingType { get; }
+                public string SourceBinding { get; }
+                public string DestinationBinding { get; }
+                public string VirtualHost { get; }
             }
         }
     }
