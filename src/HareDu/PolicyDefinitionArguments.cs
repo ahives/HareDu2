@@ -17,12 +17,30 @@ namespace HareDu
     {
         void Set<T>(string arg, T value);
 
-        void SetExpiry(long milliseconds);
+        void SetExpiry(long value);
 
-        void SetFederationUpstreamSet(string upstreamSet);
+        void SetFederationUpstreamSet(string value);
 
-        void SetFederationUpstream(string upstream);
+        void SetFederationUpstream(string value);
 
-        void SetHighAvailabilityMode(string mode);
+        void SetHighAvailabilityMode(string value);
+
+        void SetHighAvailabilityParams(string value);
+
+        void SetHighAvailabilitySyncMode(string value);
+
+        void SetMessageTimeToLive(string value);
+
+        void SetMessageMaxSizeInBytes(string value);
+
+        void SetMessageMaxSize(string value);
+
+        void SetDeadLetterExchange(string value);
+
+        void SetDeadLetterRoutingKey(string value);
+
+        void SetQueueMode(string value);
+
+        void SetAlternateExchange(string value);
     }
 }

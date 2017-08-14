@@ -19,7 +19,8 @@ namespace HareDu
     using System.Threading.Tasks;
     using Model;
 
-    public interface ScopedParameter
+    public interface ScopedParameter :
+        Resource
     {
         Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         

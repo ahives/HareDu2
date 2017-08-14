@@ -54,7 +54,7 @@ namespace HareDu.Internal.Resources
 
             ScopedParameterDescription desc = impl.ParameterDescription.Value;
 
-            string url = $"api/parameters/{desc.Component}/{desc.VirtualHost}/{desc.Name}";
+            string url = $"api/parameters/{desc.Component}/{desc.VirtualHost.SanitizeVirtualHostName()}/{desc.Name}";
 
             LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{desc.Name}'.");
 

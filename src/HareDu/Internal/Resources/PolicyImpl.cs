@@ -133,36 +133,109 @@ namespace HareDu.Internal.Resources
                 {
                     Validate(arg.Trim(), "federation-upstream", "federation-upstream-set");
                     Validate("ha-mode");
+                    Validate("ha-sync-mode");
+                    Validate("ha-params");
+                    Validate("expires");
+                    Validate("message-ttl");
+                    Validate("max-length-bytes");
+                    Validate("max-length");
+                    Validate("dead-letter-exchange");
+                    Validate("dead-letter-routing-key");
+                    Validate("queue-mode");
+                    Validate("alternate-exchange");
                     
                     Arguments.Add(arg.Trim(), value);
                 }
 
-                public void SetExpiry(long milliseconds)
+                public void SetExpiry(long value)
                 {
                     Validate("expires");
                     
-                    Arguments.Add("expires", milliseconds);
+                    Arguments.Add("expires", value);
                 }
 
-                public void SetFederationUpstreamSet(string upstreamSet)
+                public void SetFederationUpstreamSet(string value)
                 {
                     Validate("federation-upstream-set", "federation-upstream");
                     
-                    Arguments.Add("federation-upstream-set", upstreamSet.Trim());
+                    Arguments.Add("federation-upstream-set", value.Trim());
                 }
 
-                public void SetFederationUpstream(string upstream)
+                public void SetFederationUpstream(string value)
                 {
                     Validate("federation-upstream", "federation-upstream-set");
                     
-                    Arguments.Add("federation-upstream", upstream.Trim());
+                    Arguments.Add("federation-upstream", value.Trim());
                 }
 
-                public void SetHighAvailabilityMode(string mode)
+                public void SetHighAvailabilityMode(string value)
                 {
                     Validate("ha-mode");
                     
-                    Arguments.Add("ha-mode", mode);
+                    Arguments.Add("ha-mode", value);
+                }
+
+                public void SetHighAvailabilityParams(string value)
+                {
+                    Validate("ha-params");
+                    
+                    Arguments.Add("ha-params", value);
+                }
+
+                public void SetHighAvailabilitySyncMode(string value)
+                {
+                    Validate("ha-sync-mode");
+                    
+                    Arguments.Add("ha-sync-mode", value);
+                }
+
+                public void SetMessageTimeToLive(string value)
+                {
+                    Validate("message-ttl");
+                    
+                    Arguments.Add("message-ttl", value);
+                }
+
+                public void SetMessageMaxSizeInBytes(string value)
+                {
+                    Validate("max-length-bytes");
+                    
+                    Arguments.Add("max-length-bytes", value);
+                }
+
+                public void SetMessageMaxSize(string value)
+                {
+                    Validate("max-length");
+                    
+                    Arguments.Add("max-length", value);
+                }
+
+                public void SetDeadLetterExchange(string value)
+                {
+                    Validate("dead-letter-exchange");
+                    
+                    Arguments.Add("dead-letter-exchange", value);
+                }
+
+                public void SetDeadLetterRoutingKey(string value)
+                {
+                    Validate("dead-letter-routing-key");
+                    
+                    Arguments.Add("dead-letter-routing-key", value);
+                }
+
+                public void SetQueueMode(string value)
+                {
+                    Validate("queue-mode");
+                    
+                    Arguments.Add("queue-mode", value);
+                }
+
+                public void SetAlternateExchange(string value)
+                {
+                    Validate("alternate-exchange");
+                    
+                    Arguments.Add("alternate-exchange", value);
                 }
 
                 void Validate(string arg)
