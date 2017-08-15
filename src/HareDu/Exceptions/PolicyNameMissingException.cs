@@ -11,14 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Exceptions
 {
     using System;
+    using System.Runtime.Serialization;
 
-    public interface PolicyDefinition
+    public class PolicyNameMissingException :
+        Exception
     {
-        void Policy(Action<PolicyConfiguration> definition);
+        public PolicyNameMissingException()
+        {
+        }
 
-        void On(string vhost);
+        protected PolicyNameMissingException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public PolicyNameMissingException(string message)
+            : base(message)
+        {
+        }
+
+        public PolicyNameMissingException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

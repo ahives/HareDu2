@@ -11,31 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Exceptions
+namespace HareDu
 {
-    using System;
-    using System.Runtime.Serialization;
-
-    public class PolicyMissingException :
-        Exception
+    public enum HighAvailabilitySyncModes
     {
-        public PolicyMissingException()
-        {
-        }
-
-        protected PolicyMissingException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        public PolicyMissingException(string message)
-            : base(message)
-        {
-        }
-
-        public PolicyMissingException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+        Manual,
+        Automatic
     }
 }

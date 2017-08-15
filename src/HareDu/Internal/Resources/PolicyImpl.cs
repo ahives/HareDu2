@@ -56,9 +56,9 @@ namespace HareDu.Internal.Resources
 
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string url = $"api/policies/{sanitizedVHost}/{policy}";
+            string url = $"api/policies/{sanitizedVHost}/{impl.PolicyName}";
 
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.PolicyName}' in virtual host '{sanitizedVHost}'.");
 
             HttpResponseMessage response = await HttpPut(url, policy, cancellationToken);
             Result result = response.GetResponse();
@@ -66,12 +66,12 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(string vhost, string policy, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(string policy, string vhost, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             if (string.IsNullOrWhiteSpace(policy))
-                throw new PolicyMissingException("The name of the policy is missing.");
+                throw new PolicyNameMissingException("The name of the policy is missing.");
 
             if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
@@ -113,9 +113,22 @@ namespace HareDu.Internal.Resources
                 _applyTo = impl.AppllyTo;
                 _pattern = impl.Pattern;
                 _priority = impl.Priority;
-                
+                _arguments = impl.Arguments;
+
+                if (_arguments.ContainsKey("ha-mode"))
+                {
+                    object value;
+                    if (!_arguments.TryGetValue("ha-mode", out value))
+                        throw new PolicyDefinitionException($"Argument 'ha-mode' was set without a corresponding value.");
+
+                    string mode = value.ToString().Trim();
+                    if (((mode.ConvertTo() == HighAvailabilityModes.Exactly) || (mode.ConvertTo() == HighAvailabilityModes.Nodes)) && !_arguments.ContainsKey("ha-params"))
+                        throw new PolicyDefinitionException(
+                            $"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set");
+                }
+
                 if (string.IsNullOrWhiteSpace(impl.PolicyName))
-                    throw new PolicyMissingException("The name of the policy is missing.");
+                    throw new PolicyNameMissingException("The name of the policy is missing.");
 
                 PolicyName = impl.PolicyName;
             }
@@ -136,6 +149,7 @@ namespace HareDu.Internal.Resources
                 public int Priority { get; private set; }
                 public string Pattern { get; private set; }
                 public string AppllyTo { get; private set; }
+                public IDictionary<string, object> Arguments { get; private set; }
                 
                 public void Name(string name) => PolicyName = name;
 
@@ -146,7 +160,7 @@ namespace HareDu.Internal.Resources
                     var impl = new PolicyDefinitionArgumentsImpl();
                     arguments(impl);
 
-                    _arguments = impl.Arguments;
+                    Arguments = impl.Arguments;
                 }
 
                 public void WithPriority(int priority) => Priority = priority;
@@ -178,11 +192,11 @@ namespace HareDu.Internal.Resources
                     Arguments.Add(arg.Trim(), value);
                 }
 
-                public void DefineExpiry(long value)
+                public void DefineExpiry(long milliseconds)
                 {
                     Validate("expires");
                     
-                    Arguments.Add("expires", value);
+                    Arguments.Add("expires", milliseconds);
                 }
 
                 public void DefineFederationUpstreamSet(string value)
@@ -199,39 +213,39 @@ namespace HareDu.Internal.Resources
                     Arguments.Add("federation-upstream", value.Trim());
                 }
 
-                public void DefineHighAvailabilityMode(string value)
+                public void DefineHighAvailabilityMode(HighAvailabilityModes mode)
                 {
                     Validate("ha-mode");
                     
-                    Arguments.Add("ha-mode", value);
+                    Arguments.Add("ha-mode", mode.ConvertTo());
                 }
 
                 public void DefineHighAvailabilityParams(string value)
                 {
                     Validate("ha-params");
                     
-                    Arguments.Add("ha-params", value);
+                    Arguments.Add("ha-params", value.Trim());
                 }
 
-                public void DefineHighAvailabilitySyncMode(string value)
+                public void DefineHighAvailabilitySyncMode(HighAvailabilitySyncModes mode)
                 {
                     Validate("ha-sync-mode");
                     
-                    Arguments.Add("ha-sync-mode", value);
+                    Arguments.Add("ha-sync-mode", mode.ConvertTo());
                 }
 
-                public void DefineMessageTimeToLive(string value)
+                public void DefineMessageTimeToLive(long milliseconds)
                 {
                     Validate("message-ttl");
                     
-                    Arguments.Add("message-ttl", value);
+                    Arguments.Add("message-ttl", milliseconds);
                 }
 
                 public void DefineMessageMaxSizeInBytes(long value)
                 {
                     Validate("max-length-bytes");
                     
-                    Arguments.Add("max-length-bytes", value);
+                    Arguments.Add("max-length-bytes", value.ToString());
                 }
 
                 public void DefineMessageMaxSize(long value)
@@ -245,28 +259,28 @@ namespace HareDu.Internal.Resources
                 {
                     Validate("dead-letter-exchange");
                     
-                    Arguments.Add("dead-letter-exchange", value);
+                    Arguments.Add("dead-letter-exchange", value.Trim());
                 }
 
                 public void DefineDeadLetterRoutingKey(string value)
                 {
                     Validate("dead-letter-routing-key");
                     
-                    Arguments.Add("dead-letter-routing-key", value);
+                    Arguments.Add("dead-letter-routing-key", value.Trim());
                 }
 
                 public void DefineQueueMode(string value)
                 {
                     Validate("queue-mode");
                     
-                    Arguments.Add("queue-mode", value);
+                    Arguments.Add("queue-mode", value.Trim());
                 }
 
                 public void DefineAlternateExchange(string value)
                 {
                     Validate("alternate-exchange");
                     
-                    Arguments.Add("alternate-exchange", value);
+                    Arguments.Add("alternate-exchange", value.Trim());
                 }
 
                 void Validate(string arg)

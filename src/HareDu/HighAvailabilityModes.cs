@@ -13,12 +13,10 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface PolicyDefinition
+    public enum HighAvailabilityModes
     {
-        void Policy(Action<PolicyConfiguration> definition);
-
-        void On(string vhost);
+        All,
+        Exactly,
+        Nodes
     }
 }

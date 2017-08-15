@@ -26,6 +26,6 @@ namespace HareDu
         
         Task<Result> Create(Action<PolicyDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string vhost, string policy, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Delete(string policy, string vhost, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

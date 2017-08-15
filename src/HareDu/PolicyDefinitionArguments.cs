@@ -17,19 +17,19 @@ namespace HareDu
     {
         void Define<T>(string arg, T value);
 
-        void DefineExpiry(long value);
+        void DefineExpiry(long milliseconds);
 
         void DefineFederationUpstreamSet(string value);
 
         void DefineFederationUpstream(string value);
 
-        void DefineHighAvailabilityMode(string value);
+        void DefineHighAvailabilityMode(HighAvailabilityModes mode);
 
         void DefineHighAvailabilityParams(string value);
 
-        void DefineHighAvailabilitySyncMode(string value);
+        void DefineHighAvailabilitySyncMode(HighAvailabilitySyncModes mode);
 
-        void DefineMessageTimeToLive(string value);
+        void DefineMessageTimeToLive(long milliseconds);
 
         void DefineMessageMaxSizeInBytes(long value);
 

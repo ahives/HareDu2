@@ -76,7 +76,7 @@
     <Compile Include="Exceptions\ParameterDefinitionException.cs" />
     <Compile Include="Exceptions\ParameterMissingException.cs" />
     <Compile Include="Exceptions\PolicyDefinitionException.cs" />
-    <Compile Include="Exceptions\PolicyMissingException.cs" />
+    <Compile Include="Exceptions\PolicyNameMissingException.cs" />
     <Compile Include="Exceptions\QueueArgumentException.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
@@ -98,6 +98,8 @@
     <Compile Include="GlobalParameterDefinition.cs" />
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
+    <Compile Include="HighAvailabilityModes.cs" />
+    <Compile Include="HighAvailabilitySyncModes.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
     <Compile Include="Internal\BindingCreationSettings.cs" />
     <Compile Include="Internal\DefinedPolicy.cs" />
@@ -222,6 +224,7 @@
     <Compile Include="Model\VirtualHostHealthCheck.cs" />
     <Compile Include="Model\VirtualHostInfo.cs" />
     <Compile Include="Policy.cs" />
+    <Compile Include="PolicyConfiguration.cs" />
     <Compile Include="PolicyDefinition.cs" />
     <Compile Include="PolicyDefinitionArguments.cs" />
     <Compile Include="QueueArguments.cs" />

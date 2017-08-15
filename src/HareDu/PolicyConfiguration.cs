@@ -15,10 +15,16 @@ namespace HareDu
 {
     using System;
 
-    public interface PolicyDefinition
+    public interface PolicyConfiguration
     {
-        void Policy(Action<PolicyConfiguration> definition);
-
-        void On(string vhost);
+        void Name(string name);
+        
+        void UsingPattern(string pattern);
+        
+        void WithArguments(Action<PolicyDefinitionArguments> arguments);
+        
+        void WithPriority(int priority);
+        
+        void AppliedTo(string applyTo);
     }
 }
