@@ -204,7 +204,7 @@
     <Compile Include="Model\GarbageCollectionMetrics.cs" />
     <Compile Include="Model\NodeInfo.cs" />
     <Compile Include="Model\NodeHealthCheck.cs" />
-    <Compile Include="Model\PolicyDescription.cs" />
+    <Compile Include="Model\PolicyDetails.cs" />
     <Compile Include="Model\PolicyInfo.cs" />
     <Compile Include="Model\PolicySummary.cs" />
     <Compile Include="Model\QueueConsumerDetails.cs" />

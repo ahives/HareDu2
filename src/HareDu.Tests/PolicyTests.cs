@@ -1,6 +1,7 @@
 ﻿namespace HareDu.Tests
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using NUnit.Framework;
 
     [TestFixture]
@@ -8,19 +9,24 @@
         HareDuTestBase
     {
         [Test]
-        public void Test()
+        public async Task Test()
         {
-            var result = Client
+            Result result = await Client
                 .Factory<Policy>()
-                .Create("P1", "HareDu", x =>
+                .Create(x =>
                 {
-                    x.UsingPattern("^amq.");
-                    x.Priority(0);
-                    x.WithArguments(d =>
+                    x.Policy(p =>
                     {
-                        d.SetFederationUpstreamSet("all");
+                        p.Name("P1");
+                        p.UsingPattern("^amq.");
+                        p.WithPriority(0);
+                        p.WithArguments(d =>
+                        {
+                            d.DefineFederationUpstreamSet("all");
+                        });
+                        p.AppliedTo("all");
                     });
-                    x.AppliedTo("all");
+                    x.On("HareDu");
                 });
         }
     }

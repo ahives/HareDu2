@@ -17,11 +17,20 @@ namespace HareDu
 
     public interface PolicyDefinition
     {
+        void Policy(Action<PolicyConfiguration> definition);
+
+        void On(string vhost);
+    }
+
+    public interface PolicyConfiguration
+    {
+        void Name(string name);
+        
         void UsingPattern(string pattern);
         
         void WithArguments(Action<PolicyDefinitionArguments> arguments);
         
-        void Priority(int priority);
+        void WithPriority(int priority);
         
         void AppliedTo(string applyTo);
     }

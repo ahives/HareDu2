@@ -15,7 +15,7 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface PolicyDescription
+    public interface PolicyDetails
     {
         [JsonProperty("ha-mode")]
         string HighAvailabilityMode { get; }

@@ -15,32 +15,32 @@ namespace HareDu
 {
     public interface PolicyDefinitionArguments
     {
-        void Set<T>(string arg, T value);
+        void Define<T>(string arg, T value);
 
-        void SetExpiry(long value);
+        void DefineExpiry(long value);
 
-        void SetFederationUpstreamSet(string value);
+        void DefineFederationUpstreamSet(string value);
 
-        void SetFederationUpstream(string value);
+        void DefineFederationUpstream(string value);
 
-        void SetHighAvailabilityMode(string value);
+        void DefineHighAvailabilityMode(string value);
 
-        void SetHighAvailabilityParams(string value);
+        void DefineHighAvailabilityParams(string value);
 
-        void SetHighAvailabilitySyncMode(string value);
+        void DefineHighAvailabilitySyncMode(string value);
 
-        void SetMessageTimeToLive(string value);
+        void DefineMessageTimeToLive(string value);
 
-        void SetMessageMaxSizeInBytes(string value);
+        void DefineMessageMaxSizeInBytes(long value);
 
-        void SetMessageMaxSize(string value);
+        void DefineMessageMaxSize(long value);
 
-        void SetDeadLetterExchange(string value);
+        void DefineDeadLetterExchange(string value);
 
-        void SetDeadLetterRoutingKey(string value);
+        void DefineDeadLetterRoutingKey(string value);
 
-        void SetQueueMode(string value);
+        void DefineQueueMode(string value);
 
-        void SetAlternateExchange(string value);
+        void DefineAlternateExchange(string value);
     }
 }

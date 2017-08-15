@@ -45,28 +45,22 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string policy, string vhost, Action<PolicyDefinition> definition, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> Create(Action<PolicyDefinition> definition, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(policy))
-                throw new PolicyMissingException("The name of the policy is missing.");
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
             var impl = new PolicyDefinitionImpl();
             definition(impl);
 
-            DefinedPolicy definedPolicy = impl.DefinedPolicy.Value;
+            DefinedPolicy policy = impl.DefinedPolicy.Value;
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
             LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
 
-            HttpResponseMessage response = await HttpPut(url, definedPolicy, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, policy, cancellationToken);
             Result result = response.GetResponse();
 
             return result;
@@ -104,32 +98,69 @@ namespace HareDu.Internal.Resources
             static string _applyTo;
             
             public Lazy<DefinedPolicy> DefinedPolicy { get; }
+            public string VirtualHost { get; private set; }
+            public string PolicyName { get; private set; }
 
             public PolicyDefinitionImpl() => DefinedPolicy = new Lazy<DefinedPolicy>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             DefinedPolicy Init() => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo);
 
-            public void UsingPattern(string pattern) => _pattern = pattern;
-            
-            public void WithArguments(Action<PolicyDefinitionArguments> arguments)
+            public void Policy(Action<PolicyConfiguration> definition)
             {
-                var impl = new PolicyDefinitionArgumentsImpl();
-                arguments(impl);
+                var impl = new PolicyConfigurationImpl();
+                definition(impl);
 
-                _arguments = impl.Arguments;
+                _applyTo = impl.AppllyTo;
+                _pattern = impl.Pattern;
+                _priority = impl.Priority;
+                
+                if (string.IsNullOrWhiteSpace(impl.PolicyName))
+                    throw new PolicyMissingException("The name of the policy is missing.");
+
+                PolicyName = impl.PolicyName;
             }
 
-            public void Priority(int priority) => _priority = priority;
+            public void On(string vhost)
+            {
+                if (string.IsNullOrWhiteSpace(vhost))
+                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+                VirtualHost = vhost;
+            }
 
-            public void AppliedTo(string applyTo) => _applyTo = applyTo;
 
+            class PolicyConfigurationImpl :
+                PolicyConfiguration
+            {
+                public string PolicyName { get; private set; }
+                public int Priority { get; private set; }
+                public string Pattern { get; private set; }
+                public string AppllyTo { get; private set; }
+                
+                public void Name(string name) => PolicyName = name;
+
+                public void UsingPattern(string pattern) => Pattern = pattern;
+
+                public void WithArguments(Action<PolicyDefinitionArguments> arguments)
+                {
+                    var impl = new PolicyDefinitionArgumentsImpl();
+                    arguments(impl);
+
+                    _arguments = impl.Arguments;
+                }
+
+                public void WithPriority(int priority) => Priority = priority;
+
+                public void AppliedTo(string applyTo) => AppllyTo = applyTo;
+            }
+            
             
             class PolicyDefinitionArgumentsImpl :
                 PolicyDefinitionArguments
             {
                 public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
                 
-                public void Set<T>(string arg, T value)
+                public void Define<T>(string arg, T value)
                 {
                     Validate(arg.Trim(), "federation-upstream", "federation-upstream-set");
                     Validate("ha-mode");
@@ -147,91 +178,91 @@ namespace HareDu.Internal.Resources
                     Arguments.Add(arg.Trim(), value);
                 }
 
-                public void SetExpiry(long value)
+                public void DefineExpiry(long value)
                 {
                     Validate("expires");
                     
                     Arguments.Add("expires", value);
                 }
 
-                public void SetFederationUpstreamSet(string value)
+                public void DefineFederationUpstreamSet(string value)
                 {
                     Validate("federation-upstream-set", "federation-upstream");
                     
                     Arguments.Add("federation-upstream-set", value.Trim());
                 }
 
-                public void SetFederationUpstream(string value)
+                public void DefineFederationUpstream(string value)
                 {
                     Validate("federation-upstream", "federation-upstream-set");
                     
                     Arguments.Add("federation-upstream", value.Trim());
                 }
 
-                public void SetHighAvailabilityMode(string value)
+                public void DefineHighAvailabilityMode(string value)
                 {
                     Validate("ha-mode");
                     
                     Arguments.Add("ha-mode", value);
                 }
 
-                public void SetHighAvailabilityParams(string value)
+                public void DefineHighAvailabilityParams(string value)
                 {
                     Validate("ha-params");
                     
                     Arguments.Add("ha-params", value);
                 }
 
-                public void SetHighAvailabilitySyncMode(string value)
+                public void DefineHighAvailabilitySyncMode(string value)
                 {
                     Validate("ha-sync-mode");
                     
                     Arguments.Add("ha-sync-mode", value);
                 }
 
-                public void SetMessageTimeToLive(string value)
+                public void DefineMessageTimeToLive(string value)
                 {
                     Validate("message-ttl");
                     
                     Arguments.Add("message-ttl", value);
                 }
 
-                public void SetMessageMaxSizeInBytes(string value)
+                public void DefineMessageMaxSizeInBytes(long value)
                 {
                     Validate("max-length-bytes");
                     
                     Arguments.Add("max-length-bytes", value);
                 }
 
-                public void SetMessageMaxSize(string value)
+                public void DefineMessageMaxSize(long value)
                 {
                     Validate("max-length");
                     
                     Arguments.Add("max-length", value);
                 }
 
-                public void SetDeadLetterExchange(string value)
+                public void DefineDeadLetterExchange(string value)
                 {
                     Validate("dead-letter-exchange");
                     
                     Arguments.Add("dead-letter-exchange", value);
                 }
 
-                public void SetDeadLetterRoutingKey(string value)
+                public void DefineDeadLetterRoutingKey(string value)
                 {
                     Validate("dead-letter-routing-key");
                     
                     Arguments.Add("dead-letter-routing-key", value);
                 }
 
-                public void SetQueueMode(string value)
+                public void DefineQueueMode(string value)
                 {
                     Validate("queue-mode");
                     
                     Arguments.Add("queue-mode", value);
                 }
 
-                public void SetAlternateExchange(string value)
+                public void DefineAlternateExchange(string value)
                 {
                     Validate("alternate-exchange");
                     

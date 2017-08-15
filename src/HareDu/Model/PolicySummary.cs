@@ -30,7 +30,7 @@ namespace HareDu.Model
         string ApplyTo { get; }
         
         [JsonProperty("definition")]
-        PolicyDescription Description { get; }
+        PolicyDetails Details { get; }
         
         [JsonProperty("priority")]
         long Priority { get; }
