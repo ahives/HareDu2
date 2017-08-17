@@ -176,20 +176,20 @@ namespace HareDu.Internal.Resources
                 
                 public void Define<T>(string arg, T value)
                 {
-                    Validate(arg.Trim(), "federation-upstream", "federation-upstream-set");
-                    Validate("ha-mode");
-                    Validate("ha-sync-mode");
-                    Validate("ha-params");
-                    Validate("expires");
-                    Validate("message-ttl");
-                    Validate("max-length-bytes");
-                    Validate("max-length");
-                    Validate("dead-letter-exchange");
-                    Validate("dead-letter-routing-key");
-                    Validate("queue-mode");
-                    Validate("alternate-exchange");
+                    ValidateConflictingArgs(arg, "federation-upstream", "federation-upstream-set");
+                    ValidateConflictingArgs(arg, "ha-mode");
+                    ValidateConflictingArgs(arg, "ha-sync-mode");
+                    ValidateConflictingArgs(arg, "ha-params");
+                    ValidateConflictingArgs(arg, "expires");
+                    ValidateConflictingArgs(arg, "message-ttl");
+                    ValidateConflictingArgs(arg, "max-length-bytes");
+                    ValidateConflictingArgs(arg, "max-length");
+                    ValidateConflictingArgs(arg, "dead-letter-exchange");
+                    ValidateConflictingArgs(arg, "dead-letter-routing-key");
+                    ValidateConflictingArgs(arg, "queue-mode");
+                    ValidateConflictingArgs(arg, "alternate-exchange");
                     
-                    Arguments.Add(arg.Trim(), value);
+                    Arguments.Add(arg, value);
                 }
 
                 public void DefineExpiry(long milliseconds)
@@ -201,14 +201,14 @@ namespace HareDu.Internal.Resources
 
                 public void DefineFederationUpstreamSet(string value)
                 {
-                    Validate("federation-upstream-set", "federation-upstream");
+                    ValidateConflictingArgs("federation-upstream-set", "federation-upstream");
                     
                     Arguments.Add("federation-upstream-set", value.Trim());
                 }
 
                 public void DefineFederationUpstream(string value)
                 {
-                    Validate("federation-upstream", "federation-upstream-set");
+                    ValidateConflictingArgs("federation-upstream", "federation-upstream-set");
                     
                     Arguments.Add("federation-upstream", value.Trim());
                 }
@@ -269,11 +269,11 @@ namespace HareDu.Internal.Resources
                     Arguments.Add("dead-letter-routing-key", value.Trim());
                 }
 
-                public void DefineQueueMode(string value)
+                public void DefineQueueMode()
                 {
                     Validate("queue-mode");
                     
-                    Arguments.Add("queue-mode", value.Trim());
+                    Arguments.Add("queue-mode", "lazy");
                 }
 
                 public void DefineAlternateExchange(string value)
@@ -289,13 +289,13 @@ namespace HareDu.Internal.Resources
                         throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
                 }
 
-                void Validate(string arg, string targetArg)
+                void ValidateConflictingArgs(string arg, string targetArg)
                 {
-                    if (Arguments.ContainsKey(arg) && Arguments.ContainsKey(targetArg))
+                    if (Arguments.ContainsKey(arg) || (arg == targetArg && Arguments.ContainsKey(targetArg)))
                         throw new PolicyDefinitionException($"Argument '{arg}' has already been set or would conflict with argument '{targetArg}'");
                 }
 
-                void Validate(string arg, string targetArg, string conflictingArg)
+                void ValidateConflictingArgs(string arg, string targetArg, string conflictingArg)
                 {
                     if (Arguments.ContainsKey(arg) ||
                         (arg == conflictingArg && Arguments.ContainsKey(targetArg)) ||

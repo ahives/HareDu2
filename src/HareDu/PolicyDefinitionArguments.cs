@@ -39,7 +39,7 @@ namespace HareDu
 
         void DefineDeadLetterRoutingKey(string value);
 
-        void DefineQueueMode(string value);
+        void DefineQueueMode();
 
         void DefineAlternateExchange(string value);
     }
