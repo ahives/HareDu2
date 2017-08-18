@@ -227,8 +227,8 @@
     <Compile Include="PolicyConfiguration.cs" />
     <Compile Include="PolicyDefinition.cs" />
     <Compile Include="PolicyDefinitionArguments.cs" />
-    <Compile Include="QueueArguments.cs" />
-    <Compile Include="QueueBehavior.cs" />
+    <Compile Include="QueueDefinitionArguments.cs" />
+    <Compile Include="QueueDefinition.cs" />
     <Compile Include="DeleteQueueCondition.cs" />
     <Compile Include="Queue.cs" />
     <Compile Include="Resource.cs" />

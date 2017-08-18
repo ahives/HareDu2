@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface QueueArguments
+    public interface QueueDefinitionArguments
     {
         void Set<T>(string arg, T value);
         

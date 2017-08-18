@@ -11,17 +11,35 @@
         [Test]
         public void Test()
         {
-            var result = Client
+//            var result = Client
+//                .Factory<Queue>()
+//                .Create("Q1", "HareDu", x =>
+//                {
+//                    x.IsDurable();
+//                    x.WithArguments(a =>
+//                    {
+//                        a.SetDeadLetterExchange("E1");
+//                        a.SetQueueExpiration(1000);
+//                        a.SetPerQueuedMessageExpiration(1000);
+//                    });
+//                });
+            var result2 = Client
                 .Factory<Queue>()
-                .Create("Q1", "HareDu", x =>
+                .Create(x =>
                 {
-                    x.IsDurable();
-                    x.WithArguments(a =>
+                    x.Configure(d =>
                     {
-                        a.SetDeadLetterExchange("E1");
-                        a.SetQueueExpiration(1000);
-                        a.SetPerQueuedMessageExpiration(1000);
+                        d.Name("Q3");
+                        d.IsDurable();
+                        d.WithArguments(arg =>
+                        {
+//                            arg.SetDeadLetterExchange("E1");
+                            arg.SetQueueExpiration(1000);
+//                            arg.SetPerQueuedMessageExpiration(1000);
+                        });
                     });
+//                    x.OnNode("");
+                    x.OnVirtualHost("HareDu");
                 });
         }
 

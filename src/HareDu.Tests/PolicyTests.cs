@@ -17,7 +17,7 @@
                 .Factory<Policy>()
                 .Create(x =>
                 {
-                    x.Policy(p =>
+                    x.Configure(p =>
                     {
                         p.Name("P3");
                         p.UsingPattern("^amq.");
@@ -29,7 +29,7 @@
                         });
                         p.AppliedTo("all");
                     });
-                    x.On("HareDu");
+                    x.OnVirtualHost("HareDu");
                 });
             
             Console.WriteLine(result.Reason);
@@ -43,7 +43,7 @@
                 .Factory<Policy>()
                 .Create(x =>
                 {
-                    x.Policy(p =>
+                    x.Configure(p =>
                     {
                         p.Name("P4");
                         p.UsingPattern("^amq.");
@@ -56,7 +56,7 @@
                         });
                         p.AppliedTo("all");
                     });
-                    x.On("HareDu");
+                    x.OnVirtualHost("HareDu");
                 });
             
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);

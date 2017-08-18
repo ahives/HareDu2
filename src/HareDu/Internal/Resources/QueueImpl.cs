@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using Configuration;
     using Exceptions;
     using Model;
+    using QueueDefinition = HareDu.QueueDefinition;
 
     internal class QueueImpl :
         ResourceBase,
@@ -45,29 +46,22 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string queue, string vhost, Action<QueueBehavior> behavior,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<QueueDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(queue))
-                throw new QueueMissingException("The name of the queue is missing.");
+            var impl = new QueueDefinitionImpl();
+            definition(impl);
 
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
-            var impl = new QueueBehaviorImpl();
-            behavior(impl);
+            QueueSettings settings = impl.Settings.Value;
 
-            QueueSettings queueSettings = impl.Settings.Value;
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}";
 
-            string url = $"api/queues/{sanitizedVHost}/{queue}";
+            LogInfo($"Sent request to RabbitMQ server to create queue '{impl.QueueName}' in virtual host '{sanitizedVHost}'.");
 
-            LogInfo($"Sent request to RabbitMQ server to create queue '{queue}' in virtual host '{sanitizedVHost}'.");
-
-            HttpResponseMessage response = await HttpPut(url, queueSettings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
             return result;
@@ -139,20 +133,14 @@ namespace HareDu.Internal.Resources
             public bool DeleteIfUnused { get; private set; }
             public bool DeleteIfEmpty { get; private set; }
 
-            public void IfUnused()
-            {
-                DeleteIfUnused = true;
-            }
+            public void IfUnused() => DeleteIfUnused = true;
 
-            public void IfEmpty()
-            {
-                DeleteIfEmpty = true;
-            }
+            public void IfEmpty() => DeleteIfEmpty = true;
         }
 
 
-        class QueueBehaviorImpl :
-            QueueBehavior
+        class QueueDefinitionImpl :
+            QueueDefinition
         {
             static bool _durable;
             static bool _autoDelete;
@@ -160,28 +148,65 @@ namespace HareDu.Internal.Resources
             static IDictionary<string, object> _arguments;
 
             public Lazy<QueueSettings> Settings { get; }
+            public string QueueName { get; private set; }
+            public string VirtualHost { get; private set; }
 
-            public QueueBehaviorImpl() => Settings = new Lazy<QueueSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public QueueDefinitionImpl() => Settings = new Lazy<QueueSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             QueueSettings Init() => new QueueSettingsImpl(_durable, _autoDelete, _node, _arguments);
 
-            public void IsDurable() => _durable = true;
+            public void Configure(Action<QueueConfiguration> definition)
+            {
+                var impl = new QueueConfigurationImpl();
+                definition(impl);
+
+                _durable = impl.Durable;
+                _autoDelete = impl.AutoDelete;
+                _arguments = impl.Arguments;
+                
+                if (string.IsNullOrWhiteSpace(impl.QueueName))
+                    throw new QueueMissingException("The name of the queue is missing.");
+
+                QueueName = impl.QueueName;
+            }
 
             public void OnNode(string node) => _node = node;
             
-            public void WithArguments(Action<QueueArguments> arguments)
+            public void OnVirtualHost(string vhost)
             {
-                var impl = new QueueArgumentsImpl();
-                arguments(impl);
-
-                _arguments = impl.Arguments;
+                if (string.IsNullOrWhiteSpace(vhost))
+                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+                VirtualHost = vhost;
             }
 
-            public void AutoDeleteWhenNotInUse() => _autoDelete = true;
+
+            class QueueConfigurationImpl :
+                QueueConfiguration
+            {
+                public string QueueName { get; private set; }
+                public bool Durable { get; private set; }
+                public IDictionary<string, object> Arguments { get; private set; }
+                public bool AutoDelete { get; private set; }
+                
+                public void Name(string name) => QueueName = name;
+
+                public void IsDurable() => Durable = true;
+
+                public void WithArguments(Action<QueueDefinitionArguments> arguments)
+                {
+                    var impl = new QueueDefinitionArgumentsImpl();
+                    arguments(impl);
+
+                    Arguments = impl.Arguments;
+                }
+
+                public void AutoDeleteWhenNotInUse() => AutoDelete = true;
+            }
 
             
-            class QueueArgumentsImpl :
-                QueueArguments
+            class QueueDefinitionArgumentsImpl :
+                QueueDefinitionArguments
             {
                 public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
 

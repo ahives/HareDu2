@@ -15,13 +15,22 @@ namespace HareDu
 {
     using System;
 
-    public interface QueueBehavior
+    public interface QueueDefinition
     {
-        void IsDurable();
+        void Configure(Action<QueueConfiguration> definition);
 
         void OnNode(string node);
 
-        void WithArguments(Action<QueueArguments> arguments);
+        void OnVirtualHost(string vhost);
+    }
+
+    public interface QueueConfiguration
+    {
+        void Name(string name);
+        
+        void IsDurable();
+
+        void WithArguments(Action<QueueDefinitionArguments> arguments);
 
         void AutoDeleteWhenNotInUse();
     }

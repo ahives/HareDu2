@@ -105,7 +105,7 @@ namespace HareDu.Internal.Resources
 
             DefinedPolicy Init() => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo);
 
-            public void Policy(Action<PolicyConfiguration> definition)
+            public void Configure(Action<PolicyConfiguration> definition)
             {
                 var impl = new PolicyConfigurationImpl();
                 definition(impl);
@@ -133,7 +133,7 @@ namespace HareDu.Internal.Resources
                 PolicyName = impl.PolicyName;
             }
 
-            public void On(string vhost)
+            public void OnVirtualHost(string vhost)
             {
                 if (string.IsNullOrWhiteSpace(vhost))
                     throw new VirtualHostMissingException("The name of the virtual host is missing.");
