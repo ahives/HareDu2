@@ -13,21 +13,26 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface QueueDefinition
+    public interface PolicyDescription
     {
+        [JsonProperty("vhost")]
+        string VirtualHost { get; }
+        
         [JsonProperty("name")]
         string Name { get; }
-
-        [JsonProperty("durable")]
-        bool IsDurable { get; }
-
-        [JsonProperty("auto_delete")]
-        bool IsAutoDelete { get; }
-
-        [JsonProperty("arguments")]
-        IDictionary<string, object> Arguments { get; }
+        
+        [JsonProperty("pattern")]
+        string Pattern { get; }
+        
+        [JsonProperty("apply-to")]
+        string ApplyTo { get; }
+        
+        [JsonProperty("definition")]
+        PolicyDetails Details { get; }
+        
+        [JsonProperty("priority")]
+        long Priority { get; }
     }
 }

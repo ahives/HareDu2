@@ -13,26 +13,27 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface PolicySummary
+    public interface ExchangeDescription
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
-        
         [JsonProperty("name")]
         string Name { get; }
         
-        [JsonProperty("pattern")]
-        string Pattern { get; }
+        [JsonProperty("type")]
+        string Type { get; }
         
-        [JsonProperty("apply-to")]
-        string ApplyTo { get; }
+        [JsonProperty("durable")]
+        bool Durable { get; }
         
-        [JsonProperty("definition")]
-        PolicyDetails Details { get; }
+        [JsonProperty("auto_delete")]
+        bool AutoDelete { get; }
         
-        [JsonProperty("priority")]
-        long Priority { get; }
+        [JsonProperty("internal")]
+        bool Internal { get; }
+        
+        [JsonProperty("arguments")]
+        IDictionary<string, string> Arguments { get; }
     }
 }

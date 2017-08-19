@@ -22,6 +22,7 @@ namespace HareDu.Internal.Resources
     using Exceptions;
     using Model;
     using BindingDefinition = HareDu.BindingDefinition;
+    using BindingDescription = HareDu.BindingDescription;
 
     internal class BindingImpl :
         ResourceBase,

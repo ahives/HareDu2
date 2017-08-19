@@ -21,7 +21,6 @@ namespace HareDu.Internal.Resources
     using Configuration;
     using Exceptions;
     using Model;
-    using QueueDefinition = HareDu.QueueDefinition;
 
     internal class QueueImpl :
         ResourceBase,

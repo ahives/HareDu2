@@ -9,36 +9,22 @@
         HareDuTestBase
     {
         [Test]
-        public void Test()
+        public async Task Test()
         {
-//            var result = Client
-//                .Factory<Queue>()
-//                .Create("Q1", "HareDu", x =>
-//                {
-//                    x.IsDurable();
-//                    x.WithArguments(a =>
-//                    {
-//                        a.SetDeadLetterExchange("E1");
-//                        a.SetQueueExpiration(1000);
-//                        a.SetPerQueuedMessageExpiration(1000);
-//                    });
-//                });
-            var result2 = Client
+            Result result = await Client
                 .Factory<Queue>()
                 .Create(x =>
                 {
                     x.Configure(d =>
                     {
-                        d.Name("Q3");
+                        d.Name("TestQueue");
                         d.IsDurable();
                         d.WithArguments(arg =>
                         {
-//                            arg.SetDeadLetterExchange("E1");
                             arg.SetQueueExpiration(1000);
-//                            arg.SetPerQueuedMessageExpiration(1000);
                         });
                     });
-//                    x.OnNode("");
+                    x.OnNode("MyNode1");
                     x.OnVirtualHost("HareDu");
                 });
         }

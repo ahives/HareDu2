@@ -22,15 +22,15 @@ namespace HareDu.Model
         string Version { get; }
         
         [JsonProperty("policies")]
-        IEnumerable<PolicySummary> Policies { get; }
+        IEnumerable<PolicyDescription> Policies { get; }
         
         [JsonProperty("queues")]
-        IEnumerable<QueueDefinition> QueueDefinitions { get; }
+        IEnumerable<QueueDescription> Queues { get; }
         
         [JsonProperty("exchanges")]
-        IEnumerable<ExchangeDefinition> ExchangeDefinitions { get; }
+        IEnumerable<ExchangeDescription> Exchanges { get; }
         
         [JsonProperty("bindings")]
-        IEnumerable<BindingDefinition> BindingDefinitions { get; }
+        IEnumerable<BindingDescription> Bindings { get; }
     }
 }
