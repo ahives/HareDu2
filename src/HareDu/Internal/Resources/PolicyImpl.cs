@@ -174,7 +174,7 @@ namespace HareDu.Internal.Resources
             {
                 public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
                 
-                public void Define<T>(string arg, T value)
+                public void Set<T>(string arg, T value)
                 {
                     ValidateConflictingArgs(arg, "federation-upstream", "federation-upstream-set");
                     ValidateConflictingArgs(arg, "ha-mode");
@@ -192,91 +192,91 @@ namespace HareDu.Internal.Resources
                     Arguments.Add(arg, value);
                 }
 
-                public void DefineExpiry(long milliseconds)
+                public void SetExpiry(long milliseconds)
                 {
                     Validate("expires");
                     
                     Arguments.Add("expires", milliseconds);
                 }
 
-                public void DefineFederationUpstreamSet(string value)
+                public void SetFederationUpstreamSet(string value)
                 {
                     ValidateConflictingArgs("federation-upstream-set", "federation-upstream");
                     
                     Arguments.Add("federation-upstream-set", value.Trim());
                 }
 
-                public void DefineFederationUpstream(string value)
+                public void SetFederationUpstream(string value)
                 {
                     ValidateConflictingArgs("federation-upstream", "federation-upstream-set");
                     
                     Arguments.Add("federation-upstream", value.Trim());
                 }
 
-                public void DefineHighAvailabilityMode(HighAvailabilityModes mode)
+                public void SetHighAvailabilityMode(HighAvailabilityModes mode)
                 {
                     Validate("ha-mode");
                     
                     Arguments.Add("ha-mode", mode.ConvertTo());
                 }
 
-                public void DefineHighAvailabilityParams(string value)
+                public void SetHighAvailabilityParams(string value)
                 {
                     Validate("ha-params");
                     
                     Arguments.Add("ha-params", value.Trim());
                 }
 
-                public void DefineHighAvailabilitySyncMode(HighAvailabilitySyncModes mode)
+                public void SetHighAvailabilitySyncMode(HighAvailabilitySyncModes mode)
                 {
                     Validate("ha-sync-mode");
                     
                     Arguments.Add("ha-sync-mode", mode.ConvertTo());
                 }
 
-                public void DefineMessageTimeToLive(long milliseconds)
+                public void SetMessageTimeToLive(long milliseconds)
                 {
                     Validate("message-ttl");
                     
                     Arguments.Add("message-ttl", milliseconds);
                 }
 
-                public void DefineMessageMaxSizeInBytes(long value)
+                public void SetMessageMaxSizeInBytes(long value)
                 {
                     Validate("max-length-bytes");
                     
                     Arguments.Add("max-length-bytes", value.ToString());
                 }
 
-                public void DefineMessageMaxSize(long value)
+                public void SetMessageMaxSize(long value)
                 {
                     Validate("max-length");
                     
                     Arguments.Add("max-length", value);
                 }
 
-                public void DefineDeadLetterExchange(string value)
+                public void SetDeadLetterExchange(string value)
                 {
                     Validate("dead-letter-exchange");
                     
                     Arguments.Add("dead-letter-exchange", value.Trim());
                 }
 
-                public void DefineDeadLetterRoutingKey(string value)
+                public void SetDeadLetterRoutingKey(string value)
                 {
                     Validate("dead-letter-routing-key");
                     
                     Arguments.Add("dead-letter-routing-key", value.Trim());
                 }
 
-                public void DefineQueueMode()
+                public void SetQueueMode()
                 {
                     Validate("queue-mode");
                     
                     Arguments.Add("queue-mode", "lazy");
                 }
 
-                public void DefineAlternateExchange(string value)
+                public void SetAlternateExchange(string value)
                 {
                     Validate("alternate-exchange");
                     

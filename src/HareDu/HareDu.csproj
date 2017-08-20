@@ -230,6 +230,7 @@
     <Compile Include="PolicyConfiguration.cs" />
     <Compile Include="PolicyDefinition.cs" />
     <Compile Include="PolicyDefinitionArguments.cs" />
+    <Compile Include="QueueConfiguration.cs" />
     <Compile Include="QueueDefinitionArguments.cs" />
     <Compile Include="QueueDefinition.cs" />
     <Compile Include="DeleteQueueCondition.cs" />

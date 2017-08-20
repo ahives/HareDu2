@@ -24,8 +24,8 @@
                         p.WithPriority(0);
                         p.WithArguments(d =>
                         {
-                            d.DefineHighAvailabilityMode(HighAvailabilityModes.All);
-                            d.DefineExpiry(1000);
+                            d.SetHighAvailabilityMode(HighAvailabilityModes.All);
+                            d.SetExpiry(1000);
                         });
                         p.AppliedTo("all");
                     });
@@ -50,9 +50,9 @@
                         p.WithPriority(0);
                         p.WithArguments(d =>
                         {
-                            d.DefineHighAvailabilityMode(HighAvailabilityModes.All);
-                            d.DefineFederationUpstreamSet("all");
-                            d.DefineExpiry(1000);
+                            d.SetHighAvailabilityMode(HighAvailabilityModes.All);
+                            d.SetFederationUpstreamSet("all");
+                            d.SetExpiry(1000);
                         });
                         p.AppliedTo("all");
                     });
