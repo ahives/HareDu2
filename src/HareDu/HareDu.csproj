@@ -101,6 +101,8 @@
     <Compile Include="GlobalParameterDefinition.cs" />
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
+    <Compile Include="HealthCheckType.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="HighAvailabilityModes.cs" />
     <Compile Include="HighAvailabilitySyncModes.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Internal\Resources\ClusterImpl.cs" />
     <Compile Include="Internal\Resources\ExchangeImpl.cs" />
     <Compile Include="Internal\Resources\GlobalParameterImpl.cs" />
+    <Compile Include="Internal\Resources\ServerImpl.cs" />
     <Compile Include="Internal\Resources\PolicyImpl.cs" />
     <Compile Include="Internal\Resources\QueueImpl.cs" />
     <Compile Include="Internal\Resources\NodeImpl.cs" />
@@ -208,7 +211,6 @@
     <Compile Include="Model\MessageStats.cs" />
     <Compile Include="Model\GarbageCollectionMetrics.cs" />
     <Compile Include="Model\NodeInfo.cs" />
-    <Compile Include="Model\NodeHealthCheck.cs" />
     <Compile Include="Model\PolicyDetails.cs" />
     <Compile Include="Model\PolicyInfo.cs" />
     <Compile Include="Model\PolicyDescription.cs" />
@@ -224,7 +226,7 @@
     <Compile Include="Model\UserAccessInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Model\VirtualHostDefinition.cs" />
-    <Compile Include="Model\VirtualHostHealthCheck.cs" />
+    <Compile Include="Model\ServerHealth.cs" />
     <Compile Include="Model\VirtualHostInfo.cs" />
     <Compile Include="Policy.cs" />
     <Compile Include="PolicyConfiguration.cs" />
@@ -240,6 +242,7 @@
     <Compile Include="Result.cs" />
     <Compile Include="ScopedParameter.cs" />
     <Compile Include="ScopedParameterDefinition.cs" />
+    <Compile Include="ServerHealthCheckConstraints.cs" />
     <Compile Include="UserAccess.cs" />
     <Compile Include="UserAccessCharacteristics.cs" />
     <Compile Include="UserAccessOptions.cs" />

@@ -11,16 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu
 {
-    using Newtonsoft.Json;
-
-    public interface NodeHealthCheck
+    public interface ServerHealthCheckConstraints
     {
-        [JsonProperty("status")]
-        string Status { get; }
-        
-        [JsonProperty("reason")]
-        string Reason { get; }
+        void Name(string name);
+
+        void Type(HealthCheckType type);
     }
 }

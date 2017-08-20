@@ -15,10 +15,13 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface VirtualHostHealthCheck :
-        ResourceSummary
+    public interface ServerHealth :
+        Resource
     {
         [JsonProperty("status")]
         string Status { get; }
+        
+        [JsonProperty("reason")]
+        string Reason { get; }
     }
 }

@@ -28,20 +28,6 @@ namespace HareDu.Internal.Resources
             : base(client, settings)
         {
         }
-        
-        public async Task<Result<NodeHealthCheck>> IsHealthy(string node, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-            
-            string url = $"api/healthchecks/node/{node}";
-
-            LogInfo($"Sent request to execute an health check on RabbitMQ server node '{node}'.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<NodeHealthCheck> result = await response.GetResponse<NodeHealthCheck>();
-
-            return result;
-        }
 
         public async Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = new CancellationToken())
         {

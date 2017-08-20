@@ -29,38 +29,6 @@ namespace HareDu.Internal.Resources
             : base(client, settings)
         {
         }
-        
-        public async Task<Result<VirtualHostHealthCheck>> IsHealthy(string vhost, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            string sanitizedVHostName = vhost.SanitizeVirtualHostName();
-            
-            string url = $"api/aliveness-test/{sanitizedVHostName}";
-
-            LogInfo($"Sent request to execute an aliveness test on virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<VirtualHostHealthCheck> result = await response.GetResponse<VirtualHostHealthCheck>();
-
-            return result;
-        }
-
-        public async Task<Result<VirtualHostDefinition>> GetDefinition(string vhost, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/definitions/{sanitizedVHost}";
-
-            LogInfo($"Sent request to return all information corresponding to virtual host '{sanitizedVHost}' on current RabbitMQ server.");
-
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<VirtualHostDefinition> result = await response.GetResponse<VirtualHostDefinition>();
-
-            return result;
-        }
 
         public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
         {
