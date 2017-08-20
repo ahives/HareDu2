@@ -64,12 +64,20 @@
 
             Result result = await Client
                 .Factory<Exchange>()
-                .Create("E6", "HareDu", x =>
+                .Create(x =>
                 {
-                    x.IsDurable();
-                    x.IsForInternalUse();
-                    x.UsingRoutingType(r => r.Fanout());
-                    x.WithArguments(args);
+                    x.Configure(c =>
+                    {
+                        c.Name("E3");
+                        c.IsDurable();
+                        c.IsForInternalUse();
+                        c.UsingRoutingType(ExchangeRoutingType.Fanout);
+//                        c.WithArguments(arg =>
+//                        {
+//                            arg.Set("", "");
+//                        });
+                    });
+                    x.OnVirtualHost("HareDu");
                 });
 
             Console.WriteLine("Reason: {0}", result.Reason);

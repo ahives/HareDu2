@@ -13,13 +13,20 @@
 // limitations under the License.
 namespace HareDu
 {
-    public enum ExchangeRoutingType
+    using System;
+
+    public interface ExchangeConfiguration
     {
-        Fanout,
-        Direct,
-        Topic,
-        Headers,
-        Federated,
-        Match
+        void Name(string name);
+
+        void UsingRoutingType(ExchangeRoutingType routingType);
+
+        void IsDurable();
+
+        void IsForInternalUse();
+
+        void WithArguments(Action<ExchangeDefinitionArguments> arguments);
+
+        void AutoDeleteWhenNotInUse();
     }
 }

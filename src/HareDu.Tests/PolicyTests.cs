@@ -19,7 +19,7 @@
                 {
                     x.Configure(p =>
                     {
-                        p.Name("P3");
+                        p.Name("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>

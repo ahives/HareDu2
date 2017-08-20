@@ -24,8 +24,7 @@ namespace HareDu
     {
         Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> behavior,
-            CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(Action<ExchangeDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Delete(string exchange, string vhost, CancellationToken cancellationToken = default(CancellationToken));
         

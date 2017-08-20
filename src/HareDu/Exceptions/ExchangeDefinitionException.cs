@@ -11,23 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Exceptions
 {
     using System;
-    using System.Collections.Generic;
+    using System.Runtime.Serialization;
 
-    public interface ExchangeBehavior
+    public class ExchangeDefinitionException :
+        Exception
     {
-        void UsingRoutingType(string routingType);
+        public ExchangeDefinitionException()
+        {
+        }
 
-        void UsingRoutingType(Action<ExchangeRoutingType> routingType);
+        protected ExchangeDefinitionException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
 
-        void IsDurable();
+        public ExchangeDefinitionException(string message)
+            : base(message)
+        {
+        }
 
-        void IsForInternalUse();
-
-        void WithArguments(IDictionary<string, object> args);
-
-        void AutoDeleteWhenNotInUse();
+        public ExchangeDefinitionException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

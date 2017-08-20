@@ -30,7 +30,13 @@ namespace HareDu.Internal
         protected virtual void LogError(Exception e)
         {
             if (_isEnabled)
-                _logger.Error(format => format("[Msg]: {0}, [Stack Trace] {1}", e.Message, e.StackTrace));
+                _logger.Error(format => format($"[Msg]: {e.Message}, [Stack Trace] {e.StackTrace}"));
+        }
+
+        protected virtual void LogRetryError(Exception e, int retry)
+        {
+            if (_isEnabled)
+                _logger.Error(format => format($"Retry {retry}\n[Msg]: {e.Message}, [Stack Trace] {e.StackTrace}"));
         }
 
         protected virtual void LogError(string message)

@@ -72,6 +72,7 @@
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="Exceptions\BindingException.cs" />
+    <Compile Include="Exceptions\ExchangeDefinitionException.cs" />
     <Compile Include="Exceptions\HareDuClientConfigurationException.cs" />
     <Compile Include="Exceptions\ParameterDefinitionException.cs" />
     <Compile Include="Exceptions\ParameterMissingException.cs" />
@@ -89,8 +90,10 @@
     <Compile Include="Exceptions\HareDuResourceInitException.cs" />
     <Compile Include="Exceptions\UserCredentialsMissingException.cs" />
     <Compile Include="Exceptions\VirtualHostMissingException.cs" />
-    <Compile Include="ExchangeBehavior.cs" />
+    <Compile Include="ExchangeConfiguration.cs" />
+    <Compile Include="ExchangeDefinition.cs" />
     <Compile Include="Exchange.cs" />
+    <Compile Include="ExchangeDefinitionArguments.cs" />
     <Compile Include="ExchangeRoutingType.cs" />
     <Compile Include="ExchangeSettings.cs" />
     <Compile Include="GlobalParameter.cs" />

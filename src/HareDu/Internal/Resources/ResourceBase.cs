@@ -36,7 +36,7 @@ namespace HareDu.Internal.Resources
             _settings = settings;
             _policy = Policy<Task<HttpResponseMessage>>
                 .Handle<HttpRequestException>()
-                .Retry(_settings.RetryLimit, (e, i) => LogError(e.Exception));
+                .Retry(_settings.RetryLimit, (e, i) => LogRetryError(e.Exception, i));
         }
 
         void HandleDotsAndSlashes()

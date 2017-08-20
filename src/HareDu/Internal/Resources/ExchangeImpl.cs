@@ -45,32 +45,25 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string exchange, string vhost, Action<ExchangeBehavior> behavior,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<ExchangeDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(exchange))
-                throw new ExchangeMissingException("The name of the exchange is missing.");
+            var impl = new ExchangeDefinitionImpl();
+            definition(impl);
 
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            ExchangeSettings settings = impl.Settings.Value;
             
-            var impl = new ExchangeBehaviorImpl();
-            behavior(impl);
-
-            ExchangeSettings excahngeSettings = impl.Settings.Value;
-            
-            if (string.IsNullOrWhiteSpace(excahngeSettings?.RoutingType))
+            if (string.IsNullOrWhiteSpace(settings?.RoutingType))
                 throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
+            string url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}";
 
-            LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange} in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create exchange '{impl.ExchangeName} in virtual host '{sanitizedVHost}'.");
 
-            HttpResponseMessage response = await HttpPut(url, excahngeSettings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
             return result;
@@ -136,8 +129,8 @@ namespace HareDu.Internal.Resources
         }
 
 
-        class ExchangeBehaviorImpl :
-            ExchangeBehavior
+        class ExchangeDefinitionImpl :
+            ExchangeDefinition
         {
             static string _routingType;
             static bool _durable;
@@ -146,52 +139,117 @@ namespace HareDu.Internal.Resources
             static IDictionary<string, object> _arguments;
             
             public Lazy<ExchangeSettings> Settings { get; }
+            public string VirtualHost { get; private set; }
+            public string ExchangeName { get; private set; }
 
-            public ExchangeBehaviorImpl() => Settings = new Lazy<ExchangeSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public ExchangeDefinitionImpl() => Settings = new Lazy<ExchangeSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             static ExchangeSettings Init() => new ExchangeSettingsImpl(_routingType, _durable, _autoDelete, _internal, _arguments);
 
-            public void UsingRoutingType(string routingType) => _routingType = routingType;
-            
-            public void UsingRoutingType(Action<ExchangeRoutingType> routingType)
+            public void Configure(Action<ExchangeConfiguration> definition)
             {
-                var impl = new ExchangeRoutingTypeImpl();
-                routingType(impl);
-                
-                UsingRoutingType(impl.RoutingType);
+                var impl = new ExchangeConfigurationImpl();
+                definition(impl);
+
+                _durable = impl.Durable;
+                _routingType = impl.RoutingType;
+                _autoDelete = impl.AutoDelete;
+                _internal = impl.InternalUse;
+                _arguments = impl.Arguments;
+
+                if (string.IsNullOrWhiteSpace(impl.ExchangeName))
+                    throw new ExchangeMissingException("The name of the exchange is missing.");
+
+                ExchangeName = impl.ExchangeName;
             }
 
-            public void IsDurable() => _durable = true;
-
-            public void IsForInternalUse() => _internal = true;
-
-            public void WithArguments(IDictionary<string, object> args)
+            public void OnVirtualHost(string vhost)
             {
-                if (args == null)
-                    return;
+                if (string.IsNullOrWhiteSpace(vhost))
+                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-                _arguments = args;
+                VirtualHost = vhost;
             }
 
-            public void AutoDeleteWhenNotInUse() => _autoDelete = true;
 
-            
-            class ExchangeRoutingTypeImpl :
-                ExchangeRoutingType
+            class ExchangeConfigurationImpl :
+                ExchangeConfiguration
             {
+                public string ExchangeName { get; private set; }
                 public string RoutingType { get; private set; }
-                
-                public void Fanout() => RoutingType = "fanout";
+                public IDictionary<string, object> Arguments { get; private set; }
+                public bool Durable { get; private set; }
+                public bool InternalUse { get; private set; }
+                public bool AutoDelete { get; private set; }
 
-                public void Direct() => RoutingType = "direct";
+                public void Name(string name) => ExchangeName = name;
 
-                public void Topic() => RoutingType = "topic";
+                public void UsingRoutingType(ExchangeRoutingType routingType)
+                {
+                    switch (routingType)
+                    {
+                        case ExchangeRoutingType.Fanout:
+                            RoutingType = "fanout";
+                            break;
+                            
+                        case ExchangeRoutingType.Direct:
+                            RoutingType = "direct";
+                            break;
+                            
+                        case ExchangeRoutingType.Topic:
+                            RoutingType = "topic";
+                            break;
+                            
+                        case ExchangeRoutingType.Headers:
+                            RoutingType = "headers";
+                            break;
+                            
+                        case ExchangeRoutingType.Federated:
+                            RoutingType = "federated";
+                            break;
+                            
+                        case ExchangeRoutingType.Match:
+                            RoutingType = "match";
+                            break;
+                            
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(routingType), routingType, null);
+                    }
+                }
 
-                public void Headers() => RoutingType = "headers";
+                public void IsDurable() => Durable = true;
 
-                public void Federated() => RoutingType = "federated";
+                public void IsForInternalUse() => InternalUse = true;
 
-                public void Match() => RoutingType = "match";
+                public void WithArguments(Action<ExchangeDefinitionArguments> arguments)
+                {
+                    var impl = new ExchangeDefinitionArgumentsImpl();
+                    arguments(impl);
+
+                    Arguments = impl.Arguments;
+                }
+
+                public void AutoDeleteWhenNotInUse() => AutoDelete = true;
+            }
+
+
+            class ExchangeDefinitionArgumentsImpl :
+                ExchangeDefinitionArguments
+            {
+                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+
+                public void Set<T>(string arg, T value)
+                {
+                    Validate(arg);
+                    
+                    Arguments.Add(arg, value);
+                }
+
+                void Validate(string arg)
+                {
+                    if (Arguments.ContainsKey(arg))
+                        throw new ExchangeDefinitionException($"Argument '{arg}' has already been set");
+                }
             }
 
 
