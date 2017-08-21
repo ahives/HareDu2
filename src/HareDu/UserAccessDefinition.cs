@@ -13,10 +13,14 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface UserAccessCharacteristics
+    using System;
+
+    public interface UserAccessDefinition
     {
-        void Configure(string pattern);
-        void Write(string pattern);
-        void Read(string pattern);
+        void Configure(Action<UserAccessConfiguration> definition);
+        
+        void OnUser(string username);
+
+        void OnVirtualHost(string vhost);
     }
 }

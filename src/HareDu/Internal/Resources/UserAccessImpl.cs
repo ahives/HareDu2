@@ -45,27 +45,20 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string vhost, string username, Action<UserAccessCharacteristics> characteristics,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<UserAccessDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(username))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
-            var impl = new UserAccessCharacteristicsImpl();
-            characteristics(impl);
+            var impl = new UserAccessDefinitionImpl();
+            definition(impl);
 
             UserPermissions settings = impl.Characteristics.Value;
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string url = $"api/permissions/{sanitizedVHost}/{username}";
+            string url = $"api/permissions/{sanitizedVHost}/{impl.Username}";
 
-            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
+            LogInfo($"Sent request to RabbitMQ server to create user '{impl.Username}'");
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
@@ -96,25 +89,47 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class UserAccessCharacteristicsImpl :
-            UserAccessCharacteristics
+        class UserAccessDefinitionImpl :
+            UserAccessDefinition
         {
             static string _configurePattern;
             static string _writePattern;
             static string _readPattern;
             
             public Lazy<UserPermissions> Characteristics { get; }
+            public string VirtualHost { get; private set; }
+            public string Username { get; private set; }
 
-            public UserAccessCharacteristicsImpl()
+            public UserAccessDefinitionImpl()
                 => Characteristics = new Lazy<UserPermissions>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             UserPermissions Init() => new UserPermissionsImpl(_configurePattern, _writePattern, _readPattern);
 
-            public void Configure(string pattern) => _configurePattern = pattern;
+            public void Configure(Action<UserAccessConfiguration> definition)
+            {
+                var impl = new UserAccessConfigurationImpl();
+                definition(impl);
 
-            public void Write(string pattern) => _writePattern = pattern;
+                _configurePattern = impl.ConfigurePattern;
+                _writePattern = impl.WritePattern;
+                _readPattern = impl.ReadPattern;
+            }
 
-            public void Read(string pattern) => _readPattern = pattern;
+            public void OnUser(string username)
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                    throw new UserCredentialsMissingException("The username and/or password is missing.");
+
+                Username = username;
+            }
+
+            public void OnVirtualHost(string vhost)
+            {
+                if (string.IsNullOrWhiteSpace(vhost))
+                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+                VirtualHost = vhost;
+            }
 
             
             class UserPermissionsImpl :
@@ -130,6 +145,21 @@ namespace HareDu.Internal.Resources
                 public string Configure { get; }
                 public string Write { get; }
                 public string Read { get; }
+            }
+
+            
+            class UserAccessConfigurationImpl :
+                UserAccessConfiguration
+            {
+                public string ConfigurePattern { get; private set; }
+                public string ReadPattern { get; private set; }
+                public string WritePattern { get; private set; }
+                
+                public void UsingConfigurePattern(string pattern) => ConfigurePattern = pattern;
+
+                public void UsingWritePattern(string pattern) => WritePattern = pattern;
+
+                public void UsingReadPattern(string pattern) => ReadPattern = pattern;
             }
         }
     }

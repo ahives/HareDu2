@@ -244,7 +244,8 @@
     <Compile Include="ScopedParameterDefinition.cs" />
     <Compile Include="ServerHealthCheckConstraints.cs" />
     <Compile Include="UserAccess.cs" />
-    <Compile Include="UserAccessCharacteristics.cs" />
+    <Compile Include="UserAccessConfiguration.cs" />
+    <Compile Include="UserAccessDefinition.cs" />
     <Compile Include="UserAccessOptions.cs" />
     <Compile Include="UserAdmin.cs" />
     <Compile Include="UserDefinition.cs" />
