@@ -35,9 +35,19 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
+//            Result result = await Client
+//                .Factory<VirtualHost>()
+//                .Create("HareDu3");
             Result result = await Client
                 .Factory<VirtualHost>()
-                .Create("HareDu3");
+                .Create(x =>
+                {
+                    x.Configure(c =>
+                    {
+                        c.Name("HareDu5");
+                        c.EnableTracing();
+                    });
+                });
 
             Console.WriteLine("Reason: {0}", result.Reason);
             Console.WriteLine("StatusCode: {0}", result.StatusCode);

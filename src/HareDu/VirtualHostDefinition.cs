@@ -14,18 +14,9 @@
 namespace HareDu
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
 
-    public interface VirtualHost :
-        Resource
+    public interface VirtualHostDefinition
     {
-        Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result> Create(Action<VirtualHostDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result> Delete(string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        void Configure(Action<VirtualHostConfiguration> configuration);
     }
 }

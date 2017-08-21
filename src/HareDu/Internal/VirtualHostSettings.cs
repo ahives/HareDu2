@@ -11,26 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu.Internal
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface VirtualHostDefinition
+    internal interface VirtualHostSettings
     {
-        [JsonProperty("rabbit_version")]
-        string Version { get; }
-        
-        [JsonProperty("policies")]
-        IEnumerable<PolicyDescription> Policies { get; }
-        
-        [JsonProperty("queues")]
-        IEnumerable<QueueDescription> Queues { get; }
-        
-        [JsonProperty("exchanges")]
-        IEnumerable<ExchangeDescription> Exchanges { get; }
-        
-        [JsonProperty("bindings")]
-        IEnumerable<BindingDescription> Bindings { get; }
+        [JsonProperty("tracing")]
+        bool Tracing { get; }
     }
 }

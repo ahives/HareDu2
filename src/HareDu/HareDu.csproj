@@ -102,6 +102,7 @@
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HealthCheckType.cs" />
+    <Compile Include="Internal\VirtualHostSettings.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="HighAvailabilityModes.cs" />
     <Compile Include="HighAvailabilitySyncModes.cs" />
@@ -225,7 +226,7 @@
     <Compile Include="Model\SocketOptions.cs" />
     <Compile Include="Model\UserAccessInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
-    <Compile Include="Model\VirtualHostDefinition.cs" />
+    <Compile Include="Model\VirtualHostDescription.cs" />
     <Compile Include="Model\ServerHealth.cs" />
     <Compile Include="Model\VirtualHostInfo.cs" />
     <Compile Include="Policy.cs" />
@@ -251,6 +252,8 @@
     <Compile Include="UserDefinition.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
+    <Compile Include="VirtualHostConfiguration.cs" />
+    <Compile Include="VirtualHostDefinition.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

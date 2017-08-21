@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Internal.Resources
 {
+    using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
@@ -40,6 +41,30 @@ namespace HareDu.Internal.Resources
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<VirtualHostInfo>> result = await response.GetResponse<IEnumerable<VirtualHostInfo>>();
+
+            return result;
+        }
+
+        public async Task<Result> Create(Action<VirtualHostDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            var impl = new VirtualHostDefinitionImpl();
+            definition(impl);
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+
+            string url = $"api/vhosts/{sanitizedVHost}";
+
+            VirtualHostSettings settings = impl.Settings.Value;
+
+            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            Result result = response.GetResponse();
+            
+            LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -83,6 +108,53 @@ namespace HareDu.Internal.Resources
             Result result = response.GetResponse();
 
             return result;
+        }
+
+        
+        class VirtualHostDefinitionImpl :
+            VirtualHostDefinition
+        {
+            static bool _tracing;
+            
+            public Lazy<VirtualHostSettings> Settings { get; }
+            public string VirtualHost { get; private set; }
+            
+            public VirtualHostDefinitionImpl() => Settings = new Lazy<VirtualHostSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+
+            VirtualHostSettings Init() => new VirtualHostSettingsImpl(_tracing);
+
+            public void Configure(Action<VirtualHostConfiguration> configuration)
+            {
+                var impl = new VirtualHostConfigurationImpl();
+                configuration(impl);
+
+                _tracing = impl.Tracing;
+                VirtualHost = impl.VirtualHost;
+            }
+
+            
+            class VirtualHostSettingsImpl :
+                VirtualHostSettings
+            {
+                public VirtualHostSettingsImpl(bool tracing)
+                {
+                    Tracing = tracing;
+                }
+
+                public bool Tracing { get; }
+            }
+
+            
+            class VirtualHostConfigurationImpl :
+                VirtualHostConfiguration
+            {
+                public string VirtualHost { get; private set; }
+                public bool Tracing { get; private set; }
+                
+                public void Name(string name) => VirtualHost = name;
+
+                public void EnableTracing() => Tracing = true;
+            }
         }
     }
 }
