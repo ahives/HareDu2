@@ -11,22 +11,6 @@
         HareDuTestBase
     {
         [Test]
-        public async Task Test()
-        {
-            var result = await Client
-                .Factory<UserAdmin>()
-                .Create("test1", x =>
-                {
-                    x.Password("test1");
-                    x.WithTags(t =>
-                    {
-                        t.Management();
-                        t.Administrator();
-                    });
-                });
-        }
-
-        [Test]
         public async Task Test2()
         {
             Result<IEnumerable<UserInfo>> result = await Client

@@ -15,10 +15,14 @@ namespace HareDu
 {
     using System;
 
-    public interface UserAdminCharacteristics
+    public interface UserDefinition
     {
+        void Username(string username);
+        
         void Password(string password);
+        
         void WithPasswordHash(string passwordHash);
+        
         void WithTags(Action<UserAccessOptions> tags);
     }
 }

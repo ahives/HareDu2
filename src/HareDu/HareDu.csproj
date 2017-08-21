@@ -247,7 +247,7 @@
     <Compile Include="UserAccessCharacteristics.cs" />
     <Compile Include="UserAccessOptions.cs" />
     <Compile Include="UserAdmin.cs" />
-    <Compile Include="UserAdminCharacteristics.cs" />
+    <Compile Include="UserDefinition.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
   </ItemGroup>

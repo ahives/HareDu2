@@ -24,8 +24,7 @@ namespace HareDu
     {
         Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken());
 
-        Task<Result> Create(string username, Action<UserAdminCharacteristics> characteristics,
-            CancellationToken cancellationToken = new CancellationToken());
+        Task<Result> Create(Action<UserDefinition> definition, CancellationToken cancellationToken = new CancellationToken());
 
         Task<Result> Delete(string username, CancellationToken cancellationToken = new CancellationToken());
     }

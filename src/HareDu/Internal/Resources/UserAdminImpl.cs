@@ -46,25 +46,18 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string username, Action<UserAdminCharacteristics> characteristics,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<UserDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(username))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
-            
-            var impl = new UserAdminCharacteristicsImpl();
-            characteristics(impl);
+            var impl = new UserDefinitionImpl();
+            definition(impl);
 
             UserChacteristics settings = impl.Characteristics.Value;
             
-            if (string.IsNullOrWhiteSpace(settings.Password) && string.IsNullOrWhiteSpace(settings.PasswordHash))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
+            string url = $"api/users/{impl.User}";
 
-            string url = $"api/users/{username}";
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
+            LogInfo($"Sent request to RabbitMQ server to create user '{impl.User}'");
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
@@ -90,19 +83,28 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class UserAdminCharacteristicsImpl :
-            UserAdminCharacteristics
+        class UserDefinitionImpl :
+            UserDefinition
         {
             static string _password;
             static string _passwordHash;
             static string _tags;
             
             public Lazy<UserChacteristics> Characteristics { get; }
+            public string User { get; private set; }
 
-            public UserAdminCharacteristicsImpl()
+            public UserDefinitionImpl()
                 => Characteristics = new Lazy<UserChacteristics>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             UserChacteristics Init() => new UserChacteristicsImpl(_password, _passwordHash, _tags);
+
+            public void Username(string username)
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                    throw new UserCredentialsMissingException("The username and/or password is missing.");
+            
+                User = username;
+            }
 
             public void Password(string password) => _password = password;
 
@@ -111,7 +113,6 @@ namespace HareDu.Internal.Resources
             public void WithTags(Action<UserAccessOptions> tags)
             {
                 var impl = new UserAccessOptionsImpl();
-
                 tags(impl);
 
                 _tags = impl.ToString();
@@ -146,6 +147,9 @@ namespace HareDu.Internal.Resources
             {
                 public UserChacteristicsImpl(string password, string passwordHash, string tags)
                 {
+                    if (string.IsNullOrWhiteSpace(password) && string.IsNullOrWhiteSpace(passwordHash))
+                        throw new UserCredentialsMissingException("The username and/or password is missing.");
+                    
                     PasswordHash = passwordHash;
                     Password = password;
                     Tags = tags;
