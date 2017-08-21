@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new ScopedParameterDefinitionImpl();
             definition(impl);
 
-            ScopedParameterDescription desc = impl.ParameterDescription.Value;
+            ScopedParameterSettings desc = impl.Settings.Value;
 
             string url = $"api/parameters/{desc.Component}/{desc.VirtualHost.SanitizeVirtualHostName()}/{desc.Name}";
 
@@ -90,11 +90,11 @@ namespace HareDu.Internal.Resources
             static string _value;
             static string _name;
             
-            public Lazy<ScopedParameterDescription> ParameterDescription { get; }
+            public Lazy<ScopedParameterSettings> Settings { get; }
 
-            public ScopedParameterDefinitionImpl() => ParameterDescription = new Lazy<ScopedParameterDescription>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public ScopedParameterDefinitionImpl() => Settings = new Lazy<ScopedParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            ScopedParameterDescription Init() => new ScopedParameterDescriptionImpl(_vhost, _component, _name, _value);
+            ScopedParameterSettings Init() => new ScopedParameterSettingsImpl(_vhost, _component, _name, _value);
 
             public void OnComponent(string component) => _component = component;
 
@@ -107,10 +107,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class ScopedParameterDescriptionImpl :
-                ScopedParameterDescription
+            class ScopedParameterSettingsImpl :
+                ScopedParameterSettings
             {
-                public ScopedParameterDescriptionImpl(string virtualHost, string component, string name, string value)
+                public ScopedParameterSettingsImpl(string virtualHost, string component, string name, string value)
                 {
                     if (string.IsNullOrWhiteSpace(name))
                         throw new ParameterMissingException("The name of the parameter is missing.");

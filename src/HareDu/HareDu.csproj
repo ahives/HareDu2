@@ -108,8 +108,8 @@
     <Compile Include="HighAvailabilitySyncModes.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
     <Compile Include="Internal\BindingCreationSettings.cs" />
-    <Compile Include="Internal\DefinedPolicy.cs" />
-    <Compile Include="Internal\GlobalParameterDescription.cs" />
+    <Compile Include="Internal\DefinedPolicySettings.cs" />
+    <Compile Include="Internal\GlobalParameterSettings.cs" />
     <Compile Include="Internal\HareDuClientImpl.cs" />
     <Compile Include="Internal\HttpExtensions.cs" />
     <Compile Include="Internal\Logging.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="Internal\Resources\ScopedParameterImpl.cs" />
     <Compile Include="Internal\Resources\UserAccessImpl.cs" />
     <Compile Include="Internal\Resources\UserAdminImpl.cs" />
-    <Compile Include="Internal\ScopedParameterDescription.cs" />
+    <Compile Include="Internal\ScopedParameterSettings.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
     <Compile Include="Internal\Serialization\DictionaryConverterCache.cs" />
     <Compile Include="Internal\Serialization\DictionaryObjectValueProvider.cs" />
@@ -188,9 +188,9 @@
     <Compile Include="Internal\Serialization\ValueObjectMapper.cs" />
     <Compile Include="Internal\Serialization\ValueValueDictionaryDictionaryMapper.cs" />
     <Compile Include="Internal\Serialization\ValueValueDictionaryObjectMapper.cs" />
-    <Compile Include="Internal\UserChacteristics.cs" />
-    <Compile Include="Internal\UserPermissions.cs" />
-    <Compile Include="Internal\UserPermissionTag.cs" />
+    <Compile Include="Internal\UserAdminSettings.cs" />
+    <Compile Include="Internal\UserAccessSettings.cs" />
+    <Compile Include="Internal\UserAccessTag.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\AuthenticationMechanism.cs" />
     <Compile Include="Model\BindingInfo.cs" />

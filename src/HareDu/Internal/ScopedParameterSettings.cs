@@ -13,11 +13,20 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
-    public static class UserPermissionTag
+    using Newtonsoft.Json;
+
+    public interface ScopedParameterSettings
     {
-        public static readonly string Administrator = "administrator";
-        public static readonly string Monitoring = "monitoring";
-        public static readonly string Management = "management";
-        public static readonly string None = string.Empty;
+        [JsonProperty("vhost")]
+        string VirtualHost { get; }
+
+        [JsonProperty("component")]
+        string Component { get; }
+
+        [JsonProperty("name")]
+        string Name { get; }
+
+        [JsonProperty("value")]
+        string Value { get; }
     }
 }

@@ -16,7 +16,7 @@ namespace HareDu
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface ExchangeSettings
+    internal interface ExchangeSettings
     {
         [JsonProperty("type")]
         string RoutingType { get; }

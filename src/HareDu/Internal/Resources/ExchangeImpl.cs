@@ -67,10 +67,10 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}";
 
-            LogInfo($"Sent request to RabbitMQ server to create exchange '{impl.ExchangeName} in virtual host '{sanitizedVHost}'.");
-
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create exchange '{impl.ExchangeName} in virtual host '{sanitizedVHost}'.");
 
             return result;
         }

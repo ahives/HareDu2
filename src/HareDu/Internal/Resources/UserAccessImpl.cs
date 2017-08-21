@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserAccessDefinitionImpl();
             definition(impl);
 
-            UserPermissions settings = impl.Characteristics.Value;
+            UserAccessSettings settings = impl.Settings.Value;
 
             if (string.IsNullOrWhiteSpace(impl.Username))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
@@ -102,14 +102,14 @@ namespace HareDu.Internal.Resources
             static string _writePattern;
             static string _readPattern;
             
-            public Lazy<UserPermissions> Characteristics { get; }
+            public Lazy<UserAccessSettings> Settings { get; }
             public string VirtualHost { get; private set; }
             public string Username { get; private set; }
 
             public UserAccessDefinitionImpl()
-                => Characteristics = new Lazy<UserPermissions>(Init, LazyThreadSafetyMode.PublicationOnly);
+                => Settings = new Lazy<UserAccessSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            UserPermissions Init() => new UserPermissionsImpl(_configurePattern, _writePattern, _readPattern);
+            UserAccessSettings Init() => new UserAccessSettingsImpl(_configurePattern, _writePattern, _readPattern);
 
             public void Configure(Action<UserAccessConfiguration> definition)
             {
@@ -126,10 +126,10 @@ namespace HareDu.Internal.Resources
             public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 
 
-            class UserPermissionsImpl :
-                UserPermissions
+            class UserAccessSettingsImpl :
+                UserAccessSettings
             {
-                public UserPermissionsImpl(string configurePattern, string writePattern, string readPattern)
+                public UserAccessSettingsImpl(string configurePattern, string writePattern, string readPattern)
                 {
                     Configure = configurePattern;
                     Write = writePattern;

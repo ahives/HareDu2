@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new PolicyDefinitionImpl();
             definition(impl);
 
-            DefinedPolicy policy = impl.DefinedPolicy.Value;
+            DefinedPolicySettings settings = impl.Settings.Value;
 
             if (string.IsNullOrWhiteSpace(impl.PolicyName))
                 throw new PolicyNameMissingException("The name of the policy is missing.");
@@ -66,7 +66,7 @@ namespace HareDu.Internal.Resources
 
             LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.PolicyName}' in virtual host '{sanitizedVHost}'.");
 
-            HttpResponseMessage response = await HttpPut(url, policy, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
             return result;
@@ -103,13 +103,13 @@ namespace HareDu.Internal.Resources
             static int _priority;
             static string _applyTo;
             
-            public Lazy<DefinedPolicy> DefinedPolicy { get; }
+            public Lazy<DefinedPolicySettings> Settings { get; }
             public string VirtualHost { get; private set; }
             public string PolicyName { get; private set; }
 
-            public PolicyDefinitionImpl() => DefinedPolicy = new Lazy<DefinedPolicy>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public PolicyDefinitionImpl() => Settings = new Lazy<DefinedPolicySettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            DefinedPolicy Init() => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo);
+            DefinedPolicySettings Init() => new DefinedPolicySettingsImpl(_pattern, _arguments, _priority, _applyTo);
 
             public void Configure(Action<PolicyConfiguration> definition)
             {
@@ -302,10 +302,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class DefinedPolicyImpl :
-                DefinedPolicy
+            class DefinedPolicySettingsImpl :
+                DefinedPolicySettings
             {
-                public DefinedPolicyImpl(string pattern, IDictionary<string, object> arguments, int priority, string applyTo)
+                public DefinedPolicySettingsImpl(string pattern, IDictionary<string, object> arguments, int priority, string applyTo)
                 {
                     Pattern = pattern;
                     Arguments = arguments;

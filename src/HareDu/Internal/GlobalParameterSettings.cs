@@ -16,7 +16,7 @@ namespace HareDu.Internal
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface GlobalParameterDescription
+    public interface GlobalParameterSettings
     {
         [JsonProperty("name")]
         string Name { get; }

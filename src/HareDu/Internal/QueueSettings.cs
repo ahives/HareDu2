@@ -16,7 +16,7 @@ namespace HareDu.Internal
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface QueueSettings
+    internal interface QueueSettings
     {
         [JsonProperty("node")]
         string Node { get; }

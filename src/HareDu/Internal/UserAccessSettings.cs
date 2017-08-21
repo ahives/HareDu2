@@ -15,7 +15,7 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    internal interface UserPermissions
+    internal interface UserAccessSettings
     {
         [JsonProperty("configure")]
         string Configure { get; }

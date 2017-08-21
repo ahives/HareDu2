@@ -53,17 +53,20 @@ namespace HareDu.Internal.Resources
             var impl = new UserDefinitionImpl();
             definition(impl);
 
-            UserChacteristics settings = impl.Characteristics.Value;
+            UserAdminSettings settings = impl.Characteristics.Value;
 
             if (string.IsNullOrWhiteSpace(impl.User))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
             
+            if (string.IsNullOrWhiteSpace(settings.Password) && string.IsNullOrWhiteSpace(settings.PasswordHash))
+                throw new UserCredentialsMissingException("The username and/or password is missing.");
+                    
             string url = $"api/users/{impl.User}";
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{impl.User}'");
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create user '{impl.User}'");
 
             return result;
         }
@@ -93,13 +96,13 @@ namespace HareDu.Internal.Resources
             static string _passwordHash;
             static string _tags;
             
-            public Lazy<UserChacteristics> Characteristics { get; }
+            public Lazy<UserAdminSettings> Characteristics { get; }
             public string User { get; private set; }
 
             public UserDefinitionImpl()
-                => Characteristics = new Lazy<UserChacteristics>(Init, LazyThreadSafetyMode.PublicationOnly);
+                => Characteristics = new Lazy<UserAdminSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            UserChacteristics Init() => new UserChacteristicsImpl(_password, _passwordHash, _tags);
+            UserAdminSettings Init() => new UserAdminSettingsImpl(_password, _passwordHash, _tags);
 
             public void Username(string username)
             {
@@ -124,32 +127,29 @@ namespace HareDu.Internal.Resources
             {
                 List<string> Tags { get; } = new List<string>();
                 
-                public void None() => Tags.Add(UserPermissionTag.None);
+                public void None() => Tags.Add(UserAccessTag.None);
 
-                public void Administrator() => Tags.Add(UserPermissionTag.Administrator);
+                public void Administrator() => Tags.Add(UserAccessTag.Administrator);
 
-                public void Monitoring() => Tags.Add(UserPermissionTag.Monitoring);
+                public void Monitoring() => Tags.Add(UserAccessTag.Monitoring);
 
-                public void Management() => Tags.Add(UserPermissionTag.Management);
+                public void Management() => Tags.Add(UserAccessTag.Management);
 
                 public override string ToString()
                 {
-                    if (Tags.Contains(UserPermissionTag.None) || !Tags.Any())
-                        return UserPermissionTag.None;
+                    if (Tags.Contains(UserAccessTag.None) || !Tags.Any())
+                        return UserAccessTag.None;
 
                     return string.Join(",", Tags);
                 }
             }
 
 
-            class UserChacteristicsImpl :
-                UserChacteristics
+            class UserAdminSettingsImpl :
+                UserAdminSettings
             {
-                public UserChacteristicsImpl(string password, string passwordHash, string tags)
+                public UserAdminSettingsImpl(string password, string passwordHash, string tags)
                 {
-                    if (string.IsNullOrWhiteSpace(password) && string.IsNullOrWhiteSpace(passwordHash))
-                        throw new UserCredentialsMissingException("The username and/or password is missing.");
-                    
                     PasswordHash = passwordHash;
                     Password = password;
                     Tags = tags;

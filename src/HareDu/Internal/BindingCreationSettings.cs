@@ -15,12 +15,16 @@ namespace HareDu.Internal
 {
     using System.Collections.Generic;
 
-    public interface BindingCreationSettings
+    internal interface BindingCreationSettings
     {
         string RoutingKey { get; }
+        
         IDictionary<string, object> Arguments { get; }
+        
         string SourceBinding { get; }
+        
         string DestinationBinding { get; }
+        
         string VirtualHost { get; }
     }
 }
