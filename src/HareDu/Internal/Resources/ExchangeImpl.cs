@@ -53,7 +53,13 @@ namespace HareDu.Internal.Resources
             definition(impl);
 
             ExchangeSettings settings = impl.Settings.Value;
-            
+
+            if (string.IsNullOrWhiteSpace(impl.ExchangeName))
+                throw new ExchangeMissingException("The name of the exchange is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+
             if (string.IsNullOrWhiteSpace(settings?.RoutingType))
                 throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
 
@@ -157,19 +163,10 @@ namespace HareDu.Internal.Resources
                 _internal = impl.InternalUse;
                 _arguments = impl.Arguments;
 
-                if (string.IsNullOrWhiteSpace(impl.ExchangeName))
-                    throw new ExchangeMissingException("The name of the exchange is missing.");
-
                 ExchangeName = impl.ExchangeName;
             }
 
-            public void OnVirtualHost(string vhost)
-            {
-                if (string.IsNullOrWhiteSpace(vhost))
-                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
-
-                VirtualHost = vhost;
-            }
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 
 
             class ExchangeConfigurationImpl :

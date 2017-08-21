@@ -54,6 +54,9 @@ namespace HareDu.Internal.Resources
             definition(impl);
 
             UserChacteristics settings = impl.Characteristics.Value;
+
+            if (string.IsNullOrWhiteSpace(impl.User))
+                throw new UserCredentialsMissingException("The username and/or password is missing.");
             
             string url = $"api/users/{impl.User}";
 
@@ -100,9 +103,6 @@ namespace HareDu.Internal.Resources
 
             public void Username(string username)
             {
-                if (string.IsNullOrWhiteSpace(username))
-                    throw new UserCredentialsMissingException("The username and/or password is missing.");
-            
                 User = username;
             }
 

@@ -23,7 +23,7 @@ namespace HareDu
     {
         Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(string name, Action<GlobalParameterDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(Action<GlobalParameterDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Delete(string name, CancellationToken cancellationToken = default(CancellationToken));
     }

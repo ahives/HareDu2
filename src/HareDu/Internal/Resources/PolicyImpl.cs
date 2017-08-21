@@ -54,6 +54,12 @@ namespace HareDu.Internal.Resources
 
             DefinedPolicy policy = impl.DefinedPolicy.Value;
 
+            if (string.IsNullOrWhiteSpace(impl.PolicyName))
+                throw new PolicyNameMissingException("The name of the policy is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
             string url = $"api/policies/{sanitizedVHost}/{impl.PolicyName}";
@@ -127,19 +133,10 @@ namespace HareDu.Internal.Resources
                             $"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set");
                 }
 
-                if (string.IsNullOrWhiteSpace(impl.PolicyName))
-                    throw new PolicyNameMissingException("The name of the policy is missing.");
-
                 PolicyName = impl.PolicyName;
             }
 
-            public void OnVirtualHost(string vhost)
-            {
-                if (string.IsNullOrWhiteSpace(vhost))
-                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
-                VirtualHost = vhost;
-            }
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 
 
             class PolicyConfigurationImpl :

@@ -54,6 +54,12 @@ namespace HareDu.Internal.Resources
 
             QueueSettings settings = impl.Settings.Value;
 
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.QueueName))
+                throw new QueueMissingException("The name of the queue is missing.");
+
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}";
@@ -163,21 +169,12 @@ namespace HareDu.Internal.Resources
                 _autoDelete = impl.AutoDelete;
                 _arguments = impl.Arguments;
                 
-                if (string.IsNullOrWhiteSpace(impl.QueueName))
-                    throw new QueueMissingException("The name of the queue is missing.");
-
                 QueueName = impl.QueueName;
             }
 
             public void OnNode(string node) => _node = node;
             
-            public void OnVirtualHost(string vhost)
-            {
-                if (string.IsNullOrWhiteSpace(vhost))
-                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
-                VirtualHost = vhost;
-            }
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 
 
             class QueueConfigurationImpl :

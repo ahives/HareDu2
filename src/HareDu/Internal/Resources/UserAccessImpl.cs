@@ -54,6 +54,12 @@ namespace HareDu.Internal.Resources
 
             UserPermissions settings = impl.Characteristics.Value;
 
+            if (string.IsNullOrWhiteSpace(impl.Username))
+                throw new UserCredentialsMissingException("The username and/or password is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
             string url = $"api/permissions/{sanitizedVHost}/{impl.Username}";
@@ -115,23 +121,11 @@ namespace HareDu.Internal.Resources
                 _readPattern = impl.ReadPattern;
             }
 
-            public void OnUser(string username)
-            {
-                if (string.IsNullOrWhiteSpace(username))
-                    throw new UserCredentialsMissingException("The username and/or password is missing.");
+            public void OnUser(string username) => Username = username;
 
-                Username = username;
-            }
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 
-            public void OnVirtualHost(string vhost)
-            {
-                if (string.IsNullOrWhiteSpace(vhost))
-                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
-            
-                VirtualHost = vhost;
-            }
 
-            
             class UserPermissionsImpl :
                 UserPermissions
             {

@@ -44,23 +44,20 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string name, Action<GlobalParameterDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<GlobalParameterDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
-
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ParameterMissingException("The name of the parameter is missing.");
             
             var impl = new GlobalParameterDefinitionImpl();
             definition(impl);
 
-            GlobalParameterDescription parameterDescription = impl.ParameterDescription.Value;
+            GlobalParameterDescription desc = impl.ParameterDescription.Value;
 
-            string url = $"api/global-parameters/{name}";
+            string url = $"api/global-parameters/{desc.Name}";
 
-            LogInfo($"Sent request to RabbitMQ server to create a global parameter '{name}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a global parameter '{desc.Name}'.");
 
-            HttpResponseMessage response = await HttpPut(url, parameterDescription, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, desc, cancellationToken);
             Result result = response.GetResponse();
 
             return result;
@@ -132,6 +129,9 @@ namespace HareDu.Internal.Resources
             {
                 public GlobalParameterDescriptionImpl(string name, IDictionary<string, object> arguments)
                 {
+                    if (string.IsNullOrWhiteSpace(name))
+                        throw new ParameterMissingException("The name of the parameter is missing.");
+
                     Name = name;
                     Value = arguments;
                 }
