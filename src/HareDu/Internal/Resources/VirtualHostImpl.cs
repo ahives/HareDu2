@@ -100,7 +100,7 @@ namespace HareDu.Internal.Resources
         {
             public string VirtualHost { get; private set; }
             
-            public void Name(string vhost) => VirtualHost = vhost;
+            public void Resource(string vhost) => VirtualHost = vhost;
         }
 
         
@@ -144,7 +144,7 @@ namespace HareDu.Internal.Resources
                 public string VirtualHost { get; private set; }
                 public bool Tracing { get; private set; }
                 
-                public void Name(string name) => VirtualHost = name;
+                public void Resource(string name) => VirtualHost = name;
 
                 public void EnableTracing() => Tracing = true;
             }

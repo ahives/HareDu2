@@ -15,15 +15,15 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    internal interface UserAdminSettings
+    internal interface UserPermissionsSettings
     {
-        [JsonProperty("password_hash")]
-        string PasswordHash { get; }
+        [JsonProperty("configure")]
+        string Configure { get; }
         
-        [JsonProperty("password")]
-        string Password { get; }
+        [JsonProperty("write")]
+        string Write { get; }
         
-        [JsonProperty("tags")]
-        string Tags { get; }
+        [JsonProperty("read")]
+        string Read { get; }
     }
 }

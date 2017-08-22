@@ -14,7 +14,7 @@
         public async Task Test1()
         {
             Result<IEnumerable<UserAccessInfo>> result = await Client
-                .Factory<UserAccess>()
+                .Factory<UserPermissions>()
                 .GetAll();
             
             foreach (var access in result.Data)
@@ -30,7 +30,17 @@
             Console.WriteLine("Reason: {0}", result.Reason);
             Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine();
+        }
 
+        public async Task Test()
+        {
+            Result result = await Client
+                .Factory<UserPermissions>()
+                .Delete(x =>
+                {
+                    x.User("");
+                    x.OnVirtualHost("HareDu5");
+                });
         }
     }
 }

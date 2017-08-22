@@ -14,18 +14,13 @@
 namespace HareDu
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
 
-    public interface UserAccess :
-        Resource
+    public interface UserPermissionsCreateAction
     {
-        Task<Result<IEnumerable<UserAccessInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        void Configure(Action<UserAccessConfiguration> definition);
+        
+        void OnUser(string username);
 
-        Task<Result> Create(Action<UserAccessDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<Result> Delete(string vhost, string username, CancellationToken cancellationToken = default(CancellationToken));
+        void OnVirtualHost(string vhost);
     }
 }

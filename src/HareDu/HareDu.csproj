@@ -125,7 +125,7 @@
     <Compile Include="Internal\Resources\QueueImpl.cs" />
     <Compile Include="Internal\Resources\NodeImpl.cs" />
     <Compile Include="Internal\Resources\ScopedParameterImpl.cs" />
-    <Compile Include="Internal\Resources\UserAccessImpl.cs" />
+    <Compile Include="Internal\Resources\UserPermissionsImpl.cs" />
     <Compile Include="Internal\Resources\UserImpl.cs" />
     <Compile Include="Internal\ScopedParameterSettings.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
@@ -190,8 +190,8 @@
     <Compile Include="Internal\Serialization\ValueObjectMapper.cs" />
     <Compile Include="Internal\Serialization\ValueValueDictionaryDictionaryMapper.cs" />
     <Compile Include="Internal\Serialization\ValueValueDictionaryObjectMapper.cs" />
-    <Compile Include="Internal\UserAdminSettings.cs" />
-    <Compile Include="Internal\UserAccessSettings.cs" />
+    <Compile Include="Internal\UserSettings.cs" />
+    <Compile Include="Internal\UserPermissionsSettings.cs" />
     <Compile Include="Internal\UserAccessTag.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\AuthenticationMechanism.cs" />
@@ -246,13 +246,14 @@
     <Compile Include="ScopedParameter.cs" />
     <Compile Include="ScopedParameterDefinition.cs" />
     <Compile Include="ServerHealthCheckConstraints.cs" />
-    <Compile Include="UserAccess.cs" />
+    <Compile Include="UserPermissions.cs" />
     <Compile Include="UserAccessConfiguration.cs" />
-    <Compile Include="UserAccessDefinition.cs" />
+    <Compile Include="UserPermissionsCreateAction.cs" />
     <Compile Include="UserAccessOptions.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCreateAction.cs" />
     <Compile Include="UserDeleteAction.cs" />
+    <Compile Include="UserPermissionsDeleteAction.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
     <Compile Include="VirtualHostConfiguration.cs" />

@@ -11,10 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal
 {
-    public interface VirtualHostDeleteAction
+    using Newtonsoft.Json;
+
+    internal interface UserSettings
     {
-        void Resource(string vhost);
+        [JsonProperty("password_hash")]
+        string PasswordHash { get; }
+        
+        [JsonProperty("password")]
+        string Password { get; }
+        
+        [JsonProperty("tags")]
+        string Tags { get; }
     }
 }

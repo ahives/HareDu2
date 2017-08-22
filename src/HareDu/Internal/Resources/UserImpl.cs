@@ -53,7 +53,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserCreateActionImpl();
             action(impl);
 
-            UserAdminSettings settings = impl.Characteristics.Value;
+            UserSettings settings = impl.Settings.Value;
 
             if (string.IsNullOrWhiteSpace(impl.User))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
@@ -108,18 +108,15 @@ namespace HareDu.Internal.Resources
             static string _passwordHash;
             static string _tags;
             
-            public Lazy<UserAdminSettings> Characteristics { get; }
+            public Lazy<UserSettings> Settings { get; }
             public string User { get; private set; }
 
             public UserCreateActionImpl()
-                => Characteristics = new Lazy<UserAdminSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+                => Settings = new Lazy<UserSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            UserAdminSettings Init() => new UserAdminSettingsImpl(_password, _passwordHash, _tags);
+            UserSettings Init() => new UserSettingsImpl(_password, _passwordHash, _tags);
 
-            public void Username(string username)
-            {
-                User = username;
-            }
+            public void Username(string username) => User = username;
 
             public void Password(string password) => _password = password;
 
@@ -157,10 +154,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class UserAdminSettingsImpl :
-                UserAdminSettings
+            class UserSettingsImpl :
+                UserSettings
             {
-                public UserAdminSettingsImpl(string password, string passwordHash, string tags)
+                public UserSettingsImpl(string password, string passwordHash, string tags)
                 {
                     PasswordHash = passwordHash;
                     Password = password;

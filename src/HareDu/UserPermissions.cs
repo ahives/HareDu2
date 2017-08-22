@@ -11,19 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu
 {
-    using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Model;
 
-    internal interface UserAccessSettings
+    public interface UserPermissions :
+        Resource
     {
-        [JsonProperty("configure")]
-        string Configure { get; }
-        
-        [JsonProperty("write")]
-        string Write { get; }
-        
-        [JsonProperty("read")]
-        string Read { get; }
+        Task<Result<IEnumerable<UserAccessInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
