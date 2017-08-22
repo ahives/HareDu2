@@ -48,12 +48,21 @@
 
         }
 
-//        [Test]
-//        public async Task Test3()
-//        {
-//            Result result = await Client
-//                .Factory<Queue>()
-//                .Delete()
-//        }
+        [Test]
+        public async Task Test3()
+        {
+            Result result = await Client
+                .Factory<Queue>()
+                .Delete(x =>
+                {
+                    x.Resource("");
+                    x.OnVirtualHost("HareDu");
+                    x.WithConditions(c =>
+                    {
+                        c.IfUnused();
+                        c.IfEmpty();
+                    });
+                });
+        }
     }
 }

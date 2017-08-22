@@ -13,14 +13,18 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface QueueDefinition
+    public interface QueueCreateArguments
     {
-        void Configure(Action<QueueConfiguration> definition);
-
-        void OnNode(string node);
-
-        void OnVirtualHost(string vhost);
+        void Set<T>(string arg, T value);
+        
+        void SetQueueExpiration(long milliseconds);
+        
+        void SetPerQueuedMessageExpiration(long milliseconds);
+        
+        void SetDeadLetterExchange(string exchange);
+        
+        void SetDeadLetterExchangeRoutingKey(string routingKey);
+        
+        void SetAlternateExchange(string exchange);
     }
 }

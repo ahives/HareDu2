@@ -103,6 +103,7 @@
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HealthCheckType.cs" />
     <Compile Include="Internal\VirtualHostSettings.cs" />
+    <Compile Include="QueueDeleteAction.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="HighAvailabilityModes.cs" />
     <Compile Include="HighAvailabilitySyncModes.cs" />
@@ -234,8 +235,8 @@
     <Compile Include="PolicyDefinition.cs" />
     <Compile Include="PolicyDefinitionArguments.cs" />
     <Compile Include="QueueConfiguration.cs" />
-    <Compile Include="QueueDefinitionArguments.cs" />
-    <Compile Include="QueueDefinition.cs" />
+    <Compile Include="QueueCreateArguments.cs" />
+    <Compile Include="QueueCreateAction.cs" />
     <Compile Include="DeleteQueueCondition.cs" />
     <Compile Include="Queue.cs" />
     <Compile Include="Resource.cs" />
