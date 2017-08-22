@@ -19,7 +19,7 @@
                 {
                     x.Configure(p =>
                     {
-                        p.Name("P4");
+                        p.Resource("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>
@@ -45,7 +45,7 @@
                 {
                     x.Configure(p =>
                     {
-                        p.Name("P4");
+                        p.Resource("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>
@@ -60,6 +60,18 @@
                 });
             
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+        }
+
+        [Test]
+        public async Task Verify_can_delete_policy()
+        {
+            Result result = await Client
+                .Factory<Policy>()
+                .Delete(x =>
+                {
+                    x.Resource("P4");
+                    x.OnVirtualHost("HareDu");
+                });
         }
     }
 }

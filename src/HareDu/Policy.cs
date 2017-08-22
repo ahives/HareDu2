@@ -24,8 +24,8 @@ namespace HareDu
     {
         Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<PolicyDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string policy, string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

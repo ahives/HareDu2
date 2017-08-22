@@ -37,20 +37,20 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies";
 
-            LogInfo($"Sent request to return all policy information on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<PolicyInfo>> result = await response.GetResponse<IEnumerable<PolicyInfo>>();
+
+            LogInfo($"Sent request to return all policy information on current RabbitMQ server.");
 
             return result;
         }
 
-        public async Task<Result> Create(Action<PolicyDefinition> definition, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            var impl = new PolicyDefinitionImpl();
-            definition(impl);
+            var impl = new PolicyCreateActionImpl();
+            action(impl);
 
             DefinedPolicySettings settings = impl.Settings.Value;
 
@@ -64,39 +64,54 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies/{sanitizedVHost}/{impl.PolicyName}";
 
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.PolicyName}' in virtual host '{sanitizedVHost}'.");
-
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.PolicyName}' in virtual host '{sanitizedVHost}'.");
 
             return result;
         }
 
-        public async Task<Result> Delete(string policy, string vhost, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(policy))
+            var impl = new PolicyDeleteActionImpl();
+            action(impl);
+            
+            if (string.IsNullOrWhiteSpace(impl.Policy))
                 throw new PolicyNameMissingException("The name of the policy is missing.");
 
-            if (string.IsNullOrWhiteSpace(vhost))
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string url = $"api/policies/{sanitizedVHost}/{policy}";
-
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
+            string url = $"api/policies/{sanitizedVHost}/{impl.Policy}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.Policy}' in virtual host '{sanitizedVHost}'.");
 
             return result;
         }
 
         
-        class PolicyDefinitionImpl :
-            PolicyDefinition
+        class PolicyDeleteActionImpl :
+            PolicyDeleteAction
+        {
+            public string Policy { get; private set; }
+            public string VirtualHost { get; private set; }
+            
+            public void Resource(string name) => Policy = name;
+
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+        }
+
+        
+        class PolicyCreateActionImpl :
+            PolicyCreateAction
         {
             static string _pattern;
             static IDictionary<string, object> _arguments;
@@ -107,7 +122,7 @@ namespace HareDu.Internal.Resources
             public string VirtualHost { get; private set; }
             public string PolicyName { get; private set; }
 
-            public PolicyDefinitionImpl() => Settings = new Lazy<DefinedPolicySettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public PolicyCreateActionImpl() => Settings = new Lazy<DefinedPolicySettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             DefinedPolicySettings Init() => new DefinedPolicySettingsImpl(_pattern, _arguments, _priority, _applyTo);
 
@@ -148,7 +163,7 @@ namespace HareDu.Internal.Resources
                 public string AppllyTo { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
                 
-                public void Name(string name) => PolicyName = name;
+                public void Resource(string name) => PolicyName = name;
 
                 public void UsingPattern(string pattern) => Pattern = pattern;
 

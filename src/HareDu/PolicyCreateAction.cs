@@ -15,7 +15,7 @@ namespace HareDu
 {
     using System;
 
-    public interface PolicyDefinition
+    public interface PolicyCreateAction
     {
         void Configure(Action<PolicyConfiguration> definition);
 
