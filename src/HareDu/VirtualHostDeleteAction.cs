@@ -13,10 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface VirtualHostDefinition
+    public interface VirtualHostDeleteAction
     {
-        void Configure(Action<VirtualHostConfiguration> configuration);
+        void Name(string vhost);
     }
 }

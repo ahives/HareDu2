@@ -45,12 +45,12 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(Action<VirtualHostDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            var impl = new VirtualHostDefinitionImpl();
-            definition(impl);
+            var impl = new VirtualHostCreateActionImpl();
+            action(impl);
 
             if (string.IsNullOrWhiteSpace(impl.VirtualHost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
@@ -69,57 +69,50 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(string vhost, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(vhost))
+            var impl = new VirtualHostDeleteActionImpl();
+            action(impl);
+            
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/vhosts/{sanitizedVHost}";
-
-            LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHost}'.");
-
-            HttpResponseMessage response = await HttpPut(url, new StringContent(string.Empty), cancellationToken);
-            Result result = response.GetResponse();
-
-            return result;
-        }
-
-        public async Task<Result> Delete(string vhost, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
             
             if (sanitizedVHost == "2%f")
                 throw new DeleteVirtualHostException("Cannot delete the default virtual host.");
 
             string url = $"api/vhosts/{sanitizedVHost}";
 
-            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{vhost}'.");
-
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{impl.VirtualHost}'.");
 
             return result;
         }
 
         
-        class VirtualHostDefinitionImpl :
-            VirtualHostDefinition
+        class VirtualHostDeleteActionImpl :
+            VirtualHostDeleteAction
+        {
+            public string VirtualHost { get; private set; }
+            
+            public void Name(string vhost) => VirtualHost = vhost;
+        }
+
+        
+        class VirtualHostCreateActionImpl :
+            VirtualHostCreateAction
         {
             static bool _tracing;
             
             public Lazy<VirtualHostSettings> Settings { get; }
             public string VirtualHost { get; private set; }
             
-            public VirtualHostDefinitionImpl() => Settings = new Lazy<VirtualHostSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public VirtualHostCreateActionImpl() => Settings = new Lazy<VirtualHostSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             VirtualHostSettings Init() => new VirtualHostSettingsImpl(_tracing);
 

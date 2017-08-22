@@ -60,7 +60,7 @@
         {
             Result result = await Client
                 .Factory<VirtualHost>()
-                .Delete("HareDu2");
+                .Delete(x => x.Name("HareDu2"));
 
             Console.WriteLine("Reason: {0}", result.Reason);
             Console.WriteLine("StatusCode: {0}", result.StatusCode);

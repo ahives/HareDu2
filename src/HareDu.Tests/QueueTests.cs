@@ -47,5 +47,13 @@
             }
 
         }
+
+//        [Test]
+//        public async Task Test3()
+//        {
+//            Result result = await Client
+//                .Factory<Queue>()
+//                .Delete()
+//        }
     }
 }
