@@ -48,7 +48,6 @@
     <Compile Include="QueueTests.cs" />
     <Compile Include="ScopedParameterTests.cs" />
     <Compile Include="UserAccessTests.cs" />
-    <Compile Include="UserAdminTests.cs" />
     <Compile Include="UserTests.cs" />
     <Compile Include="ValueExtensionTests.cs" />
     <Compile Include="VirtualHostTests.cs" />

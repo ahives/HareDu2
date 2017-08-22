@@ -14,7 +14,7 @@
         public async Task Test2()
         {
             Result<IEnumerable<UserInfo>> result = await Client
-                .Factory<UserAdmin>()
+                .Factory<User>()
                 .GetAll();
 
             foreach (var user in result.Data)
@@ -31,6 +31,32 @@
             Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine();
 
+        }
+        
+        [Test]
+        public async Task Test1()
+        {
+            Result result = await Client
+                .Factory<User>()
+                .Create(x =>
+                {
+                    x.Username("testuser1");
+                    x.Password("testuserpwd1");
+//                    x.WithPasswordHash("");
+                    x.WithTags(t =>
+                    {
+                        t.Administrator();
+                    });
+                });
+        }
+
+
+        [Test]
+        public async Task Test()
+        {
+            Result result = await Client
+                .Factory<User>()
+                .Delete(x => x.User(""));
         }
     }
 }

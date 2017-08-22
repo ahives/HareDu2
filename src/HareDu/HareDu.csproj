@@ -126,7 +126,7 @@
     <Compile Include="Internal\Resources\NodeImpl.cs" />
     <Compile Include="Internal\Resources\ScopedParameterImpl.cs" />
     <Compile Include="Internal\Resources\UserAccessImpl.cs" />
-    <Compile Include="Internal\Resources\UserAdminImpl.cs" />
+    <Compile Include="Internal\Resources\UserImpl.cs" />
     <Compile Include="Internal\ScopedParameterSettings.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
     <Compile Include="Internal\Serialization\DictionaryConverterCache.cs" />
@@ -250,8 +250,9 @@
     <Compile Include="UserAccessConfiguration.cs" />
     <Compile Include="UserAccessDefinition.cs" />
     <Compile Include="UserAccessOptions.cs" />
-    <Compile Include="UserAdmin.cs" />
-    <Compile Include="UserDefinition.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserCreateAction.cs" />
+    <Compile Include="UserDeleteAction.cs" />
     <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
     <Compile Include="VirtualHostConfiguration.cs" />

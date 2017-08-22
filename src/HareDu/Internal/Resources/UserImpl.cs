@@ -23,11 +23,11 @@ namespace HareDu.Internal.Resources
     using Exceptions;
     using Model;
 
-    internal class UserAdminImpl :
+    internal class UserImpl :
         ResourceBase,
-        UserAdmin
+        User
     {
-        public UserAdminImpl(HttpClient client, HareDuClientSettings settings)
+        public UserImpl(HttpClient client, HareDuClientSettings settings)
             : base(client, settings)
         {
         }
@@ -38,20 +38,20 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/users";
 
-            LogInfo($"Sent request to return all user information on current RabbitMQ server");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<UserInfo>> result = await response.GetResponse<IEnumerable<UserInfo>>();
+
+            LogInfo($"Sent request to return all user information on current RabbitMQ server");
 
             return result;
         }
 
-        public async Task<Result> Create(Action<UserDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            var impl = new UserDefinitionImpl();
-            definition(impl);
+            var impl = new UserCreateActionImpl();
+            action(impl);
 
             UserAdminSettings settings = impl.Characteristics.Value;
 
@@ -71,26 +71,38 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(string username, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(username))
+            var impl = new UserDeleteActionImpl();
+            action(impl);
+            
+            if (string.IsNullOrWhiteSpace(impl.Username))
                 throw new UserCredentialsMissingException("The username is missing.");
 
-            string url = $"api/users/{username}";
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
+            string url = $"api/users/{impl.Username}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create user '{impl.Username}'");
 
             return result;
         }
 
         
-        class UserDefinitionImpl :
-            UserDefinition
+        class UserDeleteActionImpl :
+            UserDeleteAction
+        {
+            public string Username { get; private set; }
+            
+            public void User(string name) => Username = name;
+        }
+
+
+        class UserCreateActionImpl :
+            UserCreateAction
         {
             static string _password;
             static string _passwordHash;
@@ -99,7 +111,7 @@ namespace HareDu.Internal.Resources
             public Lazy<UserAdminSettings> Characteristics { get; }
             public string User { get; private set; }
 
-            public UserDefinitionImpl()
+            public UserCreateActionImpl()
                 => Characteristics = new Lazy<UserAdminSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             UserAdminSettings Init() => new UserAdminSettingsImpl(_password, _passwordHash, _tags);

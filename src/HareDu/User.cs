@@ -14,15 +14,18 @@
 namespace HareDu
 {
     using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Model;
 
-    public interface UserDefinition
+    public interface User :
+        Resource
     {
-        void Username(string username);
-        
-        void Password(string password);
-        
-        void WithPasswordHash(string passwordHash);
-        
-        void WithTags(Action<UserAccessOptions> tags);
+        Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken());
+
+        Task<Result> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken());
+
+        Task<Result> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken());
     }
 }
