@@ -105,6 +105,7 @@
     <Compile Include="Internal\VirtualHostSettings.cs" />
     <Compile Include="PolicyDeleteAction.cs" />
     <Compile Include="QueueDeleteAction.cs" />
+    <Compile Include="ScopedParameterDeleteAction.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="HighAvailabilityModes.cs" />
     <Compile Include="HighAvailabilitySyncModes.cs" />
@@ -244,7 +245,7 @@
     <Compile Include="Node.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ScopedParameter.cs" />
-    <Compile Include="ScopedParameterDefinition.cs" />
+    <Compile Include="ScopedParameterCreateAction.cs" />
     <Compile Include="ServerHealthCheckConstraints.cs" />
     <Compile Include="UserPermissions.cs" />
     <Compile Include="UserAccessConfiguration.cs" />

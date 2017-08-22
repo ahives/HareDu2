@@ -11,22 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu
 {
-    using Newtonsoft.Json;
-
-    public interface ScopedParameterSettings
+    public interface ScopedParameterCreateAction
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
+        void OnComponent(string component);
 
-        [JsonProperty("component")]
-        string Component { get; }
+        void OnVirtualHost(string vhost);
 
-        [JsonProperty("name")]
-        string ParameterName { get; }
-
-        [JsonProperty("value")]
-        string ParameterValue { get; }
+        void Parameter(string name, string value);
     }
 }

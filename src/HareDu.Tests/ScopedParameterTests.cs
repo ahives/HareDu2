@@ -15,15 +15,28 @@
                 .Factory<ScopedParameter>()
                 .Create(x =>
                 {
+                    x.Parameter("test", "me");
                     x.OnComponent("federation");
                     x.OnVirtualHost("HareDu");
-                    x.SetParameter("test", "me");
                 });
             
             Console.WriteLine("Reason: {0}", result.Reason);
             Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
+        }
+
+        [Test]
+        public async Task Test()
+        {
+            Result result = await Client
+                .Factory<ScopedParameter>()
+                .Delete(x =>
+                {
+                    x.Parameter("");
+                    x.OnComponent("");
+                    x.OnVirtualHost("HareDu");
+                });
         }
     }
 }

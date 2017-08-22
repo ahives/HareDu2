@@ -17,6 +17,7 @@ namespace HareDu
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using log4net.Filter;
     using Model;
 
     public interface ScopedParameter :
@@ -24,8 +25,8 @@ namespace HareDu
     {
         Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<ScopedParameterDefinition> definition, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(string component, string name, string vhost, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

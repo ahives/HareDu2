@@ -37,53 +37,74 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/parameters";
 
-            LogInfo($"Sent request to return all parameter information on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<ScopedParameterInfo>> result = await response.GetResponse<IEnumerable<ScopedParameterInfo>>();
 
+            LogInfo($"Sent request to return all parameter information on current RabbitMQ server.");
+
             return result;
         }
 
-        public async Task<Result> Create(Action<ScopedParameterDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
             
-            var impl = new ScopedParameterDefinitionImpl();
-            definition(impl);
+            var impl = new ScopedParameterCreateActionImpl();
+            action(impl);
 
-            ScopedParameterSettings desc = impl.Settings.Value;
+            ScopedParameterSettings settings = impl.Settings.Value;
 
-            string url = $"api/parameters/{desc.Component}/{desc.VirtualHost.SanitizeVirtualHostName()}/{desc.Name}";
+            if (string.IsNullOrWhiteSpace(settings.ParameterName))
+                throw new ParameterMissingException("The name of the parameter is missing.");
+                    
+            string url = $"api/parameters/{settings.Component}/{settings.VirtualHost.SanitizeVirtualHostName()}/{settings.ParameterName}";
 
-            LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{desc.Name}'.");
-
-            HttpResponseMessage response = await HttpPut(url, desc, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{settings.ParameterName}'.");
 
             return result;
         }
 
-        public async Task<Result> Delete(string component, string name, string vhost, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(name))
+            var impl = new ScopedParameterDeleteActionImpl();
+            action(impl);
+            
+            if (string.IsNullOrWhiteSpace(impl.ScopedParameter))
                 throw new ParameterMissingException("The name of the parameter is missing.");
 
-            string url = $"api/parameters/{component}/{vhost}/{name}";
-
-            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{name}'.");
+            string url = $"api/parameters/{impl.Component}/{impl.VirtualHost}/{impl.ScopedParameter}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{impl.ScopedParameter}'.");
 
             return result;
         }
 
         
-        class ScopedParameterDefinitionImpl :
-            ScopedParameterDefinition
+        class ScopedParameterDeleteActionImpl :
+            ScopedParameterDeleteAction
+        {
+            public string ScopedParameter { get; private set; }
+            public string Component { get; private set; }
+            public string VirtualHost { get; private set; }
+
+            public void Parameter(string name) => ScopedParameter = name;
+
+            public void OnComponent(string component) => Component = component;
+
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+        }
+
+        
+        class ScopedParameterCreateActionImpl :
+            ScopedParameterCreateAction
         {
             static string _component;
             static string _vhost;
@@ -92,7 +113,7 @@ namespace HareDu.Internal.Resources
             
             public Lazy<ScopedParameterSettings> Settings { get; }
 
-            public ScopedParameterDefinitionImpl() => Settings = new Lazy<ScopedParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public ScopedParameterCreateActionImpl() => Settings = new Lazy<ScopedParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             ScopedParameterSettings Init() => new ScopedParameterSettingsImpl(_vhost, _component, _name, _value);
 
@@ -100,7 +121,7 @@ namespace HareDu.Internal.Resources
 
             public void OnVirtualHost(string vhost) => _vhost = vhost;
             
-            public void SetParameter(string name, string value)
+            public void Parameter(string name, string value)
             {
                 _name = name;
                 _value = value;
@@ -112,19 +133,16 @@ namespace HareDu.Internal.Resources
             {
                 public ScopedParameterSettingsImpl(string virtualHost, string component, string name, string value)
                 {
-                    if (string.IsNullOrWhiteSpace(name))
-                        throw new ParameterMissingException("The name of the parameter is missing.");
-                    
                     VirtualHost = virtualHost;
                     Component = component;
-                    Name = name;
-                    Value = value;
+                    ParameterName = name;
+                    ParameterValue = value;
                 }
 
                 public string VirtualHost { get; }
                 public string Component { get; }
-                public string Name { get; }
-                public string Value { get; }
+                public string ParameterName { get; }
+                public string ParameterValue { get; }
             }
         }
     }
