@@ -30,32 +30,6 @@
                 Console.WriteLine();
             }
         }
-        
-        [Test, Explicit]
-        public async Task Verify_conditional_Delete_works()
-        {
-            Result result = await Client
-                .Factory<Exchange>()
-                .Delete("E2", "HareDu", x => x.IfUnused());
- 
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
-        }
-        
-        [Test, Explicit]
-        public async Task Verify_Delete_works()
-        {
-            Result result = await Client
-                .Factory<Exchange>()
-                .Delete("E3", "HareDu");
- 
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
-        }
 
         [Test, Explicit]
         public async Task Verify_Create_works()
@@ -84,6 +58,18 @@
             Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
+        }
+
+        public async Task Test()
+        {
+            Result result = await Client
+                .Factory<Exchange>()
+                .Delete(x =>
+                {
+                    x.Resource("E3");
+                    x.OnVirtualHost("HareDu");
+                    x.WithConditions(c => c.IfUnused());
+                });
         }
     }
 }

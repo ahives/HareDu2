@@ -14,18 +14,13 @@
 namespace HareDu
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
 
-    public interface Exchange :
-        Resource
+    public interface ExchangeDeleteAction
     {
-        Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        void Resource(string name);
+
+        void OnVirtualHost(string vhost);
+
+        void WithConditions(Action<DeleteExchangeCondition> condition);
     }
 }

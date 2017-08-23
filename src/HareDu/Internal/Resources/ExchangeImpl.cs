@@ -37,20 +37,20 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/exchanges";
 
-            LogInfo($"Sent request to return all information on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<ExchangeInfo>> result = await response.GetResponse<IEnumerable<ExchangeInfo>>();
+
+            LogInfo($"Sent request to return all information on current RabbitMQ server.");
 
             return result;
         }
 
-        public async Task<Result> Create(Action<ExchangeDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            var impl = new ExchangeDefinitionImpl();
-            definition(impl);
+            var impl = new ExchangeCreateActionImpl();
+            action(impl);
 
             ExchangeSettings settings = impl.Settings.Value;
 
@@ -75,68 +75,71 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(string exchange, string vhost, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(exchange))
-                throw new ExchangeMissingException("The name of the exchange is missing.");
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
-
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
-
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = response.GetResponse();
-
-            return result;
-        }
-
-        public async Task<Result> Delete(string exchange, string vhost, Action<DeleteExchangeCondition> condition, CancellationToken cancellationToken = new CancellationToken())
-        {
-            cancellationToken.RequestCanceled(LogInfo);
-
-            if (string.IsNullOrWhiteSpace(exchange))
-                throw new ExchangeMissingException("The name of the exchange is missing.");
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-
-            var impl = new DeleteExchangeConditionImpl();
-            condition(impl);
+            var impl = new ExchangeDeleteActionImpl();
+            action(impl);
             
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
+            if (string.IsNullOrWhiteSpace(impl.Exchange))
+                throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            if (impl.DeleteIfUnused)
-                url = $"api/exchanges/{sanitizedVHost}/{exchange}?if-unused=true";
+            string url = $"api/exchanges/{sanitizedVHost}/{impl.Exchange}";
 
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
+            if (!string.IsNullOrWhiteSpace(impl.Query))
+                url = $"api/exchanges/{sanitizedVHost}/{impl.Exchange}?{impl.Query}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to delete exchange '{impl.Exchange}' from virtual host '{sanitizedVHost}'.");
 
             return result;
         }
 
         
-        class DeleteExchangeConditionImpl :
-            DeleteExchangeCondition
+        class ExchangeDeleteActionImpl :
+            ExchangeDeleteAction
         {
-            public bool DeleteIfUnused { get; private set; }
-            
-            public void IfUnused() => DeleteIfUnused = true;
+            public string Query { get; private set; }
+            public string Exchange { get; private set; }
+            public string VirtualHost { get; private set; }
+
+            public void Resource(string name) => Exchange = name;
+
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+
+            public void WithConditions(Action<DeleteExchangeCondition> condition)
+            {
+                var impl = new DeleteExchangeConditionImpl();
+                condition(impl);
+
+                string query = string.Empty;
+                if (impl.DeleteIfUnused)
+                    query = "if-unused=true";
+
+                Query = query;
+            }
+
+
+            class DeleteExchangeConditionImpl :
+                DeleteExchangeCondition
+            {
+                public bool DeleteIfUnused { get; private set; }
+
+                public void IfUnused() => DeleteIfUnused = true;
+            }
         }
 
 
-        class ExchangeDefinitionImpl :
-            ExchangeDefinition
+        class ExchangeCreateActionImpl :
+            ExchangeCreateAction
         {
             static string _routingType;
             static bool _durable;
@@ -148,7 +151,7 @@ namespace HareDu.Internal.Resources
             public string VirtualHost { get; private set; }
             public string ExchangeName { get; private set; }
 
-            public ExchangeDefinitionImpl() => Settings = new Lazy<ExchangeSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public ExchangeCreateActionImpl() => Settings = new Lazy<ExchangeSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             static ExchangeSettings Init() => new ExchangeSettingsImpl(_routingType, _durable, _autoDelete, _internal, _arguments);
 

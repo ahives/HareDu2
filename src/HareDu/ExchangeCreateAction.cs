@@ -15,7 +15,7 @@ namespace HareDu
 {
     using System;
 
-    public interface ExchangeDefinition
+    public interface ExchangeCreateAction
     {
         void Configure(Action<ExchangeConfiguration> definition);
         
