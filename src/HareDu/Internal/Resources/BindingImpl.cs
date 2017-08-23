@@ -21,8 +21,6 @@ namespace HareDu.Internal.Resources
     using Configuration;
     using Exceptions;
     using Model;
-    using BindingDefinition = HareDu.BindingDefinition;
-    using BindingDescription = HareDu.BindingDescription;
 
     internal class BindingImpl :
         ResourceBase,
@@ -39,34 +37,42 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/bindings";
 
-            LogInfo($"Sent request to return all binding information corresponding on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<BindingInfo>> result = await response.GetResponse<IEnumerable<BindingInfo>>();
+
+            LogInfo($"Sent request to return all binding information corresponding on current RabbitMQ server.");
 
             return result;
         }
 
-        public async Task<Result> Create(Action<BindingDefinition> definition, BindingType bindingType,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            var impl = new BindingDefinitionImpl();
-            definition(impl);
+            var impl = new BindingCreateActionImpl();
+            action(impl);
 
-            BindingCreationSettings settings = impl.Settings.Value;
+            BindingCreateSettings settings = impl.Settings.Value;
 
+            if (string.IsNullOrWhiteSpace(settings.Source))
+                throw new BindingException("The name of the binding source is missing.");
+
+            if (string.IsNullOrWhiteSpace(settings.Destination))
+                throw new BindingException("The name of the binding destination is missing.");
+            
+            if (string.IsNullOrWhiteSpace(settings.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
             string sanitizedVHost = settings.VirtualHost.SanitizeVirtualHostName();
 
-            string url = bindingType == BindingType.Exchange
-                ? $"api/bindings/{sanitizedVHost}/e/{settings.SourceBinding}/e/{settings.DestinationBinding}"
-                : $"api/bindings/{sanitizedVHost}/e/{settings.SourceBinding}/q/{settings.DestinationBinding}";
-
-            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{settings.SourceBinding}' and '{settings.DestinationBinding}' on virtual host '{sanitizedVHost}'.");
+            string url = settings.BindingType == BindingType.Exchange
+                ? $"api/bindings/{sanitizedVHost}/e/{settings.Source}/e/{settings.Destination}"
+                : $"api/bindings/{sanitizedVHost}/e/{settings.Source}/q/{settings.Destination}";
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{settings.Source}' and '{settings.Destination}' on virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -97,25 +103,26 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class BindingDefinitionImpl :
-            BindingDefinition
+        class BindingCreateActionImpl :
+            BindingCreateAction
         {
             static string _routingKey;
             static IDictionary<string, object> _arguments;
             static string _vhost;
             static string _source;
             static string _destination;
-            
-            public Lazy<BindingCreationSettings> Settings { get; }
+            static BindingType _bindingType;
 
-            public BindingDefinitionImpl() => Settings = new Lazy<BindingCreationSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public Lazy<BindingCreateSettings> Settings { get; }
 
-            BindingCreationSettings Init() => new BindingCreationSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination);
+            public BindingCreateActionImpl() => Settings = new Lazy<BindingCreateSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
-            public void Binding(Action<BindingDescription> description)
+            BindingCreateSettings Init() => new BindingCreateSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination, _bindingType);
+
+            public void Configure(Action<BindingConfiguration> configuration)
             {
-                var impl = new BindingDescriptionImpl();
-                description(impl);
+                var impl = new BindingConfigurationImpl();
+                configuration(impl);
 
                 _source = impl.Source;
                 _destination = impl.Destination;
@@ -123,38 +130,22 @@ namespace HareDu.Internal.Resources
                 _routingKey = impl.RoutingKey;
             }
 
-            public void On(string vhost)
-            {
-                if (string.IsNullOrWhiteSpace(vhost))
-                    throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            public void OnVirtualHost(string vhost) => _vhost = vhost;
             
-                _vhost = vhost;
-            }
+            public void ForBindingType(BindingType bindingType) => _bindingType = bindingType;
 
 
-            class BindingDescriptionImpl :
-                BindingDescription
+            class BindingConfigurationImpl :
+                BindingConfiguration
             {
                 public string Source { get; private set; }
                 public string Destination { get; private set; }
                 public string RoutingKey { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
                 
-                public void Bind(string source)
-                {
-                    if (string.IsNullOrWhiteSpace(source))
-                        throw new BindingException("The name of the binding source is missing.");
+                public void Bind(string source) => Source = source;
 
-                    Source = source;
-                }
-
-                public void To(string destination)
-                {
-                    if (string.IsNullOrWhiteSpace(destination))
-                        throw new BindingException("The name of the binding destination is missing.");
-            
-                    Destination = destination;
-                }
+                public void To(string destination) => Destination = destination;
 
                 public void WithRoutingKey(string routingKey) => RoutingKey = routingKey;
 
@@ -188,24 +179,25 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class BindingCreationSettingsImpl :
-                BindingCreationSettings
+            class BindingCreateSettingsImpl :
+                BindingCreateSettings
             {
-                public BindingCreationSettingsImpl(string routingKey, IDictionary<string, object> arguments,
-                    string vhost, string source, string destination)
+                public BindingCreateSettingsImpl(string routingKey, IDictionary<string, object> arguments,
+                    string vhost, string source, string destination, BindingType bindingType)
                 {
                     RoutingKey = routingKey;
                     Arguments = arguments;
-                    SourceBinding = source;
-                    DestinationBinding = destination;
+                    Source = source;
+                    Destination = destination;
                     VirtualHost = vhost;
+                    BindingType = bindingType;
                 }
 
                 public string RoutingKey { get; }
                 public IDictionary<string, object> Arguments { get; }
                 public BindingType BindingType { get; }
-                public string SourceBinding { get; }
-                public string DestinationBinding { get; }
+                public string Source { get; }
+                public string Destination { get; }
                 public string VirtualHost { get; }
             }
         }

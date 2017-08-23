@@ -15,10 +15,12 @@ namespace HareDu
 {
     using System;
 
-    public interface BindingDefinition
+    public interface BindingCreateAction
     {
-        void Binding(Action<BindingDescription> description);
+        void Configure(Action<BindingConfiguration> configuration);
         
-        void On(string vhost);
+        void OnVirtualHost(string vhost);
+
+        void ForBindingType(BindingType bindingType);
     }
 }

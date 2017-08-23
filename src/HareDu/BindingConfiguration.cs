@@ -11,20 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu
 {
-    using System.Collections.Generic;
+    using System;
 
-    internal interface BindingCreationSettings
+    public interface BindingConfiguration
     {
-        string RoutingKey { get; }
+        void Bind(string source);
+
+        void To(string destination);
         
-        IDictionary<string, object> Arguments { get; }
+        void WithRoutingKey(string routingKey);
         
-        string SourceBinding { get; }
-        
-        string DestinationBinding { get; }
-        
-        string VirtualHost { get; }
+        void WithArguments(Action<BindingArguments> arguments);
     }
 }

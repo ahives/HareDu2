@@ -24,8 +24,7 @@ namespace HareDu
     {
         Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Create(Action<BindingDefinition> definition, BindingType bindingType,
-            CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Result> Delete(string vhost, string exchange, string queue,
             CancellationToken cancellationToken = default(CancellationToken));

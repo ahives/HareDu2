@@ -63,8 +63,8 @@
   <ItemGroup>
     <Compile Include="Binding.cs" />
     <Compile Include="BindingArguments.cs" />
-    <Compile Include="BindingDefinition.cs" />
-    <Compile Include="BindingDescription.cs" />
+    <Compile Include="BindingCreateAction.cs" />
+    <Compile Include="BindingConfiguration.cs" />
     <Compile Include="BindingType.cs" />
     <Compile Include="Configuration\HareDuClientBehavior.cs" />
     <Compile Include="Configuration\HareDuClientSettings.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="HighAvailabilityModes.cs" />
     <Compile Include="HighAvailabilitySyncModes.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
-    <Compile Include="Internal\BindingCreationSettings.cs" />
+    <Compile Include="Internal\BindingCreateSettings.cs" />
     <Compile Include="Internal\DefinedPolicySettings.cs" />
     <Compile Include="Internal\GlobalParameterSettings.cs" />
     <Compile Include="Internal\HareDuClientImpl.cs" />

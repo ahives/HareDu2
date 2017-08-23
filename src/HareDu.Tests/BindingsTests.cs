@@ -39,7 +39,7 @@
                 .Factory<Binding>()
                 .Create(x =>
                 {
-                    x.Binding(b =>
+                    x.Configure(b =>
                     {
                         b.Bind("E2");
                         b.To("Q1");
@@ -49,8 +49,9 @@
                             a.Set("arg1", "value1");
                         });
                     });
-                    x.On("HareDu");
-                }, BindingType.Exchange);
+                    x.ForBindingType(BindingType.Exchange);
+                    x.OnVirtualHost("HareDu");
+                });
 
         }
     }
