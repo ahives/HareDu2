@@ -36,20 +36,20 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/global-parameters";
 
-            LogInfo($"Sent request to return all global parameter information on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<GlobalParameterInfo>> result = await response.GetResponse<IEnumerable<GlobalParameterInfo>>();
+
+            LogInfo($"Sent request to return all global parameter information on current RabbitMQ server.");
 
             return result;
         }
 
-        public async Task<Result> Create(Action<GlobalParameterDefinition> definition, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
             
-            var impl = new GlobalParameterDefinitionImpl();
-            definition(impl);
+            var impl = new GlobalParameterCreateActionImpl();
+            action(impl);
 
             GlobalParameterSettings settings = impl.Settings.Value;
 
@@ -63,33 +63,45 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(string name, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            if (string.IsNullOrWhiteSpace(name))
+            var impl = new GlobalParameterDeleteActionImpl();
+            action(impl);
+            
+            if (string.IsNullOrWhiteSpace(impl.ParameterName))
                 throw new ParameterMissingException("The name of the parameter is missing.");
 
-            string url = $"api/global-parameters/{name}";
-
-            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{name}'.");
+            string url = $"api/global-parameters/{impl.ParameterName}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{impl.ParameterName}'.");
 
             return result;
         }
 
         
-        class GlobalParameterDefinitionImpl :
-            GlobalParameterDefinition
+        class GlobalParameterDeleteActionImpl :
+            GlobalParameterDeleteAction
+        {
+            public string ParameterName { get; private set; }
+            
+            public void Parameter(string name) => ParameterName = name;
+        }
+
+
+        class GlobalParameterCreateActionImpl :
+            GlobalParameterCreateAction
         {
             static IDictionary<string, object> _arguments;
             static string _name;
 
             public Lazy<GlobalParameterSettings> Settings { get; }
 
-            public GlobalParameterDefinitionImpl() => Settings = new Lazy<GlobalParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public GlobalParameterCreateActionImpl() => Settings = new Lazy<GlobalParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
 
             GlobalParameterSettings Init() => new GlobalParameterSettingsImpl(_name, _arguments);
 

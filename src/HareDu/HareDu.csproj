@@ -98,7 +98,8 @@
     <Compile Include="ExchangeSettings.cs" />
     <Compile Include="GlobalParameter.cs" />
     <Compile Include="GlobalParameterArguments.cs" />
-    <Compile Include="GlobalParameterDefinition.cs" />
+    <Compile Include="GlobalParameterCreateAction.cs" />
+    <Compile Include="GlobalParameterDeleteAction.cs" />
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HealthCheckType.cs" />

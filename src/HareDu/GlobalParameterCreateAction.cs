@@ -14,17 +14,11 @@
 namespace HareDu
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
 
-    public interface GlobalParameter :
-        Resource
+    public interface GlobalParameterCreateAction
     {
-        Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
-        
-        Task<Result> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        void Name(string name);
+
+        void WithArguments(Action<GlobalParameterArguments> arguments);
     }
 }

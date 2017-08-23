@@ -35,10 +35,10 @@ namespace HareDu.Internal.Resources
 
             string url = "api/nodes";
 
-            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<ChannelInfo>> result = await response.GetResponse<IEnumerable<ChannelInfo>>();
+
+            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
 
             return result;
         }
@@ -49,10 +49,10 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/connections";
 
-            LogInfo($"Sent request to return all connection information on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<ConnectionInfo>> result = await response.GetResponse<IEnumerable<ConnectionInfo>>();
+
+            LogInfo($"Sent request to return all connection information on current RabbitMQ server.");
 
             return result;
         }
@@ -63,10 +63,10 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/consumers";
 
-            LogInfo($"Sent request to return all consumer information on current RabbitMQ server.");
-
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
             Result<IEnumerable<ConsumerInfo>> result = await response.GetResponse<IEnumerable<ConsumerInfo>>();
+
+            LogInfo($"Sent request to return all consumer information on current RabbitMQ server.");
 
             return result;
         }

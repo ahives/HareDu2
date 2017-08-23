@@ -13,12 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface GlobalParameterDefinition
+    public interface GlobalParameterDeleteAction
     {
-        void Name(string name);
-
-        void WithArguments(Action<GlobalParameterArguments> arguments);
+        void Parameter(string name);
     }
 }
