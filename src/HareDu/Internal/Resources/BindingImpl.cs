@@ -77,32 +77,79 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(string vhost, string exchange, string queue, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
-//            cancellationToken.RequestCanceled(LogInfo);
-//
-//            if (string.IsNullOrWhiteSpace(queue))
-//                throw new QueueMissingException("The name of the queue is missing.");
-//
-//            if (string.IsNullOrWhiteSpace(vhost))
-//                throw new VirtualHostMissingException("The name of the virtual host is missing.");
-//            
-//            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-//
-//            string url = $"api/queues/{sanitizedVHost}/{queue}";
-//            string query = string.Empty;
-//
-//            LogInfo($"Sent request to RabbitMQ server to delete queue '{queue}' from virtual host '{sanitizedVHost}'.");
-//
-//            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-//            Result result = response.GetResponse();
-//
-//            return result;
+            cancellationToken.RequestCanceled(LogInfo);
 
-            throw new NotImplementedException();
+            var impl = new BindingDeleteActionImpl();
+            action(impl);
+            
+            if (string.IsNullOrWhiteSpace(impl.BindingSource))
+                throw new QueueMissingException("The name of the queue is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.BindingName))
+                throw new BindingException("The name of the binding is missing.");
+            
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+
+            string url = impl.BindingType == BindingType.Queue
+                ? $"api/bindings/{sanitizedVHost}/e/{impl.BindingSource}/q/{impl.DestinationSource}/{impl.BindingName}"
+                : $"api/bindings/{sanitizedVHost}/e/{impl.BindingSource}/e/{impl.DestinationSource}/{impl.BindingName}";
+
+            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
+            Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server for binding '{impl.BindingName}'.");
+
+            return result;
         }
 
         
+        class BindingDeleteActionImpl :
+            BindingDeleteAction
+        {
+            public string VirtualHost { get; private set; }
+            public BindingType BindingType { get; private set; }
+            public string BindingName { get; private set; }
+            public string BindingSource { get; private set; }
+            public string DestinationSource { get; private set; }
+            
+            public void Binding(Action<BindingDeleteDefinition> definition)
+            {
+                var impl = new BindingDeleteDefinitionImpl();
+                definition(impl);
+
+                BindingType = impl.BindingType;
+                BindingName = impl.BindingName;
+                BindingSource = impl.BindingSource;
+                DestinationSource = impl.DestinationSource;
+            }
+
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+
+
+            class BindingDeleteDefinitionImpl :
+                BindingDeleteDefinition
+            {
+                public string BindingName { get; private set; }
+                public string BindingSource { get; private set; }
+                public string DestinationSource { get; private set; }
+                public BindingType BindingType { get; private set; }
+
+                public void Name(string name) => BindingName = name;
+
+                public void Source(string binding) => BindingSource = binding;
+
+                public void Destination(string binding) => DestinationSource = binding;
+
+                public void Type(BindingType bindingType) => BindingType = bindingType;
+            }
+        }
+
+
         class BindingCreateActionImpl :
             BindingCreateAction
         {
@@ -119,20 +166,41 @@ namespace HareDu.Internal.Resources
 
             BindingCreateSettings Init() => new BindingCreateSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination, _bindingType);
 
+            public void Binding(Action<BindingCreateDefinition> definition)
+            {
+                var impl = new BindingCreateDefinitionImpl();
+                definition(impl);
+                
+                _source = impl.SourceBinding;
+                _destination = impl.DestinationBinding;
+                _bindingType = impl.BindingType;
+            }
+
             public void Configure(Action<BindingConfiguration> configuration)
             {
                 var impl = new BindingConfigurationImpl();
                 configuration(impl);
 
-                _source = impl.Source;
-                _destination = impl.Destination;
                 _arguments = impl.Arguments;
                 _routingKey = impl.RoutingKey;
             }
 
             public void OnVirtualHost(string vhost) => _vhost = vhost;
-            
-            public void ForBindingType(BindingType bindingType) => _bindingType = bindingType;
+
+
+            class BindingCreateDefinitionImpl :
+                BindingCreateDefinition
+            {
+                public string SourceBinding { get; private set; }
+                public string DestinationBinding { get; private set; }
+                public BindingType BindingType { get; private set; }
+
+                public void Source(string binding) => SourceBinding = binding;
+
+                public void Destination(string binding) => DestinationBinding = binding;
+
+                public void Type(BindingType bindingType) => BindingType = bindingType;
+            }
 
 
             class BindingConfigurationImpl :

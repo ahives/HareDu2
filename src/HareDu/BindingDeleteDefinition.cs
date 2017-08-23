@@ -13,19 +13,14 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
-
-    public interface Binding :
-        Resource
+    public interface BindingDeleteDefinition
     {
-        Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        void Name(string name);
+        
+        void Source(string binding);
 
-        Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        void Destination(string binding);
 
-        Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        void Type(BindingType bindingType);
     }
 }

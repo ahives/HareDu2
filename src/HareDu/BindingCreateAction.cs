@@ -17,10 +17,10 @@ namespace HareDu
 
     public interface BindingCreateAction
     {
+        void Binding(Action<BindingCreateDefinition> definition);
+        
         void Configure(Action<BindingConfiguration> configuration);
         
         void OnVirtualHost(string vhost);
-
-        void ForBindingType(BindingType bindingType);
     }
 }

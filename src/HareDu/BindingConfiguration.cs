@@ -17,10 +17,6 @@ namespace HareDu
 
     public interface BindingConfiguration
     {
-        void Bind(string source);
-
-        void To(string destination);
-        
         void WithRoutingKey(string routingKey);
         
         void WithArguments(Action<BindingArguments> arguments);

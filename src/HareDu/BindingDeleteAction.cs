@@ -14,18 +14,11 @@
 namespace HareDu
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
 
-    public interface Binding :
-        Resource
+    public interface BindingDeleteAction
     {
-        Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        void Binding(Action<BindingDeleteDefinition> definition);
+        
+        void OnVirtualHost(string vhost);
     }
 }

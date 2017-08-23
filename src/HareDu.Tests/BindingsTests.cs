@@ -10,7 +10,7 @@
         HareDuTestBase
     {
         [Test]
-        public async Task Test()
+        public async Task Verify_can_get_all_bindings()
         {
             var result = await Client
                 .Factory<Binding>()
@@ -39,20 +39,41 @@
                 .Factory<Binding>()
                 .Create(x =>
                 {
+                    x.Binding(b =>
+                    {
+                        b.Source("E2");
+                        b.Destination("Q1");
+                        b.Type(BindingType.Exchange);
+                    });
                     x.Configure(b =>
                     {
-                        b.Bind("E2");
-                        b.To("Q1");
                         b.WithRoutingKey("*.");
                         b.WithArguments(a =>
                         {
                             a.Set("arg1", "value1");
                         });
                     });
-                    x.ForBindingType(BindingType.Exchange);
                     x.OnVirtualHost("HareDu");
                 });
 
+        }
+
+        [Test]
+        public async Task Verify_can_delete_binding()
+        {
+            Result result = await Client
+                .Factory<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name("");
+                        b.Source("");
+                        b.Destination("Q1");
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.OnVirtualHost("HareDu");
+                });
         }
     }
 }

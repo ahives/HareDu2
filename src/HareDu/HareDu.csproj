@@ -65,6 +65,9 @@
     <Compile Include="BindingArguments.cs" />
     <Compile Include="BindingCreateAction.cs" />
     <Compile Include="BindingConfiguration.cs" />
+    <Compile Include="BindingCreateDefinition.cs" />
+    <Compile Include="BindingDeleteAction.cs" />
+    <Compile Include="BindingDeleteDefinition.cs" />
     <Compile Include="BindingType.cs" />
     <Compile Include="Configuration\HareDuClientBehavior.cs" />
     <Compile Include="Configuration\HareDuClientSettings.cs" />
