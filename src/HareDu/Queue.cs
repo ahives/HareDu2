@@ -27,5 +27,14 @@ namespace HareDu
         Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default(CancellationToken));
+    }
+
+    public interface QueueEmptyAction
+    {
+        void OnVirtualHost(string vhost);
+
+        void Queue(string name);
     }
 }

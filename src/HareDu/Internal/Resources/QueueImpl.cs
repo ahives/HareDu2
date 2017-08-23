@@ -79,7 +79,7 @@ namespace HareDu.Internal.Resources
             var impl = new QueueDeleteActionImpl();
             action(impl);
 
-            if (string.IsNullOrWhiteSpace(impl.Queue))
+            if (string.IsNullOrWhiteSpace(impl.QueueName))
                 throw new QueueMissingException("The name of the queue is missing.");
 
             if (string.IsNullOrWhiteSpace(impl.VirtualHost))
@@ -87,7 +87,7 @@ namespace HareDu.Internal.Resources
             
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string url = $"api/queues/{sanitizedVHost}/{impl.Queue}";
+            string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}";
 
             if (string.IsNullOrWhiteSpace(impl.Query))
                 url = $"{url}?{impl.Query}";
@@ -95,20 +95,57 @@ namespace HareDu.Internal.Resources
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to delete queue '{impl.Queue}' from virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete queue '{impl.QueueName}' from virtual host '{sanitizedVHost}'.");
+
+            return result;
+        }
+
+        public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            var impl = new QueueEmptyActionImpl();
+            action(impl);
+
+            if (string.IsNullOrWhiteSpace(impl.QueueName))
+                throw new QueueMissingException("The name of the queue is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+
+            string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}/contents";
+
+            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
+            Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to empty queue '{impl.QueueName}' on virtual host '{sanitizedVHost}'.");
 
             return result;
         }
 
         
+        class QueueEmptyActionImpl :
+            QueueEmptyAction
+        {
+            public string QueueName { get; private set; }
+            public string VirtualHost { get; private set; }
+
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+
+            public void Queue(string name) => QueueName = name;
+        }
+
+
         class QueueDeleteActionImpl :
             QueueDeleteAction
         {
             public string Query { get; private set; }
-            public string Queue { get; private set; }
+            public string QueueName { get; private set; }
             public string VirtualHost { get; private set; }
 
-            public void Resource(string name) => Queue = name;
+            public void Queue(string name) => QueueName = name;
 
             public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 

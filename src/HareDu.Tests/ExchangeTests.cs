@@ -42,7 +42,7 @@
                 {
                     x.Configure(c =>
                     {
-                        c.Name("E3");
+                        c.Exchange("E3");
                         c.IsDurable();
                         c.IsForInternalUse();
                         c.UsingRoutingType(ExchangeRoutingType.Fanout);
@@ -66,7 +66,7 @@
                 .Factory<Exchange>()
                 .Delete(x =>
                 {
-                    x.Resource("E3");
+                    x.Exchange("E3");
                     x.OnVirtualHost("HareDu");
                     x.WithConditions(c => c.IfUnused());
                 });

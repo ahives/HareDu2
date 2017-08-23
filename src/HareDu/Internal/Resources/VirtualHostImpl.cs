@@ -122,7 +122,7 @@ namespace HareDu.Internal.Resources
                 configuration(impl);
 
                 _tracing = impl.Tracing;
-                VirtualHost = impl.VirtualHost;
+                VirtualHost = impl.VirtualHostName;
             }
 
             
@@ -141,10 +141,10 @@ namespace HareDu.Internal.Resources
             class VirtualHostConfigurationImpl :
                 VirtualHostConfiguration
             {
-                public string VirtualHost { get; private set; }
+                public string VirtualHostName { get; private set; }
                 public bool Tracing { get; private set; }
                 
-                public void Resource(string name) => VirtualHost = name;
+                public void VirtualHost(string name) => VirtualHostName = name;
 
                 public void EnableTracing() => Tracing = true;
             }

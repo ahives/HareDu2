@@ -55,7 +55,7 @@
                 .Factory<Queue>()
                 .Delete(x =>
                 {
-                    x.Resource("");
+                    x.Queue("");
                     x.OnVirtualHost("HareDu");
                     x.WithConditions(c =>
                     {

@@ -82,7 +82,7 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeDeleteActionImpl();
             action(impl);
             
-            if (string.IsNullOrWhiteSpace(impl.Exchange))
+            if (string.IsNullOrWhiteSpace(impl.ExchangeName))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
             if (string.IsNullOrWhiteSpace(impl.VirtualHost))
@@ -90,15 +90,15 @@ namespace HareDu.Internal.Resources
             
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHost}/{impl.Exchange}";
+            string url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}";
 
             if (!string.IsNullOrWhiteSpace(impl.Query))
-                url = $"api/exchanges/{sanitizedVHost}/{impl.Exchange}?{impl.Query}";
+                url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}?{impl.Query}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{impl.Exchange}' from virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete exchange '{impl.ExchangeName}' from virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -108,10 +108,10 @@ namespace HareDu.Internal.Resources
             ExchangeDeleteAction
         {
             public string Query { get; private set; }
-            public string Exchange { get; private set; }
+            public string ExchangeName { get; private set; }
             public string VirtualHost { get; private set; }
 
-            public void Resource(string name) => Exchange = name;
+            public void Exchange(string name) => ExchangeName = name;
 
             public void OnVirtualHost(string vhost) => VirtualHost = vhost;
 
@@ -182,7 +182,7 @@ namespace HareDu.Internal.Resources
                 public bool InternalUse { get; private set; }
                 public bool AutoDelete { get; private set; }
 
-                public void Name(string name) => ExchangeName = name;
+                public void Exchange(string name) => ExchangeName = name;
 
                 public void UsingRoutingType(ExchangeRoutingType routingType)
                 {

@@ -17,7 +17,7 @@ namespace HareDu
 
     public interface PolicyConfiguration
     {
-        void Resource(string name);
+        void Policy(string name);
         
         void UsingPattern(string pattern);
         

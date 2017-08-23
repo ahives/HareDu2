@@ -17,7 +17,7 @@ namespace HareDu
 
     public interface QueueDeleteAction
     {
-        void Resource(string name);
+        void Queue(string name);
 
         void OnVirtualHost(string vhost);
 

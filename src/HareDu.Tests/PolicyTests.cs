@@ -19,7 +19,7 @@
                 {
                     x.Configure(p =>
                     {
-                        p.Resource("P4");
+                        p.Policy("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>
@@ -45,7 +45,7 @@
                 {
                     x.Configure(p =>
                     {
-                        p.Resource("P4");
+                        p.Policy("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>

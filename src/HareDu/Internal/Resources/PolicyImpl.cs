@@ -163,7 +163,7 @@ namespace HareDu.Internal.Resources
                 public string AppllyTo { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
                 
-                public void Resource(string name) => PolicyName = name;
+                public void Policy(string name) => PolicyName = name;
 
                 public void UsingPattern(string pattern) => Pattern = pattern;
 

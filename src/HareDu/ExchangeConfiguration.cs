@@ -17,7 +17,7 @@ namespace HareDu
 
     public interface ExchangeConfiguration
     {
-        void Name(string name);
+        void Exchange(string name);
 
         void UsingRoutingType(ExchangeRoutingType routingType);
 

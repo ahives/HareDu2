@@ -17,7 +17,7 @@ namespace HareDu
 
     public interface ExchangeDeleteAction
     {
-        void Resource(string name);
+        void Exchange(string name);
 
         void OnVirtualHost(string vhost);
 

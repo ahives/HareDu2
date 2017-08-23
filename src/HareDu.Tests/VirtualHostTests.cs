@@ -44,7 +44,7 @@
                 {
                     x.Configure(c =>
                     {
-                        c.Resource("HareDu5");
+                        c.VirtualHost("HareDu5");
                         c.EnableTracing();
                     });
                 });
