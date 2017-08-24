@@ -128,7 +128,22 @@ namespace HareDu.Internal.Resources
                 BindingDestination = impl.DestinationSource;
             }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            public void On(Action<BindingOn> location)
+            {
+                var impl = new BindingOnImpl();
+                location(impl);
+
+                VirtualHost = impl.VirtualHostName;
+            }
+
+            
+            class BindingOnImpl :
+                BindingOn
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
 
 
             class BindingDeleteDefinitionImpl :
@@ -185,17 +200,17 @@ namespace HareDu.Internal.Resources
                 _routingKey = impl.RoutingKey;
             }
 
-            public void On(Action<BindOn> location)
+            public void On(Action<BindingOn> location)
             {
-                var impl = new BindOnImpl();
+                var impl = new BindingOnImpl();
                 location(impl);
 
                 _vhost = impl.VirtualHostName;
             }
 
             
-            class BindOnImpl :
-                BindOn
+            class BindingOnImpl :
+                BindingOn
             {
                 public string VirtualHostName { get; private set; }
 

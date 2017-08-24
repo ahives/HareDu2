@@ -21,6 +21,6 @@ namespace HareDu
         
         void Configure(Action<BindingConfiguration> configuration);
 
-        void On(Action<BindOn> location);
+        void On(Action<BindingOn> location);
     }
 }

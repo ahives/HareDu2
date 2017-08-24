@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface BindOn
+    public interface BindingOn
     {
         void VirtualHost(string vhost);
     }

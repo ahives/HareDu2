@@ -18,7 +18,7 @@ namespace HareDu
     public interface BindingDeleteAction
     {
         void Binding(Action<BindingDeleteDefinition> definition);
-        
-        void OnVirtualHost(string vhost);
+
+        void On(Action<BindingOn> location);
     }
 }
