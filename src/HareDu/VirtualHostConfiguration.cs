@@ -15,8 +15,6 @@ namespace HareDu
 {
     public interface VirtualHostConfiguration
     {
-        void VirtualHost(string name);
-
         void EnableTracing();
     }
 }

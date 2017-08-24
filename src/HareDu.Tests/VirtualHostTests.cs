@@ -42,9 +42,9 @@
                 .Factory<VirtualHost>()
                 .Create(x =>
                 {
+                    x.VirtualHost("HareDu5");
                     x.Configure(c =>
                     {
-                        c.VirtualHost("HareDu5");
                         c.EnableTracing();
                     });
                 });
@@ -60,7 +60,7 @@
         {
             Result result = await Client
                 .Factory<VirtualHost>()
-                .Delete(x => x.Resource("HareDu2"));
+                .Delete(x => x.VirtualHost("HareDu2"));
 
             Console.WriteLine("Reason: {0}", result.Reason);
             Console.WriteLine("StatusCode: {0}", result.StatusCode);

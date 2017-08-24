@@ -15,6 +15,6 @@ namespace HareDu
 {
     public interface VirtualHostDeleteAction
     {
-        void Resource(string vhost);
+        void VirtualHost(string vhost);
     }
 }

@@ -52,10 +52,12 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostCreateActionImpl();
             action(impl);
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            string vhost = impl.VirtualHostName.Value;
+
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/vhosts/{sanitizedVHost}";
 
@@ -76,10 +78,10 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostDeleteActionImpl();
             action(impl);
             
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(impl.VirtualHostName))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = impl.VirtualHostName.SanitizeVirtualHostName();
             
             if (sanitizedVHost == "2%f")
                 throw new DeleteVirtualHostException("Cannot delete the default virtual host.");
@@ -89,7 +91,7 @@ namespace HareDu.Internal.Resources
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{impl.VirtualHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete virtual host '{impl.VirtualHostName}'.");
 
             return result;
         }
@@ -98,9 +100,9 @@ namespace HareDu.Internal.Resources
         class VirtualHostDeleteActionImpl :
             VirtualHostDeleteAction
         {
-            public string VirtualHost { get; private set; }
+            public string VirtualHostName { get; private set; }
             
-            public void Resource(string vhost) => VirtualHost = vhost;
+            public void VirtualHost(string vhost) => VirtualHostName = vhost;
         }
 
         
@@ -108,13 +110,19 @@ namespace HareDu.Internal.Resources
             VirtualHostCreateAction
         {
             static bool _tracing;
-            
-            public Lazy<VirtualHostSettings> Settings { get; }
-            public string VirtualHost { get; private set; }
-            
-            public VirtualHostCreateActionImpl() => Settings = new Lazy<VirtualHostSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            static string _vhost;
 
-            VirtualHostSettings Init() => new VirtualHostSettingsImpl(_tracing);
+            public Lazy<VirtualHostSettings> Settings { get; }
+            public Lazy<string> VirtualHostName { get; }
+            
+            public VirtualHostCreateActionImpl()
+            {
+                Settings = new Lazy<VirtualHostSettings>(
+                    () => new VirtualHostSettingsImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
+                VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void VirtualHost(string name) => _vhost = name;
 
             public void Configure(Action<VirtualHostConfiguration> configuration)
             {
@@ -122,29 +130,22 @@ namespace HareDu.Internal.Resources
                 configuration(impl);
 
                 _tracing = impl.Tracing;
-                VirtualHost = impl.VirtualHostName;
             }
 
             
             class VirtualHostSettingsImpl :
                 VirtualHostSettings
             {
-                public VirtualHostSettingsImpl(bool tracing)
-                {
-                    Tracing = tracing;
-                }
-
                 public bool Tracing { get; }
+                
+                public VirtualHostSettingsImpl(bool tracing) => Tracing = tracing;
             }
 
             
             class VirtualHostConfigurationImpl :
                 VirtualHostConfiguration
             {
-                public string VirtualHostName { get; private set; }
                 public bool Tracing { get; private set; }
-                
-                public void VirtualHost(string name) => VirtualHostName = name;
 
                 public void EnableTracing() => Tracing = true;
             }
