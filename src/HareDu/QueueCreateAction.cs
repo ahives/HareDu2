@@ -17,10 +17,10 @@ namespace HareDu
 
     public interface QueueCreateAction
     {
+        void Queue(string name);
+        
         void Configure(Action<QueueConfiguration> definition);
 
-        void OnNode(string node);
-
-        void OnVirtualHost(string vhost);
+        void On(Action<CreateQueueOn> location);
     }
 }

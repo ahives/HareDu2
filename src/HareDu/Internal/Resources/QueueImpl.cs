@@ -54,20 +54,23 @@ namespace HareDu.Internal.Resources
 
             QueueSettings settings = impl.Settings.Value;
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            string vhost = impl.VirtualHost.Value;
+            string queue = impl.QueueName.Value;
+            
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.QueueName))
+            if (string.IsNullOrWhiteSpace(queue))
                 throw new QueueMissingException("The name of the queue is missing.");
 
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}";
+            string url = $"api/queues/{sanitizedVHost}/{queue}";
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create queue '{impl.QueueName}' in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create queue '{queue}' in virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -79,23 +82,28 @@ namespace HareDu.Internal.Resources
             var impl = new QueueDeleteActionImpl();
             action(impl);
 
-            if (string.IsNullOrWhiteSpace(impl.QueueName))
+            string queue = impl.QueueName.Value;
+            string vhost = impl.VirtualHost.Value;
+            
+            if (string.IsNullOrWhiteSpace(queue))
                 throw new QueueMissingException("The name of the queue is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}";
 
-            if (string.IsNullOrWhiteSpace(impl.Query))
+            string query = impl.Query.Value;
+            
+            if (string.IsNullOrWhiteSpace(query))
                 url = $"{url}?{impl.Query}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to delete queue '{impl.QueueName}' from virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete queue '{queue}' from virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -178,13 +186,30 @@ namespace HareDu.Internal.Resources
         class QueueDeleteActionImpl :
             QueueDeleteAction
         {
-            public string Query { get; private set; }
-            public string QueueName { get; private set; }
-            public string VirtualHost { get; private set; }
+            static string _vhost;
+            static string _queue;
+            static string _query;
+            
+            public Lazy<string> Query { get; }
+            public Lazy<string> QueueName { get; }
+            public Lazy<string> VirtualHost { get; }
 
-            public void Queue(string name) => QueueName = name;
+            public QueueDeleteActionImpl()
+            {
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
+                Query = new Lazy<string>(() => _query, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            public void Queue(string name) => _queue = name;
+            
+            public void On(Action<DeleteQueueOn> target)
+            {
+                var impl = new DeleteQueueOnImpl();
+                target(impl);
+
+                _vhost = impl.VirtualHostName;
+            }
 
             public void WithConditions(Action<DeleteQueueCondition> condition)
             {
@@ -199,7 +224,16 @@ namespace HareDu.Internal.Resources
                 if (impl.DeleteIfEmpty)
                     query = !string.IsNullOrWhiteSpace(query) ? $"{query}&if-empty=true" : "if-empty=true";
 
-                Query = query;
+                _query = query;
+            }
+
+            
+            class DeleteQueueOnImpl :
+                DeleteQueueOn
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
             }
 
 
@@ -223,14 +257,22 @@ namespace HareDu.Internal.Resources
             static bool _autoDelete;
             static string _node;
             static IDictionary<string, object> _arguments;
+            static string _vhost;
+            static string _queue;
 
             public Lazy<QueueSettings> Settings { get; }
-            public string QueueName { get; private set; }
-            public string VirtualHost { get; private set; }
+            public Lazy<string> QueueName { get; }
+            public Lazy<string> VirtualHost { get; }
 
-            public QueueCreateActionImpl() => Settings = new Lazy<QueueSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public QueueCreateActionImpl()
+            {
+                Settings = new Lazy<QueueSettings>(
+                    () => new QueueSettingsImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            QueueSettings Init() => new QueueSettingsImpl(_durable, _autoDelete, _node, _arguments);
+            public void Queue(string name) => _queue = name;
 
             public void Configure(Action<QueueConfiguration> definition)
             {
@@ -240,24 +282,36 @@ namespace HareDu.Internal.Resources
                 _durable = impl.Durable;
                 _autoDelete = impl.AutoDelete;
                 _arguments = impl.Arguments;
-                
-                QueueName = impl.QueueName;
             }
 
-            public void OnNode(string node) => _node = node;
+            public void On(Action<CreateQueueOn> location)
+            {
+                var impl = new CreateQueueOnImpl();
+                location(impl);
+
+                _node = impl.NodeName;
+                _vhost = impl.VirtualHostName;
+            }
+
             
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            class CreateQueueOnImpl :
+                CreateQueueOn
+            {
+                public string VirtualHostName { get; private set; }
+                public string NodeName { get; private set; }
+                
+                public void Node(string node) => NodeName = node;
+            
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
 
 
             class QueueConfigurationImpl :
                 QueueConfiguration
             {
-                public string QueueName { get; private set; }
                 public bool Durable { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
                 public bool AutoDelete { get; private set; }
-                
-                public void Name(string name) => QueueName = name;
 
                 public void IsDurable() => Durable = true;
 

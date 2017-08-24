@@ -71,7 +71,7 @@
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.OnVirtualHost("HareDu");
+                    x.On(l => l.VirtualHost("HareDu"));
                 });
         }
     }

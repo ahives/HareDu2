@@ -13,14 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface QueueDeleteAction
+    public interface DeleteQueueOn
     {
-        void Queue(string name);
-
-        void On(Action<DeleteQueueOn> target);
-
-        void WithConditions(Action<DeleteQueueCondition> condition);
+        void VirtualHost(string vhost);
     }
 }

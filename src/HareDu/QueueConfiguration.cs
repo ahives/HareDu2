@@ -17,8 +17,6 @@ namespace HareDu
 
     public interface QueueConfiguration
     {
-        void Name(string name);
-        
         void IsDurable();
 
         void WithArguments(Action<QueueCreateArguments> arguments);

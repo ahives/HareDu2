@@ -15,17 +15,20 @@
                 .Factory<Queue>()
                 .Create(x =>
                 {
-                    x.Configure(d =>
+                    x.Queue("TestQueue2");
+                    x.Configure(c =>
                     {
-                        d.Name("TestQueue");
-                        d.IsDurable();
-                        d.WithArguments(arg =>
+                        c.IsDurable();
+                        c.WithArguments(arg =>
                         {
                             arg.SetQueueExpiration(1000);
                         });
                     });
-                    x.OnNode("MyNode1");
-                    x.OnVirtualHost("HareDu");
+                    x.On(l =>
+                    {
+                        l.Node("MyNode1");
+                        l.VirtualHost("HareDu");
+                    });
                 });
         }
 
@@ -56,7 +59,7 @@
                 .Delete(x =>
                 {
                     x.Queue("");
-                    x.OnVirtualHost("HareDu");
+                    x.On(l => l.VirtualHost("HareDu"));
                     x.WithConditions(c =>
                     {
                         c.IfUnused();
