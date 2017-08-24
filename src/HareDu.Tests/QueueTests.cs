@@ -9,7 +9,7 @@
         HareDuTestBase
     {
         [Test]
-        public async Task Test()
+        public async Task Verify_can_create_queue()
         {
             Result result = await Client
                 .Factory<Queue>()
@@ -30,7 +30,7 @@
         }
 
         [Test]
-        public void Test2()
+        public void Verify_can_get_all()
         {
             var result = Client
                 .Factory<Queue>()
@@ -49,7 +49,7 @@
         }
 
         [Test]
-        public async Task Test3()
+        public async Task Verify_can_delete_queue()
         {
             Result result = await Client
                 .Factory<Queue>()
@@ -62,6 +62,18 @@
                         c.IfUnused();
                         c.IfEmpty();
                     });
+                });
+        }
+
+        [Test]
+        public async Task Verify_can_peek_messages()
+        {
+            Result result = await Client
+                .Factory<Queue>()
+                .Peek(x =>
+                {
+                    x.Queue("");
+                    x.OnVirtualHost("HareDu");
                 });
         }
     }

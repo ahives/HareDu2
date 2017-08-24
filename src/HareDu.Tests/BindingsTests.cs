@@ -39,23 +39,22 @@
                 .Factory<Binding>()
                 .Create(x =>
                 {
-                    x.Binding(b =>
+                    x.Bind(b =>
                     {
                         b.Source("E2");
                         b.Destination("Q1");
                         b.Type(BindingType.Exchange);
                     });
-                    x.Configure(b =>
+                    x.Configure(c =>
                     {
-                        b.WithRoutingKey("*.");
-                        b.WithArguments(a =>
+                        c.WithRoutingKey("*.");
+                        c.WithArguments(arg =>
                         {
-                            a.Set("arg1", "value1");
+                            arg.Set("arg1", "value1");
                         });
                     });
-                    x.OnVirtualHost("HareDu");
+                    x.On(y => y.VirtualHost("HareDu"));
                 });
-
         }
 
         [Test]
@@ -67,10 +66,10 @@
                 {
                     x.Binding(b =>
                     {
-                        b.Name("");
-                        b.Source("");
-                        b.Destination("Q1");
-                        b.Type(BindingType.Exchange);
+                        b.Name("%2A.");
+                        b.Source("E2");
+                        b.Destination("Q4");
+                        b.Type(BindingType.Queue);
                     });
                     x.OnVirtualHost("HareDu");
                 });

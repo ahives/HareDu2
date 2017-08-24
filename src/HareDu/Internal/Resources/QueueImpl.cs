@@ -125,7 +125,44 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
+        public async Task<Result> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            var impl = new QueuePeekActionImpl();
+            action(impl);
+
+            if (string.IsNullOrWhiteSpace(impl.QueueName))
+                throw new QueueMissingException("The name of the queue is missing.");
+
+            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+            
+            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+
+            string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}/get";
+
+            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
+            Result result = response.GetResponse();
+
+            LogInfo($"Sent request to RabbitMQ server to empty queue '{impl.QueueName}' on virtual host '{sanitizedVHost}'.");
+
+            return result;
+        }
+
         
+        class QueuePeekActionImpl :
+            QueuePeekAction
+        {
+            public string QueueName { get; private set; }
+            public string VirtualHost { get; private set; }
+            
+            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+
+            public void Queue(string name) => QueueName = name;
+        }
+
+
         class QueueEmptyActionImpl :
             QueueEmptyAction
         {

@@ -84,8 +84,8 @@ namespace HareDu.Internal.Resources
             var impl = new BindingDeleteActionImpl();
             action(impl);
             
-            if (string.IsNullOrWhiteSpace(impl.BindingSource))
-                throw new QueueMissingException("The name of the queue is missing.");
+            if (string.IsNullOrWhiteSpace(impl.BindingDestination))
+                throw new QueueMissingException("The name of the destination binding (queue/exchange) is missing.");
 
             if (string.IsNullOrWhiteSpace(impl.VirtualHost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
@@ -96,8 +96,8 @@ namespace HareDu.Internal.Resources
             string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
 
             string url = impl.BindingType == BindingType.Queue
-                ? $"api/bindings/{sanitizedVHost}/e/{impl.BindingSource}/q/{impl.DestinationSource}/{impl.BindingName}"
-                : $"api/bindings/{sanitizedVHost}/e/{impl.BindingSource}/e/{impl.DestinationSource}/{impl.BindingName}";
+                ? $"api/bindings/{sanitizedVHost}/e/{impl.BindingSource}/q/{impl.BindingDestination}/{impl.BindingName}"
+                : $"api/bindings/{sanitizedVHost}/e/{impl.BindingSource}/e/{impl.BindingDestination}/{impl.BindingName}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
@@ -115,7 +115,7 @@ namespace HareDu.Internal.Resources
             public BindingType BindingType { get; private set; }
             public string BindingName { get; private set; }
             public string BindingSource { get; private set; }
-            public string DestinationSource { get; private set; }
+            public string BindingDestination { get; private set; }
             
             public void Binding(Action<BindingDeleteDefinition> definition)
             {
@@ -125,7 +125,7 @@ namespace HareDu.Internal.Resources
                 BindingType = impl.BindingType;
                 BindingName = impl.BindingName;
                 BindingSource = impl.BindingSource;
-                DestinationSource = impl.DestinationSource;
+                BindingDestination = impl.DestinationSource;
             }
 
             public void OnVirtualHost(string vhost) => VirtualHost = vhost;
@@ -166,7 +166,7 @@ namespace HareDu.Internal.Resources
 
             BindingCreateSettings Init() => new BindingCreateSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination, _bindingType);
 
-            public void Binding(Action<BindingCreateDefinition> definition)
+            public void Bind(Action<BindingCreateDefinition> definition)
             {
                 var impl = new BindingCreateDefinitionImpl();
                 definition(impl);
@@ -185,7 +185,22 @@ namespace HareDu.Internal.Resources
                 _routingKey = impl.RoutingKey;
             }
 
-            public void OnVirtualHost(string vhost) => _vhost = vhost;
+            public void On(Action<BindOn> location)
+            {
+                var impl = new BindOnImpl();
+                location(impl);
+
+                _vhost = impl.VirtualHostName;
+            }
+
+            
+            class BindOnImpl :
+                BindOn
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
 
 
             class BindingCreateDefinitionImpl :

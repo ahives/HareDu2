@@ -69,6 +69,7 @@
     <Compile Include="BindingDeleteAction.cs" />
     <Compile Include="BindingDeleteDefinition.cs" />
     <Compile Include="BindingType.cs" />
+    <Compile Include="BindOn.cs" />
     <Compile Include="Configuration\HareDuClientBehavior.cs" />
     <Compile Include="Configuration\HareDuClientSettings.cs" />
     <Compile Include="Configuration\HareDuCredentials.cs" />
@@ -110,6 +111,8 @@
     <Compile Include="Internal\VirtualHostSettings.cs" />
     <Compile Include="PolicyDeleteAction.cs" />
     <Compile Include="QueueDeleteAction.cs" />
+    <Compile Include="QueueEmptyAction.cs" />
+    <Compile Include="QueuePeekAction.cs" />
     <Compile Include="ScopedParameterDeleteAction.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="HighAvailabilityModes.cs" />

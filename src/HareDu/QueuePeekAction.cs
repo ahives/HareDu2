@@ -13,14 +13,10 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface BindingCreateAction
+    public interface QueuePeekAction
     {
-        void Bind(Action<BindingCreateDefinition> definition);
-        
-        void Configure(Action<BindingConfiguration> configuration);
+        void OnVirtualHost(string vhost);
 
-        void On(Action<BindOn> location);
+        void Queue(string name);
     }
 }
