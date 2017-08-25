@@ -15,10 +15,8 @@ namespace HareDu
 {
     using System;
 
-    public interface GlobalParameterCreateAction
+    public interface GlobalParameterConfiguration
     {
-        void Parameter(string name);
-
-        void Configure(Action<GlobalParameterConfiguration> configuration);
+        void WithArguments(Action<GlobalParameterArguments> arguments);
     }
 }

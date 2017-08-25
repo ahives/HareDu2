@@ -101,37 +101,50 @@ namespace HareDu.Internal.Resources
 
             public Lazy<GlobalParameterSettings> Settings { get; }
 
-            public GlobalParameterCreateActionImpl() => Settings = new Lazy<GlobalParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public GlobalParameterCreateActionImpl() => Settings = new Lazy<GlobalParameterSettings>(
+                () => new GlobalParameterSettingsImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
 
-            GlobalParameterSettings Init() => new GlobalParameterSettingsImpl(_name, _arguments);
-
-            public void Name(string name) => _name = name;
-
-            public void WithArguments(Action<GlobalParameterArguments> arguments)
+            public void Parameter(string name) => _name = name;
+            
+            public void Configure(Action<GlobalParameterConfiguration> configuration)
             {
-                var impl = new GlobalParameterArgumentsImpl();
-                arguments(impl);
-
+                var impl = new GlobalParameterConfigurationImpl();
+                configuration(impl);
+                
                 _arguments = impl.Arguments;
             }
 
-            
-            class GlobalParameterArgumentsImpl :
-                GlobalParameterArguments
+            class GlobalParameterConfigurationImpl :
+                GlobalParameterConfiguration
             {
-                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                public IDictionary<string, object> Arguments { get; private set; }
                 
-                public void Set<T>(string arg, T value)
+                public void WithArguments(Action<GlobalParameterArguments> arguments)
                 {
-                    Validate(arg);
-                    
-                    Arguments.Add(arg.Trim(), value);
+                    var impl = new GlobalParameterArgumentsImpl();
+                    arguments(impl);
+
+                    Arguments = impl.Arguments;
                 }
 
-                void Validate(string arg)
+
+                class GlobalParameterArgumentsImpl :
+                    GlobalParameterArguments
                 {
-                    if (Arguments.ContainsKey(arg))
-                        throw new ParameterDefinitionException($"Argument '{arg}' has already been set");
+                    public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+
+                    public void Set<T>(string arg, T value)
+                    {
+                        Validate(arg);
+
+                        Arguments.Add(arg.Trim(), value);
+                    }
+
+                    void Validate(string arg)
+                    {
+                        if (Arguments.ContainsKey(arg))
+                            throw new ParameterDefinitionException($"Argument '{arg}' has already been set");
+                    }
                 }
             }
 
