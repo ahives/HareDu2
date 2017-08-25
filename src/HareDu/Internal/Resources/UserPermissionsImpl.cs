@@ -54,20 +54,23 @@ namespace HareDu.Internal.Resources
 
             UserPermissionsSettings settings = impl.Settings.Value;
 
-            if (string.IsNullOrWhiteSpace(impl.Username))
+            string username = impl.Username.Value;
+            string vhost = impl.VirtualHost.Value;
+            
+            if (string.IsNullOrWhiteSpace(username))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/permissions/{sanitizedVHost}/{impl.Username}";
+            string url = $"api/permissions/{sanitizedVHost}/{username}";
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create user '{impl.Username}'");
+            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
 
             return result;
         }
@@ -78,21 +81,24 @@ namespace HareDu.Internal.Resources
 
             var impl = new UserPermissionsDeleteActionImpl();
             action(impl);
+
+            string username = impl.Username.Value;
+            string vhost = impl.VirtualHost.Value;
             
-            if (string.IsNullOrWhiteSpace(impl.Username))
+            if (string.IsNullOrWhiteSpace(username))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/permissions/{sanitizedVHost}/{impl.Username}";
+            string url = $"api/permissions/{sanitizedVHost}/{username}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create user '{impl.Username}'");
+            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
 
             return result;
         }
@@ -101,12 +107,36 @@ namespace HareDu.Internal.Resources
         class UserPermissionsDeleteActionImpl :
             UserPermissionsDeleteAction
         {
-            public string Username { get; private set; }
-            public string VirtualHost { get; private set; }
+            static string _vhost;
+            static string _user;
+            
+            public Lazy<string> Username { get; }
+            public Lazy<string> VirtualHost { get; }
 
-            public void User(string name) => Username = name;
+            public UserPermissionsDeleteActionImpl()
+            {
+                Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            public void Target(Action<UserPermissionsTarget> target)
+            {
+                var impl = new UserPermissionsTargetImpl();
+                target(impl);
+
+                _vhost = impl.VirtualHostName;
+            }
+
+            public void User(string name) => _user = name;
+
+            
+            class UserPermissionsTargetImpl :
+                UserPermissionsTarget
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
         }
 
         
@@ -116,15 +146,22 @@ namespace HareDu.Internal.Resources
             static string _configurePattern;
             static string _writePattern;
             static string _readPattern;
-            
+            static string _vhost;
+            static string _user;
+
             public Lazy<UserPermissionsSettings> Settings { get; }
-            public string VirtualHost { get; private set; }
-            public string Username { get; private set; }
+            public Lazy<string> VirtualHost { get; }
+            public Lazy<string> Username { get; }
 
             public UserPermissionsCreateActionImpl()
-                => Settings = new Lazy<UserPermissionsSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            {
+                Settings = new Lazy<UserPermissionsSettings>(
+                    () => new UserPermissionsSettingsImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            UserPermissionsSettings Init() => new UserPermissionsSettingsImpl(_configurePattern, _writePattern, _readPattern);
+            public void User(string username) => _user = username;
 
             public void Configure(Action<UserAccessConfiguration> definition)
             {
@@ -136,9 +173,22 @@ namespace HareDu.Internal.Resources
                 _readPattern = impl.ReadPattern;
             }
 
-            public void OnUser(string username) => Username = username;
+            public void Target(Action<UserPermissionsTarget> target)
+            {
+                var impl = new UserPermissionsTargetImpl();
+                target(impl);
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+                _vhost = impl.VirtualHostName;
+            }
+
+            
+            class UserPermissionsTargetImpl :
+                UserPermissionsTarget
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
 
 
             class UserPermissionsSettingsImpl :

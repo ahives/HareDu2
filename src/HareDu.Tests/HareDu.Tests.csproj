@@ -48,7 +48,7 @@
     <Compile Include="PolicyTests.cs" />
     <Compile Include="QueueTests.cs" />
     <Compile Include="ScopedParameterTests.cs" />
-    <Compile Include="UserAccessTests.cs" />
+    <Compile Include="UserPermissionsTests.cs" />
     <Compile Include="UserTests.cs" />
     <Compile Include="ValueExtensionTests.cs" />
     <Compile Include="VirtualHostTests.cs" />

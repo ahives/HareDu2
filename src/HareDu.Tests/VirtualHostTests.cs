@@ -35,9 +35,6 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-//            Result result = await Client
-//                .Factory<VirtualHost>()
-//                .Create("HareDu3");
             Result result = await Client
                 .Factory<VirtualHost>()
                 .Create(x =>

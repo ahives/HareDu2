@@ -13,14 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface UserPermissionsCreateAction
+    public interface UserPermissionsTarget
     {
-        void User(string username);
-
-        void Configure(Action<UserAccessConfiguration> definition);
-
-        void Target(Action<UserPermissionsTarget> target);
+        void VirtualHost(string vhost);
     }
 }

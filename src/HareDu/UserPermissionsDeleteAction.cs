@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
+
     public interface UserPermissionsDeleteAction
     {
         void User(string name);
 
-        void OnVirtualHost(string vhost);
+        void Target(Action<UserPermissionsTarget> target);
     }
 }

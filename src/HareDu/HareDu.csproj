@@ -76,6 +76,7 @@
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="CreateQueueOn.cs" />
+    <Compile Include="UserPermissionsTarget.cs" />
     <Compile Include="DeleteQueueOn.cs" />
     <Compile Include="Exceptions\BindingException.cs" />
     <Compile Include="Exceptions\ExchangeDefinitionException.cs" />

@@ -7,11 +7,11 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class UserAccessTests :
+    public class UserPermissionsTests :
         HareDuTestBase
     {
         [Test]
-        public async Task Test1()
+        public async Task Verify_can_get_all_user_permissions()
         {
             Result<IEnumerable<UserAccessInfo>> result = await Client
                 .Factory<UserPermissions>()
@@ -32,14 +32,33 @@
             Console.WriteLine();
         }
 
-        public async Task Test()
+        [Test]
+        public async Task TestVerify_can_delete_user_permissions()
         {
             Result result = await Client
                 .Factory<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User("");
-                    x.OnVirtualHost("HareDu5");
+                    x.Target(t => t.VirtualHost("HareDu5"));
+                });
+        }
+
+        [Test]
+        public async Task Verify_can_create_user_permissions()
+        {
+            Result result = await Client
+                .Factory<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User("");
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern("");
+                        c.UsingReadPattern("");
+                        c.UsingWritePattern("");
+                    });
+                    x.Target(t => t.VirtualHost("HareDu5"));
                 });
         }
     }
