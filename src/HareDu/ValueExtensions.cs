@@ -26,10 +26,13 @@ namespace HareDu
             {
                 case HighAvailabilityModes.All:
                     return "all";
+                    
                 case HighAvailabilityModes.Exactly:
                     return "exactly";
+                    
                 case HighAvailabilityModes.Nodes:
                     return "nodes";
+                    
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
@@ -41,10 +44,13 @@ namespace HareDu
             {
                 case "all":
                     return HighAvailabilityModes.All;
+                    
                 case "exactly":
                     return HighAvailabilityModes.Exactly;
+                    
                 case "nodes":
                     return HighAvailabilityModes.Nodes;
+                    
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
@@ -56,8 +62,10 @@ namespace HareDu
             {
                 case HighAvailabilitySyncModes.Manual:
                     return "manual";
+                    
                 case HighAvailabilitySyncModes.Automatic:
                     return "automatic";
+                    
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }

@@ -43,7 +43,8 @@ namespace HareDu.Internal.Serialization
                 ConstructorHandling = source.ConstructorHandling,
                 ContractResolver = source.ContractResolver,
                 DateParseHandling = source.DateParseHandling,
-                Converters = new List<JsonConverter>(source.Converters)
+                Converters = new List<JsonConverter>(source.Converters),
+                Formatting = Formatting.Indented
             };
 
             settings.Converters.Add(new StringEnumConverter());

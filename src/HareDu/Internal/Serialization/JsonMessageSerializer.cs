@@ -22,7 +22,7 @@ namespace HareDu.Internal.Serialization
     public class JsonMessageSerializer :
         IMessageSerializer
     {
-        public const string ContentTypeHeaderValue = "application/vnd.masstransit+json";
+        public const string ContentTypeHeaderValue = "application/vnd.haredu+json";
         public static readonly ContentType JsonContentType = new ContentType(ContentTypeHeaderValue);
 
         static readonly Lazy<JsonSerializer> _deserializer;

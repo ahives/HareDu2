@@ -29,7 +29,7 @@ namespace HareDu.Internal.Serialization
                                                                 | MethodAttributes.VtableLayoutMask;
 
         readonly ConcurrentDictionary<string, ModuleBuilder> _moduleBuilders;
-        readonly string _proxyNamespaceSuffix = "GreenPipes.DynamicInternal" + Guid.NewGuid().ToString("N");
+        readonly string _proxyNamespaceSuffix = "HareDu.DynamicInternal" + Guid.NewGuid().ToString("N");
         readonly ConcurrentDictionary<Type, Lazy<Type>> _proxyTypes;
 
         public DynamicImplementationBuilder()
@@ -56,7 +56,7 @@ namespace HareDu.Internal.Serialization
 
         Type CreateTypeFromInterface(ModuleBuilder builder, Type interfaceType)
         {
-            var typeName = "GreenPipes.DynamicInternal." +
+            var typeName = "HareDu.DynamicInternal." +
                            (interfaceType.IsNested && (interfaceType.DeclaringType != null)
                                ? $"{interfaceType.DeclaringType.Name}+{TypeCache.GetShortName(interfaceType)}"
                                : TypeCache.GetShortName(interfaceType));
