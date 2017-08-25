@@ -19,6 +19,6 @@ namespace HareDu
     {
         void Binding(Action<BindingDeleteDefinition> definition);
 
-        void On(Action<BindingOn> location);
+        void Target(Action<BindingTarget> target);
     }
 }

@@ -53,7 +53,7 @@
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.On(y => y.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
         }
 
@@ -71,7 +71,7 @@
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.On(l => l.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
         }
     }
