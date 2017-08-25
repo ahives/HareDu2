@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
+
     public interface PolicyDeleteAction
     {
-        void Resource(string name);
+        void Policy(string name);
 
-        void OnVirtualHost(string vhost);
+        void Target(Action<PolicyTarget> target);
     }
 }

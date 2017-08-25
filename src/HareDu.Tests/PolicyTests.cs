@@ -17,9 +17,9 @@
                 .Factory<Policy>()
                 .Create(x =>
                 {
+                    x.Policy("P4");
                     x.Configure(p =>
                     {
-                        p.Policy("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>
@@ -29,7 +29,7 @@
                         });
                         p.AppliedTo("all");
                     });
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Console.WriteLine(result.Reason);
@@ -43,9 +43,9 @@
                 .Factory<Policy>()
                 .Create(x =>
                 {
+                    x.Policy("P4");
                     x.Configure(p =>
                     {
-                        p.Policy("P4");
                         p.UsingPattern("^amq.");
                         p.WithPriority(0);
                         p.WithArguments(d =>
@@ -56,7 +56,7 @@
                         });
                         p.AppliedTo("all");
                     });
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
@@ -69,8 +69,8 @@
                 .Factory<Policy>()
                 .Delete(x =>
                 {
-                    x.Resource("P4");
-                    x.OnVirtualHost("HareDu");
+                    x.Policy("P4");
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
         }
     }

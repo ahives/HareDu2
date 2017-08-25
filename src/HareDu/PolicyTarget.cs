@@ -13,16 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface PolicyConfiguration
+    public interface PolicyTarget
     {
-        void UsingPattern(string pattern);
-        
-        void WithArguments(Action<PolicyDefinitionArguments> arguments);
-        
-        void WithPriority(int priority);
-        
-        void AppliedTo(string applyTo);
+        void VirtualHost(string vhost);
     }
 }

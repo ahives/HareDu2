@@ -17,8 +17,10 @@ namespace HareDu
 
     public interface PolicyCreateAction
     {
-        void Configure(Action<PolicyConfiguration> definition);
+        void Policy(string name);
+        
+        void Configure(Action<PolicyConfiguration> configuration);
 
-        void OnVirtualHost(string vhost);
+        void Target(Action<PolicyTarget> target);
     }
 }

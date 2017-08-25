@@ -54,20 +54,23 @@ namespace HareDu.Internal.Resources
 
             DefinedPolicySettings settings = impl.Settings.Value;
 
-            if (string.IsNullOrWhiteSpace(impl.PolicyName))
+            string policy = impl.PolicyName.Value;
+            string vhost = impl.VirtualHost.Value;
+            
+            if (string.IsNullOrWhiteSpace(policy))
                 throw new PolicyNameMissingException("The name of the policy is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/policies/{sanitizedVHost}/{impl.PolicyName}";
+            string url = $"api/policies/{sanitizedVHost}/{policy}";
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.PolicyName}' in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -79,20 +82,23 @@ namespace HareDu.Internal.Resources
             var impl = new PolicyDeleteActionImpl();
             action(impl);
             
-            if (string.IsNullOrWhiteSpace(impl.Policy))
+            string policy = impl.PolicyName.Value;
+            string vhost = impl.VirtualHost.Value;
+            
+            if (string.IsNullOrWhiteSpace(policy))
                 throw new PolicyNameMissingException("The name of the policy is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/policies/{sanitizedVHost}/{impl.Policy}";
+            string url = $"api/policies/{sanitizedVHost}/{policy}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{impl.Policy}' in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -101,12 +107,36 @@ namespace HareDu.Internal.Resources
         class PolicyDeleteActionImpl :
             PolicyDeleteAction
         {
-            public string Policy { get; private set; }
-            public string VirtualHost { get; private set; }
+            static string _vhost;
+            static string _policy;
             
-            public void Resource(string name) => Policy = name;
+            public Lazy<string> PolicyName { get; }
+            public Lazy<string> VirtualHost { get; }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            public PolicyDeleteActionImpl()
+            {
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void Policy(string name) => _policy = name;
+            
+            public void Target(Action<PolicyTarget> target)
+            {
+                var impl = new PolicyTargetImpl();
+                target(impl);
+
+                _vhost = impl.VirtualHostName;
+            }
+
+            
+            class PolicyTargetImpl :
+                PolicyTarget
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
         }
 
         
@@ -117,19 +147,27 @@ namespace HareDu.Internal.Resources
             static IDictionary<string, object> _arguments;
             static int _priority;
             static string _applyTo;
+            static string _policy;
+            static string _vhost;
             
             public Lazy<DefinedPolicySettings> Settings { get; }
-            public string VirtualHost { get; private set; }
-            public string PolicyName { get; private set; }
+            public Lazy<string> VirtualHost { get; }
+            public Lazy<string> PolicyName { get; }
 
-            public PolicyCreateActionImpl() => Settings = new Lazy<DefinedPolicySettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public PolicyCreateActionImpl()
+            {
+                Settings = new Lazy<DefinedPolicySettings>(
+                    () => new DefinedPolicySettingsImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            DefinedPolicySettings Init() => new DefinedPolicySettingsImpl(_pattern, _arguments, _priority, _applyTo);
+            public void Policy(string name) => _policy = name;
 
-            public void Configure(Action<PolicyConfiguration> definition)
+            public void Configure(Action<PolicyConfiguration> configuration)
             {
                 var impl = new PolicyConfigurationImpl();
-                definition(impl);
+                configuration(impl);
 
                 _applyTo = impl.AppllyTo;
                 _pattern = impl.Pattern;
@@ -143,27 +181,37 @@ namespace HareDu.Internal.Resources
                         throw new PolicyDefinitionException($"Argument 'ha-mode' was set without a corresponding value.");
 
                     string mode = value.ToString().Trim();
-                    if (((mode.ConvertTo() == HighAvailabilityModes.Exactly) || (mode.ConvertTo() == HighAvailabilityModes.Nodes)) && !_arguments.ContainsKey("ha-params"))
-                        throw new PolicyDefinitionException(
-                            $"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set");
+                    if (((mode.ConvertTo() == HighAvailabilityModes.Exactly) || (mode.ConvertTo() == HighAvailabilityModes.Nodes)) &&
+                        !_arguments.ContainsKey("ha-params"))
+                        throw new PolicyDefinitionException($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set");
                 }
+            }
+            
+            public void Target(Action<PolicyTarget> target)
+            {
+                var impl = new PolicyTargetImpl();
+                target(impl);
 
-                PolicyName = impl.PolicyName;
+                _vhost = impl.VirtualHostName;
             }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            
+            class PolicyTargetImpl :
+                PolicyTarget
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
 
 
             class PolicyConfigurationImpl :
                 PolicyConfiguration
             {
-                public string PolicyName { get; private set; }
                 public int Priority { get; private set; }
                 public string Pattern { get; private set; }
                 public string AppllyTo { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
-                
-                public void Policy(string name) => PolicyName = name;
 
                 public void UsingPattern(string pattern) => Pattern = pattern;
 
