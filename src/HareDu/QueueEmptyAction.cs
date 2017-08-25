@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
+
     public interface QueueEmptyAction
     {
-        void OnVirtualHost(string vhost);
-
         void Queue(string name);
+
+        void Target(Action<QueueTarget> target);
     }
 }

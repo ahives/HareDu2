@@ -19,8 +19,8 @@ namespace HareDu
     {
         void Queue(string name);
 
-        void On(Action<DeleteQueueOn> target);
+        void Target(Action<QueueTarget> target);
 
-        void WithConditions(Action<DeleteQueueCondition> condition);
+        void WithConditions(Action<QueueDeleteCondition> condition);
     }
 }

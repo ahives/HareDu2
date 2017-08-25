@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface DeleteQueueOn
+    public interface QueueTarget
     {
         void VirtualHost(string vhost);
     }

@@ -21,6 +21,6 @@ namespace HareDu
         
         void Configure(Action<QueueConfiguration> definition);
 
-        void On(Action<CreateQueueOn> location);
+        void Target(Action<QueueCreateTarget> target);
     }
 }

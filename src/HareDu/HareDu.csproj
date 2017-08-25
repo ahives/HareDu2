@@ -75,9 +75,9 @@
     <Compile Include="Configuration\HareDuCredentials.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
-    <Compile Include="CreateQueueOn.cs" />
+    <Compile Include="QueueCreateTarget.cs" />
     <Compile Include="UserPermissionsTarget.cs" />
-    <Compile Include="DeleteQueueOn.cs" />
+    <Compile Include="QueueTarget.cs" />
     <Compile Include="Exceptions\BindingException.cs" />
     <Compile Include="Exceptions\ExchangeDefinitionException.cs" />
     <Compile Include="Exceptions\HareDuClientConfigurationException.cs" />
@@ -250,7 +250,7 @@
     <Compile Include="QueueConfiguration.cs" />
     <Compile Include="QueueCreateArguments.cs" />
     <Compile Include="QueueCreateAction.cs" />
-    <Compile Include="DeleteQueueCondition.cs" />
+    <Compile Include="QueueDeleteCondition.cs" />
     <Compile Include="Queue.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="Node.cs" />

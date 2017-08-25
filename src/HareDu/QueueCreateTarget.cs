@@ -13,10 +13,10 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface DeleteQueueCondition
+    public interface QueueCreateTarget
     {
-        void IfUnused();
-        
-        void IfEmpty();
+        void Node(string node);
+
+        void VirtualHost(string vhost);
     }
 }

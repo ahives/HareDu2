@@ -24,10 +24,10 @@
                             arg.SetQueueExpiration(1000);
                         });
                     });
-                    x.On(l =>
+                    x.Target(t =>
                     {
-                        l.Node("MyNode1");
-                        l.VirtualHost("HareDu");
+                        t.Node("MyNode1");
+                        t.VirtualHost("HareDu");
                     });
                 });
         }
@@ -59,7 +59,7 @@
                 .Delete(x =>
                 {
                     x.Queue("");
-                    x.On(l => l.VirtualHost("HareDu"));
+                    x.Target(l => l.VirtualHost("HareDu"));
                     x.WithConditions(c =>
                     {
                         c.IfUnused();
@@ -76,7 +76,7 @@
                 .Peek(x =>
                 {
                     x.Queue("");
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
         }
     }
