@@ -39,7 +39,7 @@
                 .Factory<Binding>()
                 .Create(x =>
                 {
-                    x.Bind(b =>
+                    x.Binding(b =>
                     {
                         b.Source("E2");
                         b.Destination("Q1");

@@ -132,9 +132,9 @@ namespace HareDu.Internal.Resources
 
             public void Exchange(string name) => _exchange = name;
 
-            public void WithConditions(Action<DeleteExchangeCondition> condition)
+            public void WithConditions(Action<ExchangeDeleteCondition> condition)
             {
-                var impl = new DeleteExchangeConditionImpl();
+                var impl = new ExchangeDeleteConditionImpl();
                 condition(impl);
 
                 string query = string.Empty;
@@ -162,8 +162,8 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class DeleteExchangeConditionImpl :
-                DeleteExchangeCondition
+            class ExchangeDeleteConditionImpl :
+                ExchangeDeleteCondition
             {
                 public bool DeleteIfUnused { get; private set; }
 

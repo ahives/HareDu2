@@ -13,14 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface BindingCreateAction
+    public interface ExchangeTarget
     {
-        void Binding(Action<BindingCreateDefinition> definition);
-        
-        void Configure(Action<BindingConfiguration> configuration);
-
-        void Target(Action<BindingTarget> target);
+        void VirtualHost(string vhost);
     }
 }

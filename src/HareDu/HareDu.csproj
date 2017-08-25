@@ -75,7 +75,9 @@
     <Compile Include="Configuration\HareDuCredentials.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
+    <Compile Include="ExchangeTarget.cs" />
     <Compile Include="GlobalParameterConfiguration.cs" />
+    <Compile Include="Internal\ExchangeSettings.cs" />
     <Compile Include="PolicyTarget.cs" />
     <Compile Include="QueueCreateTarget.cs" />
     <Compile Include="ScopedParameterTarget.cs" />
@@ -92,7 +94,7 @@
     <Compile Include="Cluster.cs" />
     <Compile Include="Exceptions\HostUrlMissingException.cs" />
     <Compile Include="Exceptions\QueueMissingException.cs" />
-    <Compile Include="DeleteExchangeCondition.cs" />
+    <Compile Include="ExchangeDeleteCondition.cs" />
     <Compile Include="Exceptions\ExchangeMissingException.cs" />
     <Compile Include="Exceptions\DeleteVirtualHostException.cs" />
     <Compile Include="Exceptions\ExchangeRoutingTypeMissingException.cs" />
@@ -106,7 +108,6 @@
     <Compile Include="ExchangeDefinitionArguments.cs" />
     <Compile Include="ExchangeDeleteAction.cs" />
     <Compile Include="ExchangeRoutingType.cs" />
-    <Compile Include="ExchangeSettings.cs" />
     <Compile Include="GlobalParameter.cs" />
     <Compile Include="GlobalParameterArguments.cs" />
     <Compile Include="GlobalParameterCreateAction.cs" />

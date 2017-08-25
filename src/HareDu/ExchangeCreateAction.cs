@@ -23,9 +23,4 @@ namespace HareDu
 
         void Target(Action<ExchangeTarget> target);
     }
-
-    public interface ExchangeTarget
-    {
-        void VirtualHost(string vhost);
-    }
 }

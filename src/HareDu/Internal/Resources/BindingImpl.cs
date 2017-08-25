@@ -201,7 +201,7 @@ namespace HareDu.Internal.Resources
             public BindingCreateActionImpl() => Settings = new Lazy<BindingCreateSettings>(
                 () => new BindingCreateSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination, _bindingType), LazyThreadSafetyMode.PublicationOnly);
 
-            public void Bind(Action<BindingCreateDefinition> definition)
+            public void Binding(Action<BindingCreateDefinition> definition)
             {
                 var impl = new BindingCreateDefinitionImpl();
                 definition(impl);

@@ -21,6 +21,6 @@ namespace HareDu
 
         void Target(Action<ExchangeTarget> target);
 
-        void WithConditions(Action<DeleteExchangeCondition> condition);
+        void WithConditions(Action<ExchangeDeleteCondition> condition);
     }
 }
