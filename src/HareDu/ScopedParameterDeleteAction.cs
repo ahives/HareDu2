@@ -13,12 +13,12 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
+
     public interface ScopedParameterDeleteAction
     {
         void Parameter(string name);
 
-        void OnComponent(string component);
-
-        void OnVirtualHost(string vhost);
+        void Target(Action<ScopedParameterTarget> target);
     }
 }

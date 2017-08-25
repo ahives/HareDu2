@@ -13,12 +13,12 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
+
     public interface ScopedParameterCreateAction
     {
-        void OnComponent(string component);
-
-        void OnVirtualHost(string vhost);
-
         void Parameter(string name, string value);
+
+        void Target(Action<ScopedParameterTarget> target);
     }
 }

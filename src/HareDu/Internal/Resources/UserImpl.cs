@@ -55,18 +55,20 @@ namespace HareDu.Internal.Resources
 
             UserSettings settings = impl.Settings.Value;
 
-            if (string.IsNullOrWhiteSpace(impl.User))
+            string user = impl.User.Value;
+            
+            if (string.IsNullOrWhiteSpace(user))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
             
             if (string.IsNullOrWhiteSpace(settings.Password) && string.IsNullOrWhiteSpace(settings.PasswordHash))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
                     
-            string url = $"api/users/{impl.User}";
+            string url = $"api/users/{user}";
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create user '{impl.User}'");
+            LogInfo($"Sent request to RabbitMQ server to create user '{user}'");
 
             return result;
         }
@@ -107,16 +109,19 @@ namespace HareDu.Internal.Resources
             static string _password;
             static string _passwordHash;
             static string _tags;
+            static string _user;
             
             public Lazy<UserSettings> Settings { get; }
-            public string User { get; private set; }
+            public Lazy<string> User { get; }
 
             public UserCreateActionImpl()
-                => Settings = new Lazy<UserSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            {
+                Settings = new Lazy<UserSettings>(
+                    () => new UserSettingsImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
+                User = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            UserSettings Init() => new UserSettingsImpl(_password, _passwordHash, _tags);
-
-            public void Username(string username) => User = username;
+            public void Username(string username) => _user = username;
 
             public void Password(string password) => _password = password;
 

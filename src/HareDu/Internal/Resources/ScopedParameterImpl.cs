@@ -73,16 +73,20 @@ namespace HareDu.Internal.Resources
 
             var impl = new ScopedParameterDeleteActionImpl();
             action(impl);
+
+            string scopedParameter = impl.ScopedParameter.Value;
+            string virtualHost = impl.VirtualHost.Value;
+            string component = impl.Component.Value;
             
-            if (string.IsNullOrWhiteSpace(impl.ScopedParameter))
+            if (string.IsNullOrWhiteSpace(scopedParameter))
                 throw new ParameterMissingException("The name of the parameter is missing.");
 
-            string url = $"api/parameters/{impl.Component}/{impl.VirtualHost}/{impl.ScopedParameter}";
+            string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{impl.ScopedParameter}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{scopedParameter}'.");
 
             return result;
         }
@@ -91,15 +95,43 @@ namespace HareDu.Internal.Resources
         class ScopedParameterDeleteActionImpl :
             ScopedParameterDeleteAction
         {
-            public string ScopedParameter { get; private set; }
-            public string Component { get; private set; }
-            public string VirtualHost { get; private set; }
+            static string _vhost;
+            static string _component;
+            static string _scopedParameter;
+            
+            public Lazy<string> ScopedParameter { get; }
+            public Lazy<string> Component { get; }
+            public Lazy<string> VirtualHost { get; }
 
-            public void Parameter(string name) => ScopedParameter = name;
+            public ScopedParameterDeleteActionImpl()
+            {
+                ScopedParameter = new Lazy<string>(() => _scopedParameter, LazyThreadSafetyMode.PublicationOnly);
+                Component = new Lazy<string>(() => _component, LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            public void OnComponent(string component) => Component = component;
+            public void Parameter(string name) => _scopedParameter = name;
+            
+            public void Target(Action<ScopedParameterTarget> target)
+            {
+                var impl = new ScopedParameterTargetImpl();
+                target(impl);
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+                _vhost = impl.VirtualHostName;
+                _component = impl.ComponentName;
+            }
+
+            
+            class ScopedParameterTargetImpl :
+                ScopedParameterTarget
+            {
+                public string ComponentName { get; private set; }
+                public string VirtualHostName { get; private set; }
+
+                public void Component(string component) => ComponentName = component;
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
         }
 
         
@@ -113,18 +145,34 @@ namespace HareDu.Internal.Resources
             
             public Lazy<ScopedParameterSettings> Settings { get; }
 
-            public ScopedParameterCreateActionImpl() => Settings = new Lazy<ScopedParameterSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public ScopedParameterCreateActionImpl() => Settings = new Lazy<ScopedParameterSettings>(
+                () => new ScopedParameterSettingsImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
 
-            ScopedParameterSettings Init() => new ScopedParameterSettingsImpl(_vhost, _component, _name, _value);
-
-            public void OnComponent(string component) => _component = component;
-
-            public void OnVirtualHost(string vhost) => _vhost = vhost;
-            
             public void Parameter(string name, string value)
             {
                 _name = name;
                 _value = value;
+            }
+            
+            public void Target(Action<ScopedParameterTarget> target)
+            {
+                var impl = new ScopedParameterTargetImpl();
+                target(impl);
+
+                _vhost = impl.VirtualHostName;
+                _component = impl.ComponentName;
+            }
+
+            
+            class ScopedParameterTargetImpl :
+                ScopedParameterTarget
+            {
+                public string ComponentName { get; private set; }
+                public string VirtualHostName { get; private set; }
+
+                public void Component(string component) => ComponentName = component;
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
             }
 
             

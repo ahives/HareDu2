@@ -328,10 +328,10 @@ namespace HareDu.Internal.Resources
 
             public void Queue(string name) => _queue = name;
 
-            public void Configure(Action<QueueConfiguration> definition)
+            public void Configure(Action<QueueConfiguration> configuration)
             {
                 var impl = new QueueConfigurationImpl();
-                definition(impl);
+                configuration(impl);
 
                 _durable = impl.Durable;
                 _autoDelete = impl.AutoDelete;

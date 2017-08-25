@@ -13,14 +13,10 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface QueueCreateAction
+    public interface ScopedParameterTarget
     {
-        void Queue(string name);
-        
-        void Configure(Action<QueueConfiguration> configuration);
+        void Component(string component);
 
-        void Target(Action<QueueCreateTarget> target);
+        void VirtualHost(string vhost);
     }
 }

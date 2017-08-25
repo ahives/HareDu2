@@ -76,6 +76,7 @@
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="QueueCreateTarget.cs" />
+    <Compile Include="ScopedParameterTarget.cs" />
     <Compile Include="UserPermissionsTarget.cs" />
     <Compile Include="QueueTarget.cs" />
     <Compile Include="Exceptions\BindingException.cs" />

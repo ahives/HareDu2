@@ -16,8 +16,11 @@
                 .Create(x =>
                 {
                     x.Parameter("test", "me");
-                    x.OnComponent("federation");
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t =>
+                    {
+                        t.Component("federation");
+                        t.VirtualHost("HareDu");
+                    });
                 });
             
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -34,8 +37,11 @@
                 .Delete(x =>
                 {
                     x.Parameter("");
-                    x.OnComponent("");
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t =>
+                    {
+                        t.Component("federation");
+                        t.VirtualHost("HareDu");
+                    });
                 });
         }
     }
