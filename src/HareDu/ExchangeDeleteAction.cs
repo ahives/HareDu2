@@ -19,7 +19,7 @@ namespace HareDu
     {
         void Exchange(string name);
 
-        void OnVirtualHost(string vhost);
+        void Target(Action<ExchangeTarget> target);
 
         void WithConditions(Action<DeleteExchangeCondition> condition);
     }

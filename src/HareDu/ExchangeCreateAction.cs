@@ -17,8 +17,15 @@ namespace HareDu
 
     public interface ExchangeCreateAction
     {
-        void Configure(Action<ExchangeConfiguration> definition);
-        
-        void OnVirtualHost(string vhost);
+        void Exchange(string name);
+
+        void Configure(Action<ExchangeConfiguration> configuration);
+
+        void Target(Action<ExchangeTarget> target);
+    }
+
+    public interface ExchangeTarget
+    {
+        void VirtualHost(string vhost);
     }
 }

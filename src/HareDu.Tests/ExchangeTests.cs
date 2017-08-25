@@ -40,9 +40,9 @@
                 .Factory<Exchange>()
                 .Create(x =>
                 {
+                    x.Exchange("E3");
                     x.Configure(c =>
                     {
-                        c.Exchange("E3");
                         c.IsDurable();
                         c.IsForInternalUse();
                         c.UsingRoutingType(ExchangeRoutingType.Fanout);
@@ -51,7 +51,7 @@
 //                            arg.Set("", "");
 //                        });
                     });
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
 
             Console.WriteLine("Reason: {0}", result.Reason);
@@ -67,7 +67,7 @@
                 .Delete(x =>
                 {
                     x.Exchange("E3");
-                    x.OnVirtualHost("HareDu");
+                    x.Target(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
                 });
         }

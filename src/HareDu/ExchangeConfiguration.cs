@@ -17,8 +17,6 @@ namespace HareDu
 
     public interface ExchangeConfiguration
     {
-        void Exchange(string name);
-
         void UsingRoutingType(ExchangeRoutingType routingType);
 
         void IsDurable();

@@ -54,23 +54,26 @@ namespace HareDu.Internal.Resources
 
             ExchangeSettings settings = impl.Settings.Value;
 
-            if (string.IsNullOrWhiteSpace(impl.ExchangeName))
+            string exchange = impl.ExchangeName.Value;
+            string vhost = impl.VirtualHost.Value;
+            
+            if (string.IsNullOrWhiteSpace(exchange))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
             if (string.IsNullOrWhiteSpace(settings?.RoutingType))
                 throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
+            
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
-
-            string url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}";
+            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
             HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create exchange '{impl.ExchangeName} in virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange}' in virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -81,24 +84,29 @@ namespace HareDu.Internal.Resources
 
             var impl = new ExchangeDeleteActionImpl();
             action(impl);
+
+            string exchange = impl.ExchangeName.Value;
+            string vhost = impl.VirtualHost.Value;
             
-            if (string.IsNullOrWhiteSpace(impl.ExchangeName))
+            if (string.IsNullOrWhiteSpace(exchange))
                 throw new ExchangeMissingException("The name of the exchange is missing.");
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
-            string sanitizedVHost = impl.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}";
+            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            if (!string.IsNullOrWhiteSpace(impl.Query))
-                url = $"api/exchanges/{sanitizedVHost}/{impl.ExchangeName}?{impl.Query}";
+            string query = impl.Query.Value;
+            
+            if (!string.IsNullOrWhiteSpace(query))
+                url = $"api/exchanges/{sanitizedVHost}/{exchange}?{query}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{impl.ExchangeName}' from virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -107,13 +115,22 @@ namespace HareDu.Internal.Resources
         class ExchangeDeleteActionImpl :
             ExchangeDeleteAction
         {
-            public string Query { get; private set; }
-            public string ExchangeName { get; private set; }
-            public string VirtualHost { get; private set; }
+            static string _vhost;
+            static string _exchange;
+            static string _query;
 
-            public void Exchange(string name) => ExchangeName = name;
+            public Lazy<string> Query { get; }
+            public Lazy<string> VirtualHost { get; }
+            public Lazy<string> ExchangeName { get; }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            public ExchangeDeleteActionImpl()
+            {
+                Query = new Lazy<string>(() => _query, LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void Exchange(string name) => _exchange = name;
 
             public void WithConditions(Action<DeleteExchangeCondition> condition)
             {
@@ -124,7 +141,24 @@ namespace HareDu.Internal.Resources
                 if (impl.DeleteIfUnused)
                     query = "if-unused=true";
 
-                Query = query;
+                _query = query;
+            }
+
+            public void Target(Action<ExchangeTarget> target)
+            {
+                var impl = new ExchangeTargetImpl();
+                target(impl);
+
+                _vhost = impl.VirtualHostName;
+            }
+
+            
+            class ExchangeTargetImpl :
+                ExchangeTarget
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
             }
 
 
@@ -146,43 +180,61 @@ namespace HareDu.Internal.Resources
             static bool _autoDelete;
             static bool _internal;
             static IDictionary<string, object> _arguments;
-            
+            static string _vhost;
+            static string _exchange;
+
             public Lazy<ExchangeSettings> Settings { get; }
-            public string VirtualHost { get; private set; }
-            public string ExchangeName { get; private set; }
+            public Lazy<string> VirtualHost { get; }
+            public Lazy<string> ExchangeName { get; }
 
-            public ExchangeCreateActionImpl() => Settings = new Lazy<ExchangeSettings>(Init, LazyThreadSafetyMode.PublicationOnly);
+            public ExchangeCreateActionImpl()
+            {
+                Settings = new Lazy<ExchangeSettings>(
+                    () => new ExchangeSettingsImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
+            }
 
-            static ExchangeSettings Init() => new ExchangeSettingsImpl(_routingType, _durable, _autoDelete, _internal, _arguments);
+            public void Exchange(string name) => _exchange = name;
 
-            public void Configure(Action<ExchangeConfiguration> definition)
+            public void Configure(Action<ExchangeConfiguration> configuration)
             {
                 var impl = new ExchangeConfigurationImpl();
-                definition(impl);
+                configuration(impl);
 
                 _durable = impl.Durable;
                 _routingType = impl.RoutingType;
                 _autoDelete = impl.AutoDelete;
                 _internal = impl.InternalUse;
                 _arguments = impl.Arguments;
-
-                ExchangeName = impl.ExchangeName;
             }
 
-            public void OnVirtualHost(string vhost) => VirtualHost = vhost;
+            public void Target(Action<ExchangeTarget> target)
+            {
+                var impl = new ExchangeTargetImpl();
+                target(impl);
+
+                _vhost = impl.VirtualHostName;
+            }
+
+            
+            class ExchangeTargetImpl :
+                ExchangeTarget
+            {
+                public string VirtualHostName { get; private set; }
+
+                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            }
 
 
             class ExchangeConfigurationImpl :
                 ExchangeConfiguration
             {
-                public string ExchangeName { get; private set; }
                 public string RoutingType { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
                 public bool Durable { get; private set; }
                 public bool InternalUse { get; private set; }
                 public bool AutoDelete { get; private set; }
-
-                public void Exchange(string name) => ExchangeName = name;
 
                 public void UsingRoutingType(ExchangeRoutingType routingType)
                 {
