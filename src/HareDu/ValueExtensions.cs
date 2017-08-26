@@ -70,6 +70,8 @@ namespace HareDu
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
         }
+
+        public static bool IsNull<T>(this T value) => value == null;
         
         public static bool HasValue<T>(this Result<T> source) => source != null && source.Data != null;
 

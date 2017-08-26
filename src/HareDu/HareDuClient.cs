@@ -37,12 +37,11 @@ namespace HareDu
 
                 HareDuClientSettings settings = init.Settings.Value;
 
-                if (init.Settings == null || settings == null)
-                    throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+                ValidateSettings(settings);
 
-                HttpClient httpClient = GetHttpClient(settings);
+                HttpClient client = GetHttpClient(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(httpClient, settings);
+                HareDuFactory factory = new HareDuFactoryImpl(client, settings);
 
                 return factory;
             }
@@ -56,14 +55,13 @@ namespace HareDu
         {
             try
             {
-                var settings = SerializerCache.Deserializer.Deserialize<HareDuClientSettings>(new JsonTextReader(new StringReader(configuration)));
+                HareDuClientSettings settings = SerializerCache.Deserializer.Deserialize<HareDuClientSettings>(new JsonTextReader(new StringReader(configuration)));
 
-                if (settings == null)
-                    throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+                ValidateSettings(settings);
 
-                HttpClient httpClient = GetHttpClient(settings);
+                HttpClient client = GetHttpClient(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(httpClient, settings);
+                HareDuFactory factory = new HareDuFactoryImpl(client, settings);
 
                 return factory;
             }
@@ -82,9 +80,11 @@ namespace HareDu
                 
                 HareDuClientSettings settings = configuration();
 
-                HttpClient httpClient = GetHttpClient(settings);
+                ValidateSettings(settings);
+
+                HttpClient client = GetHttpClient(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(httpClient, settings);
+                HareDuFactory factory = new HareDuFactoryImpl(client, settings);
 
                 return factory;
             }
@@ -92,6 +92,18 @@ namespace HareDu
             {
                 throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
             }
+        }
+
+        static void ValidateSettings(HareDuClientSettings settings)
+        {
+            if (settings.IsNull())
+                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+            if (settings.Credentials.IsNull() || string.IsNullOrWhiteSpace(settings.Credentials.Username) || string.IsNullOrWhiteSpace(settings.Credentials.Password))
+                throw new UserCredentialsMissingException("Username and password are required and cannot be empty.");
+            
+            if (string.IsNullOrWhiteSpace(settings.Host))
+                throw new HostUrlMissingException("Host URL is required and cannot be empty.");
         }
 
         static HttpClient GetHttpClient(HareDuClientSettings settings)
@@ -131,13 +143,7 @@ namespace HareDu
                 () => new HareDuClientSettingsImpl(_host, _enableLogger, _logger, _loggerName, _timeout, _username, _password, _enableTransientRetry, _retryLimit),
                 LazyThreadSafetyMode.PublicationOnly);
 
-            public void ConnectTo(string host)
-            {
-                if (string.IsNullOrWhiteSpace(host))
-                    throw new HostUrlMissingException("Host URL is required and cannot be empty.");
-                
-                _host = host;
-            }
+            public void ConnectTo(string host) => _host = host;
 
             public void Logging(Action<LoggerSettings> settings)
             {
@@ -153,9 +159,6 @@ namespace HareDu
 
             public void UsingCredentials(string username, string password)
             {
-                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-                    throw new UserCredentialsMissingException("Username and password are required and cannot be empty.");
-                
                 _username = username;
                 _password = password;
             }

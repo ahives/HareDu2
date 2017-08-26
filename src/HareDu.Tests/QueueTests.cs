@@ -44,19 +44,22 @@
                 .Factory<Queue>()
                 .GetAllAsync();
             
-//            foreach (var queue in result)
-//            {
-//                Console.WriteLine("Name: {0}", queue.Name);
-//                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
-//                Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
-//                Console.WriteLine("****************************************************");
-//                Console.WriteLine();
-//            }
-//            using (StreamWriter sw = new StreamWriter("/users/albert/documents/git/test5.txt"))
-//            using (JsonWriter writer = new JsonTextWriter(sw))
-//            {
-//                SerializerCache.Serializer.Serialize(writer, result);
-//            }
+            foreach (var queue in result.Data)
+            {
+                Console.WriteLine("Name: {0}", queue.Name);
+                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
+                Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+
+        [Test]
+        public async Task Verify_can_get_all_json()
+        {
+            Result<IEnumerable<QueueInfo>> result = await Client
+                .Factory<Queue>()
+                .GetAllAsync();
 
             Console.WriteLine(result.ToJson());
         }

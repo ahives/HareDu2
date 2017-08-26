@@ -20,15 +20,20 @@ namespace HareDu.Configuration
     public interface HareDuClientSettings
     {
         string Host { get; }
+        
         bool EnableLogger { get; }
+        
         string LoggerName { get; }
         
         [JsonIgnore]
         ILog Logger { get; }
         
         TimeSpan Timeout { get; }
+        
         HareDuCredentials Credentials { get; }
+        
         bool EnableTransientRetry { get; }
+        
         int RetryLimit { get; }
     }
 }

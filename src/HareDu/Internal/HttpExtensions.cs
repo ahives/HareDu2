@@ -33,12 +33,7 @@ namespace HareDu.Internal
             return result;
         }
 
-        internal static Result GetResponse(this HttpResponseMessage responseMessage)
-        {
-            Result result = new ResultImpl(responseMessage);
-
-            return result;
-        }
+        internal static Result GetResponse(this HttpResponseMessage responseMessage) => new ResultImpl(responseMessage);
 
         
         class ResultImpl<TData> :
