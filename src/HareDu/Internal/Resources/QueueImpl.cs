@@ -93,12 +93,12 @@ namespace HareDu.Internal.Resources
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/queues/{sanitizedVHost}/{impl.QueueName}";
+            string url = $"api/queues/{sanitizedVHost}/{queue}";
 
             string query = impl.Query.Value;
             
             if (string.IsNullOrWhiteSpace(query))
-                url = $"{url}?{impl.Query}";
+                url = $"{url}?{query}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
             Result result = response.GetResponse();

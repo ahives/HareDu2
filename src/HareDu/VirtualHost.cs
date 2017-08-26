@@ -23,7 +23,7 @@ namespace HareDu
         Resource
     {
         Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
-        
+
         Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
         Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
