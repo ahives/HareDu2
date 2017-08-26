@@ -16,6 +16,6 @@ namespace HareDu.Configuration
     public interface TransientRetrySettings
     {
         void Enable();
-        void RetryLimit(int retryLimit);
+        void Limit(int retryLimit);
     }
 }

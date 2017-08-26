@@ -15,7 +15,7 @@ namespace HareDu.Configuration
 {
     using System;
 
-    public interface HareDuClientBehavior
+    public interface HareDuClientConfiguration
     {
         void ConnectTo(string host);
 

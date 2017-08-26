@@ -19,14 +19,14 @@ namespace HareDu.Internal
     using Configuration;
     using Exceptions;
 
-    internal class HareDuClientImpl :
+    internal class HareDuFactoryImpl :
         Logging,
-        HareDuClient
+        HareDuFactory
     {
         readonly HttpClient _httpClient;
         readonly HareDuClientSettings _settings;
 
-        public HareDuClientImpl(HttpClient httpClient, HareDuClientSettings settings)
+        public HareDuFactoryImpl(HttpClient httpClient, HareDuClientSettings settings)
             : base(settings.LoggerName, settings.Logger, settings.EnableLogger)
         {
             _httpClient = httpClient;

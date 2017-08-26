@@ -70,7 +70,7 @@
     <Compile Include="BindingDeleteDefinition.cs" />
     <Compile Include="BindingType.cs" />
     <Compile Include="BindingTarget.cs" />
-    <Compile Include="Configuration\HareDuClientBehavior.cs" />
+    <Compile Include="Configuration\HareDuClientConfiguration.cs" />
     <Compile Include="Configuration\HareDuClientSettings.cs" />
     <Compile Include="Configuration\HareDuCredentials.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
@@ -113,8 +113,8 @@
     <Compile Include="GlobalParameterArguments.cs" />
     <Compile Include="GlobalParameterCreateAction.cs" />
     <Compile Include="GlobalParameterDeleteAction.cs" />
-    <Compile Include="HareDuClient.cs" />
     <Compile Include="HareDuFactory.cs" />
+    <Compile Include="HareDuClient.cs" />
     <Compile Include="HealthCheckType.cs" />
     <Compile Include="Internal\VirtualHostSettings.cs" />
     <Compile Include="PolicyDeleteAction.cs" />
@@ -129,7 +129,7 @@
     <Compile Include="Internal\BindingCreateSettings.cs" />
     <Compile Include="Internal\DefinedPolicySettings.cs" />
     <Compile Include="Internal\GlobalParameterSettings.cs" />
-    <Compile Include="Internal\HareDuClientImpl.cs" />
+    <Compile Include="Internal\HareDuFactoryImpl.cs" />
     <Compile Include="Internal\HttpExtensions.cs" />
     <Compile Include="Internal\Logging.cs" />
     <Compile Include="Internal\QueueSettings.cs" />

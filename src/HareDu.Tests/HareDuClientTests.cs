@@ -40,8 +40,8 @@
 
             string config = reader.ReadToEnd();
 
-            IEnumerable<VirtualHostInfo> vhosts = HareDuFactory
-                .Create(config)
+            IEnumerable<VirtualHostInfo> vhosts = HareDuClient
+                .Initialize(config)
                 .Factory<VirtualHost>()
                 .GetAllAsync()
                 .Where(x => x.Name == "HareDu");
@@ -58,8 +58,8 @@
         [Test]
         public void Verify_can_init_client_from_behavior_description()
         {
-            IEnumerable<VirtualHostInfo> vhosts = HareDuFactory
-                .Create(x =>
+            IEnumerable<VirtualHostInfo> vhosts = HareDuClient
+                .Initialize(x =>
                 {
                     x.ConnectTo("http://localhost:15672");
                     x.Logging(s =>
@@ -71,7 +71,7 @@
                     x.TransientRetry(s =>
                     {
                         s.Enable();
-                        s.RetryLimit(3);
+                        s.Limit(3);
                     });
                 })
                 .Factory<VirtualHost>()
@@ -90,8 +90,8 @@
         [Test]
         public void Verify_can_init_client_from_settings_object()
         {
-            var vhosts = HareDuFactory
-                .Create(() => new HareDuClientSettingsImpl(
+            var vhosts = HareDuClient
+                .Initialize(() => new HareDuClientSettingsImpl(
                     "http://localhost:15672",
                     true,
                     "HareDuLogger",
