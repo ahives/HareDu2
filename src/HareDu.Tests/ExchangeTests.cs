@@ -16,7 +16,7 @@
         {
             IEnumerable<ExchangeInfo> result = Client
                 .Factory<Exchange>()
-                .GetAll()
+                .GetAllAsync()
                 .Where(x => x.Name == "HareDu");
 
             foreach (var exchange in result)
@@ -38,7 +38,7 @@
 
             Result result = await Client
                 .Factory<Exchange>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Exchange("E3");
                     x.Configure(c =>
@@ -64,7 +64,7 @@
         {
             Result result = await Client
                 .Factory<Exchange>()
-                .Delete(x =>
+                .DeleteAsync(x =>
                 {
                     x.Exchange("E3");
                     x.Target(t => t.VirtualHost("HareDu"));

@@ -31,7 +31,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -45,7 +45,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> CreateAsync(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -71,7 +71,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

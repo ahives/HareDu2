@@ -29,7 +29,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<ServerHealth>> CheckUp(Action<ServerHealthCheckConstraints> constraints, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ServerHealth>> CheckUpAsync(Action<ServerHealthCheckConstraints> constraints, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

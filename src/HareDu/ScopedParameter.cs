@@ -23,10 +23,10 @@ namespace HareDu
     public interface ScopedParameter :
         Resource
     {
-        Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<ScopedParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

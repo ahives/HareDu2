@@ -22,10 +22,10 @@ namespace HareDu
     public interface VirtualHost :
         Resource
     {
-        Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<VirtualHostInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

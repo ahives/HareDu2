@@ -29,7 +29,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -43,7 +43,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -57,7 +57,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

@@ -19,7 +19,7 @@
         {
             Result<IEnumerable<VirtualHostInfo>> result = await Client
                 .Factory<VirtualHost>()
-                .GetAll();
+                .GetAllAsync();
 
             Assert.IsTrue(result.HasValue());
 
@@ -37,7 +37,7 @@
         {
             Result result = await Client
                 .Factory<VirtualHost>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.VirtualHost("HareDu5");
                     x.Configure(c =>
@@ -57,7 +57,7 @@
         {
             Result result = await Client
                 .Factory<VirtualHost>()
-                .Delete(x => x.VirtualHost("HareDu2"));
+                .DeleteAsync(x => x.VirtualHost("HareDu2"));
 
             Console.WriteLine("Reason: {0}", result.Reason);
             Console.WriteLine("StatusCode: {0}", result.StatusCode);

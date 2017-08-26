@@ -13,12 +13,14 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
     using System.Net;
 
     public interface Result
     {
         string Reason { get; }
         HttpStatusCode StatusCode { get; }
+        DateTimeOffset Timestamp { get; }
     }
 
     public interface Result<out TData>
@@ -26,5 +28,6 @@ namespace HareDu
         TData Data { get; }
         string Reason { get; }
         HttpStatusCode StatusCode { get; }
+        DateTimeOffset Timestamp { get; }
     }
 }

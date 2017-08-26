@@ -22,10 +22,10 @@ namespace HareDu
     public interface User :
         Resource
     {
-        Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken());
+        Task<Result<IEnumerable<UserInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken());
 
-        Task<Result> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken());
+        Task<Result> CreateAsync(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken());
 
-        Task<Result> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken());
+        Task<Result> DeleteAsync(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken());
     }
 }

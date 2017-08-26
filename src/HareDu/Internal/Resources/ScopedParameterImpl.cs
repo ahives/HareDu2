@@ -31,7 +31,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ScopedParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -45,7 +45,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> CreateAsync(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
             
@@ -67,7 +67,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

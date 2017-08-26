@@ -21,6 +21,6 @@ namespace HareDu
     public interface Server :
         Resource
     {
-        Task<Result<ServerHealth>> CheckUp(Action<ServerHealthCheckConstraints> constraints, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<ServerHealth>> CheckUpAsync(Action<ServerHealthCheckConstraints> constraints, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

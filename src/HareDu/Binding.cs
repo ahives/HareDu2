@@ -22,10 +22,10 @@ namespace HareDu
     public interface Binding :
         Resource
     {
-        Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<BindingInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<BindingCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

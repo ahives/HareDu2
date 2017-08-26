@@ -31,7 +31,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<PolicyInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -45,7 +45,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result> CreateAsync(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -75,7 +75,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

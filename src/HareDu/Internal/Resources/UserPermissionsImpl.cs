@@ -31,7 +31,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<UserAccessInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<UserAccessInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -45,7 +45,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> CreateAsync(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -75,7 +75,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

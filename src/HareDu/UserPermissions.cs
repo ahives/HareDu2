@@ -22,10 +22,10 @@ namespace HareDu
     public interface UserPermissions :
         Resource
     {
-        Task<Result<IEnumerable<UserAccessInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<UserAccessInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

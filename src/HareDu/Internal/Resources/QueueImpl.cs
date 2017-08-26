@@ -31,7 +31,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<QueueInfo>>> GetAll(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<QueueInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -45,7 +45,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> CreateAsync(Action<QueueCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -75,7 +75,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(Action<QueueDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -108,7 +108,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> EmptyAsync(Action<QueueEmptyAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -136,7 +136,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> PeekAsync(Action<QueuePeekAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

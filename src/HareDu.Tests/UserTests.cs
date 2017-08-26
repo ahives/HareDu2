@@ -15,7 +15,7 @@
         {
             Result<IEnumerable<UserInfo>> result = await Client
                 .Factory<User>()
-                .GetAll();
+                .GetAllAsync();
 
             foreach (var user in result.Data)
             {
@@ -38,7 +38,7 @@
         {
             Result result = await Client
                 .Factory<User>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Username("testuser1");
                     x.Password("testuserpwd1");
@@ -56,7 +56,7 @@
         {
             Result result = await Client
                 .Factory<User>()
-                .Delete(x => x.User(""));
+                .DeleteAsync(x => x.User(""));
         }
     }
 }

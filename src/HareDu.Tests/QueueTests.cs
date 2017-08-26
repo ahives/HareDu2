@@ -18,7 +18,7 @@
         {
             Result result = await Client
                 .Factory<Queue>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Queue("TestQueue2");
                     x.Configure(c =>
@@ -42,7 +42,7 @@
         {
             Result<IEnumerable<QueueInfo>> result = await Client
                 .Factory<Queue>()
-                .GetAll();
+                .GetAllAsync();
             
 //            foreach (var queue in result)
 //            {
@@ -66,7 +66,7 @@
         {
             Result result = await Client
                 .Factory<Queue>()
-                .Delete(x =>
+                .DeleteAsync(x =>
                 {
                     x.Queue("");
                     x.Target(l => l.VirtualHost("HareDu"));
@@ -83,7 +83,19 @@
         {
             Result result = await Client
                 .Factory<Queue>()
-                .Peek(x =>
+                .PeekAsync(x =>
+                {
+                    x.Queue("");
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+        }
+
+        [Test]
+        public async Task Verify_can_empty_queue()
+        {
+            Result result = await Client
+                .Factory<Queue>()
+                .EmptyAsync(x =>
                 {
                     x.Queue("");
                     x.Target(t => t.VirtualHost("HareDu"));

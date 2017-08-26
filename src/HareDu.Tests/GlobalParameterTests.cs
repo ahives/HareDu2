@@ -11,7 +11,7 @@
         {
             Result result = await Client
                 .Factory<GlobalParameter>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Parameter("");
                     x.Configure(c =>
@@ -28,7 +28,7 @@
         {
             Result result = await Client
                 .Factory<GlobalParameter>()
-                .Delete(x => x.Parameter("Fred"));
+                .DeleteAsync(x => x.Parameter("Fred"));
         }
     }
 }

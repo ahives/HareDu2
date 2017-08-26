@@ -21,8 +21,8 @@ namespace HareDu
     public interface Cluster :
         Resource
     {
-        Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<ClusterInfo>> GetDetailsAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<NodeInfo>>> GetNodesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

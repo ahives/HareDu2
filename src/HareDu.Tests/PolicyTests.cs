@@ -15,7 +15,7 @@
         {
             Result result = await Client
                 .Factory<Policy>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Policy("P4");
                     x.Configure(p =>
@@ -41,7 +41,7 @@
         {
             Result result = await Client
                 .Factory<Policy>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Policy("P4");
                     x.Configure(p =>
@@ -67,7 +67,7 @@
         {
             Result result = await Client
                 .Factory<Policy>()
-                .Delete(x =>
+                .DeleteAsync(x =>
                 {
                     x.Policy("P4");
                     x.Target(t => t.VirtualHost("HareDu"));

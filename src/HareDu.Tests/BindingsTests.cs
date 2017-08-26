@@ -14,7 +14,7 @@
         {
             var result = await Client
                 .Factory<Binding>()
-                .GetAll();
+                .GetAllAsync();
             
             foreach (var binding in result.Data)
             {
@@ -37,7 +37,7 @@
         {
             Result result = await Client
                 .Factory<Binding>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Binding(b =>
                     {
@@ -62,7 +62,7 @@
         {
             Result result = await Client
                 .Factory<Binding>()
-                .Delete(x =>
+                .DeleteAsync(x =>
                 {
                     x.Binding(b =>
                     {

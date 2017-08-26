@@ -22,14 +22,14 @@ namespace HareDu
     public interface Queue :
         Resource
     {
-        Task<Result<IEnumerable<QueueInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<QueueInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<QueueCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> EmptyAsync(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Result> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> PeekAsync(Action<QueuePeekAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

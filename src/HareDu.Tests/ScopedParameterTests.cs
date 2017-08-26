@@ -13,7 +13,7 @@
         {
             Result result = await Client
                 .Factory<ScopedParameter>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.Parameter("test", "me");
                     x.Target(t =>
@@ -34,7 +34,7 @@
         {
             Result result = await Client
                 .Factory<ScopedParameter>()
-                .Delete(x =>
+                .DeleteAsync(x =>
                 {
                     x.Parameter("");
                     x.Target(t =>

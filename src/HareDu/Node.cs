@@ -21,10 +21,10 @@ namespace HareDu
     public interface Node :
         Resource
     {
-        Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -15,7 +15,7 @@
         {
             Result<IEnumerable<UserAccessInfo>> result = await Client
                 .Factory<UserPermissions>()
-                .GetAll();
+                .GetAllAsync();
             
             foreach (var access in result.Data)
             {
@@ -37,7 +37,7 @@
         {
             Result result = await Client
                 .Factory<UserPermissions>()
-                .Delete(x =>
+                .DeleteAsync(x =>
                 {
                     x.User("");
                     x.Target(t => t.VirtualHost("HareDu5"));
@@ -49,7 +49,7 @@
         {
             Result result = await Client
                 .Factory<UserPermissions>()
-                .Create(x =>
+                .CreateAsync(x =>
                 {
                     x.User("");
                     x.Configure(c =>

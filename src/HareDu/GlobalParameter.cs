@@ -21,10 +21,10 @@ namespace HareDu
     public interface GlobalParameter :
         Resource
     {
-        Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<GlobalParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -15,7 +15,7 @@
         {
             IEnumerable<VirtualHostInfo> vhosts = Client
                 .Factory<VirtualHost>()
-                .GetAll()
+                .GetAllAsync()
                 .Where(x => x.Name == "HareDu");
 
             foreach (var vhost in vhosts)
@@ -32,7 +32,7 @@
         {
             bool found = Client
                 .Factory<VirtualHost>()
-                .GetAll()
+                .GetAllAsync()
                 .Any();
             
             Assert.IsTrue(found);
@@ -43,7 +43,7 @@
         {
             bool found = Client
                 .Factory<VirtualHost>()
-                .GetAll()
+                .GetAllAsync()
                 .Any(x => x.Name == "HareDu");
             
             Assert.IsTrue(found);
@@ -54,7 +54,7 @@
         {
             ExchangeInfo exchange = Client
                 .Factory<Exchange>()
-                .GetAll()
+                .GetAllAsync()
                 .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")
                 .FirstOrDefault();
  

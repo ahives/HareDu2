@@ -22,10 +22,10 @@ namespace HareDu
     public interface Policy :
         Resource
     {
-        Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<PolicyInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

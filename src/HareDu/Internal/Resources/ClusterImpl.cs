@@ -29,7 +29,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ClusterInfo>> GetDetailsAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -43,7 +43,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<NodeInfo>>> GetNodesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 

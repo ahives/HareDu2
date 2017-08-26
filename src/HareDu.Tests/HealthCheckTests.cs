@@ -16,7 +16,7 @@
         {
             Result<ServerHealth> result = await Client
                 .Factory<Server>()
-                .CheckUp(x =>
+                .CheckUpAsync(x =>
                 {
                     x.Name("HareDu");
                     x.Type(HealthCheckType.VirtualHost);
@@ -34,7 +34,7 @@
         {
             Result<IEnumerable<NodeInfo>> result = await Client
                 .Factory<Cluster>()
-                .GetNodes();
+                .GetNodesAsync();
 
             Assert.IsTrue(result.HasValue());
             
@@ -55,7 +55,7 @@
         {
             Result<IEnumerable<ChannelInfo>> result = await Client
                 .Factory<Node>()
-                .GetChannels();
+                .GetChannelsAsync();
 
             foreach (var node in result.Data)
             {
@@ -74,7 +74,7 @@
         {
             Result<ClusterInfo> result = await Client
                 .Factory<Cluster>()
-                .GetDetails();
+                .GetDetailsAsync();
 
             Console.WriteLine("ClusterName: {0}", result.Data.ClusterName);
 //            Console.WriteLine("TotalQueues: {0}", result.Data.ClusterObjects.TotalQueues);

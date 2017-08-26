@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
+    using System;
     using System.IO;
     using System.Net;
     using System.Net.Http;
@@ -48,11 +49,13 @@ namespace HareDu.Internal
                 Data = response;
                 Reason = responseMessage.ReasonPhrase;
                 StatusCode = responseMessage.StatusCode;
+                Timestamp = DateTimeOffset.UtcNow;
             }
 
             public TData Data { get; }
             public string Reason { get; }
             public HttpStatusCode StatusCode { get; }
+            public DateTimeOffset Timestamp { get; }
         }
 
         
@@ -63,10 +66,12 @@ namespace HareDu.Internal
             {
                 Reason = responseMessage.ReasonPhrase;
                 StatusCode = responseMessage.StatusCode;
+                Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string Reason { get; }
             public HttpStatusCode StatusCode { get; }
+            public DateTimeOffset Timestamp { get; }
         }
     }
 }

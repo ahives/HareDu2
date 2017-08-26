@@ -43,7 +43,7 @@
             IEnumerable<VirtualHostInfo> vhosts = HareDuFactory
                 .Create(config)
                 .Factory<VirtualHost>()
-                .GetAll()
+                .GetAllAsync()
                 .Where(x => x.Name == "HareDu");
             
             foreach (var vhost in vhosts)
@@ -75,7 +75,7 @@
                     });
                 })
                 .Factory<VirtualHost>()
-                .GetAll()
+                .GetAllAsync()
                 .Where(x => x.Name == "HareDu");
             
             foreach (var vhost in vhosts)
@@ -99,7 +99,7 @@
                     true,
                     3))
                 .Factory<VirtualHost>()
-                .GetAll()
+                .GetAllAsync()
                 .Where(x => x.Name == "HareDu");
                         
             foreach (var vhost in vhosts)

@@ -22,10 +22,10 @@ namespace HareDu
     public interface Exchange :
         Resource
     {
-        Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<ExchangeInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> CreateAsync(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result> DeleteAsync(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
