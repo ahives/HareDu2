@@ -13,14 +13,9 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface QueuePeekAction
+    public enum MessageEncoding
     {
-        void Queue(string name);
-
-        void Configure(Action<QueuePeekConfiguration> configuration);
-        
-        void Target(Action<QueuePeekTarget> target);
+        Auto,
+        Base64
     }
 }

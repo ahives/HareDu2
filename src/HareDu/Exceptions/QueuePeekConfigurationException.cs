@@ -11,16 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Exceptions
 {
     using System;
+    using System.Runtime.Serialization;
 
-    public interface QueuePeekAction
+    public class QueuePeekConfigurationException :
+        Exception
     {
-        void Queue(string name);
+        public QueuePeekConfigurationException()
+        {
+        }
 
-        void Configure(Action<QueuePeekConfiguration> configuration);
-        
-        void Target(Action<QueuePeekTarget> target);
+        protected QueuePeekConfigurationException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public QueuePeekConfigurationException(string message)
+            : base(message)
+        {
+        }
+
+        public QueuePeekConfigurationException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

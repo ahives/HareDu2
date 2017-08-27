@@ -75,12 +75,17 @@
     <Compile Include="Configuration\HareDuCredentials.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
+    <Compile Include="Exceptions\QueuePeekConfigurationException.cs" />
     <Compile Include="ExchangeTarget.cs" />
     <Compile Include="GlobalParameterConfiguration.cs" />
     <Compile Include="Internal\ExchangeSettings.cs" />
+    <Compile Include="Internal\QueuePeekSettings.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="MessageEncoding.cs" />
     <Compile Include="PolicyTarget.cs" />
     <Compile Include="QueueCreateTarget.cs" />
+    <Compile Include="QueuePeekConfiguration.cs" />
+    <Compile Include="QueuePeekTarget.cs" />
     <Compile Include="ScopedParameterTarget.cs" />
     <Compile Include="UserPermissionsTarget.cs" />
     <Compile Include="QueueTarget.cs" />

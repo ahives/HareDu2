@@ -11,16 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal
 {
-    using System;
+    using Newtonsoft.Json;
 
-    public interface QueuePeekAction
+    internal interface QueuePeekSettings
     {
-        void Queue(string name);
-
-        void Configure(Action<QueuePeekConfiguration> configuration);
+        [JsonProperty("count")]
+        int Take { get; }
         
-        void Target(Action<QueuePeekTarget> target);
+        [JsonProperty("requeue")]
+        bool PutBackWhenFinished { get; }
+        
+        [JsonProperty("encoding")]
+        string Encoding { get; }
+        
+        [JsonProperty("truncate")]
+        long TruncateMessageThreshold { get; }
     }
 }

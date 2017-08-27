@@ -89,6 +89,13 @@
                 .PeekAsync(x =>
                 {
                     x.Queue("");
+                    x.Configure(c =>
+                    {
+                        c.Take(5);
+                        c.PutBackWhenFinished();
+                        c.TruncateIfAbove(5000);
+                        c.Encoding(MessageEncoding.Auto);
+                    });
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
         }

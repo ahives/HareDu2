@@ -143,6 +143,14 @@ namespace HareDu.Internal.Resources
             var impl = new QueuePeekActionImpl();
             action(impl);
 
+            QueuePeekSettings settings = impl.Settings.Value;
+            
+            if (settings.Take < 1)
+                throw new QueuePeekConfigurationException("Must be set a value greater than 1.");
+
+            if (string.IsNullOrWhiteSpace(settings.Encoding))
+                throw new QueuePeekConfigurationException("Encoding must be set to auto or base64.");
+
             string queue = impl.QueueName.Value;
             string vhost = impl.VirtualHost.Value;
             
@@ -156,10 +164,10 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/get";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
+            HttpResponseMessage response = await HttpPost(url, settings, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to empty queue '{queue}' on virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to peek into queue '{queue}' on virtual host '{sanitizedVHost}' and pop {settings.Take} messages.");
 
             return result;
         }
@@ -170,32 +178,101 @@ namespace HareDu.Internal.Resources
         {
             static string _vhost;
             static string _queue;
+            static int _take;
+            static bool _putBackWhenFinished;
+            static string _encoding;
+            static long _truncateIfAbove;
 
+            public Lazy<QueuePeekSettings> Settings { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
 
             public QueuePeekActionImpl()
             {
+                Settings = new Lazy<QueuePeekSettings>(
+                    () => new QueuePeekSettingsImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Queue(string name) => _queue = name;
             
-            public void Target(Action<QueueTarget> target)
+            public void Configure(Action<QueuePeekConfiguration> configuration)
             {
-                var impl = new QueueTargetImpl();
+                var impl = new QueuePeekConfigurationImpl();
+                configuration(impl);
+
+                _take = impl.TakeAmount;
+                _putBackWhenFinished = impl.PutBack;
+                _encoding = impl.MessageEncoding;
+                _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
+            }
+
+            public void Target(Action<QueuePeekTarget> target)
+            {
+                var impl = new QueuePeekTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
             }
 
             
-            class QueueTargetImpl :
-                QueueTarget
+            class QueuePeekSettingsImpl :
+                QueuePeekSettings
+            {
+                public QueuePeekSettingsImpl(int take, bool putBackWhenFinished, string encoding, long truncateMessageThreshold)
+                {
+                    Take = take;
+                    PutBackWhenFinished = putBackWhenFinished;
+                    Encoding = encoding;
+                    TruncateMessageThreshold = truncateMessageThreshold;
+                }
+
+                public int Take { get; }
+                public bool PutBackWhenFinished { get; }
+                public string Encoding { get; }
+                public long TruncateMessageThreshold { get; }
+            }
+
+            
+            class QueuePeekConfigurationImpl :
+                QueuePeekConfiguration
+            {
+                public int TakeAmount { get; private set; }
+                public bool PutBack { get; private set; }
+                public string MessageEncoding { get; private set; }
+                public long TruncateMessageThresholdInBytes { get; private set; }
+
+                public void Take(int count) => TakeAmount = count;
+
+                public void PutBackWhenFinished() => PutBack = true;
+
+                public void Encoding(MessageEncoding encoding)
+                {
+                    switch (encoding)
+                    {
+                        case HareDu.MessageEncoding.Auto:
+                            MessageEncoding = "auto";
+                            break;
+                            
+                        case HareDu.MessageEncoding.Base64:
+                            MessageEncoding = "base64";
+                            break;
+                            
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(encoding), encoding, null);
+                    }
+                }
+
+                public void TruncateIfAbove(int bytes) => TruncateMessageThresholdInBytes = bytes;
+            }
+
+            
+            class QueuePeekTargetImpl :
+                QueuePeekTarget
             {
                 public string VirtualHostName { get; private set; }
-
+                
                 public void VirtualHost(string vhost) => VirtualHostName = vhost;
             }
         }

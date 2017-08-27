@@ -13,14 +13,14 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface QueuePeekAction
+    public interface QueuePeekConfiguration
     {
-        void Queue(string name);
+        void Take(int count);
 
-        void Configure(Action<QueuePeekConfiguration> configuration);
-        
-        void Target(Action<QueuePeekTarget> target);
+        void PutBackWhenFinished();
+
+        void Encoding(MessageEncoding encoding);
+
+        void TruncateIfAbove(int bytes);
     }
 }
