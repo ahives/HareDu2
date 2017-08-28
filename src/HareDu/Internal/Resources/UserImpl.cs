@@ -53,19 +53,19 @@ namespace HareDu.Internal.Resources
             var impl = new UserCreateActionImpl();
             action(impl);
 
-            UserSettings settings = impl.Settings.Value;
+            DefinedUser definition = impl.Definition.Value;
 
             string user = impl.User.Value;
             
             if (string.IsNullOrWhiteSpace(user))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
             
-            if (string.IsNullOrWhiteSpace(settings.Password) && string.IsNullOrWhiteSpace(settings.PasswordHash))
+            if (string.IsNullOrWhiteSpace(definition.Password) && string.IsNullOrWhiteSpace(definition.PasswordHash))
                 throw new UserCredentialsMissingException("The username and/or password is missing.");
                     
             string url = $"api/users/{user}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create user '{user}'");
@@ -111,13 +111,13 @@ namespace HareDu.Internal.Resources
             static string _tags;
             static string _user;
             
-            public Lazy<UserSettings> Settings { get; }
+            public Lazy<DefinedUser> Definition { get; }
             public Lazy<string> User { get; }
 
             public UserCreateActionImpl()
             {
-                Settings = new Lazy<UserSettings>(
-                    () => new UserSettingsImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<DefinedUser>(
+                    () => new DefinedUserImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
                 User = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
 
@@ -159,10 +159,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class UserSettingsImpl :
-                UserSettings
+            class DefinedUserImpl :
+                DefinedUser
             {
-                public UserSettingsImpl(string password, string passwordHash, string tags)
+                public DefinedUserImpl(string password, string passwordHash, string tags)
                 {
                     PasswordHash = passwordHash;
                     Password = password;

@@ -16,8 +16,9 @@
         [Test]
         public async Task Verify_can_create_queue()
         {
-            Result result = await Client
-                .Factory<Queue>()
+            Queue resource = Client.Factory<Queue>();
+            
+            Result result = await resource
                 .CreateAsync(x =>
                 {
                     x.Queue("TestQueue2");

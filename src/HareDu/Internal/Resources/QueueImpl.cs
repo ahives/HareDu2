@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new QueueCreateActionImpl();
             action(impl);
 
-            QueueSettings settings = impl.Settings.Value;
+            DefinedQueue definition = impl.Definition.Value;
 
             string vhost = impl.VirtualHost.Value;
             string queue = impl.QueueName.Value;
@@ -67,7 +67,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create queue '{queue}' in virtual host '{sanitizedVHost}'.");
@@ -143,12 +143,12 @@ namespace HareDu.Internal.Resources
             var impl = new QueuePeekActionImpl();
             action(impl);
 
-            QueuePeekSettings settings = impl.Settings.Value;
+            DefinedQueuePeek definition = impl.Definition.Value;
             
-            if (settings.Take < 1)
+            if (definition.Take < 1)
                 throw new QueuePeekConfigurationException("Must be set a value greater than 1.");
 
-            if (string.IsNullOrWhiteSpace(settings.Encoding))
+            if (string.IsNullOrWhiteSpace(definition.Encoding))
                 throw new QueuePeekConfigurationException("Encoding must be set to auto or base64.");
 
             string queue = impl.QueueName.Value;
@@ -164,10 +164,10 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/get";
 
-            HttpResponseMessage response = await HttpPost(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPost(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to peek into queue '{queue}' on virtual host '{sanitizedVHost}' and pop {settings.Take} messages.");
+            LogInfo($"Sent request to RabbitMQ server to peek into queue '{queue}' on virtual host '{sanitizedVHost}' and pop {definition.Take} messages.");
 
             return result;
         }
@@ -183,14 +183,14 @@ namespace HareDu.Internal.Resources
             static string _encoding;
             static long _truncateIfAbove;
 
-            public Lazy<QueuePeekSettings> Settings { get; }
+            public Lazy<DefinedQueuePeek> Definition { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
 
             public QueuePeekActionImpl()
             {
-                Settings = new Lazy<QueuePeekSettings>(
-                    () => new QueuePeekSettingsImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<DefinedQueuePeek>(
+                    () => new DefinedQueuePeekImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -217,10 +217,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class QueuePeekSettingsImpl :
-                QueuePeekSettings
+            class DefinedQueuePeekImpl :
+                DefinedQueuePeek
             {
-                public QueuePeekSettingsImpl(int take, bool putBackWhenFinished, string encoding, long truncateMessageThreshold)
+                public DefinedQueuePeekImpl(int take, bool putBackWhenFinished, string encoding, long truncateMessageThreshold)
                 {
                     Take = take;
                     PutBackWhenFinished = putBackWhenFinished;
@@ -391,14 +391,14 @@ namespace HareDu.Internal.Resources
             static string _vhost;
             static string _queue;
 
-            public Lazy<QueueSettings> Settings { get; }
+            public Lazy<DefinedQueue> Definition { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
 
             public QueueCreateActionImpl()
             {
-                Settings = new Lazy<QueueSettings>(
-                    () => new QueueSettingsImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<DefinedQueue>(
+                    () => new DefinedQueueImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -523,10 +523,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class QueueSettingsImpl :
-                QueueSettings
+            class DefinedQueueImpl :
+                DefinedQueue
             {
-                public QueueSettingsImpl(bool durable, bool autoDelete, string node, IDictionary<string, object> arguments)
+                public DefinedQueueImpl(bool durable, bool autoDelete, string node, IDictionary<string, object> arguments)
                 {
                     Durable = durable;
                     AutoDelete = autoDelete;

@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeCreateActionImpl();
             action(impl);
 
-            ExchangeSettings settings = impl.Settings.Value;
+            DefinedExchange definition = impl.Definition.Value;
 
             string exchange = impl.ExchangeName.Value;
             string vhost = impl.VirtualHost.Value;
@@ -63,14 +63,14 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
 
-            if (string.IsNullOrWhiteSpace(settings?.RoutingType))
+            if (string.IsNullOrWhiteSpace(definition?.RoutingType))
                 throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange}' in virtual host '{sanitizedVHost}'.");
@@ -183,14 +183,14 @@ namespace HareDu.Internal.Resources
             static string _vhost;
             static string _exchange;
 
-            public Lazy<ExchangeSettings> Settings { get; }
+            public Lazy<DefinedExchange> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> ExchangeName { get; }
 
             public ExchangeCreateActionImpl()
             {
-                Settings = new Lazy<ExchangeSettings>(
-                    () => new ExchangeSettingsImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<DefinedExchange>(
+                    () => new DefinedExchangeImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -305,10 +305,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class ExchangeSettingsImpl :
-                ExchangeSettings
+            class DefinedExchangeImpl :
+                DefinedExchange
             {
-                public ExchangeSettingsImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, object> arguments)
+                public DefinedExchangeImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, object> arguments)
                 {
                     RoutingType = routingType;
                     Durable = durable;

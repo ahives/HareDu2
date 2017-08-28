@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new PolicyCreateActionImpl();
             action(impl);
 
-            DefinedPolicySettings settings = impl.Settings.Value;
+            DefinedPolicy definition = impl.Definition.Value;
 
             string policy = impl.PolicyName.Value;
             string vhost = impl.VirtualHost.Value;
@@ -67,7 +67,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
@@ -150,14 +150,14 @@ namespace HareDu.Internal.Resources
             static string _policy;
             static string _vhost;
             
-            public Lazy<DefinedPolicySettings> Settings { get; }
+            public Lazy<DefinedPolicy> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> PolicyName { get; }
 
             public PolicyCreateActionImpl()
             {
-                Settings = new Lazy<DefinedPolicySettings>(
-                    () => new DefinedPolicySettingsImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<DefinedPolicy>(
+                    () => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -365,10 +365,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class DefinedPolicySettingsImpl :
-                DefinedPolicySettings
+            class DefinedPolicyImpl :
+                DefinedPolicy
             {
-                public DefinedPolicySettingsImpl(string pattern, IDictionary<string, object> arguments, int priority, string applyTo)
+                public DefinedPolicyImpl(string pattern, IDictionary<string, object> arguments, int priority, string applyTo)
                 {
                     Pattern = pattern;
                     Arguments = arguments;

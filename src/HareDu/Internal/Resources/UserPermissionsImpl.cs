@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserPermissionsCreateActionImpl();
             action(impl);
 
-            UserPermissionsSettings settings = impl.Settings.Value;
+            DefinedUserPermissions settings = impl.Settings.Value;
 
             string username = impl.Username.Value;
             string vhost = impl.VirtualHost.Value;
@@ -149,14 +149,14 @@ namespace HareDu.Internal.Resources
             static string _vhost;
             static string _user;
 
-            public Lazy<UserPermissionsSettings> Settings { get; }
+            public Lazy<DefinedUserPermissions> Settings { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> Username { get; }
 
             public UserPermissionsCreateActionImpl()
             {
-                Settings = new Lazy<UserPermissionsSettings>(
-                    () => new UserPermissionsSettingsImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
+                Settings = new Lazy<DefinedUserPermissions>(
+                    () => new DefinedUserPermissionsImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -191,10 +191,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class UserPermissionsSettingsImpl :
-                UserPermissionsSettings
+            class DefinedUserPermissionsImpl :
+                DefinedUserPermissions
             {
-                public UserPermissionsSettingsImpl(string configurePattern, string writePattern, string readPattern)
+                public DefinedUserPermissionsImpl(string configurePattern, string writePattern, string readPattern)
                 {
                     Configure = configurePattern;
                     Write = writePattern;

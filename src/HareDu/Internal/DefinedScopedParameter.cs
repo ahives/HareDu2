@@ -15,7 +15,7 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    public interface ScopedParameterSettings
+    public interface DefinedScopedParameter
     {
         [JsonProperty("vhost")]
         string VirtualHost { get; }

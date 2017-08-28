@@ -52,17 +52,17 @@ namespace HareDu.Internal.Resources
             var impl = new ScopedParameterCreateActionImpl();
             action(impl);
 
-            ScopedParameterSettings settings = impl.Settings.Value;
+            DefinedScopedParameter definition = impl.Definition.Value;
 
-            if (string.IsNullOrWhiteSpace(settings.ParameterName))
+            if (string.IsNullOrWhiteSpace(definition.ParameterName))
                 throw new ParameterMissingException("The name of the parameter is missing.");
                     
-            string url = $"api/parameters/{settings.Component}/{settings.VirtualHost.SanitizeVirtualHostName()}/{settings.ParameterName}";
+            string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{settings.ParameterName}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{definition.ParameterName}'.");
 
             return result;
         }
@@ -143,10 +143,10 @@ namespace HareDu.Internal.Resources
             static string _value;
             static string _name;
             
-            public Lazy<ScopedParameterSettings> Settings { get; }
+            public Lazy<DefinedScopedParameter> Definition { get; }
 
-            public ScopedParameterCreateActionImpl() => Settings = new Lazy<ScopedParameterSettings>(
-                () => new ScopedParameterSettingsImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
+            public ScopedParameterCreateActionImpl() => Definition = new Lazy<DefinedScopedParameter>(
+                () => new DefinedScopedParameterImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
 
             public void Parameter(string name, string value)
             {
@@ -176,10 +176,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class ScopedParameterSettingsImpl :
-                ScopedParameterSettings
+            class DefinedScopedParameterImpl :
+                DefinedScopedParameter
             {
-                public ScopedParameterSettingsImpl(string virtualHost, string component, string name, string value)
+                public DefinedScopedParameterImpl(string virtualHost, string component, string name, string value)
                 {
                     VirtualHost = virtualHost;
                     Component = component;

@@ -52,27 +52,32 @@ namespace HareDu.Internal.Resources
             var impl = new BindingCreateActionImpl();
             action(impl);
 
-            BindingCreateSettings settings = impl.Settings.Value;
+            DefineBinding definition = impl.Definition.Value;
 
-            if (string.IsNullOrWhiteSpace(settings.Source))
+            string source = impl.Source.Value;
+            string destination = impl.Destination.Value;
+            BindingType bindingType = impl.BindingType.Value;
+            string vhost = impl.VirtualHost.Value;
+            
+            if (string.IsNullOrWhiteSpace(source))
                 throw new BindingException("The name of the binding source is missing.");
 
-            if (string.IsNullOrWhiteSpace(settings.Destination))
+            if (string.IsNullOrWhiteSpace(destination))
                 throw new BindingException("The name of the binding destination is missing.");
             
-            if (string.IsNullOrWhiteSpace(settings.VirtualHost))
+            if (string.IsNullOrWhiteSpace(vhost))
                 throw new VirtualHostMissingException("The name of the virtual host is missing.");
             
-            string sanitizedVHost = settings.VirtualHost.SanitizeVirtualHostName();
+            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = settings.BindingType == BindingType.Exchange
-                ? $"api/bindings/{sanitizedVHost}/e/{settings.Source}/e/{settings.Destination}"
-                : $"api/bindings/{sanitizedVHost}/e/{settings.Source}/q/{settings.Destination}";
+            string url = bindingType == BindingType.Exchange
+                ? $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}"
+                : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPost(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{settings.Source}' and '{settings.Destination}' on virtual host '{sanitizedVHost}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{source}' and '{destination}' on virtual host '{sanitizedVHost}'.");
 
             return result;
         }
@@ -196,10 +201,20 @@ namespace HareDu.Internal.Resources
             static string _destination;
             static BindingType _bindingType;
 
-            public Lazy<BindingCreateSettings> Settings { get; }
+            public Lazy<DefineBinding> Definition { get; }
+            public Lazy<string> Source { get; }
+            public Lazy<string> Destination { get; }
+            public Lazy<string> VirtualHost { get; }
+            public Lazy<BindingType> BindingType { get; }
 
-            public BindingCreateActionImpl() => Settings = new Lazy<BindingCreateSettings>(
-                () => new BindingCreateSettingsImpl(_routingKey, _arguments, _vhost, _source, _destination, _bindingType), LazyThreadSafetyMode.PublicationOnly);
+            public BindingCreateActionImpl()
+            {
+                Definition = new Lazy<DefineBinding>(() => new DefineBindingImpl(_routingKey, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Source = new Lazy<string>(() => _source, LazyThreadSafetyMode.PublicationOnly);
+                Destination = new Lazy<string>(() => _destination, LazyThreadSafetyMode.PublicationOnly);
+                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+                BindingType = new Lazy<BindingType>(() => _bindingType, LazyThreadSafetyMode.PublicationOnly);
+            }
 
             public void Binding(Action<BindingCreateDefinition> definition)
             {
@@ -256,14 +271,8 @@ namespace HareDu.Internal.Resources
             class BindingConfigurationImpl :
                 BindingConfiguration
             {
-                public string Source { get; private set; }
-                public string Destination { get; private set; }
                 public string RoutingKey { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
-                
-                public void Bind(string source) => Source = source;
-
-                public void To(string destination) => Destination = destination;
 
                 public void WithRoutingKey(string routingKey) => RoutingKey = routingKey;
 
@@ -297,26 +306,17 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class BindingCreateSettingsImpl :
-                BindingCreateSettings
+            class DefineBindingImpl :
+                DefineBinding
             {
-                public BindingCreateSettingsImpl(string routingKey, IDictionary<string, object> arguments,
-                    string vhost, string source, string destination, BindingType bindingType)
+                public DefineBindingImpl(string routingKey, IDictionary<string, object> arguments)
                 {
                     RoutingKey = routingKey;
                     Arguments = arguments;
-                    Source = source;
-                    Destination = destination;
-                    VirtualHost = vhost;
-                    BindingType = bindingType;
                 }
 
                 public string RoutingKey { get; }
                 public IDictionary<string, object> Arguments { get; }
-                public BindingType BindingType { get; }
-                public string Source { get; }
-                public string Destination { get; }
-                public string VirtualHost { get; }
             }
         }
     }

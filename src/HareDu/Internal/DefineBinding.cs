@@ -14,19 +14,14 @@
 namespace HareDu.Internal
 {
     using System.Collections.Generic;
+    using Newtonsoft.Json;
 
-    internal interface BindingCreateSettings
+    internal interface DefineBinding
     {
+        [JsonProperty("routing_key")]
         string RoutingKey { get; }
         
+        [JsonProperty("arguments")]
         IDictionary<string, object> Arguments { get; }
-        
-        string Source { get; }
-        
-        string Destination { get; }
-        
-        string VirtualHost { get; }
-        
-        BindingType BindingType { get; }
     }
 }

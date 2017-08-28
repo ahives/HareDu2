@@ -78,8 +78,8 @@
     <Compile Include="Exceptions\QueuePeekConfigurationException.cs" />
     <Compile Include="ExchangeTarget.cs" />
     <Compile Include="GlobalParameterConfiguration.cs" />
-    <Compile Include="Internal\ExchangeSettings.cs" />
-    <Compile Include="Internal\QueuePeekSettings.cs" />
+    <Compile Include="Internal\DefinedExchange.cs" />
+    <Compile Include="Internal\DefinedQueuePeek.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="MessageEncoding.cs" />
     <Compile Include="PolicyTarget.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="HareDuFactory.cs" />
     <Compile Include="HareDuClient.cs" />
     <Compile Include="HealthCheckType.cs" />
-    <Compile Include="Internal\VirtualHostSettings.cs" />
+    <Compile Include="Internal\DefinedVirtualHost.cs" />
     <Compile Include="PolicyDeleteAction.cs" />
     <Compile Include="QueueDeleteAction.cs" />
     <Compile Include="QueueEmptyAction.cs" />
@@ -131,13 +131,13 @@
     <Compile Include="HighAvailabilityModes.cs" />
     <Compile Include="HighAvailabilitySyncModes.cs" />
     <Compile Include="Internal\AsyncTaskExtensions.cs" />
-    <Compile Include="Internal\BindingCreateSettings.cs" />
-    <Compile Include="Internal\DefinedPolicySettings.cs" />
-    <Compile Include="Internal\GlobalParameterSettings.cs" />
+    <Compile Include="Internal\DefineBinding.cs" />
+    <Compile Include="Internal\DefinedPolicy.cs" />
+    <Compile Include="Internal\DefinedGlobalParameter.cs" />
     <Compile Include="Internal\HareDuFactoryImpl.cs" />
     <Compile Include="Internal\HttpExtensions.cs" />
     <Compile Include="Internal\Logging.cs" />
-    <Compile Include="Internal\QueueSettings.cs" />
+    <Compile Include="Internal\DefinedQueue.cs" />
     <Compile Include="Internal\Resources\BindingImpl.cs" />
     <Compile Include="Internal\Resources\ClusterImpl.cs" />
     <Compile Include="Internal\Resources\ExchangeImpl.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Internal\Resources\ScopedParameterImpl.cs" />
     <Compile Include="Internal\Resources\UserPermissionsImpl.cs" />
     <Compile Include="Internal\Resources\UserImpl.cs" />
-    <Compile Include="Internal\ScopedParameterSettings.cs" />
+    <Compile Include="Internal\DefinedScopedParameter.cs" />
     <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
     <Compile Include="Internal\Serialization\DictionaryConverterCache.cs" />
     <Compile Include="Internal\Serialization\DictionaryObjectValueProvider.cs" />
@@ -212,8 +212,8 @@
     <Compile Include="Internal\Serialization\ValueObjectMapper.cs" />
     <Compile Include="Internal\Serialization\ValueValueDictionaryDictionaryMapper.cs" />
     <Compile Include="Internal\Serialization\ValueValueDictionaryObjectMapper.cs" />
-    <Compile Include="Internal\UserSettings.cs" />
-    <Compile Include="Internal\UserPermissionsSettings.cs" />
+    <Compile Include="Internal\DefinedUser.cs" />
+    <Compile Include="Internal\DefinedUserPermissions.cs" />
     <Compile Include="Internal\UserAccessTag.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\AuthenticationMechanism.cs" />

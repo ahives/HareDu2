@@ -13,17 +13,15 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    internal interface UserSettings
+    public interface DefinedGlobalParameter
     {
-        [JsonProperty("password_hash")]
-        string PasswordHash { get; }
-        
-        [JsonProperty("password")]
-        string Password { get; }
-        
-        [JsonProperty("tags")]
-        string Tags { get; }
+        [JsonProperty("name")]
+        string Name { get; }
+            
+        [JsonProperty("value")]
+        IDictionary<string, object> Value { get; }
     }
 }

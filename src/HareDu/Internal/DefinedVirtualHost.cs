@@ -13,15 +13,11 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface GlobalParameterSettings
+    internal interface DefinedVirtualHost
     {
-        [JsonProperty("name")]
-        string Name { get; }
-            
-        [JsonProperty("value")]
-        IDictionary<string, object> Value { get; }
+        [JsonProperty("tracing")]
+        bool Tracing { get; }
     }
 }

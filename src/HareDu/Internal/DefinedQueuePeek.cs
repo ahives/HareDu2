@@ -15,9 +15,18 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    internal interface VirtualHostSettings
+    internal interface DefinedQueuePeek
     {
-        [JsonProperty("tracing")]
-        bool Tracing { get; }
+        [JsonProperty("count")]
+        int Take { get; }
+        
+        [JsonProperty("requeue")]
+        bool PutBackWhenFinished { get; }
+        
+        [JsonProperty("encoding")]
+        string Encoding { get; }
+        
+        [JsonProperty("truncate")]
+        long TruncateMessageThreshold { get; }
     }
 }

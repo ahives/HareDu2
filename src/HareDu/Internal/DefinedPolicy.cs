@@ -13,20 +13,21 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    internal interface QueuePeekSettings
+    public interface DefinedPolicy
     {
-        [JsonProperty("count")]
-        int Take { get; }
-        
-        [JsonProperty("requeue")]
-        bool PutBackWhenFinished { get; }
-        
-        [JsonProperty("encoding")]
-        string Encoding { get; }
-        
-        [JsonProperty("truncate")]
-        long TruncateMessageThreshold { get; }
+        [JsonProperty("pattern")]
+        string Pattern { get; }
+
+        [JsonProperty("definition")]
+        IDictionary<string, object> Arguments { get; }
+
+        [JsonProperty("priority")]
+        int Priority { get; }
+
+        [JsonProperty("apply-to")]
+        string ApplyTo { get; }
     }
 }

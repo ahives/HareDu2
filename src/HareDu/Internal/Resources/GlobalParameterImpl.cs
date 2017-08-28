@@ -51,14 +51,17 @@ namespace HareDu.Internal.Resources
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
 
-            GlobalParameterSettings settings = impl.Settings.Value;
+            DefinedGlobalParameter definition = impl.Definition.Value;
 
-            string url = $"api/global-parameters/{settings.Name}";
+            if (string.IsNullOrWhiteSpace(definition.Name))
+                throw new ParameterMissingException("The name of the parameter is missing.");
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            string url = $"api/global-parameters/{definition.Name}";
+
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
 
-            LogInfo($"Sent request to RabbitMQ server to create a global parameter '{settings.Name}'.");
+            LogInfo($"Sent request to RabbitMQ server to create a global parameter '{definition.Name}'.");
 
             return result;
         }
@@ -99,10 +102,10 @@ namespace HareDu.Internal.Resources
             static IDictionary<string, object> _arguments;
             static string _name;
 
-            public Lazy<GlobalParameterSettings> Settings { get; }
+            public Lazy<DefinedGlobalParameter> Definition { get; }
 
-            public GlobalParameterCreateActionImpl() => Settings = new Lazy<GlobalParameterSettings>(
-                () => new GlobalParameterSettingsImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
+            public GlobalParameterCreateActionImpl() => Definition = new Lazy<DefinedGlobalParameter>(
+                () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
 
             public void Parameter(string name) => _name = name;
             
@@ -149,14 +152,11 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class GlobalParameterSettingsImpl :
-                GlobalParameterSettings
+            class DefinedGlobalParameterImpl :
+                DefinedGlobalParameter
             {
-                public GlobalParameterSettingsImpl(string name, IDictionary<string, object> arguments)
+                public DefinedGlobalParameterImpl(string name, IDictionary<string, object> arguments)
                 {
-                    if (string.IsNullOrWhiteSpace(name))
-                        throw new ParameterMissingException("The name of the parameter is missing.");
-
                     Name = name;
                     Value = arguments;
                 }

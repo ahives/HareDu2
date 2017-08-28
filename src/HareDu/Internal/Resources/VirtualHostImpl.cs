@@ -61,9 +61,9 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/vhosts/{sanitizedVHost}";
 
-            VirtualHostSettings settings = impl.Settings.Value;
+            DefinedVirtualHost definition = impl.Definition.Value;
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = response.GetResponse();
             
             LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHost}'.");
@@ -112,13 +112,13 @@ namespace HareDu.Internal.Resources
             static bool _tracing;
             static string _vhost;
 
-            public Lazy<VirtualHostSettings> Settings { get; }
+            public Lazy<DefinedVirtualHost> Definition { get; }
             public Lazy<string> VirtualHostName { get; }
             
             public VirtualHostCreateActionImpl()
             {
-                Settings = new Lazy<VirtualHostSettings>(
-                    () => new VirtualHostSettingsImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<DefinedVirtualHost>(
+                    () => new DefinedVirtualHostImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
@@ -133,12 +133,12 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class VirtualHostSettingsImpl :
-                VirtualHostSettings
+            class DefinedVirtualHostImpl :
+                DefinedVirtualHost
             {
                 public bool Tracing { get; }
                 
-                public VirtualHostSettingsImpl(bool tracing) => Tracing = tracing;
+                public DefinedVirtualHostImpl(bool tracing) => Tracing = tracing;
             }
 
             

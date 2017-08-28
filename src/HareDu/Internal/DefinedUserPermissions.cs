@@ -13,21 +13,17 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    internal interface QueueSettings
+    internal interface DefinedUserPermissions
     {
-        [JsonProperty("node")]
-        string Node { get; }
+        [JsonProperty("configure")]
+        string Configure { get; }
         
-        [JsonProperty("durable")]
-        bool Durable { get; }
+        [JsonProperty("write")]
+        string Write { get; }
         
-        [JsonProperty("auto_delete")]
-        bool AutoDelete { get; }
-                
-        [JsonProperty("arguments", Required = Required.Default)]
-        IDictionary<string, object> Arguments { get; }
+        [JsonProperty("read")]
+        string Read { get; }
     }
 }
