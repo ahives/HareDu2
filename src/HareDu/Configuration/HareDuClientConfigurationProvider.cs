@@ -15,9 +15,9 @@ namespace HareDu.Configuration
 {
     using System;
 
-    public interface HareDuClientConfiguration
+    public interface HareDuClientConfigurationProvider
     {
-        void ConnectTo(string host);
+        void ConnectTo(string rmqServerUrl);
 
         void Logging(Action<LoggerSettings> settings);
 

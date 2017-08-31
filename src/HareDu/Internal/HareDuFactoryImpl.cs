@@ -27,7 +27,7 @@ namespace HareDu.Internal
         readonly HareDuClientSettings _settings;
 
         public HareDuFactoryImpl(HttpClient httpClient, HareDuClientSettings settings)
-            : base(settings.LoggerName, settings.Logger, settings.EnableLogger)
+            : base(settings.LoggerSettings.Name, settings.LoggerSettings.Logger, settings.LoggerSettings.Enable)
         {
             _httpClient = httpClient;
             _settings = settings;

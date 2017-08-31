@@ -125,39 +125,63 @@
             public string Password { get; }
         }
 
-        
+
         class HareDuClientSettingsImpl :
             HareDuClientSettings
         {
-            public HareDuClientSettingsImpl(string host, bool enableLogger, string loggerName, TimeSpan timeout, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
+            public HareDuClientSettingsImpl(string rmqServerUrl, bool enableLogger, string loggerName,
+                TimeSpan timeout, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
             {
-                Host = host;
-                EnableLogger = enableLogger;
-                LoggerName = loggerName;
+                RabbitMqServerUrl = rmqServerUrl;
                 Timeout = timeout;
                 Credentials = credentials;
-                EnableTransientRetry = enableTransientRetry;
-                RetryLimit = retryLimit;
+                LoggerSettings = new HareDuLoggerSettingsImpl(enableLogger, loggerName);
+                TransientRetrySettings = new HareDuTransientRetrySettingsImpl(enableTransientRetry, retryLimit);
             }
-
-            public HareDuClientSettingsImpl(string host, bool enableLogger, string loggerName, HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
+            
+            public HareDuClientSettingsImpl(string rmqServerUrl, bool enableLogger, string loggerName,
+                HareDuCredentials credentials, bool enableTransientRetry, int retryLimit)
             {
-                Host = host;
-                EnableLogger = enableLogger;
-                LoggerName = loggerName;
+                RabbitMqServerUrl = rmqServerUrl;
                 Credentials = credentials;
-                EnableTransientRetry = enableTransientRetry;
-                RetryLimit = retryLimit;
+                LoggerSettings = new HareDuLoggerSettingsImpl(enableLogger, loggerName);
+                TransientRetrySettings = new HareDuTransientRetrySettingsImpl(enableTransientRetry, retryLimit);
             }
 
-            public string Host { get; }
-            public bool EnableLogger { get; }
-            public string LoggerName { get; }
-            public ILog Logger { get; }
+            public string RabbitMqServerUrl { get; }
             public TimeSpan Timeout { get; }
+            public HareDuLoggerSettings LoggerSettings { get; }
             public HareDuCredentials Credentials { get; }
-            public bool EnableTransientRetry { get; }
-            public int RetryLimit { get; }
+            public HareDuTransientRetrySettings TransientRetrySettings { get; }
+
+
+            class HareDuTransientRetrySettingsImpl :
+                HareDuTransientRetrySettings
+            {
+                public HareDuTransientRetrySettingsImpl(bool enable, int retryLimit)
+                {
+                    Enable = enable;
+                    RetryLimit = retryLimit;
+                }
+
+                public bool Enable { get; }
+                public int RetryLimit { get; }
+            }
+
+
+            class HareDuLoggerSettingsImpl :
+                HareDuLoggerSettings
+            {
+                public HareDuLoggerSettingsImpl(bool enableLogger, string loggerName)
+                {
+                    Enable = enableLogger;
+                    Name = loggerName;
+                }
+
+                public bool Enable { get; }
+                public string Name { get; }
+                public ILog Logger { get; }
+            }
         }
     }
 }

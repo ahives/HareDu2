@@ -28,11 +28,11 @@ namespace HareDu
 
     public static class HareDuClient
     {
-        public static HareDuFactory Initialize(Action<HareDuClientConfiguration> configuration)
+        public static HareDuFactory Initialize(Action<HareDuClientConfigurationProvider> configuration)
         {
             try
             {
-                var init = new HareDuClientConfigurationImpl();
+                var init = new HareDuClientConfigurationProviderImpl();
                 configuration(init);
 
                 HareDuClientSettings settings = init.Settings.Value;
@@ -102,13 +102,13 @@ namespace HareDu
             if (settings.Credentials.IsNull() || string.IsNullOrWhiteSpace(settings.Credentials.Username) || string.IsNullOrWhiteSpace(settings.Credentials.Password))
                 throw new UserCredentialsMissingException("Username and password are required and cannot be empty.");
             
-            if (string.IsNullOrWhiteSpace(settings.Host))
+            if (string.IsNullOrWhiteSpace(settings.RabbitMqServerUrl))
                 throw new HostUrlMissingException("Host URL is required and cannot be empty.");
         }
 
         static HttpClient GetHttpClient(HareDuClientSettings settings)
         {
-            var uri = new Uri($"{settings.Host}/");
+            var uri = new Uri($"{settings.RabbitMqServerUrl}/");
             var handler = new HttpClientHandler
             {
                 Credentials = new NetworkCredential(settings.Credentials.Username, settings.Credentials.Password)
@@ -124,10 +124,10 @@ namespace HareDu
         }
 
 
-        class HareDuClientConfigurationImpl :
-            HareDuClientConfiguration
+        class HareDuClientConfigurationProviderImpl :
+            HareDuClientConfigurationProvider
         {
-            static string _host;
+            static string _rmqServerUrl;
             static ILog _logger;
             static TimeSpan _timeout;
             static int _retryLimit;
@@ -139,11 +139,11 @@ namespace HareDu
 
             public Lazy<HareDuClientSettings> Settings { get; }
 
-            public HareDuClientConfigurationImpl() => Settings = new Lazy<HareDuClientSettings>(
-                () => new HareDuClientSettingsImpl(_host, _enableLogger, _logger, _loggerName, _timeout, _username, _password, _enableTransientRetry, _retryLimit),
+            public HareDuClientConfigurationProviderImpl() => Settings = new Lazy<HareDuClientSettings>(
+                () => new HareDuClientSettingsImpl(_rmqServerUrl, _enableLogger, _logger, _loggerName, _timeout, _username, _password, _enableTransientRetry, _retryLimit),
                 LazyThreadSafetyMode.PublicationOnly);
 
-            public void ConnectTo(string host) => _host = host;
+            public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
 
             public void Logging(Action<LoggerSettings> settings)
             {
@@ -152,7 +152,7 @@ namespace HareDu
 
                 _enableLogger = impl.IsEnabled;
                 _logger = impl.Logger;
-                _loggerName = impl.LoggerName;
+                _loggerName = impl.Name;
             }
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
@@ -188,54 +188,78 @@ namespace HareDu
             class HareDuClientSettingsImpl :
                 HareDuClientSettings
             {
-                public HareDuClientSettingsImpl(string host, bool enableLogger, ILog logger, string loggerName,
+                public HareDuClientSettingsImpl(string rmqServerUrl, bool enableLogger, ILog logger, string loggerName,
                     TimeSpan timeout, string username, string password, bool enableTransientRetry, int retryLimit)
                 {
-                    Host = host;
-                    EnableLogger = enableLogger;
-                    Logger = logger;
+                    RabbitMqServerUrl = rmqServerUrl;
                     Timeout = timeout;
                     Credentials = new HareDuCredentialsImpl(username, password);
-                    RetryLimit = retryLimit;
-                    EnableTransientRetry = enableTransientRetry;
-                    LoggerName = loggerName;
+                    LoggerSettings = new HareDuLoggerSettingsImpl(enableLogger, loggerName, logger);
+                    TransientRetrySettings = new HareDuTransientRetrySettingsImpl(enableTransientRetry, retryLimit);
                 }
 
-                public string Host { get; }
-                public bool EnableLogger { get; }
-                public string LoggerName { get; }
-                public ILog Logger { get; }
+                public string RabbitMqServerUrl { get; }
                 public TimeSpan Timeout { get; }
+                public HareDuLoggerSettings LoggerSettings { get; }
                 public HareDuCredentials Credentials { get; }
-                public bool EnableTransientRetry { get; }
-                public int RetryLimit { get; }
-            }
+                public HareDuTransientRetrySettings TransientRetrySettings { get; }
 
-
-            class HareDuCredentialsImpl :
-                HareDuCredentials
-            {
-                public HareDuCredentialsImpl(string username, string password)
+                
+                class HareDuTransientRetrySettingsImpl :
+                    HareDuTransientRetrySettings
                 {
-                    Username = username;
-                    Password = password;
+                    public HareDuTransientRetrySettingsImpl(bool enable, int retryLimit)
+                    {
+                        Enable = enable;
+                        RetryLimit = retryLimit;
+                    }
+
+                    public bool Enable { get; }
+                    public int RetryLimit { get; }
                 }
 
-                public string Username { get; }
-                public string Password { get; }
+                
+                class HareDuLoggerSettingsImpl :
+                    HareDuLoggerSettings
+                {
+                    public HareDuLoggerSettingsImpl(bool enableLogger, string loggerName, ILog logger)
+                    {
+                        Enable = enableLogger;
+                        Name = loggerName;
+                        Logger = logger;
+                    }
+
+                    public bool Enable { get; }
+                    public string Name { get; }
+                    public ILog Logger { get; }
+                }
+
+
+                class HareDuCredentialsImpl :
+                    HareDuCredentials
+                {
+                    public HareDuCredentialsImpl(string username, string password)
+                    {
+                        Username = username;
+                        Password = password;
+                    }
+
+                    public string Username { get; }
+                    public string Password { get; }
+                }
             }
 
 
             class LoggerSettingsImpl :
                 LoggerSettings
             {
-                public string LoggerName { get; private set; }
+                public string Name { get; private set; }
                 public bool IsEnabled { get; private set; }
                 public ILog Logger { get; private set; }
 
                 public void Enable() => IsEnabled = true;
 
-                public void UseLogger(string name) => LoggerName = name;
+                public void UseLogger(string name) => Name = name;
                 
                 public void UseLogger(ILog logger) => Logger = logger;
             }

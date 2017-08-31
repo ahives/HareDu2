@@ -13,9 +13,14 @@
 // limitations under the License.
 namespace HareDu.Configuration
 {
+    using Newtonsoft.Json;
+
     public interface HareDuCredentials
     {
+        [JsonProperty("username")]
         string Username { get; }
+        
+        [JsonProperty("password")]
         string Password { get; }
     }
 }

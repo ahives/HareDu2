@@ -18,7 +18,9 @@ namespace HareDu.Configuration
     public interface LoggerSettings
     {
         void Enable();
+        
         void UseLogger(string name);
+        
         void UseLogger(ILog logger);
     }
 }

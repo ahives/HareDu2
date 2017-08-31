@@ -19,21 +19,40 @@ namespace HareDu.Configuration
 
     public interface HareDuClientSettings
     {
-        string Host { get; }
+        [JsonProperty("rmqServerUrl")]
+        string RabbitMqServerUrl { get; }
         
-        bool EnableLogger { get; }
+        [JsonProperty("timeout")]
+        TimeSpan Timeout { get; }
         
-        string LoggerName { get; }
+        [JsonProperty("logger")]
+        HareDuLoggerSettings LoggerSettings { get; }
+        
+        [JsonProperty("credentials")]
+        HareDuCredentials Credentials { get; }
+        
+        [JsonProperty("transientRetry")]
+        HareDuTransientRetrySettings TransientRetrySettings { get; }
+    }
+
+    public interface HareDuLoggerSettings
+    {
+        [JsonProperty("enable")]
+        bool Enable { get; }
+        
+        [JsonProperty("name")]
+        string Name { get; }
         
         [JsonIgnore]
         ILog Logger { get; }
+    }
+
+    public interface HareDuTransientRetrySettings
+    {
+        [JsonProperty("enable")]
+        bool Enable { get; }
         
-        TimeSpan Timeout { get; }
-        
-        HareDuCredentials Credentials { get; }
-        
-        bool EnableTransientRetry { get; }
-        
+        [JsonProperty("limit")]
         int RetryLimit { get; }
     }
 }
