@@ -13,24 +13,18 @@
 // limitations under the License.
 namespace HareDu.Configuration
 {
-    using System;
+    using Common.Logging;
     using Newtonsoft.Json;
 
-    public interface HareDuClientSettings
+    public interface HareDuLoggerSettings
     {
-        [JsonProperty("rmqServerUrl")]
-        string RabbitMqServerUrl { get; }
+        [JsonProperty("enable")]
+        bool Enable { get; }
         
-        [JsonProperty("timeout")]
-        TimeSpan Timeout { get; }
+        [JsonProperty("name")]
+        string Name { get; }
         
-        [JsonProperty("logger")]
-        HareDuLoggerSettings LoggerSettings { get; }
-        
-        [JsonProperty("credentials")]
-        HareDuCredentials Credentials { get; }
-        
-        [JsonProperty("transientRetry")]
-        HareDuTransientRetrySettings TransientRetrySettings { get; }
+        [JsonIgnore]
+        ILog Logger { get; }
     }
 }

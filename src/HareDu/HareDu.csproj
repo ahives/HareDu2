@@ -73,6 +73,8 @@
     <Compile Include="Configuration\HareDuClientConfigurationProvider.cs" />
     <Compile Include="Configuration\HareDuClientSettings.cs" />
     <Compile Include="Configuration\HareDuCredentials.cs" />
+    <Compile Include="Configuration\HareDuLoggerSettings.cs" />
+    <Compile Include="Configuration\HareDuTransientRetrySettings.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="Exceptions\QueuePeekConfigurationException.cs" />
