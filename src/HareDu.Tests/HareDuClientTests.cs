@@ -36,9 +36,29 @@
         [Test]
         public void Verify_can_init_client_from_json()
         {
-            StreamReader reader = File.OpenText("/users/albert/documents/git/haredu_config.txt");
+//            string config;
+//
+//            using (StreamReader reader = File.OpenText("/users/albert/documents/git/haredu_config.txt"))
+//            {
+//                config = reader.ReadToEnd();
+//            }
 
-            string config = reader.ReadToEnd();
+            string config = @"{
+	'rmqServerUrl':'http://localhost:15672',
+            'timeout':'00:00:50',
+            'logger':{
+                'enable':true,
+                'name':'HareDuLogger'
+            },
+            'credentials':{
+                'username':'guest',
+                'password':'guest'
+            },
+            'transientRetry':{
+                'enable':true,
+                'limit':3
+            }
+        }";
 
             IEnumerable<VirtualHostInfo> vhosts = HareDuClient
                 .Initialize(config)
