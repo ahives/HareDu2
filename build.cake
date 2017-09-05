@@ -1,21 +1,24 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 #tool nuget:?package=GitVersion.CommandLine
 
-// Script arguments
-var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
-var buildType = Argument("type", "local");
+var target = Argument<string>("target", "Default");
+var configuration = Argument<string>("configuration", "Release");
+var package = Argument<bool>("package", true);
+var prerelease = Argument<bool>("prerelease", true);
+var semver = Argument<string>("semver");
 
-// Directory paths
-var solution = "./src/HareDu.sln";
-var buildPath = Directory("./src/HareDu/bin") + Directory(configuration);
+var product = "HareDu";
+var copyright = string.Format("Copyright (c) 2013-{0} Albert L. Hives", DateTime.Now.Year);
+var solutionInfo = "./src/HareDu/SolutionVersion.cs";
+
+var solution = string.Format("./src/{0}.sln", product);
+var buildPath = (DirectoryPath)(Directory(string.Format("./src/{0}/bin", product)) + Directory(configuration));
 var artifactsBasePath = (DirectoryPath)Directory("./artifacts");
 var baseBinPath = artifactsBasePath.Combine("bin");
 var bin452Path = baseBinPath.Combine("net452");
-var nuGetPath = artifactsBasePath.Combine("nuget");
+var nugetPath = artifactsBasePath.Combine("nuget");
 var bin452FullPath = MakeAbsolute(bin452Path).FullPath;
 
-// Perform task initialization before and after Build Tasks
 TaskSetup(context =>
     {
         var message = string.Format("Task {0} started", context.Task.Name);
@@ -30,14 +33,6 @@ TaskTeardown(context =>
         Information(message);
     });
 
-/*
-    Perform the following build tasks
-    1. Clean the build folder
-    2. Restore all NuGet packages
-    3. Build solution
-    4. Create NuGet package
-*/
-
 Task("Clean-Build-Folder")
     .Does(() =>
     {
@@ -51,39 +46,63 @@ Task("Restore-NuGet-Packages")
         NuGetRestore(solution);
     });
 
-Task("Build")
+Task("Perform-Versioning")
     .IsDependentOn("Restore-NuGet-Packages")
+    .Does(() =>
+    {
+        var asmInfoSettings = new AssemblyInfoSettings
+        {
+            Product = product,
+            Copyright = copyright,
+            InformationalVersion = semver,
+            FileVersion = semver,
+            Version = prerelease ? string.Format("{0}-prerelease", semver) : semver
+        };
+
+        CreateAssemblyInfo(solutionInfo, asmInfoSettings);
+    });
+
+Task("Build")
+    .IsDependentOn("Perform-Versioning")
     .Does(() =>
     {
         // Add support for .NET Standard, .NET Core
 
-        if (IsRunningOnWindows())
-        {
-            MSBuild(solution, settings => settings.SetConfiguration(configuration));
-        }
-        else
-        {
-            XBuild(solution, c => c.SetConfiguration(configuration)
-                .SetVerbosity(Verbosity.Minimal)
-                .UseToolVersion(XBuildToolVersion.NET40));
-        }
+        MSBuild(solution, settings => settings.SetConfiguration(configuration));
     });
 
-Task("Create-NuGet-Package")
-    .WithCriteria(() => buildType == "nuget")
+Task("Copy-Build-Artifacts")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var nuspec = "./nuspec/HareDu.nuspec";
+        EnsureDirectoryExists(bin452Path);
 
-        // Add semver here using GitVersion
+        CopyFiles(string.Format("{0}/*.dll", buildPath.ToString()), bin452Path);
+        CopyFiles(string.Format("{0}/*.pdb", buildPath.ToString()), bin452Path);
+        CopyFiles(string.Format("{0}/*.xml", buildPath.ToString()), bin452Path);
+        CopyFiles(string.Format("{0}/*.config", buildPath.ToString()), bin452Path);
+        CopyFileToDirectory("license", artifactsBasePath);
+    });
+
+Task("Create-NuGet-Package")
+    .WithCriteria(() => package == true)
+    .IsDependentOn("Copy-Build-Artifacts")
+    .Does(() =>
+    {
+        var files = GetFiles(bin452Path.ToString());
+        var nuspecBasePath = new DirectoryPath("./artifacts/nuspec");
+        var nuspec = string.Format("{0}/{1}.nuspec", nuspecBasePath.ToString(), product);
+
+        EnsureDirectoryExists(nuspecBasePath);
+
+        var assemblyInfo = ParseAssemblyInfo(solutionInfo);
 
         var packageSettings = new NuGetPackSettings
         {
-            Id = "HareDu",
-            Title = "HareDu",
+            Id = product,
+            Title = product,
             Description = "HareDu is a .NET API that can be used to manage and monitor a RabbitMQ server or cluster.",
-            Copyright = "Copyright 2013-2017 Albert L. Hives, Chris Patterson",
+            Copyright = copyright,
             ProjectUrl = new Uri("http://github.com/ahives/HareDu2"),
             LicenseUrl = new Uri("http://www.apache.org/licenses/LICENSE-2.0"),
             Owners = new []{"Albert L. Hives"},
@@ -96,12 +115,17 @@ Task("Create-NuGet-Package")
                 new NuSpecDependency { Id = "Newtonsoft.Json", Version = "10.0.3" },
                 new NuSpecDependency { Id = "Polly-Signed", Version = "5.3.0" }
             },
-        //    Version = ,
+            Version = assemblyInfo.AssemblyVersion,
             BasePath = bin452Path,
-            OutputDirectory = nuGetPath
+            OutputDirectory = nuspecBasePath,
+            RequireLicenseAcceptance = true,
+            Symbols = false,
+            Files = files
+                .Select(file => new NuSpecContent { Source = file.ToString(), Target = file.ToString() })
+                .ToArray()
         };
 
-        NuGetPack(nuspec, packageSettings);
+        NuGetPack(packageSettings);
     });
 
 Task("Default")

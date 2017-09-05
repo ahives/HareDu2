@@ -1,5 +1,5 @@
 build_output/*
-build_artifacts/*
+artifacts/*
 build_temp/*
 *.suo
 *.user

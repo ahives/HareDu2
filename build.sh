@@ -34,7 +34,9 @@ VERBOSITY="verbose"
 DRYRUN=
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
-BUILD_TYPE="local"
+PACKAGE=true
+SEMVER="2.0.0"
+PRE_RELEASE=true
 
 # Parse arguments.
 for i in "$@"; do
@@ -43,7 +45,9 @@ for i in "$@"; do
         -t|--target) TARGET="$2"; shift ;;
         -c|--configuration) CONFIGURATION="$2"; shift ;;
         -v|--verbosity) VERBOSITY="$2"; shift ;;
-        -b|--build) BUILD_TYPE="$2"; shift ;;
+        -p|--package) PACKAGE="$2"; shift ;;
+        -sv|--semver) SEMVER="$2"; shift ;;
+        -pr|--prerelease) PRE_RELEASE="$2"; shift ;;
         -d|--dryrun) DRYRUN="-dryrun" ;;
         --version) SHOW_VERSION=true ;;
         --) shift; SCRIPT_ARGUMENTS+=("$@"); break ;;
@@ -129,5 +133,5 @@ fi
 if $SHOW_VERSION; then
     exec mono "$CAKE_EXE" -version
 else
-    exec mono "$CAKE_EXE" $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET -build=$BUILD_TYPE $DRYRUN "${SCRIPT_ARGUMENTS[@]}"
+    exec mono "$CAKE_EXE" $SCRIPT -verbosity=$VERBOSITY -configuration=$CONFIGURATION -target=$TARGET -package=$PACKAGE $DRYRUN -semver=$SEMVER -prerelease=$PRE_RELEASE "${SCRIPT_ARGUMENTS[@]}"
 fi
