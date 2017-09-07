@@ -4,18 +4,18 @@
 var target = Argument<string>("target", "Default");
 var configuration = Argument<string>("configuration", "Release");
 var package = Argument<bool>("package", true);
-var prerelease = Argument<bool>("prerelease", true);
+var prerelease = Argument<bool>("prerelease", false);
 var semver = Argument<string>("semver");
 
-var product = "HareDu";
-var copyright = string.Format("Copyright (c) 2013-{0} Albert L. Hives", DateTime.Now.Year);
+var product = "HareDu2";
+var copyright = string.Format("Copyright (c) 2013-{0} Albert L. Hives, et al.", DateTime.Now.Year);
 var solutionInfo = "./src/HareDu/SolutionVersion.cs";
 
-var solution = string.Format("./src/{0}.sln", product);
-var buildPath = (DirectoryPath)(Directory(string.Format("./src/{0}/bin", product)) + Directory(configuration));
+var solution = "./src/HareDu.sln";
+var buildPath = (DirectoryPath)(Directory("./src/HareDu/bin") + Directory(configuration));
 var artifactsBasePath = (DirectoryPath)Directory("./artifacts");
 var baseBinPath = artifactsBasePath.Combine("bin");
-var bin452Path = baseBinPath.Combine("net452");
+var bin452Path = baseBinPath.Combine("lib/net452");
 var nugetPath = artifactsBasePath.Combine("nuget");
 var bin452FullPath = MakeAbsolute(bin452Path).FullPath;
 
@@ -91,7 +91,8 @@ Task("Create-NuGet-Package")
     {
         var files = GetFiles(bin452Path.ToString());
         var nuspecBasePath = new DirectoryPath("./artifacts/nuspec");
-        var nuspec = string.Format("{0}/{1}.nuspec", nuspecBasePath.ToString(), product);
+        //var nuspec = string.Format("{0}.nuspec", product);
+        var nuspec = "HareDu.nuspec";
 
         EnsureDirectoryExists(nuspecBasePath);
 
@@ -111,7 +112,7 @@ Task("Create-NuGet-Package")
             {
                 new NuSpecDependency { Id = "Common.Logging", Version = "3.3.1" },
                 new NuSpecDependency { Id = "Microsoft.AspNet.WebApi.Client", Version = "5.2.3" },
-                new NuSpecDependency { Id = "Microsoft.Net.Http", Version = "4.3.2" },
+                new NuSpecDependency { Id = "System.Net.Http", Version = "4.3.2" },
                 new NuSpecDependency { Id = "Newtonsoft.Json", Version = "10.0.3" },
                 new NuSpecDependency { Id = "Polly-Signed", Version = "5.3.0" }
             },
@@ -121,11 +122,11 @@ Task("Create-NuGet-Package")
             RequireLicenseAcceptance = true,
             Symbols = false,
             Files = files
-                .Select(file => new NuSpecContent { Source = file.ToString(), Target = file.ToString() })
+                .Select(file => new NuSpecContent { Source = file.ToString(), Target = "lib" })
                 .ToArray()
         };
 
-        NuGetPack(packageSettings);
+        NuGetPack(nuspec, packageSettings);
     });
 
 Task("Default")

@@ -26,6 +26,8 @@ _ReSharper*
 *.swp
 *.bak
 *.orig
+*.nupkg
+*.nuspec
 
 NuGet.exe
 packages
