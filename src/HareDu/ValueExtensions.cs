@@ -80,69 +80,20 @@ namespace HareDu
         public static IEnumerable<T> Where<T>(this Result<IEnumerable<T>> source, Func<T, bool> predicate)
             => source?.Data == null || !source.Data.Any() ? Enumerable.Empty<T>() : source.Data.Where(predicate);
 
-        public static T Single<T>(this Task<Result<IEnumerable<T>>> source)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return default(T);
+        public static T Single<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().Single();
 
-            return data.Data.Single();
-        }
+        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().SingleOrDefault();
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return default(T);
+        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Unravel().SingleOrDefault(predicate);
 
-            return data.Data.SingleOrDefault();
-        }
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().FirstOrDefault();
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return default(T);
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Unravel().FirstOrDefault(predicate);
 
-            return data.Data.SingleOrDefault(predicate);
-        }
+        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().Any();
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return default(T);
+        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Unravel().Any(predicate);
 
-            return data.Data.FirstOrDefault();
-        }
-
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return default(T);
-
-            return data.Data.FirstOrDefault(predicate);
-        }
-        
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return false;
-
-            return data.Data.Any();
-        }
-
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
-        {
-            var data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return false;
-
-            return data.Data.Any(predicate);
-        }
-        
         /// <summary>
         /// 
         /// </summary>
@@ -156,9 +107,18 @@ namespace HareDu
             if (data?.Data == null || !data.Data.Any())
                 return Enumerable.Empty<T>();
 
-            IEnumerable<T> list = source.Result.Data.Where(predicate);
+            IEnumerable<T> list = source.Unravel().Where(predicate);
             
             return list;
+        }
+
+        public static T Unwrap<T>(this Task<T> result) => result.Result;
+
+        public static T Unravel<T>(this Task<Result<T>> result)
+        {
+            var data = result.Unwrap().Data;
+
+            return !data.IsNull() ? result.Unwrap().Data : default(T);
         }
     }
 }

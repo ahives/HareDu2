@@ -28,6 +28,40 @@
         }
 
         [Test, Explicit]
+        public void Verify_Unwrap_works()
+        {
+            Result<IEnumerable<VirtualHostInfo>> vhosts = Client
+                .Factory<VirtualHost>()
+                .GetAllAsync()
+                .Unwrap();
+
+            foreach (var vhost in vhosts.Data)
+            {
+                Console.WriteLine("Name: {0}", vhost.Name);
+                Console.WriteLine("Tracing: {0}", vhost.Tracing);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+
+        [Test, Explicit]
+        public void Verify_Unwravel_works()
+        {
+            IEnumerable<VirtualHostInfo> vhosts = Client
+                .Factory<VirtualHost>()
+                .GetAllAsync()
+                .Unravel();
+
+            foreach (var vhost in vhosts)
+            {
+                Console.WriteLine("Name: {0}", vhost.Name);
+                Console.WriteLine("Tracing: {0}", vhost.Tracing);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+
+        [Test, Explicit]
         public void Verify_Any_works()
         {
             bool found = Client
