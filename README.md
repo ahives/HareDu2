@@ -1,5 +1,7 @@
 HareDu 2
 ========
+
+[![Join the chat at https://gitter.im/HareDu2/Lobby](https://badges.gitter.im/HareDu2/Lobby.svg)](https://gitter.im/HareDu2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 HareDu 2 is a .NET client and library that consumes the RabbitMQ REST API and can be used to manage and monitor a RabbitMQ server or cluster.
 
 
