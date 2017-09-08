@@ -22,10 +22,27 @@ namespace HareDu
     public interface VirtualHost :
         Resource
     {
+        /// <summary>
+        /// Returns information about each virtual host on the current RabbitMQ server asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result<IEnumerable<VirtualHostInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Creates the specified virtual host on the current RabbitMQ server asynchronously.
+        /// </summary>
+        /// <param name="action">Describes how the virtual host will be created.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result> CreateAsync(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Delete the specified virtual host on the current RabbitMQ server asynchronously.
+        /// </summary>
+        /// <param name="action">Describes how the virtual host will be delete.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result> DeleteAsync(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

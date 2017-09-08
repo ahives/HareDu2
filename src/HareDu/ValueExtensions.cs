@@ -20,7 +20,7 @@ namespace HareDu
 
     public static class ValueExtensions
     {
-        public static string ConvertTo(this HighAvailabilityModes mode)
+        internal static string ConvertTo(this HighAvailabilityModes mode)
         {
             switch (mode)
             {
@@ -38,7 +38,7 @@ namespace HareDu
             }
         }
         
-        public static HighAvailabilityModes ConvertTo(this string mode)
+        internal static HighAvailabilityModes ConvertTo(this string mode)
         {
             switch (mode.ToLower())
             {
@@ -56,7 +56,7 @@ namespace HareDu
             }
         }
 
-        public static string ConvertTo(this HighAvailabilitySyncModes mode)
+        internal static string ConvertTo(this HighAvailabilitySyncModes mode)
         {
             switch (mode)
             {

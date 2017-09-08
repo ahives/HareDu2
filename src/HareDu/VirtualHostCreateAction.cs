@@ -17,8 +17,16 @@ namespace HareDu
 
     public interface VirtualHostCreateAction
     {
+        /// <summary>
+        /// Define the virtual host name.
+        /// </summary>
+        /// <param name="name"></param>
         void VirtualHost(string name);
 
+        /// <summary>
+        /// Define how the virtual host is configured.
+        /// </summary>
+        /// <param name="configuration"></param>
         void Configure(Action<VirtualHostConfiguration> configuration);
     }
 }

@@ -35,7 +35,7 @@ DRYRUN=
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
 PACKAGE=true
-SEMVER="0.1.2"
+SEMVER="0.1.6"
 PRE_RELEASE=true
 
 # Parse arguments.
