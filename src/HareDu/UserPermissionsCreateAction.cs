@@ -17,10 +17,22 @@ namespace HareDu
 
     public interface UserPermissionsCreateAction
     {
+        /// <summary>
+        /// Specify the user for which the permission should be assigned to.
+        /// </summary>
+        /// <param name="username"></param>
         void User(string username);
 
-        void Configure(Action<UserAccessConfiguration> definition);
+        /// <summary>
+        /// Define how the user permission is to be created.
+        /// </summary>
+        /// <param name="definition"></param>
+        void Configure(Action<UserPermissionsConfiguration> definition);
 
+        /// <summary>
+        /// Specify the target for which the user permission will be created.
+        /// </summary>
+        /// <param name="target"></param>
         void Target(Action<UserPermissionsTarget> target);
     }
 }

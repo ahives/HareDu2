@@ -26,7 +26,7 @@ namespace HareDu
             where TResource : Resource;
         
         /// <summary>
-        /// 
+        /// Cancel pending running thread.
         /// </summary>
         void CancelPendingRequest();
     }

@@ -17,12 +17,28 @@ namespace HareDu
 
     public interface UserCreateAction
     {
+        /// <summary>
+        /// Specify the login username for the corresponding user.
+        /// </summary>
+        /// <param name="username"></param>
         void Username(string username);
         
+        /// <summary>
+        /// Specify the login password for the corresponding user.
+        /// </summary>
+        /// <param name="password"></param>
         void Password(string password);
         
+        /// <summary>
+        /// Specify the password hash.
+        /// </summary>
+        /// <param name="passwordHash"></param>
         void WithPasswordHash(string passwordHash);
         
+        /// <summary>
+        /// Specify the type of access the corresponding user has.
+        /// </summary>
+        /// <param name="tags"></param>
         void WithTags(Action<UserAccessOptions> tags);
     }
 }

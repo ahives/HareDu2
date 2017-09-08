@@ -274,7 +274,7 @@
     <Compile Include="ScopedParameterCreateAction.cs" />
     <Compile Include="ServerHealthCheckConstraints.cs" />
     <Compile Include="UserPermissions.cs" />
-    <Compile Include="UserAccessConfiguration.cs" />
+    <Compile Include="UserPermissionsConfiguration.cs" />
     <Compile Include="UserPermissionsCreateAction.cs" />
     <Compile Include="UserAccessOptions.cs" />
     <Compile Include="User.cs" />

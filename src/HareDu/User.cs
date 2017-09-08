@@ -22,10 +22,27 @@ namespace HareDu
     public interface User :
         Resource
     {
+        /// <summary>
+        /// Returns information about all users on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result<IEnumerable<UserInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken());
 
+        /// <summary>
+        /// Creates a user on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="action">Describes how the user permission will be created.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result> CreateAsync(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken());
 
+        /// <summary>
+        /// Delete the specified user on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="action">Describes how the virtual host will be delete.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result> DeleteAsync(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken());
     }
 }

@@ -163,9 +163,9 @@ namespace HareDu.Internal.Resources
 
             public void User(string username) => _user = username;
 
-            public void Configure(Action<UserAccessConfiguration> definition)
+            public void Configure(Action<UserPermissionsConfiguration> definition)
             {
-                var impl = new UserAccessConfigurationImpl();
+                var impl = new UserPermissionsConfigurationImpl();
                 definition(impl);
 
                 _configurePattern = impl.ConfigurePattern;
@@ -207,8 +207,8 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class UserAccessConfigurationImpl :
-                UserAccessConfiguration
+            class UserPermissionsConfigurationImpl :
+                UserPermissionsConfiguration
             {
                 public string ConfigurePattern { get; private set; }
                 public string ReadPattern { get; private set; }

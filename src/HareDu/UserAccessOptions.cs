@@ -15,9 +15,24 @@ namespace HareDu
 {
     public interface UserAccessOptions
     {
+        /// <summary>
+        /// Specify that the corresponding user has no associated priviledges.
+        /// </summary>
         void None();
+        
+        /// <summary>
+        /// Specify that the corresponding user has administrative priviledges.
+        /// </summary>
         void Administrator();
+        
+        /// <summary>
+        /// Specify that the corresponding user has monitoring pviliedges.
+        /// </summary>
         void Monitoring();
+        
+        /// <summary>
+        /// Specify that the corresponding user has management priviledges.
+        /// </summary>
         void Management();
     }
 }
