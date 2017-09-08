@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Common.Logging;
     using Configuration;
+    using Extensions;
     using Internal.Serialization;
     using Model;
     using Newtonsoft.Json;

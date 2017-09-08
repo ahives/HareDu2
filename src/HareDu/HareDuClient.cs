@@ -22,6 +22,7 @@ namespace HareDu
     using Common.Logging;
     using Configuration;
     using Exceptions;
+    using Extensions;
     using Internal;
     using Internal.Serialization;
     using Newtonsoft.Json;

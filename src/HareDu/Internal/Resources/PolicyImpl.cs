@@ -20,6 +20,7 @@ namespace HareDu.Internal.Resources
     using System.Threading.Tasks;
     using Configuration;
     using Exceptions;
+    using Extensions;
     using Model;
 
     internal class PolicyImpl :

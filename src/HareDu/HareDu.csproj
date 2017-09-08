@@ -79,10 +79,13 @@
     <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="Exceptions\QueuePeekConfigurationException.cs" />
     <Compile Include="ExchangeTarget.cs" />
+    <Compile Include="Extensions\ConverterExtensions.cs" />
+    <Compile Include="Extensions\JsonExtensions.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Extensions\ValueExtensions.cs" />
     <Compile Include="GlobalParameterConfiguration.cs" />
     <Compile Include="Internal\DefinedExchange.cs" />
     <Compile Include="Internal\DefinedQueuePeek.cs" />
-    <Compile Include="JsonExtensions.cs" />
     <Compile Include="MessageEncoding.cs" />
     <Compile Include="PolicyTarget.cs" />
     <Compile Include="QueueCreateTarget.cs" />
@@ -278,7 +281,6 @@
     <Compile Include="UserCreateAction.cs" />
     <Compile Include="UserDeleteAction.cs" />
     <Compile Include="UserPermissionsDeleteAction.cs" />
-    <Compile Include="ValueExtensions.cs" />
     <Compile Include="VirtualHost.cs" />
     <Compile Include="VirtualHostConfiguration.cs" />
     <Compile Include="VirtualHostCreateAction.cs" />
