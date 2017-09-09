@@ -60,7 +60,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
 
             HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{definition.ParameterName}'.");
 
@@ -84,7 +84,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{scopedParameter}'.");
 

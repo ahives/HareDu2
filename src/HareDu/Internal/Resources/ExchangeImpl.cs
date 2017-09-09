@@ -71,7 +71,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
             HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange}' in virtual host '{sanitizedVHost}'.");
 
@@ -104,7 +104,7 @@ namespace HareDu.Internal.Resources
                 url = $"api/exchanges/{sanitizedVHost}/{exchange}?{query}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
 

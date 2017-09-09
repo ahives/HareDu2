@@ -66,7 +66,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/users/{user}";
 
             HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create user '{user}'");
 
@@ -86,7 +86,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/users/{impl.Username}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create user '{impl.Username}'");
 

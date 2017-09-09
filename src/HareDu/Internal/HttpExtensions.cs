@@ -27,26 +27,36 @@ namespace HareDu.Internal
         {
             string rawResponse = await responseMessage.Content.ReadAsStringAsync();
             TData response = SerializerCache.Deserializer.Deserialize<TData>(new JsonTextReader(new StringReader(rawResponse)));
+            string rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
             
-            Result<TData> result = new ResultImpl<TData>(responseMessage, response);
+            Result<TData> result = new ResultImpl<TData>(responseMessage, response, rawRequest);
 
             return result;
         }
 
-        internal static Result GetResponse(this HttpResponseMessage responseMessage) => new ResultImpl(responseMessage);
+        internal static async Task<Result> GetResponse(this HttpResponseMessage responseMessage)
+        {
+            string rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
+            
+            Result result = new ResultImpl(responseMessage, rawRequest);
 
-        
+            return result;
+        }
+
+
         class ResultImpl<TData> :
             Result<TData>
         {
-            public ResultImpl(HttpResponseMessage responseMessage, TData response)
+            public ResultImpl(HttpResponseMessage responseMessage, TData response, string request)
             {
+                DebugInfo = $"Debug: {request}";
                 Data = response;
                 Reason = responseMessage.ReasonPhrase;
                 StatusCode = responseMessage.StatusCode;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
+            public string DebugInfo { get; }
             public TData Data { get; }
             public string Reason { get; }
             public HttpStatusCode StatusCode { get; }
@@ -57,13 +67,15 @@ namespace HareDu.Internal
         class ResultImpl :
             Result
         {
-            public ResultImpl(HttpResponseMessage responseMessage)
+            public ResultImpl(HttpResponseMessage responseMessage, string request)
             {
+                DebugInfo = $"Debug: {request}";
                 Reason = responseMessage.ReasonPhrase;
                 StatusCode = responseMessage.StatusCode;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
+            public string DebugInfo { get; }
             public string Reason { get; }
             public HttpStatusCode StatusCode { get; }
             public DateTimeOffset Timestamp { get; }

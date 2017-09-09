@@ -64,7 +64,7 @@ namespace HareDu.Internal.Resources
             DefinedVirtualHost definition = impl.Definition.Value;
 
             HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
             
             LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHost}'.");
 
@@ -89,7 +89,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/vhosts/{sanitizedVHost}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete virtual host '{impl.VirtualHostName}'.");
 

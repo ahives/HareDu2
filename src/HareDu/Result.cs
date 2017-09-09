@@ -18,14 +18,16 @@ namespace HareDu
 
     public interface Result
     {
+        string DebugInfo { get; }
         string Reason { get; }
         HttpStatusCode StatusCode { get; }
         DateTimeOffset Timestamp { get; }
     }
 
-    public interface Result<out TData>
+    public interface Result<out T>
     {
-        TData Data { get; }
+        string DebugInfo { get; }
+        T Data { get; }
         string Reason { get; }
         HttpStatusCode StatusCode { get; }
         DateTimeOffset Timestamp { get; }

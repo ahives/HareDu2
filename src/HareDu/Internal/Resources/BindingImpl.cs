@@ -75,7 +75,7 @@ namespace HareDu.Internal.Resources
                 : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
 
             HttpResponseMessage response = await HttpPost(url, definition, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{source}' and '{destination}' on virtual host '{sanitizedVHost}'.");
 
@@ -111,7 +111,7 @@ namespace HareDu.Internal.Resources
                 : $"api/bindings/{sanitizedVHost}/e/{bindingSource}/e/{bindingDestination}/{bindingName}";
 
             HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = response.GetResponse();
+            Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server for binding '{impl.BindingName}'.");
 
