@@ -90,7 +90,7 @@
                 .Factory<Queue>()
                 .PeekAsync(x =>
                 {
-                    x.Queue("");
+                    x.Queue("Queue1");
                     x.Configure(c =>
                     {
                         c.Take(5);

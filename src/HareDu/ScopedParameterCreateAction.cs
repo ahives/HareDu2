@@ -17,8 +17,17 @@ namespace HareDu
 
     public interface ScopedParameterCreateAction
     {
+        /// <summary>
+        /// Specify the name of the scoped parameter.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void Parameter(string name, string value);
 
+        /// <summary>
+        /// Specify the targeted component and virtual host.
+        /// </summary>
+        /// <param name="target"></param>
         void Target(Action<ScopedParameterTarget> target);
     }
 }

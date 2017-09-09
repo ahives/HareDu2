@@ -15,6 +15,10 @@ namespace HareDu
 {
     public interface QueuePeekConfiguration
     {
+        /// <summary>
+        /// Specify how many messages to take from the queue.
+        /// </summary>
+        /// <param name="count"></param>
         void Take(int count);
 
         void PutBackWhenFinished();

@@ -15,6 +15,10 @@ namespace HareDu
 {
     public interface BindingTarget
     {
+        /// <summary>
+        /// Specify the name of the virtual host.
+        /// </summary>
+        /// <param name="vhost"></param>
         void VirtualHost(string vhost);
     }
 }

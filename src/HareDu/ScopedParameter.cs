@@ -17,16 +17,32 @@ namespace HareDu
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using log4net.Filter;
     using Model;
 
     public interface ScopedParameter :
         Resource
     {
+        /// <summary>
+        /// Returns all scoped parameters on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<ScopedParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Creates a scoped parameter for a particular component and virtual host on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="action">Describes how the scoped parameter will be created.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> CreateAsync(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Delete the specified scoped parameter for a particular component and virtual host on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="action">Describes how the scoped parameter will be delete.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> DeleteAsync(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

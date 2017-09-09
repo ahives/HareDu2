@@ -16,7 +16,7 @@ namespace HareDu
     public interface UserPermissionsTarget
     {
         /// <summary>
-        /// Set virtual host target.
+        /// Specify the name of the virtual host.
         /// </summary>
         /// <param name="vhost"></param>
         void VirtualHost(string vhost);

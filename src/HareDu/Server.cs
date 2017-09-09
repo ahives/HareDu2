@@ -21,6 +21,12 @@ namespace HareDu
     public interface Server :
         Resource
     {
+        /// <summary>
+        /// Perform a health check on a virtual host or node.
+        /// </summary>
+        /// <param name="constraints">Constraints of how the </param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns></returns>
         Task<Result<ServerHealth>> CheckUpAsync(Action<ServerHealthCheckConstraints> constraints, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

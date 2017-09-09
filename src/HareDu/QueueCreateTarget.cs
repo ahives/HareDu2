@@ -15,8 +15,16 @@ namespace HareDu
 {
     public interface QueueCreateTarget
     {
+        /// <summary>
+        /// Specify the name of the node.
+        /// </summary>
+        /// <param name="node"></param>
         void Node(string node);
 
+        /// <summary>
+        /// Specify the name of the virtual host.
+        /// </summary>
+        /// <param name="vhost"></param>
         void VirtualHost(string vhost);
     }
 }

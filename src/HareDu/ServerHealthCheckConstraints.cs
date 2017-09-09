@@ -15,8 +15,16 @@ namespace HareDu
 {
     public interface ServerHealthCheckConstraints
     {
+        /// <summary>
+        /// Specify the name of the virtual host or node that is receiving a check up.
+        /// </summary>
+        /// <param name="name"></param>
         void Name(string name);
 
+        /// <summary>
+        /// Specify the type (e.g. virtual host, node, etc. of check up to perform.
+        /// </summary>
+        /// <param name="type"></param>
         void Type(HealthCheckType type);
     }
 }
