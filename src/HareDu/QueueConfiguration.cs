@@ -25,7 +25,7 @@ namespace HareDu
         /// <summary>
         /// Specify arguments for the queue.
         /// </summary>
-        /// <param name="arguments">Pre-defined arguments</param>
+        /// <param name="arguments">Pre-defined arguments applied to the definition of the queue.</param>
         void WithArguments(Action<QueueCreateArguments> arguments);
 
         /// <summary>

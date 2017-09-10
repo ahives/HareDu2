@@ -24,7 +24,7 @@ namespace HareDu
         /// <summary>
         /// Specify the name of the virtual host.
         /// </summary>
-        /// <param name="vhost"></param>
+        /// <param name="vhost">Name of the virtual host being targeted.</param>
         void VirtualHost(string vhost);
     }
 }

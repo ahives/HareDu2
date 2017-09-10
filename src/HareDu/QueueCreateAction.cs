@@ -30,9 +30,9 @@ namespace HareDu
         void Configure(Action<QueueConfiguration> configuration);
 
         /// <summary>
-        /// Specify where the queue lives (i.e. virtual host, etc.).
+        /// Specify where the queue will live (i.e. virtual host, etc.).
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="target">Define where the queue will live</param>
         void Target(Action<QueueCreateTarget> target);
     }
 }

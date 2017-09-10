@@ -22,10 +22,27 @@ namespace HareDu
     public interface Policy :
         Resource
     {
+        /// <summary>
+        /// Returns all policies on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<PolicyInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Creates the specified policy on the target virtual host.
+        /// </summary>
+        /// <param name="action">Describes how the policy will be created.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> CreateAsync(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Delete the specified policy on the target virtual host.
+        /// </summary>
+        /// <param name="action">Describes how the policy will be deleted.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> DeleteAsync(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

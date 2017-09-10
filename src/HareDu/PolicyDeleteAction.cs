@@ -19,6 +19,10 @@ namespace HareDu
     {
         void Policy(string name);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
         void Target(Action<PolicyTarget> target);
     }
 }
