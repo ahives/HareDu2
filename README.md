@@ -8,7 +8,7 @@ HareDu 2 is a .NET client and library that consumes the RabbitMQ REST API and ca
 
 Docs under construction here
 
-https://ahives.gitbooks.io/haredu2/content/usage/getting-started/creating-haredu-resources.html
+https://ahives.gitbooks.io/haredu2/content/
 
 
 Get It
