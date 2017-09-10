@@ -19,8 +19,6 @@ namespace HareDu.Internal.Resources
     using System.Threading;
     using System.Threading.Tasks;
     using Configuration;
-    using Polly;
-    using Polly.Retry;
 
     internal class ResourceBase :
         Logging
