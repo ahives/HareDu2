@@ -17,10 +17,22 @@ namespace HareDu
 
     public interface QueueCreateAction
     {
+        /// <summary>
+        /// Specify the name of the queue.
+        /// </summary>
+        /// <param name="name">Name of the queue</param>
         void Queue(string name);
-        
+
+        /// <summary>
+        /// Specify how the queue should be configured.
+        /// </summary>
+        /// <param name="configuration">User-defined configuration</param>
         void Configure(Action<QueueConfiguration> configuration);
 
+        /// <summary>
+        /// Specify where the queue lives (i.e. virtual host, etc.).
+        /// </summary>
+        /// <param name="target"></param>
         void Target(Action<QueueCreateTarget> target);
     }
 }

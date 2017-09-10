@@ -21,10 +21,21 @@ namespace HareDu
         /// <param name="count"></param>
         void Take(int count);
 
+        /// <summary>
+        /// Specify that after messages are popped from the queue to requeue them.
+        /// </summary>
         void PutBackWhenFinished();
 
+        /// <summary>
+        /// Specify how to encode messages when requeued. 
+        /// </summary>
+        /// <param name="encoding"></param>
         void Encoding(MessageEncoding encoding);
 
+        /// <summary>
+        /// Specify the size of messages in bytes that are acceptable before having to truncate.
+        /// </summary>
+        /// <param name="bytes"></param>
         void TruncateIfAbove(int bytes);
     }
 }

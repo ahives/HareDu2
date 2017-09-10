@@ -75,10 +75,10 @@
                 {
                     x.Queue("");
                     x.Target(l => l.VirtualHost("HareDu"));
-                    x.WithConditions(c =>
+                    x.When(c =>
                     {
-                        c.IfUnused();
-                        c.IfEmpty();
+                        c.HasNoConsumers();
+                        c.Empty();
                     });
                 });
         }

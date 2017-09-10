@@ -15,8 +15,14 @@ namespace HareDu
 {
     public interface QueueDeleteCondition
     {
-        void IfUnused();
+        /// <summary>
+        /// Prevent delete actions on the specified queue from being successful if the queue has consumers.
+        /// </summary>
+        void HasNoConsumers();
         
-        void IfEmpty();
+        /// <summary>
+        /// Prevent delete actions on the specified queue from being successful if the queue contains messages.
+        /// </summary>
+        void Empty();
     }
 }

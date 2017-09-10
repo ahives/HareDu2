@@ -17,8 +17,16 @@ namespace HareDu
 
     public interface GlobalParameterCreateAction
     {
+        /// <summary>
+        /// Specify the name of the global parameter.
+        /// </summary>
+        /// <param name="name"></param>
         void Parameter(string name);
 
+        /// <summary>
+        /// Specify how the global parameter should be configured.
+        /// </summary>
+        /// <param name="configuration"></param>
         void Configure(Action<GlobalParameterConfiguration> configuration);
     }
 }

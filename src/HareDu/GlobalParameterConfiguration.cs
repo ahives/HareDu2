@@ -17,6 +17,10 @@ namespace HareDu
 
     public interface GlobalParameterConfiguration
     {
+        /// <summary>
+        /// Specify global parameter arguments.
+        /// </summary>
+        /// <param name="arguments"></param>
         void WithArguments(Action<GlobalParameterArguments> arguments);
     }
 }

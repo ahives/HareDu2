@@ -22,14 +22,43 @@ namespace HareDu
     public interface Queue :
         Resource
     {
+        /// <summary>
+        /// Returns all queues on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<QueueInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Creates the specified queue on the target virtual host and perhaps RabbitMQ node.
+        /// </summary>
+        /// <param name="action">Describes how the queue will be created.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> CreateAsync(Action<QueueCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Delete the specified queue on the target virtual host and perhaps RabbitMQ node.
+        /// </summary>
+        /// <param name="action">Describes how the queue will be deleted.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> DeleteAsync(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Purge all messages in the specified queue on the target virtual host on the current RAbbitMQ node.
+        /// </summary>
+        /// <param name="action">Describes how the queue will be purged.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> EmptyAsync(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Pull a specified number of messages from the specified queue on the target virtual host on the current RAbbitMQ node.
+        /// </summary>
+        /// <param name="action">Describes how the queue will be purged.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> PeekAsync(Action<QueuePeekAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

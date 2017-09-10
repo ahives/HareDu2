@@ -26,7 +26,7 @@ namespace HareDu
         /// <summary>
         /// Specify how the virtual host should be configured.
         /// </summary>
-        /// <param name="configuration"></param>
+        /// <param name="configuration">User-defined configuration</param>
         void Configure(Action<VirtualHostConfiguration> configuration);
     }
 }

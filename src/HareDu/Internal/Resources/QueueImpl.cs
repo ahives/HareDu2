@@ -342,7 +342,7 @@ namespace HareDu.Internal.Resources
                 _vhost = impl.VirtualHostName;
             }
 
-            public void WithConditions(Action<QueueDeleteCondition> condition)
+            public void When(Action<QueueDeleteCondition> condition)
             {
                 var impl = new QueueDeleteConditionImpl();
                 condition(impl);
@@ -374,9 +374,9 @@ namespace HareDu.Internal.Resources
                 public bool DeleteIfUnused { get; private set; }
                 public bool DeleteIfEmpty { get; private set; }
 
-                public void IfUnused() => DeleteIfUnused = true;
+                public void HasNoConsumers() => DeleteIfUnused = true;
 
-                public void IfEmpty() => DeleteIfEmpty = true;
+                public void Empty() => DeleteIfEmpty = true;
             }
         }
 

@@ -17,10 +17,22 @@ namespace HareDu
 
     public interface QueueDeleteAction
     {
+        /// <summary>
+        /// Specify the name of the queue.
+        /// </summary>
+        /// <param name="name">Name of the queue</param>
         void Queue(string name);
 
+        /// <summary>
+        /// Specify where the queue lives (i.e. virtual host, etc.).
+        /// </summary>
+        /// <param name="target"></param>
         void Target(Action<QueueTarget> target);
 
-        void WithConditions(Action<QueueDeleteCondition> condition);
+        /// <summary>
+        /// Specify acceptable conditions for which the queue can be deleted.
+        /// </summary>
+        /// <param name="condition"></param>
+        void When(Action<QueueDeleteCondition> condition);
     }
 }

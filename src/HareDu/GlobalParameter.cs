@@ -21,10 +21,27 @@ namespace HareDu
     public interface GlobalParameter :
         Resource
     {
+        /// <summary>
+        /// Returns all global parameters on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<GlobalParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Creates the specified global parameter on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="action">Describes how the global parameter will be created.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> CreateAsync(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
         
+        /// <summary>
+        /// Delete the specified global parqmeter on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="action">Describes how the global parameter will be deleted.</param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result"/></returns>
         Task<Result> DeleteAsync(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
