@@ -17,14 +17,29 @@ namespace HareDu.Configuration
 
     public interface HareDuClientConfigurationProvider
     {
+        /// <summary>
+        /// Specify the RabbitMQ server url to connect to.
+        /// </summary>
+        /// <param name="rmqServerUrl"></param>
         void ConnectTo(string rmqServerUrl);
 
+        /// <summary>
+        /// Specify the information needed to setup API logging.
+        /// </summary>
+        /// <param name="settings"></param>
         void Logging(Action<LoggerSettings> settings);
 
+        /// <summary>
+        /// Specify the maximum time before the HTTP request to the RAbbitMQ server will fail.
+        /// </summary>
+        /// <param name="timeout"></param>
         void TimeoutAfter(TimeSpan timeout);
         
+        /// <summary>
+        /// Specify the user creadentials to connect to the RabbitMQ server.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
         void UsingCredentials(string username, string password);
-
-        void TransientRetry(Action<TransientRetrySettings> settings);
     }
 }

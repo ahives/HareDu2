@@ -17,11 +17,6 @@
                     s.UseLogger("HareDuLogger");
                 });
                 x.UsingCredentials("guest", "guest");
-                x.TransientRetry(s =>
-                {
-                    s.Enable();
-                    s.Limit(3);
-                });
             });
         }
         

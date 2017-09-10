@@ -48,9 +48,6 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Polly, Version=5.3.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc">
-      <HintPath>..\packages\Polly-Signed.5.3.0\lib\net45\Polly.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
@@ -74,9 +71,7 @@
     <Compile Include="Configuration\HareDuClientSettings.cs" />
     <Compile Include="Configuration\HareDuCredentials.cs" />
     <Compile Include="Configuration\HareDuLoggerSettings.cs" />
-    <Compile Include="Configuration\HareDuTransientRetrySettings.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
-    <Compile Include="Configuration\TransientRetrySettings.cs" />
     <Compile Include="Exceptions\QueuePeekConfigurationException.cs" />
     <Compile Include="ExchangeTarget.cs" />
     <Compile Include="Extensions\ConverterExtensions.cs" />

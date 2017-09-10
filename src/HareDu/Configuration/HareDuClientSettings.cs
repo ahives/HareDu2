@@ -29,8 +29,5 @@ namespace HareDu.Configuration
         
         [JsonProperty("credentials")]
         HareDuCredentials Credentials { get; }
-        
-        [JsonProperty("transientRetry")]
-        HareDuTransientRetrySettings TransientRetrySettings { get; }
     }
 }
