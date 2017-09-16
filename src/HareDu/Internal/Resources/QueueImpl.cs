@@ -208,7 +208,7 @@ namespace HareDu.Internal.Resources
                 _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
             }
 
-            public void Target(Action<QueuePeekTarget> target)
+            public void Targeting(Action<QueuePeekTarget> target)
             {
                 var impl = new QueuePeekTargetImpl();
                 target(impl);
@@ -295,7 +295,7 @@ namespace HareDu.Internal.Resources
 
             public void Queue(string name) => _queue = name;
             
-            public void Target(Action<QueueTarget> target)
+            public void Targeting(Action<QueueTarget> target)
             {
                 var impl = new QueueTargetImpl();
                 target(impl);
@@ -334,7 +334,7 @@ namespace HareDu.Internal.Resources
 
             public void Queue(string name) => _queue = name;
             
-            public void Target(Action<QueueTarget> target)
+            public void Targeting(Action<QueueTarget> target)
             {
                 var impl = new QueueTargetImpl();
                 target(impl);

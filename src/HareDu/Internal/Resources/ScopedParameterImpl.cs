@@ -112,7 +112,7 @@ namespace HareDu.Internal.Resources
 
             public void Parameter(string name) => _scopedParameter = name;
             
-            public void Target(Action<ScopedParameterTarget> target)
+            public void Targeting(Action<ScopedParameterTarget> target)
             {
                 var impl = new ScopedParameterTargetImpl();
                 target(impl);

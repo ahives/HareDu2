@@ -68,7 +68,7 @@
                 .DeleteAsync(x =>
                 {
                     x.Exchange("E3");
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
                 });
         }

@@ -74,7 +74,7 @@
                 .DeleteAsync(x =>
                 {
                     x.Queue("");
-                    x.Target(l => l.VirtualHost("HareDu"));
+                    x.Targeting(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
                         c.HasNoConsumers();
@@ -98,7 +98,7 @@
                         c.TruncateIfAbove(5000);
                         c.Encoding(MessageEncoding.Auto);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
         }
 
@@ -110,7 +110,7 @@
                 .EmptyAsync(x =>
                 {
                     x.Queue("");
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
         }
     }

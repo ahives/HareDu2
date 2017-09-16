@@ -33,6 +33,6 @@ namespace HareDu
         /// Specify the target for which the binding will be created.
         /// </summary>
         /// <param name="target">Define the location where the binding (i.e. virtual host) will be created</param>
-        void Target(Action<BindingTarget> target);
+        void Targeting(Action<BindingTarget> target);
     }
 }

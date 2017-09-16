@@ -144,7 +144,7 @@ namespace HareDu.Internal.Resources
                 _query = query;
             }
 
-            public void Target(Action<ExchangeTarget> target)
+            public void Targeting(Action<ExchangeTarget> target)
             {
                 var impl = new ExchangeTargetImpl();
                 target(impl);

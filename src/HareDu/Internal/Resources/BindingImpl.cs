@@ -154,7 +154,7 @@ namespace HareDu.Internal.Resources
                 _bindingDestination = impl.DestinationSource;
             }
 
-            public void Target(Action<BindingTarget> target)
+            public void Targeting(Action<BindingTarget> target)
             {
                 var impl = new BindingTargetImpl();
                 target(impl);
@@ -235,7 +235,7 @@ namespace HareDu.Internal.Resources
                 _routingKey = impl.RoutingKey;
             }
 
-            public void Target(Action<BindingTarget> target)
+            public void Targeting(Action<BindingTarget> target)
             {
                 var impl = new BindingTargetImpl();
                 target(impl);

@@ -37,7 +37,7 @@
                 .DeleteAsync(x =>
                 {
                     x.Parameter("");
-                    x.Target(t =>
+                    x.Targeting(t =>
                     {
                         t.Component("federation");
                         t.VirtualHost("HareDu");
