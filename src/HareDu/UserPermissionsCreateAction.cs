@@ -32,7 +32,7 @@ namespace HareDu
         /// <summary>
         /// Specify the target for which the user permission will be created.
         /// </summary>
-        /// <param name="target"></param>
-        void Target(Action<UserPermissionsTarget> target);
+        /// <param name="target">Define which user is associated with the permissions that are being created.</param>
+        void Targeting(Action<UserPermissionsTarget> target);
     }
 }

@@ -158,7 +158,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 
@@ -209,7 +209,7 @@ namespace HareDu.Internal.Resources
                 _arguments = impl.Arguments;
             }
 
-            public void Target(Action<ExchangeTarget> target)
+            public void Targeting(Action<ExchangeTarget> target)
             {
                 var impl = new ExchangeTargetImpl();
                 target(impl);
@@ -223,7 +223,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 

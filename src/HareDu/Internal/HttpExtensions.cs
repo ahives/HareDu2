@@ -27,7 +27,10 @@ namespace HareDu.Internal
         {
             string rawResponse = await responseMessage.Content.ReadAsStringAsync();
             TData response = SerializerCache.Deserializer.Deserialize<TData>(new JsonTextReader(new StringReader(rawResponse)));
-            string rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
+
+            string rawRequest = string.Empty;
+            if (responseMessage.RequestMessage.Content != null)
+                rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
             
             Result<TData> result = new ResultImpl<TData>(responseMessage, response, rawRequest);
 

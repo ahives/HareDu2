@@ -16,7 +16,7 @@
                 .CreateAsync(x =>
                 {
                     x.Parameter("test", "me");
-                    x.Target(t =>
+                    x.Targeting(t =>
                     {
                         t.Component("federation");
                         t.VirtualHost("HareDu");

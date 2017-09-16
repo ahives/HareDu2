@@ -29,7 +29,7 @@
                         });
                         p.AppliedTo("all");
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Console.WriteLine(result.Reason);
@@ -56,7 +56,7 @@
                         });
                         p.AppliedTo("all");
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);

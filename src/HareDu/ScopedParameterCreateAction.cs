@@ -28,6 +28,6 @@ namespace HareDu
         /// Specify the targeted component and virtual host.
         /// </summary>
         /// <param name="target"></param>
-        void Target(Action<ScopedParameterTarget> target);
+        void Targeting(Action<ScopedParameterTarget> target);
     }
 }

@@ -102,7 +102,7 @@ namespace HareDu.Internal.Resources
         {
             public string VirtualHostName { get; private set; }
             
-            public void VirtualHost(string vhost) => VirtualHostName = vhost;
+            public void VirtualHost(string name) => VirtualHostName = name;
         }
 
         

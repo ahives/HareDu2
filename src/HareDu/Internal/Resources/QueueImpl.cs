@@ -415,7 +415,7 @@ namespace HareDu.Internal.Resources
                 _arguments = impl.Arguments;
             }
 
-            public void Target(Action<QueueCreateTarget> target)
+            public void Targeting(Action<QueueCreateTarget> target)
             {
                 var impl = new QueueCreateTargetImpl();
                 target(impl);

@@ -52,7 +52,7 @@
 //                            arg.Set("", "");
 //                        });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             Console.WriteLine("Reason: {0}", result.Reason);

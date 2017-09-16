@@ -20,11 +20,11 @@ namespace HareDu
         /// <summary>
         /// Specify the name of the virtual host.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">RabbitMQ virtual host name</param>
         void VirtualHost(string name);
 
         /// <summary>
-        /// Specify how the virtual host should be configured.
+        /// Specify how should the virtual host be configured.
         /// </summary>
         /// <param name="configuration">User-defined configuration</param>
         void Configure(Action<VirtualHostConfiguration> configuration);

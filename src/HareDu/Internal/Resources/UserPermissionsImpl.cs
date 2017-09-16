@@ -119,7 +119,7 @@ namespace HareDu.Internal.Resources
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Target(Action<UserPermissionsTarget> target)
+            public void Targeting(Action<UserPermissionsTarget> target)
             {
                 var impl = new UserPermissionsTargetImpl();
                 target(impl);
@@ -173,7 +173,7 @@ namespace HareDu.Internal.Resources
                 _readPattern = impl.ReadPattern;
             }
 
-            public void Target(Action<UserPermissionsTarget> target)
+            public void Targeting(Action<UserPermissionsTarget> target)
             {
                 var impl = new UserPermissionsTargetImpl();
                 target(impl);

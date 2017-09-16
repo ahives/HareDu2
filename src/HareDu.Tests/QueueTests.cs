@@ -31,7 +31,7 @@
                             arg.SetQueueExpiration(1000);
                         });
                     });
-                    x.Target(t =>
+                    x.Targeting(t =>
                     {
                         t.Node("MyNode1");
                         t.VirtualHost("HareDu");

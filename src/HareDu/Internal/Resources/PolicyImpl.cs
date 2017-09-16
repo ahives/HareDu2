@@ -188,7 +188,7 @@ namespace HareDu.Internal.Resources
                 }
             }
             
-            public void Target(Action<PolicyTarget> target)
+            public void Targeting(Action<PolicyTarget> target)
             {
                 var impl = new PolicyTargetImpl();
                 target(impl);

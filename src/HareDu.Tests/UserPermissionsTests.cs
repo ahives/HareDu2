@@ -40,7 +40,7 @@
                 .DeleteAsync(x =>
                 {
                     x.User("");
-                    x.Target(t => t.VirtualHost("HareDu5"));
+                    x.Targeting(t => t.VirtualHost("HareDu5"));
                 });
         }
 
@@ -58,7 +58,7 @@
                         c.UsingReadPattern("");
                         c.UsingWritePattern("");
                     });
-                    x.Target(t => t.VirtualHost("HareDu5"));
+                    x.Targeting(t => t.VirtualHost("HareDu5"));
                 });
         }
     }

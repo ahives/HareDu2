@@ -21,10 +21,25 @@ namespace HareDu
     public interface Node :
         Resource
     {
+        /// <summary>
+        /// Returns all channels on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = default(CancellationToken));
-        
+
+        /// <summary>
+        /// Returns all connections on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = default(CancellationToken));
-        
+
+        /// <summary>
+        /// Returns all consumers on the curre
+        /// </summary>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

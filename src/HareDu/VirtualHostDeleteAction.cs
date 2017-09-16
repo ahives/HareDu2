@@ -18,7 +18,7 @@ namespace HareDu
         /// <summary>
         /// Define which virtual host will be deleted.
         /// </summary>
-        /// <param name="vhost"></param>
-        void VirtualHost(string vhost);
+        /// <param name="name">RabbitMQ virtual host name</param>
+        void VirtualHost(string name);
     }
 }
