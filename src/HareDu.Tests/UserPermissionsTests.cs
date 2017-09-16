@@ -13,7 +13,7 @@
         [Test]
         public async Task Verify_can_get_all_user_permissions()
         {
-            Result<IEnumerable<UserAccessInfo>> result = await Client
+            Result<IEnumerable<UserPermissionsInfo>> result = await Client
                 .Factory<UserPermissions>()
                 .GetAllAsync();
             

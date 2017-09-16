@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -53,6 +54,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedScopedParameter definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             if (string.IsNullOrWhiteSpace(definition.ParameterName))
                 throw new ParameterMissingException("The name of the parameter is missing.");
@@ -130,7 +133,7 @@ namespace HareDu.Internal.Resources
 
                 public void Component(string component) => ComponentName = component;
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
         }
 
@@ -172,7 +175,7 @@ namespace HareDu.Internal.Resources
 
                 public void Component(string component) => ComponentName = component;
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
             

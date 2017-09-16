@@ -36,10 +36,17 @@ namespace HareDu
         Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Returns all consumers on the curre
+        /// Returns all consumers on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Returns all object definitions on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result<ServerDefinition>> GetDefintiions(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

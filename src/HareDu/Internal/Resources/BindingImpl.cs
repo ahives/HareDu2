@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -53,6 +54,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefineBinding definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             string source = impl.Source.Value;
             string destination = impl.Destination.Value;
@@ -168,7 +171,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 
@@ -249,7 +252,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 

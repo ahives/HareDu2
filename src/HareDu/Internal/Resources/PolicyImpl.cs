@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -54,6 +55,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedPolicy definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             string policy = impl.PolicyName.Value;
             string vhost = impl.VirtualHost.Value;
@@ -136,7 +139,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
         }
 
@@ -202,7 +205,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 

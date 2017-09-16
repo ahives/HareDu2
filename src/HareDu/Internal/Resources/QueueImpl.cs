@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -53,6 +54,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedQueue definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             string vhost = impl.VirtualHost.Value;
             string queue = impl.QueueName.Value;
@@ -144,6 +147,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedQueuePeek definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
             
             if (definition.Take < 1)
                 throw new QueuePeekConfigurationException("Must be set a value greater than 1.");
@@ -273,7 +278,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
                 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
         }
 
@@ -309,7 +314,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
         }
 
@@ -364,7 +369,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 
@@ -433,7 +438,7 @@ namespace HareDu.Internal.Resources
                 
                 public void Node(string node) => NodeName = node;
             
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 

@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Net.Http;
     using System.Threading;
@@ -54,6 +55,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedUser definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             string user = impl.User.Value;
             

@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public interface ExchangeInfo
@@ -34,5 +35,8 @@ namespace HareDu.Model
         
         [JsonProperty("internal")]
         bool Internal { get; }
+        
+        [JsonProperty("arguments")]
+        IDictionary<string, object> Arguments { get; }
     }
 }

@@ -18,8 +18,17 @@ namespace HareDu.Model
 
     public interface PolicyInfo
     {
+        [JsonProperty("vhost")]
+        string VirtualHost { get; }
+        
+        [JsonProperty("name")]
+        string Name { get; }
+        
         [JsonProperty("pattern")]
         string Pattern { get; }
+        
+        [JsonProperty("apply-to")]
+        string AppliedTo { get; }
 
         [JsonProperty("definition")]
         IDictionary<string, string> Definition { get; }

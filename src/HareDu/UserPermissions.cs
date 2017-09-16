@@ -27,7 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<IEnumerable<UserAccessInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<UserPermissionsInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Creates a user permission and assign it to a user on a specific virtual host on the current RabbitMQ server.

@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -52,6 +53,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedGlobalParameter definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             if (string.IsNullOrWhiteSpace(definition.Name))
                 throw new ParameterMissingException("The name of the parameter is missing.");

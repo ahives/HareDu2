@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,14 +32,14 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<UserAccessInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<UserPermissionsInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/users";
 
             HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<UserAccessInfo>> result = await response.GetResponse<IEnumerable<UserAccessInfo>>();
+            Result<IEnumerable<UserPermissionsInfo>> result = await response.GetResponse<IEnumerable<UserPermissionsInfo>>();
 
             LogInfo($"Sent request to return all user information on current RabbitMQ server");
 
@@ -52,7 +53,9 @@ namespace HareDu.Internal.Resources
             var impl = new UserPermissionsCreateActionImpl();
             action(impl);
 
-            DefinedUserPermissions settings = impl.Settings.Value;
+            DefinedUserPermissions definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             string username = impl.Username.Value;
             string vhost = impl.VirtualHost.Value;
@@ -67,7 +70,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            HttpResponseMessage response = await HttpPut(url, settings, cancellationToken);
+            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
             Result result = await response.GetResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
@@ -135,7 +138,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
         }
 
@@ -149,13 +152,13 @@ namespace HareDu.Internal.Resources
             static string _vhost;
             static string _user;
 
-            public Lazy<DefinedUserPermissions> Settings { get; }
+            public Lazy<DefinedUserPermissions> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> Username { get; }
 
             public UserPermissionsCreateActionImpl()
             {
-                Settings = new Lazy<DefinedUserPermissions>(
+                Definition = new Lazy<DefinedUserPermissions>(
                     () => new DefinedUserPermissionsImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
@@ -187,7 +190,7 @@ namespace HareDu.Internal.Resources
             {
                 public string VirtualHostName { get; private set; }
 
-                public void VirtualHost(string vhost) => VirtualHostName = vhost;
+                public void VirtualHost(string name) => VirtualHostName = name;
             }
 
 

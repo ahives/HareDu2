@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -53,6 +54,8 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             DefinedExchange definition = impl.Definition.Value;
+
+            Debug.Assert(definition != null);
 
             string exchange = impl.ExchangeName.Value;
             string vhost = impl.VirtualHost.Value;

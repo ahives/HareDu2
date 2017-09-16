@@ -18,7 +18,7 @@ namespace HareDu
         /// <summary>
         /// Specify where the binding will bind source (e.g. exchange, queue) and destination (e.g. exchange, queue).
         /// </summary>
-        /// <param name="vhost">Name of the virtual host being targeted.</param>
-        void VirtualHost(string vhost);
+        /// <param name="name">Name of the virtual host being targeted.</param>
+        void VirtualHost(string name);
     }
 }

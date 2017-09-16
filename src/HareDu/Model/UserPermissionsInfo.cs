@@ -15,7 +15,7 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface UserAccessInfo
+    public interface UserPermissionsInfo
     {
         [JsonProperty("user")]
         string User { get; }

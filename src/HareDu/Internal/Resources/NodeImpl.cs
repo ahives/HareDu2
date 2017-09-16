@@ -70,5 +70,19 @@ namespace HareDu.Internal.Resources
 
             return result;
         }
+
+        public async Task<Result<ServerDefinition>> GetDefintiions(CancellationToken cancellationToken = new CancellationToken())
+        {
+            cancellationToken.RequestCanceled(LogInfo);
+
+            string url = $"api/definitions";
+
+            HttpResponseMessage response = await HttpGet(url, cancellationToken);
+            Result<ServerDefinition> result = await response.GetResponse<ServerDefinition>();
+
+            LogInfo($"Sent request to return all node object definitions on current RabbitMQ server.");
+
+            return result;
+        }
     }
 }
