@@ -38,8 +38,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<QueueInfo>> result = await response.GetResponse<IEnumerable<QueueInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<QueueInfo>> result = await response.DeserializeResponse<IEnumerable<QueueInfo>>();
 
             LogInfo($"Sent request to return all information on current RabbitMQ server.");
 
@@ -70,8 +70,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}";
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create queue '{queue}' in virtual host '{sanitizedVHost}'.");
 
@@ -103,8 +103,8 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(query))
                 url = $"{url}?{query}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete queue '{queue}' from virtual host '{sanitizedVHost}'.");
 
@@ -131,8 +131,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/contents";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to empty queue '{queue}' on virtual host '{sanitizedVHost}'.");
 
@@ -169,8 +169,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/get";
 
-            HttpResponseMessage response = await HttpPost(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPost(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to peek into queue '{queue}' on virtual host '{sanitizedVHost}' and pop {definition.Take} messages.");
 

@@ -37,8 +37,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/global-parameters";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<GlobalParameterInfo>> result = await response.GetResponse<IEnumerable<GlobalParameterInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<GlobalParameterInfo>> result = await response.DeserializeResponse<IEnumerable<GlobalParameterInfo>>();
 
             LogInfo($"Sent request to return all global parameter information on current RabbitMQ server.");
 
@@ -61,8 +61,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/global-parameters/{definition.Name}";
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a global parameter '{definition.Name}'.");
 
@@ -81,8 +81,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{impl.ParameterName}'.");
 

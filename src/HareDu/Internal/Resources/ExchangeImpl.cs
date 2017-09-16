@@ -38,8 +38,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/exchanges";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<ExchangeInfo>> result = await response.GetResponse<IEnumerable<ExchangeInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<ExchangeInfo>> result = await response.DeserializeResponse<IEnumerable<ExchangeInfo>>();
 
             LogInfo($"Sent request to return all information on current RabbitMQ server.");
 
@@ -73,8 +73,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange}' in virtual host '{sanitizedVHost}'.");
 
@@ -106,8 +106,8 @@ namespace HareDu.Internal.Resources
             if (!string.IsNullOrWhiteSpace(query))
                 url = $"api/exchanges/{sanitizedVHost}/{exchange}?{query}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
 

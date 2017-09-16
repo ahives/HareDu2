@@ -35,8 +35,8 @@ namespace HareDu.Internal.Resources
 
             string url = "api/nodes";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<ChannelInfo>> result = await response.GetResponse<IEnumerable<ChannelInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<ChannelInfo>> result = await response.DeserializeResponse<IEnumerable<ChannelInfo>>();
 
             LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
 
@@ -49,8 +49,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/connections";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<ConnectionInfo>> result = await response.GetResponse<IEnumerable<ConnectionInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<ConnectionInfo>> result = await response.DeserializeResponse<IEnumerable<ConnectionInfo>>();
 
             LogInfo($"Sent request to return all connection information on current RabbitMQ server.");
 
@@ -63,8 +63,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/consumers";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<ConsumerInfo>> result = await response.GetResponse<IEnumerable<ConsumerInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<ConsumerInfo>> result = await response.DeserializeResponse<IEnumerable<ConsumerInfo>>();
 
             LogInfo($"Sent request to return all consumer information on current RabbitMQ server.");
 
@@ -77,8 +77,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/definitions";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<ServerDefinition> result = await response.GetResponse<ServerDefinition>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<ServerDefinition> result = await response.DeserializeResponse<ServerDefinition>();
 
             LogInfo($"Sent request to return all node object definitions on current RabbitMQ server.");
 

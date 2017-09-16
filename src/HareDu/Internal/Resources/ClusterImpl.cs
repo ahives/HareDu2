@@ -37,8 +37,8 @@ namespace HareDu.Internal.Resources
 
             LogInfo("Sent request to return information pertaining to the RabbitMQ cluster.");
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<ClusterInfo> result = await response.GetResponse<ClusterInfo>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<ClusterInfo> result = await response.DeserializeResponse<ClusterInfo>();
 
             return result;
         }
@@ -51,8 +51,8 @@ namespace HareDu.Internal.Resources
 
             LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<NodeInfo>> result = await response.GetResponse<IEnumerable<NodeInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<NodeInfo>> result = await response.DeserializeResponse<IEnumerable<NodeInfo>>();
 
             return result;
         }

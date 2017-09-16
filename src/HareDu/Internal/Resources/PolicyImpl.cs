@@ -39,8 +39,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<PolicyInfo>> result = await response.GetResponse<IEnumerable<PolicyInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<PolicyInfo>> result = await response.DeserializeResponse<IEnumerable<PolicyInfo>>();
 
             LogInfo($"Sent request to return all policy information on current RabbitMQ server.");
 
@@ -71,8 +71,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
 
@@ -99,8 +99,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
 

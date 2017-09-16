@@ -48,7 +48,7 @@ namespace HareDu.Internal.Resources
             setUpdatableFlagsMethod.Invoke(uriParser, new object[] {0});
         }
 
-        protected virtual async Task<HttpResponseMessage> HttpGet(string url, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> PerformHttpGet(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
@@ -64,7 +64,7 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> HttpDelete(string url, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> PerformHttpDelete(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
@@ -80,7 +80,7 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> HttpPut<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> PerformHttpPut<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
@@ -96,7 +96,7 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> HttpPost<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
+        protected virtual async Task<HttpResponseMessage> PerformHttpPost<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {

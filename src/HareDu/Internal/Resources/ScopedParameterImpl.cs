@@ -38,8 +38,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/parameters";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<ScopedParameterInfo>> result = await response.GetResponse<IEnumerable<ScopedParameterInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<ScopedParameterInfo>> result = await response.DeserializeResponse<IEnumerable<ScopedParameterInfo>>();
 
             LogInfo($"Sent request to return all parameter information on current RabbitMQ server.");
 
@@ -62,8 +62,8 @@ namespace HareDu.Internal.Resources
                     
             string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{definition.ParameterName}'.");
 
@@ -86,8 +86,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{scopedParameter}'.");
 

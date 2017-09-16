@@ -39,8 +39,8 @@ namespace HareDu.Internal.Resources
 
             LogInfo("Sent request to return all information on all virtual hosts on current RabbitMQ server.");
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<VirtualHostInfo>> result = await response.GetResponse<IEnumerable<VirtualHostInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<VirtualHostInfo>> result = await response.DeserializeResponse<IEnumerable<VirtualHostInfo>>();
 
             return result;
         }
@@ -63,8 +63,8 @@ namespace HareDu.Internal.Resources
 
             DefinedVirtualHost definition = impl.Definition.Value;
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
             
             LogInfo($"Sent request to RabbitMQ server to create virtual host '{sanitizedVHost}'.");
 
@@ -88,8 +88,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/vhosts/{sanitizedVHost}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to delete virtual host '{impl.VirtualHostName}'.");
 

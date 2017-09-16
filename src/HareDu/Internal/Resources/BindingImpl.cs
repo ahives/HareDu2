@@ -38,8 +38,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/bindings";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<BindingInfo>> result = await response.GetResponse<IEnumerable<BindingInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<BindingInfo>> result = await response.DeserializeResponse<IEnumerable<BindingInfo>>();
 
             LogInfo($"Sent request to return all binding information corresponding on current RabbitMQ server.");
 
@@ -77,8 +77,8 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}"
                 : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
 
-            HttpResponseMessage response = await HttpPost(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPost(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{source}' and '{destination}' on virtual host '{sanitizedVHost}'.");
 
@@ -113,8 +113,8 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{sanitizedVHost}/e/{bindingSource}/q/{bindingDestination}/{bindingName}"
                 : $"api/bindings/{sanitizedVHost}/e/{bindingSource}/e/{bindingDestination}/{bindingName}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server for binding '{impl.BindingName}'.");
 

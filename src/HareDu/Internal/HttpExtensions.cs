@@ -23,7 +23,7 @@ namespace HareDu.Internal
 
     internal static class HttpExtensions
     {
-        internal static async Task<Result<TData>> GetResponse<TData>(this HttpResponseMessage responseMessage)
+        internal static async Task<Result<TData>> DeserializeResponse<TData>(this HttpResponseMessage responseMessage)
         {
             string rawResponse = await responseMessage.Content.ReadAsStringAsync();
             TData response = SerializerCache.Deserializer.Deserialize<TData>(new JsonTextReader(new StringReader(rawResponse)));
@@ -37,7 +37,7 @@ namespace HareDu.Internal
             return result;
         }
 
-        internal static async Task<Result> GetResponse(this HttpResponseMessage responseMessage)
+        internal static async Task<Result> DeserializeResponse(this HttpResponseMessage responseMessage)
         {
             string rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
             

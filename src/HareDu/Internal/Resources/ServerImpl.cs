@@ -58,8 +58,8 @@ namespace HareDu.Internal.Resources
                     throw new ArgumentOutOfRangeException();
             }
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<ServerHealth> result = await response.GetResponse<ServerHealth>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<ServerHealth> result = await response.DeserializeResponse<ServerHealth>();
 
             return result;
         }

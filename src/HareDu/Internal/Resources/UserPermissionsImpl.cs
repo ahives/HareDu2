@@ -38,8 +38,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/users";
 
-            HttpResponseMessage response = await HttpGet(url, cancellationToken);
-            Result<IEnumerable<UserPermissionsInfo>> result = await response.GetResponse<IEnumerable<UserPermissionsInfo>>();
+            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
+            Result<IEnumerable<UserPermissionsInfo>> result = await response.DeserializeResponse<IEnumerable<UserPermissionsInfo>>();
 
             LogInfo($"Sent request to return all user information on current RabbitMQ server");
 
@@ -70,8 +70,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            HttpResponseMessage response = await HttpPut(url, definition, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
 
@@ -98,8 +98,8 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            HttpResponseMessage response = await HttpDelete(url, cancellationToken);
-            Result result = await response.GetResponse();
+            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
+            Result result = await response.DeserializeResponse();
 
             LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
 
