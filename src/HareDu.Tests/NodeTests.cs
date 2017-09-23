@@ -11,7 +11,7 @@
     public class NodeTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public void Test()
         {
             IEnumerable<ChannelInfo> nodes = Client

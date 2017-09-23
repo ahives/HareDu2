@@ -7,6 +7,7 @@
     public class GlobalParameterTests :
         HareDuTestBase
     {
+        [Test, Explicit]
         public async Task Verify_can_create_parameter()
         {
             Result result = await Client
@@ -23,7 +24,8 @@
                     });
                 });
         }
-        [Test]
+        
+        [Test, Explicit]
         public async Task Test()
         {
             Result result = await Client

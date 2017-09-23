@@ -8,7 +8,7 @@
     public class ScopedParameterTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_create()
         {
             Result result = await Client
@@ -29,7 +29,7 @@
             Console.WriteLine();
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Test()
         {
             Result result = await Client

@@ -10,7 +10,7 @@
     public class PolicyTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_create_policy()
         {
             Result result = await Client
@@ -36,7 +36,7 @@
             Assert.AreEqual(HttpStatusCode.Accepted, result.StatusCode);
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_cannot_create_policy()
         {
             Result result = await Client
@@ -62,7 +62,7 @@
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_delete_policy()
         {
             Result result = await Client

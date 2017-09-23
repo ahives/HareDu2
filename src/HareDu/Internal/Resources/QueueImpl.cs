@@ -381,7 +381,7 @@ namespace HareDu.Internal.Resources
 
                 public void HasNoConsumers() => DeleteIfUnused = true;
 
-                public void Empty() => DeleteIfEmpty = true;
+                public void IsEmpty() => DeleteIfEmpty = true;
             }
         }
 

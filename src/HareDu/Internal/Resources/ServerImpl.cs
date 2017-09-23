@@ -29,12 +29,12 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<ServerHealth>> CheckUpAsync(Action<ServerHealthCheckConstraints> constraints, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ServerHealth>> HealthCheckAsync(Action<HealthCheckAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
-            var impl = new ServerHealthCheckConstraintsImpl();
-            constraints(impl);
+            var impl = new HealthCheckActionImpl();
+            action(impl);
 
             string url;
             
@@ -65,15 +65,23 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class ServerHealthCheckConstraintsImpl :
-            ServerHealthCheckConstraints
+        class HealthCheckActionImpl :
+            HealthCheckAction
         {
             public string ResourceName { get; private set; }
             public HealthCheckType CheckUpType { get; private set; }
             
-            public void Name(string name) => ResourceName = name;
+            public void VirtualHost(string name)
+            {
+                CheckUpType = HealthCheckType.VirtualHost;
+                ResourceName = name;
+            }
 
-            public void Type(HealthCheckType type) => CheckUpType = type;
+            public void Node(string name)
+            {
+                CheckUpType = HealthCheckType.Node;
+                ResourceName = name;
+            }
         }
     }
 }

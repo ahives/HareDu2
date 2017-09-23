@@ -17,10 +17,9 @@
         {
             Result<ServerHealth> result = await Client
                 .Factory<Server>()
-                .CheckUpAsync(x =>
+                .HealthCheckAsync(x =>
                 {
-                    x.Name("HareDu");
-                    x.Type(HealthCheckType.VirtualHost);
+                    x.VirtualHost("HareDu");
                 });
 
             Console.WriteLine("Status: {0}", result.Data.Status);

@@ -23,6 +23,6 @@ namespace HareDu
         /// <summary>
         /// Prevent delete actions on the specified queue from being successful if the queue contains messages.
         /// </summary>
-        void Empty();
+        void IsEmpty();
     }
 }

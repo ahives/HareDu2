@@ -10,7 +10,7 @@
     public class UserPermissionsTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_get_all_user_permissions()
         {
             Result<IEnumerable<UserPermissionsInfo>> result = await Client
@@ -32,7 +32,7 @@
             Console.WriteLine();
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task TestVerify_can_delete_user_permissions()
         {
             Result result = await Client
@@ -44,7 +44,7 @@
                 });
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_create_user_permissions()
         {
             Result result = await Client

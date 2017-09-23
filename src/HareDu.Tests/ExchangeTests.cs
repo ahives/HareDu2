@@ -61,6 +61,7 @@
             Console.WriteLine();
         }
 
+        [Test, Explicit]
         public async Task Test()
         {
             Result result = await Client

@@ -10,7 +10,7 @@
     public class UserTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Test2()
         {
             Result<IEnumerable<UserInfo>> result = await Client
@@ -33,7 +33,7 @@
 
         }
         
-        [Test]
+        [Test, Explicit]
         public async Task Test1()
         {
             Result result = await Client
@@ -51,7 +51,7 @@
         }
 
 
-        [Test]
+        [Test, Explicit]
         public async Task Test()
         {
             Result result = await Client

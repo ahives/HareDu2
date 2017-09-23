@@ -14,7 +14,7 @@
     public class QueueTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_create_queue()
         {
             Queue resource = Client.Factory<Queue>();
@@ -39,7 +39,7 @@
                 });
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_get_all()
         {
             Result<IEnumerable<QueueInfo>> result = await Client
@@ -56,7 +56,7 @@
             }
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_get_all_json()
         {
             Result<IEnumerable<QueueInfo>> result = await Client
@@ -66,7 +66,7 @@
             Console.WriteLine(result.ToJson());
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_delete_queue()
         {
             Result result = await Client
@@ -78,12 +78,12 @@
                     x.When(c =>
                     {
                         c.HasNoConsumers();
-                        c.Empty();
+                        c.IsEmpty();
                     });
                 });
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_peek_messages()
         {
             Result result = await Client
@@ -102,7 +102,7 @@
                 });
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_empty_queue()
         {
             Result result = await Client

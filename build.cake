@@ -112,9 +112,7 @@ Task("Create-NuGet-Package")
             {
                 new NuSpecDependency { Id = "Common.Logging", Version = "3.3.1" },
                 new NuSpecDependency { Id = "Microsoft.AspNet.WebApi.Client", Version = "5.2.3" },
-                new NuSpecDependency { Id = "System.Net.Http", Version = "4.3.2" },
-                new NuSpecDependency { Id = "Newtonsoft.Json", Version = "10.0.3" },
-                new NuSpecDependency { Id = "Polly-Signed", Version = "5.3.0" }
+                new NuSpecDependency { Id = "Newtonsoft.Json", Version = "10.0.3" }
             },
             Version = assemblyInfo.AssemblyVersion,
             BasePath = bin452Path,

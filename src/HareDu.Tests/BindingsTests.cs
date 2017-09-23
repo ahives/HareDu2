@@ -9,7 +9,7 @@
     public class BindingsTests :
         HareDuTestBase
     {
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_get_all_bindings()
         {
             var result = await Client
@@ -32,7 +32,7 @@
             Console.WriteLine();
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_add_arguments()
         {
             Result result = await Client
@@ -57,7 +57,7 @@
                 });
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_delete_binding()
         {
             Result result = await Client
