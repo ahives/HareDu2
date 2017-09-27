@@ -239,7 +239,7 @@ namespace HareDu.Internal.Resources
                 public bool InternalUse { get; private set; }
                 public bool AutoDelete { get; private set; }
 
-                public void UsingRoutingType(ExchangeRoutingType routingType)
+                public void HasRoutingType(ExchangeRoutingType routingType)
                 {
                     switch (routingType)
                     {
@@ -276,7 +276,7 @@ namespace HareDu.Internal.Resources
 
                 public void IsForInternalUse() => InternalUse = true;
 
-                public void WithArguments(Action<ExchangeDefinitionArguments> arguments)
+                public void HasArguments(Action<ExchangeDefinitionArguments> arguments)
                 {
                     var impl = new ExchangeDefinitionArgumentsImpl();
                     arguments(impl);

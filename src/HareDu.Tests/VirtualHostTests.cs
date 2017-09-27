@@ -42,7 +42,7 @@
                     x.VirtualHost("HareDu5");
                     x.Configure(c =>
                     {
-                        c.EnableTracing();
+                        c.WithTracingEnabled();
                     });
                 });
 

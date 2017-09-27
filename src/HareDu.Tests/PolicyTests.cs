@@ -21,8 +21,8 @@
                     x.Configure(p =>
                     {
                         p.UsingPattern("^amq.");
-                        p.WithPriority(0);
-                        p.WithArguments(d =>
+                        p.HasPriority(0);
+                        p.HasArguments(d =>
                         {
                             d.SetHighAvailabilityMode(HighAvailabilityModes.All);
                             d.SetExpiry(1000);
@@ -47,8 +47,8 @@
                     x.Configure(p =>
                     {
                         p.UsingPattern("^amq.");
-                        p.WithPriority(0);
-                        p.WithArguments(d =>
+                        p.HasPriority(0);
+                        p.HasArguments(d =>
                         {
                             d.SetHighAvailabilityMode(HighAvailabilityModes.All);
                             d.SetFederationUpstreamSet("all");

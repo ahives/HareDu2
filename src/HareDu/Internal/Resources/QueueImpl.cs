@@ -451,7 +451,7 @@ namespace HareDu.Internal.Resources
 
                 public void IsDurable() => Durable = true;
 
-                public void WithArguments(Action<QueueCreateArguments> arguments)
+                public void HasArguments(Action<QueueCreateArguments> arguments)
                 {
                     var impl = new QueueCreateArgumentsImpl();
                     arguments(impl);

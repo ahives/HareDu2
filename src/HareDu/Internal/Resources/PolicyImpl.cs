@@ -219,7 +219,7 @@ namespace HareDu.Internal.Resources
 
                 public void UsingPattern(string pattern) => Pattern = pattern;
 
-                public void WithArguments(Action<PolicyDefinitionArguments> arguments)
+                public void HasArguments(Action<PolicyDefinitionArguments> arguments)
                 {
                     var impl = new PolicyDefinitionArgumentsImpl();
                     arguments(impl);
@@ -227,7 +227,7 @@ namespace HareDu.Internal.Resources
                     Arguments = impl.Arguments;
                 }
 
-                public void WithPriority(int priority) => Priority = priority;
+                public void HasPriority(int priority) => Priority = priority;
 
                 public void AppliedTo(string applyTo) => AppllyTo = applyTo;
             }

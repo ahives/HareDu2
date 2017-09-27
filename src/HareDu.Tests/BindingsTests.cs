@@ -47,8 +47,8 @@
                     });
                     x.Configure(c =>
                     {
-                        c.WithRoutingKey("*.");
-                        c.WithArguments(arg =>
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
                         {
                             arg.Set("arg1", "value1");
                         });

@@ -21,6 +21,6 @@ namespace HareDu
         /// Specify global parameter arguments.
         /// </summary>
         /// <param name="arguments"></param>
-        void WithArguments(Action<GlobalParameterArguments> arguments);
+        void HasArguments(Action<GlobalParameterArguments> arguments);
     }
 }

@@ -21,7 +21,7 @@ namespace HareDu
         /// Specify the message routing type (e.g. fanout, direct, topic, etc.).
         /// </summary>
         /// <param name="routingType"></param>
-        void UsingRoutingType(ExchangeRoutingType routingType);
+        void HasRoutingType(ExchangeRoutingType routingType);
 
         /// <summary>
         /// Specify that the exchange is durable.
@@ -37,7 +37,7 @@ namespace HareDu
         /// Specify user-defined arguments used to configure the exchange.
         /// </summary>
         /// <param name="arguments"></param>
-        void WithArguments(Action<ExchangeDefinitionArguments> arguments);
+        void HasArguments(Action<ExchangeDefinitionArguments> arguments);
 
         /// <summary>
         /// Specify that the exchange will be deleted when there are no consumers.

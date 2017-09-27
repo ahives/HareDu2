@@ -17,7 +17,7 @@
                     x.Parameter("");
                     x.Configure(c =>
                     {
-                        c.WithArguments(arg =>
+                        c.HasArguments(arg =>
                         {
                             arg.Set("arg1", "value1");
                         });

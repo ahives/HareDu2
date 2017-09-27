@@ -46,8 +46,8 @@
                     {
                         c.IsDurable();
                         c.IsForInternalUse();
-                        c.UsingRoutingType(ExchangeRoutingType.Fanout);
-//                        c.WithArguments(arg =>
+                        c.HasRoutingType(ExchangeRoutingType.Fanout);
+//                        c.HasArguments(arg =>
 //                        {
 //                            arg.Set("", "");
 //                        });

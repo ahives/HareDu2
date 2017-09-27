@@ -26,7 +26,7 @@ namespace HareDu
         /// Specify arguments for the queue.
         /// </summary>
         /// <param name="arguments">Pre-defined arguments applied to the definition of the queue.</param>
-        void WithArguments(Action<QueueCreateArguments> arguments);
+        void HasArguments(Action<QueueCreateArguments> arguments);
 
         /// <summary>
         /// Specify whether the queue is deleted when there are no consumers.

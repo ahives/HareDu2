@@ -125,7 +125,7 @@ namespace HareDu.Internal.Resources
             {
                 public IDictionary<string, object> Arguments { get; private set; }
                 
-                public void WithArguments(Action<GlobalParameterArguments> arguments)
+                public void HasArguments(Action<GlobalParameterArguments> arguments)
                 {
                     var impl = new GlobalParameterArgumentsImpl();
                     arguments(impl);

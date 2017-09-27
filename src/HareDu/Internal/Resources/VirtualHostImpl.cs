@@ -147,7 +147,7 @@ namespace HareDu.Internal.Resources
             {
                 public bool Tracing { get; private set; }
 
-                public void EnableTracing() => Tracing = true;
+                public void WithTracingEnabled() => Tracing = true;
             }
         }
     }

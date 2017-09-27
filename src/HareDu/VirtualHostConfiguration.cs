@@ -18,6 +18,6 @@ namespace HareDu
         /// <summary>
         /// Configuration setting that enabless tracing.
         /// </summary>
-        void EnableTracing();
+        void WithTracingEnabled();
     }
 }

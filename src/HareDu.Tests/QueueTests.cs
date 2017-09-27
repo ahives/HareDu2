@@ -26,7 +26,7 @@
                     x.Configure(c =>
                     {
                         c.IsDurable();
-                        c.WithArguments(arg =>
+                        c.HasArguments(arg =>
                         {
                             arg.SetQueueExpiration(1000);
                         });

@@ -277,9 +277,9 @@ namespace HareDu.Internal.Resources
                 public string RoutingKey { get; private set; }
                 public IDictionary<string, object> Arguments { get; private set; }
 
-                public void WithRoutingKey(string routingKey) => RoutingKey = routingKey;
+                public void HasRoutingKey(string routingKey) => RoutingKey = routingKey;
 
-                public void WithArguments(Action<BindingArguments> arguments)
+                public void HasArguments(Action<BindingArguments> arguments)
                 {
                     var impl = new BindingArgumentsImpl();
                     arguments(impl);
