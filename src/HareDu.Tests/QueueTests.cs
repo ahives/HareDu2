@@ -2,12 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
     using Extensions;
-    using Internal.Serialization;
     using Model;
-    using Newtonsoft.Json;
     using NUnit.Framework;
 
     [TestFixture]

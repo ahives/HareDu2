@@ -1,8 +1,10 @@
 ﻿namespace HareDu.Tests
 {
     using System;
-    using System.Security.Cryptography.X509Certificates;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Extensions;
+    using Model;
     using NUnit.Framework;
 
     [TestFixture]
@@ -12,11 +14,12 @@
         [Test, Explicit]
         public async Task Verify_can_get_all_bindings()
         {
-            var result = await Client
+            IEnumerable<BindingInfo> result = Client
                 .Factory<Binding>()
-                .GetAllAsync();
+                .GetAllAsync()
+                .Unravel();
             
-            foreach (var binding in result.Data)
+            foreach (var binding in result)
             {
                 Console.WriteLine("VirtualHost: {0}", binding.VirtualHost);
                 Console.WriteLine("Source: {0}", binding.Source);
@@ -27,9 +30,9 @@
                 Console.WriteLine();
             }
             
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine();
+            //Console.WriteLine("Reason: {0}", result.Reason);
+            //Console.WriteLine("StatusCode: {0}", result.StatusCode);
+            //Console.WriteLine();
         }
 
         [Test, Explicit]

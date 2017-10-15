@@ -138,9 +138,11 @@ namespace HareDu
 
             public Lazy<HareDuClientSettings> Settings { get; }
 
-            public HareDuClientConfigurationProviderImpl() => Settings = new Lazy<HareDuClientSettings>(
-                () => new HareDuClientSettingsImpl(_rmqServerUrl, _enableLogger, _logger, _loggerName, _timeout, _username, _password),
-                LazyThreadSafetyMode.PublicationOnly);
+            public HareDuClientConfigurationProviderImpl()
+            {
+                Settings = new Lazy<HareDuClientSettings>(
+                        () => new HareDuClientSettingsImpl(_rmqServerUrl, _enableLogger, _logger, _loggerName, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
+            }
 
             public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
 

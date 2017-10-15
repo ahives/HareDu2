@@ -107,8 +107,11 @@ namespace HareDu.Internal.Resources
 
             public Lazy<DefinedGlobalParameter> Definition { get; }
 
-            public GlobalParameterCreateActionImpl() => Definition = new Lazy<DefinedGlobalParameter>(
-                () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
+            public GlobalParameterCreateActionImpl()
+            {
+                Definition = new Lazy<DefinedGlobalParameter>(
+                    () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
+            }
 
             public void Parameter(string name) => _name = name;
             

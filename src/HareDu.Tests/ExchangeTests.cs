@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
     using Extensions;
     using Model;
@@ -18,7 +17,8 @@
             IEnumerable<ExchangeInfo> result = Client
                 .Factory<Exchange>()
                 .GetAllAsync()
-                .Where(x => x.Name == "HareDu");
+                .Unravel();
+                //.Where(x => x.Name == "HareDu");
 
             foreach (var exchange in result)
             {
@@ -35,8 +35,6 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-            var args = new Dictionary<string, object> {{"arg1", 5}, {"arg2", true}, {"arg3", "Something"}};
-
             Result result = await Client
                 .Factory<Exchange>()
                 .CreateAsync(x =>

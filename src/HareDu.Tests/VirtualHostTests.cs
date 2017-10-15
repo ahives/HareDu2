@@ -39,7 +39,7 @@
                 .Factory<VirtualHost>()
                 .CreateAsync(x =>
                 {
-                    x.VirtualHost("HareDu5");
+                    x.VirtualHost("HareDu2");
                     x.Configure(c =>
                     {
                         c.WithTracingEnabled();

@@ -148,8 +148,11 @@ namespace HareDu.Internal.Resources
             
             public Lazy<DefinedScopedParameter> Definition { get; }
 
-            public ScopedParameterCreateActionImpl() => Definition = new Lazy<DefinedScopedParameter>(
-                () => new DefinedScopedParameterImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
+            public ScopedParameterCreateActionImpl()
+            {
+                Definition = new Lazy<DefinedScopedParameter>(
+                    () => new DefinedScopedParameterImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
+            }
 
             public void Parameter(string name, string value)
             {

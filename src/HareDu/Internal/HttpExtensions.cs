@@ -39,8 +39,10 @@ namespace HareDu.Internal
 
         internal static async Task<Result> DeserializeResponse(this HttpResponseMessage responseMessage)
         {
-            string rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
-            
+            string rawRequest = string.Empty;
+            if (responseMessage.RequestMessage.Content != null)
+                rawRequest = await responseMessage.RequestMessage.Content.ReadAsStringAsync();
+
             Result result = new ResultImpl(responseMessage, rawRequest);
 
             return result;

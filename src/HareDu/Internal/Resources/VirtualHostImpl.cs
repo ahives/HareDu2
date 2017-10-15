@@ -137,8 +137,11 @@ namespace HareDu.Internal.Resources
                 DefinedVirtualHost
             {
                 public bool Tracing { get; }
-                
-                public DefinedVirtualHostImpl(bool tracing) => Tracing = tracing;
+
+                public DefinedVirtualHostImpl(bool tracing)
+                {
+                    Tracing = tracing;
+                }
             }
 
             
