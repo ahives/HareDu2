@@ -17,7 +17,7 @@
             IEnumerable<ExchangeInfo> result = Client
                 .Factory<Exchange>()
                 .GetAllAsync()
-                .Unravel();
+                .Safely();
                 //.Where(x => x.Name == "HareDu");
 
             foreach (var exchange in result)

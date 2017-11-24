@@ -17,7 +17,7 @@
             IEnumerable<BindingInfo> result = Client
                 .Factory<Binding>()
                 .GetAllAsync()
-                .Unravel();
+                .Safely();
             
             foreach (var binding in result)
             {

@@ -20,19 +20,19 @@ namespace HareDu.Extensions
 
     public static class LinqExtensions
     {
-        public static T Single<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().Single();
+        public static T Single<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().Single();
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().SingleOrDefault();
+        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().SingleOrDefault();
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Unravel().SingleOrDefault(predicate);
+        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().SingleOrDefault(predicate);
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().FirstOrDefault();
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().FirstOrDefault();
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Unravel().FirstOrDefault(predicate);
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().FirstOrDefault(predicate);
 
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source) => source.Unravel().Any();
+        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().Any();
 
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Unravel().Any(predicate);
+        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().Any(predicate);
 
         public static IEnumerable<T> Where<T>(this Result<IEnumerable<T>> source, Func<T, bool> predicate)
             => source?.Data == null || !source.Data.Any() ? Enumerable.Empty<T>() : source.Data.Where(predicate);
@@ -50,18 +50,24 @@ namespace HareDu.Extensions
             if (data?.Data == null || !data.Data.Any())
                 return Enumerable.Empty<T>();
 
-            IEnumerable<T> list = source.Unravel().Where(predicate);
+            IEnumerable<T> list = source.Safely().Where(predicate);
             
             return list;
         }
 
         public static T Unwrap<T>(this Task<T> result) => result.Result;
 
-        public static T Unravel<T>(this Task<Result<T>> result)
+        /// <summary>
+        /// Unwraps the Result from Task<Result<T>> and returns T.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Safely<T>(this Task<Result<T>> result)
         {
-            var data = result.Unwrap().Data;
+            T data = result.Unwrap().Data;
 
-            return !data.IsNull() ? result.Unwrap().Data : default(T);
+            return !data.IsNull() ? data : default(T);
         }
     }
 }

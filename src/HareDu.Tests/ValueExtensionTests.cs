@@ -51,7 +51,7 @@
             IEnumerable<VirtualHostInfo> vhosts = Client
                 .Factory<VirtualHost>()
                 .GetAllAsync()
-                .Unravel();
+                .Safely();
 
             foreach (var vhost in vhosts)
             {
