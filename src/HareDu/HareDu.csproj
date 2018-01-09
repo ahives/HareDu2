@@ -1,36 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C03CC43-9B6D-477C-9887-AC0C16CB7BC3}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HareDu</RootNamespace>
-    <AssemblyName>HareDu</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+    <DebugType>portable</DebugType>
+    <LangVersion>7.1</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
@@ -77,237 +57,20 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Binding.cs" />
-    <Compile Include="BindingArguments.cs" />
-    <Compile Include="BindingCreateAction.cs" />
-    <Compile Include="BindingConfiguration.cs" />
-    <Compile Include="BindingCreateDefinition.cs" />
-    <Compile Include="BindingDeleteAction.cs" />
-    <Compile Include="BindingDeleteDefinition.cs" />
-    <Compile Include="BindingType.cs" />
-    <Compile Include="BindingTarget.cs" />
-    <Compile Include="Configuration\HareDuClientConfigurationProvider.cs" />
-    <Compile Include="Configuration\HareDuClientSettings.cs" />
-    <Compile Include="Configuration\HareDuCredentials.cs" />
-    <Compile Include="Configuration\HareDuLoggerSettings.cs" />
-    <Compile Include="Configuration\LoggerSettings.cs" />
-    <Compile Include="Exceptions\QueuePeekConfigurationException.cs" />
-    <Compile Include="ExchangeTarget.cs" />
-    <Compile Include="Extensions\ConverterExtensions.cs" />
-    <Compile Include="Extensions\JsonExtensions.cs" />
-    <Compile Include="Extensions\LinqExtensions.cs" />
-    <Compile Include="Extensions\ValueExtensions.cs" />
-    <Compile Include="GlobalParameterConfiguration.cs" />
-    <Compile Include="Internal\DefinedExchange.cs" />
-    <Compile Include="Internal\DefinedQueuePeek.cs" />
-    <Compile Include="MessageEncoding.cs" />
-    <Compile Include="Model\ServerDefinition.cs" />
-    <Compile Include="PolicyTarget.cs" />
-    <Compile Include="QueueCreateTarget.cs" />
-    <Compile Include="QueuePeekConfiguration.cs" />
-    <Compile Include="QueuePeekTarget.cs" />
-    <Compile Include="ScopedParameterTarget.cs" />
-    <Compile Include="UserPermissionsTarget.cs" />
-    <Compile Include="QueueTarget.cs" />
-    <Compile Include="Exceptions\BindingException.cs" />
-    <Compile Include="Exceptions\ExchangeDefinitionException.cs" />
-    <Compile Include="Exceptions\HareDuClientConfigurationException.cs" />
-    <Compile Include="Exceptions\ParameterDefinitionException.cs" />
-    <Compile Include="Exceptions\ParameterMissingException.cs" />
-    <Compile Include="Exceptions\PolicyDefinitionException.cs" />
-    <Compile Include="Exceptions\PolicyNameMissingException.cs" />
-    <Compile Include="Exceptions\QueueArgumentException.cs" />
-    <Compile Include="Cluster.cs" />
-    <Compile Include="Exceptions\HostUrlMissingException.cs" />
-    <Compile Include="Exceptions\QueueMissingException.cs" />
-    <Compile Include="ExchangeDeleteCondition.cs" />
-    <Compile Include="Exceptions\ExchangeMissingException.cs" />
-    <Compile Include="Exceptions\DeleteVirtualHostException.cs" />
-    <Compile Include="Exceptions\ExchangeRoutingTypeMissingException.cs" />
-    <Compile Include="Exceptions\HareDuClientInitException.cs" />
-    <Compile Include="Exceptions\HareDuResourceInitException.cs" />
-    <Compile Include="Exceptions\UserCredentialsMissingException.cs" />
-    <Compile Include="Exceptions\VirtualHostMissingException.cs" />
-    <Compile Include="ExchangeConfiguration.cs" />
-    <Compile Include="ExchangeCreateAction.cs" />
-    <Compile Include="Exchange.cs" />
-    <Compile Include="ExchangeDefinitionArguments.cs" />
-    <Compile Include="ExchangeDeleteAction.cs" />
-    <Compile Include="ExchangeRoutingType.cs" />
-    <Compile Include="GlobalParameter.cs" />
-    <Compile Include="GlobalParameterArguments.cs" />
-    <Compile Include="GlobalParameterCreateAction.cs" />
-    <Compile Include="GlobalParameterDeleteAction.cs" />
-    <Compile Include="HareDuFactory.cs" />
-    <Compile Include="HareDuClient.cs" />
-    <Compile Include="HealthCheckType.cs" />
-    <Compile Include="Internal\DefinedVirtualHost.cs" />
-    <Compile Include="PolicyDeleteAction.cs" />
-    <Compile Include="QueueDeleteAction.cs" />
-    <Compile Include="QueueEmptyAction.cs" />
-    <Compile Include="QueuePeekAction.cs" />
-    <Compile Include="ScopedParameterDeleteAction.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="HighAvailabilityModes.cs" />
-    <Compile Include="HighAvailabilitySyncModes.cs" />
-    <Compile Include="Internal\AsyncTaskExtensions.cs" />
-    <Compile Include="Internal\DefineBinding.cs" />
-    <Compile Include="Internal\DefinedPolicy.cs" />
-    <Compile Include="Internal\DefinedGlobalParameter.cs" />
-    <Compile Include="Internal\HareDuFactoryImpl.cs" />
-    <Compile Include="Internal\HttpExtensions.cs" />
-    <Compile Include="Internal\Logging.cs" />
-    <Compile Include="Internal\DefinedQueue.cs" />
-    <Compile Include="Internal\Resources\BindingImpl.cs" />
-    <Compile Include="Internal\Resources\ClusterImpl.cs" />
-    <Compile Include="Internal\Resources\ExchangeImpl.cs" />
-    <Compile Include="Internal\Resources\GlobalParameterImpl.cs" />
-    <Compile Include="Internal\Resources\ServerImpl.cs" />
-    <Compile Include="Internal\Resources\PolicyImpl.cs" />
-    <Compile Include="Internal\Resources\QueueImpl.cs" />
-    <Compile Include="Internal\Resources\NodeImpl.cs" />
-    <Compile Include="Internal\Resources\ScopedParameterImpl.cs" />
-    <Compile Include="Internal\Resources\UserPermissionsImpl.cs" />
-    <Compile Include="Internal\Resources\UserImpl.cs" />
-    <Compile Include="Internal\DefinedScopedParameter.cs" />
-    <Compile Include="Internal\Serialization\ByteArrayConverter.cs" />
-    <Compile Include="Internal\Serialization\DictionaryConverterCache.cs" />
-    <Compile Include="Internal\Serialization\DictionaryObjectValueProvider.cs" />
-    <Compile Include="Internal\Serialization\DynamicImplementationBuilder.cs" />
-    <Compile Include="Internal\Serialization\DynamicObjectConverter.cs" />
-    <Compile Include="Internal\Serialization\DynamicObjectConverterCache.cs" />
-    <Compile Include="Internal\Serialization\EnumDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\EnumObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ExpressionExtensions.cs" />
-    <Compile Include="Internal\Serialization\IArrayValueProvider.cs" />
-    <Compile Include="Internal\Serialization\IDictionaryConverter.cs" />
-    <Compile Include="Internal\Serialization\IDictionaryConverterCache.cs" />
-    <Compile Include="Internal\Serialization\IDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\IImplementationBuilder.cs" />
-    <Compile Include="Internal\Serialization\IMessageSerializer.cs" />
-    <Compile Include="Internal\Serialization\InterfaceExtensions.cs" />
-    <Compile Include="Internal\Serialization\InterfaceProxyConverter.cs" />
-    <Compile Include="Internal\Serialization\InterfaceReflectionCache.cs" />
-    <Compile Include="Internal\Serialization\IObjectConverter.cs" />
-    <Compile Include="Internal\Serialization\IObjectConverterCache.cs" />
-    <Compile Include="Internal\Serialization\IObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\IObjectValueProvider.cs" />
-    <Compile Include="Internal\Serialization\IReadOnlyPropertyCache.cs" />
-    <Compile Include="Internal\Serialization\IReadWritePropertyCache.cs" />
-    <Compile Include="Internal\Serialization\ITypeCache.cs" />
-    <Compile Include="Internal\Serialization\ITypeMetadataCache.cs" />
-    <Compile Include="Internal\Serialization\JsonContractResolver.cs" />
-    <Compile Include="Internal\Serialization\JsonMessageSerializer.cs" />
-    <Compile Include="Internal\Serialization\ListConverterCache.cs" />
-    <Compile Include="Internal\Serialization\ListJsonConverter.cs" />
-    <Compile Include="Internal\Serialization\NullableValueDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\NullableValueObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ObjectArrayDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\ObjectArrayObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ObjectArrayValueProvider.cs" />
-    <Compile Include="Internal\Serialization\ObjectDictionaryConverter.cs" />
-    <Compile Include="Internal\Serialization\ObjectDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\ObjectListDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\ObjectListObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ObjectObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ReadOnlyProperty.cs" />
-    <Compile Include="Internal\Serialization\ReadOnlyPropertyCache.cs" />
-    <Compile Include="Internal\Serialization\ReadWriteProperty.cs" />
-    <Compile Include="Internal\Serialization\ReadWritePropertyCache.cs" />
-    <Compile Include="Internal\Serialization\SerializerCache.cs" />
-    <Compile Include="Internal\Serialization\StringDecimalConverter.cs" />
-    <Compile Include="Internal\Serialization\TypeCache.cs" />
-    <Compile Include="Internal\Serialization\TypeExtensions.cs" />
-    <Compile Include="Internal\Serialization\TypeMetadataCache.cs" />
-    <Compile Include="Internal\Serialization\TypeNameFormatter.cs" />
-    <Compile Include="Internal\Resources\ResourceBase.cs" />
-    <Compile Include="Internal\Resources\VirtualHostImpl.cs" />
-    <Compile Include="Internal\SanitizationExtensions.cs" />
-    <Compile Include="Internal\Serialization\ValueArrayObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueListObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueObject.cs" />
-    <Compile Include="Internal\Serialization\ValueObjectDictionaryDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueObjectDictionaryObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueObjectMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueValueDictionaryDictionaryMapper.cs" />
-    <Compile Include="Internal\Serialization\ValueValueDictionaryObjectMapper.cs" />
-    <Compile Include="Internal\DefinedUser.cs" />
-    <Compile Include="Internal\DefinedUserPermissions.cs" />
-    <Compile Include="Internal\UserAccessTag.cs" />
-    <Compile Include="Model\Application.cs" />
-    <Compile Include="Model\AuthenticationMechanism.cs" />
-    <Compile Include="Model\BindingInfo.cs" />
-    <Compile Include="Model\BindingDescription.cs" />
-    <Compile Include="Model\ChannelDetails.cs" />
-    <Compile Include="Model\ChannelInfo.cs" />
-    <Compile Include="Model\ClusterInfo.cs" />
-    <Compile Include="Model\ClusterObjectTotals.cs" />
-    <Compile Include="Model\ConnectionInfo.cs" />
-    <Compile Include="Model\ConnectionDetails.cs" />
-    <Compile Include="Model\ConsumerInfo.cs" />
-    <Compile Include="Model\Context.cs" />
-    <Compile Include="Model\ExchangeInfo.cs" />
-    <Compile Include="Model\ExchangeDescription.cs" />
-    <Compile Include="Model\ExchangeType.cs" />
-    <Compile Include="Model\GarbageCollectionDetails.cs" />
-    <Compile Include="Model\GlobalParameterInfo.cs" />
-    <Compile Include="Model\Listener.cs" />
-    <Compile Include="Model\MessageStats.cs" />
-    <Compile Include="Model\GarbageCollectionMetrics.cs" />
-    <Compile Include="Model\NodeInfo.cs" />
-    <Compile Include="Model\PolicyDetails.cs" />
-    <Compile Include="Model\PolicyInfo.cs" />
-    <Compile Include="Model\PolicyDescription.cs" />
-    <Compile Include="Model\QueueConsumerDetails.cs" />
-    <Compile Include="Model\QueueInfo.cs" />
-    <Compile Include="Model\QueueStats.cs" />
-    <Compile Include="Model\QueueStatus.cs" />
-    <Compile Include="Model\QueueDescription.cs" />
-    <Compile Include="Model\Rate.cs" />
-    <Compile Include="Model\ResourceSummary.cs" />
-    <Compile Include="Model\ScopedParameterInfo.cs" />
-    <Compile Include="Model\SocketOptions.cs" />
-    <Compile Include="Model\UserPermissionsInfo.cs" />
-    <Compile Include="Model\UserInfo.cs" />
-    <Compile Include="Model\VirtualHostDescription.cs" />
-    <Compile Include="Model\ServerHealth.cs" />
-    <Compile Include="Model\VirtualHostInfo.cs" />
-    <Compile Include="Policy.cs" />
-    <Compile Include="PolicyConfiguration.cs" />
-    <Compile Include="PolicyCreateAction.cs" />
-    <Compile Include="PolicyDefinitionArguments.cs" />
-    <Compile Include="QueueConfiguration.cs" />
-    <Compile Include="QueueCreateArguments.cs" />
-    <Compile Include="QueueCreateAction.cs" />
-    <Compile Include="QueueDeleteCondition.cs" />
-    <Compile Include="Queue.cs" />
-    <Compile Include="Resource.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="Result.cs" />
-    <Compile Include="ScopedParameter.cs" />
-    <Compile Include="ScopedParameterCreateAction.cs" />
-    <Compile Include="HealthCheckAction.cs" />
-    <Compile Include="UserPermissions.cs" />
-    <Compile Include="UserPermissionsConfiguration.cs" />
-    <Compile Include="UserPermissionsCreateAction.cs" />
-    <Compile Include="UserAccessOptions.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="UserCreateAction.cs" />
-    <Compile Include="UserDeleteAction.cs" />
-    <Compile Include="UserPermissionsDeleteAction.cs" />
-    <Compile Include="VirtualHost.cs" />
-    <Compile Include="VirtualHostConfiguration.cs" />
-    <Compile Include="VirtualHostCreateAction.cs" />
-    <Compile Include="VirtualHostDeleteAction.cs" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
+    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Console" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.FileVersionInfo" Version="4.3.0" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+  </ItemGroup>
 </Project>

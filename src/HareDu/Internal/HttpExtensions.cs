@@ -56,9 +56,13 @@ namespace HareDu.Internal
             {
                 DebugInfo = $"Debug: {request}";
                 Data = response;
+                Timestamp = DateTimeOffset.UtcNow;
+                
+                if (responseMessage == null)
+                    throw new ArgumentNullException(nameof(responseMessage));
+                
                 Reason = responseMessage.ReasonPhrase;
                 StatusCode = responseMessage.StatusCode;
-                Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string DebugInfo { get; }
@@ -75,9 +79,13 @@ namespace HareDu.Internal
             public ResultImpl(HttpResponseMessage responseMessage, string request)
             {
                 DebugInfo = $"Debug: {request}";
+                Timestamp = DateTimeOffset.UtcNow;
+                
+                if (responseMessage == null)
+                    throw new ArgumentNullException(nameof(responseMessage));
+                
                 Reason = responseMessage.ReasonPhrase;
                 StatusCode = responseMessage.StatusCode;
-                Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string DebugInfo { get; }
