@@ -16,7 +16,7 @@
         {
             IEnumerable<ChannelInfo> nodes = Client
                 .Factory<Node>()
-                .GetChannelsAsync()
+                .GetChannels()
                 .Safely();
             
             foreach (var node in nodes)

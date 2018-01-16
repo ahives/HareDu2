@@ -55,7 +55,7 @@
         {
             Result<IEnumerable<ChannelInfo>> result = await Client
                 .Factory<Node>()
-                .GetChannelsAsync();
+                .GetChannels();
 
             foreach (var node in result.Data)
             {

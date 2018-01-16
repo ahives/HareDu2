@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2017 Albert L. Hives
+﻿// Copyright 2013-2018 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,21 +26,21 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns all connections on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns all consumers on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns all object definitions on the current RabbitMQ node.

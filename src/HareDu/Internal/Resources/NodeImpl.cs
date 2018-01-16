@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2017 Albert L. Hives
+﻿// Copyright 2013-2018 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -39,7 +39,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -49,7 +49,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
