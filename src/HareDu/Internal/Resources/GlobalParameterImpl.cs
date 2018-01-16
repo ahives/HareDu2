@@ -20,21 +20,20 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
 
     internal class GlobalParameterImpl :
         ResourceBase,
         GlobalParameter
     {
-        public GlobalParameterImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public GlobalParameterImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/global-parameters";
             var result = await Get<IEnumerable<GlobalParameterInfo>>(url, cancellationToken);
@@ -44,7 +43,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<GlobalParameterInfo>> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
             
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
@@ -68,7 +67,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<GlobalParameterInfo>> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new GlobalParameterDeleteActionImpl();
             action(impl);

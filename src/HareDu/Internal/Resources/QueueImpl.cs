@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Model;
     using Queue = HareDu.Queue;
@@ -29,14 +28,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Queue
     {
-        public QueueImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public QueueImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<QueueInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/queues";
             var result = await Get<IEnumerable<QueueInfo>>(url, cancellationToken);
@@ -46,7 +45,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<QueueInfo>> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new QueueCreateActionImpl();
             action(impl);
@@ -78,7 +77,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<QueueInfo>> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new QueueDeleteActionImpl();
             action(impl);
@@ -108,7 +107,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<QueueInfo>> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new QueueEmptyActionImpl();
             action(impl);
@@ -133,7 +132,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<QueueInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new QueuePeekActionImpl();
             action(impl);

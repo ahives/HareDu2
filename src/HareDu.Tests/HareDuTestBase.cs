@@ -1,4 +1,4 @@
-﻿namespace HareDu.Tests
+﻿﻿namespace HareDu.Tests
 {
     using NUnit.Framework;
 
@@ -11,11 +11,6 @@
             Client = HareDuClient.Initialize(x =>
             {
                 x.ConnectTo("http://localhost:15672");
-                x.Logging(s =>
-                {
-                    s.Enable();
-                    s.UseLogger("HareDuLogger");
-                });
                 x.UsingCredentials("guest", "guest");
             });
         }

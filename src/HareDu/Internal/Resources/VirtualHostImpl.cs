@@ -26,14 +26,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         VirtualHost
     {
-        public VirtualHostImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public VirtualHostImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
             var result = await Get<IEnumerable<VirtualHostInfo>>(url, cancellationToken);
@@ -43,7 +43,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<VirtualHostInfo>> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new VirtualHostCreateActionImpl();
             action(impl);
@@ -66,7 +66,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<VirtualHostInfo>> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new VirtualHostDeleteActionImpl();
             action(impl);

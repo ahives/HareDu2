@@ -1,4 +1,4 @@
-﻿namespace HareDu.Tests
+﻿﻿namespace HareDu.Tests
 {
     using System;
     using System.Collections.Generic;

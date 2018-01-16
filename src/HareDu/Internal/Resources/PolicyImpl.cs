@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Extensions;
     using Model;
@@ -29,14 +28,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Policy
     {
-        public PolicyImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public PolicyImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/policies";
             var result = await Get<IEnumerable<PolicyInfo>>(url, cancellationToken);
@@ -46,7 +45,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<PolicyInfo>> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new PolicyCreateActionImpl();
             action(impl);
@@ -78,7 +77,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<PolicyInfo>> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new PolicyDeleteActionImpl();
             action(impl);

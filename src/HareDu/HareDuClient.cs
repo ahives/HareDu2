@@ -19,7 +19,6 @@ namespace HareDu
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading;
-    using Common.Logging;
     using Configuration;
     using Exceptions;
     using Extensions;
@@ -135,10 +134,7 @@ namespace HareDu
             HareDuClientConfigurationProvider
         {
             static string _rmqServerUrl;
-            static ILog _logger;
             static TimeSpan _timeout;
-            static bool _enableLogger;
-            static string _loggerName;
             static string _username;
             static string _password;
 
@@ -147,20 +143,10 @@ namespace HareDu
             public HareDuClientConfigurationProviderImpl()
             {
                 Settings = new Lazy<HareDuClientSettings>(
-                        () => new HareDuClientSettingsImpl(_rmqServerUrl, _enableLogger, _logger, _loggerName, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
+                        () => new HareDuClientSettingsImpl(_rmqServerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
-
-            public void Logging(Action<LoggerSettings> settings)
-            {
-                var impl = new LoggerSettingsImpl();
-                settings(impl);
-
-                _enableLogger = impl.IsEnabled;
-                _logger = impl.Logger;
-                _loggerName = impl.Name;
-            }
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 
@@ -174,35 +160,17 @@ namespace HareDu
             class HareDuClientSettingsImpl :
                 HareDuClientSettings
             {
-                public HareDuClientSettingsImpl(string rmqServerUrl, bool enableLogger, ILog logger, string loggerName,
-                    TimeSpan timeout, string username, string password)
+                public HareDuClientSettingsImpl(string rmqServerUrl, TimeSpan timeout, string username, string password)
                 {
                     RabbitMqServerUrl = rmqServerUrl;
                     Timeout = timeout;
                     Credentials = new HareDuCredentialsImpl(username, password);
-                    LoggerSettings = new HareDuLoggerSettingsImpl(enableLogger, loggerName, logger);
                 }
 
                 public string RabbitMqServerUrl { get; }
                 public TimeSpan Timeout { get; }
-                public HareDuLoggerSettings LoggerSettings { get; }
                 public HareDuCredentials Credentials { get; }
 
-                
-                class HareDuLoggerSettingsImpl :
-                    HareDuLoggerSettings
-                {
-                    public HareDuLoggerSettingsImpl(bool enableLogger, string loggerName, ILog logger)
-                    {
-                        Enable = enableLogger;
-                        Name = loggerName;
-                        Logger = logger;
-                    }
-
-                    public bool Enable { get; }
-                    public string Name { get; }
-                    public ILog Logger { get; }
-                }
 
 
                 class HareDuCredentialsImpl :
@@ -217,21 +185,6 @@ namespace HareDu
                     public string Username { get; }
                     public string Password { get; }
                 }
-            }
-
-
-            class LoggerSettingsImpl :
-                LoggerSettings
-            {
-                public string Name { get; private set; }
-                public bool IsEnabled { get; private set; }
-                public ILog Logger { get; private set; }
-
-                public void Enable() => IsEnabled = true;
-
-                public void UseLogger(string name) => Name = name;
-                
-                public void UseLogger(ILog logger) => Logger = logger;
             }
         }
     }

@@ -19,7 +19,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Model;
 
@@ -27,14 +26,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         UserPermissions
     {
-        public UserPermissionsImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public UserPermissionsImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<UserPermissionsInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/users";
             var result = await Get<IEnumerable<UserPermissionsInfo>>(url, cancellationToken);
@@ -44,7 +43,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<UserPermissionsInfo>> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new UserPermissionsCreateActionImpl();
             action(impl);
@@ -73,7 +72,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<UserPermissionsInfo>> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new UserPermissionsDeleteActionImpl();
             action(impl);

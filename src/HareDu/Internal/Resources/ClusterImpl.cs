@@ -17,21 +17,20 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Model;
 
     internal class ClusterImpl :
         ResourceBase,
         Cluster
     {
-        public ClusterImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public ClusterImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = "api/overview";
             var result = await Get<ClusterInfo>(url, cancellationToken);
@@ -41,7 +40,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = "api/nodes";
             var result = await Get<IEnumerable<NodeInfo>>(url, cancellationToken);

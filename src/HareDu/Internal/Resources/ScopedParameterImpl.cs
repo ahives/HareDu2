@@ -19,7 +19,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Model;
 
@@ -27,14 +26,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         ScopedParameter
     {
-        public ScopedParameterImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public ScopedParameterImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/parameters";
 
@@ -45,7 +44,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<ScopedParameterInfo>> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
             
             var impl = new ScopedParameterCreateActionImpl();
             action(impl);
@@ -66,7 +65,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<ScopedParameterInfo>> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new ScopedParameterDeleteActionImpl();
             action(impl);

@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Model;
 
@@ -28,14 +27,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Exchange
     {
-        public ExchangeImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public ExchangeImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/exchanges";
             var result = await Get<IEnumerable<ExchangeInfo>>(url, cancellationToken);
@@ -45,7 +44,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<ExchangeInfo>> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new ExchangeCreateActionImpl();
             action(impl);
@@ -80,7 +79,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<ExchangeInfo>> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new ExchangeDeleteActionImpl();
             action(impl);

@@ -20,14 +20,12 @@ namespace HareDu.Internal
     using Exceptions;
 
     internal class HareDuFactoryImpl :
-        Logging,
         HareDuFactory
     {
         readonly HttpClient _client;
         readonly HareDuClientSettings _settings;
 
         public HareDuFactoryImpl(HttpClient client, HareDuClientSettings settings)
-            : base(settings.LoggerSettings)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _settings = settings;
@@ -49,8 +47,6 @@ namespace HareDu.Internal
 
         public void CancelPendingRequest()
         {
-            LogInfo("Cancelling all pending requests.");
-
             _client.CancelPendingRequests();
         }
     }

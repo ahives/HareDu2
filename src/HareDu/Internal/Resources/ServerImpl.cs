@@ -17,21 +17,20 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Model;
 
     internal class ServerImpl :
         ResourceBase,
         Server
     {
-        public ServerImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public ServerImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<ServerHealth>> HealthCheck(Action<HealthCheckAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new HealthCheckActionImpl();
             action(impl);

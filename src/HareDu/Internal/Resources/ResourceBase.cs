@@ -26,13 +26,11 @@ namespace HareDu.Internal.Resources
     using Newtonsoft.Json;
     using Serialization;
 
-    internal class ResourceBase :
-        Logging
+    internal class ResourceBase
     {
         readonly HttpClient _client;
 
-        protected ResourceBase(HttpClient client, HareDuClientSettings settings)
-            : base(settings.LoggerSettings)
+        protected ResourceBase(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }

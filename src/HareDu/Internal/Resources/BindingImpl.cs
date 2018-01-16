@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Model;
 
@@ -28,14 +27,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         Binding
     {
-        public BindingImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public BindingImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/bindings";
             var result = await Get<IEnumerable<BindingInfo>>(url, cancellationToken);
@@ -45,7 +44,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new BindingCreateActionImpl();
             action(impl);
@@ -84,7 +83,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<BindingInfo>> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new BindingDeleteActionImpl();
             action(impl);

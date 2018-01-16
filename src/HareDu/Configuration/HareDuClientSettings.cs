@@ -24,9 +24,6 @@ namespace HareDu.Configuration
         [JsonProperty("timeout")]
         TimeSpan Timeout { get; }
         
-        [JsonProperty("logger")]
-        HareDuLoggerSettings LoggerSettings { get; }
-        
         [JsonProperty("credentials")]
         HareDuCredentials Credentials { get; }
     }

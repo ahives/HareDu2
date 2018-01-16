@@ -24,12 +24,6 @@ namespace HareDu.Configuration
         void ConnectTo(string rmqServerUrl);
 
         /// <summary>
-        /// Specify the information needed to setup API logging.
-        /// </summary>
-        /// <param name="settings"></param>
-        void Logging(Action<LoggerSettings> settings);
-
-        /// <summary>
         /// Specify the maximum time before the HTTP request to the RAbbitMQ server will fail.
         /// </summary>
         /// <param name="timeout"></param>

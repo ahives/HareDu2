@@ -17,21 +17,20 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Model;
 
     internal class NodeImpl :
         ResourceBase,
         Node
     {
-        public NodeImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public NodeImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = "api/nodes";
             var result = await Get<IEnumerable<ChannelInfo>>(url, cancellationToken);
@@ -41,7 +40,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/connections";
             var result = await Get<IEnumerable<ConnectionInfo>>(url, cancellationToken);
@@ -51,7 +50,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/consumers";
             var result = await Get<IEnumerable<ConsumerInfo>>(url, cancellationToken);
@@ -61,7 +60,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<ServerDefinition>> GetDefintiions(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/definitions";
             var result = await Get<ServerDefinition>(url, cancellationToken);

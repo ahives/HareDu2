@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
     using Exceptions;
     using Model;
 
@@ -28,14 +27,14 @@ namespace HareDu.Internal.Resources
         ResourceBase,
         User
     {
-        public UserImpl(HttpClient client, HareDuClientSettings settings)
-            : base(client, settings)
+        public UserImpl(HttpClient client)
+            : base(client)
         {
         }
 
         public async Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             string url = $"api/users";
             var result = await Get<IEnumerable<UserInfo>>(url, cancellationToken);
@@ -45,7 +44,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<UserInfo>> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new UserCreateActionImpl();
             action(impl);
@@ -71,7 +70,7 @@ namespace HareDu.Internal.Resources
 
         public async Task<Result<UserInfo>> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = default)
         {
-            cancellationToken.RequestCanceled(LogInfo);
+            cancellationToken.RequestCanceled();
 
             var impl = new UserDeleteActionImpl();
             action(impl);
