@@ -32,21 +32,18 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ScopedParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/parameters";
 
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<ScopedParameterInfo>> result = await response.DeserializeResponse<IEnumerable<ScopedParameterInfo>>();
-
-            LogInfo($"Sent request to return all parameter information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<ScopedParameterInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ScopedParameterInfo>> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
             
@@ -58,19 +55,16 @@ namespace HareDu.Internal.Resources
             Debug.Assert(definition != null);
 
             if (string.IsNullOrWhiteSpace(definition.ParameterName))
-                throw new ParameterMissingException("The name of the parameter is missing.");
+                return Result.None<ScopedParameterInfo>(errors: new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
                     
             string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create a scoped parameter '{definition.ParameterName}'.");
+            var result = await Put<DefinedScopedParameter, ScopedParameterInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ScopedParameterInfo>> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -82,14 +76,11 @@ namespace HareDu.Internal.Resources
             string component = impl.Component.Value;
             
             if (string.IsNullOrWhiteSpace(scopedParameter))
-                throw new ParameterMissingException("The name of the parameter is missing.");
+                return Result.None<ScopedParameterInfo>(errors: new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
 
             string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{scopedParameter}'.");
+            var result = await Delete<ScopedParameterInfo>(url, cancellationToken);
 
             return result;
         }

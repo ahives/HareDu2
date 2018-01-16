@@ -16,6 +16,7 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -32,26 +33,25 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<BindingInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/bindings";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<BindingInfo>> result = await response.DeserializeResponse<IEnumerable<BindingInfo>>();
-
-            LogInfo($"Sent request to return all binding information corresponding on current RabbitMQ server.");
+            var result = await Get<IEnumerable<BindingInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<BindingCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             var impl = new BindingCreateActionImpl();
             action(impl);
+            
+            if (impl.Errors.Value.Any())
+                return Result.None<BindingInfo>(errors: impl.Errors.Value);
 
             DefineBinding definition = impl.Definition.Value;
 
@@ -63,13 +63,13 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(source))
-                throw new BindingException("The name of the binding source is missing.");
+                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the binding (queue/exchange) source is missing.") });
 
             if (string.IsNullOrWhiteSpace(destination))
-                throw new BindingException("The name of the binding destination is missing.");
+                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the destination binding (queue/exchange) is missing.") });
             
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -77,46 +77,40 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}"
                 : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
 
-            HttpResponseMessage response = await PerformHttpPost(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create a binding between exchanges '{source}' and '{destination}' on virtual host '{sanitizedVHost}'.");
+            var result = await PerformHttpPost<DefineBinding, BindingInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<BindingDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<BindingInfo>> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             var impl = new BindingDeleteActionImpl();
             action(impl);
 
-            string bindingDestination = impl.BindingDestination.Value;
+            string destination = impl.BindingDestination.Value;
             string vhost = impl.VirtualHost.Value;
             string bindingName = impl.BindingName.Value;
-            string bindingSource = impl.BindingSource.Value;
+            string source = impl.BindingSource.Value;
             BindingType bindingType = impl.BindingType.Value;
             
-            if (string.IsNullOrWhiteSpace(bindingDestination))
-                throw new QueueMissingException("The name of the destination binding (queue/exchange) is missing.");
+            if (string.IsNullOrWhiteSpace(destination))
+                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the destination binding (queue/exchange) is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
 
             if (string.IsNullOrWhiteSpace(bindingName))
-                throw new BindingException("The name of the binding is missing.");
+                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the binding is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = bindingType == BindingType.Queue
-                ? $"api/bindings/{sanitizedVHost}/e/{bindingSource}/q/{bindingDestination}/{bindingName}"
-                : $"api/bindings/{sanitizedVHost}/e/{bindingSource}/e/{bindingDestination}/{bindingName}";
+                ? $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}/{bindingName}"
+                : $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}/{bindingName}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server for binding '{impl.BindingName}'.");
+            var result = await Delete<BindingInfo>(url, cancellationToken);
 
             return result;
         }
@@ -198,7 +192,7 @@ namespace HareDu.Internal.Resources
             BindingCreateAction
         {
             static string _routingKey;
-            static IDictionary<string, object> _arguments;
+            static IDictionary<string, ArgumentValue<object>> _arguments;
             static string _vhost;
             static string _source;
             static string _destination;
@@ -209,9 +203,11 @@ namespace HareDu.Internal.Resources
             public Lazy<string> Destination { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<BindingType> BindingType { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public BindingCreateActionImpl()
             {
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefineBinding>(() => new DefineBindingImpl(_routingKey, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 Source = new Lazy<string>(() => _source, LazyThreadSafetyMode.PublicationOnly);
                 Destination = new Lazy<string>(() => _destination, LazyThreadSafetyMode.PublicationOnly);
@@ -275,7 +271,7 @@ namespace HareDu.Internal.Resources
                 BindingConfiguration
             {
                 public string RoutingKey { get; private set; }
-                public IDictionary<string, object> Arguments { get; private set; }
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
 
                 public void HasRoutingKey(string routingKey) => RoutingKey = routingKey;
 
@@ -292,19 +288,14 @@ namespace HareDu.Internal.Resources
             class BindingArgumentsImpl :
                 BindingArguments
             {
-                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
 
                 public void Set<T>(string arg, T value)
                 {
-                    Validate(arg);
-                    
-                    Arguments.Add(arg.Trim(), value);
-                }
-
-                void Validate(string arg)
-                {
-                    if (Arguments.ContainsKey(arg))
-                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg)
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                            : new ArgumentValue<object>(value));
                 }
             }
 
@@ -312,10 +303,10 @@ namespace HareDu.Internal.Resources
             class DefineBindingImpl :
                 DefineBinding
             {
-                public DefineBindingImpl(string routingKey, IDictionary<string, object> arguments)
+                public DefineBindingImpl(string routingKey, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     RoutingKey = routingKey;
-                    Arguments = arguments;
+                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 
                 public string RoutingKey { get; }

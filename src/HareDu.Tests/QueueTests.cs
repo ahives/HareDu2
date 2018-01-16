@@ -16,8 +16,8 @@
         {
             Queue resource = Client.Factory<Queue>();
             
-            Result result = await resource
-                .CreateAsync(x =>
+            Result<QueueInfo> result = await resource
+                .Create(x =>
                 {
                     x.Queue("TestQueue2");
                     x.Configure(c =>
@@ -41,7 +41,7 @@
         {
             Result<IEnumerable<QueueInfo>> result = await Client
                 .Factory<Queue>()
-                .GetAllAsync();
+                .GetAll();
             
             foreach (var queue in result.Data)
             {
@@ -58,7 +58,7 @@
         {
             Result<IEnumerable<QueueInfo>> result = await Client
                 .Factory<Queue>()
-                .GetAllAsync();
+                .GetAll();
 
             Console.WriteLine(result.ToJson());
         }
@@ -66,9 +66,9 @@
         [Test, Explicit]
         public async Task Verify_can_delete_queue()
         {
-            Result result = await Client
+            Result<QueueInfo> result = await Client
                 .Factory<Queue>()
-                .DeleteAsync(x =>
+                .Delete(x =>
                 {
                     x.Queue("");
                     x.Targeting(l => l.VirtualHost("HareDu"));
@@ -83,9 +83,9 @@
         [Test, Explicit]
         public async Task Verify_can_peek_messages()
         {
-            Result result = await Client
+            Result<QueueInfo> result = await Client
                 .Factory<Queue>()
-                .PeekAsync(x =>
+                .Peek(x =>
                 {
                     x.Queue("Queue1");
                     x.Configure(c =>
@@ -102,9 +102,9 @@
         [Test, Explicit]
         public async Task Verify_can_empty_queue()
         {
-            Result result = await Client
+            Result<QueueInfo> result = await Client
                 .Factory<Queue>()
-                .EmptyAsync(x =>
+                .Empty(x =>
                 {
                     x.Queue("");
                     x.Targeting(t => t.VirtualHost("HareDu"));

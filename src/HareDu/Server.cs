@@ -27,6 +27,6 @@ namespace HareDu
         /// <param name="action">Constraints of how the </param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<ServerHealth>> HealthCheckAsync(Action<HealthCheckAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<ServerHealth>> HealthCheck(Action<HealthCheckAction> action, CancellationToken cancellationToken = default);
     }
 }

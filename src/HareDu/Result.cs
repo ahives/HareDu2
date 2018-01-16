@@ -14,22 +14,38 @@
 namespace HareDu
 {
     using System;
-    using System.Net;
+    using System.Collections.Generic;
 
-    public interface Result
+    public interface Result<out TResult>
     {
-        string DebugInfo { get; }
-        string Reason { get; }
-        HttpStatusCode StatusCode { get; }
+        TResult Data { get; }
         DateTimeOffset Timestamp { get; }
+        DebugInfo DebugInfo { get; }
+        IEnumerable<Error> Errors { get; }
     }
 
-    public interface Result<out T>
+    public static class Result
     {
-        string DebugInfo { get; }
-        T Data { get; }
-        string Reason { get; }
-        HttpStatusCode StatusCode { get; }
-        DateTimeOffset Timestamp { get; }
+        public static Result<T> None<T>(DebugInfo debugInfo = default, IEnumerable<Error> errors = default)
+        {
+            return new ResultImpl<T>(debugInfo, errors);
+        }
+
+            
+        class ResultImpl<TResult> :
+            Result<TResult>
+        {
+            public ResultImpl(DebugInfo debugInfo, IEnumerable<Error> errors)
+            {
+                DebugInfo = debugInfo;
+                Errors = errors;
+                Timestamp = DateTimeOffset.UtcNow;
+            }
+
+            public TResult Data => throw new ArgumentNullException();
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IEnumerable<Error> Errors { get; }
+        }
     }
 }

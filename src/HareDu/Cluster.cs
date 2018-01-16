@@ -26,8 +26,13 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<ClusterInfo>> GetDetailsAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default);
 
-        Task<Result<IEnumerable<NodeInfo>>> GetNodesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default);
     }
 }

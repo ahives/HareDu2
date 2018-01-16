@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2017 Albert L. Hives
+﻿// Copyright 2013-2018 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +35,9 @@ namespace HareDu.Extensions
         public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().Any(predicate);
 
         public static IEnumerable<T> Where<T>(this Result<IEnumerable<T>> source, Func<T, bool> predicate)
-            => source?.Data == null || !source.Data.Any() ? Enumerable.Empty<T>() : source.Data.Where(predicate);
+            => source?.Data == null || !source.Data.Any()
+                ? Enumerable.Empty<T>()
+                : source.Data.Where(predicate);
 
         /// <summary>
         /// 
@@ -67,7 +69,7 @@ namespace HareDu.Extensions
         {
             T data = result.Unwrap().Data;
 
-            return !data.IsNull() ? data : default(T);
+            return !data.IsNull() ? data : default;
         }
     }
 }

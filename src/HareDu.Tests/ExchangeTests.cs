@@ -16,7 +16,7 @@
         {
             IEnumerable<ExchangeInfo> result = Client
                 .Factory<Exchange>()
-                .GetAllAsync()
+                .GetAll()
                 .Safely();
                 //.Where(x => x.Name == "HareDu");
 
@@ -35,9 +35,9 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-            Result result = await Client
+            Result<ExchangeInfo> result = await Client
                 .Factory<Exchange>()
-                .CreateAsync(x =>
+                .Create(x =>
                 {
                     x.Exchange("E3");
                     x.Configure(c =>
@@ -52,19 +52,14 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
-
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
         }
 
         [Test, Explicit]
         public async Task Test()
         {
-            Result result = await Client
+            Result<ExchangeInfo> result = await Client
                 .Factory<Exchange>()
-                .DeleteAsync(x =>
+                .Delete(x =>
                 {
                     x.Exchange("E3");
                     x.Targeting(t => t.VirtualHost("HareDu"));

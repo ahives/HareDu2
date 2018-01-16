@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Model;
     using NUnit.Framework;
 
     [TestFixture]
@@ -11,9 +12,9 @@
         [Test, Explicit]
         public async Task Verify_can_create()
         {
-            Result result = await Client
+            Result<ScopedParameterInfo> result = await Client
                 .Factory<ScopedParameter>()
-                .CreateAsync(x =>
+                .Create(x =>
                 {
                     x.Parameter("test", "me");
                     x.Targeting(t =>
@@ -23,8 +24,8 @@
                     });
                 });
             
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
+//            Console.WriteLine("Reason: {0}", result.Reason);
+//            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }
@@ -32,9 +33,9 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result result = await Client
+            Result<ScopedParameterInfo> result = await Client
                 .Factory<ScopedParameter>()
-                .DeleteAsync(x =>
+                .Delete(x =>
                 {
                     x.Parameter("");
                     x.Targeting(t =>

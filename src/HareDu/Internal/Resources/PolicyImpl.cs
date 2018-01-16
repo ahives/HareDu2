@@ -16,6 +16,7 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -33,26 +34,25 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<PolicyInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/policies";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<PolicyInfo>> result = await response.DeserializeResponse<IEnumerable<PolicyInfo>>();
-
-            LogInfo($"Sent request to return all policy information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<PolicyInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Result<PolicyInfo>> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             var impl = new PolicyCreateActionImpl();
             action(impl);
+
+            if (impl.Errors.Value.Any())
+                return Result.None<PolicyInfo>(errors: impl.Errors.Value);
 
             DefinedPolicy definition = impl.Definition.Value;
 
@@ -62,24 +62,21 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(policy))
-                throw new PolicyNameMissingException("The name of the policy is missing.");
+                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the policy is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
+            var result = await Put<DefinedPolicy, PolicyInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<PolicyInfo>> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -90,19 +87,16 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(policy))
-                throw new PolicyNameMissingException("The name of the policy is missing.");
+                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the policy is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create a policy '{policy}' in virtual host '{sanitizedVHost}'.");
+            var result = await Delete<PolicyInfo>(url, cancellationToken);
 
             return result;
         }
@@ -148,22 +142,27 @@ namespace HareDu.Internal.Resources
             PolicyCreateAction
         {
             static string _pattern;
-            static IDictionary<string, object> _arguments;
+            static IDictionary<string, ArgumentValue<object>> _arguments;
             static int _priority;
             static string _applyTo;
             static string _policy;
             static string _vhost;
+            static List<Error> _errors;
             
             public Lazy<DefinedPolicy> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> PolicyName { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public PolicyCreateActionImpl()
             {
+                _errors = _arguments.Select(x => x.Value.Error).ToList();
+                
                 Definition = new Lazy<DefinedPolicy>(
                     () => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Policy(string name) => _policy = name;
@@ -178,17 +177,16 @@ namespace HareDu.Internal.Resources
                 _priority = impl.Priority;
                 _arguments = impl.Arguments;
 
-                if (_arguments.ContainsKey("ha-mode"))
-                {
-                    object value;
-                    if (!_arguments.TryGetValue("ha-mode", out value))
-                        throw new PolicyDefinitionException($"Argument 'ha-mode' was set without a corresponding value.");
+                if (!_arguments.ContainsKey("ha-mode"))
+                    return;
+                
+                if (!_arguments.TryGetValue("ha-mode", out var value))
+                    _errors.Add(new ErrorImpl($"Argument 'ha-mode' was set without a corresponding value."));
 
-                    string mode = value.ToString().Trim();
-                    if (((mode.ConvertTo() == HighAvailabilityModes.Exactly) || (mode.ConvertTo() == HighAvailabilityModes.Nodes)) &&
-                        !_arguments.ContainsKey("ha-params"))
-                        throw new PolicyDefinitionException($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set");
-                }
+                string mode = value.ToString().Trim();
+                if ((mode.ConvertTo() == HighAvailabilityModes.Exactly || mode.ConvertTo() == HighAvailabilityModes.Nodes) &&
+                    !_arguments.ContainsKey("ha-params"))
+                    _errors.Add(new ErrorImpl($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set"));
             }
             
             public void Targeting(Action<PolicyTarget> target)
@@ -215,7 +213,7 @@ namespace HareDu.Internal.Resources
                 public int Priority { get; private set; }
                 public string Pattern { get; private set; }
                 public string AppllyTo { get; private set; }
-                public IDictionary<string, object> Arguments { get; private set; }
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
 
                 public void UsingPattern(string pattern) => Pattern = pattern;
 
@@ -236,135 +234,113 @@ namespace HareDu.Internal.Resources
             class PolicyDefinitionArgumentsImpl :
                 PolicyDefinitionArguments
             {
-                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
                 
                 public void Set<T>(string arg, T value)
                 {
-                    ValidateConflictingArgs(arg, "federation-upstream", "federation-upstream-set");
-                    ValidateConflictingArgs(arg, "ha-mode");
-                    ValidateConflictingArgs(arg, "ha-sync-mode");
-                    ValidateConflictingArgs(arg, "ha-params");
-                    ValidateConflictingArgs(arg, "expires");
-                    ValidateConflictingArgs(arg, "message-ttl");
-                    ValidateConflictingArgs(arg, "max-length-bytes");
-                    ValidateConflictingArgs(arg, "max-length");
-                    ValidateConflictingArgs(arg, "dead-letter-exchange");
-                    ValidateConflictingArgs(arg, "dead-letter-routing-key");
-                    ValidateConflictingArgs(arg, "queue-mode");
-                    ValidateConflictingArgs(arg, "alternate-exchange");
-                    
-                    Arguments.Add(arg, value);
+                    SetArgWithConflictingCheck(arg, "federation-upstream", "federation-upstream-set", value);
+                    SetArgWithConflictingCheck(arg, "ha-mode", value);
+                    SetArgWithConflictingCheck(arg, "ha-sync-mode", value);
+                    SetArgWithConflictingCheck(arg, "ha-params", value);
+                    SetArgWithConflictingCheck(arg, "expires", value);
+                    SetArgWithConflictingCheck(arg, "message-ttl", value);
+                    SetArgWithConflictingCheck(arg, "max-length-bytes", value);
+                    SetArgWithConflictingCheck(arg, "max-length", value);
+                    SetArgWithConflictingCheck(arg, "dead-letter-exchange", value);
+                    SetArgWithConflictingCheck(arg, "dead-letter-routing-key", value);
+                    SetArgWithConflictingCheck(arg, "queue-mode", value);
+                    SetArgWithConflictingCheck(arg, "alternate-exchange", value);
                 }
 
                 public void SetExpiry(long milliseconds)
                 {
-                    Validate("expires");
-                    
-                    Arguments.Add("expires", milliseconds);
+                    SetArg("expires", milliseconds);
                 }
 
                 public void SetFederationUpstreamSet(string value)
                 {
-                    ValidateConflictingArgs("federation-upstream-set", "federation-upstream");
-                    
-                    Arguments.Add("federation-upstream-set", value.Trim());
+                    SetArgWithConflictingCheck("federation-upstream-set", "federation-upstream", value.Trim());
                 }
 
                 public void SetFederationUpstream(string value)
                 {
-                    ValidateConflictingArgs("federation-upstream", "federation-upstream-set");
-                    
-                    Arguments.Add("federation-upstream", value.Trim());
+                    SetArgWithConflictingCheck("federation-upstream", "federation-upstream-set", value.Trim());
                 }
 
                 public void SetHighAvailabilityMode(HighAvailabilityModes mode)
                 {
-                    Validate("ha-mode");
-                    
-                    Arguments.Add("ha-mode", mode.ConvertTo());
+                    SetArg("ha-mode", mode.ConvertTo());
                 }
 
                 public void SetHighAvailabilityParams(string value)
                 {
-                    Validate("ha-params");
-                    
-                    Arguments.Add("ha-params", value.Trim());
+                    SetArg("ha-params", value);
                 }
 
                 public void SetHighAvailabilitySyncMode(HighAvailabilitySyncModes mode)
                 {
-                    Validate("ha-sync-mode");
-                    
-                    Arguments.Add("ha-sync-mode", mode.ConvertTo());
+                    SetArg("ha-sync-mode", mode.ConvertTo());
                 }
 
                 public void SetMessageTimeToLive(long milliseconds)
                 {
-                    Validate("message-ttl");
-                    
-                    Arguments.Add("message-ttl", milliseconds);
+                    SetArg("message-ttl", milliseconds);
                 }
 
                 public void SetMessageMaxSizeInBytes(long value)
                 {
-                    Validate("max-length-bytes");
-                    
-                    Arguments.Add("max-length-bytes", value.ToString());
+                    SetArg("max-length-bytes", value.ToString());
                 }
 
                 public void SetMessageMaxSize(long value)
                 {
-                    Validate("max-length");
-                    
-                    Arguments.Add("max-length", value);
+                    SetArg("max-length", value);
                 }
 
                 public void SetDeadLetterExchange(string value)
                 {
-                    Validate("dead-letter-exchange");
-                    
-                    Arguments.Add("dead-letter-exchange", value.Trim());
+                    SetArg("dead-letter-exchange", value.Trim());
                 }
 
                 public void SetDeadLetterRoutingKey(string value)
                 {
-                    Validate("dead-letter-routing-key");
-                    
-                    Arguments.Add("dead-letter-routing-key", value.Trim());
+                    SetArg("dead-letter-routing-key", value.Trim());
                 }
 
                 public void SetQueueMode()
                 {
-                    Validate("queue-mode");
-                    
-                    Arguments.Add("queue-mode", "lazy");
+                    SetArg("queue-mode", "lazy");
                 }
 
                 public void SetAlternateExchange(string value)
                 {
-                    Validate("alternate-exchange");
-                    
-                    Arguments.Add("alternate-exchange", value.Trim());
+                    SetArg("alternate-exchange", value.Trim());
                 }
 
-                void Validate(string arg)
+                void SetArg(string arg, object value)
                 {
-                    if (Arguments.ContainsKey(arg))
-                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg)
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                            : new ArgumentValue<object>(value));
                 }
 
-                void ValidateConflictingArgs(string arg, string targetArg)
+                void SetArgWithConflictingCheck(string arg, string targetArg, object value)
                 {
-                    if (Arguments.ContainsKey(arg) || (arg == targetArg && Arguments.ContainsKey(targetArg)))
-                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set or would conflict with argument '{targetArg}'");
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg) || (arg == targetArg && Arguments.ContainsKey(targetArg))
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set or would conflict with argument '{targetArg}'")
+                            : new ArgumentValue<object>(value));
                 }
 
-                void ValidateConflictingArgs(string arg, string targetArg, string conflictingArg)
+                void SetArgWithConflictingCheck(string arg, string targetArg, string conflictingArg, object value)
                 {
-                    if (Arguments.ContainsKey(arg) ||
-                        (arg == conflictingArg && Arguments.ContainsKey(targetArg)) ||
-                        (arg == targetArg && Arguments.ContainsKey(conflictingArg)))
-                        throw new PolicyDefinitionException($"Argument '{conflictingArg}' has already been set or would conflict with argument '{arg}'");
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg)
+                        || arg == conflictingArg && Arguments.ContainsKey(targetArg)
+                        || arg == targetArg && Arguments.ContainsKey(conflictingArg)
+                            ? new ArgumentValue<object>(value, $"Argument '{conflictingArg}' has already been set or would conflict with argument '{arg}'")
+                            : new ArgumentValue<object>(value));
                 }
             }
 
@@ -372,10 +348,10 @@ namespace HareDu.Internal.Resources
             class DefinedPolicyImpl :
                 DefinedPolicy
             {
-                public DefinedPolicyImpl(string pattern, IDictionary<string, object> arguments, int priority, string applyTo)
+                public DefinedPolicyImpl(string pattern, IDictionary<string, ArgumentValue<object>> arguments, int priority, string applyTo)
                 {
                     Pattern = pattern;
-                    Arguments = arguments;
+                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                     Priority = priority;
                     ApplyTo = applyTo;
                 }

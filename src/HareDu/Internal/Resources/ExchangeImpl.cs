@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2017 Albert L. Hives
+﻿// Copyright 2013-2018 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -32,26 +33,25 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ExchangeInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/exchanges";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<ExchangeInfo>> result = await response.DeserializeResponse<IEnumerable<ExchangeInfo>>();
-
-            LogInfo($"Sent request to return all information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<ExchangeInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ExchangeInfo>> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             var impl = new ExchangeCreateActionImpl();
             action(impl);
+            
+            if (impl.Errors.Value.Any())
+                return Result.None<ExchangeInfo>(errors: impl.Errors.Value);
 
             DefinedExchange definition = impl.Definition.Value;
 
@@ -61,27 +61,24 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(exchange))
-                throw new ExchangeMissingException("The name of the exchange is missing.");
+                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the exchange is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
 
             if (string.IsNullOrWhiteSpace(definition?.RoutingType))
-                throw new ExchangeRoutingTypeMissingException("The routing type of the exchange is missing.");
+                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The routing type of the exchange is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create exchange '{exchange}' in virtual host '{sanitizedVHost}'.");
+            var result = await Put<DefinedExchange, ExchangeInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ExchangeInfo>> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -92,10 +89,10 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(exchange))
-                throw new ExchangeMissingException("The name of the exchange is missing.");
+                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the exchange is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -106,10 +103,7 @@ namespace HareDu.Internal.Resources
             if (!string.IsNullOrWhiteSpace(query))
                 url = $"api/exchanges/{sanitizedVHost}/{exchange}?{query}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to delete exchange '{exchange}' from virtual host '{sanitizedVHost}'.");
+            var result = await Delete<ExchangeInfo>(url, cancellationToken);
 
             return result;
         }
@@ -182,16 +176,18 @@ namespace HareDu.Internal.Resources
             static bool _durable;
             static bool _autoDelete;
             static bool _internal;
-            static IDictionary<string, object> _arguments;
+            static IDictionary<string, ArgumentValue<object>> _arguments;
             static string _vhost;
             static string _exchange;
 
             public Lazy<DefinedExchange> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> ExchangeName { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public ExchangeCreateActionImpl()
             {
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedExchange>(
                     () => new DefinedExchangeImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
@@ -234,7 +230,7 @@ namespace HareDu.Internal.Resources
                 ExchangeConfiguration
             {
                 public string RoutingType { get; private set; }
-                public IDictionary<string, object> Arguments { get; private set; }
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
                 public bool Durable { get; private set; }
                 public bool InternalUse { get; private set; }
                 public bool AutoDelete { get; private set; }
@@ -291,19 +287,19 @@ namespace HareDu.Internal.Resources
             class ExchangeDefinitionArgumentsImpl :
                 ExchangeDefinitionArguments
             {
-                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
 
                 public void Set<T>(string arg, T value)
                 {
-                    Validate(arg);
-                    
-                    Arguments.Add(arg, value);
+                    SetArg(arg, value);
                 }
 
-                void Validate(string arg)
+                void SetArg(string arg, object value)
                 {
-                    if (Arguments.ContainsKey(arg))
-                        throw new ExchangeDefinitionException($"Argument '{arg}' has already been set");
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg)
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                            : new ArgumentValue<object>(value));
                 }
             }
 
@@ -311,13 +307,13 @@ namespace HareDu.Internal.Resources
             class DefinedExchangeImpl :
                 DefinedExchange
             {
-                public DefinedExchangeImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, object> arguments)
+                public DefinedExchangeImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     RoutingType = routingType;
                     Durable = durable;
                     AutoDelete = autoDelete;
                     Internal = @internal;
-                    Arguments = arguments;
+                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 
                 public string RoutingType { get; }

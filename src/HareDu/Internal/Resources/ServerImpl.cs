@@ -29,7 +29,7 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<ServerHealth>> HealthCheckAsync(Action<HealthCheckAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ServerHealth>> HealthCheck(Action<HealthCheckAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -44,22 +44,17 @@ namespace HareDu.Internal.Resources
                     string sanitizedVHostName = impl.ResourceName.SanitizeVirtualHostName();
             
                     url = $"api/aliveness-test/{sanitizedVHostName}";
-
-                    LogInfo($"Sent request to execute an aliveness test on virtual host '{sanitizedVHostName}' on current RabbitMQ server.");
                     break;
                     
                 case HealthCheckType.Node:
                     url = $"api/healthchecks/node/{impl.ResourceName}";
-
-                    LogInfo($"Sent request to execute an health check on RabbitMQ server node '{impl.ResourceName}'.");
                     break;
                     
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<ServerHealth> result = await response.DeserializeResponse<ServerHealth>();
+            var result = await Get<ServerHealth>(url, cancellationToken);
 
             return result;
         }

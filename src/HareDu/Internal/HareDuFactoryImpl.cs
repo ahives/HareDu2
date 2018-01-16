@@ -23,13 +23,13 @@ namespace HareDu.Internal
         Logging,
         HareDuFactory
     {
-        readonly HttpClient _httpClient;
+        readonly HttpClient _client;
         readonly HareDuClientSettings _settings;
 
-        public HareDuFactoryImpl(HttpClient httpClient, HareDuClientSettings settings)
-            : base(settings.LoggerSettings.Name, settings.LoggerSettings.Logger, settings.LoggerSettings.Enable)
+        public HareDuFactoryImpl(HttpClient client, HareDuClientSettings settings)
+            : base(settings.LoggerSettings)
         {
-            _httpClient = httpClient;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _settings = settings;
         }
 
@@ -44,14 +44,14 @@ namespace HareDu.Internal
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource)Activator.CreateInstance(type, _httpClient, _settings);
+            return (TResource)Activator.CreateInstance(type, _client, _settings);
         }
 
         public void CancelPendingRequest()
         {
             LogInfo("Cancelling all pending requests.");
 
-            _httpClient.CancelPendingRequests();
+            _client.CancelPendingRequests();
         }
     }
 }

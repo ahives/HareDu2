@@ -27,22 +27,22 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<UserInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken());
+        Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a user on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the user permission will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result"/></returns>
-        Task<Result> CreateAsync(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken());
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<UserInfo>> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete the specified user on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the virtual host will be delete.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result"/></returns>
-        Task<Result> DeleteAsync(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken());
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<UserInfo>> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = default);
     }
 }

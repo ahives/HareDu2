@@ -16,7 +16,7 @@
         {
             IEnumerable<BindingInfo> result = Client
                 .Factory<Binding>()
-                .GetAllAsync()
+                .GetAll()
                 .Safely();
             
             foreach (var binding in result)
@@ -29,18 +29,14 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
-            
-            //Console.WriteLine("Reason: {0}", result.Reason);
-            //Console.WriteLine("StatusCode: {0}", result.StatusCode);
-            //Console.WriteLine();
         }
 
         [Test, Explicit]
         public async Task Verify_can_add_arguments()
         {
-            Result result = await Client
+            Result<BindingInfo> result = await Client
                 .Factory<Binding>()
-                .CreateAsync(x =>
+                .Create(x =>
                 {
                     x.Binding(b =>
                     {
@@ -63,9 +59,9 @@
         [Test, Explicit]
         public async Task Verify_can_delete_binding()
         {
-            Result result = await Client
+            Result<BindingInfo> result = await Client
                 .Factory<Binding>()
-                .DeleteAsync(x =>
+                .Delete(x =>
                 {
                     x.Binding(b =>
                     {

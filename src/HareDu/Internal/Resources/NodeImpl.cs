@@ -29,58 +29,42 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ChannelInfo>>> GetChannelsAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = "api/nodes";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<ChannelInfo>> result = await response.DeserializeResponse<IEnumerable<ChannelInfo>>();
-
-            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
+            var result = await Get<IEnumerable<ChannelInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ConnectionInfo>>> GetConnectionsAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/connections";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<ConnectionInfo>> result = await response.DeserializeResponse<IEnumerable<ConnectionInfo>>();
-
-            LogInfo($"Sent request to return all connection information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<ConnectionInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<ConsumerInfo>>> GetConsumersAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/consumers";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<ConsumerInfo>> result = await response.DeserializeResponse<IEnumerable<ConsumerInfo>>();
-
-            LogInfo($"Sent request to return all consumer information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<ConsumerInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<ServerDefinition>> GetDefintiions(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ServerDefinition>> GetDefintiions(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/definitions";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<ServerDefinition> result = await response.DeserializeResponse<ServerDefinition>();
-
-            LogInfo($"Sent request to return all node object definitions on current RabbitMQ server.");
+            var result = await Get<ServerDefinition>(url, cancellationToken);
 
             return result;
         }

@@ -27,7 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<IEnumerable<VirtualHostInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates the specified virtual host on the current RabbitMQ server.
@@ -35,7 +35,7 @@ namespace HareDu
         /// <param name="action">Describes how the virtual host will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result> CreateAsync(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<VirtualHostInfo>> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Delete the specified virtual host on the current RabbitMQ server.
@@ -43,6 +43,6 @@ namespace HareDu
         /// <param name="action">Describes how the virtual host will be delete.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result> DeleteAsync(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<VirtualHostInfo>> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default);
     }
 }

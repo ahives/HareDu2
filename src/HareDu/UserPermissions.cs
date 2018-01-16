@@ -27,7 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<IEnumerable<UserPermissionsInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<UserPermissionsInfo>>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a user permission and assign it to a user on a specific virtual host on the current RabbitMQ server.
@@ -35,7 +35,7 @@ namespace HareDu
         /// <param name="action">Describes how the user permission will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result> CreateAsync(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<UserPermissionsInfo>> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete the specified user permission assigned to a specified user on a specific virtual host on the current RabbitMQ server.
@@ -43,6 +43,6 @@ namespace HareDu
         /// <param name="action">Describes how the virtual host will be delete.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result> DeleteAsync(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<UserPermissionsInfo>> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default);
     }
 }

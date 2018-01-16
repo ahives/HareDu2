@@ -62,7 +62,7 @@
             IEnumerable<VirtualHostInfo> vhosts = HareDuClient
                 .Initialize(config)
                 .Factory<VirtualHost>()
-                .GetAllAsync()
+                .GetAll()
                 .Where(x => x.Name == "HareDu");
             
             foreach (var vhost in vhosts)
@@ -89,7 +89,7 @@
                     x.UsingCredentials("guest", "guest");
                 })
                 .Factory<VirtualHost>()
-                .GetAllAsync()
+                .GetAll()
                 .Where(x => x.Name == "HareDu");
             
             foreach (var vhost in vhosts)
@@ -111,7 +111,7 @@
                     "HareDuLogger",
                     new HareDuCredentialsImpl("guest", "guest")))
                 .Factory<VirtualHost>()
-                .GetAllAsync()
+                .GetAll()
                 .Where(x => x.Name == "HareDu");
                         
             foreach (var vhost in vhosts)

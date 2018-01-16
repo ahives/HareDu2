@@ -33,21 +33,17 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<UserInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/users";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<UserInfo>> result = await response.DeserializeResponse<IEnumerable<UserInfo>>();
-
-            LogInfo($"Sent request to return all user information on current RabbitMQ server");
+            var result = await Get<IEnumerable<UserInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<UserCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<UserInfo>> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -61,37 +57,31 @@ namespace HareDu.Internal.Resources
             string user = impl.User.Value;
             
             if (string.IsNullOrWhiteSpace(user))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
+                return Result.None<UserInfo>(errors: new List<Error> {new ErrorImpl("The username and/or password is missing.")});
             
             if (string.IsNullOrWhiteSpace(definition.Password) && string.IsNullOrWhiteSpace(definition.PasswordHash))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
+                return Result.None<UserInfo>(errors: new List<Error> {new ErrorImpl("The password/hash is missing.")});
                     
             string url = $"api/users/{user}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{user}'");
+            var result = await Put<DefinedUser, UserInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<UserDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<UserInfo>> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             var impl = new UserDeleteActionImpl();
             action(impl);
-            
+
             if (string.IsNullOrWhiteSpace(impl.Username))
-                throw new UserCredentialsMissingException("The username is missing.");
+                return Result.None<UserInfo>(errors: new List<Error> {new ErrorImpl("The username is missing.")});
 
             string url = $"api/users/{impl.Username}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{impl.Username}'");
+            var result = await Delete<UserInfo>(url, cancellationToken);
 
             return result;
         }

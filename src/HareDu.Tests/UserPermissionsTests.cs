@@ -15,7 +15,7 @@
         {
             Result<IEnumerable<UserPermissionsInfo>> result = await Client
                 .Factory<UserPermissions>()
-                .GetAllAsync();
+                .GetAll();
             
             foreach (var access in result.Data)
             {
@@ -27,17 +27,17 @@
                 Console.WriteLine();
             }
             
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
+//            Console.WriteLine("Reason: {0}", result.Reason);
+//            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine();
         }
 
         [Test, Explicit]
         public async Task TestVerify_can_delete_user_permissions()
         {
-            Result result = await Client
+            Result<UserPermissionsInfo> result = await Client
                 .Factory<UserPermissions>()
-                .DeleteAsync(x =>
+                .Delete(x =>
                 {
                     x.User("");
                     x.Targeting(t => t.VirtualHost("HareDu5"));
@@ -47,9 +47,9 @@
         [Test, Explicit]
         public async Task Verify_can_create_user_permissions()
         {
-            Result result = await Client
+            Result<UserPermissionsInfo> result = await Client
                 .Factory<UserPermissions>()
-                .CreateAsync(x =>
+                .Create(x =>
                 {
                     x.User("");
                     x.Configure(c =>

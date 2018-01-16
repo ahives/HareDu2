@@ -31,6 +31,9 @@ namespace HareDu
     {
         public static HareDuFactory Initialize(Action<HareDuClientConfigurationProvider> configuration)
         {
+            if (configuration == null)
+                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+            
             try
             {
                 var init = new HareDuClientConfigurationProviderImpl();
@@ -54,6 +57,9 @@ namespace HareDu
 
         public static HareDuFactory Initialize(string configuration)
         {
+            if (string.IsNullOrWhiteSpace(configuration))
+                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
             try
             {
                 HareDuClientSettings settings = SerializerCache.Deserializer.Deserialize<HareDuClientSettings>(new JsonTextReader(new StringReader(configuration)));
@@ -74,11 +80,11 @@ namespace HareDu
 
         public static HareDuFactory Initialize(Func<HareDuClientSettings> configuration)
         {
+            if (configuration == null)
+                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+            
             try
             {
-                if (configuration == null)
-                    throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-                
                 HareDuClientSettings settings = configuration();
 
                 ValidateSettings(settings);

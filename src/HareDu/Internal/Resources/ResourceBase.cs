@@ -14,23 +14,107 @@
 namespace HareDu.Internal.Resources
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Net;
     using System.Net.Http;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Configuration;
+    using Extensions;
+    using Newtonsoft.Json;
+    using Serialization;
 
     internal class ResourceBase :
         Logging
     {
         readonly HttpClient _client;
-        readonly HareDuClientSettings _settings;
 
         protected ResourceBase(HttpClient client, HareDuClientSettings settings)
-            : base(settings.LoggerSettings.Name, settings.LoggerSettings.Logger, settings.LoggerSettings.Enable)
+            : base(settings.LoggerSettings)
         {
-            _client = client;
-            _settings = settings;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
+        }
+
+        protected async Task<Result<T>> Get<T>(string url, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                var responseMessage = await _client.GetAsync(url, cancellationToken);
+                var response = await DeserializeResponse<T>(responseMessage);
+                var request = await GetRequest(responseMessage);
+                var error = GetError(responseMessage.StatusCode);
+                
+                return new ResultImpl<T>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+            }
+            catch (MissingMethodException e)
+            {
+                return new ResultImpl<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
+        }
+
+        protected async Task<Result<T>> Delete<T>(string url, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                var responseMessage = await _client.DeleteAsync(url, cancellationToken);
+                var response = await DeserializeResponse<T>(responseMessage);
+                var request = await GetRequest(responseMessage);
+                var error = GetError(responseMessage.StatusCode);
+
+                return Result.None<T>(new DebugInfoImpl(request), new List<Error>{error});
+            }
+            catch (MissingMethodException e)
+            {
+                return new ResultImpl<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
+        }
+
+        protected async Task<Result<TResult>> Put<TValue, TResult>(string url, TValue value, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                var responseMessage = await _client.PutAsJsonAsync(url, value, cancellationToken);
+                var response = await DeserializeResponse<TResult>(responseMessage);
+                var request = await GetRequest(responseMessage);
+                var error = GetError(responseMessage.StatusCode);
+
+                return Result.None<TResult>(new DebugInfoImpl(request), error.IsNull() ? new List<Error>() : new List<Error>{error});
+            }
+            catch (MissingMethodException e)
+            {
+                return new ResultImpl<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
+        }
+
+        protected async Task<Result<TResult>> PerformHttpPost<TValue, TResult>(string url, TValue value, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                var responseMessage = await _client.PostAsJsonAsync(url, value, cancellationToken);
+                var response = await DeserializeResponse<TResult>(responseMessage);
+                var request = await GetRequest(responseMessage);
+                var error = GetError(responseMessage.StatusCode);
+
+                return new ResultImpl<TResult>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+            }
+            catch (MissingMethodException e)
+            {
+                return new ResultImpl<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
         }
 
         void HandleDotsAndSlashes()
@@ -47,69 +131,95 @@ namespace HareDu.Internal.Resources
 
             setUpdatableFlagsMethod.Invoke(uriParser, new object[] {0});
         }
-
-        protected virtual async Task<HttpResponseMessage> PerformHttpGet(string url, CancellationToken cancellationToken = default(CancellationToken))
+        
+        async Task<T> DeserializeResponse<T>(HttpResponseMessage responseMessage)
         {
-            try
-            {
-                if (url.Contains("/%2f"))
-                    HandleDotsAndSlashes();
+            string response = await responseMessage.Content.ReadAsStringAsync();
+            T deserializedResponse = SerializerCache.Deserializer.Deserialize<T>(new JsonTextReader(new StringReader(response)));
 
-                return await _client.GetAsync(url, cancellationToken);
-            }
-            catch (Exception e)
+            return deserializedResponse;
+        }
+
+        async Task<string> GetRequest(HttpResponseMessage responseMessage)
+        {
+            return responseMessage.RequestMessage.Content != null
+                ? await responseMessage.RequestMessage.Content.ReadAsStringAsync()
+                : string.Empty;
+        }
+
+        Error GetError(HttpStatusCode statusCode)
+        {
+            switch (statusCode)
             {
-                LogError(e);
-                throw;
+                case HttpStatusCode.BadGateway:
+                    return new ErrorImpl("");
+                case HttpStatusCode.BadRequest:
+                    return new ErrorImpl("");
+                case HttpStatusCode.Forbidden:
+                    return new ErrorImpl("");
+                case HttpStatusCode.InternalServerError:
+                    return new ErrorImpl("");
+                case HttpStatusCode.RequestTimeout:
+                    return new ErrorImpl("");
+                case HttpStatusCode.ServiceUnavailable:
+                    return new ErrorImpl("");
+                case HttpStatusCode.Unauthorized:
+                    return new ErrorImpl("");
+                default:
+                    return null;
             }
         }
 
-        protected virtual async Task<HttpResponseMessage> PerformHttpDelete(string url, CancellationToken cancellationToken = default(CancellationToken))
+        
+        class DebugInfoImpl :
+            DebugInfo
         {
-            try
+            public DebugInfoImpl(string request)
             {
-                if (url.Contains("/%2f"))
-                    HandleDotsAndSlashes();
+                Request = request;
+            }
 
-                return await _client.DeleteAsync(url, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-                throw;
-            }
+            public string Request { get; }
         }
 
-        protected virtual async Task<HttpResponseMessage> PerformHttpPut<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
+        
+        class ResultImpl<T> :
+            Result<T>
         {
-            try
+            public ResultImpl(T data, IEnumerable<Error> errors, DebugInfo debugInfo)
             {
-                if (url.Contains("/%2f"))
-                    HandleDotsAndSlashes();
+                Data = data;
+                Timestamp = DateTimeOffset.UtcNow;
+                DebugInfo = debugInfo;
+                Errors = errors;
+            }
+        
+            public ResultImpl(IEnumerable<Error> errors)
+            {
+                Data = default;
+                Timestamp = DateTimeOffset.UtcNow;
+                DebugInfo = default;
+                Errors = errors;
+            }
 
-                return await _client.PutAsJsonAsync(url, value, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-                throw;
-            }
+            public T Data { get; }
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IEnumerable<Error> Errors { get; }
         }
 
-        protected virtual async Task<HttpResponseMessage> PerformHttpPost<T>(string url, T value, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            try
-            {
-                if (url.Contains("/%2f"))
-                    HandleDotsAndSlashes();
 
-                return await _client.PostAsJsonAsync(url, value, cancellationToken);
-            }
-            catch (Exception e)
+        protected class ErrorImpl :
+            Error
+        {
+            public ErrorImpl(string reason)
             {
-                LogError(e);
-                throw;
+                Reason = reason;
+                Timestamp = DateTimeOffset.UtcNow;
             }
+
+            public string Reason { get; }
+            public DateTimeOffset Timestamp { get; }
         }
     }
 }

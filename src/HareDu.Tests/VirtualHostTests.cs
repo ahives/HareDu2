@@ -19,7 +19,7 @@
         {
             Result<IEnumerable<VirtualHostInfo>> result = await Client
                 .Factory<VirtualHost>()
-                .GetAllAsync();
+                .GetAll();
 
             Assert.IsTrue(result.HasValue());
 
@@ -35,9 +35,9 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-            Result result = await Client
+            Result<VirtualHostInfo> result = await Client
                 .Factory<VirtualHost>()
-                .CreateAsync(x =>
+                .Create(x =>
                 {
                     x.VirtualHost("HareDu2");
                     x.Configure(c =>
@@ -46,8 +46,6 @@
                     });
                 });
 
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }
@@ -55,12 +53,10 @@
         [Test, Explicit]
         public async Task Verify_Delete_works()
         {
-            Result result = await Client
+            Result<VirtualHostInfo> result = await Client
                 .Factory<VirtualHost>()
-                .DeleteAsync(x => x.VirtualHost("HareDu2"));
+                .Delete(x => x.VirtualHost("HareDu2"));
 
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }

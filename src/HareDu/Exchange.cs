@@ -27,22 +27,22 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ExchangeInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Creates the specified exchange on the target virtual host.
         /// </summary>
         /// <param name="action">Describes how the queue will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result"/></returns>
-        Task<Result> CreateAsync(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<ExchangeInfo>> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Delete the specified exchange on the target virtual host.
         /// </summary>
         /// <param name="action">Describes how the queue will be deleted.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result"/></returns>
-        Task<Result> DeleteAsync(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<ExchangeInfo>> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default);
     }
 }

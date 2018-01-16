@@ -15,9 +15,11 @@ namespace HareDu.Internal
 {
     using System;
     using Common.Logging;
+    using Configuration;
 
     internal abstract class Logging
     {
+        readonly HareDuLoggerSettings _settings;
         readonly ILog _logger;
         readonly bool _isEnabled;
 
@@ -25,6 +27,13 @@ namespace HareDu.Internal
         {
             _logger = logger ?? (!string.IsNullOrWhiteSpace(loggerName) ? LogManager.GetLogger(loggerName) : null);
             _isEnabled = enable && _logger != null;
+        }
+
+        protected Logging(HareDuLoggerSettings settings)
+        {
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _logger = _settings.Logger ?? (!string.IsNullOrWhiteSpace(_settings.Name) ? LogManager.GetLogger(_settings.Name) : null);
+            _isEnabled = _settings.Enable && _logger != null;
         }
 
         protected virtual void LogError(Exception e)

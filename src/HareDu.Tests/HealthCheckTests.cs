@@ -17,14 +17,14 @@
         {
             Result<ServerHealth> result = await Client
                 .Factory<Server>()
-                .HealthCheckAsync(x =>
+                .HealthCheck(x =>
                 {
                     x.VirtualHost("HareDu");
                 });
 
             Console.WriteLine("Status: {0}", result.Data.Status);
-            Console.WriteLine("Reason: {0}", result.Reason);
-            Console.WriteLine("StatusCode: {0}", result.StatusCode);
+//            Console.WriteLine("Reason: {0}", result.Reason);
+//            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }
@@ -34,7 +34,7 @@
         {
             Result<IEnumerable<NodeInfo>> result = await Client
                 .Factory<Cluster>()
-                .GetNodesAsync();
+                .GetNodes();
 
             Assert.IsTrue(result.HasValue());
             
@@ -44,7 +44,7 @@
                 Console.WriteLine("TotalFileDescriptors: {0}", node.TotalFileDescriptors);
                 Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
                 Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
-                Console.WriteLine("StatusCode: {0}", result.StatusCode);
+//                Console.WriteLine("StatusCode: {0}", result.StatusCode);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
@@ -63,7 +63,7 @@
                 Console.WriteLine("PrefetchCount: {0}", node.PrefetchCount);
 //                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
 //                Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
-                Console.WriteLine("StatusCode: {0}", result.StatusCode);
+//                Console.WriteLine("StatusCode: {0}", result.StatusCode);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
@@ -74,7 +74,7 @@
         {
             Result<ClusterInfo> result = await Client
                 .Factory<Cluster>()
-                .GetDetailsAsync();
+                .GetDetails();
 
             Console.WriteLine("ClusterName: {0}", result.Data.ClusterName);
 //            Console.WriteLine("TotalQueues: {0}", result.Data.ClusterObjects.TotalQueues);

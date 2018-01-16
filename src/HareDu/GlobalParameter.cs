@@ -26,22 +26,22 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<GlobalParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Creates the specified global parameter on the current RabbitMQ node.
         /// </summary>
         /// <param name="action">Describes how the global parameter will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result"/></returns>
-        Task<Result> CreateAsync(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<GlobalParameterInfo>> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Delete the specified global parqmeter on the current RabbitMQ node.
         /// </summary>
         /// <param name="action">Describes how the global parameter will be deleted.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result"/></returns>
-        Task<Result> DeleteAsync(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<GlobalParameterInfo>> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default);
     }
 }

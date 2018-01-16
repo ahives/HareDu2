@@ -32,21 +32,17 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<UserPermissionsInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<UserPermissionsInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/users";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<UserPermissionsInfo>> result = await response.DeserializeResponse<IEnumerable<UserPermissionsInfo>>();
-
-            LogInfo($"Sent request to return all user information on current RabbitMQ server");
+            var result = await Get<IEnumerable<UserPermissionsInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<UserPermissionsInfo>> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -61,24 +57,21 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(username))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
+                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The username and/or password is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
+            var result = await Put<DefinedUserPermissions, UserPermissionsInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<UserPermissionsInfo>> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -87,21 +80,18 @@ namespace HareDu.Internal.Resources
 
             string username = impl.Username.Value;
             string vhost = impl.VirtualHost.Value;
-            
+
             if (string.IsNullOrWhiteSpace(username))
-                throw new UserCredentialsMissingException("The username and/or password is missing.");
+                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The username and/or password is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create user '{username}'");
+            var result = await Delete<UserPermissionsInfo>(url, cancellationToken);
 
             return result;
         }

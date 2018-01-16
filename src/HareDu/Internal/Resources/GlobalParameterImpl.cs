@@ -16,6 +16,7 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,45 +32,41 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<GlobalParameterInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/global-parameters";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<GlobalParameterInfo>> result = await response.DeserializeResponse<IEnumerable<GlobalParameterInfo>>();
-
-            LogInfo($"Sent request to return all global parameter information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<GlobalParameterInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<GlobalParameterInfo>> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
             
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
+            
+            if (impl.Errors.Value.Any())
+                return Result.None<GlobalParameterInfo>(errors: impl.Errors.Value);
 
             DefinedGlobalParameter definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
             if (string.IsNullOrWhiteSpace(definition.Name))
-                throw new ParameterMissingException("The name of the parameter is missing.");
+                return Result.None<GlobalParameterInfo>(errors: new List<Error> {new ErrorImpl("The name of the parameter is missing.")});
 
             string url = $"api/global-parameters/{definition.Name}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create a global parameter '{definition.Name}'.");
+            var result = await Put<DefinedGlobalParameter, GlobalParameterInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<GlobalParameterInfo>> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -77,14 +74,11 @@ namespace HareDu.Internal.Resources
             action(impl);
             
             if (string.IsNullOrWhiteSpace(impl.ParameterName))
-                throw new ParameterMissingException("The name of the parameter is missing.");
+                return Result.None<GlobalParameterInfo>(errors: new List<Error> {new ErrorImpl("The name of the parameter is missing.")});
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to delete a global parameter '{impl.ParameterName}'.");
+            var result = await Delete<GlobalParameterInfo>(url, cancellationToken);
 
             return result;
         }
@@ -102,13 +96,15 @@ namespace HareDu.Internal.Resources
         class GlobalParameterCreateActionImpl :
             GlobalParameterCreateAction
         {
-            static IDictionary<string, object> _arguments;
+            static IDictionary<string, ArgumentValue<object>> _arguments;
             static string _name;
 
             public Lazy<DefinedGlobalParameter> Definition { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public GlobalParameterCreateActionImpl()
             {
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedGlobalParameter>(
                     () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
             }
@@ -126,7 +122,7 @@ namespace HareDu.Internal.Resources
             class GlobalParameterConfigurationImpl :
                 GlobalParameterConfiguration
             {
-                public IDictionary<string, object> Arguments { get; private set; }
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
                 
                 public void HasArguments(Action<GlobalParameterArguments> arguments)
                 {
@@ -140,19 +136,14 @@ namespace HareDu.Internal.Resources
                 class GlobalParameterArgumentsImpl :
                     GlobalParameterArguments
                 {
-                    public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                    public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
 
                     public void Set<T>(string arg, T value)
                     {
-                        Validate(arg);
-
-                        Arguments.Add(arg.Trim(), value);
-                    }
-
-                    void Validate(string arg)
-                    {
-                        if (Arguments.ContainsKey(arg))
-                            throw new ParameterDefinitionException($"Argument '{arg}' has already been set");
+                        Arguments.Add(arg.Trim(),
+                            Arguments.ContainsKey(arg)
+                                ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                                : new ArgumentValue<object>(value));
                     }
                 }
             }
@@ -161,10 +152,10 @@ namespace HareDu.Internal.Resources
             class DefinedGlobalParameterImpl :
                 DefinedGlobalParameter
             {
-                public DefinedGlobalParameterImpl(string name, IDictionary<string, object> arguments)
+                public DefinedGlobalParameterImpl(string name, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     Name = name;
-                    Value = arguments;
+                    Value = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 
                 public string Name { get; }

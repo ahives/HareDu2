@@ -29,30 +29,22 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<ClusterInfo>> GetDetailsAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = "api/overview";
-
-            LogInfo("Sent request to return information pertaining to the RabbitMQ cluster.");
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<ClusterInfo> result = await response.DeserializeResponse<ClusterInfo>();
+            var result = await Get<ClusterInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<IEnumerable<NodeInfo>>> GetNodesAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = "api/nodes";
-
-            LogInfo("Sent request to return all information on all nodes on current RabbitMQ cluster.");
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<NodeInfo>> result = await response.DeserializeResponse<IEnumerable<NodeInfo>>();
+            var result = await Get<IEnumerable<NodeInfo>>(url, cancellationToken);
 
             return result;
         }

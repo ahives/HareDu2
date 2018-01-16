@@ -16,12 +16,14 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Configuration;
     using Exceptions;
     using Model;
+    using Queue = HareDu.Queue;
 
     internal class QueueImpl :
         ResourceBase,
@@ -32,26 +34,25 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<QueueInfo>>> GetAllAsync(CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<IEnumerable<QueueInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             string url = $"api/queues";
-
-            HttpResponseMessage response = await PerformHttpGet(url, cancellationToken);
-            Result<IEnumerable<QueueInfo>> result = await response.DeserializeResponse<IEnumerable<QueueInfo>>();
-
-            LogInfo($"Sent request to return all information on current RabbitMQ server.");
+            var result = await Get<IEnumerable<QueueInfo>>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> CreateAsync(Action<QueueCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<QueueInfo>> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
             var impl = new QueueCreateActionImpl();
             action(impl);
+            
+            if (impl.Errors.Value.Any())
+                return Result.None<QueueInfo>(errors: impl.Errors.Value);
 
             DefinedQueue definition = impl.Definition.Value;
 
@@ -61,24 +62,21 @@ namespace HareDu.Internal.Resources
             string queue = impl.QueueName.Value;
             
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
 
             if (string.IsNullOrWhiteSpace(queue))
-                throw new QueueMissingException("The name of the queue is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{queue}";
 
-            HttpResponseMessage response = await PerformHttpPut(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to create queue '{queue}' in virtual host '{sanitizedVHost}'.");
+            var result = await Put<DefinedQueue, QueueInfo>(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> DeleteAsync(Action<QueueDeleteAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<QueueInfo>> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -89,10 +87,10 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(queue))
-                throw new QueueMissingException("The name of the queue is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -103,15 +101,12 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(query))
                 url = $"{url}?{query}";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to delete queue '{queue}' from virtual host '{sanitizedVHost}'.");
+            var result = await Delete<QueueInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> EmptyAsync(Action<QueueEmptyAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<QueueInfo>> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -122,24 +117,21 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(queue))
-                throw new QueueMissingException("The name of the queue is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/contents";
 
-            HttpResponseMessage response = await PerformHttpDelete(url, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to empty queue '{queue}' on virtual host '{sanitizedVHost}'.");
+            var result = await Delete<QueueInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> PeekAsync(Action<QueuePeekAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result<QueueInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled(LogInfo);
 
@@ -151,28 +143,25 @@ namespace HareDu.Internal.Resources
             Debug.Assert(definition != null);
             
             if (definition.Take < 1)
-                throw new QueuePeekConfigurationException("Must be set a value greater than 1.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("Must be set a value greater than 1.") });
 
             if (string.IsNullOrWhiteSpace(definition.Encoding))
-                throw new QueuePeekConfigurationException("Encoding must be set to auto or base64.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("TEncoding must be set to auto or base64.") });
 
             string queue = impl.QueueName.Value;
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(queue))
-                throw new QueueMissingException("The name of the queue is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
 
             if (string.IsNullOrWhiteSpace(vhost))
-                throw new VirtualHostMissingException("The name of the virtual host is missing.");
+                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/get";
 
-            HttpResponseMessage response = await PerformHttpPost(url, definition, cancellationToken);
-            Result result = await response.DeserializeResponse();
-
-            LogInfo($"Sent request to RabbitMQ server to peek into queue '{queue}' on virtual host '{sanitizedVHost}' and pop {definition.Take} messages.");
+            var result = await PerformHttpPost<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
 
             return result;
         }
@@ -392,16 +381,18 @@ namespace HareDu.Internal.Resources
             static bool _durable;
             static bool _autoDelete;
             static string _node;
-            static IDictionary<string, object> _arguments;
+            static IDictionary<string, ArgumentValue<object>> _arguments;
             static string _vhost;
             static string _queue;
 
             public Lazy<DefinedQueue> Definition { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public QueueCreateActionImpl()
             {
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedQueue>(
                     () => new DefinedQueueImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
@@ -446,7 +437,7 @@ namespace HareDu.Internal.Resources
                 QueueConfiguration
             {
                 public bool Durable { get; private set; }
-                public IDictionary<string, object> Arguments { get; private set; }
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
                 public bool AutoDelete { get; private set; }
 
                 public void IsDurable() => Durable = true;
@@ -466,64 +457,56 @@ namespace HareDu.Internal.Resources
             class QueueCreateArgumentsImpl :
                 QueueCreateArguments
             {
-                public IDictionary<string, object> Arguments { get; } = new Dictionary<string, object>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
 
                 public void Set<T>(string arg, T value)
                 {
-                    Validate(arg.Trim(), "x-expires");
-                    Validate(arg.Trim(), "x-message-ttl");
-                    Validate(arg.Trim(), "x-dead-letter-exchange");
-                    Validate(arg.Trim(), "x-dead-letter-routing-key");
-                    Validate(arg.Trim(), "alternate-exchange");
-                    
-                    Arguments.Add(arg, value);
+                    SetArg(arg, "x-expires", value);
+                    SetArg(arg, "x-message-ttl", value);
+                    SetArg(arg, "x-dead-letter-exchange", value);
+                    SetArg(arg, "x-dead-letter-routing-key", value);
+                    SetArg(arg, "alternate-exchange", value);
                 }
 
                 public void SetQueueExpiration(long milliseconds)
                 {
-                    Validate("x-expires");
-                    
-                    Arguments.Add("x-expires", milliseconds);
+                    SetArg("x-expires", milliseconds);
                 }
 
                 public void SetPerQueuedMessageExpiration(long milliseconds)
                 {
-                    Validate("x-message-ttl");
-                    
-                    Arguments.Add("x-message-ttl", milliseconds);
+                    SetArg("x-message-ttl", milliseconds);
                 }
 
                 public void SetDeadLetterExchange(string exchange)
                 {
-                    Validate("x-dead-letter-exchange");
-                    
-                    Arguments.Add("x-dead-letter-exchange", exchange);
+                    SetArg("x-dead-letter-exchange", exchange);
                 }
 
                 public void SetDeadLetterExchangeRoutingKey(string routingKey)
                 {
-                    Validate("x-dead-letter-routing-key");
-                    
-                    Arguments.Add("x-dead-letter-routing-key", routingKey);
+                    SetArg("x-dead-letter-routing-key", routingKey);
                 }
 
                 public void SetAlternateExchange(string exchange)
                 {
-                    Validate("alternate-exchange");
-                    
-                    Arguments.Add("alternate-exchange", exchange);
+                    SetArg("alternate-exchange", exchange);
                 }
 
-                void Validate(string arg, string targetArg)
+                void SetArg(string arg, string targetArg, object value)
                 {
-                    if (arg == targetArg && Arguments.ContainsKey(targetArg))
-                        throw new PolicyDefinitionException($"Argument '{arg}' has already been set");
+                    Arguments.Add(arg.Trim(),
+                        arg == targetArg && Arguments.ContainsKey(targetArg)
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                            : new ArgumentValue<object>(value));
                 }
 
-                void Validate(string arg)
+                void SetArg(string arg, object value)
                 {
-                    if (Arguments.ContainsKey(arg))
-                        throw new QueueArgumentException($"Argument '{arg}' has already been set");
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg)
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                            : new ArgumentValue<object>(value));
                 }
             }
 
@@ -531,12 +514,12 @@ namespace HareDu.Internal.Resources
             class DefinedQueueImpl :
                 DefinedQueue
             {
-                public DefinedQueueImpl(bool durable, bool autoDelete, string node, IDictionary<string, object> arguments)
+                public DefinedQueueImpl(bool durable, bool autoDelete, string node, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     Durable = durable;
                     AutoDelete = autoDelete;
                     Node = node;
-                    Arguments = arguments;
+                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 
                 public string Node { get; }
