@@ -76,7 +76,7 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}"
                 : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
 
-            var result = await PerformHttpPost<DefineBinding, BindingInfo>(url, definition, cancellationToken);
+            var result = await Post<DefineBinding, BindingInfo>(url, definition, cancellationToken);
 
             return result;
         }

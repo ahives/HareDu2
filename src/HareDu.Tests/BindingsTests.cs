@@ -17,7 +17,7 @@
             IEnumerable<BindingInfo> result = Client
                 .Factory<Binding>()
                 .GetAll()
-                .Safely();
+                .Select(x => x.Data);
             
             foreach (var binding in result)
             {

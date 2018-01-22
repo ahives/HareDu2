@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Extensions;
     using Model;
     using NUnit.Framework;
@@ -11,15 +10,18 @@
     public class NodeTests :
         HareDuTestBase
     {
-        [Test, Explicit]
+        [Test]
         public void Test()
         {
-            IEnumerable<ChannelInfo> nodes = Client
+            IEnumerable<ChannelInfo> result = Client
                 .Factory<Node>()
                 .GetChannels()
-                .Safely();
+                .Select(x => x.Data);
+//                .Unwrap();
             
-            foreach (var node in nodes)
+//            Assert.IsTrue(result.TryGetValue(out var nodes));
+            
+            foreach (var node in result)
             {
                 Console.WriteLine("Name: {0}", node.Name);
                 Console.WriteLine("VirtualHost: {0}", node.VirtualHost);

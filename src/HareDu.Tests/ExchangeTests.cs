@@ -17,7 +17,7 @@
             IEnumerable<ExchangeInfo> result = Client
                 .Factory<Exchange>()
                 .GetAll()
-                .Safely();
+                .Select(x => x.Data);
                 //.Where(x => x.Name == "HareDu");
 
             foreach (var exchange in result)

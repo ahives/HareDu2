@@ -16,60 +16,77 @@ namespace HareDu.Extensions
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
 
     public static class LinqExtensions
     {
-        public static T Single<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().Single();
+        public static T Single<T>(this Task<Result<IEnumerable<T>>> source)
+        {
+            return source.Select(x => x.Data).Single();
+        }
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().SingleOrDefault();
+        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
+        {
+            return source.Select(x => x.Data).SingleOrDefault();
+        }
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().SingleOrDefault(predicate);
+        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        {
+            return source.Select(x => x.Data).SingleOrDefault(predicate);
+        }
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().FirstOrDefault();
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
+        {
+            return source.Select(x => x.Data).FirstOrDefault();
+        }
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().FirstOrDefault(predicate);
+        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        {
+            return source.Select(x => x.Data).FirstOrDefault(predicate);
+        }
 
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source) => source.Safely().Any();
+        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source)
+        {
+            return source.Select(x => x.Data).Any();
+        }
 
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate) => source.Safely().Any(predicate);
+        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        {
+            return source.Select(x => x.Data).Any(predicate);
+        }
 
         public static IEnumerable<T> Where<T>(this Result<IEnumerable<T>> source, Func<T, bool> predicate)
-            => source?.Data == null || !source.Data.Any()
+        {
+            return source?.Data == null || !source.Data.Any()
                 ? Enumerable.Empty<T>()
                 : source.Data.Where(predicate);
+        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         public static IEnumerable<T> Where<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
         {
             Result<IEnumerable<T>> data = source?.Result;
             if (data?.Data == null || !data.Data.Any())
                 return Enumerable.Empty<T>();
 
-            IEnumerable<T> list = source.Safely().Where(predicate);
+            IEnumerable<T> list = source.Select(x => x.Data).Where(predicate);
             
             return list;
         }
 
-        public static T Unwrap<T>(this Task<T> result) => result.Result;
-
-        /// <summary>
-        /// Unwraps the Result from Task<Result<T>> and returns T.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T Safely<T>(this Task<Result<T>> result)
+        public static T Unwrap<T>(this Task<T> result)
         {
-            T data = result.Unwrap().Data;
+            return result.Result;
+        }
 
-            return !data.IsNull() ? data : default;
+        public static TResult Select<T, TResult>(this Task<Result<T>> source, Func<Result<T>, TResult> projector)
+        {
+            if (source.IsNull() || projector.IsNull())
+                return default;
+                
+            Result<T> result = source.Unwrap();
+
+            return result.HasResult ? projector(result) : default;
         }
     }
 }

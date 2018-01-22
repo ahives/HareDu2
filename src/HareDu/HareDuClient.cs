@@ -44,7 +44,7 @@ namespace HareDu
 
                 HttpClient client = GetHttpClient(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(client, settings);
+                HareDuFactory factory = new HareDuFactoryImpl(client);
 
                 return factory;
             }
@@ -67,7 +67,7 @@ namespace HareDu
 
                 HttpClient client = GetHttpClient(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(client, settings);
+                HareDuFactory factory = new HareDuFactoryImpl(client);
 
                 return factory;
             }
@@ -90,7 +90,7 @@ namespace HareDu
 
                 HttpClient client = GetHttpClient(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(client, settings);
+                HareDuFactory factory = new HareDuFactoryImpl(client);
 
                 return factory;
             }

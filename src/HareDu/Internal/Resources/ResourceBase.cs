@@ -95,7 +95,7 @@ namespace HareDu.Internal.Resources
             }
         }
 
-        protected async Task<Result<TResult>> PerformHttpPost<TValue, TResult>(string url, TValue value, CancellationToken cancellationToken = default)
+        protected async Task<Result<TResult>> Post<TValue, TResult>(string url, TValue value, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -190,6 +190,7 @@ namespace HareDu.Internal.Resources
                 Timestamp = DateTimeOffset.UtcNow;
                 DebugInfo = debugInfo;
                 Errors = errors;
+                HasResult = !Data.IsNull();
             }
         
             public ResultImpl(IEnumerable<Error> errors)
@@ -198,12 +199,14 @@ namespace HareDu.Internal.Resources
                 Timestamp = DateTimeOffset.UtcNow;
                 DebugInfo = default;
                 Errors = errors;
+                HasResult = !Data.IsNull();
             }
 
             public T Data { get; }
             public DateTimeOffset Timestamp { get; }
             public DebugInfo DebugInfo { get; }
             public IEnumerable<Error> Errors { get; }
+            public bool HasResult { get; }
         }
 
 

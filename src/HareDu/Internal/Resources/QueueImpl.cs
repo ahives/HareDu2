@@ -160,7 +160,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/get";
 
-            var result = await PerformHttpPost<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
+            var result = await Post<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
 
             return result;
         }

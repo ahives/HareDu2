@@ -18,10 +18,31 @@ namespace HareDu.Extensions
 
     public static class ValueExtensions
     {
-        public static bool IsNull<T>(this T value) => value == null;
+        public static bool IsNull<T>(this T value)
+        {
+            return value == null;
+        }
         
-        public static bool HasValue<T>(this Result<T> source) => source != null && source.Data != null;
+        public static bool HasValue<T>(this Result<T> source)
+        {
+            return source != null && source.Data != null;
+        }
 
-        public static bool HasValue<T>(this Result<IEnumerable<T>> source) => source?.Data != null && source.Data.Any();
+        public static bool HasValue<T>(this Result<IEnumerable<T>> source)
+        {
+            return source?.Data != null && source.Data.Any();
+        }
+
+        public static bool TryGetValue<T>(this Result<IEnumerable<T>> source, int index, out T value)
+        {
+            if (source.IsNull() || source.Data.IsNull() || !source.Data.Any() || index < 0 || index >= source.Data.Count())
+            {
+                value = default;
+                return false;
+            }
+
+            value = source.Data.ElementAt(index);
+            return true;
+        }
     }
 }

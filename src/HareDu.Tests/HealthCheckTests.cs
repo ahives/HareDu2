@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Extensions;
     using Model;
@@ -23,8 +22,6 @@
                 });
 
             Console.WriteLine("Status: {0}", result.Data.Status);
-//            Console.WriteLine("Reason: {0}", result.Reason);
-//            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }
@@ -44,7 +41,6 @@
                 Console.WriteLine("TotalFileDescriptors: {0}", node.TotalFileDescriptors);
                 Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
                 Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
-//                Console.WriteLine("StatusCode: {0}", result.StatusCode);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }

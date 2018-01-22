@@ -22,6 +22,7 @@ namespace HareDu
         DateTimeOffset Timestamp { get; }
         DebugInfo DebugInfo { get; }
         IEnumerable<Error> Errors { get; }
+        bool HasResult { get; }
     }
 
     public static class Result
@@ -46,6 +47,7 @@ namespace HareDu
             public DateTimeOffset Timestamp { get; }
             public DebugInfo DebugInfo { get; }
             public IEnumerable<Error> Errors { get; }
+            public bool HasResult => false;
         }
     }
 }

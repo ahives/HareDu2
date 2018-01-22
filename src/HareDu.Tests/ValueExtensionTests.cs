@@ -51,7 +51,7 @@
             IEnumerable<VirtualHostInfo> vhosts = Client
                 .Factory<VirtualHost>()
                 .GetAll()
-                .Safely();
+                .Select(x => x.Data);
 
             foreach (var vhost in vhosts)
             {

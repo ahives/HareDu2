@@ -1,8 +1,5 @@
 ﻿﻿namespace HareDu.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
     using System.Threading.Tasks;
     using Model;
     using NUnit.Framework;
@@ -32,10 +29,7 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
-            
-//            Console.WriteLine(result.Reason);
-//            Assert.AreEqual(HttpStatusCode.Accepted, result.StatusCode);
-        }
+         }
 
         [Test, Explicit]
         public async Task Verify_cannot_create_policy()
@@ -59,8 +53,6 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
-            
-//            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
         [Test, Explicit]

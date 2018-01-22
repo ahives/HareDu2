@@ -23,12 +23,10 @@ namespace HareDu.Internal
         HareDuFactory
     {
         readonly HttpClient _client;
-        readonly HareDuClientSettings _settings;
 
-        public HareDuFactoryImpl(HttpClient client, HareDuClientSettings settings)
+        public HareDuFactoryImpl(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _settings = settings;
         }
 
         public TResource Factory<TResource>()
@@ -42,7 +40,7 @@ namespace HareDu.Internal
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
             
-            return (TResource)Activator.CreateInstance(type, _client, _settings);
+            return (TResource)Activator.CreateInstance(type, _client);
         }
 
         public void CancelPendingRequest()
