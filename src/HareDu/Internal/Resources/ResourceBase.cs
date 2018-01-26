@@ -16,6 +16,7 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Reflection;
@@ -23,6 +24,7 @@ namespace HareDu.Internal.Resources
     using System.Threading.Tasks;
     using Configuration;
     using Extensions;
+    using Model;
     using Newtonsoft.Json;
     using Serialization;
 
@@ -33,6 +35,26 @@ namespace HareDu.Internal.Resources
         protected ResourceBase(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+        }
+
+        protected async Task<Result<IReadOnlyList<T>>> GetAll<T>(string url, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                var responseMessage = await _client.GetAsync(url, cancellationToken);
+                var response = await DeserializeResponse<IReadOnlyList<T>>(responseMessage);
+                var request = await GetRequest(responseMessage);
+                var error = GetError(responseMessage.StatusCode);
+                
+                return new SuccessfulListResult<T>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+            }
+            catch (MissingMethodException e)
+            {
+                return new FaultedResult<IReadOnlyList<T>>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
         }
 
         protected async Task<Result<T>> Get<T>(string url, CancellationToken cancellationToken = default)
@@ -47,15 +69,15 @@ namespace HareDu.Internal.Resources
                 var request = await GetRequest(responseMessage);
                 var error = GetError(responseMessage.StatusCode);
                 
-                return new ResultImpl<T>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+                return new SuccessfulResult<T>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
-                return new ResultImpl<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+                return new FaultedResult<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
 
-        protected async Task<Result<T>> Delete<T>(string url, CancellationToken cancellationToken = default)
+        protected async Task<Result> Delete(string url, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -63,19 +85,18 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.DeleteAsync(url, cancellationToken);
-                var response = await DeserializeResponse<T>(responseMessage);
                 var request = await GetRequest(responseMessage);
                 var error = GetError(responseMessage.StatusCode);
 
-                return Result.None<T>(new DebugInfoImpl(request), new List<Error>{error});
+                return new SuccessfulResult(new DebugInfoImpl(request), new List<Error>{error});
             }
             catch (MissingMethodException e)
             {
-                return new ResultImpl<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+                return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
 
-        protected async Task<Result<TResult>> Put<TValue, TResult>(string url, TValue value, CancellationToken cancellationToken = default)
+        protected async Task<Result> Put<TValue>(string url, TValue value, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -83,15 +104,14 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.PutAsJsonAsync(url, value, cancellationToken);
-                var response = await DeserializeResponse<TResult>(responseMessage);
                 var request = await GetRequest(responseMessage);
                 var error = GetError(responseMessage.StatusCode);
 
-                return Result.None<TResult>(new DebugInfoImpl(request), error.IsNull() ? new List<Error>() : new List<Error>{error});
+                return new SuccessfulResult(new DebugInfoImpl(request), error.IsNull() ? new List<Error>() : new List<Error>{error});
             }
             catch (MissingMethodException e)
             {
-                return new ResultImpl<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+                return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
 
@@ -107,11 +127,11 @@ namespace HareDu.Internal.Resources
                 var request = await GetRequest(responseMessage);
                 var error = GetError(responseMessage.StatusCode);
 
-                return new ResultImpl<TResult>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+                return new SuccessfulResult<TResult>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
-                return new ResultImpl<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+                return new FaultedResult<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
 
@@ -178,35 +198,6 @@ namespace HareDu.Internal.Resources
             }
 
             public string Request { get; }
-        }
-
-        
-        class ResultImpl<T> :
-            Result<T>
-        {
-            public ResultImpl(T data, IEnumerable<Error> errors, DebugInfo debugInfo)
-            {
-                Data = data;
-                Timestamp = DateTimeOffset.UtcNow;
-                DebugInfo = debugInfo;
-                Errors = errors;
-                HasResult = !Data.IsNull();
-            }
-        
-            public ResultImpl(IEnumerable<Error> errors)
-            {
-                Data = default;
-                Timestamp = DateTimeOffset.UtcNow;
-                DebugInfo = default;
-                Errors = errors;
-                HasResult = !Data.IsNull();
-            }
-
-            public T Data { get; }
-            public DateTimeOffset Timestamp { get; }
-            public DebugInfo DebugInfo { get; }
-            public IEnumerable<Error> Errors { get; }
-            public bool HasResult { get; }
         }
 
 

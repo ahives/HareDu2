@@ -32,12 +32,12 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<BindingInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<BindingInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/bindings";
-            var result = await Get<IEnumerable<BindingInfo>>(url, cancellationToken);
+            var result = await GetAll<BindingInfo>(url, cancellationToken);
 
             return result;
         }
@@ -49,8 +49,9 @@ namespace HareDu.Internal.Resources
             var impl = new BindingCreateActionImpl();
             action(impl);
             
-            if (impl.Errors.Value.Any())
-                return Result.None<BindingInfo>(errors: impl.Errors.Value);
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
 
             DefineBinding definition = impl.Definition.Value;
 
@@ -62,13 +63,16 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(source))
-                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the binding (queue/exchange) source is missing.") });
+                errors.Add(new ErrorImpl("The name of the binding (queue/exchange) source is missing."));
 
             if (string.IsNullOrWhiteSpace(destination))
-                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the destination binding (queue/exchange) is missing.") });
+                errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
             
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult<BindingInfo>(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -81,7 +85,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<BindingInfo>> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -94,14 +98,19 @@ namespace HareDu.Internal.Resources
             string source = impl.BindingSource.Value;
             BindingType bindingType = impl.BindingType.Value;
             
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(destination))
-                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the destination binding (queue/exchange) is missing.") });
-
+                errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
+            
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
 
             if (string.IsNullOrWhiteSpace(bindingName))
-                return Result.None<BindingInfo>(errors: new List<Error>{ new ErrorImpl("The name of the binding is missing.") });
+                errors.Add(new ErrorImpl("The name of the binding is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -109,7 +118,7 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}/{bindingName}"
                 : $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}/{bindingName}";
 
-            var result = await Delete<BindingInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using Extensions;
     using Internal.Serialization;
@@ -17,13 +18,31 @@
         [Test, Explicit]
         public async Task Verify_GetAll_works()
         {
-            Result<IEnumerable<VirtualHostInfo>> result = await Client
+            IReadOnlyList<VirtualHostInfo> result = Client
                 .Factory<VirtualHost>()
-                .GetAll();
+                .GetAll()
+                .Select(x => x.Data);
 
-            Assert.IsTrue(result.HasValue());
+//            Assert.IsTrue(result.HasValue());
 
-            foreach (var vhost in result.Data)
+            foreach (var vhost in result)
+            {
+                Console.WriteLine("Name: {0}", vhost.Name);
+                Console.WriteLine("Tracing: {0}", vhost.Tracing);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+
+        [Test, Explicit]
+        public async Task Verify_filtered_GetAll_works()
+        {
+            IReadOnlyList<VirtualHostInfo> result = Client
+                .Factory<VirtualHost>()
+                .GetAll()
+                .Where(x => x.Name == "HareDu");
+
+            foreach (var vhost in result)
             {
                 Console.WriteLine("Name: {0}", vhost.Name);
                 Console.WriteLine("Tracing: {0}", vhost.Tracing);
@@ -35,7 +54,7 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-            Result<VirtualHostInfo> result = await Client
+            Result result = await Client
                 .Factory<VirtualHost>()
                 .Create(x =>
                 {
@@ -53,7 +72,7 @@
         [Test, Explicit]
         public async Task Verify_Delete_works()
         {
-            Result<VirtualHostInfo> result = await Client
+            Result result = await Client
                 .Factory<VirtualHost>()
                 .Delete(x => x.VirtualHost("HareDu2"));
 

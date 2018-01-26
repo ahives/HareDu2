@@ -16,7 +16,7 @@
         {
             Queue resource = Client.Factory<Queue>();
             
-            Result<QueueInfo> result = await resource
+            Result result = await resource
                 .Create(x =>
                 {
                     x.Queue("TestQueue2");
@@ -39,11 +39,12 @@
         [Test, Explicit]
         public async Task Verify_can_get_all()
         {
-            Result<IEnumerable<QueueInfo>> result = await Client
+            IReadOnlyList<QueueInfo> result = Client
                 .Factory<Queue>()
-                .GetAll();
+                .GetAll()
+                .Select(x => x.Data);
             
-            foreach (var queue in result.Data)
+            foreach (var queue in result)
             {
                 Console.WriteLine("Name: {0}", queue.Name);
                 Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
@@ -66,7 +67,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_queue()
         {
-            Result<QueueInfo> result = await Client
+            Result result = await Client
                 .Factory<Queue>()
                 .Delete(x =>
                 {
@@ -102,7 +103,7 @@
         [Test, Explicit]
         public async Task Verify_can_empty_queue()
         {
-            Result<QueueInfo> result = await Client
+            Result result = await Client
                 .Factory<Queue>()
                 .Empty(x =>
                 {

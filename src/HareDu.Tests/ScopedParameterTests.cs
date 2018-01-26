@@ -12,7 +12,7 @@
         [Test, Explicit]
         public async Task Verify_can_create()
         {
-            Result<ScopedParameterInfo> result = await Client
+            Result result = await Client
                 .Factory<ScopedParameter>()
                 .Create(x =>
                 {
@@ -33,7 +33,7 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result<ScopedParameterInfo> result = await Client
+            Result result = await Client
                 .Factory<ScopedParameter>()
                 .Delete(x =>
                 {

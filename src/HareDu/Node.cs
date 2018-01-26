@@ -26,27 +26,27 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default);
+        Task<Result<IReadOnlyList<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns all connections on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default);
+        Task<Result<IReadOnlyList<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns all consumers on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default);
+        Task<Result<IReadOnlyList<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns all object definitions on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<ServerDefinition>> GetDefintiions(CancellationToken cancellationToken = default);
+        Task<Result<IReadOnlyList<ServerDefinition>>> GetDefintiions(CancellationToken cancellationToken = default);
     }
 }

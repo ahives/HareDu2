@@ -21,22 +21,22 @@ namespace HareDu.Extensions
 
     public static class LinqExtensions
     {
-        public static T Single<T>(this Task<Result<IEnumerable<T>>> source)
+        public static T Single<T>(this Task<Result<IReadOnlyList<T>>> source)
         {
             return source.Select(x => x.Data).Single();
         }
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
+        public static T SingleOrDefault<T>(this Task<Result<IReadOnlyList<T>>> source)
         {
             return source.Select(x => x.Data).SingleOrDefault();
         }
 
-        public static T SingleOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        public static T SingleOrDefault<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
         {
             return source.Select(x => x.Data).SingleOrDefault(predicate);
         }
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source)
+        public static T FirstOrDefault<T>(this Task<Result<IReadOnlyList<T>>> source)
         {
             return source.Select(x => x.Data).FirstOrDefault();
         }
@@ -46,47 +46,14 @@ namespace HareDu.Extensions
             return source.Select(x => x.Data).FirstOrDefault(predicate);
         }
 
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source)
+        public static bool Any<T>(this Task<Result<IReadOnlyList<T>>> source)
         {
             return source.Select(x => x.Data).Any();
         }
 
-        public static bool Any<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        public static bool Any<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
         {
             return source.Select(x => x.Data).Any(predicate);
-        }
-
-        public static IEnumerable<T> Where<T>(this Result<IEnumerable<T>> source, Func<T, bool> predicate)
-        {
-            return source?.Data == null || !source.Data.Any()
-                ? Enumerable.Empty<T>()
-                : source.Data.Where(predicate);
-        }
-
-        public static IEnumerable<T> Where<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
-        {
-            Result<IEnumerable<T>> data = source?.Result;
-            if (data?.Data == null || !data.Data.Any())
-                return Enumerable.Empty<T>();
-
-            IEnumerable<T> list = source.Select(x => x.Data).Where(predicate);
-            
-            return list;
-        }
-
-        public static T Unwrap<T>(this Task<T> result)
-        {
-            return result.Result;
-        }
-
-        public static TResult Select<T, TResult>(this Task<Result<T>> source, Func<Result<T>, TResult> projector)
-        {
-            if (source.IsNull() || projector.IsNull())
-                return default;
-                
-            Result<T> result = source.Unwrap();
-
-            return result.HasResult ? projector(result) : default;
         }
     }
 }

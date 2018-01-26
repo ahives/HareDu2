@@ -33,6 +33,6 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default);
+        Task<Result<IReadOnlyList<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default);
     }
 }

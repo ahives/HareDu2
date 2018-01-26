@@ -32,17 +32,17 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<UserInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<UserInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/users";
-            var result = await Get<IEnumerable<UserInfo>>(url, cancellationToken);
+            var result = await GetAll<UserInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<UserInfo>> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -55,20 +55,25 @@ namespace HareDu.Internal.Resources
 
             string user = impl.User.Value;
             
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(user))
-                return Result.None<UserInfo>(errors: new List<Error> {new ErrorImpl("The username and/or password is missing.")});
+                errors.Add(new ErrorImpl("The username is missing."));
             
             if (string.IsNullOrWhiteSpace(definition.Password) && string.IsNullOrWhiteSpace(definition.PasswordHash))
-                return Result.None<UserInfo>(errors: new List<Error> {new ErrorImpl("The password/hash is missing.")});
+                errors.Add(new ErrorImpl("The password/hash is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
                     
             string url = $"api/users/{user}";
 
-            var result = await Put<DefinedUser, UserInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<UserInfo>> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -76,11 +81,11 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             if (string.IsNullOrWhiteSpace(impl.Username))
-                return Result.None<UserInfo>(errors: new List<Error> {new ErrorImpl("The username is missing.")});
+                return new FaultedResult(new List<Error> {new ErrorImpl("The username is missing.")});
 
             string url = $"api/users/{impl.Username}";
 
-            var result = await Delete<UserInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

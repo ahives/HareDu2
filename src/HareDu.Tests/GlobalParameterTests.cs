@@ -10,7 +10,7 @@
         [Test, Explicit]
         public async Task Verify_can_create_parameter()
         {
-            Result<GlobalParameterInfo> result = await Client
+            Result result = await Client
                 .Factory<GlobalParameter>()
                 .Create(x =>
                 {
@@ -28,7 +28,7 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result<GlobalParameterInfo> result = await Client
+            Result result = await Client
                 .Factory<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
         }

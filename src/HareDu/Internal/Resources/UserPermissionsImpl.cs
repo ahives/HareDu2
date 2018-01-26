@@ -16,6 +16,7 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,17 +32,17 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<UserPermissionsInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<UserPermissionsInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/users";
-            var result = await Get<IEnumerable<UserPermissionsInfo>>(url, cancellationToken);
+            var result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<UserPermissionsInfo>> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -54,23 +55,28 @@ namespace HareDu.Internal.Resources
 
             string username = impl.Username.Value;
             string vhost = impl.VirtualHost.Value;
+
+            var errors = new List<Error>();
             
             if (string.IsNullOrWhiteSpace(username))
-                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The username and/or password is missing.") });
+                errors.Add(new ErrorImpl("The username and/or password is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            var result = await Put<DefinedUserPermissions, UserPermissionsInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<UserPermissionsInfo>> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -80,17 +86,22 @@ namespace HareDu.Internal.Resources
             string username = impl.Username.Value;
             string vhost = impl.VirtualHost.Value;
 
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(username))
-                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The username and/or password is missing.") });
+                errors.Add(new ErrorImpl("The username and/or password is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<UserPermissionsInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/permissions/{sanitizedVHost}/{username}";
 
-            var result = await Delete<UserPermissionsInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

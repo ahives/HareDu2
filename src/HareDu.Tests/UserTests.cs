@@ -36,7 +36,7 @@
         [Test, Explicit]
         public async Task Test1()
         {
-            Result<UserInfo> result = await Client
+            Result result = await Client
                 .Factory<User>()
                 .Create(x =>
                 {
@@ -54,7 +54,7 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result<UserInfo> result = await Client
+            Result result = await Client
                 .Factory<User>()
                 .Delete(x => x.User(""));
         }

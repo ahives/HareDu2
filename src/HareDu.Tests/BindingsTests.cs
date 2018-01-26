@@ -59,7 +59,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_binding()
         {
-            Result<BindingInfo> result = await Client
+            Result result = await Client
                 .Factory<Binding>()
                 .Delete(x =>
                 {

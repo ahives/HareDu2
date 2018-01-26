@@ -27,7 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default);
+        Task<Result<IReadOnlyList<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Creates the specified exchange on the target virtual host.
@@ -35,7 +35,7 @@ namespace HareDu
         /// <param name="action">Describes how the queue will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<ExchangeInfo>> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default);
+        Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Delete the specified exchange on the target virtual host.
@@ -43,6 +43,6 @@ namespace HareDu
         /// <param name="action">Describes how the queue will be deleted.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<ExchangeInfo>> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default);
+        Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default);
     }
 }

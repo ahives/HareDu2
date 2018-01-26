@@ -38,12 +38,12 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IEnumerable<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/nodes";
-            var result = await Get<IEnumerable<NodeInfo>>(url, cancellationToken);
+            var result = await GetAll<NodeInfo>(url, cancellationToken);
 
             return result;
         }

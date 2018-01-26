@@ -32,8 +32,6 @@
             Result<IEnumerable<NodeInfo>> result = await Client
                 .Factory<Cluster>()
                 .GetNodes();
-
-            Assert.IsTrue(result.HasValue());
             
             foreach (var node in result.Data)
             {

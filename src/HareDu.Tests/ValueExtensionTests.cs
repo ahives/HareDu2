@@ -48,7 +48,7 @@
         [Test, Explicit]
         public void Verify_Unwravel_works()
         {
-            IEnumerable<VirtualHostInfo> vhosts = Client
+            IReadOnlyList<VirtualHostInfo> vhosts = Client
                 .Factory<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);

@@ -32,25 +32,26 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/exchanges";
-            var result = await Get<IEnumerable<ExchangeInfo>>(url, cancellationToken);
+            var result = await GetAll<ExchangeInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<ExchangeInfo>> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled();
 
             var impl = new ExchangeCreateActionImpl();
             action(impl);
             
-            if (impl.Errors.Value.Any())
-                return Result.None<ExchangeInfo>(errors: impl.Errors.Value);
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
 
             DefinedExchange definition = impl.Definition.Value;
 
@@ -60,24 +61,27 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(exchange))
-                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the exchange is missing.") });
+                errors.Add(new ErrorImpl("The name of the exchange is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
 
             if (string.IsNullOrWhiteSpace(definition?.RoutingType))
-                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The routing type of the exchange is missing.") });
+                errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
 
-            var result = await Put<DefinedExchange, ExchangeInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<ExchangeInfo>> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -87,11 +91,16 @@ namespace HareDu.Internal.Resources
             string exchange = impl.ExchangeName.Value;
             string vhost = impl.VirtualHost.Value;
             
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(exchange))
-                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the exchange is missing.") });
+                errors.Add(new ErrorImpl("The name of the exchange is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<ExchangeInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -102,7 +111,7 @@ namespace HareDu.Internal.Resources
             if (!string.IsNullOrWhiteSpace(query))
                 url = $"api/exchanges/{sanitizedVHost}/{exchange}?{query}";
 
-            var result = await Delete<ExchangeInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

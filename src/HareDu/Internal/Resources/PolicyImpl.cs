@@ -33,25 +33,26 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/policies";
-            var result = await Get<IEnumerable<PolicyInfo>>(url, cancellationToken);
+            var result = await GetAll<PolicyInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<PolicyInfo>> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             var impl = new PolicyCreateActionImpl();
             action(impl);
 
-            if (impl.Errors.Value.Any())
-                return Result.None<PolicyInfo>(errors: impl.Errors.Value);
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
 
             DefinedPolicy definition = impl.Definition.Value;
 
@@ -61,21 +62,24 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             
             if (string.IsNullOrWhiteSpace(policy))
-                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the policy is missing.") });
+                errors.Add(new ErrorImpl("The name of the policy is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            var result = await Put<DefinedPolicy, PolicyInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<PolicyInfo>> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<PolicyDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -85,17 +89,22 @@ namespace HareDu.Internal.Resources
             string policy = impl.PolicyName.Value;
             string vhost = impl.VirtualHost.Value;
             
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(policy))
-                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the policy is missing.") });
+                errors.Add(new ErrorImpl("The name of the policy is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<PolicyInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/policies/{sanitizedVHost}/{policy}";
 
-            var result = await Delete<PolicyInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

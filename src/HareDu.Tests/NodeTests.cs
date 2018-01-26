@@ -17,9 +17,6 @@
                 .Factory<Node>()
                 .GetChannels()
                 .Select(x => x.Data);
-//                .Unwrap();
-            
-//            Assert.IsTrue(result.TryGetValue(out var nodes));
             
             foreach (var node in result)
             {

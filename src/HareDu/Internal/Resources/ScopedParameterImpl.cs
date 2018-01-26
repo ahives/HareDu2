@@ -31,18 +31,18 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<ScopedParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/parameters";
 
-            var result = await Get<IEnumerable<ScopedParameterInfo>>(url, cancellationToken);
+            var result = await GetAll<ScopedParameterInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<ScopedParameterInfo>> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
             
@@ -54,16 +54,16 @@ namespace HareDu.Internal.Resources
             Debug.Assert(definition != null);
 
             if (string.IsNullOrWhiteSpace(definition.ParameterName))
-                return Result.None<ScopedParameterInfo>(errors: new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
+                return new FaultedResult(new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
                     
             string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
 
-            var result = await Put<DefinedScopedParameter, ScopedParameterInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<ScopedParameterInfo>> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -75,11 +75,11 @@ namespace HareDu.Internal.Resources
             string component = impl.Component.Value;
             
             if (string.IsNullOrWhiteSpace(scopedParameter))
-                return Result.None<ScopedParameterInfo>(errors: new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
+                return new FaultedResult(new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
 
             string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
 
-            var result = await Delete<ScopedParameterInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

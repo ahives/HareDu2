@@ -22,16 +22,6 @@ namespace HareDu.Extensions
         {
             return value == null;
         }
-        
-        public static bool HasValue<T>(this Result<T> source)
-        {
-            return source != null && source.Data != null;
-        }
-
-        public static bool HasValue<T>(this Result<IEnumerable<T>> source)
-        {
-            return source?.Data != null && source.Data.Any();
-        }
 
         public static bool TryGetValue<T>(this Result<IEnumerable<T>> source, int index, out T value)
         {

@@ -31,41 +31,45 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/global-parameters";
-            var result = await Get<IEnumerable<GlobalParameterInfo>>(url, cancellationToken);
+            var result = await GetAll<GlobalParameterInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<GlobalParameterInfo>> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
             
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
             
-            if (impl.Errors.Value.Any())
-                return Result.None<GlobalParameterInfo>(errors: impl.Errors.Value);
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
 
             DefinedGlobalParameter definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
             if (string.IsNullOrWhiteSpace(definition.Name))
-                return Result.None<GlobalParameterInfo>(errors: new List<Error> {new ErrorImpl("The name of the parameter is missing.")});
+                errors.Add(new ErrorImpl("The name of the parameter is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
 
             string url = $"api/global-parameters/{definition.Name}";
 
-            var result = await Put<DefinedGlobalParameter, GlobalParameterInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<GlobalParameterInfo>> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -73,11 +77,11 @@ namespace HareDu.Internal.Resources
             action(impl);
             
             if (string.IsNullOrWhiteSpace(impl.ParameterName))
-                return Result.None<GlobalParameterInfo>(errors: new List<Error> {new ErrorImpl("The name of the parameter is missing.")});
+                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the parameter is missing.")});
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 
-            var result = await Delete<GlobalParameterInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }

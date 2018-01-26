@@ -11,22 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public interface Result
-    {
-        DateTimeOffset Timestamp { get; }
-        DebugInfo DebugInfo { get; }
-        IReadOnlyList<Error> Errors { get; }
-    }
+    using System.Threading.Tasks;
 
-    public interface Result<out TResult> :
-        Result
+    public static class TaskExtensions
     {
-        TResult Data { get; }
-        bool HasResult { get; }
+        public static T Unwrap<T>(this Task<T> result)
+        {
+            return !result.IsCanceled && !result.IsFaulted ? result.Result : default;
+        }
     }
 }

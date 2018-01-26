@@ -35,7 +35,7 @@
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-            Result<ExchangeInfo> result = await Client
+            Result result = await Client
                 .Factory<Exchange>()
                 .Create(x =>
                 {
@@ -57,7 +57,7 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result<ExchangeInfo> result = await Client
+            Result result = await Client
                 .Factory<Exchange>()
                 .Delete(x =>
                 {

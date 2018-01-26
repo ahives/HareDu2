@@ -33,25 +33,26 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<QueueInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<QueueInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/queues";
-            var result = await Get<IEnumerable<QueueInfo>>(url, cancellationToken);
+            var result = await GetAll<QueueInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<QueueInfo>> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             var impl = new QueueCreateActionImpl();
             action(impl);
             
-            if (impl.Errors.Value.Any())
-                return Result.None<QueueInfo>(errors: impl.Errors.Value);
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
 
             DefinedQueue definition = impl.Definition.Value;
 
@@ -61,21 +62,24 @@ namespace HareDu.Internal.Resources
             string queue = impl.QueueName.Value;
             
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
 
             if (string.IsNullOrWhiteSpace(queue))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
+                errors.Add(new ErrorImpl("The name of the queue is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{queue}";
 
-            var result = await Put<DefinedQueue, QueueInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<QueueInfo>> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -85,11 +89,16 @@ namespace HareDu.Internal.Resources
             string queue = impl.QueueName.Value;
             string vhost = impl.VirtualHost.Value;
             
-            if (string.IsNullOrWhiteSpace(queue))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
-
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (string.IsNullOrWhiteSpace(queue))
+                errors.Add(new ErrorImpl("The name of the queue is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -100,12 +109,12 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(query))
                 url = $"{url}?{query}";
 
-            var result = await Delete<QueueInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<QueueInfo>> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -115,17 +124,22 @@ namespace HareDu.Internal.Resources
             string queue = impl.QueueName.Value;
             string vhost = impl.VirtualHost.Value;
             
-            if (string.IsNullOrWhiteSpace(queue))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
-
+            var errors = new List<Error>();
+            
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (string.IsNullOrWhiteSpace(queue))
+                errors.Add(new ErrorImpl("The name of the queue is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = $"api/queues/{sanitizedVHost}/{queue}/contents";
 
-            var result = await Delete<QueueInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -141,20 +155,25 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
             
+            var errors = new List<Error>();
+            
             if (definition.Take < 1)
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("Must be set a value greater than 1.") });
+                errors.Add(new ErrorImpl("Must be set a value greater than 1."));
 
             if (string.IsNullOrWhiteSpace(definition.Encoding))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("TEncoding must be set to auto or base64.") });
+                errors.Add(new ErrorImpl("Encoding must be set to auto or base64."));
 
             string queue = impl.QueueName.Value;
             string vhost = impl.VirtualHost.Value;
             
-            if (string.IsNullOrWhiteSpace(queue))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the queue is missing.") });
-
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<QueueInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (string.IsNullOrWhiteSpace(queue))
+                errors.Add(new ErrorImpl("The name of the queue is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult<QueueInfo>(errors);
             
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 

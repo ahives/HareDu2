@@ -31,17 +31,17 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IEnumerable<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
-            var result = await Get<IEnumerable<VirtualHostInfo>>(url, cancellationToken);
+            var result = await GetAll<VirtualHostInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<VirtualHostInfo>> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -51,7 +51,7 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHostName.Value;
 
             if (string.IsNullOrWhiteSpace(vhost))
-                return Result.None<VirtualHostInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the virtual host is missing.")});
 
             string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
@@ -59,12 +59,12 @@ namespace HareDu.Internal.Resources
 
             DefinedVirtualHost definition = impl.Definition.Value;
 
-            var result = await Put<DefinedVirtualHost, VirtualHostInfo>(url, definition, cancellationToken);
+            var result = await Put(url, definition, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<VirtualHostInfo>> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -72,16 +72,16 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             if (string.IsNullOrWhiteSpace(impl.VirtualHostName))
-                return Result.None<VirtualHostInfo>(errors: new List<Error>{ new ErrorImpl("The name of the virtual host is missing.") });
+                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the virtual host is missing.")});
 
             string sanitizedVHost = impl.VirtualHostName.SanitizeVirtualHostName();
 
             if (sanitizedVHost == "2%f")
-                return Result.None<VirtualHostInfo>(errors: new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") });
+                return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") });
 
             string url = $"api/vhosts/{sanitizedVHost}";
 
-            var result = await Delete<VirtualHostInfo>(url, cancellationToken);
+            var result = await Delete(url, cancellationToken);
 
             return result;
         }
