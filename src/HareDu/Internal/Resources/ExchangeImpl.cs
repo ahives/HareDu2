@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using System.Threading;
     using System.Threading.Tasks;
     using Exceptions;
+    using Extensions;
     using Model;
 
     internal class ExchangeImpl :
@@ -195,7 +196,7 @@ namespace HareDu.Internal.Resources
 
             public ExchangeCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedExchange>(
                     () => new DefinedExchangeImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);

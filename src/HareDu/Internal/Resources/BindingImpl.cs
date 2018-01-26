@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using System.Threading;
     using System.Threading.Tasks;
     using Exceptions;
+    using Extensions;
     using Model;
 
     internal class BindingImpl :
@@ -215,7 +216,7 @@ namespace HareDu.Internal.Resources
 
             public BindingCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefineBinding>(() => new DefineBindingImpl(_routingKey, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 Source = new Lazy<string>(() => _source, LazyThreadSafetyMode.PublicationOnly);
                 Destination = new Lazy<string>(() => _destination, LazyThreadSafetyMode.PublicationOnly);

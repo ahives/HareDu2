@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using System.Threading;
     using System.Threading.Tasks;
     using Exceptions;
+    using Extensions;
     using Model;
     using Queue = HareDu.Queue;
 
@@ -410,7 +411,7 @@ namespace HareDu.Internal.Resources
 
             public QueueCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedQueue>(
                     () => new DefinedQueueImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);

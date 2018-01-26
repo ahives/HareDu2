@@ -14,12 +14,12 @@
         [Test, Explicit]
         public async Task Verify_can_create_queue()
         {
-            Queue resource = Client.Factory<Queue>();
+            var client = Client.Factory<Queue>();
             
-            Result result = await resource
+            Result result = await client
                 .Create(x =>
                 {
-                    x.Queue("TestQueue2");
+                    x.Queue("TestQueue9");
                     x.Configure(c =>
                     {
                         c.IsDurable();
@@ -30,10 +30,11 @@
                     });
                     x.Targeting(t =>
                     {
-                        t.Node("MyNode1");
                         t.VirtualHost("HareDu");
                     });
                 });
+            
+            Console.WriteLine(result.Errors.ToJson());
         }
 
         [Test, Explicit]

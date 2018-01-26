@@ -164,7 +164,7 @@ namespace HareDu.Internal.Resources
 
             public PolicyCreateActionImpl()
             {
-                _errors = _arguments.Select(x => x.Value.Error).ToList();
+                _errors = _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList();
                 
                 Definition = new Lazy<DefinedPolicy>(
                     () => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);

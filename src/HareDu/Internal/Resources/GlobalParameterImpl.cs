@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using System.Threading;
     using System.Threading.Tasks;
     using Exceptions;
+    using Extensions;
 
     internal class GlobalParameterImpl :
         ResourceBase,
@@ -107,7 +108,7 @@ namespace HareDu.Internal.Resources
 
             public GlobalParameterCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedGlobalParameter>(
                     () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
             }
