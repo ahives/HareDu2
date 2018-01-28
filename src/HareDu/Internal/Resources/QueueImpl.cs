@@ -71,9 +71,7 @@ namespace HareDu.Internal.Resources
             if (errors.Any())
                 return new FaultedResult(errors);
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/queues/{sanitizedVHost}/{queue}";
+            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}";
 
             var result = await Put(url, definition, cancellationToken);
 
@@ -100,10 +98,8 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/queues/{sanitizedVHost}/{queue}";
+            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}";
 
             string query = impl.Query.Value;
             
@@ -135,10 +131,8 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/queues/{sanitizedVHost}/{queue}/contents";
+            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/contents";
 
             var result = await Delete(url, cancellationToken);
 
@@ -175,10 +169,8 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult<QueueInfo>(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/queues/{sanitizedVHost}/{queue}/get";
+            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/get";
 
             var result = await Post<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
 

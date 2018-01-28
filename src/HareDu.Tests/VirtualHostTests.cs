@@ -23,8 +23,6 @@
                 .GetAll()
                 .Select(x => x.Data);
 
-//            Assert.IsTrue(result.HasValue());
-
             foreach (var vhost in result)
             {
                 Console.WriteLine("Name: {0}", vhost.Name);
@@ -32,6 +30,16 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
+        }
+
+        [Test, Explicit]
+        public async Task Verify_GetAll_HasResult_works()
+        {
+            Result<IReadOnlyList<VirtualHostInfo>> result = await Client
+                .Factory<VirtualHost>()
+                .GetAll();
+
+            Assert.IsTrue(result.HasResult);
         }
 
         [Test, Explicit]

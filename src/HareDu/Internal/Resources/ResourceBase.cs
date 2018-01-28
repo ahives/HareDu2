@@ -45,11 +45,13 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.GetAsync(url, cancellationToken);
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResult<IReadOnlyList<T>>(new List<Error> { GetError(responseMessage.StatusCode) });
+                
                 var response = await DeserializeResponse<IReadOnlyList<T>>(responseMessage);
                 var request = await GetRequest(responseMessage);
-                var error = GetError(responseMessage.StatusCode);
                 
-                return new SuccessfulListResult<T>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+                return new SuccessfulListResult<T>(response, new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
@@ -65,11 +67,13 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.GetAsync(url, cancellationToken);
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) });
+
                 var response = await DeserializeResponse<T>(responseMessage);
                 var request = await GetRequest(responseMessage);
-                var error = GetError(responseMessage.StatusCode);
                 
-                return new SuccessfulResult<T>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+                return new SuccessfulResult<T>(response, new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
@@ -85,10 +89,12 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.DeleteAsync(url, cancellationToken);
-                var request = await GetRequest(responseMessage);
-                var error = GetError(responseMessage.StatusCode);
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) });
 
-                return new SuccessfulResult(new DebugInfoImpl(request), new List<Error>{error});
+                var request = await GetRequest(responseMessage);
+
+                return new SuccessfulResult(new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
@@ -104,10 +110,12 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.PutAsJsonAsync(url, value, cancellationToken);
-                var request = await GetRequest(responseMessage);
-                var error = GetError(responseMessage.StatusCode);
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) });
 
-                return new SuccessfulResult(new DebugInfoImpl(request), error.IsNull() ? new List<Error>() : new List<Error>{error});
+                var request = await GetRequest(responseMessage);
+
+                return new SuccessfulResult(new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
@@ -123,16 +131,23 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.PostAsJsonAsync(url, value, cancellationToken);
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResult<TResult>(new List<Error> { GetError(responseMessage.StatusCode) });
+
                 var response = await DeserializeResponse<TResult>(responseMessage);
                 var request = await GetRequest(responseMessage);
-                var error = GetError(responseMessage.StatusCode);
 
-                return new SuccessfulResult<TResult>(response, error.IsNull() ? new List<Error>() : new List<Error>{error}, new DebugInfoImpl(request));
+                return new SuccessfulResult<TResult>(response, new DebugInfoImpl(request));
             }
             catch (MissingMethodException e)
             {
                 return new FaultedResult<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
+        }
+
+        protected string SanitizeVirtualHostName(string value)
+        {
+            return value == @"/" ? value.Replace("/", "%2f") : value;
         }
 
         void HandleDotsAndSlashes()
@@ -176,13 +191,13 @@ namespace HareDu.Internal.Resources
                 case HttpStatusCode.Forbidden:
                     return new ErrorImpl("");
                 case HttpStatusCode.InternalServerError:
-                    return new ErrorImpl("");
+                    return new ErrorImpl("Internal error happened on RabbitMQ server.");
                 case HttpStatusCode.RequestTimeout:
                     return new ErrorImpl("");
                 case HttpStatusCode.ServiceUnavailable:
                     return new ErrorImpl("");
                 case HttpStatusCode.Unauthorized:
-                    return new ErrorImpl("");
+                    return new ErrorImpl("Unauthorized access to RabbitMQ server resource.");
                 default:
                     return null;
             }

@@ -15,12 +15,13 @@ namespace HareDu
 {
     using System;
     using System.Collections.Generic;
-    
+
     public interface Result
     {
         DateTimeOffset Timestamp { get; }
         DebugInfo DebugInfo { get; }
         IReadOnlyList<Error> Errors { get; }
+        bool HasFaulted { get; }
     }
 
     public interface Result<out TResult> :

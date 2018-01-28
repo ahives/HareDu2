@@ -15,38 +15,42 @@ namespace HareDu
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Extensions;
 
     public class SuccessfulResult<T> :
         Result<T>
     {
-        public SuccessfulResult(T data, IReadOnlyList<Error> errors, DebugInfo debugInfo)
+        public SuccessfulResult(T data, DebugInfo debugInfo)
         {
             Data = data;
             DebugInfo = debugInfo;
-            Errors = errors;
+            Errors = new List<Error>();
             Timestamp = DateTimeOffset.UtcNow;
+            HasResult = !Data.IsNull();
         }
 
         public T Data { get; }
+        public bool HasResult { get; }
         public DateTimeOffset Timestamp { get; }
         public DebugInfo DebugInfo { get; }
         public IReadOnlyList<Error> Errors { get; }
-        public bool HasResult => !Data.IsNull();
+        public bool HasFaulted => false;
     }
 
     public class SuccessfulResult :
         Result
     {
-        public SuccessfulResult(DebugInfo debugInfo, IReadOnlyList<Error> errors)
+        public SuccessfulResult(DebugInfo debugInfo)
         {
             DebugInfo = debugInfo;
-            Errors = errors;
+            Errors = new List<Error>();
             Timestamp = DateTimeOffset.UtcNow;
         }
 
         public DateTimeOffset Timestamp { get; }
         public DebugInfo DebugInfo { get; }
         public IReadOnlyList<Error> Errors { get; }
+        public bool HasFaulted => false;
     }
 }

@@ -56,7 +56,7 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(definition.ParameterName))
                 return new FaultedResult(new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
                     
-            string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
+            string url = $"api/parameters/{definition.Component}/{SanitizeVirtualHostName(definition.VirtualHost)}/{definition.ParameterName}";
 
             var result = await Put(url, definition, cancellationToken);
 

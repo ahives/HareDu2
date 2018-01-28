@@ -72,10 +72,8 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
+            string url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}";
 
             var result = await Put(url, definition, cancellationToken);
 
@@ -102,15 +100,13 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/exchanges/{sanitizedVHost}/{exchange}";
+            string url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}";
 
             string query = impl.Query.Value;
             
             if (!string.IsNullOrWhiteSpace(query))
-                url = $"api/exchanges/{sanitizedVHost}/{exchange}?{query}";
+                url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}?{query}";
 
             var result = await Delete(url, cancellationToken);
 

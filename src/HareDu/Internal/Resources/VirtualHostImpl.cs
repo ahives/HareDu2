@@ -53,9 +53,7 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(vhost))
                 return new FaultedResult(new List<Error> {new ErrorImpl("The name of the virtual host is missing.")});
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/vhosts/{sanitizedVHost}";
+            string url = $"api/vhosts/{SanitizeVirtualHostName(vhost)}";
 
             DefinedVirtualHost definition = impl.Definition.Value;
 
@@ -74,12 +72,12 @@ namespace HareDu.Internal.Resources
             if (string.IsNullOrWhiteSpace(impl.VirtualHostName))
                 return new FaultedResult(new List<Error> {new ErrorImpl("The name of the virtual host is missing.")});
 
-            string sanitizedVHost = impl.VirtualHostName.SanitizeVirtualHostName();
+            string sanitizedVHost = SanitizeVirtualHostName(impl.VirtualHostName);
 
             if (sanitizedVHost == "2%f")
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") });
 
-            string url = $"api/vhosts/{sanitizedVHost}";
+            string url = $"api/vhosts/{SanitizeVirtualHostName(impl.VirtualHostName)}";
 
             var result = await Delete(url, cancellationToken);
 

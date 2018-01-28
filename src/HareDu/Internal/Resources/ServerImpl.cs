@@ -40,9 +40,7 @@ namespace HareDu.Internal.Resources
             switch (impl.CheckUpType)
             {
                 case HealthCheckType.VirtualHost:
-                    string sanitizedVHostName = impl.ResourceName.SanitizeVirtualHostName();
-            
-                    url = $"api/aliveness-test/{sanitizedVHostName}";
+                    url = $"api/aliveness-test/{SanitizeVirtualHostName(impl.ResourceName)}";
                     break;
                     
                 case HealthCheckType.Node:

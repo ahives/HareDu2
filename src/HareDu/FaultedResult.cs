@@ -15,6 +15,7 @@ namespace HareDu
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Extensions;
 
     public class FaultedResult<T> :
@@ -23,19 +24,22 @@ namespace HareDu
         public FaultedResult(IReadOnlyList<Error> errors)
         {
             Errors = errors;
+            Timestamp = DateTimeOffset.UtcNow;
         }
 
         public FaultedResult(DebugInfo debugInfo, IReadOnlyList<Error> errors)
         {
             DebugInfo = debugInfo;
             Errors = errors;
+            Timestamp = DateTimeOffset.UtcNow;
         }
 
-        public T Data => throw new ArgumentNullException();
+        public T Data => default;
+        public bool HasResult => false;
         public DateTimeOffset Timestamp { get; }
         public DebugInfo DebugInfo { get; }
         public IReadOnlyList<Error> Errors { get; }
-        public bool HasResult => !Data.IsNull();
+        public bool HasFaulted => true;
     }
 
     public class FaultedResult :
@@ -44,16 +48,19 @@ namespace HareDu
         public FaultedResult(IReadOnlyList<Error> errors)
         {
             Errors = errors;
+            Timestamp = DateTimeOffset.UtcNow;
         }
 
         public FaultedResult(DebugInfo debugInfo, IReadOnlyList<Error> errors)
         {
             DebugInfo = debugInfo;
             Errors = errors;
+            Timestamp = DateTimeOffset.UtcNow;
         }
 
         public DateTimeOffset Timestamp { get; }
         public DebugInfo DebugInfo { get; }
         public IReadOnlyList<Error> Errors { get; }
+        public bool HasFaulted => true;
     }
 }

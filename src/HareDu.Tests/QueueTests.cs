@@ -14,27 +14,21 @@
         [Test, Explicit]
         public async Task Verify_can_create_queue()
         {
-            var client = Client.Factory<Queue>();
-            
-            Result result = await client
+            Result result = await Client
+                .Factory<Queue>()
                 .Create(x =>
                 {
-                    x.Queue("TestQueue9");
+                    x.Queue("TestQueue11");
                     x.Configure(c =>
                     {
                         c.IsDurable();
-                        c.HasArguments(arg =>
-                        {
-                            arg.SetQueueExpiration(1000);
-                        });
+                        c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
                     });
-                    x.Targeting(t =>
-                    {
-                        t.VirtualHost("HareDu");
-                    });
+                    x.Targeting(t => { t.VirtualHost("HareDu"); });
                 });
             
-            Console.WriteLine(result.Errors.ToJson());
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]
@@ -72,7 +66,7 @@
                 .Factory<Queue>()
                 .Delete(x =>
                 {
-                    x.Queue("");
+                    x.Queue("TestQueue10");
                     x.Targeting(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
@@ -80,6 +74,9 @@
                         c.IsEmpty();
                     });
                 });
+            
+//            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]
@@ -99,6 +96,7 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]

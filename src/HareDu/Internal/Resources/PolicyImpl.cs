@@ -69,10 +69,8 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
-            string url = $"api/policies/{sanitizedVHost}/{policy}";
+            string url = $"api/policies/{SanitizeVirtualHostName(vhost)}/{policy}";
 
             var result = await Put(url, definition, cancellationToken);
 
@@ -100,9 +98,7 @@ namespace HareDu.Internal.Resources
             if (errors.Any())
                 return new FaultedResult(errors);
 
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
-
-            string url = $"api/policies/{sanitizedVHost}/{policy}";
+            string url = $"api/policies/{SanitizeVirtualHostName(vhost)}/{policy}";
 
             var result = await Delete(url, cancellationToken);
 

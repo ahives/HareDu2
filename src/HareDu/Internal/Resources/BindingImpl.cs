@@ -74,12 +74,10 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult<BindingInfo>(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = bindingType == BindingType.Exchange
-                ? $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}"
-                : $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}";
+                ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}"
+                : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}";
 
             var result = await Post<DefineBinding, BindingInfo>(url, definition, cancellationToken);
 
@@ -112,12 +110,10 @@ namespace HareDu.Internal.Resources
             
             if (errors.Any())
                 return new FaultedResult(errors);
-            
-            string sanitizedVHost = vhost.SanitizeVirtualHostName();
 
             string url = bindingType == BindingType.Queue
-                ? $"api/bindings/{sanitizedVHost}/e/{source}/q/{destination}/{bindingName}"
-                : $"api/bindings/{sanitizedVHost}/e/{source}/e/{destination}/{bindingName}";
+                ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}/{bindingName}"
+                : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}/{bindingName}";
 
             var result = await Delete(url, cancellationToken);
 
