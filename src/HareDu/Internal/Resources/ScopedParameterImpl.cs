@@ -19,7 +19,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Model;
 
     internal class ScopedParameterImpl :
@@ -36,8 +35,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/parameters";
-
-            var result = await GetAll<ScopedParameterInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<ScopedParameterInfo>> result = await GetAll<ScopedParameterInfo>(url, cancellationToken);
 
             return result;
         }
@@ -58,7 +57,7 @@ namespace HareDu.Internal.Resources
                     
             string url = $"api/parameters/{definition.Component}/{SanitizeVirtualHostName(definition.VirtualHost)}/{definition.ParameterName}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -79,7 +78,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }

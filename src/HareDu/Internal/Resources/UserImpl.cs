@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Model;
 
     internal class UserImpl :
@@ -37,7 +36,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/users";
-            var result = await GetAll<UserInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<UserInfo>> result = await GetAll<UserInfo>(url, cancellationToken);
 
             return result;
         }
@@ -68,7 +68,7 @@ namespace HareDu.Internal.Resources
                     
             string url = $"api/users/{user}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -85,7 +85,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/users/{impl.Username}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }

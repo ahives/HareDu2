@@ -18,7 +18,7 @@
                 .Factory<Queue>()
                 .Create(x =>
                 {
-                    x.Queue("TestQueue11");
+                    x.Queue("TestQueue3");
                     x.Configure(c =>
                     {
                         c.IsDurable();
@@ -34,12 +34,11 @@
         [Test, Explicit]
         public async Task Verify_can_get_all()
         {
-            IReadOnlyList<QueueInfo> result = Client
+            var result = await Client
                 .Factory<Queue>()
-                .GetAll()
-                .Select(x => x.Data);
+                .GetAll();
             
-            foreach (var queue in result)
+            foreach (var queue in result.Select(x => x.Data))
             {
                 Console.WriteLine("Name: {0}", queue.Name);
                 Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
@@ -47,6 +46,9 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]
@@ -55,7 +57,8 @@
             Result<IEnumerable<QueueInfo>> result = await Client
                 .Factory<Queue>()
                 .GetAll();
-
+            
+            Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJson());
         }
 
@@ -70,11 +73,11 @@
                     x.Targeting(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
-                        c.HasNoConsumers();
-                        c.IsEmpty();
+//                        c.HasNoConsumers();
+//                        c.IsEmpty();
                     });
                 });
-            
+
 //            Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJson());
         }
@@ -96,6 +99,8 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJson());
         }
 
@@ -109,6 +114,9 @@
                     x.Queue("");
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
     }
 }

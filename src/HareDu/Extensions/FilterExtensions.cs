@@ -21,17 +21,17 @@ namespace HareDu.Extensions
     {
         public static IReadOnlyList<T> Where<T>(this Result<IReadOnlyList<T>> source, Func<T, bool> predicate)
         {
-            IReadOnlyList<T> list = source.Select(x => x.Data);
-
-            return Filter(list, predicate);
+            return !source.HasResult ? default : Filter(source.Data, predicate);
         }
 
         public static IReadOnlyList<T> Where<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
         {
-            Result<IReadOnlyList<T>> data = source?.Result;
-            IReadOnlyList<T> list = data.Select(x => x.Data);
+            if (!source.IsNull())
+                return default;
+            
+            Result<IReadOnlyList<T>> result = source?.Result;
 
-            return Filter(list, predicate);
+            return !result.HasResult ? default : Filter(result.Data, predicate);
         }
 
         static IReadOnlyList<T> Filter<T>(IReadOnlyList<T> list, Func<T, bool> predicate)

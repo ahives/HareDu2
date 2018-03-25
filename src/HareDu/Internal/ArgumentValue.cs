@@ -26,6 +26,12 @@ namespace HareDu.Internal
             Error = new ErrorImpl(errorMsg);
         }
 
+        public ArgumentValue(TValue value)
+        {
+            Value = value;
+        }
+
+        
         class ErrorImpl :
             Error
         {
@@ -37,11 +43,6 @@ namespace HareDu.Internal
 
             public string Reason { get; }
             public DateTimeOffset Timestamp { get; }
-        }
-
-        public ArgumentValue(TValue value)
-        {
-            Value = value;
         }
     }
 }

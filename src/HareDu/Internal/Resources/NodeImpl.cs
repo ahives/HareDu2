@@ -33,7 +33,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = "api/nodes";
-            var result = await GetAll<ChannelInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<ChannelInfo>> result = await GetAll<ChannelInfo>(url, cancellationToken);
 
             return result;
         }
@@ -43,7 +44,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/connections";
-            var result = await GetAll<ConnectionInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<ConnectionInfo>> result = await GetAll<ConnectionInfo>(url, cancellationToken);
 
             return result;
         }
@@ -53,7 +55,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/consumers";
-            var result = await GetAll<ConsumerInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<ConsumerInfo>> result = await GetAll<ConsumerInfo>(url, cancellationToken);
 
             return result;
         }
@@ -63,7 +66,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/definitions";
-            var result = await GetAll<ServerDefinition>(url, cancellationToken);
+            
+            Result<IReadOnlyList<ServerDefinition>> result = await GetAll<ServerDefinition>(url, cancellationToken);
 
             return result;
         }

@@ -33,7 +33,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = "api/overview";
-            var result = await Get<ClusterInfo>(url, cancellationToken);
+            
+            Result<ClusterInfo> result = await Get<ClusterInfo>(url, cancellationToken);
 
             return result;
         }
@@ -43,7 +44,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = "api/nodes";
-            var result = await GetAll<NodeInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<NodeInfo>> result = await GetAll<NodeInfo>(url, cancellationToken);
 
             return result;
         }

@@ -18,8 +18,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
-    using Exceptions;
     using Model;
 
     internal class VirtualHostImpl :
@@ -36,7 +34,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
-            var result = await GetAll<VirtualHostInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<VirtualHostInfo>> result = await GetAll<VirtualHostInfo>(url, cancellationToken);
 
             return result;
         }
@@ -57,7 +56,7 @@ namespace HareDu.Internal.Resources
 
             DefinedVirtualHost definition = impl.Definition.Value;
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -79,7 +78,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/vhosts/{SanitizeVirtualHostName(impl.VirtualHostName)}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }

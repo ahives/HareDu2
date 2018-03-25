@@ -1,7 +1,8 @@
 ﻿﻿namespace HareDu.Tests
 {
+    using System;
     using System.Threading.Tasks;
-    using Model;
+    using Extensions;
     using NUnit.Framework;
 
     [TestFixture]
@@ -29,6 +30,9 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
          }
 
         [Test, Explicit]
@@ -53,6 +57,9 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]
@@ -65,6 +72,9 @@
                     x.Policy("P4");
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
     }
 }

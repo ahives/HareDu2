@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Extensions;
 
     internal class GlobalParameterImpl :
@@ -37,7 +36,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/global-parameters";
-            var result = await GetAll<GlobalParameterInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<GlobalParameterInfo>> result = await GetAll<GlobalParameterInfo>(url, cancellationToken);
 
             return result;
         }
@@ -49,23 +49,24 @@ namespace HareDu.Internal.Resources
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
             
-            var errors = new List<Error>();
-            
-            errors.AddRange(impl.Errors.Value);
-
             DefinedGlobalParameter definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
+            var errors = new List<Error>();
+
             if (string.IsNullOrWhiteSpace(definition.Name))
                 errors.Add(new ErrorImpl("The name of the parameter is missing."));
+
+            if (!impl.Errors.Value.IsNull())
+                errors.AddRange(impl.Errors.Value);
             
             if (errors.Any())
                 return new FaultedResult(errors);
 
             string url = $"api/global-parameters/{definition.Name}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -82,7 +83,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -108,7 +109,7 @@ namespace HareDu.Internal.Resources
 
             public GlobalParameterCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedGlobalParameter>(
                     () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
             }
@@ -123,6 +124,12 @@ namespace HareDu.Internal.Resources
                 _arguments = impl.Arguments;
             }
 
+            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
+            {
+                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
+            }
+
+            
             class GlobalParameterConfigurationImpl :
                 GlobalParameterConfiguration
             {
@@ -159,6 +166,10 @@ namespace HareDu.Internal.Resources
                 public DefinedGlobalParameterImpl(string name, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     Name = name;
+
+                    if (arguments.IsNull())
+                        return;
+                    
                     Value = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 

@@ -1,6 +1,8 @@
 ﻿namespace HareDu.Tests
 {
+    using System;
     using System.Threading.Tasks;
+    using Extensions;
     using NUnit.Framework;
 
     [TestFixture]
@@ -23,14 +25,20 @@
                         });
                     });
                 });
+             
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
         
         [Test, Explicit]
-        public async Task Test()
+        public async Task Verify_can_delete_parameter()
         {
             Result result = await Client
                 .Factory<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
     }
 }

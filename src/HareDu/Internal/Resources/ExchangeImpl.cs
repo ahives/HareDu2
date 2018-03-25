@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Extensions;
     using Model;
 
@@ -38,7 +37,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/exchanges";
-            var result = await GetAll<ExchangeInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<ExchangeInfo>> result = await GetAll<ExchangeInfo>(url, cancellationToken);
 
             return result;
         }
@@ -50,10 +50,6 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeCreateActionImpl();
             action(impl);
             
-            var errors = new List<Error>();
-            
-            errors.AddRange(impl.Errors.Value);
-
             DefinedExchange definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -61,6 +57,8 @@ namespace HareDu.Internal.Resources
             string exchange = impl.ExchangeName.Value;
             string vhost = impl.VirtualHost.Value;
             
+            var errors = new List<Error>();
+
             if (string.IsNullOrWhiteSpace(exchange))
                 errors.Add(new ErrorImpl("The name of the exchange is missing."));
 
@@ -69,13 +67,16 @@ namespace HareDu.Internal.Resources
 
             if (string.IsNullOrWhiteSpace(definition?.RoutingType))
                 errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
+
+            if (!impl.Errors.Value.IsNull())
+                errors.AddRange(impl.Errors.Value);
             
             if (errors.Any())
                 return new FaultedResult(errors);
 
             string url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -108,7 +109,7 @@ namespace HareDu.Internal.Resources
             if (!string.IsNullOrWhiteSpace(query))
                 url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}?{query}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -192,7 +193,7 @@ namespace HareDu.Internal.Resources
 
             public ExchangeCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedExchange>(
                     () => new DefinedExchangeImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
@@ -219,6 +220,11 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            }
+
+            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
+            {
+                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
             }
 
             
@@ -292,7 +298,12 @@ namespace HareDu.Internal.Resources
             class ExchangeDefinitionArgumentsImpl :
                 ExchangeDefinitionArguments
             {
-                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; }
+
+                public ExchangeDefinitionArgumentsImpl()
+                {
+                    Arguments = new Dictionary<string, ArgumentValue<object>>();
+                }
 
                 public void Set<T>(string arg, T value)
                 {
@@ -318,6 +329,10 @@ namespace HareDu.Internal.Resources
                     Durable = durable;
                     AutoDelete = autoDelete;
                     Internal = @internal;
+
+                    if (arguments.IsNull())
+                        return;
+                    
                     Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 

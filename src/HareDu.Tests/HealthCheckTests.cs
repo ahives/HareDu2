@@ -29,11 +29,11 @@
         [Test]
         public async Task Verify_GetAllNodes_works()
         {
-            Result<IEnumerable<NodeInfo>> result = await Client
+            Result<IReadOnlyList<NodeInfo>> result = await Client
                 .Factory<Cluster>()
                 .GetNodes();
             
-            foreach (var node in result.Data)
+            foreach (var node in result.Select(x => x.Data))
             {
                 Console.WriteLine("OperatingSystemPid: {0}", node.OperatingSystemPid);
                 Console.WriteLine("TotalFileDescriptors: {0}", node.TotalFileDescriptors);
@@ -47,11 +47,11 @@
         [Test]
         public async Task Verify_GetChannels_works()
         {
-            Result<IEnumerable<ChannelInfo>> result = await Client
+            Result<IReadOnlyList<ChannelInfo>> result = await Client
                 .Factory<Node>()
                 .GetChannels();
 
-            foreach (var node in result.Data)
+            foreach (var node in result.Select(x => x.Data))
             {
                 Console.WriteLine("Name: {0}", node.Name);
                 Console.WriteLine("PrefetchCount: {0}", node.PrefetchCount);

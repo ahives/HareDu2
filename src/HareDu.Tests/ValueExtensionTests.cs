@@ -98,8 +98,6 @@
             Console.WriteLine("Internal: {0}", exchange.Internal);
             Console.WriteLine("Durable: {0}", exchange.Durable);
             Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-//            Console.WriteLine("Reason: {0}", result.Reason);
-//            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine("****************************************************");
             Console.WriteLine();
         }

@@ -14,12 +14,11 @@
         [Test, Explicit]
         public async Task Verify_can_get_all_bindings()
         {
-            IEnumerable<BindingInfo> result = Client
+            Result<IReadOnlyList<BindingInfo>> result = await Client
                 .Factory<Binding>()
-                .GetAll()
-                .Select(x => x.Data);
+                .GetAll();
             
-            foreach (var binding in result)
+            foreach (var binding in result.Select(x => x.Data))
             {
                 Console.WriteLine("VirtualHost: {0}", binding.VirtualHost);
                 Console.WriteLine("Source: {0}", binding.Source);
@@ -29,6 +28,9 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]
@@ -54,6 +56,9 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
 
         [Test, Explicit]
@@ -72,6 +77,9 @@
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
     }
 }

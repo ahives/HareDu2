@@ -16,15 +16,11 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using Configuration;
-    using Extensions;
-    using Model;
     using Newtonsoft.Json;
     using Serialization;
 
@@ -89,10 +85,10 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.DeleteAsync(url, cancellationToken);
+                string request = await GetRequest(responseMessage);
+                
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) });
-
-                var request = await GetRequest(responseMessage);
+                    return new FaultedResult(new DebugInfoImpl(url), new List<Error> { GetError(responseMessage.StatusCode) });
 
                 return new SuccessfulResult(new DebugInfoImpl(request));
             }
@@ -184,18 +180,16 @@ namespace HareDu.Internal.Resources
         {
             switch (statusCode)
             {
-                case HttpStatusCode.BadGateway:
-                    return new ErrorImpl("");
                 case HttpStatusCode.BadRequest:
-                    return new ErrorImpl("");
+                    return new ErrorImpl("RabbitMQ server did not recognize the request due to malformed syntax.");
                 case HttpStatusCode.Forbidden:
-                    return new ErrorImpl("");
+                    return new ErrorImpl("RabbitMQ server rejected the request.");
                 case HttpStatusCode.InternalServerError:
                     return new ErrorImpl("Internal error happened on RabbitMQ server.");
                 case HttpStatusCode.RequestTimeout:
-                    return new ErrorImpl("");
+                    return new ErrorImpl("No response from the RabbitMQ server within the specified window of time.");
                 case HttpStatusCode.ServiceUnavailable:
-                    return new ErrorImpl("");
+                    return new ErrorImpl("RabbitMQ server temporarily not able to handle request");
                 case HttpStatusCode.Unauthorized:
                     return new ErrorImpl("Unauthorized access to RabbitMQ server resource.");
                 default:

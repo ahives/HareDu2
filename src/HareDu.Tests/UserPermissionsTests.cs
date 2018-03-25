@@ -27,8 +27,6 @@
                 Console.WriteLine();
             }
             
-//            Console.WriteLine("Reason: {0}", result.Reason);
-//            Console.WriteLine("StatusCode: {0}", result.StatusCode);
             Console.WriteLine();
         }
 

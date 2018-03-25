@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Extensions;
     using Model;
 
@@ -38,7 +37,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/policies";
-            var result = await GetAll<PolicyInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<PolicyInfo>> result = await GetAll<PolicyInfo>(url, cancellationToken);
 
             return result;
         }
@@ -50,10 +50,6 @@ namespace HareDu.Internal.Resources
             var impl = new PolicyCreateActionImpl();
             action(impl);
 
-            var errors = new List<Error>();
-            
-            errors.AddRange(impl.Errors.Value);
-
             DefinedPolicy definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -61,18 +57,23 @@ namespace HareDu.Internal.Resources
             string policy = impl.PolicyName.Value;
             string vhost = impl.VirtualHost.Value;
             
+            var errors = new List<Error>();
+
             if (string.IsNullOrWhiteSpace(policy))
                 errors.Add(new ErrorImpl("The name of the policy is missing."));
 
             if (string.IsNullOrWhiteSpace(vhost))
                 errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (!impl.Errors.Value.IsNull())
+                errors.AddRange(impl.Errors.Value);
             
             if (errors.Any())
                 return new FaultedResult(errors);
 
             string url = $"api/policies/{SanitizeVirtualHostName(vhost)}/{policy}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -100,7 +101,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/policies/{SanitizeVirtualHostName(vhost)}/{policy}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -160,13 +161,11 @@ namespace HareDu.Internal.Resources
 
             public PolicyCreateActionImpl()
             {
-                _errors = _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList();
-                
+                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments, _errors), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedPolicy>(
                     () => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
-                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Policy(string name) => _policy = name;
@@ -199,6 +198,13 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            }
+
+            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments, List<Error> errors)
+            {
+                return arguments.IsNull()
+                    ? new List<Error>()
+                    : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).Concat(errors).ToList();
             }
 
             
@@ -238,8 +244,13 @@ namespace HareDu.Internal.Resources
             class PolicyDefinitionArgumentsImpl :
                 PolicyDefinitionArguments
             {
-                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
-                
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; }
+
+                public PolicyDefinitionArgumentsImpl()
+                {
+                    Arguments = new Dictionary<string, ArgumentValue<object>>();
+                }
+
                 public void Set<T>(string arg, T value)
                 {
                     SetArgWithConflictingCheck(arg, "federation-upstream", "federation-upstream-set", value);
@@ -355,9 +366,13 @@ namespace HareDu.Internal.Resources
                 public DefinedPolicyImpl(string pattern, IDictionary<string, ArgumentValue<object>> arguments, int priority, string applyTo)
                 {
                     Pattern = pattern;
-                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                     Priority = priority;
                     ApplyTo = applyTo;
+
+                    if (arguments.IsNull())
+                        return;
+                    
+                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 
                 public string Pattern { get; }

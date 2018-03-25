@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Extensions;
     using Model;
     using NUnit.Framework;
@@ -11,14 +12,13 @@
         HareDuTestBase
     {
         [Test]
-        public void Test()
+        public async Task Test()
         {
-            IEnumerable<ChannelInfo> result = Client
+            Result<IReadOnlyList<ChannelInfo>> result = await Client
                 .Factory<Node>()
-                .GetChannels()
-                .Select(x => x.Data);
+                .GetChannels();
             
-            foreach (var node in result)
+            foreach (var node in result.Select(x => x.Data))
             {
                 Console.WriteLine("Name: {0}", node.Name);
                 Console.WriteLine("VirtualHost: {0}", node.VirtualHost);
@@ -29,6 +29,9 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJson());
         }
     }
 }

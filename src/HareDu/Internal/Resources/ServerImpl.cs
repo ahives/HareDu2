@@ -51,7 +51,7 @@ namespace HareDu.Internal.Resources
                     throw new ArgumentOutOfRangeException();
             }
 
-            var result = await Get<ServerHealth>(url, cancellationToken);
+            Result<ServerHealth> result = await Get<ServerHealth>(url, cancellationToken);
 
             return result;
         }

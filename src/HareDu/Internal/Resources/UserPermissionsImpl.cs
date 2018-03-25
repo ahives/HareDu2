@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Model;
 
     internal class UserPermissionsImpl :
@@ -37,7 +36,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/users";
-            var result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<UserPermissionsInfo>> result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
 
             return result;
         }
@@ -69,7 +69,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/permissions/{SanitizeVirtualHostName(vhost)}/{username}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -97,7 +97,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/permissions/{SanitizeVirtualHostName(vhost)}/{username}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }

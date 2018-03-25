@@ -20,10 +20,8 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Extensions;
     using Model;
-    using Queue = HareDu.Queue;
 
     internal class QueueImpl :
         ResourceBase,
@@ -39,7 +37,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/queues";
-            var result = await GetAll<QueueInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<QueueInfo>> result = await GetAll<QueueInfo>(url, cancellationToken);
 
             return result;
         }
@@ -51,10 +50,6 @@ namespace HareDu.Internal.Resources
             var impl = new QueueCreateActionImpl();
             action(impl);
             
-            var errors = new List<Error>();
-            
-            errors.AddRange(impl.Errors.Value);
-
             DefinedQueue definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -62,18 +57,23 @@ namespace HareDu.Internal.Resources
             string vhost = impl.VirtualHost.Value;
             string queue = impl.QueueName.Value;
             
+            var errors = new List<Error>();
+
             if (string.IsNullOrWhiteSpace(vhost))
                 errors.Add(new ErrorImpl("The name of the virtual host is missing."));
 
             if (string.IsNullOrWhiteSpace(queue))
                 errors.Add(new ErrorImpl("The name of the queue is missing."));
+
+            if (!impl.Errors.IsNull())
+                errors.AddRange(impl.Errors.Value);
             
             if (errors.Any())
                 return new FaultedResult(errors);
 
             string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}";
 
-            var result = await Put(url, definition, cancellationToken);
+            Result result = await Put(url, definition, cancellationToken);
 
             return result;
         }
@@ -103,10 +103,10 @@ namespace HareDu.Internal.Resources
 
             string query = impl.Query.Value;
             
-            if (string.IsNullOrWhiteSpace(query))
+            if (!string.IsNullOrWhiteSpace(query))
                 url = $"{url}?{query}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -134,7 +134,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/contents";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -172,7 +172,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/get";
 
-            var result = await Post<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
+            Result<QueueInfo> result = await Post<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
 
             return result;
         }
@@ -403,7 +403,7 @@ namespace HareDu.Internal.Resources
 
             public QueueCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedQueue>(
                     () => new DefinedQueueImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
@@ -429,6 +429,11 @@ namespace HareDu.Internal.Resources
 
                 _node = impl.NodeName;
                 _vhost = impl.VirtualHostName;
+            }
+
+            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
+            {
+                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
             }
 
             
@@ -468,7 +473,12 @@ namespace HareDu.Internal.Resources
             class QueueCreateArgumentsImpl :
                 QueueCreateArguments
             {
-                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; }
+
+                public QueueCreateArgumentsImpl()
+                {
+                    Arguments = new Dictionary<string, ArgumentValue<object>>();
+                }
 
                 public void Set<T>(string arg, T value)
                 {
@@ -530,6 +540,10 @@ namespace HareDu.Internal.Resources
                     Durable = durable;
                     AutoDelete = autoDelete;
                     Node = node;
+
+                    if (arguments.IsNull())
+                        return;
+                    
                     Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 

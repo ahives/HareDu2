@@ -20,7 +20,6 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Exceptions;
     using Extensions;
     using Model;
 
@@ -38,7 +37,8 @@ namespace HareDu.Internal.Resources
             cancellationToken.RequestCanceled();
 
             string url = $"api/bindings";
-            var result = await GetAll<BindingInfo>(url, cancellationToken);
+            
+            Result<IReadOnlyList<BindingInfo>> result = await GetAll<BindingInfo>(url, cancellationToken);
 
             return result;
         }
@@ -50,10 +50,6 @@ namespace HareDu.Internal.Resources
             var impl = new BindingCreateActionImpl();
             action(impl);
             
-            var errors = new List<Error>();
-            
-            errors.AddRange(impl.Errors.Value);
-
             DefineBinding definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -63,6 +59,8 @@ namespace HareDu.Internal.Resources
             BindingType bindingType = impl.BindingType.Value;
             string vhost = impl.VirtualHost.Value;
             
+            var errors = new List<Error>();
+
             if (string.IsNullOrWhiteSpace(source))
                 errors.Add(new ErrorImpl("The name of the binding (queue/exchange) source is missing."));
 
@@ -71,6 +69,9 @@ namespace HareDu.Internal.Resources
             
             if (string.IsNullOrWhiteSpace(vhost))
                 errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (!impl.Errors.Value.IsNull())
+                errors.AddRange(impl.Errors.Value);
             
             if (errors.Any())
                 return new FaultedResult<BindingInfo>(errors);
@@ -79,7 +80,7 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}"
                 : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}";
 
-            var result = await Post<DefineBinding, BindingInfo>(url, definition, cancellationToken);
+            Result<BindingInfo> result = await Post<DefineBinding, BindingInfo>(url, definition, cancellationToken);
 
             return result;
         }
@@ -115,7 +116,7 @@ namespace HareDu.Internal.Resources
                 ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}/{bindingName}"
                 : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}/{bindingName}";
 
-            var result = await Delete(url, cancellationToken);
+            Result result = await Delete(url, cancellationToken);
 
             return result;
         }
@@ -212,7 +213,7 @@ namespace HareDu.Internal.Resources
 
             public BindingCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => _arguments.Select(x => x.Value.Error).Where(x => !x.IsNull()).ToList(), LazyThreadSafetyMode.PublicationOnly);
+                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefineBinding>(() => new DefineBindingImpl(_routingKey, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 Source = new Lazy<string>(() => _source, LazyThreadSafetyMode.PublicationOnly);
                 Destination = new Lazy<string>(() => _destination, LazyThreadSafetyMode.PublicationOnly);
@@ -245,6 +246,11 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            }
+
+            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
+            {
+                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
             }
 
             
@@ -293,7 +299,12 @@ namespace HareDu.Internal.Resources
             class BindingArgumentsImpl :
                 BindingArguments
             {
-                public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; }
+
+                public BindingArgumentsImpl()
+                {
+                    Arguments = new Dictionary<string, ArgumentValue<object>>();
+                }
 
                 public void Set<T>(string arg, T value)
                 {
@@ -311,6 +322,10 @@ namespace HareDu.Internal.Resources
                 public DefineBindingImpl(string routingKey, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     RoutingKey = routingKey;
+
+                    if (arguments.IsNull())
+                        return;
+                    
                     Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
                 }
 

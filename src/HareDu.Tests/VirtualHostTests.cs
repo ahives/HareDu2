@@ -66,7 +66,7 @@
                 .Factory<VirtualHost>()
                 .Create(x =>
                 {
-                    x.VirtualHost("HareDu2");
+                    x.VirtualHost("HareDu6");
                     x.Configure(c =>
                     {
                         c.WithTracingEnabled();
