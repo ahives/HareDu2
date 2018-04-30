@@ -61,13 +61,13 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<IReadOnlyList<ServerDefinition>>> GetDefintiions(CancellationToken cancellationToken = default)
+        public async Task<Result<ServerDefinitionInfo>> GetDefintiion(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/definitions";
             
-            Result<IReadOnlyList<ServerDefinition>> result = await GetAll<ServerDefinition>(url, cancellationToken);
+            Result<ServerDefinitionInfo> result = await Get<ServerDefinitionInfo>(url, cancellationToken);
 
             return result;
         }

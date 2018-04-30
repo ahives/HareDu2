@@ -13,22 +13,22 @@
         HareDuTestBase
     {
         [Test, Explicit]
-        public async Task Verify_can_get_all_exchanges()
+        public async Task Should_be_able_to_get_all_exchanges()
         {
-            Result<IReadOnlyList<ExchangeInfo>> result = await Client
+            var result = await Client
                 .Factory<Exchange>()
                 .GetAll();
 
-//            foreach (var exchange in result.Select(x => x.Data))
-//            {
-//                Console.WriteLine("Name: {0}", exchange.Name);
-//                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-//                Console.WriteLine("Internal: {0}", exchange.Internal);
-//                Console.WriteLine("Durable: {0}", exchange.Durable);
-//                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-//                Console.WriteLine("****************************************************");
-//                Console.WriteLine();
-//            }
+            foreach (var exchange in result.Select(x => x.Data))
+            {
+                Console.WriteLine("Name: {0}", exchange.Name);
+                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
+                Console.WriteLine("Internal: {0}", exchange.Internal);
+                Console.WriteLine("Durable: {0}", exchange.Durable);
+                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
             
             Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJson());

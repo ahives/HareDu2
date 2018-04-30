@@ -47,6 +47,6 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<IReadOnlyList<ServerDefinition>>> GetDefintiions(CancellationToken cancellationToken = default);
+        Task<Result<ServerDefinitionInfo>> GetDefintiion(CancellationToken cancellationToken = default);
     }
 }

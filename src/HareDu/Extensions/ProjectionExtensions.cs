@@ -14,6 +14,8 @@
 namespace HareDu.Extensions
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public static class ProjectionExtensions
@@ -34,6 +36,15 @@ namespace HareDu.Extensions
                 return default;
 
             return source.HasResult ? projector(source) : default;
+        }
+
+        public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source,
+            Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projection)
+        {
+            if (source.IsNull() || projection.IsNull())
+                return new List<T>();
+
+            return source.HasResult ? projection(source) : new List<T>();
         }
     }
 }

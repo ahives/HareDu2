@@ -32,7 +32,7 @@
         }
 
         [Test, Explicit]
-        public async Task Verify_can_get_all()
+        public async Task Should_be_able_to_get_all_queues()
         {
             var result = await Client
                 .Factory<Queue>()

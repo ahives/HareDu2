@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Extensions;
     using Model;
     using NUnit.Framework;
 
@@ -11,13 +12,13 @@
         HareDuTestBase
     {
         [Test, Explicit]
-        public async Task Verify_can_get_all_user_permissions()
+        public async Task Should_be_able_to_get_all_user_permissions()
         {
-            Result<IEnumerable<UserPermissionsInfo>> result = await Client
+            var result = await Client
                 .Factory<UserPermissions>()
                 .GetAll();
             
-            foreach (var access in result.Data)
+            foreach (var access in result.Select(x => x.Data))
             {
                 Console.WriteLine("VirtualHost: {0}", access.VirtualHost);
                 Console.WriteLine("Configure: {0}", access.Configure);
@@ -26,8 +27,6 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
-            
-            Console.WriteLine();
         }
 
         [Test, Explicit]

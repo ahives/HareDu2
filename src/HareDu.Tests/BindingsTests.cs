@@ -12,9 +12,9 @@
         HareDuTestBase
     {
         [Test, Explicit]
-        public async Task Verify_can_get_all_bindings()
+        public async Task Should_be_able_to_get_all_bindings()
         {
-            Result<IReadOnlyList<BindingInfo>> result = await Client
+            var result = await Client
                 .Factory<Binding>()
                 .GetAll();
             

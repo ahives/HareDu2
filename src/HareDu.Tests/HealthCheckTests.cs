@@ -27,43 +27,6 @@
         }
         
         [Test]
-        public async Task Verify_GetAllNodes_works()
-        {
-            Result<IReadOnlyList<NodeInfo>> result = await Client
-                .Factory<Cluster>()
-                .GetNodes();
-            
-            foreach (var node in result.Select(x => x.Data))
-            {
-                Console.WriteLine("OperatingSystemPid: {0}", node.OperatingSystemPid);
-                Console.WriteLine("TotalFileDescriptors: {0}", node.TotalFileDescriptors);
-                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
-                Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-        }
-        
-        [Test]
-        public async Task Verify_GetChannels_works()
-        {
-            Result<IReadOnlyList<ChannelInfo>> result = await Client
-                .Factory<Node>()
-                .GetChannels();
-
-            foreach (var node in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", node.Name);
-                Console.WriteLine("PrefetchCount: {0}", node.PrefetchCount);
-//                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedRate.Rate);
-//                Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedRate.Rate);
-//                Console.WriteLine("StatusCode: {0}", result.StatusCode);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-        }
-        
-        [Test]
         public async Task Verify_GetClusterDetails_works()
         {
             Result<ClusterInfo> result = await Client

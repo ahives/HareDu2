@@ -16,10 +16,13 @@ namespace HareDu.Model
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface ServerDefinition
+    public interface ServerDefinitionInfo
     {
+        [JsonProperty("rabbit_version")]
+        string RabbitMqVersion { get; }
+        
         [JsonProperty("users")]
-        IEnumerable<UserInfo> User { get; }
+        IEnumerable<UserInfo> Users { get; }
         
         [JsonProperty("vhosts")]
         IEnumerable<VirtualHostInfo> VirtualHosts { get; }

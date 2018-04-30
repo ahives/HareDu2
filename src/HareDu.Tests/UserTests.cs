@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Extensions;
     using Model;
     using NUnit.Framework;
 
@@ -11,13 +12,13 @@
         HareDuTestBase
     {
         [Test, Explicit]
-        public async Task Test2()
+        public async Task Should_be_able_to_get_all_users()
         {
-            Result<IEnumerable<UserInfo>> result = await Client
+            var result = await Client
                 .Factory<User>()
                 .GetAll();
 
-            foreach (var user in result.Data)
+            foreach (var user in result.Select(x => x.Data))
             {
                 Console.WriteLine("Username: {0}", user.Username);
                 Console.WriteLine("PasswordHash: {0}", user.PasswordHash);
@@ -26,9 +27,6 @@
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
-            
-            Console.WriteLine();
-
         }
         
         [Test, Explicit]

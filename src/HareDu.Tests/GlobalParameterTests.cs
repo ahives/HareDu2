@@ -1,6 +1,7 @@
 ﻿namespace HareDu.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Extensions;
     using NUnit.Framework;
@@ -9,6 +10,24 @@
     public class GlobalParameterTests :
         HareDuTestBase
     {
+        [Test, Explicit]
+        public async Task Should_be_able_to_get_all_global_parameters()
+        {
+            var result = await Client
+                .Factory<GlobalParameter>()
+                .GetAll();
+
+            foreach (var parameter in result.Select(x => x.Data))
+            {
+                Console.WriteLine("Component: {0}", parameter.Component);
+                Console.WriteLine("Name: {0}", parameter.Name);
+                Console.WriteLine("Value: {0}", parameter.Value);
+                Console.WriteLine("VirtualHost: {0}", parameter.VirtualHost);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+        
         [Test, Explicit]
         public async Task Verify_can_create_parameter()
         {
