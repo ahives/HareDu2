@@ -35,8 +35,8 @@ DRYRUN=
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
 PACKAGE=true
-SEMVER="0.1.6"
-PRE_RELEASE=true
+SEMVER="2.0.0"
+PRE_RELEASE=false
 
 # Parse arguments.
 for i in "$@"; do

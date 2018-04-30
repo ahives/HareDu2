@@ -4,7 +4,7 @@
 var target = Argument<string>("target", "Default");
 var configuration = Argument<string>("configuration", "Release");
 var package = Argument<bool>("package", true);
-var prerelease = Argument<bool>("prerelease", false);
+var prerelease = Argument<bool>("develop", false);
 var semver = Argument<string>("semver");
 
 var product = "HareDu2";
@@ -110,9 +110,7 @@ Task("Create-NuGet-Package")
             Authors = new []{"Albert L. Hives", "Chris Patterson"},
             Dependencies = new []
             {
-                new NuSpecDependency { Id = "Common.Logging", Version = "3.3.1" },
-                new NuSpecDependency { Id = "Microsoft.AspNet.WebApi.Client", Version = "5.2.3" },
-                new NuSpecDependency { Id = "Newtonsoft.Json", Version = "10.0.3" }
+                new NuSpecDependency { Id = "Newtonsoft.Json", Version = "11.0.2" }
             },
             Version = assemblyInfo.AssemblyVersion,
             BasePath = bin452Path,
