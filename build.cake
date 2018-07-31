@@ -1,6 +1,8 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 #tool nuget:?package=GitVersion.CommandLine
 
+//using Cake.Common.Tools.DotNetCore.Pack;
+
 var target = Argument<string>("target", "Default");
 var configuration = Argument<string>("configuration", "Release");
 var package = Argument<bool>("package", true);
@@ -67,8 +69,13 @@ Task("Build")
     .Does(() =>
     {
         // Add support for .NET Standard, .NET Core
-
-        MSBuild(solution, settings => settings.SetConfiguration(configuration));
+        var config = new DotNetCoreBuildSettings
+        {
+            Framework = "netstandard2.0",
+            Configuration = configuration,
+        }
+        DotNetCoreBuild("./src/*", config);
+        //MSBuild(solution, settings => settings.SetConfiguration(configuration));
     });
 
 Task("Copy-Build-Artifacts")

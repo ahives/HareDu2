@@ -24,7 +24,7 @@
                         c.IsDurable();
                         c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
                     });
-                    x.Targeting(t => { t.VirtualHost("HareDu"); });
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
