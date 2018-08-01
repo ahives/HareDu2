@@ -39,6 +39,6 @@ namespace HareDu
         /// Specify how the policy is applied.
         /// </summary>
         /// <param name="applyTo"></param>
-        void AppliedTo(string applyTo);
+        void ApplyTo(string applyTo);
     }
 }

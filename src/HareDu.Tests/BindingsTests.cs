@@ -54,7 +54,7 @@
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -75,7 +75,7 @@
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);

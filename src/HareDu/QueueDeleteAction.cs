@@ -27,7 +27,7 @@ namespace HareDu
         /// Specify where the queue lives (i.e. virtual host, etc.).
         /// </summary>
         /// <param name="target"></param>
-        void Targeting(Action<QueueTarget> target);
+        void Target(Action<QueueTarget> target);
 
         /// <summary>
         /// Specify acceptable conditions for which the queue can be deleted.

@@ -27,6 +27,6 @@ namespace HareDu
         /// Specify the target for which the binding will be deleted.
         /// </summary>
         /// <param name="target">Define the location where the binding (i.e. virtual host) will be deleted</param>
-        void Targeting(Action<BindingTarget> target);
+        void Target(Action<BindingTarget> target);
     }
 }

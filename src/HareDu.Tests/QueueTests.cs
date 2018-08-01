@@ -24,7 +24,7 @@
                         c.IsDurable();
                         c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -70,7 +70,7 @@
                 .Delete(x =>
                 {
                     x.Queue("TestQueue10");
-                    x.Targeting(l => l.VirtualHost("HareDu"));
+                    x.Target(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
 //                        c.HasNoConsumers();
@@ -97,7 +97,7 @@
                         c.TruncateIfAbove(5000);
                         c.Encoding(MessageEncoding.Auto);
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -112,7 +112,7 @@
                 .Empty(x =>
                 {
                     x.Queue("");
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);

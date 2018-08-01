@@ -192,7 +192,7 @@ namespace HareDu.Internal.Resources
                     _errors.Add(new ErrorImpl($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set"));
             }
             
-            public void Targeting(Action<PolicyTarget> target)
+            public void Target(Action<PolicyTarget> target)
             {
                 var impl = new PolicyTargetImpl();
                 target(impl);
@@ -237,7 +237,7 @@ namespace HareDu.Internal.Resources
 
                 public void HasPriority(int priority) => Priority = priority;
 
-                public void AppliedTo(string applyTo) => AppllyTo = applyTo;
+                public void ApplyTo(string applyTo) => AppllyTo = applyTo;
             }
             
             

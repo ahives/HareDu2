@@ -33,6 +33,6 @@ namespace HareDu
         /// Specify where the queue lives (i.e. virtual host, etc.).
         /// </summary>
         /// <param name="target"></param>
-        void Targeting(Action<QueuePeekTarget> target);
+        void Target(Action<QueuePeekTarget> target);
     }
 }

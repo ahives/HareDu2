@@ -47,9 +47,9 @@
                             d.SetHighAvailabilityMode(HighAvailabilityModes.All);
                             d.SetExpiry(1000);
                         });
-                        p.AppliedTo("all");
+                        p.ApplyTo("all");
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -74,9 +74,9 @@
                             d.SetFederationUpstreamSet("all");
                             d.SetExpiry(1000);
                         });
-                        p.AppliedTo("all");
+                        p.ApplyTo("all");
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);

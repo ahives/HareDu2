@@ -74,7 +74,7 @@
 //                            arg.Set("", "");
 //                        });
                     });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -89,7 +89,7 @@
                 .Delete(x =>
                 {
                     x.Exchange("E3");
-                    x.Targeting(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
                 });
             

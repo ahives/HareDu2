@@ -33,6 +33,6 @@ namespace HareDu
         /// Specify where the queue will live (i.e. virtual host, etc.).
         /// </summary>
         /// <param name="target">Define where the queue will live</param>
-        void Targeting(Action<QueueCreateTarget> target);
+        void Target(Action<QueueCreateTarget> target);
     }
 }
