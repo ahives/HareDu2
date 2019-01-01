@@ -209,7 +209,7 @@
         {
             Result<ServerDefinitionInfo> result = await Client
                 .Factory<Node>()
-                .GetDefintiion();
+                .GetDefinition();
 
             if (result.HasResult)
             {

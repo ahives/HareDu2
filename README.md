@@ -35,20 +35,76 @@ Dependencies
 ============
 .NET Framework 4.5.2 or above
 
-JSON.NET 10.0.3 or above
+.NET Core 2.1 or above
+
+JSON.NET 11.0.2 or above
 
 ASP.NET WebAPI 5.2.3 or above
 
-Common.Logging 3.3.1
 
-Polly 5.3.0
+Debugging
+=========
 
-Log4Net 2.0.8
+If you find that making an API call is failing for reasons unknown, HareDu 2 introduces a way to return a text representation of the serialized JSON of the returned ```Result<T>``` monad. Here is an example,
+
+<pre><code class="c#">Result result = await Client
+    .Factory&lt;Shovel&lt;AMQP091Source, AMQP091Destination&gt;&gt;()
+    .Shovel(x =&gt;
+    {
+        x.Configure(c =&gt;
+        {
+            c.Name(&quot;my-shovel&quot;);
+            c.VirtualHost(&quot;%2f&quot;);
+        });
+        x.Source(s =&gt;
+        {
+            s.Uri(u =&gt; { u.Builder(b =&gt; { b.SetHeartbeat(1); }); });
+            s.PrefetchCount(2);
+            s.Queue(&quot;my-queue&quot;);
+        });
+        x.Destination(d =&gt;
+        {
+            d.Queue(&quot;another-queue&quot;);
+            d.Uri(u =&gt;
+            {
+                u.Builder(b =&gt;
+                {
+                    b.SetHost(&quot;remote-server&quot;);
+                });
+            });
+        });
+    });
+
+Console.WriteLine(result.ToJson());
+</code></pre>
+
+So, the output calling result.ToJson would be,
+
+<pre><code class="json">
+{
+  &quot;timestamp&quot;: &quot;2018-12-31T18:04:39.511627+00:00&quot;,
+  &quot;debugInfo&quot;: null,
+  &quot;errors&quot;: [
+    {
+      &quot;reason&quot;: &quot;RabbitMQ server did not recognize the request due to malformed syntax.&quot;,
+      &quot;timestamp&quot;: &quot;2018-12-31T18:04:39.511303+00:00&quot;
+    }
+  ],
+  &quot;hasFaulted&quot;: true
+}
+</code></pre>
+
+
+
+
+
+
+
 
 
 Tested
 ======
-macOS Sierra 10.12.5
+macOS Sierra 10.12.5/High Sierra/Mojave
 
 Windows Server 2008 R2
 
@@ -57,4 +113,7 @@ RabbitMQ 3.6.9
 Erlang OTP R19.3 (x64)
 
 .NET 4.5.2 Framework
+
+.NET Core 2.1
+
 

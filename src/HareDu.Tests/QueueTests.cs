@@ -18,7 +18,7 @@
                 .Factory<Queue>()
                 .Create(x =>
                 {
-                    x.Queue("TestQueue3");
+                    x.Queue("TestQueue30");
                     x.Configure(c =>
                     {
                         c.IsDurable();

@@ -39,8 +39,10 @@ namespace HareDu.Internal
 
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
-            
-            return (TResource)Activator.CreateInstance(type, _client);
+
+            var resource = (TResource)Activator.CreateInstance(type, _client);
+
+            return resource;
         }
 
         public void CancelPendingRequest()

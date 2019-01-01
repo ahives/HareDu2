@@ -61,7 +61,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result<ServerDefinitionInfo>> GetDefintiion(CancellationToken cancellationToken = default)
+        public async Task<Result<ServerDefinitionInfo>> GetDefinition(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
