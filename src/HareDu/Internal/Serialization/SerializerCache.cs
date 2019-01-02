@@ -1,4 +1,4 @@
-﻿// Copyright 2007-2014 Chris Patterson
+﻿// Copyright 2007-2019 Chris Patterson
 //  
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 // this file except in compliance with the License. You may obtain a copy of the 
@@ -36,7 +36,7 @@ namespace HareDu.Internal.Serialization
 
             var settings = new JsonSerializerSettings
             {
-                NullValueHandling = NullValueHandling.Include,
+                NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Include,
                 MissingMemberHandling = source.MissingMemberHandling,
                 ObjectCreationHandling = source.ObjectCreationHandling,

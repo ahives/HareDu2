@@ -19,9 +19,13 @@ namespace HareDu.Internal.Resources
     using System.Net;
     using System.Net.Http;
     using System.Reflection;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Extensions;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using Serialization;
 
     internal class ResourceBase
@@ -42,12 +46,11 @@ namespace HareDu.Internal.Resources
 
                 var responseMessage = await _client.GetAsync(url, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult<IReadOnlyList<T>>(new List<Error> { GetError(responseMessage.StatusCode) });
+                    return new FaultedResult<IReadOnlyList<T>>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
                 
                 var response = await DeserializeResponse<IReadOnlyList<T>>(responseMessage);
-                var request = await GetRequest(responseMessage);
                 
-                return new SuccessfulListResult<T>(response, new DebugInfoImpl(request));
+                return new SuccessfulListResult<T>(response, new DebugInfoImpl(url, null));
             }
             catch (MissingMethodException e)
             {
@@ -64,12 +67,11 @@ namespace HareDu.Internal.Resources
 
                 var responseMessage = await _client.GetAsync(url, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) });
+                    return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
 
                 var response = await DeserializeResponse<T>(responseMessage);
-                var request = await GetRequest(responseMessage);
                 
-                return new SuccessfulResult<T>(response, new DebugInfoImpl(request));
+                return new SuccessfulResult<T>(response, new DebugInfoImpl(url, null));
             }
             catch (MissingMethodException e)
             {
@@ -85,12 +87,11 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 var responseMessage = await _client.DeleteAsync(url, cancellationToken);
-                string request = await GetRequest(responseMessage);
                 
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new DebugInfoImpl(url), new List<Error> { GetError(responseMessage.StatusCode) });
+                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
 
-                return new SuccessfulResult(new DebugInfoImpl(request));
+                return new SuccessfulResult(new DebugInfoImpl(url, null));
             }
             catch (MissingMethodException e)
             {
@@ -105,13 +106,13 @@ namespace HareDu.Internal.Resources
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
+                string request = value.ToJsonString();
+
                 var responseMessage = await _client.PutAsJsonAsync(url, value, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) });
+                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
-                var request = await GetRequest(responseMessage);
-
-                return new SuccessfulResult(new DebugInfoImpl(request));
+                return new SuccessfulResult(new DebugInfoImpl(url, request));
             }
             catch (MissingMethodException e)
             {
@@ -126,14 +127,15 @@ namespace HareDu.Internal.Resources
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
+                string request = value.ToJsonString();
+
                 var responseMessage = await _client.PostAsJsonAsync(url, value, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult<TResult>(new List<Error> { GetError(responseMessage.StatusCode) });
+                    return new FaultedResult<TResult>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
                 var response = await DeserializeResponse<TResult>(responseMessage);
-                var request = await GetRequest(responseMessage);
 
-                return new SuccessfulResult<TResult>(response, new DebugInfoImpl(request));
+                return new SuccessfulResult<TResult>(response, new DebugInfoImpl(url, request));
             }
             catch (MissingMethodException e)
             {
@@ -169,13 +171,6 @@ namespace HareDu.Internal.Resources
             return deserializedResponse;
         }
 
-        async Task<string> GetRequest(HttpResponseMessage responseMessage)
-        {
-            return responseMessage.RequestMessage.Content != null
-                ? await responseMessage.RequestMessage.Content.ReadAsStringAsync()
-                : string.Empty;
-        }
-
         Error GetError(HttpStatusCode statusCode)
         {
             switch (statusCode)
@@ -201,11 +196,13 @@ namespace HareDu.Internal.Resources
         class DebugInfoImpl :
             DebugInfo
         {
-            public DebugInfoImpl(string request)
+            public DebugInfoImpl(string url, string request)
             {
+                URL = url;
                 Request = request;
             }
 
+            public string URL { get; }
             public string Request { get; }
         }
 

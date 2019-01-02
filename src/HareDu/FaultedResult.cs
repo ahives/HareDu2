@@ -25,7 +25,7 @@ namespace HareDu
             Timestamp = DateTimeOffset.UtcNow;
         }
 
-        public FaultedResult(DebugInfo debugInfo, IReadOnlyList<Error> errors)
+        public FaultedResult(IReadOnlyList<Error> errors, DebugInfo debugInfo)
         {
             DebugInfo = debugInfo;
             Errors = errors;
@@ -49,7 +49,7 @@ namespace HareDu
             Timestamp = DateTimeOffset.UtcNow;
         }
 
-        public FaultedResult(DebugInfo debugInfo, IReadOnlyList<Error> errors)
+        public FaultedResult(IReadOnlyList<Error> errors, DebugInfo debugInfo)
         {
             DebugInfo = debugInfo;
             Errors = errors;

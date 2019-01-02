@@ -43,7 +43,7 @@ namespace HareDu.Tests
                     });
                 });
             
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
     }
 }

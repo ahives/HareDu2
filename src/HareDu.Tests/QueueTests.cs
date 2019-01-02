@@ -28,7 +28,7 @@
                 });
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test, Explicit]
@@ -48,7 +48,7 @@
             }
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test, Explicit]
@@ -59,7 +59,7 @@
                 .GetAll();
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test, Explicit]
@@ -79,7 +79,7 @@
                 });
 
 //            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test, Explicit]
@@ -101,7 +101,7 @@
                 });
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test, Explicit]
@@ -116,7 +116,7 @@
                 });
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJson());
+            Console.WriteLine(result.ToJsonString());
         }
     }
 }

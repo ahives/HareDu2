@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeCreateActionImpl();
             action(impl);
             
-            var definition = impl.Definition.Value;
+            DefinedExchange definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 

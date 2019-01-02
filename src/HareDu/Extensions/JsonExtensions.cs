@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2018 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,39 +13,30 @@
 // limitations under the License.
 namespace HareDu.Extensions
 {
-    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
     using Internal.Serialization;
     using Newtonsoft.Json;
 
     public static class JsonExtensions
     {
-        public static string ToJson<T>(this T obj)
+        public static string ToJsonString<T>(this T obj)
         {
-            JsonSerializerSettings settings = GetSerializerSettings();
-            string serializeObject = JsonConvert.SerializeObject(obj, settings);
-
-            return serializeObject;
-        }
-
-        static JsonSerializerSettings GetSerializerSettings()
-        {
-            return new JsonSerializerSettings
+            var encoding = new UTF8Encoding(false, true);
+            
+            using (var stream = new MemoryStream())
+            using (var writer = new StreamWriter(stream, encoding, 1024, true))
+            using (var jsonWriter = new JsonTextWriter(writer))
             {
-                NullValueHandling = NullValueHandling.Include,
-                DefaultValueHandling = DefaultValueHandling.Include,
-                MissingMemberHandling = MissingMemberHandling.Ignore,
-                ObjectCreationHandling = ObjectCreationHandling.Auto,
-                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                ContractResolver = new JsonContractResolver(),
-                TypeNameHandling = TypeNameHandling.None,
-                DateParseHandling = DateParseHandling.None,
-                DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind,
-                Converters = new List<JsonConverter>(new JsonConverter[]
-                {
-                    new ByteArrayConverter()
-                }),
-                Formatting = Formatting.Indented
-            };
+                jsonWriter.Formatting = Formatting.Indented;
+
+                SerializerCache.Serializer.Serialize(jsonWriter, obj, typeof(T));
+
+                jsonWriter.Flush();
+                writer.Flush();
+
+                return encoding.GetString(stream.ToArray());
+            }
         }
     }
 }
