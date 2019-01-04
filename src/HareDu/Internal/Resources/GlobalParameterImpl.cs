@@ -53,18 +53,10 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            var errors = new List<Error>();
-
-            if (string.IsNullOrWhiteSpace(definition.Name))
-                errors.Add(new ErrorImpl("The name of the parameter is missing."));
-
-            if (!impl.Errors.Value.IsNull())
-                errors.AddRange(impl.Errors.Value);
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
             string url = $"api/global-parameters/{definition.Name}";
+            
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -79,7 +71,8 @@ namespace HareDu.Internal.Resources
             action(impl);
             
             if (string.IsNullOrWhiteSpace(impl.ParameterName))
-                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the parameter is missing.")});
+                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the parameter is missing.")},
+                    new DebugInfoImpl(@"api/global-parameters/", null));
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 
@@ -101,20 +94,29 @@ namespace HareDu.Internal.Resources
         class GlobalParameterCreateActionImpl :
             GlobalParameterCreateAction
         {
-            static IDictionary<string, ArgumentValue<object>> _arguments;
-            static string _name;
+            IDictionary<string, ArgumentValue<object>> _arguments;
+            string _name;
+            readonly List<Error> _errors;
 
             public Lazy<DefinedGlobalParameter> Definition { get; }
             public Lazy<List<Error>> Errors { get; }
 
             public GlobalParameterCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedGlobalParameter>(
                     () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Parameter(string name) => _name = name;
+            public void Parameter(string name)
+            {
+                _name = name;
+
+                if (string.IsNullOrWhiteSpace(_name))
+                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
+            }
             
             public void Configure(Action<GlobalParameterConfiguration> configuration)
             {
@@ -122,11 +124,9 @@ namespace HareDu.Internal.Resources
                 configuration(impl);
                 
                 _arguments = impl.Arguments;
-            }
 
-            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
-            {
-                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
+                if (_arguments != null)
+                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
             

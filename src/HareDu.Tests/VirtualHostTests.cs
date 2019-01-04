@@ -65,15 +65,14 @@
                 .Factory<VirtualHost>()
                 .Create(x =>
                 {
-                    x.VirtualHost("HareDu6");
+                    x.VirtualHost("HareDu7");
                     x.Configure(c =>
                     {
                         c.WithTracingEnabled();
                     });
                 });
 
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test, Explicit]
@@ -81,10 +80,9 @@
         {
             Result result = await Client
                 .Factory<VirtualHost>()
-                .Delete(x => x.VirtualHost("HareDu2"));
+                .Delete(x => x.VirtualHost("HareDu7"));
 
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
+            Console.WriteLine(result.ToJsonString());
         }
     }
 }

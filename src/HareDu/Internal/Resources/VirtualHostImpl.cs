@@ -15,6 +15,7 @@ namespace HareDu.Internal.Resources
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -68,15 +69,15 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostDeleteActionImpl();
             action(impl);
 
-            if (string.IsNullOrWhiteSpace(impl.VirtualHostName))
-                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the virtual host is missing.")});
+            string sanitizedVHost = SanitizeVirtualHostName(impl.VirtualHostName.Value);
 
-            string sanitizedVHost = SanitizeVirtualHostName(impl.VirtualHostName);
+            string url = $"api/vhosts/{sanitizedVHost}";
+
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             if (sanitizedVHost == "2%f")
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") });
-
-            string url = $"api/vhosts/{SanitizeVirtualHostName(impl.VirtualHostName)}";
 
             Result result = await Delete(url, cancellationToken);
 
@@ -87,29 +88,58 @@ namespace HareDu.Internal.Resources
         class VirtualHostDeleteActionImpl :
             VirtualHostDeleteAction
         {
-            public string VirtualHostName { get; private set; }
-            
-            public void VirtualHost(string name) => VirtualHostName = name;
+            string _vhost;
+            readonly List<Error> _errors;
+
+            public Lazy<string> VirtualHostName { get; }
+            public Lazy<List<Error>> Errors { get; }
+
+            public VirtualHostDeleteActionImpl()
+            {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
+                VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void VirtualHost(string name)
+            {
+                _vhost = name;
+
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
         }
 
         
         class VirtualHostCreateActionImpl :
             VirtualHostCreateAction
         {
-            static bool _tracing;
-            static string _vhost;
+            bool _tracing;
+            string _vhost;
+            readonly List<Error> _errors;
 
             public Lazy<DefinedVirtualHost> Definition { get; }
             public Lazy<string> VirtualHostName { get; }
+            public Lazy<List<Error>> Errors { get; }
             
             public VirtualHostCreateActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedVirtualHost>(
                     () => new DefinedVirtualHostImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void VirtualHost(string name) => _vhost = name;
+            public void VirtualHost(string name)
+            {
+                _vhost = name;
+
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
 
             public void Configure(Action<VirtualHostConfiguration> configuration)
             {

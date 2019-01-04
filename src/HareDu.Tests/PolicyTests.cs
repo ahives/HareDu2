@@ -37,7 +37,7 @@
                 .Factory<Policy>()
                 .Create(x =>
                 {
-                    x.Policy("P4");
+                    x.Policy("P5");
                     x.Configure(p =>
                     {
                         p.UsingPattern("^amq.");
@@ -52,7 +52,7 @@
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
-            Assert.IsFalse(result.HasFaulted);
+//            Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJsonString());
          }
 

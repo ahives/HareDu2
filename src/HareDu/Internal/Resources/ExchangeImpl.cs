@@ -54,27 +54,10 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string exchange = impl.ExchangeName.Value;
-            string vhost = impl.VirtualHost.Value;
+            string url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}";
             
-            var errors = new List<Error>();
-
-            if (string.IsNullOrWhiteSpace(exchange))
-                errors.Add(new ErrorImpl("The name of the exchange is missing."));
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (string.IsNullOrWhiteSpace(definition?.RoutingType))
-                errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
-
-            if (!impl.Errors.Value.IsNull())
-                errors.AddRange(impl.Errors.Value);
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -88,26 +71,12 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeDeleteActionImpl();
             action(impl);
 
-            string exchange = impl.ExchangeName.Value;
-            string vhost = impl.VirtualHost.Value;
+            string url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}";
+            if (!string.IsNullOrWhiteSpace(impl.Query.Value))
+                url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}?{impl.Query.Value}";
             
-            var errors = new List<Error>();
-            
-            if (string.IsNullOrWhiteSpace(exchange))
-                errors.Add(new ErrorImpl("The name of the exchange is missing."));
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}";
-
-            string query = impl.Query.Value;
-            
-            if (!string.IsNullOrWhiteSpace(query))
-                url = $"api/exchanges/{SanitizeVirtualHostName(vhost)}/{exchange}?{query}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -118,22 +87,33 @@ namespace HareDu.Internal.Resources
         class ExchangeDeleteActionImpl :
             ExchangeDeleteAction
         {
-            static string _vhost;
-            static string _exchange;
-            static string _query;
+            string _vhost;
+            string _exchange;
+            string _query;
+            readonly List<Error> _errors;
 
             public Lazy<string> Query { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> ExchangeName { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public ExchangeDeleteActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Query = new Lazy<string>(() => _query, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Exchange(string name) => _exchange = name;
+            public void Exchange(string name)
+            {
+                _exchange = name;
+             
+                if (string.IsNullOrWhiteSpace(_exchange))
+                    _errors.Add(new ErrorImpl("The name of the exchange is missing."));
+            }
 
             public void WithConditions(Action<ExchangeDeleteCondition> condition)
             {
@@ -153,6 +133,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             
@@ -178,13 +161,14 @@ namespace HareDu.Internal.Resources
         class ExchangeCreateActionImpl :
             ExchangeCreateAction
         {
-            static string _routingType;
-            static bool _durable;
-            static bool _autoDelete;
-            static bool _internal;
-            static IDictionary<string, ArgumentValue<object>> _arguments;
-            static string _vhost;
-            static string _exchange;
+            string _routingType;
+            bool _durable;
+            bool _autoDelete;
+            bool _internal;
+            IDictionary<string, ArgumentValue<object>> _arguments;
+            string _vhost;
+            string _exchange;
+            readonly List<Error> _errors;
 
             public Lazy<DefinedExchange> Definition { get; }
             public Lazy<string> VirtualHost { get; }
@@ -193,14 +177,22 @@ namespace HareDu.Internal.Resources
 
             public ExchangeCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedExchange>(
                     () => new DefinedExchangeImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Exchange(string name) => _exchange = name;
+            public void Exchange(string name)
+            {
+                _exchange = name;
+
+                if (string.IsNullOrWhiteSpace(_exchange))
+                    _errors.Add(new ErrorImpl("The name of the exchange is missing."));
+            }
 
             public void Configure(Action<ExchangeConfiguration> configuration)
             {
@@ -212,6 +204,12 @@ namespace HareDu.Internal.Resources
                 _autoDelete = impl.AutoDelete;
                 _internal = impl.InternalUse;
                 _arguments = impl.Arguments;
+
+                if (string.IsNullOrWhiteSpace(_routingType))
+                    _errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
+
+                if (_arguments != null)
+                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
             public void Target(Action<ExchangeTarget> target)
@@ -220,11 +218,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-            }
 
-            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
-            {
-                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             

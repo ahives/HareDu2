@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Extensions;
 
     internal class ShovelImpl :
         ResourceBase,
@@ -41,16 +42,12 @@ namespace HareDu.Internal.Resources
             ShovelDefinition<AMQP091ShovelDefinition> definition = new ShovelDefinitionImpl(impl.Definition.Value);
 
             Debug.Assert(definition != null);
-            
-            var errors = new List<Error>();
-            
-            errors.AddRange(impl.Errors.Value);
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
 
             string url = $"/api/parameters/shovel/{impl.VirtualHostName.Value}/{impl.ShovelName.Value}";
 
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+            
             Result result = await Put(url, definition, cancellationToken);
 
             return result;

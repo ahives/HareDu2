@@ -20,6 +20,7 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Extensions;
     using Model;
 
     internal class UserImpl :
@@ -52,21 +53,11 @@ namespace HareDu.Internal.Resources
             DefinedUser definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
-
-            string user = impl.User.Value;
-            
-            var errors = new List<Error>();
-            
-            if (string.IsNullOrWhiteSpace(user))
-                errors.Add(new ErrorImpl("The username is missing."));
-            
-            if (string.IsNullOrWhiteSpace(definition.Password) && string.IsNullOrWhiteSpace(definition.PasswordHash))
-                errors.Add(new ErrorImpl("The password/hash is missing."));
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
                     
-            string url = $"api/users/{user}";
+            string url = $"api/users/{impl.User.Value}";
+            
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -80,10 +71,10 @@ namespace HareDu.Internal.Resources
             var impl = new UserDeleteActionImpl();
             action(impl);
 
-            if (string.IsNullOrWhiteSpace(impl.Username))
-                return new FaultedResult(new List<Error> {new ErrorImpl("The username is missing.")});
-
             string url = $"api/users/{impl.Username}";
+
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -94,35 +85,76 @@ namespace HareDu.Internal.Resources
         class UserDeleteActionImpl :
             UserDeleteAction
         {
-            public string Username { get; private set; }
+            string _user;
+            readonly List<Error> _errors;
             
-            public void User(string name) => Username = name;
+            public Lazy<string> Username { get; }
+            public Lazy<List<Error>> Errors { get; }
+
+            public UserDeleteActionImpl()
+            {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
+                Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void User(string name)
+            {
+                _user = name;
+
+                if (string.IsNullOrWhiteSpace(_user))
+                    _errors.Add(new ErrorImpl("The username is missing."));
+            }
         }
 
 
         class UserCreateActionImpl :
             UserCreateAction
         {
-            static string _password;
-            static string _passwordHash;
-            static string _tags;
-            static string _user;
-            
+            string _password;
+            string _passwordHash;
+            string _tags;
+            string _user;
+            readonly List<Error> _errors;
+
             public Lazy<DefinedUser> Definition { get; }
             public Lazy<string> User { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public UserCreateActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedUser>(
                     () => new DefinedUserImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
                 User = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Username(string username) => _user = username;
+            public void Username(string username)
+            {
+                _user = username;
+            
+                if (string.IsNullOrWhiteSpace(_user))
+                    _errors.Add(new ErrorImpl("The username is missing."));
+            }
 
-            public void Password(string password) => _password = password;
+            public void Password(string password)
+            {
+                _password = password;
+            
+                if (string.IsNullOrWhiteSpace(_password))
+                    _errors.Add(new ErrorImpl("The password is missing."));
+            }
 
-            public void WithPasswordHash(string passwordHash) => _passwordHash = passwordHash;
+            public void WithPasswordHash(string passwordHash)
+            {
+                _passwordHash = passwordHash;
+            
+                if (string.IsNullOrWhiteSpace(_passwordHash))
+                    _errors.Add(new ErrorImpl("The password hash is missing."));
+            }
 
             public void WithTags(Action<UserAccessOptions> tags)
             {

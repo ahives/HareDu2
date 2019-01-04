@@ -14,14 +14,25 @@
 namespace HareDu.Extensions
 {
     using System.IO;
+    using System.Net.Http;
     using System.Text;
+    using System.Threading.Tasks;
     using Internal.Serialization;
     using Newtonsoft.Json;
 
     public static class JsonExtensions
     {
+        /// <summary>
+        /// Takes an object and returns the JSON text representation of said object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static string ToJsonString<T>(this T obj)
         {
+            if (obj.IsNull())
+                return string.Empty;
+            
             var encoding = new UTF8Encoding(false, true);
             
             using (var stream = new MemoryStream())
@@ -36,6 +47,22 @@ namespace HareDu.Extensions
                 writer.Flush();
 
                 return encoding.GetString(stream.ToArray());
+            }
+        }
+        
+        internal static async Task<T> DeserializeResponse<T>(this HttpResponseMessage responseMessage)
+        {
+            string rawResponse = await responseMessage.Content.ReadAsStringAsync();
+
+            if (string.IsNullOrWhiteSpace(rawResponse))
+                return default;
+            
+            using (var reader = new StringReader(rawResponse))
+            using (var jsonReader = new JsonTextReader(reader))
+            {
+                T deserializedResponse = SerializerCache.Deserializer.Deserialize<T>(jsonReader);
+                
+                return deserializedResponse;
             }
         }
     }

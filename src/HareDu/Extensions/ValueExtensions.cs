@@ -23,15 +23,15 @@ namespace HareDu.Extensions
             return value == null;
         }
 
-        public static bool TryGetValue<T>(this Result<IEnumerable<T>> source, int index, out T value)
+        public static bool TryGetValue<T>(this Result<IReadOnlyList<T>> source, int index, out T value)
         {
-            if (source.IsNull() || source.Data.IsNull() || !source.Data.Any() || index < 0 || index >= source.Data.Count())
+            if (!source.HasResult || index < 0 || index >= source.Data.Count)
             {
                 value = default;
                 return false;
             }
 
-            value = source.Data.ElementAt(index);
+            value = source.Data[index];
             return true;
         }
     }

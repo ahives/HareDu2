@@ -17,7 +17,7 @@ namespace HareDu.Extensions
 
     public static class TaskExtensions
     {
-        public static T Unwrap<T>(this Task<T> result)
+        public static T Unfold<T>(this Task<T> result)
         {
             return !result.IsCanceled && !result.IsFaulted ? result.Result : default;
         }

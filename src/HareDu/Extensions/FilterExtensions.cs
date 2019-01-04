@@ -19,11 +19,25 @@ namespace HareDu.Extensions
 
     public static class FilterExtensions
     {
+        /// <summary>
+        /// Returns a filtered list of results meeting the specified predicate.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="predicate"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static IReadOnlyList<T> Where<T>(this Result<IReadOnlyList<T>> source, Func<T, bool> predicate)
         {
             return !source.HasResult ? default : Filter(source.Data, predicate);
         }
 
+        /// <summary>
+        /// Returns a filtered list of results meeting the specified predicate.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="predicate"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static IReadOnlyList<T> Where<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
         {
             if (!source.IsNull())
@@ -39,9 +53,11 @@ namespace HareDu.Extensions
             var internalList = new List<T>();
 
             for (int i = 0; i < list.Count; i++)
+            {
                 if (predicate(list[i]))
                     internalList.Add(list[i]);
-
+            }
+            
             return internalList;
         }
     }

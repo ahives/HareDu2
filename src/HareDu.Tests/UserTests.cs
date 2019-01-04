@@ -36,14 +36,16 @@
                 .Factory<User>()
                 .Create(x =>
                 {
-                    x.Username("testuser1");
-                    x.Password("testuserpwd1");
-//                    x.WithPasswordHash("");
+                    x.Username("testuser3");
+                    x.Password("testuserpwd3");
+                    x.WithPasswordHash("gkgfjjhfjh");
                     x.WithTags(t =>
                     {
                         t.Administrator();
                     });
                 });
+            
+            Console.WriteLine(result.ToJsonString());
         }
 
 

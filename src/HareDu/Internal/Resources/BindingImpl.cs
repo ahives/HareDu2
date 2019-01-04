@@ -54,31 +54,17 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string source = impl.Source.Value;
-            string destination = impl.Destination.Value;
+            string sourceBinding = impl.SourceBinding.Value;
+            string destinationBinding = impl.DestinationBinding.Value;
             BindingType bindingType = impl.BindingType.Value;
             string vhost = impl.VirtualHost.Value;
-            
-            var errors = new List<Error>();
-
-            if (string.IsNullOrWhiteSpace(source))
-                errors.Add(new ErrorImpl("The name of the binding (queue/exchange) source is missing."));
-
-            if (string.IsNullOrWhiteSpace(destination))
-                errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
-            
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (!impl.Errors.Value.IsNull())
-                errors.AddRange(impl.Errors.Value);
-            
-            if (errors.Any())
-                return new FaultedResult<BindingInfo>(errors);
 
             string url = bindingType == BindingType.Exchange
-                ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}"
-                : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}";
+                ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{sourceBinding}/e/{destinationBinding}"
+                : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{sourceBinding}/q/{destinationBinding}";
+
+            if (impl.Errors.Value.Any())
+                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result<BindingInfo> result = await Post<DefineBinding, BindingInfo>(url, definition, cancellationToken);
 
@@ -97,24 +83,13 @@ namespace HareDu.Internal.Resources
             string bindingName = impl.BindingName.Value;
             string source = impl.BindingSource.Value;
             BindingType bindingType = impl.BindingType.Value;
-            
-            var errors = new List<Error>();
-            
-            if (string.IsNullOrWhiteSpace(destination))
-                errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
-            
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (string.IsNullOrWhiteSpace(bindingName))
-                errors.Add(new ErrorImpl("The name of the binding is missing."));
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
 
             string url = bindingType == BindingType.Queue
                 ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}/{bindingName}"
                 : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}/{bindingName}";
+            
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -125,20 +100,25 @@ namespace HareDu.Internal.Resources
         class BindingDeleteActionImpl :
             BindingDeleteAction
         {
-            static BindingType _bindingType;
-            static string _bindingName;
-            static string _bindingSource;
-            static string _bindingDestination;
-            static string _vhost;
-            
+            BindingType _bindingType;
+            string _bindingName;
+            string _bindingSource;
+            string _bindingDestination;
+            string _vhost;
+            readonly List<Error> _errors;
+
             public Lazy<string> VirtualHost { get; }
             public Lazy<BindingType> BindingType { get; }
             public Lazy<string> BindingName { get; }
             public Lazy<string> BindingSource { get; }
             public Lazy<string> BindingDestination { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public BindingDeleteActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 BindingType = new Lazy<BindingType>(() => _bindingType, LazyThreadSafetyMode.PublicationOnly);
                 BindingName = new Lazy<string>(() => _bindingName, LazyThreadSafetyMode.PublicationOnly);
                 BindingSource = new Lazy<string>(() => _bindingSource, LazyThreadSafetyMode.PublicationOnly);
@@ -155,6 +135,12 @@ namespace HareDu.Internal.Resources
                 _bindingName = impl.BindingName;
                 _bindingSource = impl.BindingSource;
                 _bindingDestination = impl.DestinationSource;
+                
+                if (string.IsNullOrWhiteSpace(_bindingDestination))
+                    _errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
+
+                if (string.IsNullOrWhiteSpace(_bindingName))
+                    _errors.Add(new ErrorImpl("The name of the binding is missing."));
             }
 
             public void Target(Action<BindingTarget> target)
@@ -163,6 +149,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             
@@ -197,26 +186,29 @@ namespace HareDu.Internal.Resources
         class BindingCreateActionImpl :
             BindingCreateAction
         {
-            static string _routingKey;
-            static IDictionary<string, ArgumentValue<object>> _arguments;
-            static string _vhost;
-            static string _source;
-            static string _destination;
-            static BindingType _bindingType;
+            string _routingKey;
+            IDictionary<string, ArgumentValue<object>> _arguments;
+            string _vhost;
+            string _sourceBinding;
+            string _destinationBinding;
+            BindingType _bindingType;
+            readonly List<Error> _errors;
 
             public Lazy<DefineBinding> Definition { get; }
-            public Lazy<string> Source { get; }
-            public Lazy<string> Destination { get; }
+            public Lazy<string> SourceBinding { get; }
+            public Lazy<string> DestinationBinding { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<BindingType> BindingType { get; }
             public Lazy<List<Error>> Errors { get; }
 
             public BindingCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefineBinding>(() => new DefineBindingImpl(_routingKey, _arguments), LazyThreadSafetyMode.PublicationOnly);
-                Source = new Lazy<string>(() => _source, LazyThreadSafetyMode.PublicationOnly);
-                Destination = new Lazy<string>(() => _destination, LazyThreadSafetyMode.PublicationOnly);
+                SourceBinding = new Lazy<string>(() => _sourceBinding, LazyThreadSafetyMode.PublicationOnly);
+                DestinationBinding = new Lazy<string>(() => _destinationBinding, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 BindingType = new Lazy<BindingType>(() => _bindingType, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -226,9 +218,15 @@ namespace HareDu.Internal.Resources
                 var impl = new BindingCreateDefinitionImpl();
                 definition(impl);
                 
-                _source = impl.SourceBinding;
-                _destination = impl.DestinationBinding;
+                _sourceBinding = impl.SourceBinding;
+                _destinationBinding = impl.DestinationBinding;
                 _bindingType = impl.BindingType;
+                
+                if (string.IsNullOrWhiteSpace(_sourceBinding))
+                    _errors.Add(new ErrorImpl("The name of the source binding (queue/exchange) is missing."));
+
+                if (string.IsNullOrWhiteSpace(_destinationBinding))
+                    _errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
             }
 
             public void Configure(Action<BindingConfiguration> configuration)
@@ -238,6 +236,8 @@ namespace HareDu.Internal.Resources
 
                 _arguments = impl.Arguments;
                 _routingKey = impl.RoutingKey;
+                
+                _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
             public void Target(Action<BindingTarget> target)
@@ -246,11 +246,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-            }
-
-            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
-            {
-                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
+            
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             

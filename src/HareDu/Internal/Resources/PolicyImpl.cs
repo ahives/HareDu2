@@ -54,24 +54,10 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string policy = impl.PolicyName.Value;
-            string vhost = impl.VirtualHost.Value;
+            string url = $"api/policies/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.PolicyName.Value}";
             
-            var errors = new List<Error>();
-
-            if (string.IsNullOrWhiteSpace(policy))
-                errors.Add(new ErrorImpl("The name of the policy is missing."));
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (!impl.Errors.Value.IsNull())
-                errors.AddRange(impl.Errors.Value);
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/policies/{SanitizeVirtualHostName(vhost)}/{policy}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -84,22 +70,11 @@ namespace HareDu.Internal.Resources
 
             var impl = new PolicyDeleteActionImpl();
             action(impl);
-            
-            string policy = impl.PolicyName.Value;
-            string vhost = impl.VirtualHost.Value;
-            
-            var errors = new List<Error>();
-            
-            if (string.IsNullOrWhiteSpace(policy))
-                errors.Add(new ErrorImpl("The name of the policy is missing."));
 
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            string url = $"api/policies/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.PolicyName.Value}";
             
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/policies/{SanitizeVirtualHostName(vhost)}/{policy}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -110,19 +85,30 @@ namespace HareDu.Internal.Resources
         class PolicyDeleteActionImpl :
             PolicyDeleteAction
         {
-            static string _vhost;
-            static string _policy;
-            
+            string _vhost;
+            string _policy;
+            readonly List<Error> _errors;
+
             public Lazy<string> PolicyName { get; }
             public Lazy<string> VirtualHost { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public PolicyDeleteActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Policy(string name) => _policy = name;
+            public void Policy(string name)
+            {
+                _policy = name;
+            
+                if (string.IsNullOrWhiteSpace(_policy))
+                    _errors.Add(new ErrorImpl("The name of the policy is missing."));
+            }
             
             public void Target(Action<PolicyTarget> target)
             {
@@ -130,6 +116,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             
@@ -146,13 +135,13 @@ namespace HareDu.Internal.Resources
         class PolicyCreateActionImpl :
             PolicyCreateAction
         {
-            static string _pattern;
-            static IDictionary<string, ArgumentValue<object>> _arguments;
-            static int _priority;
-            static string _applyTo;
-            static string _policy;
-            static string _vhost;
-            static List<Error> _errors;
+            string _pattern;
+            IDictionary<string, ArgumentValue<object>> _arguments;
+            int _priority;
+            string _applyTo;
+            string _policy;
+            string _vhost;
+            readonly List<Error> _errors;
             
             public Lazy<DefinedPolicy> Definition { get; }
             public Lazy<string> VirtualHost { get; }
@@ -161,50 +150,56 @@ namespace HareDu.Internal.Resources
 
             public PolicyCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments, _errors), LazyThreadSafetyMode.PublicationOnly);
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedPolicy>(
                     () => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Policy(string name) => _policy = name;
+            public void Policy(string name)
+            {
+                _policy = name;
+                
+                if (string.IsNullOrWhiteSpace(_policy))
+                    _errors.Add(new ErrorImpl("The name of the policy is missing."));
+            }
 
             public void Configure(Action<PolicyConfiguration> configuration)
             {
                 var impl = new PolicyConfigurationImpl();
                 configuration(impl);
 
-                _applyTo = impl.AppllyTo;
+                _applyTo = impl.WhereToApply;
                 _pattern = impl.Pattern;
                 _priority = impl.Priority;
                 _arguments = impl.Arguments;
 
-                if (!_arguments.ContainsKey("ha-mode"))
+                foreach (var argument in _arguments?.Where(x => x.Value.IsNull()).Select(x => x.Key))
+                {
+                    _errors.Add(new ErrorImpl($"Argument '{argument}' has been set without a corresponding value."));
+                }
+
+                if (!_arguments.TryGetValue("ha-mode", out var haMode))
                     return;
                 
-                if (!_arguments.TryGetValue("ha-mode", out var value))
-                    _errors.Add(new ErrorImpl($"Argument 'ha-mode' was set without a corresponding value."));
-
-                string mode = value.ToString().Trim();
-                if ((mode.ConvertTo() == HighAvailabilityModes.Exactly || mode.ConvertTo() == HighAvailabilityModes.Nodes) &&
-                    !_arguments.ContainsKey("ha-params"))
+                string mode = haMode.Value.ToString().Trim();
+                if ((mode.ConvertTo() == HighAvailabilityModes.Exactly ||
+                     mode.ConvertTo() == HighAvailabilityModes.Nodes) && !_arguments.ContainsKey("ha-params"))
                     _errors.Add(new ErrorImpl($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set"));
             }
-            
+
             public void Target(Action<PolicyTarget> target)
             {
                 var impl = new PolicyTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-            }
 
-            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments, List<Error> errors)
-            {
-                return arguments.IsNull()
-                    ? new List<Error>()
-                    : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).Concat(errors).ToList();
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             
@@ -222,7 +217,7 @@ namespace HareDu.Internal.Resources
             {
                 public int Priority { get; private set; }
                 public string Pattern { get; private set; }
-                public string AppllyTo { get; private set; }
+                public string WhereToApply { get; private set; }
                 public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
 
                 public void UsingPattern(string pattern) => Pattern = pattern;
@@ -237,7 +232,7 @@ namespace HareDu.Internal.Resources
 
                 public void HasPriority(int priority) => Priority = priority;
 
-                public void ApplyTo(string applyTo) => AppllyTo = applyTo;
+                public void ApplyTo(string applyTo) => WhereToApply = applyTo;
             }
             
             
@@ -343,7 +338,7 @@ namespace HareDu.Internal.Resources
                 void SetArgWithConflictingCheck(string arg, string targetArg, object value)
                 {
                     Arguments.Add(arg.Trim(),
-                        Arguments.ContainsKey(arg) || (arg == targetArg && Arguments.ContainsKey(targetArg))
+                        Arguments.ContainsKey(arg) || arg == targetArg && Arguments.ContainsKey(targetArg)
                             ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set or would conflict with argument '{targetArg}'")
                             : new ArgumentValue<object>(value));
                 }

@@ -48,9 +48,9 @@ namespace HareDu.Internal.Resources
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult<IReadOnlyList<T>>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
                 
-                var response = await DeserializeResponse<IReadOnlyList<T>>(responseMessage);
+                var data = await responseMessage.DeserializeResponse<IReadOnlyList<T>>();
                 
-                return new SuccessfulListResult<T>(response, new DebugInfoImpl(url, null));
+                return new SuccessfulListResult<T>(data, new DebugInfoImpl(url, null));
             }
             catch (MissingMethodException e)
             {
@@ -69,9 +69,9 @@ namespace HareDu.Internal.Resources
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
 
-                var response = await DeserializeResponse<T>(responseMessage);
+                var data = await responseMessage.DeserializeResponse<T>();
                 
-                return new SuccessfulResult<T>(response, new DebugInfoImpl(url, null));
+                return new SuccessfulResult<T>(data, new DebugInfoImpl(url, null));
             }
             catch (MissingMethodException e)
             {
@@ -133,9 +133,9 @@ namespace HareDu.Internal.Resources
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult<TResult>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
-                var response = await DeserializeResponse<TResult>(responseMessage);
+                var data = await responseMessage.DeserializeResponse<TResult>();
 
-                return new SuccessfulResult<TResult>(response, new DebugInfoImpl(url, request));
+                return new SuccessfulResult<TResult>(data, new DebugInfoImpl(url, request));
             }
             catch (MissingMethodException e)
             {
@@ -162,14 +162,6 @@ namespace HareDu.Internal.Resources
 
             setUpdatableFlagsMethod.Invoke(uriParser, new object[] {0});
         }
-        
-        async Task<T> DeserializeResponse<T>(HttpResponseMessage responseMessage)
-        {
-            string response = await responseMessage.Content.ReadAsStringAsync();
-            T deserializedResponse = SerializerCache.Deserializer.Deserialize<T>(new JsonTextReader(new StringReader(response)));
-
-            return deserializedResponse;
-        }
 
         Error GetError(HttpStatusCode statusCode)
         {
@@ -193,7 +185,7 @@ namespace HareDu.Internal.Resources
         }
 
         
-        class DebugInfoImpl :
+        protected class DebugInfoImpl :
             DebugInfo
         {
             public DebugInfoImpl(string url, string request)

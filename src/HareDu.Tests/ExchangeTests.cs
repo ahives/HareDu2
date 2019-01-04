@@ -63,7 +63,7 @@
                 .Factory<Exchange>()
                 .Create(x =>
                 {
-                    x.Exchange("E3");
+                    x.Exchange("E5");
                     x.Configure(c =>
                     {
                         c.IsDurable();

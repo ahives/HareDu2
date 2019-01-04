@@ -25,7 +25,7 @@ namespace HareDu.Extensions
             if (source.IsNull() || projector.IsNull())
                 return default;
                 
-            Result<T> result = source.Unwrap();
+            Result<T> result = source.Unfold();
 
             return result.HasResult ? projector(result) : default;
         }

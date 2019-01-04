@@ -16,9 +16,11 @@ namespace HareDu.Internal.Resources
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Extensions;
     using Model;
 
     internal class ScopedParameterImpl :
@@ -51,11 +53,11 @@ namespace HareDu.Internal.Resources
             DefinedScopedParameter definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
-
-            if (string.IsNullOrWhiteSpace(definition.ParameterName))
-                return new FaultedResult(new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
                     
             string url = $"api/parameters/{definition.Component}/{SanitizeVirtualHostName(definition.VirtualHost)}/{definition.ParameterName}";
+
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -69,14 +71,10 @@ namespace HareDu.Internal.Resources
             var impl = new ScopedParameterDeleteActionImpl();
             action(impl);
 
-            string scopedParameter = impl.ScopedParameter.Value;
-            string virtualHost = impl.VirtualHost.Value;
-            string component = impl.Component.Value;
+            string url = $"api/parameters/{impl.Component.Value}/{impl.VirtualHost.Value}/{impl.ScopedParameter.Value}";
             
-            if (string.IsNullOrWhiteSpace(scopedParameter))
-                return new FaultedResult(new List<Error>{ new ErrorImpl("The name of the parameter is missing.") });
-
-            string url = $"api/parameters/{component}/{virtualHost}/{scopedParameter}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -87,22 +85,33 @@ namespace HareDu.Internal.Resources
         class ScopedParameterDeleteActionImpl :
             ScopedParameterDeleteAction
         {
-            static string _vhost;
-            static string _component;
-            static string _scopedParameter;
-            
+            string _vhost;
+            string _component;
+            string _scopedParameter;
+            readonly List<Error> _errors;
+
             public Lazy<string> ScopedParameter { get; }
             public Lazy<string> Component { get; }
             public Lazy<string> VirtualHost { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public ScopedParameterDeleteActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 ScopedParameter = new Lazy<string>(() => _scopedParameter, LazyThreadSafetyMode.PublicationOnly);
                 Component = new Lazy<string>(() => _component, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Parameter(string name) => _scopedParameter = name;
+            public void Parameter(string name)
+            {
+                _scopedParameter = name;
+            
+                if (string.IsNullOrWhiteSpace(_scopedParameter))
+                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
+            }
             
             public void Targeting(Action<ScopedParameterTarget> target)
             {
@@ -130,15 +139,20 @@ namespace HareDu.Internal.Resources
         class ScopedParameterCreateActionImpl :
             ScopedParameterCreateAction
         {
-            static string _component;
-            static string _vhost;
-            static string _value;
-            static string _name;
-            
+            string _component;
+            string _vhost;
+            string _value;
+            string _name;
+            readonly List<Error> _errors;
+
             public Lazy<DefinedScopedParameter> Definition { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public ScopedParameterCreateActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<DefinedScopedParameter>(
                     () => new DefinedScopedParameterImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
             }
@@ -147,6 +161,9 @@ namespace HareDu.Internal.Resources
             {
                 _name = name;
                 _value = value;
+
+                if (string.IsNullOrWhiteSpace(_name))
+                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
             }
             
             public void Targeting(Action<ScopedParameterTarget> target)
@@ -156,6 +173,12 @@ namespace HareDu.Internal.Resources
 
                 _vhost = impl.VirtualHostName;
                 _component = impl.ComponentName;
+
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+                if (string.IsNullOrWhiteSpace(_component))
+                    _errors.Add(new ErrorImpl("The component name is missing."));
             }
 
             

@@ -34,7 +34,7 @@
             Result<IEnumerable<VirtualHostInfo>> vhosts = Client
                 .Factory<VirtualHost>()
                 .GetAll()
-                .Unwrap();
+                .Unfold();
 
             foreach (var vhost in vhosts.Data)
             {
