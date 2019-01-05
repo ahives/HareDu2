@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserPermissionsCreateActionImpl();
             action(impl);
 
-            DefinedUserPermissions definition = impl.Definition.Value;
+            UserPermissionsDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
@@ -142,7 +142,7 @@ namespace HareDu.Internal.Resources
             string _user;
             readonly List<Error> _errors;
 
-            public Lazy<DefinedUserPermissions> Definition { get; }
+            public Lazy<UserPermissionsDefinition> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> Username { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -152,8 +152,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedUserPermissions>(
-                    () => new DefinedUserPermissionsImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<UserPermissionsDefinition>(
+                    () => new UserPermissionsDefinitionImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -197,10 +197,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class DefinedUserPermissionsImpl :
-                DefinedUserPermissions
+            class UserPermissionsDefinitionImpl :
+                UserPermissionsDefinition
             {
-                public DefinedUserPermissionsImpl(string configurePattern, string writePattern, string readPattern)
+                public UserPermissionsDefinitionImpl(string configurePattern, string writePattern, string readPattern)
                 {
                     Configure = configurePattern;
                     Write = writePattern;

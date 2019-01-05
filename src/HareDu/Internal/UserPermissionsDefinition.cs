@@ -15,18 +15,15 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    internal interface DefinedQueuePeek
+    internal interface UserPermissionsDefinition
     {
-        [JsonProperty("count")]
-        int Take { get; }
+        [JsonProperty("configure")]
+        string Configure { get; }
         
-        [JsonProperty("requeue")]
-        bool PutBackWhenFinished { get; }
+        [JsonProperty("write")]
+        string Write { get; }
         
-        [JsonProperty("encoding")]
-        string Encoding { get; }
-        
-        [JsonProperty("truncate")]
-        long TruncateMessageThreshold { get; }
+        [JsonProperty("read")]
+        string Read { get; }
     }
 }

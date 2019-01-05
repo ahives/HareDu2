@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserCreateActionImpl();
             action(impl);
 
-            DefinedUser definition = impl.Definition.Value;
+            UserDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
                     
@@ -118,7 +118,7 @@ namespace HareDu.Internal.Resources
             string _user;
             readonly List<Error> _errors;
 
-            public Lazy<DefinedUser> Definition { get; }
+            public Lazy<UserDefinition> Definition { get; }
             public Lazy<string> User { get; }
             public Lazy<List<Error>> Errors { get; }
 
@@ -127,8 +127,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedUser>(
-                    () => new DefinedUserImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<UserDefinition>(
+                    () => new UserDefinitionImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
                 User = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
 
@@ -188,10 +188,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class DefinedUserImpl :
-                DefinedUser
+            class UserDefinitionImpl :
+                UserDefinition
             {
-                public DefinedUserImpl(string password, string passwordHash, string tags)
+                public UserDefinitionImpl(string password, string passwordHash, string tags)
                 {
                     PasswordHash = passwordHash;
                     Password = password;

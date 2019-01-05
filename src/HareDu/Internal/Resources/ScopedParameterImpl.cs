@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new ScopedParameterCreateActionImpl();
             action(impl);
 
-            DefinedScopedParameter definition = impl.Definition.Value;
+            ScopedParameterDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
                     
@@ -145,7 +145,7 @@ namespace HareDu.Internal.Resources
             string _name;
             readonly List<Error> _errors;
 
-            public Lazy<DefinedScopedParameter> Definition { get; }
+            public Lazy<ScopedParameterDefinition> Definition { get; }
             public Lazy<List<Error>> Errors { get; }
 
             public ScopedParameterCreateActionImpl()
@@ -153,8 +153,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedScopedParameter>(
-                    () => new DefinedScopedParameterImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<ScopedParameterDefinition>(
+                    () => new ScopedParameterDefinitionImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Parameter(string name, string value)
@@ -194,10 +194,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class DefinedScopedParameterImpl :
-                DefinedScopedParameter
+            class ScopedParameterDefinitionImpl :
+                ScopedParameterDefinition
             {
-                public DefinedScopedParameterImpl(string virtualHost, string component, string name, string value)
+                public ScopedParameterDefinitionImpl(string virtualHost, string component, string name, string value)
                 {
                     VirtualHost = virtualHost;
                     Component = component;

@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeCreateActionImpl();
             action(impl);
             
-            DefinedExchange definition = impl.Definition.Value;
+            ExchangeDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
@@ -170,7 +170,7 @@ namespace HareDu.Internal.Resources
             string _exchange;
             readonly List<Error> _errors;
 
-            public Lazy<DefinedExchange> Definition { get; }
+            public Lazy<ExchangeDefinition> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> ExchangeName { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -180,8 +180,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedExchange>(
-                    () => new DefinedExchangeImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<ExchangeDefinition>(
+                    () => new ExchangeDefinitionImpl(_routingType, _durable, _autoDelete, _internal, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -316,10 +316,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class DefinedExchangeImpl :
-                DefinedExchange
+            class ExchangeDefinitionImpl :
+                ExchangeDefinition
             {
-                public DefinedExchangeImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, ArgumentValue<object>> arguments)
+                public ExchangeDefinitionImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     RoutingType = routingType;
                     Durable = durable;

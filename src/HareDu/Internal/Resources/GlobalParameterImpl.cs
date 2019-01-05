@@ -49,7 +49,7 @@ namespace HareDu.Internal.Resources
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
             
-            DefinedGlobalParameter definition = impl.Definition.Value;
+            GlobalParameterDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
@@ -98,7 +98,7 @@ namespace HareDu.Internal.Resources
             string _name;
             readonly List<Error> _errors;
 
-            public Lazy<DefinedGlobalParameter> Definition { get; }
+            public Lazy<GlobalParameterDefinition> Definition { get; }
             public Lazy<List<Error>> Errors { get; }
 
             public GlobalParameterCreateActionImpl()
@@ -106,8 +106,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedGlobalParameter>(
-                    () => new DefinedGlobalParameterImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<GlobalParameterDefinition>(
+                    () => new GlobalParameterDefinitionImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Parameter(string name)
@@ -160,10 +160,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class DefinedGlobalParameterImpl :
-                DefinedGlobalParameter
+            class GlobalParameterDefinitionImpl :
+                GlobalParameterDefinition
             {
-                public DefinedGlobalParameterImpl(string name, IDictionary<string, ArgumentValue<object>> arguments)
+                public GlobalParameterDefinitionImpl(string name, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     Name = name;
 

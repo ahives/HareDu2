@@ -13,24 +13,20 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    internal interface DefinedExchange
+    public interface ScopedParameterDefinition
     {
-        [JsonProperty("type")]
-        string RoutingType { get; }
-        
-        [JsonProperty("durable")]
-        bool Durable { get; }
-        
-        [JsonProperty("auto_delete")]
-        bool AutoDelete { get; }
-        
-        [JsonProperty("internal")]
-        bool Internal { get; }
-        
-        [JsonProperty("arguments", Required = Required.Default)]
-        IDictionary<string, object> Arguments { get; }
+        [JsonProperty("vhost")]
+        string VirtualHost { get; }
+
+        [JsonProperty("component")]
+        string Component { get; }
+
+        [JsonProperty("name")]
+        string ParameterName { get; }
+
+        [JsonProperty("value")]
+        string ParameterValue { get; }
     }
 }

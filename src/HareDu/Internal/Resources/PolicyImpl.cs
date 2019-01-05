@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new PolicyCreateActionImpl();
             action(impl);
 
-            DefinedPolicy definition = impl.Definition.Value;
+            PolicyDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
@@ -143,7 +143,7 @@ namespace HareDu.Internal.Resources
             string _vhost;
             readonly List<Error> _errors;
             
-            public Lazy<DefinedPolicy> Definition { get; }
+            public Lazy<PolicyDefinition> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> PolicyName { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -153,8 +153,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedPolicy>(
-                    () => new DefinedPolicyImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<PolicyDefinition>(
+                    () => new PolicyDefinitionImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -355,10 +355,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class DefinedPolicyImpl :
-                DefinedPolicy
+            class PolicyDefinitionImpl :
+                PolicyDefinition
             {
-                public DefinedPolicyImpl(string pattern, IDictionary<string, ArgumentValue<object>> arguments, int priority, string applyTo)
+                public PolicyDefinitionImpl(string pattern, IDictionary<string, ArgumentValue<object>> arguments, int priority, string applyTo)
                 {
                     Pattern = pattern;
                     Priority = priority;

@@ -13,20 +13,21 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface DefinedScopedParameter
+    internal interface QueueDefinition
     {
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
-
-        [JsonProperty("component")]
-        string Component { get; }
-
-        [JsonProperty("name")]
-        string ParameterName { get; }
-
-        [JsonProperty("value")]
-        string ParameterValue { get; }
+        [JsonProperty("node")]
+        string Node { get; }
+        
+        [JsonProperty("durable")]
+        bool Durable { get; }
+        
+        [JsonProperty("auto_delete")]
+        bool AutoDelete { get; }
+                
+        [JsonProperty("arguments", Required = Required.Default)]
+        IDictionary<string, object> Arguments { get; }
     }
 }

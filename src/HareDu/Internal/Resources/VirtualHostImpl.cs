@@ -19,6 +19,7 @@ namespace HareDu.Internal.Resources
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Extensions;
     using Model;
 
     internal class VirtualHostImpl :
@@ -48,14 +49,12 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostCreateActionImpl();
             action(impl);
 
-            string vhost = impl.VirtualHostName.Value;
+            VirtualHostDefinition definition = impl.Definition.Value;
 
-            if (string.IsNullOrWhiteSpace(vhost))
-                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the virtual host is missing.")});
+            string url = $"api/vhosts/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
 
-            string url = $"api/vhosts/{SanitizeVirtualHostName(vhost)}";
-
-            DefinedVirtualHost definition = impl.Definition.Value;
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -119,7 +118,7 @@ namespace HareDu.Internal.Resources
             string _vhost;
             readonly List<Error> _errors;
 
-            public Lazy<DefinedVirtualHost> Definition { get; }
+            public Lazy<VirtualHostDefinition> Definition { get; }
             public Lazy<string> VirtualHostName { get; }
             public Lazy<List<Error>> Errors { get; }
             
@@ -128,8 +127,8 @@ namespace HareDu.Internal.Resources
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedVirtualHost>(
-                    () => new DefinedVirtualHostImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<VirtualHostDefinition>(
+                    () => new VirtualHostDefinitionImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
@@ -150,12 +149,12 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class DefinedVirtualHostImpl :
-                DefinedVirtualHost
+            class VirtualHostDefinitionImpl :
+                VirtualHostDefinition
             {
                 public bool Tracing { get; }
 
-                public DefinedVirtualHostImpl(bool tracing)
+                public VirtualHostDefinitionImpl(bool tracing)
                 {
                     Tracing = tracing;
                 }

@@ -50,7 +50,7 @@ namespace HareDu.Internal.Resources
             var impl = new QueueCreateActionImpl();
             action(impl);
             
-            DefinedQueue definition = impl.Definition.Value;
+            QueueDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
 
@@ -146,7 +146,7 @@ namespace HareDu.Internal.Resources
             var impl = new QueuePeekActionImpl();
             action(impl);
 
-            DefinedQueuePeek definition = impl.Definition.Value;
+            QueuePeekDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
             
@@ -172,7 +172,7 @@ namespace HareDu.Internal.Resources
 
             string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/get";
 
-            Result<QueueInfo> result = await Post<DefinedQueuePeek, QueueInfo>(url, definition, cancellationToken);
+            Result<QueueInfo> result = await Post<QueuePeekDefinition, QueueInfo>(url, definition, cancellationToken);
 
             return result;
         }
@@ -188,14 +188,14 @@ namespace HareDu.Internal.Resources
             static string _encoding;
             static long _truncateIfAbove;
 
-            public Lazy<DefinedQueuePeek> Definition { get; }
+            public Lazy<QueuePeekDefinition> Definition { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
 
             public QueuePeekActionImpl()
             {
-                Definition = new Lazy<DefinedQueuePeek>(
-                    () => new DefinedQueuePeekImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<QueuePeekDefinition>(
+                    () => new QueuePeekDefinitionImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -222,10 +222,10 @@ namespace HareDu.Internal.Resources
             }
 
             
-            class DefinedQueuePeekImpl :
-                DefinedQueuePeek
+            class QueuePeekDefinitionImpl :
+                QueuePeekDefinition
             {
-                public DefinedQueuePeekImpl(int take, bool putBackWhenFinished, string encoding, long truncateMessageThreshold)
+                public QueuePeekDefinitionImpl(int take, bool putBackWhenFinished, string encoding, long truncateMessageThreshold)
                 {
                     Take = take;
                     PutBackWhenFinished = putBackWhenFinished;
@@ -396,7 +396,7 @@ namespace HareDu.Internal.Resources
             static string _vhost;
             static string _queue;
 
-            public Lazy<DefinedQueue> Definition { get; }
+            public Lazy<QueueDefinition> Definition { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -404,8 +404,8 @@ namespace HareDu.Internal.Resources
             public QueueCreateActionImpl()
             {
                 Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<DefinedQueue>(
-                    () => new DefinedQueueImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<QueueDefinition>(
+                    () => new QueueDefinitionImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -532,10 +532,10 @@ namespace HareDu.Internal.Resources
             }
 
 
-            class DefinedQueueImpl :
-                DefinedQueue
+            class QueueDefinitionImpl :
+                QueueDefinition
             {
-                public DefinedQueueImpl(bool durable, bool autoDelete, string node, IDictionary<string, ArgumentValue<object>> arguments)
+                public QueueDefinitionImpl(bool durable, bool autoDelete, string node, IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     Durable = durable;
                     AutoDelete = autoDelete;

@@ -15,9 +15,15 @@ namespace HareDu.Internal
 {
     using Newtonsoft.Json;
 
-    internal interface DefinedVirtualHost
+    internal interface UserDefinition
     {
-        [JsonProperty("tracing")]
-        bool Tracing { get; }
+        [JsonProperty("password_hash")]
+        string PasswordHash { get; }
+        
+        [JsonProperty("password")]
+        string Password { get; }
+        
+        [JsonProperty("tags")]
+        string Tags { get; }
     }
 }
