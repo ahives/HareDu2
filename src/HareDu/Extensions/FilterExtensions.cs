@@ -40,10 +40,10 @@ namespace HareDu.Extensions
         /// <returns></returns>
         public static IReadOnlyList<T> Where<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
         {
-            if (!source.IsNull())
+            if (source.IsNull())
                 return default;
             
-            Result<IReadOnlyList<T>> result = source?.Result;
+            Result<IReadOnlyList<T>> result = source.Result;
 
             return !result.HasResult ? default : Filter(result.Data, predicate);
         }

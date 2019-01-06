@@ -30,6 +30,13 @@ namespace HareDu
         Task<Result<IReadOnlyList<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result<IReadOnlyList<VirtualHostLimits>>> GetAllLimits(CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Creates the specified virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the virtual host will be created.</param>

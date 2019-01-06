@@ -42,6 +42,17 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
+        public async Task<Result<IReadOnlyList<VirtualHostLimits>>> GetAllLimits(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = "api/vhost-limits";
+            
+            Result<IReadOnlyList<VirtualHostLimits>> result = await GetAll<VirtualHostLimits>(url, cancellationToken);
+
+            return result;
+        }
+
         public async Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
@@ -83,7 +94,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        
+
         class VirtualHostDeleteActionImpl :
             VirtualHostDeleteAction
         {

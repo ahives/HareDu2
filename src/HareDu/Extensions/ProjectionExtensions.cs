@@ -16,6 +16,8 @@ namespace HareDu.Extensions
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
     using System.Threading.Tasks;
 
     public static class ProjectionExtensions
@@ -32,17 +34,23 @@ namespace HareDu.Extensions
 
         public static TResult Select<T, TResult>(this Result<T> source, Func<Result<T>, TResult> projector)
         {
-            if (source.IsNull() || projector.IsNull())
+            if (source.IsNull() || !source.HasResult || projector.IsNull())
                 return default;
 
             return source.HasResult ? projector(source) : default;
         }
 
-        public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source,
-            Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projection)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="projection"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source, Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projection)
         {
-            if (source.IsNull() || projection.IsNull())
-                return new List<T>();
+            if (source.IsNull() || !source.HasResult || projection.IsNull())
+                return Array.Empty<T>();
 
             return source.HasResult ? projection(source) : new List<T>();
         }

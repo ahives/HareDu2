@@ -2,13 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using Extensions;
-    using Internal.Serialization;
     using Model;
-    using Newtonsoft.Json;
     using NUnit.Framework;
 
     [TestFixture]
@@ -83,6 +79,51 @@
                 .Delete(x => x.VirtualHost("HareDu7"));
 
             Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
+        public async Task Verify_can_get_all_limits()
+        {
+            Result<IReadOnlyList<VirtualHostLimits>> result = await Client
+                .Factory<VirtualHost>()
+                .GetAllLimits();
+            
+            foreach (var item in result.Select(x => x.Data))
+            {
+                Console.WriteLine("Name: {0}", item.VirtualHostName);
+
+                if (item.Limits.TryGetValue("max-connections", out string maxConnections))
+                    Console.WriteLine("max-connections: {0}", maxConnections);
+
+                if (item.Limits.TryGetValue("max-queues", out string maxQueues))
+                    Console.WriteLine("max-queues: {0}", maxQueues);
+                
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+        }
+
+        [Test]
+        public async Task Verify_can_get_limits_of_specified_vhost()
+        {
+            var result = Client
+                .Factory<VirtualHost>()
+                .GetAllLimits()
+                .Where(x => x.VirtualHostName == "HareDu");
+
+            foreach (var item in result)
+            {
+                Console.WriteLine("Name: {0}", item.VirtualHostName);
+
+                if (item.Limits.TryGetValue("max-connections", out string maxConnections))
+                    Console.WriteLine("max-connections: {0}", maxConnections);
+
+                if (item.Limits.TryGetValue("max-queues", out string maxQueues))
+                    Console.WriteLine("max-queues: {0}", maxQueues);
+                
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
         }
     }
 }

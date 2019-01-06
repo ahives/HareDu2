@@ -15,7 +15,7 @@
     <PackageTags>RabbitMQ</PackageTags>
     <Authors>Albert L. Hives</Authors>
     <RepositoryType>git</RepositoryType>
-    <Copyright>Copyright 2018 Albert L. Hives</Copyright>
+    <Copyright>Copyright 2019 Albert L. Hives</Copyright>
     <WarningLevel>4</WarningLevel>
     <NoWarn>1587,1591,1998,3008,3001</NoWarn>
   </PropertyGroup>
