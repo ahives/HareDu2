@@ -208,7 +208,7 @@ namespace HareDu.Internal.Resources
                 if (string.IsNullOrWhiteSpace(_routingType))
                     _errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
 
-                if (_arguments != null)
+                if (!_arguments.IsNull())
                     _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 

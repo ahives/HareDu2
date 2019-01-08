@@ -30,7 +30,7 @@ namespace HareDu
         Task<Result<IReadOnlyList<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Returns limit information about each virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
@@ -43,7 +43,15 @@ namespace HareDu
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
         Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default);
-        
+
+        /// <summary>
+        /// Defines specified limits on the virtual host on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result> DefineLimits(Action<VirtualHostConfigureLimitsAction> action, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Delete the specified virtual host on the current RabbitMQ server.
         /// </summary>
@@ -51,5 +59,13 @@ namespace HareDu
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
         Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Delete the limits for the specified virtual host on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result> DeleteLimits(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default);
     }
 }

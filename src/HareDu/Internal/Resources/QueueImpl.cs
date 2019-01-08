@@ -54,24 +54,10 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string vhost = impl.VirtualHost.Value;
-            string queue = impl.QueueName.Value;
+            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}";
             
-            var errors = new List<Error>();
-
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (string.IsNullOrWhiteSpace(queue))
-                errors.Add(new ErrorImpl("The name of the queue is missing."));
-
-            if (!impl.Errors.IsNull())
-                errors.AddRange(impl.Errors.Value);
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result result = await Put(url, definition, cancellationToken);
 
@@ -85,26 +71,12 @@ namespace HareDu.Internal.Resources
             var impl = new QueueDeleteActionImpl();
             action(impl);
 
-            string queue = impl.QueueName.Value;
-            string vhost = impl.VirtualHost.Value;
+            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}";
+            if (!string.IsNullOrWhiteSpace(impl.Query.Value))
+                url = $"{url}?{impl.Query.Value}";
             
-            var errors = new List<Error>();
-            
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (string.IsNullOrWhiteSpace(queue))
-                errors.Add(new ErrorImpl("The name of the queue is missing."));
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}";
-
-            string query = impl.Query.Value;
-            
-            if (!string.IsNullOrWhiteSpace(query))
-                url = $"{url}?{query}";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -118,21 +90,10 @@ namespace HareDu.Internal.Resources
             var impl = new QueueEmptyActionImpl();
             action(impl);
 
-            string queue = impl.QueueName.Value;
-            string vhost = impl.VirtualHost.Value;
+            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}/contents";
             
-            var errors = new List<Error>();
-            
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (string.IsNullOrWhiteSpace(queue))
-                errors.Add(new ErrorImpl("The name of the queue is missing."));
-            
-            if (errors.Any())
-                return new FaultedResult(errors);
-
-            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/contents";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -149,28 +110,11 @@ namespace HareDu.Internal.Resources
             QueuePeekDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
-            
-            var errors = new List<Error>();
-            
-            if (definition.Take < 1)
-                errors.Add(new ErrorImpl("Must be set a value greater than 1."));
 
-            if (string.IsNullOrWhiteSpace(definition.Encoding))
-                errors.Add(new ErrorImpl("Encoding must be set to auto or base64."));
-
-            string queue = impl.QueueName.Value;
-            string vhost = impl.VirtualHost.Value;
+            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}/get";
             
-            if (string.IsNullOrWhiteSpace(vhost))
-                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-
-            if (string.IsNullOrWhiteSpace(queue))
-                errors.Add(new ErrorImpl("The name of the queue is missing."));
-            
-            if (errors.Any())
-                return new FaultedResult<QueueInfo>(errors);
-
-            string url = $"api/queues/{SanitizeVirtualHostName(vhost)}/{queue}/get";
+            if (impl.Errors.Value.Any())
+                return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             Result<QueueInfo> result = await Post<QueuePeekDefinition, QueueInfo>(url, definition, cancellationToken);
 
@@ -181,26 +125,37 @@ namespace HareDu.Internal.Resources
         class QueuePeekActionImpl :
             QueuePeekAction
         {
-            static string _vhost;
-            static string _queue;
-            static int _take;
-            static bool _putBackWhenFinished;
-            static string _encoding;
-            static long _truncateIfAbove;
+            string _vhost;
+            string _queue;
+            int _take;
+            bool _putBackWhenFinished;
+            string _encoding;
+            long _truncateIfAbove;
+            readonly List<Error> _errors;
 
             public Lazy<QueuePeekDefinition> Definition { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public QueuePeekActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<QueuePeekDefinition>(
                     () => new QueuePeekDefinitionImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name) => _queue = name;
+            public void Queue(string name)
+            {
+                _queue = name;
+
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
+            }
             
             public void Configure(Action<QueuePeekConfiguration> configuration)
             {
@@ -211,6 +166,12 @@ namespace HareDu.Internal.Resources
                 _putBackWhenFinished = impl.PutBack;
                 _encoding = impl.MessageEncoding;
                 _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
+            
+                if (_take < 1)
+                    _errors.Add(new ErrorImpl("Must be set a value greater than 1."));
+
+                if (string.IsNullOrWhiteSpace(_encoding))
+                    _errors.Add(new ErrorImpl("Encoding must be set to auto or base64."));
             }
 
             public void Target(Action<QueuePeekTarget> target)
@@ -219,6 +180,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             
@@ -286,19 +250,30 @@ namespace HareDu.Internal.Resources
         class QueueEmptyActionImpl :
             QueueEmptyAction
         {
-            static string _vhost;
-            static string _queue;
+            string _vhost;
+            string _queue;
+            readonly List<Error> _errors;
 
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public QueueEmptyActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name) => _queue = name;
+            public void Queue(string name)
+            {
+                _queue = name;
+
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
+            }
             
             public void Target(Action<QueueTarget> target)
             {
@@ -306,6 +281,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             
@@ -325,19 +303,30 @@ namespace HareDu.Internal.Resources
             static string _vhost;
             static string _queue;
             static string _query;
-            
+            readonly List<Error> _errors;
+
             public Lazy<string> Query { get; }
             public Lazy<string> QueueName { get; }
             public Lazy<string> VirtualHost { get; }
+            public Lazy<List<Error>> Errors { get; }
 
             public QueueDeleteActionImpl()
             {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
                 Query = new Lazy<string>(() => _query, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name) => _queue = name;
+            public void Queue(string name)
+            {
+                _queue = name;
+
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
+            }
             
             public void Target(Action<QueueTarget> target)
             {
@@ -345,6 +334,9 @@ namespace HareDu.Internal.Resources
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             public void When(Action<QueueDeleteCondition> condition)
@@ -389,12 +381,13 @@ namespace HareDu.Internal.Resources
         class QueueCreateActionImpl :
             QueueCreateAction
         {
-            static bool _durable;
-            static bool _autoDelete;
-            static string _node;
-            static IDictionary<string, ArgumentValue<object>> _arguments;
-            static string _vhost;
-            static string _queue;
+            bool _durable;
+            bool _autoDelete;
+            string _node;
+            IDictionary<string, ArgumentValue<object>> _arguments;
+            string _vhost;
+            string _queue;
+            readonly List<Error> _errors;
 
             public Lazy<QueueDefinition> Definition { get; }
             public Lazy<string> QueueName { get; }
@@ -403,14 +396,22 @@ namespace HareDu.Internal.Resources
 
             public QueueCreateActionImpl()
             {
-                Errors = new Lazy<List<Error>>(() => GetErrors(_arguments), LazyThreadSafetyMode.PublicationOnly);
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<QueueDefinition>(
                     () => new QueueDefinitionImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name) => _queue = name;
+            public void Queue(string name)
+            {
+                _queue = name;
+
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
+            }
 
             public void Configure(Action<QueueConfiguration> configuration)
             {
@@ -420,6 +421,9 @@ namespace HareDu.Internal.Resources
                 _durable = impl.Durable;
                 _autoDelete = impl.AutoDelete;
                 _arguments = impl.Arguments;
+
+                if (!_arguments.IsNull())
+                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
             public void Target(Action<QueueCreateTarget> target)
@@ -429,11 +433,9 @@ namespace HareDu.Internal.Resources
 
                 _node = impl.NodeName;
                 _vhost = impl.VirtualHostName;
-            }
 
-            List<Error> GetErrors(IDictionary<string, ArgumentValue<object>> arguments)
-            {
-                return arguments.IsNull() ? new List<Error>() : arguments.Select(x => x.Value?.Error).Where(x => !x.IsNull()).ToList();
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             

@@ -125,5 +125,36 @@
                 Console.WriteLine();
             }
         }
+
+        [Test]
+        public async Task Verify_can_define_limits()
+        {
+            Result result = await Client
+                .Factory<VirtualHost>()
+                .DefineLimits(x =>
+                {
+                    x.VirtualHost("HareDu5");
+                    x.Configure(c =>
+                    {
+                        c.SetMaxQueueLimit(100);
+                        c.SetMaxConnectionLimit(1000);
+                    });
+                });
+            
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
+        public async Task Verify_can_delete_limits()
+        {
+            Result result = await Client
+                .Factory<VirtualHost>()
+                .DeleteLimits(x =>
+                {
+                    x.VirtualHost("HareDu3");
+                });
+            
+            Console.WriteLine(result.ToJsonString());
+        }
     }
 }
