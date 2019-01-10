@@ -33,5 +33,10 @@ namespace HareDu.Extensions
             value = source.Data[index];
             return true;
         }
+
+        public static string Normalize(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
     }
 }

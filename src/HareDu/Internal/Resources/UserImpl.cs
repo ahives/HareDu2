@@ -177,6 +177,10 @@ namespace HareDu.Internal.Resources
                 public void Monitoring() => Tags.Add(UserAccessTag.Monitoring);
 
                 public void Management() => Tags.Add(UserAccessTag.Management);
+                
+                public void PolicyMaker() => Tags.Add(UserAccessTag.PolicyMaker);
+
+                public void Impersonator() => Tags.Add(UserAccessTag.Impersonator);
 
                 public override string ToString()
                 {
@@ -193,9 +197,12 @@ namespace HareDu.Internal.Resources
             {
                 public UserDefinitionImpl(string password, string passwordHash, string tags)
                 {
-                    PasswordHash = passwordHash;
-                    Password = password;
-                    Tags = tags;
+                    PasswordHash = passwordHash.Normalize();
+                    Password = password.Normalize();
+                    Tags = tags.Normalize();
+
+                    if (!string.IsNullOrWhiteSpace(Password))
+                        PasswordHash = null;
                 }
 
                 public string PasswordHash { get; }

@@ -166,10 +166,10 @@ namespace HareDu.Internal.Resources
                     _errors.Add(new ErrorImpl("The username and/or password is missing."));
             }
 
-            public void Configure(Action<UserPermissionsConfiguration> definition)
+            public void Configure(Action<UserPermissionsConfiguration> configure)
             {
                 var impl = new UserPermissionsConfigurationImpl();
-                definition(impl);
+                configure(impl);
 
                 _configurePattern = impl.ConfigurePattern;
                 _writePattern = impl.WritePattern;

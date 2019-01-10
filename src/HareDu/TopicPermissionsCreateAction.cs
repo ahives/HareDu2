@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ namespace HareDu
 {
     using System;
 
-    public interface UserPermissionsCreateAction
+    public interface TopicPermissionsCreateAction
     {
         /// <summary>
         /// Specify the user for which the permission should be assigned to.
@@ -26,13 +26,13 @@ namespace HareDu
         /// <summary>
         /// Define how the user permission is to be created.
         /// </summary>
-        /// <param name="configure"></param>
-        void Configure(Action<UserPermissionsConfiguration> configure);
+        /// <param name="definition"></param>
+        void Configure(Action<TopicPermissionsConfiguration> configure);
 
         /// <summary>
         /// Specify the target for which the user permission will be created.
         /// </summary>
         /// <param name="target">Define which user is associated with the permissions that are being created.</param>
-        void Targeting(Action<UserPermissionsTarget> target);
+        void VirtualHost(string name);
     }
 }

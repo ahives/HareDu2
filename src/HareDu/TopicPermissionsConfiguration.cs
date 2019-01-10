@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,26 +13,24 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface UserPermissionsCreateAction
+    public interface TopicPermissionsConfiguration
     {
         /// <summary>
-        /// Specify the user for which the permission should be assigned to.
+        /// 
         /// </summary>
-        /// <param name="username"></param>
-        void User(string username);
+        /// <param name="name"></param>
+        void OnExchange(string name);
 
         /// <summary>
-        /// Define how the user permission is to be created.
+        /// Specify the pattern of what types of writes are allowable for this permission.
         /// </summary>
-        /// <param name="configure"></param>
-        void Configure(Action<UserPermissionsConfiguration> configure);
+        /// <param name="pattern"></param>
+        void UsingWritePattern(string pattern);
 
         /// <summary>
-        /// Specify the target for which the user permission will be created.
+        /// Specify the pattern of what types of reads are allowable for this permission.
         /// </summary>
-        /// <param name="target">Define which user is associated with the permissions that are being created.</param>
-        void Targeting(Action<UserPermissionsTarget> target);
+        /// <param name="pattern"></param>
+        void UsingReadPattern(string pattern);
     }
 }

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,15 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu.Model
 {
-    public static class UserAccessTag
+    using Newtonsoft.Json;
+
+    public interface TopicPermissionsInfo
     {
-        public static readonly string Administrator = "administrator";
-        public static readonly string Monitoring = "monitoring";
-        public static readonly string Management = "management";
-        public static readonly string PolicyMaker = "policymaker";
-        public static readonly string Impersonator = "impersonator";
-        public static readonly string None = string.Empty;
+        [JsonProperty("user")]
+        string User { get; }
+        
+        [JsonProperty("vhost")]
+        string VirtualHost { get; }
+        
+        [JsonProperty("exchange")]
+        string Exchange { get; }
+        
+        [JsonProperty("write")]
+        string Write { get; }
+        
+        [JsonProperty("read")]
+        string Read { get; }
     }
 }

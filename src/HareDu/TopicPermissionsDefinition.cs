@@ -11,16 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal.Resources
+namespace HareDu
 {
     using Newtonsoft.Json;
 
-    public interface VirtualHostLimitsDefinition
+    public interface TopicPermissionsDefinition
     {
-        [JsonProperty("max-connections")]
-        int MaxConnectionLimit { get; }
+        [JsonProperty("exchange")]
+        string Exchange { get; }
         
-        [JsonProperty("max-queues")]
-        int MaxQueueLimit { get; }
+        [JsonProperty("write")]
+        string Write { get; }
+        
+        [JsonProperty("read")]
+        string Read { get; }
     }
 }

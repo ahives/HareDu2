@@ -18,6 +18,7 @@ namespace HareDu.Internal.Resources
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Reflection;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Text;
@@ -107,8 +108,11 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 string request = value.ToJsonString();
+                byte[] requestBytes = Encoding.UTF8.GetBytes(request);
+                var content = new ByteArrayContent(requestBytes);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var responseMessage = await _client.PutAsJsonAsync(url, value, cancellationToken);
+                var responseMessage = await _client.PutAsync(url, content, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
