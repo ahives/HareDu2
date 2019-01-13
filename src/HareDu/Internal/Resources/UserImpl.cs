@@ -36,7 +36,18 @@ namespace HareDu.Internal.Resources
         {
             cancellationToken.RequestCanceled();
 
-            string url = $"api/users";
+            string url = "api/users";
+            
+            Result<IReadOnlyList<UserInfo>> result = await GetAll<UserInfo>(url, cancellationToken);
+
+            return result;
+        }
+
+        public async Task<Result<IReadOnlyList<UserInfo>>> GetAllWithoutPermissions(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = "api/users/without-permissions";
             
             Result<IReadOnlyList<UserInfo>> result = await GetAll<UserInfo>(url, cancellationToken);
 
@@ -148,9 +159,9 @@ namespace HareDu.Internal.Resources
                     _errors.Add(new ErrorImpl("The password is missing."));
             }
 
-            public void WithPasswordHash(string passwordHash)
+            public void WithPasswordHash(string password)
             {
-                _passwordHash = passwordHash;
+                _passwordHash = password.ComputePasswordHash();
             
                 if (string.IsNullOrWhiteSpace(_passwordHash))
                     _errors.Add(new ErrorImpl("The password hash is missing."));
@@ -168,8 +179,13 @@ namespace HareDu.Internal.Resources
             class UserAccessOptionsImpl :
                 UserAccessOptions
             {
-                List<string> Tags { get; } = new List<string>();
+                List<string> Tags { get; }
                 
+                public UserAccessOptionsImpl()
+                {
+                    Tags = new List<string>();
+                }
+
                 public void None() => Tags.Add(UserAccessTag.None);
 
                 public void Administrator() => Tags.Add(UserAccessTag.Administrator);
@@ -197,10 +213,15 @@ namespace HareDu.Internal.Resources
             {
                 public UserDefinitionImpl(string password, string passwordHash, string tags)
                 {
-                    PasswordHash = passwordHash.Normalize();
-                    Password = password.Normalize();
-                    Tags = tags.Normalize();
+                    PasswordHash = passwordHash;
+                    Password = Normalize(password);
+                    Tags = Normalize(tags);
 
+                    string Normalize(string value)
+                    {
+                        return string.IsNullOrWhiteSpace(value) ? null : value;
+                    }
+                    
                     if (!string.IsNullOrWhiteSpace(Password))
                         PasswordHash = null;
                 }

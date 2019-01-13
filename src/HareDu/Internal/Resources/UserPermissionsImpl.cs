@@ -36,7 +36,7 @@ namespace HareDu.Internal.Resources
         {
             cancellationToken.RequestCanceled();
 
-            string url = $"api/users";
+            string url = "api/users";
             
             Result<IReadOnlyList<UserPermissionsInfo>> result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
 

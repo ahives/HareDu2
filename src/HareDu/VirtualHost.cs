@@ -67,5 +67,14 @@ namespace HareDu
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Result> DeleteLimits(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vhost"></param>
+        /// <param name="action"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default);
     }
 }

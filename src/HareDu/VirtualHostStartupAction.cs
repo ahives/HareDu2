@@ -13,12 +13,8 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface VirtualHostDeleteLimitsAction
+    public interface VirtualHostStartupAction
     {
-        /// <summary>
-        /// Defines which virtual host will limits be deleted for.
-        /// </summary>
-        /// <param name="vhost">RabbitMQ virtual host name</param>
-        void For(string vhost);
+        void On(string node);
     }
 }

@@ -30,6 +30,13 @@ namespace HareDu
         Task<Result<IReadOnlyList<UserInfo>>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Returns information about all users that do not have permissions on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result<IReadOnlyList<UserInfo>>> GetAllWithoutPermissions(CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Creates a user on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the user permission will be created.</param>

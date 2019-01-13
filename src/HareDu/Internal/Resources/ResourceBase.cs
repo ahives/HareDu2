@@ -132,8 +132,11 @@ namespace HareDu.Internal.Resources
                     HandleDotsAndSlashes();
 
                 string request = value.ToJsonString();
+                byte[] requestBytes = Encoding.UTF8.GetBytes(request);
+                var content = new ByteArrayContent(requestBytes);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var responseMessage = await _client.PostAsJsonAsync(url, value, cancellationToken);
+                var responseMessage = await _client.PostAsync(url, content, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult<TResult>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
@@ -144,6 +147,25 @@ namespace HareDu.Internal.Resources
             catch (MissingMethodException e)
             {
                 return new FaultedResult<TResult>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
+        }
+
+        protected async Task<Result> PostEmpty(string url, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                var responseMessage = await _client.PostAsync(url, null, cancellationToken);
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
+
+                return new SuccessfulResult(new DebugInfoImpl(url, null));
+            }
+            catch (MissingMethodException e)
+            {
+                return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
 

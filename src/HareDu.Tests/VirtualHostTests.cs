@@ -144,15 +144,22 @@
             Console.WriteLine(result.ToJsonString());
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Verify_can_delete_limits()
         {
             Result result = await Client
                 .Factory<VirtualHost>()
-                .DeleteLimits(x =>
-                {
-                    x.VirtualHost("HareDu3");
-                });
+                .DeleteLimits(x => x.For("HareDu3"));
+            
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test, Explicit]
+        public async Task Verify_can_start_vhost()
+        {
+            Result result = await Client
+                .Factory<VirtualHost>()
+                .Startup("", x => x.On(""));
             
             Console.WriteLine(result.ToJsonString());
         }

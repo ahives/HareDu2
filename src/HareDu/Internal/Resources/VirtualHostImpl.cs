@@ -131,7 +131,57 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
+        public async Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new VirtualHostStartupActionImpl();
+            action(impl);
+
+            string url = $"/api/vhosts/{SanitizeVirtualHostName(vhost)}/start/{impl.Node.Value}";
+
+            var errors = new List<Error>();
+            errors.AddRange(impl.Errors.Value);
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            if (errors.Any())
+                return new FaultedResult(errors, new DebugInfoImpl(url, null));
+
+            Result result = await PostEmpty(url, cancellationToken);
+
+            return result;
+        }
+
         
+        class VirtualHostStartupActionImpl :
+            VirtualHostStartupAction
+        {
+            string _node;
+            readonly List<Error> _errors;
+
+            public Lazy<List<Error>> Errors { get; }
+            public Lazy<string> Node { get; }
+
+            public VirtualHostStartupActionImpl()
+            {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
+                Node = new Lazy<string>(() => _node, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void On(string node)
+            {
+                _node = node;
+                
+                if (string.IsNullOrWhiteSpace(_node))
+                    _errors.Add(new ErrorImpl("RabbitMQ node is missing."));
+            }
+        }
+
+
         class VirtualHostDeleteLimitsActionImpl :
             VirtualHostDeleteLimitsAction
         {
@@ -149,9 +199,9 @@ namespace HareDu.Internal.Resources
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void VirtualHost(string name)
+            public void For(string vhost)
             {
-                _vhost = name;
+                _vhost = vhost;
 
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));

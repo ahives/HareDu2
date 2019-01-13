@@ -32,20 +32,18 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<TopicPermissionsInfo>>> GetAll(
-            CancellationToken cancellationToken = default)
+        public async Task<Result<IReadOnlyList<TopicPermissionsInfo>>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            string url = $"api/topic-permissions";
+            string url = "api/topic-permissions";
             
             Result<IReadOnlyList<TopicPermissionsInfo>> result = await GetAll<TopicPermissionsInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result> Create(Action<TopicPermissionsCreateAction> action,
-            CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<TopicPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -66,8 +64,7 @@ namespace HareDu.Internal.Resources
             return result;
         }
 
-        public async Task<Result> Delete(Action<TopicPermissionsDeleteAction> action,
-            CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<TopicPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
