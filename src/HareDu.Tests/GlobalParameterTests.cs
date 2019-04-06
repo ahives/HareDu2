@@ -14,7 +14,7 @@
         public async Task Should_be_able_to_get_all_global_parameters()
         {
             var result = await Client
-                .Factory<GlobalParameter>()
+                .Resource<GlobalParameter>()
                 .GetAll();
 
             foreach (var parameter in result.Select(x => x.Data))
@@ -32,7 +32,7 @@
         public async Task Verify_can_create_parameter()
         {
             Result result = await Client
-                .Factory<GlobalParameter>()
+                .Resource<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter("");
@@ -53,7 +53,7 @@
         public async Task Verify_can_delete_parameter()
         {
             Result result = await Client
-                .Factory<GlobalParameter>()
+                .Resource<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
             
             Assert.IsFalse(result.HasFaulted);

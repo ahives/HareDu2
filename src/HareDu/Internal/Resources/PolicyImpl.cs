@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class PolicyImpl :
+    class PolicyImpl :
         ResourceBase,
         Policy
     {
@@ -358,7 +358,10 @@ namespace HareDu.Internal.Resources
             class PolicyDefinitionImpl :
                 PolicyDefinition
             {
-                public PolicyDefinitionImpl(string pattern, IDictionary<string, ArgumentValue<object>> arguments, int priority, string applyTo)
+                public PolicyDefinitionImpl(string pattern,
+                    IDictionary<string, ArgumentValue<object>> arguments,
+                    int priority,
+                    string applyTo)
                 {
                     Pattern = pattern;
                     Priority = priority;

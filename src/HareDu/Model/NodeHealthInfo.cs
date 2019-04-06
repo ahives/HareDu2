@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,18 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu.Model
 {
-    using System.Threading;
+    using Newtonsoft.Json;
 
-    static class AsyncTaskExtensions
+    interface NodeHealthInfo
     {
-        internal static void RequestCanceled(this CancellationToken cancellationToken)
-        {
-            if (!cancellationToken.IsCancellationRequested)
-                return;
+        [JsonProperty("status")]
+        string Status { get; }
 
-            cancellationToken.ThrowIfCancellationRequested();
-        }
+        [JsonProperty("reason")]
+        long Reason { get; }
     }
 }

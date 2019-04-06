@@ -13,7 +13,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             Result result = await Client
-                .Factory<Shovel<AMQP091Source, AMQP091Destination>>()
+                .Resource<Shovel<AMQP091Source, AMQP091Destination>>()
                 .Shovel(x =>
                 {
                     x.Configure(c =>

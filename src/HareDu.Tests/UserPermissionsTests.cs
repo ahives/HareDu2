@@ -15,7 +15,7 @@
         public async Task Should_be_able_to_get_all_user_permissions()
         {
             var result = await Client
-                .Factory<UserPermissions>()
+                .Resource<UserPermissions>()
                 .GetAll();
             
             foreach (var access in result.Select(x => x.Data))
@@ -33,7 +33,7 @@
         public async Task TestVerify_can_delete_user_permissions()
         {
             Result result = await Client
-                .Factory<UserPermissions>()
+                .Resource<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User("");
@@ -45,7 +45,7 @@
         public async Task Verify_can_create_user_permissions()
         {
             Result result = await Client
-                .Factory<UserPermissions>()
+                .Resource<UserPermissions>()
                 .Create(x =>
                 {
                     x.User("");

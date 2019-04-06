@@ -22,7 +22,7 @@ namespace HareDu.Internal.Resources
     using System.Threading.Tasks;
     using Extensions;
 
-    internal class GlobalParameterImpl :
+    class GlobalParameterImpl :
         ResourceBase,
         GlobalParameter
     {

@@ -49,5 +49,19 @@ namespace HareDu.Internal.Resources
 
             return result;
         }
+
+        public async Task<Result> NodeHealthy(string node = null, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = string.IsNullOrWhiteSpace(node) ? "api/healthchecks/node" : $"/api/healthchecks/node/{node}";
+
+            Result<NodeHealthInfo> result = await Get<NodeHealthInfo>(url, cancellationToken);
+
+            if (result.HasResult)
+                return new SuccessfulResult(result.DebugInfo);
+
+            return new FaultedResult(result.Errors, result.DebugInfo);
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace HareDu.Internal
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public TResource Factory<TResource>()
+        public TResource Resource<TResource>()
             where TResource : Resource
         {
             Type type = GetType()

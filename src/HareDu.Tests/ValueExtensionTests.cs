@@ -15,7 +15,7 @@
         public void Verify_Where_works()
         {
             IEnumerable<VirtualHostInfo> vhosts = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
 
@@ -32,7 +32,7 @@
         public void Verify_Unwrap_works()
         {
             Result<IEnumerable<VirtualHostInfo>> vhosts = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Unfold();
 
@@ -49,7 +49,7 @@
         public void Verify_Unwravel_works()
         {
             IReadOnlyList<VirtualHostInfo> vhosts = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);
 
@@ -66,7 +66,7 @@
         public void Verify_Any_works()
         {
             bool found = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Any();
             
@@ -77,7 +77,7 @@
         public void Verify_Any_with_predicate_works()
         {
             bool found = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Any(x => x.Name == "HareDu");
             
@@ -88,7 +88,7 @@
         public void Verify_FirstOrDefault_works()
         {
             ExchangeInfo exchange = Client
-                .Factory<Exchange>()
+                .Resource<Exchange>()
                 .GetAll()
                 .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")
                 .FirstOrDefault();

@@ -14,7 +14,7 @@
         public async Task Should_be_able_to_get_all_scoped_parameters()
         {
             var result = await Client
-                .Factory<ScopedParameter>()
+                .Resource<ScopedParameter>()
                 .GetAll();
 
             foreach (var parameter in result.Select(x => x.Data))
@@ -32,7 +32,7 @@
         public async Task Verify_can_create()
         {
             Result result = await Client
-                .Factory<ScopedParameter>()
+                .Resource<ScopedParameter>()
                 .Create(x =>
                 {
                     x.Parameter("test", "me");
@@ -51,7 +51,7 @@
         public async Task Test()
         {
             Result result = await Client
-                .Factory<ScopedParameter>()
+                .Resource<ScopedParameter>()
                 .Delete(x =>
                 {
                     x.Parameter("");

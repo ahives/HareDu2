@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class BindingImpl :
+    class BindingImpl :
         ResourceBase,
         Binding
     {

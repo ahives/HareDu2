@@ -10,7 +10,7 @@ namespace HareDu.Tests
         [Test]
         public async Task QueueResourceTest()
         {
-            var impl = Client.Factory<Queue>();
+            var impl = Client.Resource<Queue>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Queue).IsInstanceOfType(impl));
@@ -19,7 +19,7 @@ namespace HareDu.Tests
         [Test]
         public async Task ExchangeResourceTest()
         {
-            var impl = Client.Factory<Exchange>();
+            var impl = Client.Resource<Exchange>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Exchange).IsInstanceOfType(impl));
@@ -28,7 +28,7 @@ namespace HareDu.Tests
         [Test]
         public async Task NodeResourceTest()
         {
-            var impl = Client.Factory<Node>();
+            var impl = Client.Resource<Node>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Node).IsInstanceOfType(impl));
@@ -37,7 +37,7 @@ namespace HareDu.Tests
         [Test]
         public async Task UserResourceTest()
         {
-            var impl = Client.Factory<User>();
+            var impl = Client.Resource<User>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(User).IsInstanceOfType(impl));
@@ -46,7 +46,7 @@ namespace HareDu.Tests
         [Test]
         public async Task GlobalParameterResourceTest()
         {
-            var impl = Client.Factory<GlobalParameter>();
+            var impl = Client.Resource<GlobalParameter>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(GlobalParameter).IsInstanceOfType(impl));
@@ -55,7 +55,7 @@ namespace HareDu.Tests
         [Test]
         public async Task UserPermissionsResourceTest()
         {
-            var impl = Client.Factory<UserPermissions>();
+            var impl = Client.Resource<UserPermissions>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(UserPermissions).IsInstanceOfType(impl));
@@ -64,7 +64,7 @@ namespace HareDu.Tests
         [Test]
         public async Task PolicyResourceTest()
         {
-            var impl = Client.Factory<Policy>();
+            var impl = Client.Resource<Policy>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Policy).IsInstanceOfType(impl));
@@ -73,7 +73,7 @@ namespace HareDu.Tests
         [Test]
         public async Task BindingResourceTest()
         {
-            var impl = Client.Factory<Binding>();
+            var impl = Client.Resource<Binding>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Binding).IsInstanceOfType(impl));
@@ -82,7 +82,7 @@ namespace HareDu.Tests
         [Test]
         public async Task ScopedParameterResourceTest()
         {
-            var impl = Client.Factory<ScopedParameter>();
+            var impl = Client.Resource<ScopedParameter>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(ScopedParameter).IsInstanceOfType(impl));
@@ -91,7 +91,7 @@ namespace HareDu.Tests
         [Test]
         public async Task VirtualHostResourceTest()
         {
-            var impl = Client.Factory<VirtualHost>();
+            var impl = Client.Resource<VirtualHost>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(VirtualHost).IsInstanceOfType(impl));

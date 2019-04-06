@@ -15,7 +15,7 @@
         public async Task Test()
         {
             Result<IReadOnlyList<ChannelInfo>> result = await Client
-                .Factory<Node>()
+                .Resource<Node>()
                 .GetChannels();
             
             foreach (var node in result.Select(x => x.Data))
@@ -38,7 +38,7 @@
         public async Task Should_be_able_to_get_all_nodes()
         {
             Result<IReadOnlyList<NodeInfo>> result = await Client
-                .Factory<Cluster>()
+                .Resource<Cluster>()
                 .GetNodes();
             
             foreach (var node in result.Select(x => x.Data))
@@ -56,7 +56,7 @@
         public async Task Should_be_able_to_get_all_connections()
         {
             Result<IReadOnlyList<ConnectionInfo>> result = await Client
-                .Factory<Node>()
+                .Resource<Node>()
                 .GetConnections();
 
             foreach (var connection in result.Select(x => x.Data))
@@ -104,7 +104,7 @@
         public async Task Should_be_able_to_get_all_channels()
         {
             Result<IReadOnlyList<ChannelInfo>> result = await Client
-                .Factory<Node>()
+                .Resource<Node>()
                 .GetChannels();
 
             if (result.HasResult)
@@ -177,7 +177,7 @@
         public async Task Should_be_able_to_get_all_consumers()
         {
             Result<IReadOnlyList<ConsumerInfo>> result = await Client
-                .Factory<Node>()
+                .Resource<Node>()
                 .GetConsumers();
 
             if (result.HasResult)
@@ -204,11 +204,11 @@
             }
         }
 
-        [Test]
+        [Test, Explicit]
         public async Task Should_be_able_to_get_all_definitions()
         {
             Result<ServerDefinitionInfo> result = await Client
-                .Factory<Node>()
+                .Resource<Node>()
                 .GetDefinition();
 
             if (result.HasResult)

@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using System.Threading.Tasks;
     using Extensions;
 
-    internal class ShovelImpl :
+    class ShovelImpl :
         ResourceBase,
         Shovel<AMQP091Source, AMQP091Destination>
     {

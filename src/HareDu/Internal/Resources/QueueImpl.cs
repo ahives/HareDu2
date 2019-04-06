@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class QueueImpl :
+    class QueueImpl :
         ResourceBase,
         Queue
     {
@@ -537,7 +537,10 @@ namespace HareDu.Internal.Resources
             class QueueDefinitionImpl :
                 QueueDefinition
             {
-                public QueueDefinitionImpl(bool durable, bool autoDelete, string node, IDictionary<string, ArgumentValue<object>> arguments)
+                public QueueDefinitionImpl(bool durable,
+                    bool autoDelete,
+                    string node,
+                    IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     Durable = durable;
                     AutoDelete = autoDelete;

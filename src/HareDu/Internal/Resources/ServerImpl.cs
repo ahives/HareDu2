@@ -19,7 +19,7 @@ namespace HareDu.Internal.Resources
     using System.Threading.Tasks;
     using Model;
 
-    internal class ServerImpl :
+    class ServerImpl :
         ResourceBase,
         Server
     {

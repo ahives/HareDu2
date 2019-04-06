@@ -34,5 +34,13 @@ namespace HareDu
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Result<IReadOnlyList<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Runs a test to check if the current RabbitMQ node is healthy.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result> NodeHealthy(string node = null, CancellationToken cancellationToken = default);
     }
 }

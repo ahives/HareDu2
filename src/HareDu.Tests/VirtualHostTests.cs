@@ -15,7 +15,7 @@
         public async Task Should_be_able_to_get_all_vhosts()
         {
             Result<IReadOnlyList<VirtualHostInfo>> result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll();
 
             foreach (var vhost in result.Select(x => x.Data))
@@ -31,7 +31,7 @@
         public async Task Verify_GetAll_HasResult_works()
         {
             Result<IReadOnlyList<VirtualHostInfo>> result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll();
 
             Assert.IsTrue(result.HasResult);
@@ -41,7 +41,7 @@
         public async Task Verify_filtered_GetAll_works()
         {
             IReadOnlyList<VirtualHostInfo> result = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
 
@@ -58,7 +58,7 @@
         public async Task Verify_Create_works()
         {
             Result result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .Create(x =>
                 {
                     x.VirtualHost("HareDu7");
@@ -75,7 +75,7 @@
         public async Task Verify_Delete_works()
         {
             Result result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .Delete(x => x.VirtualHost("HareDu7"));
 
             Console.WriteLine(result.ToJsonString());
@@ -85,7 +85,7 @@
         public async Task Verify_can_get_all_limits()
         {
             Result<IReadOnlyList<VirtualHostLimits>> result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAllLimits();
             
             foreach (var item in result.Select(x => x.Data))
@@ -107,7 +107,7 @@
         public async Task Verify_can_get_limits_of_specified_vhost()
         {
             var result = Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAllLimits()
                 .Where(x => x.VirtualHostName == "HareDu");
 
@@ -130,7 +130,7 @@
         public async Task Verify_can_define_limits()
         {
             Result result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .DefineLimits(x =>
                 {
                     x.VirtualHost("HareDu5");
@@ -148,7 +148,7 @@
         public async Task Verify_can_delete_limits()
         {
             Result result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .DeleteLimits(x => x.For("HareDu3"));
             
             Console.WriteLine(result.ToJsonString());
@@ -158,7 +158,7 @@
         public async Task Verify_can_start_vhost()
         {
             Result result = await Client
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .Startup("", x => x.On(""));
             
             Console.WriteLine(result.ToJsonString());

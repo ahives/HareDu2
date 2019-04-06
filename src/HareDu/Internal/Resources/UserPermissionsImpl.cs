@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class UserPermissionsImpl :
+    class UserPermissionsImpl :
         ResourceBase,
         UserPermissions
     {

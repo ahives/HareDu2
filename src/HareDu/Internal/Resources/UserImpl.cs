@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class UserImpl :
+    class UserImpl :
         ResourceBase,
         User
     {
@@ -214,13 +214,11 @@ namespace HareDu.Internal.Resources
                 public UserDefinitionImpl(string password, string passwordHash, string tags)
                 {
                     PasswordHash = passwordHash;
+
+                    string Normalize(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+
                     Password = Normalize(password);
                     Tags = Normalize(tags);
-
-                    string Normalize(string value)
-                    {
-                        return string.IsNullOrWhiteSpace(value) ? null : value;
-                    }
                     
                     if (!string.IsNullOrWhiteSpace(Password))
                         PasswordHash = null;

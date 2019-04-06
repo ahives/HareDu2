@@ -15,7 +15,7 @@
         public async Task Should_be_able_to_get_all_policies()
         {
             Result<IReadOnlyList<PolicyInfo>> result = await Client
-                .Factory<Policy>()
+                .Resource<Policy>()
                 .GetAll();
 
             foreach (var policy in result.Select(x => x.Data))
@@ -34,7 +34,7 @@
         public async Task Verify_can_create_policy()
         {
             Result result = await Client
-                .Factory<Policy>()
+                .Resource<Policy>()
                 .Create(x =>
                 {
                     x.Policy("P5");
@@ -60,7 +60,7 @@
         public async Task Verify_cannot_create_policy()
         {
             Result result = await Client
-                .Factory<Policy>()
+                .Resource<Policy>()
                 .Create(x =>
                 {
                     x.Policy("P4");
@@ -87,7 +87,7 @@
         public async Task Verify_can_delete_policy()
         {
             Result result = await Client
-                .Factory<Policy>()
+                .Resource<Policy>()
                 .Delete(x =>
                 {
                     x.Policy("P4");

@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class ScopedParameterImpl :
+    class ScopedParameterImpl :
         ResourceBase,
         ScopedParameter
     {

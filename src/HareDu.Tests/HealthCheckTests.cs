@@ -15,7 +15,7 @@
         public async Task Verify_IsHealthy_works()
         {
             Result<ServerHealth> result = await Client
-                .Factory<Server>()
+                .Resource<Server>()
                 .HealthCheck(x =>
                 {
                     x.VirtualHost("HareDu");
@@ -30,7 +30,7 @@
         public async Task Verify_GetClusterDetails_works()
         {
             Result<ClusterInfo> result = await Client
-                .Factory<Cluster>()
+                .Resource<Cluster>()
                 .GetDetails();
 
             Console.WriteLine("ClusterName: {0}", result.Data.ClusterName);

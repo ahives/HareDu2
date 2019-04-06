@@ -319,7 +319,11 @@ namespace HareDu.Internal.Resources
             class ExchangeDefinitionImpl :
                 ExchangeDefinition
             {
-                public ExchangeDefinitionImpl(string routingType, bool durable, bool autoDelete, bool @internal, IDictionary<string, ArgumentValue<object>> arguments)
+                public ExchangeDefinitionImpl(string routingType,
+                    bool durable,
+                    bool autoDelete,
+                    bool @internal,
+                    IDictionary<string, ArgumentValue<object>> arguments)
                 {
                     RoutingType = routingType;
                     Durable = durable;

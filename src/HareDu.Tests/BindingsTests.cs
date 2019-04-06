@@ -15,7 +15,7 @@
         public async Task Should_be_able_to_get_all_bindings()
         {
             var result = await Client
-                .Factory<Binding>()
+                .Resource<Binding>()
                 .GetAll();
             
             foreach (var binding in result.Select(x => x.Data))
@@ -37,7 +37,7 @@
         public async Task Verify_can_add_arguments()
         {
             Result<BindingInfo> result = await Client
-                .Factory<Binding>()
+                .Resource<Binding>()
                 .Create(x =>
                 {
                     x.Binding(b =>
@@ -65,7 +65,7 @@
         public async Task Verify_can_delete_binding()
         {
             Result result = await Client
-                .Factory<Binding>()
+                .Resource<Binding>()
                 .Delete(x =>
                 {
                     x.Binding(b =>

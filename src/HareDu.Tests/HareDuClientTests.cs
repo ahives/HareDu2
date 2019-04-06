@@ -57,7 +57,7 @@
 
             IEnumerable<VirtualHostInfo> vhosts = HareDuClient
                 .Initialize(config)
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
             
@@ -79,7 +79,7 @@
                     x.ConnectTo("http://localhost:15672");
                     x.UsingCredentials("guest", "guest");
                 })
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
             
@@ -99,7 +99,7 @@
                 .Initialize(() => new HareDuClientSettingsImpl(
                     "http://localhost:15672",
                     new HareDuCredentialsImpl("guest", "guest")))
-                .Factory<VirtualHost>()
+                .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
                         

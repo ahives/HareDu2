@@ -16,7 +16,7 @@
         public async Task Should_be_able_to_get_all_exchanges()
         {
             var result = await Client
-                .Factory<Exchange>()
+                .Resource<Exchange>()
                 .GetAll();
 
             foreach (var exchange in result.Select(x => x.Data))
@@ -38,7 +38,7 @@
         public async Task Verify_can_filter_exchanges()
         {
             Result<IReadOnlyList<ExchangeInfo>> result = await Client
-                .Factory<Exchange>()
+                .Resource<Exchange>()
                 .GetAll();
 
             foreach (var exchange in result.Where(x => x.Name == "amq.*"))
@@ -60,7 +60,7 @@
         public async Task Verify_can_create_exchange()
         {
             Result result = await Client
-                .Factory<Exchange>()
+                .Resource<Exchange>()
                 .Create(x =>
                 {
                     x.Exchange("E5");
@@ -85,7 +85,7 @@
         public async Task Verify_can_delete_exchange()
         {
             Result result = await Client
-                .Factory<Exchange>()
+                .Resource<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange("E3");

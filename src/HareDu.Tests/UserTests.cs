@@ -15,7 +15,7 @@
         public async Task Verify_can_get_all_users()
         {
             var result = await Client
-                .Factory<User>()
+                .Resource<User>()
                 .GetAll();
 
             foreach (var user in result.Select(x => x.Data))
@@ -33,7 +33,7 @@
         public async Task Verify_can_get_all_users_without_permissions()
         {
             var result = await Client
-                .Factory<User>()
+                .Resource<User>()
                 .GetAllWithoutPermissions();
 
             foreach (var user in result.Select(x => x.Data))
@@ -51,7 +51,7 @@
         public async Task Test1()
         {
             Result result = await Client
-                .Factory<User>()
+                .Resource<User>()
                 .Create(x =>
                 {
                     x.Username("testuser3");
@@ -71,7 +71,7 @@
         public async Task Test()
         {
             Result result = await Client
-                .Factory<User>()
+                .Resource<User>()
                 .Delete(x => x.User(""));
         }
     }

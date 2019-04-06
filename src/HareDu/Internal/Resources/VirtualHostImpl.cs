@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Model;
     using Newtonsoft.Json.Serialization;
 
-    internal class VirtualHostImpl :
+    class VirtualHostImpl :
         ResourceBase,
         VirtualHost
     {

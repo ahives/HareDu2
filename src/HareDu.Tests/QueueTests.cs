@@ -15,7 +15,7 @@
         public async Task Verify_can_create_queue()
         {
             Result result = await Client
-                .Factory<Queue>()
+                .Resource<Queue>()
                 .Create(x =>
                 {
                     x.Queue("TestQueue31");
@@ -35,7 +35,7 @@
         public async Task Should_be_able_to_get_all_queues()
         {
             var result = await Client
-                .Factory<Queue>()
+                .Resource<Queue>()
                 .GetAll();
             
             foreach (var queue in result.Select(x => x.Data))
@@ -55,7 +55,7 @@
         public async Task Verify_can_get_all_json()
         {
             Result<IEnumerable<QueueInfo>> result = await Client
-                .Factory<Queue>()
+                .Resource<Queue>()
                 .GetAll();
             
             Assert.IsFalse(result.HasFaulted);
@@ -66,7 +66,7 @@
         public async Task Verify_can_delete_queue()
         {
             Result result = await Client
-                .Factory<Queue>()
+                .Resource<Queue>()
                 .Delete(x =>
                 {
                     x.Queue("TestQueue10");
@@ -86,7 +86,7 @@
         public async Task Verify_can_peek_messages()
         {
             Result<QueueInfo> result = await Client
-                .Factory<Queue>()
+                .Resource<Queue>()
                 .Peek(x =>
                 {
                     x.Queue("Queue1");
@@ -108,7 +108,7 @@
         public async Task Verify_can_empty_queue()
         {
             Result result = await Client
-                .Factory<Queue>()
+                .Resource<Queue>()
                 .Empty(x =>
                 {
                     x.Queue("");
