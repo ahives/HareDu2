@@ -25,7 +25,7 @@ namespace HareDu.Model
         string RatesMode { get; }
 
         [JsonProperty("exchange_types")]
-        IEnumerable<ExchangeType> ExchangeTypes { get; }
+        IReadOnlyList<ExchangeType> ExchangeTypes { get; }
 
         [JsonProperty("rabbitmq_version")]
         string RabbitMqVersion { get; }
@@ -55,9 +55,9 @@ namespace HareDu.Model
         string Node { get; }
 
         [JsonProperty("listeners")]
-        IEnumerable<Listener> Listeners { get; }
+        IReadOnlyList<Listener> Listeners { get; }
 
         [JsonProperty("contexts")]
-        IEnumerable<Context> Contexts { get; }
+        IReadOnlyList<Context> Contexts { get; }
     }
 }

@@ -31,6 +31,6 @@ namespace HareDu.Model
         string Port { get; }
         
         [JsonProperty("socket_opts")]
-        IEnumerable<SocketOptions> SocketOptions { get; }
+        IReadOnlyList<SocketOptions> SocketOptions { get; }
     }
 }

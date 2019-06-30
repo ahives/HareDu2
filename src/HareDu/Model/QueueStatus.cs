@@ -28,7 +28,7 @@ namespace HareDu.Model
         long Q2 { get; }
         
         [JsonProperty("delta")]
-        IEnumerable<object> Delta { get; }
+        IReadOnlyList<object> Delta { get; }
         
         [JsonProperty("q3")]
         long Q3 { get; }

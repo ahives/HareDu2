@@ -55,7 +55,7 @@
             }
         }";
 
-            IEnumerable<VirtualHostInfo> vhosts = HareDuClient
+            var vhosts = HareDuClient
                 .Initialize(config)
                 .Resource<VirtualHost>()
                 .GetAll()
@@ -73,7 +73,7 @@
         [Test]
         public void Verify_can_init_client_from_behavior_description()
         {
-            IEnumerable<VirtualHostInfo> vhosts = HareDuClient
+            var vhosts = HareDuClient
                 .Initialize(x =>
                 {
                     x.ConnectTo("http://localhost:15672");

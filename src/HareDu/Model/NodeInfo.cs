@@ -55,16 +55,16 @@ namespace HareDu.Model
         int Processors { get; }
 
         [JsonProperty("exchange_types")]
-        IEnumerable<ExchangeType> ExchangeTypes { get; }
+        IReadOnlyList<ExchangeType> ExchangeTypes { get; }
 
         [JsonProperty("auth_mechanisms")]
-        IEnumerable<AuthenticationMechanism> AuthenticationMechanisms { get; }
+        IReadOnlyList<AuthenticationMechanism> AuthenticationMechanisms { get; }
 
         [JsonProperty("applications")]
-        IEnumerable<Application> Applications { get; }
+        IReadOnlyList<Application> Applications { get; }
 
         [JsonProperty("contexts")]
-        IEnumerable<Context> Contexts { get; }
+        IReadOnlyList<Context> Contexts { get; }
 
         [JsonProperty("log_file")]
         string LogFile { get; }
@@ -79,7 +79,7 @@ namespace HareDu.Model
         long NetworkTickTime { get; }
 
         [JsonProperty("enabled_plugins")]
-        IEnumerable<string> EnabledPlugins { get; }
+        IReadOnlyList<string> EnabledPlugins { get; }
 
         [JsonProperty("name")]
         string Name { get; }
