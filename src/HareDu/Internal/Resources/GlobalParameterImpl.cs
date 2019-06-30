@@ -21,6 +21,7 @@ namespace HareDu.Internal.Resources
     using System.Threading;
     using System.Threading.Tasks;
     using Extensions;
+    using Model;
 
     class GlobalParameterImpl :
         ResourceBase,
@@ -31,13 +32,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<GlobalParameterInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/global-parameters";
             
-            Result<IReadOnlyList<GlobalParameterInfo>> result = await GetAll<GlobalParameterInfo>(url, cancellationToken);
+            Result<GlobalParameterInfo> result = await GetAll<GlobalParameterInfo>(url, cancellationToken);
 
             return result;
         }

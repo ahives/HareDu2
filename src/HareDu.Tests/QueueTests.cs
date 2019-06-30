@@ -14,7 +14,7 @@
         [Test, Explicit]
         public async Task Verify_can_create_queue()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Queue>()
                 .Create(x =>
                 {
@@ -54,7 +54,7 @@
         [Test, Explicit]
         public async Task Verify_can_get_all_json()
         {
-            Result<IEnumerable<QueueInfo>> result = await Client
+            var result = await Client
                 .Resource<Queue>()
                 .GetAll();
             
@@ -65,7 +65,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_queue()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Queue>()
                 .Delete(x =>
                 {
@@ -85,7 +85,7 @@
         [Test, Explicit]
         public async Task Verify_can_peek_messages()
         {
-            Result<QueueInfo> result = await Client
+            var result = await Client
                 .Resource<Queue>()
                 .Peek(x =>
                 {
@@ -107,7 +107,7 @@
         [Test, Explicit]
         public async Task Verify_can_empty_queue()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Queue>()
                 .Empty(x =>
                 {

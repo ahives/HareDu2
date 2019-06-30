@@ -34,7 +34,7 @@ namespace HareDu.Tests
         [Test]
         public void Verify_can_filter_topic_permissions()
         {
-            IReadOnlyList<TopicPermissionsInfo> result = Client
+            var result = Client
                 .Resource<TopicPermissions>()
                 .GetAll()
                 .Where(x => x.VirtualHost == "HareDu");
@@ -53,7 +53,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_user_permissions()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<TopicPermissions>()
                 .Create(x =>
                 {
@@ -73,7 +73,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task TestVerify_can_delete_user_permissions()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<TopicPermissions>()
                 .Delete(x =>
                 {

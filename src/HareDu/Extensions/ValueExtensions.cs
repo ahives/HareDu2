@@ -13,18 +13,13 @@
 // limitations under the License.
 namespace HareDu.Extensions
 {
-    using System.Collections.Generic;
-
     public static class ValueExtensions
     {
-        public static bool IsNull<T>(this T value)
-        {
-            return value == null;
-        }
+        public static bool IsNull<T>(this T value) => value == null;
 
-        public static bool TryGetValue<T>(this Result<IReadOnlyList<T>> source, int index, out T value)
+        public static bool TryGetValue<T>(this Result<T> source, int index, out T value)
         {
-            if (!source.HasResult || index < 0 || index >= source.Data.Count)
+            if (!source.HasData || index < 0 || index >= source.Data.Count)
             {
                 value = default;
                 return false;

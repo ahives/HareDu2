@@ -14,7 +14,7 @@
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_policies()
         {
-            Result<IReadOnlyList<PolicyInfo>> result = await Client
+            var result = await Client
                 .Resource<Policy>()
                 .GetAll();
 
@@ -33,7 +33,7 @@
         [Test, Explicit]
         public async Task Verify_can_create_policy()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Policy>()
                 .Create(x =>
                 {
@@ -59,7 +59,7 @@
         [Test, Explicit]
         public async Task Verify_cannot_create_policy()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Policy>()
                 .Create(x =>
                 {
@@ -86,7 +86,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_policy()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Policy>()
                 .Delete(x =>
                 {

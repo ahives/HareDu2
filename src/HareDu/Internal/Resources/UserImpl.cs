@@ -32,24 +32,24 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<UserInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<UserInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/users";
             
-            Result<IReadOnlyList<UserInfo>> result = await GetAll<UserInfo>(url, cancellationToken);
+            Result<UserInfo> result = await GetAll<UserInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<IReadOnlyList<UserInfo>>> GetAllWithoutPermissions(CancellationToken cancellationToken = default)
+        public async Task<Result<UserInfo>> GetAllWithoutPermissions(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/users/without-permissions";
             
-            Result<IReadOnlyList<UserInfo>> result = await GetAll<UserInfo>(url, cancellationToken);
+            Result<UserInfo> result = await GetAll<UserInfo>(url, cancellationToken);
 
             return result;
         }

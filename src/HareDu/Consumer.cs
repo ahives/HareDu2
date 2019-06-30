@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@ namespace HareDu
     using System.Threading.Tasks;
     using Model;
 
-    public interface Node :
+    public interface Consumer :
         Resource
     {
         /// <summary>
-        /// 
+        /// Returns all consumers on the current RabbitMQ node.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result<NodeInfo>> GetAll(CancellationToken cancellationToken = default);
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<ConsumerInfo>> GetAll(CancellationToken cancellationToken = default);
     }
 }

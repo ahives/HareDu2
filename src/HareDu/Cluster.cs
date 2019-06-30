@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Model;
@@ -24,23 +23,8 @@ namespace HareDu
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">Token used to cancel the current thread</param>
         /// <returns></returns>
         Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result<IReadOnlyList<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Runs a test to check if the current RabbitMQ node is healthy.
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> NodeHealthy(string node = null, CancellationToken cancellationToken = default);
     }
 }

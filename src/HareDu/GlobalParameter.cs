@@ -17,6 +17,7 @@ namespace HareDu
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using Model;
 
     public interface GlobalParameter :
         Resource
@@ -26,7 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IReadOnlyList<GlobalParameterInfo>>> GetAll(CancellationToken cancellationToken = default);
+        Task<Result<GlobalParameterInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Creates the specified global parameter on the current RabbitMQ node.

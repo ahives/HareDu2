@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,17 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu
 {
-    using Newtonsoft.Json;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Model;
 
-    public interface ServerHealth :
+    public interface Channel :
         Resource
     {
-        [JsonProperty("status")]
-        string Status { get; }
-        
-        [JsonProperty("reason")]
-        string Reason { get; }
+        /// <summary>
+        /// Returns all channels on the current RabbitMQ node.
+        /// </summary>
+        /// <param name="cancellationToken">Token used to cancel the current thread</param>
+        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        Task<Result<ChannelInfo>> GetAll(CancellationToken cancellationToken = default);
     }
 }

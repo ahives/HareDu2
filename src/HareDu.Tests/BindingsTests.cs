@@ -36,7 +36,7 @@
         [Test, Explicit]
         public async Task Verify_can_add_arguments()
         {
-            Result<BindingInfo> result = await Client
+            var result = await Client
                 .Resource<Binding>()
                 .Create(x =>
                 {
@@ -64,7 +64,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_binding()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Binding>()
                 .Delete(x =>
                 {

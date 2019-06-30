@@ -20,37 +20,37 @@ namespace HareDu.Extensions
 
     public static class LinqExtensions
     {
-        public static T Single<T>(this Task<Result<IReadOnlyList<T>>> source)
+        public static T Single<T>(this Task<Result<T>> source)
         {
             return source.Select(x => x.Data).Single();
         }
 
-        public static T SingleOrDefault<T>(this Task<Result<IReadOnlyList<T>>> source)
+        public static T SingleOrDefault<T>(this Task<Result<T>> source)
         {
             return source.Select(x => x.Data).SingleOrDefault();
         }
 
-        public static T SingleOrDefault<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
+        public static T SingleOrDefault<T>(this Task<Result<T>> source, Func<T, bool> predicate)
         {
             return source.Select(x => x.Data).SingleOrDefault(predicate);
         }
 
-        public static T FirstOrDefault<T>(this Task<Result<IReadOnlyList<T>>> source)
+        public static T FirstOrDefault<T>(this Task<Result<T>> source)
         {
             return source.Select(x => x.Data).FirstOrDefault();
         }
 
-        public static T FirstOrDefault<T>(this Task<Result<IEnumerable<T>>> source, Func<T, bool> predicate)
+        public static T FirstOrDefault<T>(this Task<Result<T>> source, Func<T, bool> predicate)
         {
             return source.Select(x => x.Data).FirstOrDefault(predicate);
         }
 
-        public static bool Any<T>(this Task<Result<IReadOnlyList<T>>> source)
+        public static bool Any<T>(this Task<Result<T>> source)
         {
             return source.Select(x => x.Data).Any();
         }
 
-        public static bool Any<T>(this Task<Result<IReadOnlyList<T>>> source, Func<T, bool> predicate)
+        public static bool Any<T>(this Task<Result<T>> source, Func<T, bool> predicate)
         {
             return source.Select(x => x.Data).Any(predicate);
         }

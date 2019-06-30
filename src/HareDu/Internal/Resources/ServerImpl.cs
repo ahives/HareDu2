@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Internal.Resources
 {
-    using System;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -28,52 +27,15 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<ServerHealth>> HealthCheck(Action<HealthCheckAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result<ServerDefinitionInfo>> GetDefinition(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            var impl = new HealthCheckActionImpl();
-            action(impl);
-
-            string url;
+            string url = "api/definitions";
             
-            switch (impl.CheckUpType)
-            {
-                case HealthCheckType.VirtualHost:
-                    url = $"api/aliveness-test/{SanitizeVirtualHostName(impl.ResourceName)}";
-                    break;
-                    
-                case HealthCheckType.Node:
-                    url = $"api/healthchecks/node/{impl.ResourceName}";
-                    break;
-                    
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            Result<ServerHealth> result = await Get<ServerHealth>(url, cancellationToken);
+            Result<ServerDefinitionInfo> result = await Get<ServerDefinitionInfo>(url, cancellationToken);
 
             return result;
-        }
-
-        
-        class HealthCheckActionImpl :
-            HealthCheckAction
-        {
-            public string ResourceName { get; private set; }
-            public HealthCheckType CheckUpType { get; private set; }
-            
-            public void VirtualHost(string name)
-            {
-                CheckUpType = HealthCheckType.VirtualHost;
-                ResourceName = name;
-            }
-
-            public void Node(string name)
-            {
-                CheckUpType = HealthCheckType.Node;
-                ResourceName = name;
-            }
         }
     }
 }

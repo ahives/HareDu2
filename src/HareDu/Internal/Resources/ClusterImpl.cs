@@ -13,13 +13,12 @@
 // limitations under the License.
 namespace HareDu.Internal.Resources
 {
-    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Model;
 
-    internal class ClusterImpl :
+    class ClusterImpl :
         ResourceBase,
         Cluster
     {
@@ -37,31 +36,6 @@ namespace HareDu.Internal.Resources
             Result<ClusterInfo> result = await Get<ClusterInfo>(url, cancellationToken);
 
             return result;
-        }
-
-        public async Task<Result<IReadOnlyList<NodeInfo>>> GetNodes(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = "api/nodes";
-            
-            Result<IReadOnlyList<NodeInfo>> result = await GetAll<NodeInfo>(url, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result> NodeHealthy(string node = null, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = string.IsNullOrWhiteSpace(node) ? "api/healthchecks/node" : $"/api/healthchecks/node/{node}";
-
-            Result<NodeHealthInfo> result = await Get<NodeHealthInfo>(url, cancellationToken);
-
-            if (result.HasResult)
-                return new SuccessfulResult(result.DebugInfo);
-
-            return new FaultedResult(result.Errors, result.DebugInfo);
         }
     }
 }

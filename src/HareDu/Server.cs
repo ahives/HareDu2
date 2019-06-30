@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Internal.Resources
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Model;
@@ -22,11 +21,10 @@ namespace HareDu
         Resource
     {
         /// <summary>
-        /// Perform a health check on a virtual host or node.
+        /// Returns all object definitions on the current RabbitMQ node.
         /// </summary>
-        /// <param name="action">Constraints of how the </param>
-        /// <param name="cancellationToken">Token used cancel the current thread</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<ServerHealth>> HealthCheck(Action<HealthCheckAction> action, CancellationToken cancellationToken = default);
+        Task<Result<ServerDefinitionInfo>> GetDefinition(CancellationToken cancellationToken = default);
     }
 }

@@ -14,7 +14,7 @@
         [Test, Explicit]
         public void Verify_Where_works()
         {
-            IEnumerable<VirtualHostInfo> vhosts = Client
+            var vhosts = Client
                 .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
@@ -31,7 +31,7 @@
         [Test, Explicit]
         public void Verify_Unwrap_works()
         {
-            Result<IEnumerable<VirtualHostInfo>> vhosts = Client
+            var vhosts = Client
                 .Resource<VirtualHost>()
                 .GetAll()
                 .Unfold();
@@ -48,7 +48,7 @@
         [Test, Explicit]
         public void Verify_Unwravel_works()
         {
-            IReadOnlyList<VirtualHostInfo> vhosts = Client
+            var vhosts = Client
                 .Resource<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);

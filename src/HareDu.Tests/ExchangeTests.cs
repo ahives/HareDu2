@@ -1,8 +1,6 @@
 ﻿namespace HareDu.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Extensions;
     using Model;
@@ -37,7 +35,7 @@
         [Test, Explicit]
         public async Task Verify_can_filter_exchanges()
         {
-            Result<IReadOnlyList<ExchangeInfo>> result = await Client
+            Result<ExchangeInfo> result = await Client
                 .Resource<Exchange>()
                 .GetAll();
 
@@ -59,7 +57,7 @@
         [Test, Explicit]
         public async Task Verify_can_create_exchange()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Exchange>()
                 .Create(x =>
                 {
@@ -84,7 +82,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_exchange()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<Exchange>()
                 .Delete(x =>
                 {

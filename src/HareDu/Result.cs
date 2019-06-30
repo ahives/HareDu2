@@ -23,11 +23,11 @@ namespace HareDu
         IReadOnlyList<Error> Errors { get; }
         bool HasFaulted { get; }
     }
-
+    
     public interface Result<out TResult> :
         Result
     {
-        TResult Data { get; }
-        bool HasResult { get; }
+        IReadOnlyList<TResult> Data { get; }
+        bool HasData { get; }
     }
 }

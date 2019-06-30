@@ -27,14 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<IReadOnlyList<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Returns limit information about each virtual host on the current RabbitMQ server.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result<IReadOnlyList<VirtualHostLimits>>> GetAllLimits(CancellationToken cancellationToken = default);
+        Task<Result<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates the specified virtual host on the current RabbitMQ server.
@@ -45,28 +38,12 @@ namespace HareDu
         Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Defines specified limits on the virtual host on the current RabbitMQ server.
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> DefineLimits(Action<VirtualHostConfigureLimitsAction> action, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Delete the specified virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the virtual host will be delete.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
         Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Delete the limits for the specified virtual host on the current RabbitMQ server.
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result> DeleteLimits(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 

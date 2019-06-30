@@ -11,20 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Model
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
+    using Newtonsoft.Json;
 
-    public interface Node :
+    public interface ServerHealthInfo :
         Resource
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Result<NodeInfo>> GetAll(CancellationToken cancellationToken = default);
+        [JsonProperty("status")]
+        string Status { get; }
+        
+        [JsonProperty("reason")]
+        string Reason { get; }
     }
 }

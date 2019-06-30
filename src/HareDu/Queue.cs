@@ -27,7 +27,7 @@ namespace HareDu
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<IReadOnlyList<QueueInfo>>> GetAll(CancellationToken cancellationToken = default);
+        Task<Result<QueueInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Creates the specified queue on the target virtual host and perhaps RabbitMQ node.

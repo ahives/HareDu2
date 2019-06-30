@@ -32,7 +32,7 @@
         [Test, Explicit]
         public async Task TestVerify_can_delete_user_permissions()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<UserPermissions>()
                 .Delete(x =>
                 {
@@ -44,7 +44,7 @@
         [Test, Explicit]
         public async Task Verify_can_create_user_permissions()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<UserPermissions>()
                 .Create(x =>
                 {

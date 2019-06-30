@@ -13,18 +13,20 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Model;
 
-    public interface Node :
+    public interface ServerHealth :
         Resource
     {
         /// <summary>
-        /// 
+        /// Perform a health check on a virtual host or node.
         /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <param name="action">Constraints of how the </param>
+        /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<NodeInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<Result<ServerHealthInfo>> GetDetails(Action<HealthCheckAction> action, CancellationToken cancellationToken = default);
     }
 }

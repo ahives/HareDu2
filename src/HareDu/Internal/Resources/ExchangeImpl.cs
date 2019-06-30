@@ -23,7 +23,7 @@ namespace HareDu.Internal.Resources
     using Extensions;
     using Model;
 
-    internal class ExchangeImpl :
+    class ExchangeImpl :
         ResourceBase,
         Exchange
     {
@@ -32,13 +32,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<ExchangeInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<ExchangeInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/exchanges";
             
-            Result<IReadOnlyList<ExchangeInfo>> result = await GetAll<ExchangeInfo>(url, cancellationToken);
+            Result<ExchangeInfo> result = await GetAll<ExchangeInfo>(url, cancellationToken);
 
             return result;
         }
@@ -76,7 +76,7 @@ namespace HareDu.Internal.Resources
                 url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return new FaultedResult<ExchangeInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 

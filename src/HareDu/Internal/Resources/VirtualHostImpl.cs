@@ -32,24 +32,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<VirtualHostInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
             
-            Result<IReadOnlyList<VirtualHostInfo>> result = await GetAll<VirtualHostInfo>(url, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result<IReadOnlyList<VirtualHostLimits>>> GetAllLimits(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = "api/vhost-limits";
-            
-            Result<IReadOnlyList<VirtualHostLimits>> result = await GetAll<VirtualHostLimits>(url, cancellationToken);
+            Result<VirtualHostInfo> result = await GetAll<VirtualHostInfo>(url, cancellationToken);
 
             return result;
         }
@@ -64,25 +53,6 @@ namespace HareDu.Internal.Resources
             VirtualHostDefinition definition = impl.Definition.Value;
 
             string url = $"api/vhosts/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
-
-            if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
-
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result> DefineLimits(Action<VirtualHostConfigureLimitsAction> action, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            var impl = new VirtualHostConfigureLimitsActionImpl();
-            action(impl);
-
-            VirtualHostLimitsDefinition definition = impl.Definition.Value;
-
-            string url = $"api/vhost-limits/vhost/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -108,23 +78,6 @@ namespace HareDu.Internal.Resources
 
             if (sanitizedVHost == "2%f")
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url, null));
-
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result> DeleteLimits(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            var impl = new VirtualHostDeleteLimitsActionImpl();
-            action(impl);
-
-            string url = $"api/vhost-limits/vhost/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
-
-            if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -178,115 +131,6 @@ namespace HareDu.Internal.Resources
                 
                 if (string.IsNullOrWhiteSpace(_node))
                     _errors.Add(new ErrorImpl("RabbitMQ node is missing."));
-            }
-        }
-
-
-        class VirtualHostDeleteLimitsActionImpl :
-            VirtualHostDeleteLimitsAction
-        {
-            string _vhost;
-            readonly List<Error> _errors;
-
-            public Lazy<string> VirtualHostName { get; }
-            public Lazy<List<Error>> Errors { get; }
-
-            public VirtualHostDeleteLimitsActionImpl()
-            {
-                _errors = new List<Error>();
-                
-                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
-            }
-
-            public void For(string vhost)
-            {
-                _vhost = vhost;
-
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-        }
-
-
-        class VirtualHostConfigureLimitsActionImpl :
-            VirtualHostConfigureLimitsAction
-        {
-            string _vhost;
-            int _maxConnectionLimits;
-            int _maxQueueLimits;
-            readonly List<Error> _errors;
-
-            public Lazy<string> VirtualHostName { get; }
-            public Lazy<List<Error>> Errors { get; }
-            public Lazy<VirtualHostLimitsDefinition> Definition { get; }
-
-            public VirtualHostConfigureLimitsActionImpl()
-            {
-                _errors = new List<Error>();
-                
-                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<VirtualHostLimitsDefinition>(
-                    () => new VirtualHostLimitsDefinitionImpl(_maxConnectionLimits, _maxQueueLimits), LazyThreadSafetyMode.PublicationOnly);
-            }
-
-            public void VirtualHost(string name)
-            {
-                _vhost = name;
-
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-
-            public void Configure(Action<VirtualHostLimitsConfiguration> configuration)
-            {
-                var impl = new VirtualHostLimitsConfigurationImpl();
-                configuration(impl);
-
-                _maxConnectionLimits = impl.MaxConnectionLimit.Value;
-                _maxQueueLimits = impl.MaxQueueLimit.Value;
-                
-                if (_maxConnectionLimits < 1)
-                    _errors.Add(new ErrorImpl("Max connection limit value is missing."));
-                
-                if (_maxQueueLimits < 1)
-                    _errors.Add(new ErrorImpl("Max queue limit value is missing."));
-            }
-
-            
-            class VirtualHostLimitsDefinitionImpl :
-                VirtualHostLimitsDefinition
-            {
-                public VirtualHostLimitsDefinitionImpl(int maxConnectionLimit, int maxQueueLimit)
-                {
-                    MaxConnectionLimit = maxConnectionLimit;
-                    MaxQueueLimit = maxQueueLimit;
-                }
-
-                public int MaxConnectionLimit { get; }
-                public int MaxQueueLimit { get; }
-            }
-
-            
-            class VirtualHostLimitsConfigurationImpl :
-                VirtualHostLimitsConfiguration
-            {
-                int _maxQueueLimits;
-                int _maxConnectionLimits;
-                
-                public Lazy<int> MaxConnectionLimit { get; }
-                public Lazy<int> MaxQueueLimit { get; }
-                
-                public VirtualHostLimitsConfigurationImpl()
-                {
-                    MaxConnectionLimit = new Lazy<int>(() => _maxConnectionLimits, LazyThreadSafetyMode.PublicationOnly);
-                    MaxQueueLimit = new Lazy<int>(() => _maxQueueLimits, LazyThreadSafetyMode.PublicationOnly);
-                }
-
-                public void SetMaxConnectionLimit(int value) => _maxConnectionLimits = value;
-
-                public void SetMaxQueueLimit(int value) => _maxQueueLimits = value;
             }
         }
 

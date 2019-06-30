@@ -32,13 +32,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<QueueInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/queues";
             
-            Result<IReadOnlyList<QueueInfo>> result = await GetAll<QueueInfo>(url, cancellationToken);
+            Result<QueueInfo> result = await GetAll<QueueInfo>(url, cancellationToken);
 
             return result;
         }
@@ -93,7 +93,7 @@ namespace HareDu.Internal.Resources
             string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 
@@ -116,7 +116,7 @@ namespace HareDu.Internal.Resources
             if (impl.Errors.Value.Any())
                 return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
-            Result<QueueInfo> result = await Post<QueuePeekDefinition, QueueInfo>(url, definition, cancellationToken);
+            Result<QueueInfo> result = await Post<QueueInfo, QueuePeekDefinition>(url, definition, cancellationToken);
 
             return result;
         }

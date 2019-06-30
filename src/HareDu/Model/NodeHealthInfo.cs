@@ -15,7 +15,7 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    interface NodeHealthInfo
+    public interface NodeHealthInfo
     {
         [JsonProperty("status")]
         string Status { get; }

@@ -32,13 +32,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<PolicyInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<PolicyInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/policies";
             
-            Result<IReadOnlyList<PolicyInfo>> result = await GetAll<PolicyInfo>(url, cancellationToken);
+            Result<PolicyInfo> result = await GetAll<PolicyInfo>(url, cancellationToken);
 
             return result;
         }

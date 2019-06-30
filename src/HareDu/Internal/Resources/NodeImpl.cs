@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Internal.Resources
 {
-    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -28,46 +27,13 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<ChannelInfo>>> GetChannels(CancellationToken cancellationToken = default)
+        public async Task<Result<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            string url = "api/channels";
+            string url = "api/nodes";
             
-            Result<IReadOnlyList<ChannelInfo>> result = await GetAll<ChannelInfo>(url, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result<IReadOnlyList<ConnectionInfo>>> GetConnections(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = "api/connections";
-            
-            Result<IReadOnlyList<ConnectionInfo>> result = await GetAll<ConnectionInfo>(url, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result<IReadOnlyList<ConsumerInfo>>> GetConsumers(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = "api/consumers";
-            
-            Result<IReadOnlyList<ConsumerInfo>> result = await GetAll<ConsumerInfo>(url, cancellationToken);
-
-            return result;
-        }
-
-        public async Task<Result<ServerDefinitionInfo>> GetDefinition(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = "api/definitions";
-            
-            Result<ServerDefinitionInfo> result = await Get<ServerDefinitionInfo>(url, cancellationToken);
+            Result<NodeInfo> result = await GetAll<NodeInfo>(url, cancellationToken);
 
             return result;
         }

@@ -32,18 +32,18 @@ namespace HareDu.Internal.Resources
         {
         }
 
-        public async Task<Result<IReadOnlyList<BindingInfo>>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/bindings";
             
-            Result<IReadOnlyList<BindingInfo>> result = await GetAll<BindingInfo>(url, cancellationToken);
+            Result<BindingInfo> result = await GetAll<BindingInfo>(url, cancellationToken);
 
             return result;
         }
 
-        public async Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -66,7 +66,7 @@ namespace HareDu.Internal.Resources
             if (impl.Errors.Value.Any())
                 return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
-            Result<BindingInfo> result = await Post<DefineBinding, BindingInfo>(url, definition, cancellationToken);
+            Result<BindingInfo> result = await Post<BindingInfo, DefineBinding>(url, definition, cancellationToken);
 
             return result;
         }
@@ -89,7 +89,7 @@ namespace HareDu.Internal.Resources
                 : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}/{bindingName}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
 

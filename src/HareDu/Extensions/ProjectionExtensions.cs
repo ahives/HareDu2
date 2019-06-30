@@ -26,15 +26,17 @@ namespace HareDu.Extensions
                 
             Result<T> result = source.Unfold();
 
-            return result.HasResult ? projector(result) : default;
+            return result.HasData ? projector(result) : default;
         }
 
         public static TResult Select<T, TResult>(this Result<T> source, Func<Result<T>, TResult> projector)
         {
-            if (source.IsNull() || !source.HasResult || projector.IsNull())
+            if (source.IsNull() || !source.HasData || projector.IsNull())
                 return default;
 
-            return source.HasResult ? projector(source) : default;
+            TResult test = projector(source);
+            
+            return source.HasData ? projector(source) : default;
         }
 
         /// <summary>
@@ -46,10 +48,10 @@ namespace HareDu.Extensions
         /// <returns></returns>
         public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source, Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projection)
         {
-            if (source.IsNull() || !source.HasResult || projection.IsNull())
+            if (source.IsNull() || !source.HasData || projection.IsNull())
                 return Array.Empty<T>();
 
-            return source.HasResult ? projection(source) : new List<T>();
+            return source.HasData ? projection(source) : new List<T>();
         }
     }
 }

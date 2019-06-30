@@ -31,7 +31,7 @@
         [Test, Explicit]
         public async Task Verify_can_create()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<ScopedParameter>()
                 .Create(x =>
                 {
@@ -50,7 +50,7 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<ScopedParameter>()
                 .Delete(x =>
                 {

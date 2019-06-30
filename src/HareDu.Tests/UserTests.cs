@@ -50,7 +50,7 @@
         [Test, Explicit]
         public async Task Test1()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<User>()
                 .Create(x =>
                 {
@@ -70,7 +70,7 @@
         [Test, Explicit]
         public async Task Test()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<User>()
                 .Delete(x => x.User(""));
         }

@@ -31,7 +31,7 @@
         [Test, Explicit]
         public async Task Verify_can_create_parameter()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<GlobalParameter>()
                 .Create(x =>
                 {
@@ -52,7 +52,7 @@
         [Test, Explicit]
         public async Task Verify_can_delete_parameter()
         {
-            Result result = await Client
+            var result = await Client
                 .Resource<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
             
