@@ -10,22 +10,20 @@
 // under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 // specific language governing permissions and limitations under the License.
-namespace HareDu.Internal.Serialization
+namespace HareDu.Internal.Serialization.Converters
 {
     using System;
     using System.Reflection;
     using Newtonsoft.Json;
 
-    public class InterfaceProxyConverter :
+    class InterfaceProxyConverter :
         JsonConverter
     {
         readonly IImplementationBuilder _builder;
 
         public InterfaceProxyConverter(IImplementationBuilder builder)
         {
-            if (builder == null)
-                throw new ArgumentNullException(nameof(builder));
-            _builder = builder;
+            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -33,17 +31,13 @@ namespace HareDu.Internal.Serialization
             serializer.Serialize(writer, value);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             Type proxyType = _builder.GetImplementationType(objectType);
 
             return serializer.Deserialize(reader, proxyType);
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType.GetTypeInfo().IsInterface && TypeMetadataCache.IsValidMessageType(objectType);
-        }
+        public override bool CanConvert(Type objectType) => objectType.GetTypeInfo().IsInterface && TypeMetadataCache.IsValidMessageType(objectType);
     }
 }

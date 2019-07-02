@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,24 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    using System.Collections.Generic;
-    using Newtonsoft.Json;
-
-    public interface Listener
+    public interface SslOption
     {
-        [JsonProperty("node")]
-        string Node { get; }
-        
-        [JsonProperty("protocol")]
-        string Protocol { get; }
-        
-        [JsonProperty("ip_address")]
-        string IPAddress { get; }
-        
-        [JsonProperty("port")]
-        string Port { get; }
-        
-        [JsonProperty("socket_opts")]
-        IList<SocketOptions> SocketOptions { get; }
     }
 }

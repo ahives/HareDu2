@@ -16,21 +16,21 @@ namespace HareDu.Model
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface Listener
+    public interface NodeContext
     {
+        [JsonProperty("ssl_opts")]
+        IList<SslOption> SslOptions { get; }
+        
         [JsonProperty("node")]
         string Node { get; }
-        
-        [JsonProperty("protocol")]
-        string Protocol { get; }
-        
-        [JsonProperty("ip_address")]
-        string IPAddress { get; }
+
+        [JsonProperty("description")]
+        string Description { get; }
+
+        [JsonProperty("path")]
+        string Path { get; }
         
         [JsonProperty("port")]
         string Port { get; }
-        
-        [JsonProperty("socket_opts")]
-        IList<SocketOptions> SocketOptions { get; }
     }
 }

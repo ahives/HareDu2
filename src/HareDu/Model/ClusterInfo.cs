@@ -25,7 +25,7 @@ namespace HareDu.Model
         string RatesMode { get; }
 
         [JsonProperty("exchange_types")]
-        IReadOnlyList<ExchangeType> ExchangeTypes { get; }
+        IList<ExchangeType> ExchangeTypes { get; }
 
         [JsonProperty("rabbitmq_version")]
         string RabbitMqVersion { get; }
@@ -41,6 +41,9 @@ namespace HareDu.Model
 
         [JsonProperty("message_stats")]
         MessageStats MessageStats { get; }
+        
+        [JsonProperty("churn_rates")]
+        ChurnRates ChurnRates { get; }
 
         [JsonProperty("queue_totals")]
         QueueStats QueueStats { get; }
@@ -49,15 +52,15 @@ namespace HareDu.Model
         ClusterObjectTotals ObjectTotals { get; }
 
         [JsonProperty("statistics_db_event_queue")]
-        long StatsDbEventQueue { get; }
+        long StatsDatabaseEventQueue { get; }
 
         [JsonProperty("node")]
         string Node { get; }
 
         [JsonProperty("listeners")]
-        IReadOnlyList<Listener> Listeners { get; }
+        IList<Listener> Listeners { get; }
 
         [JsonProperty("contexts")]
-        IReadOnlyList<Context> Contexts { get; }
+        IList<NodeContext> Contexts { get; }
     }
 }

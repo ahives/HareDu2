@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,18 +15,9 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface Context
+    public interface CreatedConnectionDetails
     {
-        [JsonProperty("node")]
-        string Node { get; }
-
-        [JsonProperty("description")]
-        string Description { get; }
-
-        [JsonProperty("path")]
-        string Path { get; }
-        
-        [JsonProperty("port")]
-        string Port { get; }
+        [JsonProperty("rate")]
+        Rate Rate { get; }
     }
 }

@@ -17,6 +17,7 @@ namespace HareDu.Internal.Serialization
     using System.Net.Mime;
     using System.Text;
     using System.Threading;
+    using Converters;
     using Newtonsoft.Json;
 
     public class JsonMessageSerializer :
@@ -48,7 +49,8 @@ namespace HareDu.Internal.Serialization
                 new ByteArrayConverter(),
                 new ListJsonConverter(),
                 new InterfaceProxyConverter(TypeCache.ImplementationBuilder),
-                new StringDecimalConverter()
+                new StringDecimalConverter(),
+//                new RateObjectJsonConverter()
             })
         };
 

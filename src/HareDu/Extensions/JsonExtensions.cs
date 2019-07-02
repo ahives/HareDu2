@@ -60,9 +60,9 @@ namespace HareDu.Extensions
             using (var reader = new StringReader(rawResponse))
             using (var jsonReader = new JsonTextReader(reader))
             {
-                T deserializedResponse = SerializerCache.Deserializer.Deserialize<T>(jsonReader);
+                T response = SerializerCache.Deserializer.Deserialize<T>(jsonReader);
                 
-                return deserializedResponse;
+                return response;
             }
         }
     }

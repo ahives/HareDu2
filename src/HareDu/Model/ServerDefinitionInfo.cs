@@ -22,30 +22,30 @@ namespace HareDu.Model
         string RabbitMqVersion { get; }
         
         [JsonProperty("users")]
-        IReadOnlyList<UserInfo> Users { get; }
+        IList<UserInfo> Users { get; }
         
         [JsonProperty("vhosts")]
-        IReadOnlyList<VirtualHostInfo> VirtualHosts { get; }
+        IList<VirtualHostInfo> VirtualHosts { get; }
         
         [JsonProperty("permissions")]
-        IReadOnlyList<UserPermissionsInfo> Permissions { get; }
+        IList<UserPermissionsInfo> Permissions { get; }
         
         [JsonProperty("policies")]
-        IReadOnlyList<PolicyInfo> Policies { get; }
+        IList<PolicyInfo> Policies { get; }
         
         [JsonProperty("parameters")]
-        IReadOnlyList<ScopedParameterInfo> Parameters { get; }
+        IList<ScopedParameterInfo> Parameters { get; }
         
         [JsonProperty("global_parameters")]
-        IReadOnlyList<GlobalParameterInfo> GlobalParameters { get; }
+        IList<GlobalParameterInfo> GlobalParameters { get; }
         
         [JsonProperty("queues")]
-        IReadOnlyList<QueueInfo> Queues { get; }
+        IList<QueueInfo> Queues { get; }
         
         [JsonProperty("exchanges")]
-        IReadOnlyList<ExchangeInfo> Exchanges { get; }
+        IList<ExchangeInfo> Exchanges { get; }
         
         [JsonProperty("bindings")]
-        IReadOnlyList<BindingInfo> Bindings { get; }
+        IList<BindingInfo> Bindings { get; }
     }
 }
