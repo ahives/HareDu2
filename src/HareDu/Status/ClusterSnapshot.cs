@@ -7,7 +7,7 @@ namespace HareDu.Status
     using Core;
     using Core.Extensions;
 
-    public interface SomeInterface
+    public interface ClusterSnapshot
     {
         Task<ClusterStatus> GetSummary();
         
@@ -18,11 +18,11 @@ namespace HareDu.Status
     {
     }
 
-    public class SomeInterfaceImpl : SomeInterface
+    public class ClusterSnapshotImpl : ClusterSnapshot
     {
         readonly HareDuFactory _factory;
 
-        public SomeInterfaceImpl(string user, string password)
+        public ClusterSnapshotImpl(string user, string password)
         {
             _factory = InitializeFactory(user, password);
         }

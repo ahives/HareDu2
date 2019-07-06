@@ -11,7 +11,7 @@ namespace HareDu.Tests
         [Test]
         public async Task Test()
         {
-            SomeInterface snapshot = new SomeInterfaceImpl("guest", "guest");
+            ClusterSnapshot snapshot = new ClusterSnapshotImpl("guest", "guest");
 
             var summary = await snapshot.GetSummary();
             
