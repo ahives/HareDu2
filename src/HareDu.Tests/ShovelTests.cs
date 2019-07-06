@@ -2,7 +2,8 @@ namespace HareDu.Tests
 {
     using System;
     using System.Threading.Tasks;
-    using Extensions;
+    using Core;
+    using Core.Extensions;
     using NUnit.Framework;
 
     [TestFixture]

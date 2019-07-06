@@ -16,6 +16,7 @@ namespace HareDu
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using Core;
 
     public interface Shovel<out TSource, out TDestination> :
         Resource

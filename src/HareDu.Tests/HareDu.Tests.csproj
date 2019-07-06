@@ -2,13 +2,11 @@
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HareDu\HareDu.csproj">
-      <Project>{2c03cc43-9b6d-477c-9887-ac0c16cb7bc3}</Project>
-      <Name>HareDu</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\HareDu.Core\HareDu.Core.csproj" />
+    <ProjectReference Include="..\HareDu\HareDu.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.Threading.Timer" Version="4.3.0" />

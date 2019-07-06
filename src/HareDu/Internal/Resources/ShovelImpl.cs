@@ -21,7 +21,10 @@ namespace HareDu.Internal.Resources
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Extensions;
+    using Core;
+    using Core.Extensions;
+    using Core.Internal;
+    using Core.Internal.Resources;
 
     class ShovelImpl :
         ResourceBase,
