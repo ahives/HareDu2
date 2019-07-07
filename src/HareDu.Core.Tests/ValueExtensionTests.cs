@@ -10,7 +10,7 @@
 
     [TestFixture]
     public class ValueExtensionTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public void Verify_Where_works()

@@ -8,7 +8,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class ConnectionTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_connections()

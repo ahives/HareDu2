@@ -5,20 +5,20 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class HareDuTestBase :
-        IHareDuTestHarness
+    public class ResourceTestBase :
+        IResourceTestHarness
     {
-        readonly HareDuTestHarness _harness = new Harness();
+        readonly ResourceTestHarness _harness = new Harness();
 
-        public HareDuFactory Client => _harness.Client;
+        public IResourceFactory Client => _harness.Client;
 
         
         class Harness :
-            HareDuTestHarness
+            ResourceTestHarness
         {
-            protected override HareDuFactory InitializeClient()
+            protected override IResourceFactory InitializeClient()
             {
-                return HareDuClient.Initialize(x =>
+                return ResourceClient.Init(x =>
                 {
                     x.ConnectTo("http://localhost:15672");
                     x.UsingCredentials("guest", "guest");

@@ -6,7 +6,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class FactoryTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test]
         public async Task QueueResourceTest()

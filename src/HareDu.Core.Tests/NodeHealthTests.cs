@@ -8,7 +8,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class NodeHealthTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Verify_can_check_if_named_node_healthy()

@@ -55,8 +55,8 @@
             }
         }";
 
-            var vhosts = HareDuClient
-                .Initialize(config)
+            var vhosts = ResourceClient
+                .Init(config)
                 .Resource<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
@@ -73,8 +73,8 @@
         [Test]
         public void Verify_can_init_client_from_behavior_description()
         {
-            var vhosts = HareDuClient
-                .Initialize(x =>
+            var vhosts = ResourceClient
+                .Init(x =>
                 {
                     x.ConnectTo("http://localhost:15672");
                     x.UsingCredentials("guest", "guest");
@@ -95,8 +95,8 @@
         [Test]
         public void Verify_can_init_client_from_settings_object()
         {
-            var vhosts = HareDuClient
-                .Initialize(() => new HareDuClientSettingsImpl(
+            var vhosts = ResourceClient
+                .Init(() => new HareDuClientSettingsImpl(
                     "http://localhost:15672",
                     new HareDuCredentialsImpl("guest", "guest")))
                 .Resource<VirtualHost>()

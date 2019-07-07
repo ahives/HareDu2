@@ -3,17 +3,17 @@ namespace HareDu.Tests
     using System;
     using System.Threading.Tasks;
     using NUnit.Framework;
-    using Status;
 
     [TestFixture]
-    public class ClusterSnapshotTests
+    public class ClusterSnapshotTests :
+        SnapshotTestBase
     {
         [Test]
         public async Task Test()
         {
-            ClusterSnapshot snapshot = new ClusterSnapshotImpl("guest", "guest");
-
-            var summary = await snapshot.GetSummary();
+            var summary = await Client
+                .Snapshot<ClusterSnapshot>()
+                .Get();
             
             Console.WriteLine("Acknowledged => Total: {0}, Rate: {1}", summary.Queue.Acknowledged.Total, summary.Queue.Acknowledged.Rate);
             Console.WriteLine("Delivered => Total: {0}, Rate: {1}", summary.Queue.Delivered.Total, summary.Queue.Delivered.Rate);

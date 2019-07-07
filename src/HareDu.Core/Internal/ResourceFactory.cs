@@ -19,13 +19,34 @@ namespace HareDu.Core.Internal
     using System.Net.Http;
     using Exceptions;
 
-    class HareDuFactoryImpl :
-        HareDuFactory
+    public class ResourceFactory :
+        IResourceFactory
     {
-        readonly HttpClient _client;
-        readonly IDictionary<string, object> _resourceCache;
+        HttpClient _client;
+        IDictionary<string, object> _resourceCache;
+        static IResourceFactory _instance = null;
+        static readonly object _gate = new object();
 
-        public HareDuFactoryImpl(HttpClient client)
+//        public ResourceFactory(HttpClient client)
+//        {
+//            _client = client ?? throw new ArgumentNullException(nameof(client));
+//            _resourceCache = new Dictionary<string, object>();
+//
+//            RegisterResources();
+//        }
+
+        public static IResourceFactory Instance
+        {
+            get
+            {
+                lock (_gate)
+                {
+                    return _instance ?? (_instance = new ResourceFactory());
+                }
+            }
+        }
+
+        public void Init(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _resourceCache = new Dictionary<string, object>();
@@ -47,11 +68,11 @@ namespace HareDu.Core.Internal
             if (_resourceCache.ContainsKey(type.FullName))
                 return (TResource)_resourceCache[type.FullName];
             
-            var resource = (TResource)Activator.CreateInstance(type, _client);
+            var instance = (TResource)Activator.CreateInstance(type, _client);
 
-            _resourceCache.Add(type.FullName, resource);
+            _resourceCache.Add(type.FullName, instance);
             
-            return resource;
+            return instance;
         }
 
         public void CancelPendingRequest()

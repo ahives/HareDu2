@@ -9,7 +9,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class ConsumerTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_consumers()

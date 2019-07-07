@@ -8,7 +8,7 @@
 
     [TestFixture]
     public class ScopedParameterTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_scoped_parameters()

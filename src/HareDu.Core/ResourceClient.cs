@@ -26,27 +26,27 @@ namespace HareDu.Core
     using Internal.Serialization;
     using Newtonsoft.Json;
 
-    public static class HareDuClient
+    public static class ResourceClient
     {
-        public static HareDuFactory Initialize(Action<HareDuClientConfigurationProvider> configuration)
+        public static IResourceFactory Init(Action<ClientConfigProvider> configuration)
         {
             if (configuration == null)
                 throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
             
             try
             {
-                var init = new HareDuClientConfigurationProviderImpl();
+                var init = new ClientConfigProviderImpl();
                 configuration(init);
 
                 HareDuClientSettings settings = init.Settings.Value;
 
                 ValidateSettings(settings);
 
-                HttpClient client = GetHttpClient(settings);
+                HttpClient client = RabbitMqConnectionClient.Instance.Create(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(client);
+                ResourceFactory.Instance.Init(client);
 
-                return factory;
+                return ResourceFactory.Instance;
             }
             catch (Exception e)
             {
@@ -54,7 +54,7 @@ namespace HareDu.Core
             }
         }
 
-        public static HareDuFactory Initialize(string configuration)
+        public static IResourceFactory Init(string configuration)
         {
             if (string.IsNullOrWhiteSpace(configuration))
                 throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
@@ -65,11 +65,11 @@ namespace HareDu.Core
 
                 ValidateSettings(settings);
 
-                HttpClient client = GetHttpClient(settings);
+                HttpClient client = RabbitMqConnectionClient.Instance.Create(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(client);
+                ResourceFactory.Instance.Init(client);
 
-                return factory;
+                return ResourceFactory.Instance;
             }
             catch (Exception e)
             {
@@ -77,7 +77,7 @@ namespace HareDu.Core
             }
         }
 
-        public static HareDuFactory Initialize(Func<HareDuClientSettings> configuration)
+        public static IResourceFactory Init(Func<HareDuClientSettings> configuration)
         {
             if (configuration == null)
                 throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
@@ -88,11 +88,11 @@ namespace HareDu.Core
 
                 ValidateSettings(settings);
 
-                HttpClient client = GetHttpClient(settings);
+                HttpClient client = RabbitMqConnectionClient.Instance.Create(settings);
                 
-                HareDuFactory factory = new HareDuFactoryImpl(client);
+                ResourceFactory.Instance.Init(client);
 
-                return factory;
+                return ResourceFactory.Instance;
             }
             catch (Exception e)
             {
@@ -112,26 +112,9 @@ namespace HareDu.Core
                 throw new HostUrlMissingException("Host URL is required and cannot be empty.");
         }
 
-        static HttpClient GetHttpClient(HareDuClientSettings settings)
-        {
-            var uri = new Uri($"{settings.RabbitMqServerUrl}/");
-            var handler = new HttpClientHandler
-            {
-                Credentials = new NetworkCredential(settings.Credentials.Username, settings.Credentials.Password)
-            };
-            
-            var client = new HttpClient(handler){BaseAddress = uri};
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (settings.Timeout != TimeSpan.Zero)
-                client.Timeout = settings.Timeout;
-
-            return client;
-        }
-
-
-        class HareDuClientConfigurationProviderImpl :
-            HareDuClientConfigurationProvider
+        class ClientConfigProviderImpl :
+            ClientConfigProvider
         {
             static string _rmqServerUrl;
             static TimeSpan _timeout;
@@ -140,7 +123,7 @@ namespace HareDu.Core
 
             public Lazy<HareDuClientSettings> Settings { get; }
 
-            public HareDuClientConfigurationProviderImpl()
+            public ClientConfigProviderImpl()
             {
                 Settings = new Lazy<HareDuClientSettings>(
                         () => new HareDuClientSettingsImpl(_rmqServerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);

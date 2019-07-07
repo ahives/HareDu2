@@ -5,7 +5,7 @@
 
     [TestFixture]
     public class HealthCheckTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test]
         public async Task Verify_IsHealthy_works()

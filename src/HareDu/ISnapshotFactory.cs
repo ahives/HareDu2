@@ -11,22 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Testing
+namespace HareDu
 {
-    using System;
+    using Core;
 
-    public abstract class HareDuTestHarness :
-        IHareDuTestHarness
+    public interface ISnapshotFactory
     {
-        readonly Lazy<HareDuFactory> _client;
+        T Snapshot<T>()
+            where T : Snapshot;
 
-        public HareDuTestHarness()
-        {
-            _client = new Lazy<HareDuFactory>(InitializeClient);
-        }
-
-        protected abstract HareDuFactory InitializeClient();
-
-        public HareDuFactory Client => _client.Value;
+        void Init(IResourceFactory factory);
     }
 }

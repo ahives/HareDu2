@@ -9,7 +9,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class TopicPermissionsTest :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test]
         public async Task Verify_can_get_all_topic_permissions()

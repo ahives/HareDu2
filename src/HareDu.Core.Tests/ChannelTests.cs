@@ -9,7 +9,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class ChannelTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Test()

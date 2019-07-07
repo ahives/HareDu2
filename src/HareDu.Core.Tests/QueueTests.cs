@@ -9,7 +9,7 @@
 
     [TestFixture]
     public class QueueTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Verify_can_create_queue()

@@ -8,7 +8,7 @@ namespace HareDu.Tests
 
     [TestFixture]
     public class ClusterTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test]
         public async Task Test()

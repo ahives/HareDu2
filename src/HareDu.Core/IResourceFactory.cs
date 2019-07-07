@@ -11,29 +11,30 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Configuration
+namespace HareDu.Core
 {
-    using System;
+    using System.Net.Http;
 
-    public interface HareDuClientConfigurationProvider
+    public interface IResourceFactory
     {
         /// <summary>
-        /// Specify the RabbitMQ server url to connect to.
+        /// Creates a new instance of object implemented by T, which encapsulates a group of resources (e.g. Virtual Host, Exchange, Queue, User, etc.)
+        /// that are exposed by the RabbitMQ server via its REST API.
         /// </summary>
-        /// <param name="rmqServerUrl"></param>
-        void ConnectTo(string rmqServerUrl);
-
-        /// <summary>
-        /// Specify the maximum time before the HTTP request to the RAbbitMQ server will fail.
-        /// </summary>
-        /// <param name="timeout"></param>
-        void TimeoutAfter(TimeSpan timeout);
+        /// <typeparam name="T">Interface that derives from base interface ResourceClient.</typeparam>
+        /// <returns>An interface of resources available on a RabbitMQ server.</returns>
+        T Resource<T>()
+            where T : Resource;
         
         /// <summary>
-        /// Specify the user creadentials to connect to the RabbitMQ server.
+        /// Cancel pending running thread.
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        void UsingCredentials(string username, string password);
+        void CancelPendingRequest();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        void Init(HttpClient client);
     }
 }

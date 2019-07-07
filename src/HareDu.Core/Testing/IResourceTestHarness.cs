@@ -13,8 +13,8 @@
 // limitations under the License.
 namespace HareDu.Core.Testing
 {
-    public interface IHareDuTestHarness
+    public interface IResourceTestHarness
     {
-        HareDuFactory Client { get; }
+        IResourceFactory Client { get; }
     }
 }

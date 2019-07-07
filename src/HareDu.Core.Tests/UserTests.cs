@@ -9,7 +9,7 @@
 
     [TestFixture]
     public class UserTests :
-        HareDuTestBase
+        ResourceTestBase
     {
         [Test, Explicit]
         public async Task Verify_can_get_all_users()
