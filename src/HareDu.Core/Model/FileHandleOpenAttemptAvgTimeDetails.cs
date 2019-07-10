@@ -15,7 +15,7 @@ namespace HareDu.Core.Model
 {
     using Newtonsoft.Json;
 
-    public interface IOFileHandleOpenAttemptCountDetails
+    public interface FileHandleOpenAttemptAvgTimeDetails
     {
         [JsonProperty("rate")]
         decimal Rate { get; }

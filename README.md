@@ -117,3 +117,18 @@ Erlang OTP R19.3 (x64)
 .NET Core 2.1
 
 
+https://www.rabbitmq.com/monitoring.html
+
+https://www.rabbitmq.com/heartbeats.html
+
+https://www.rabbitmq.com/nettick.html
+
+https://www.rabbitmq.com/management.html
+
+https://www.rabbitmq.com/memory-use.html
+
+https://pulse.mozilla.org/doc/stats.html
+
+https://docs.appoptics.com/kb/host_infrastructure/integrations/rabbitmq/
+
+

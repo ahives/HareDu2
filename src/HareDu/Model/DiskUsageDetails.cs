@@ -13,26 +13,28 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface Queue
+    public interface DiskUsageDetails
     {
-        MessageDetails Published { get; }
+        long Total { get; }
         
-        MessageDetails Confirmed { get; }
+        decimal Rate { get; }
         
-        MessageDetails UnroutableMessagesReturned { get; }
+        Bytes Bytes { get; }
         
-        MessageDetails Gets { get; }
+        DiskOperationWallTime WallTime { get; }
+    }
+
+    public interface DiskOperationWallTime
+    {
+        long Average { get; }
         
-        MessageDetails GetsWithoutAcknowledgement { get; }
+        decimal Rate { get; }
+    }
+
+    public interface Bytes
+    {
+        long Total { get; }
         
-        MessageDetails Delivered { get; }
-        
-        MessageDetails DeliveredWithoutAcknowledgement { get; }
-        
-        MessageDetails Redelivered { get; }
-        
-        MessageDetails Acknowledged { get; }
-        
-        MessageDetails DeliveryGets { get; }
+        decimal Rate { get; }
     }
 }

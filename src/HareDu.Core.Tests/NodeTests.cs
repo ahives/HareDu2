@@ -23,7 +23,7 @@
             {
                 Console.WriteLine("OperatingSystemPid: {0}", node.OperatingSystemProcessId);
                 Console.WriteLine("TotalFileDescriptors: {0}", node.TotalFileDescriptors);
-                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsedDetails.Rate);
+                Console.WriteLine("MemoryUsedDetailsRate: {0}", node.MemoryUsageDetails.Rate);
                 Console.WriteLine("FileDescriptorUsedDetailsRate: {0}", node.FileDescriptorUsedDetails.Rate);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();

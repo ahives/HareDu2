@@ -13,9 +13,11 @@
 // limitations under the License.
 namespace HareDu.Internal.Snapshots
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
+    using Core.Model;
     using Model;
 
     public class ClusterSnapshotImpl :
@@ -39,7 +41,7 @@ namespace HareDu.Internal.Snapshots
                 .Resource<Node>()
                 .GetAll();
 
-            var clusterNodes = nodeResource.Select(x => x.Data);
+            var nodes = nodeResource.Select(x => x.Data);
 
             var connectionResource = await _factory
                 .Resource<Connection>()
@@ -53,7 +55,7 @@ namespace HareDu.Internal.Snapshots
 
             var channels = channelResource.Select(x => x.Data);
             
-            var summary = new ClusterStatusImpl(cluster, clusterNodes, connections, channels);
+            var summary = new ClusterStatusImpl(cluster, nodes, connections, channels);
 
             return summary;
         }

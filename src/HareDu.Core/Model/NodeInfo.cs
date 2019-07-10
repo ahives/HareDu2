@@ -28,7 +28,7 @@ namespace HareDu.Core.Model
         long TotalFileDescriptors { get; }
 
         [JsonProperty("sockets_total")]
-        long TotalSockets { get; }
+        long TotalSocketsAvailable { get; }
 
         [JsonProperty("mem_limit")]
         long MemoryLimit { get; }
@@ -43,7 +43,7 @@ namespace HareDu.Core.Model
         bool FreeDiskAlarm { get; }
 
         [JsonProperty("proc_total")]
-        long TotalProcessors { get; }
+        long TotalProcesses { get; }
 
         [JsonProperty("rates_mode")]
         string RatesMode { get; }
@@ -106,7 +106,7 @@ namespace HareDu.Core.Model
         long MemoryUsed { get; }
 
         [JsonProperty("mem_used_details")]
-        MemoryUsedDetails MemoryUsedDetails { get; }
+        MemoryUsageDetails MemoryUsageDetails { get; }
 
         [JsonProperty("fd_used")]
         long FileDescriptorUsed { get; }
@@ -121,10 +121,10 @@ namespace HareDu.Core.Model
         SocketsUsedDetails SocketsUsedDetails { get; }
 
         [JsonProperty("proc_used")]
-        long ProcessorsUsed { get; }
+        long ProcessesUsed { get; }
 
         [JsonProperty("proc_used_details")]
-        ProcessorsUsedDetails ProcessorsUsedDetails { get; }
+        ProcessesUsedDetails ProcessesUsedDetails { get; }
 
         [JsonProperty("disk_free")]
         long FreeDiskSpace { get; }
@@ -160,10 +160,10 @@ namespace HareDu.Core.Model
         long TotalIOBytesRead { get; }
 
         [JsonProperty("io_read_bytes_details")]
-        IOBytesReadDetails IOBytesReadDetails { get; }
+        IOBytesReadDetails IOReadBytesDetails { get; }
 
         [JsonProperty("io_read_avg_time")]
-        decimal AvgIOReadTime { get; }
+        long AvgIOReadTime { get; }
 
         [JsonProperty("io_read_avg_time_details")]
         AvgIOReadTimeDetails AvgIOReadTimeDetails { get; }
@@ -181,7 +181,7 @@ namespace HareDu.Core.Model
         IOWriteBytesDetail IOWriteBytesDetail { get; }
 
         [JsonProperty("io_write_avg_time")]
-        decimal AvgTimePerIOWrite { get; }
+        long AvgTimePerIOWrite { get; }
 
         [JsonProperty("io_write_avg_time_details")]
         AvgTimePerIOWriteDetails AvgTimePerIOWriteDetails { get; }
@@ -205,7 +205,7 @@ namespace HareDu.Core.Model
         IOSeekCountDetails RateOfIOSeeks { get; }
 
         [JsonProperty("io_seek_avg_time")]
-        decimal AverageIOSeekTime { get; }
+        long AverageIOSeekTime { get; }
 
         [JsonProperty("io_seek_avg_time_details")]
         AvgIOSeekTimeDetails AvgIOSeekTimeDetails { get; }
@@ -262,13 +262,13 @@ namespace HareDu.Core.Model
         long TotalOpenFileHandleAttempts { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count_details")]
-        IOFileHandleOpenAttemptCountDetails IOFileHandleOpenAttemptCountDetails { get; }
+        FileHandleOpenAttemptCountDetails FileHandleOpenAttemptCountDetails { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time")]
         decimal OpenFileHandleAttemptsAvgTime { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time_details")]
-        IOFileHandleOpenAttemptAvgTimeDetails IOFileHandleOpenAttemptAvgTimeDetails { get; }
+        FileHandleOpenAttemptAvgTimeDetails FileHandleOpenAttemptAvgTimeDetails { get; }
 
         [JsonProperty("metrics_gc_queue_length")]
         GarbageCollectionMetrics GarbageCollectionMetrics { get; }

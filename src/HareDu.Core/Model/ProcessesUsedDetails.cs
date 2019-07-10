@@ -15,7 +15,7 @@ namespace HareDu.Core.Model
 {
     using Newtonsoft.Json;
 
-    public interface MemoryUsedDetails
+    public interface ProcessesUsedDetails
     {
         [JsonProperty("rate")]
         decimal Rate { get; }

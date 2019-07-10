@@ -11,12 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu.Core.Model
 {
-    public interface DiskDetails
+    using Newtonsoft.Json;
+
+    public interface MemoryUsageDetails
     {
-        long Total { get; }
-        
+        [JsonProperty("rate")]
         decimal Rate { get; }
     }
 }

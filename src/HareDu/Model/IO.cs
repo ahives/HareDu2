@@ -13,10 +13,63 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using Core.Model;
+    using Newtonsoft.Json;
+
     public interface IO
     {
-        DiskDetails Reads { get; }
+        DiskDetails Disk { get; }
         
-        DiskDetails Writes { get; }
+        DiskUsageDetails Reads { get; }
+        
+        DiskUsageDetails Writes { get; }
+        
+        DiskUsageDetails Seeks { get; }
+
+        [JsonProperty("io_sync_count")]
+        long IOSyncCount { get; }
+
+        [JsonProperty("io_sync_count_details")]
+        IOSyncCountDetails RateOfIOSyncs { get; }
+
+        [JsonProperty("io_sync_avg_time")]
+        decimal AverageIOSyncTime { get; }
+
+        [JsonProperty("io_sync_avg_time_details")]
+        AvgIOSyncTimeDetails AvgIOSyncTimeDetails { get; }
+
+        [JsonProperty("io_seek_count")]
+        long IOSeekCount { get; }
+
+        [JsonProperty("io_seek_count_details")]
+        IOSeekCountDetails RateOfIOSeeks { get; }
+
+        [JsonProperty("io_seek_avg_time")]
+        decimal AverageIOSeekTime { get; }
+
+        [JsonProperty("io_seek_avg_time_details")]
+        AvgIOSeekTimeDetails AvgIOSeekTimeDetails { get; }
+
+        [JsonProperty("io_reopen_count")]
+        long IOReopenCount { get; }
+
+        [JsonProperty("io_reopen_count_details")]
+        IOReopenCountDetails RateOfIOReopened { get; }
+    }
+
+    public interface DiskDetails
+    {
+        DiskCapacityDetails Capacity { get; }
+
+        string FreeLimit { get; }
+
+        bool FreeAlarm { get; }
+    }
+
+    public interface DiskCapacityDetails
+    {
+        long Available { get; }
+        
+        decimal Rate { get; }
     }
 }
