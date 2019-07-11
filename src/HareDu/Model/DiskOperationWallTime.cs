@@ -13,16 +13,10 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface IO
+    public interface DiskOperationWallTime
     {
-        DiskDetails Disk { get; }
+        long Average { get; }
         
-        DiskUsageDetails Reads { get; }
-        
-        DiskUsageDetails Writes { get; }
-        
-        DiskUsageDetails Seeks { get; }
-
-        FileHandles FileHandles { get; }
+        decimal Rate { get; }
     }
 }

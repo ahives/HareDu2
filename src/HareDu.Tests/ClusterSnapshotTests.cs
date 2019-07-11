@@ -15,7 +15,7 @@ namespace HareDu.Tests
                 .Snapshot<ClusterSnapshot>()
                 .Get();
             
-//            snapshot.Nodes[0].IO.Seeks
+//            snapshot.Nodes[0].IO
             Console.WriteLine("Acknowledged => Total: {0}, Rate: {1}", snapshot.Queue.Acknowledged.Total, snapshot.Queue.Acknowledged.Rate);
             Console.WriteLine("Delivered => Total: {0}, Rate: {1}", snapshot.Queue.Delivered.Total, snapshot.Queue.Delivered.Rate);
             Console.WriteLine("Gets => Total: {0}, Rate: {1}", snapshot.Queue.Gets.Total, snapshot.Queue.Gets.Rate);

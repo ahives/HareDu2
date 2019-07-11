@@ -13,16 +13,10 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface IO
+    public interface ErlangProcessDetails
     {
-        DiskDetails Disk { get; }
-        
-        DiskUsageDetails Reads { get; }
-        
-        DiskUsageDetails Writes { get; }
-        
-        DiskUsageDetails Seeks { get; }
+        long Used { get; }
 
-        FileHandles FileHandles { get; }
+        decimal UsageRate { get; }
     }
 }

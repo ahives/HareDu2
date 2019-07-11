@@ -13,16 +13,12 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface IO
+    public interface Mnesia
     {
-        DiskDetails Disk { get; }
+        TransactionDetails Transactions { get; }
         
-        DiskUsageDetails Reads { get; }
+        IndexDetails Index { get; }
         
-        DiskUsageDetails Writes { get; }
-        
-        DiskUsageDetails Seeks { get; }
-
-        FileHandles FileHandles { get; }
+        StorageDetails Storage { get; }
     }
 }

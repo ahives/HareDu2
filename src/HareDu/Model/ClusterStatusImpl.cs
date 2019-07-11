@@ -14,6 +14,7 @@
 namespace HareDu.Model
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Core.Extensions;
     using Core.Model;
 
@@ -26,32 +27,68 @@ namespace HareDu.Model
 //            ErlangVerion = cluster.ErlangVerion;
             RabbitMqVersion = cluster.RabbitMqVersion;
             Queue = new QueueDetailsImpl(cluster.MessageStats);
-
-            Nodes = GetNodes(cluster, nodes);
+            Nodes = GetNodes(cluster, nodes, channels);
         }
 
-        IReadOnlyList<NodeStatus> GetNodes(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes)
+        IReadOnlyList<NodeStatus> GetNodes(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes,
+            IReadOnlyList<ChannelInfo> channels)
         {
             var nodeCluster = new List<NodeStatus>();
+            
             for (int i = 0; i < nodes.Count; i++)
             {
-                nodeCluster.Add(new NodeStatusImpl(cluster, nodes[i]));
+                nodeCluster.Add(new NodeStatusImpl(cluster, nodes[i], channels.Where(x => x.Node == nodes[i].Name)));
             }
 
             return nodeCluster;
         }
 
-        class NodeStatusImpl : NodeStatus
+        
+        class NodeStatusImpl :
+            NodeStatus
         {
-            public NodeStatusImpl(ClusterInfo cluster, NodeInfo node)
+            public NodeStatusImpl(ClusterInfo cluster, NodeInfo node, IEnumerable<ChannelInfo> channels)
             {
                 OS = new OperatingSystemDetailsImpl(node);
                 Erlang = new ErlangDetailsImpl(cluster, node);
                 IO = new IOImpl(cluster.MessageStats, node);
                 ContextSwitching = new ContextSwitchDetailsImpl(node);
+                Channels = channels.Select(x => new ChannelDetailsImpl(x)).ToList();
             }
 
+            public OperatingSystemDetails OS { get; }
+            public string RatesMode { get; }
+            public long Uptime { get; }
+            public int RunQueue { get; }
+            public long InterNodeHeartbeat { get; }
+            public string Name { get; }
+            public string Type { get; }
+            public bool IsRunning { get; }
+            public IO IO { get; }
+            public ErlangDetails Erlang { get; }
+            public Mnesia Mnesia { get; }
+            public MemoryDetails Memory { get; }
+            public GarbageCollection GC { get; }
+            public ContextSwitchingDetails ContextSwitching { get; }
+            public IReadOnlyList<ChannelDetails> Channels { get; }
+
             
+            class ChannelDetailsImpl :
+                ChannelDetails
+            {
+                public ChannelDetailsImpl(ChannelInfo channel)
+                {
+                    TotalReceived = channel.TotalReceived;
+                    TotalSent = channel.TotalSent;
+                    TotalConsumers = channel.TotalConsumers;
+                }
+
+                public long TotalReceived { get; }
+                public long TotalSent { get; }
+                public long TotalConsumers { get; }
+            }
+
+
             class ContextSwitchDetailsImpl :
                 ContextSwitchingDetails
             {
@@ -65,6 +102,7 @@ namespace HareDu.Model
                 public decimal Rate { get; }
             }
 
+            
             class ErlangDetailsImpl : ErlangDetails
             {
                 public ErlangDetailsImpl(ClusterInfo cluster, NodeInfo node)
@@ -148,27 +186,6 @@ namespace HareDu.Model
                 public FileDescriptorDetails FileDescriptors { get; }
                 public SocketDetails Sockets { get; }
             }
-
-            public OperatingSystemDetails OS { get; }
-            public string RatesMode { get; }
-            public long Uptime { get; }
-            public int RunQueue { get; }
-            public long InterNodeHeartbeat { get; }
-            public string Name { get; }
-            public string Type { get; }
-            public bool IsRunning { get; }
-            public IO IO { get; }
-            public ErlangDetails Erlang { get; }
-            public Mnesia Mnesia { get; }
-            public MemoryDetails Memory { get; }
-            public long NumberOfGarbageCollected { get; }
-            public GCDetails GcDetails { get; }
-            public long ReclaimedBytesFromGC { get; }
-            public ReclaimedBytesFromGCDetails ReclaimedBytesFromGCDetails { get; }
-            public ContextSwitchingDetails ContextSwitching { get; }
-            public long ContextSwitches { get; }
-            public ContextSwitchDetails ContextSwitchDetails { get; }
-            public GarbageCollectionMetrics GarbageCollectionMetrics { get; }
         }
 
 
@@ -196,28 +213,30 @@ namespace HareDu.Model
                     0,
                     node.AverageIOSeekTime,
                     node.AvgIOSeekTimeDetails?.Rate ?? 0);
+                FileHandles = new FileHandlesImpl(node);
             }
 
             public DiskDetails Disk { get; }
             public DiskUsageDetails Reads { get; }
             public DiskUsageDetails Writes { get; }
             public DiskUsageDetails Seeks { get; }
-            public decimal AvgIOReadTime { get; }
-            public AvgIOReadTimeDetails AvgIOReadTimeDetails { get; }
-            public decimal AvgTimePerIOWrite { get; }
-            public AvgTimePerIOWriteDetails AvgTimePerIOWriteDetails { get; }
-            public long IOSyncCount { get; }
-            public IOSyncCountDetails RateOfIOSyncs { get; }
-            public decimal AverageIOSyncTime { get; }
-            public AvgIOSyncTimeDetails AvgIOSyncTimeDetails { get; }
-            public long IOSeekCount { get; }
-            public IOSeekCountDetails RateOfIOSeeks { get; }
-            public decimal AverageIOSeekTime { get; }
-            public AvgIOSeekTimeDetails AvgIOSeekTimeDetails { get; }
-            public long IOReopenCount { get; }
-            public IOReopenCountDetails RateOfIOReopened { get; }
+            public FileHandles FileHandles { get; }
 
             
+            class FileHandlesImpl :
+                FileHandles
+            {
+                public FileHandlesImpl(NodeInfo node)
+                {
+                    Recycled = node.IOReopenCount;
+                    Rate = node.RateOfIOReopened?.Rate ?? 0;
+                }
+
+                public long Recycled { get; }
+                public decimal Rate { get; }
+            }
+
+
             class DiskDetailsImpl :
                 DiskDetails
             {

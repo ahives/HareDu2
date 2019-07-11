@@ -13,16 +13,12 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface IO
+    public interface OperatingSystemDetails
     {
-        DiskDetails Disk { get; }
-        
-        DiskUsageDetails Reads { get; }
-        
-        DiskUsageDetails Writes { get; }
-        
-        DiskUsageDetails Seeks { get; }
+        string ProcessId { get; }
 
-        FileHandles FileHandles { get; }
+        FileDescriptorDetails FileDescriptors { get; }
+        
+        SocketDetails Sockets { get; }
     }
 }

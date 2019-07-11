@@ -23,18 +23,4 @@ namespace HareDu.Model
         
         DiskOperationWallTime WallTime { get; }
     }
-
-    public interface DiskOperationWallTime
-    {
-        long Average { get; }
-        
-        decimal Rate { get; }
-    }
-
-    public interface Bytes
-    {
-        long Total { get; }
-        
-        decimal Rate { get; }
-    }
 }

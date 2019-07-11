@@ -13,16 +13,38 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface IO
-    {
-        DiskDetails Disk { get; }
-        
-        DiskUsageDetails Reads { get; }
-        
-        DiskUsageDetails Writes { get; }
-        
-        DiskUsageDetails Seeks { get; }
+    using System.Collections.Generic;
 
-        FileHandles FileHandles { get; }
+    public interface NodeStatus
+    {
+        OperatingSystemDetails OS { get; }
+
+        string RatesMode { get; }
+
+        long Uptime { get; }
+
+        int RunQueue { get; }
+
+        long InterNodeHeartbeat { get; }
+
+        string Name { get; }
+
+        string Type { get; }
+
+        bool IsRunning { get; }
+
+        IO IO { get; }
+        
+        ErlangDetails Erlang { get; }
+        
+        Mnesia Mnesia { get; }
+        
+        MemoryDetails Memory { get; }
+
+        GarbageCollection GC { get; }
+
+        ContextSwitchingDetails ContextSwitching { get; }
+        
+        IReadOnlyList<ChannelDetails> Channels { get; }
     }
 }

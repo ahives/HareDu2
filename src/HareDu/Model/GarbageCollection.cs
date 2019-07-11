@@ -13,16 +13,24 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface IO
-    {
-        DiskDetails Disk { get; }
-        
-        DiskUsageDetails Reads { get; }
-        
-        DiskUsageDetails Writes { get; }
-        
-        DiskUsageDetails Seeks { get; }
+    using Core.Model;
+    using Newtonsoft.Json;
 
-        FileHandles FileHandles { get; }
+    public interface GarbageCollection
+    {
+        [JsonProperty("gc_num")]
+        long NumberOfGarbageCollected { get; }
+
+        [JsonProperty("gc_num_details")]
+        GCDetails GcDetails { get; }
+
+        [JsonProperty("gc_bytes_reclaimed")]
+        long ReclaimedBytesFromGC { get; }
+
+        [JsonProperty("gc_bytes_reclaimed_details")]
+        ReclaimedBytesFromGCDetails ReclaimedBytesFromGCDetails { get; }
+
+        [JsonProperty("metrics_gc_queue_length")]
+        GarbageCollectionMetrics GarbageCollectionMetrics { get; }
     }
 }
