@@ -24,13 +24,13 @@ namespace HareDu.Core.Model
         long TotalReductions { get; }
 
         [JsonProperty("recv_oct")]
-        long OctetsReceived { get; }
+        long PacketsReceivedInOctets { get; }
 
         [JsonProperty("recv_oct_details")]
-        Rate RateOfOctetsRecevied { get; }
+        Rate RateOfPacketsReceivedInOctets { get; }
 
         [JsonProperty("send_oct_details")]
-        Rate RateOfOctetsSent { get; }
+        Rate RateOfPacketsSentInOctets { get; }
 
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }
@@ -58,6 +58,9 @@ namespace HareDu.Core.Model
 
         [JsonProperty("send_cnt")]
         long PacketsSent { get; }
+
+        [JsonProperty("send_oct")]
+        long PacketsSentInOctets { get; }
 
         [JsonProperty("recv_cnt")]
         long PacketsReceived { get; }
@@ -109,5 +112,8 @@ namespace HareDu.Core.Model
 
         [JsonProperty("port")]
         long Port { get; }
+
+        [JsonProperty("node")]
+        string Node { get; }
     }
 }

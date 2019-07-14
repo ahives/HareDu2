@@ -24,36 +24,44 @@ namespace HareDu.Model
         public ClusterStatusImpl(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes, IReadOnlyList<ConnectionInfo> connections, IReadOnlyList<ChannelInfo> channels)
         {
             ClusterName = cluster.ClusterName;
-//            ErlangVerion = cluster.ErlangVerion;
             RabbitMqVersion = cluster.RabbitMqVersion;
             Queue = new QueueDetailsImpl(cluster.MessageStats);
-            Nodes = GetNodes(cluster, nodes, channels);
+            Nodes = GetNodes(cluster, nodes, connections, channels);
         }
 
-        IReadOnlyList<NodeStatus> GetNodes(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes,
+        IReadOnlyList<NodeStatus> GetNodes(ClusterInfo cluster,
+            IReadOnlyList<NodeInfo> nodes,
+            IReadOnlyList<ConnectionInfo> connections,
             IReadOnlyList<ChannelInfo> channels)
         {
-            var nodeCluster = new List<NodeStatus>();
-            
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                nodeCluster.Add(new NodeStatusImpl(cluster, nodes[i], channels.Where(x => x.Node == nodes[i].Name)));
-            }
-
-            return nodeCluster;
+            return nodes
+                .Select(node => new NodeStatusImpl(cluster, node, connections.FilterByNode(node.Name), channels))
+                .Cast<NodeStatus>()
+                .ToList();
+//            return nodes
+//                .Select(node => new NodeStatusImpl(cluster, node, connections.Where(connection => connection.Node == node.Name), channels))
+//                .Cast<NodeStatus>()
+//                .ToList();
         }
+
+        public string RabbitMqVersion { get; }
+        public string ClusterName { get; }
+        public IReadOnlyList<NodeStatus> Nodes { get; }
+        public QueueDetails Queue { get; }
 
         
         class NodeStatusImpl :
             NodeStatus
         {
-            public NodeStatusImpl(ClusterInfo cluster, NodeInfo node, IEnumerable<ChannelInfo> channels)
+            public NodeStatusImpl(ClusterInfo cluster, NodeInfo node, IEnumerable<ConnectionInfo> connections, IEnumerable<ChannelInfo> channels)
             {
                 OS = new OperatingSystemDetailsImpl(node);
-                Erlang = new ErlangDetailsImpl(cluster, node);
+                Erlang = new ErlangSnapshotImpl(cluster, node);
                 IO = new IOImpl(cluster.MessageStats, node);
                 ContextSwitching = new ContextSwitchDetailsImpl(node);
-                Channels = channels.Select(x => new ChannelDetailsImpl(x)).ToList();
+                Connections = connections
+                    .Select(connection => new ConnectionSnapshotImpl(connection, channels.FilterByConnection(connection.Name)))
+                    .ToList();
             }
 
             public OperatingSystemDetails OS { get; }
@@ -65,27 +73,57 @@ namespace HareDu.Model
             public string Type { get; }
             public bool IsRunning { get; }
             public IO IO { get; }
-            public ErlangDetails Erlang { get; }
+            public ErlangSnapshot Erlang { get; }
             public Mnesia Mnesia { get; }
             public MemoryDetails Memory { get; }
             public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
-            public IReadOnlyList<ChannelDetails> Channels { get; }
+            public IReadOnlyList<ConnectionSnapshot> Connections { get; }
 
             
-            class ChannelDetailsImpl :
-                ChannelDetails
+            class ConnectionSnapshotImpl :
+                ConnectionSnapshot
             {
-                public ChannelDetailsImpl(ChannelInfo channel)
+                public ConnectionSnapshotImpl(ConnectionInfo connection, List<ChannelSnapshot> channels)
                 {
-                    TotalReceived = channel.TotalReceived;
-                    TotalSent = channel.TotalSent;
-                    TotalConsumers = channel.TotalConsumers;
+                    Traffic = new TrafficImpl(connection);
+                    Channels = channels;
                 }
 
-                public long TotalReceived { get; }
-                public long TotalSent { get; }
-                public long TotalConsumers { get; }
+                public Traffic Traffic { get; }
+                public IReadOnlyList<ChannelSnapshot> Channels { get; }
+
+                
+                class TrafficImpl :
+                    Traffic
+                {
+                    public TrafficImpl(ConnectionInfo connection)
+                    {
+                        Sent = new PacketsImpl(connection.PacketsSent, connection.PacketsSentInOctets,
+                            connection.RateOfPacketsSentInOctets?.Rate ?? 0);
+                        Received = new PacketsImpl(connection.PacketsReceived, connection.PacketsReceivedInOctets,
+                            connection.RateOfPacketsReceivedInOctets?.Rate ?? 0);
+                    }
+
+                    
+                    class PacketsImpl :
+                        Packets
+                    {
+                        public PacketsImpl(long total, long octets, decimal rate)
+                        {
+                            Total = total;
+                            Octets = octets;
+                            Rate = rate;
+                        }
+
+                        public long Total { get; }
+                        public long Octets { get; }
+                        public decimal Rate { get; }
+                    }
+
+                    public Packets Sent { get; }
+                    public Packets Received { get; }
+                }
             }
 
 
@@ -103,20 +141,39 @@ namespace HareDu.Model
             }
 
             
-            class ErlangDetailsImpl : ErlangDetails
+            class ErlangSnapshotImpl :
+                ErlangSnapshot
             {
-                public ErlangDetailsImpl(ClusterInfo cluster, NodeInfo node)
+                public ErlangSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                 {
                     Version = cluster.ErlangVerion;
                     MemoryUsed = node.MemoryUsed;
                     AvailableCPUCores = node.Processors;
+                    Processes = new ErlangProcessSnapshotImpl(node.TotalProcesses, node.ProcessesUsed,
+                        node.ProcessUsageDetails?.Rate ?? 0);
+                }
+
+                
+                class ErlangProcessSnapshotImpl :
+                    ErlangProcessSnapshot
+                {
+                    public ErlangProcessSnapshotImpl(long limit, long used, decimal usageRate)
+                    {
+                        Limit = limit;
+                        Used = used;
+                        UsageRate = usageRate;
+                    }
+
+                    public long Limit { get; }
+                    public long Used { get; }
+                    public decimal UsageRate { get; }
                 }
 
                 public string Version { get; }
                 public long MemoryUsed { get; }
                 public long AvailableCPUCores { get; }
                 public MemoryUsageDetails MemoryUsageDetails { get; }
-                public ErlangProcessDetails Processes { get; }
+                public ErlangProcessSnapshot Processes { get; }
             }
 
 
@@ -356,10 +413,5 @@ namespace HareDu.Model
                 public decimal Rate { get; }
             }
         }
-
-        public string RabbitMqVersion { get; }
-        public string ClusterName { get; }
-        public IReadOnlyList<NodeStatus> Nodes { get; }
-        public QueueDetails Queue { get; }
     }
 }

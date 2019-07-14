@@ -131,4 +131,8 @@ https://pulse.mozilla.org/doc/stats.html
 
 https://docs.appoptics.com/kb/host_infrastructure/integrations/rabbitmq/
 
+https://www.datadoghq.com/blog/rabbitmq-monitoring/
+
+https://www.rabbitmq.com/rabbitmqctl.8.html
+
 

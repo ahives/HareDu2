@@ -13,12 +13,10 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface ChannelDetails
+    public interface Traffic
     {
-        long TotalReceived { get; }
-        long TotalSent { get; }
+        Packets Sent { get; }
         
-        long TotalConsumers { get; }
-        
+        Packets Received { get; }
     }
 }

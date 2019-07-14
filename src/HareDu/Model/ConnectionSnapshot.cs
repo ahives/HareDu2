@@ -15,36 +15,10 @@ namespace HareDu.Model
 {
     using System.Collections.Generic;
 
-    public interface NodeStatus
+    public interface ConnectionSnapshot
     {
-        OperatingSystemDetails OS { get; }
-
-        string RatesMode { get; }
-
-        long Uptime { get; }
-
-        int RunQueue { get; }
-
-        long InterNodeHeartbeat { get; }
-
-        string Name { get; }
-
-        string Type { get; }
-
-        bool IsRunning { get; }
-
-        IO IO { get; }
+        Traffic Traffic { get; }
         
-        ErlangSnapshot Erlang { get; }
-        
-        Mnesia Mnesia { get; }
-        
-        MemoryDetails Memory { get; }
-
-        GarbageCollection GC { get; }
-
-        ContextSwitchingDetails ContextSwitching { get; }
-        
-        IReadOnlyList<ConnectionSnapshot> Connections { get; }
+        IReadOnlyList<ChannelSnapshot> Channels { get; }
     }
 }

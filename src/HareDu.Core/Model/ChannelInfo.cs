@@ -19,7 +19,7 @@ namespace HareDu.Core.Model
     public interface ChannelInfo
     {
         [JsonProperty("reductions_details")]
-        Rate RateOfReduction { get; }
+        ReductionDetails ReductionDetails { get; }
 
         [JsonProperty("reductions")]
         long TotalReductions { get; }
@@ -31,7 +31,7 @@ namespace HareDu.Core.Model
         string User { get; }
 
         [JsonProperty("send_oct")]
-        long SendOctet { get; }
+        long OctetsSent { get; }
 
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }
@@ -45,23 +45,11 @@ namespace HareDu.Core.Model
         [JsonProperty("timeout")]
         long Timeout { get; }
 
-        [JsonProperty("recv_oct")]
-        long ReceivedOctet { get; }
-
-        [JsonProperty("recv_oct_details")]
-        Rate RateOfReceivedOctet { get; }
-
-        [JsonProperty("send_oct_details")]
-        Rate RateOfSentOctet { get; }
-
         [JsonProperty("number")]
         long Number { get; }
 
         [JsonProperty("name")]
         string Name { get; }
-
-        [JsonProperty("node")]
-        string Node { get; }
 
         [JsonProperty("protocol")]
         string Protocol { get; }
@@ -122,12 +110,6 @@ namespace HareDu.Core.Model
 
         [JsonProperty("send_pend")]
         long SentPending { get; }
-
-        [JsonProperty("send_cnt")]
-        long TotalSent { get; }
-
-        [JsonProperty("recv_cnt")]
-        long TotalReceived { get; }
 
         [JsonProperty("global_prefetch_count")]
         long GlobalPrefetchCount { get; }

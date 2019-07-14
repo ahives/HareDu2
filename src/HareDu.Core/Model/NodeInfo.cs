@@ -124,7 +124,7 @@ namespace HareDu.Core.Model
         long ProcessesUsed { get; }
 
         [JsonProperty("proc_used_details")]
-        ProcessesUsedDetails ProcessesUsedDetails { get; }
+        ProcessUsageDetails ProcessUsageDetails { get; }
 
         [JsonProperty("disk_free")]
         long FreeDiskSpace { get; }

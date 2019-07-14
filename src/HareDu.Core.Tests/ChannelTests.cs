@@ -75,11 +75,11 @@ namespace HareDu.Tests
                     Console.WriteLine("Port: {0}", node.Port);
                     Console.WriteLine("PrefetchCount: {0}", node.PrefetchCount);
                     Console.WriteLine("Protocol: {0}", node.Protocol);
-                    Console.WriteLine("RateOfReceviedOctet: {0}", node.RateOfReceivedOctet.Rate);
-                    Console.WriteLine("RateOfReduction: {0}", node.RateOfReduction.Rate);
-                    Console.WriteLine("RateOfSentOctet: {0}", node.RateOfSentOctet.Rate);
-                    Console.WriteLine("ReceivedOctet: {0}", node.ReceivedOctet);
-                    Console.WriteLine("SendOctet: {0}", node.SendOctet);
+                    Console.WriteLine("RateOfReceviedOctet: {0}", node.OctetsReceivedDetails.Rate);
+                    Console.WriteLine("RateOfReduction: {0}", node.ReductionDetails.Rate);
+                    Console.WriteLine("RateOfSentOctet: {0}", node.OctetsSentDetails.Rate);
+                    Console.WriteLine("ReceivedOctet: {0}", node.OctetsReceived);
+                    Console.WriteLine("SendOctet: {0}", node.OctetsSent);
                     Console.WriteLine("SentPending: {0}", node.SentPending);
                     Console.WriteLine("Ssl: {0}", node.Ssl);
                     Console.WriteLine("SslCipher: {0}", node.SslCipher);
@@ -90,9 +90,9 @@ namespace HareDu.Tests
                     Console.WriteLine("Timeout: {0}", node.Timeout);
                     Console.WriteLine("TotalChannels: {0}", node.TotalChannels);
                     Console.WriteLine("TotalConsumers: {0}", node.TotalConsumers);
-                    Console.WriteLine("TotalReceived: {0}", node.TotalReceived);
+                    Console.WriteLine("TotalReceived: {0}", node.PacketsReceived);
                     Console.WriteLine("TotalReductions: {0}", node.TotalReductions);
-                    Console.WriteLine("TotalSent: {0}", node.TotalSent);
+                    Console.WriteLine("TotalSent: {0}", node.PacketsSent);
                     Console.WriteLine("Transactional: {0}", node.Transactional);
                     Console.WriteLine("Type: {0}", node.Type);
                     Console.WriteLine("UnacknowledgedMessages: {0}", node.UnacknowledgedMessages);

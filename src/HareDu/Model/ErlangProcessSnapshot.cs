@@ -13,8 +13,10 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface ErlangProcessDetails
+    public interface ErlangProcessSnapshot
     {
+        long Limit { get; }
+        
         long Used { get; }
 
         decimal UsageRate { get; }
