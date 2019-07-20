@@ -13,14 +13,12 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface FileDescriptorOpenAttempts
+    using System.Collections.Generic;
+
+    public interface ConnectionMetrics
     {
-        long OpenAttempts { get; }
-
-        decimal OpenAttemptRate { get; }
-
-        decimal OpenAttemptAvgTime { get; }
-
-        decimal FileHandleOpenAttemptAvgTimeRate { get; }
+        NetworkTrafficMetrics Traffic { get; }
+        
+        IReadOnlyList<ChannelMetrics> Channels { get; }
     }
 }

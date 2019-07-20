@@ -13,26 +13,12 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface QueueDetails
+    public interface ErlangMetrics
     {
-        MessageDetails Published { get; }
+        string Version { get; }
         
-        MessageDetails Confirmed { get; }
-        
-        MessageDetails UnroutableMessagesReturned { get; }
-        
-        MessageDetails Gets { get; }
-        
-        MessageDetails GetsWithoutAcknowledgement { get; }
-        
-        MessageDetails Delivered { get; }
-        
-        MessageDetails DeliveredWithoutAcknowledgement { get; }
-        
-        MessageDetails Redelivered { get; }
-        
-        MessageDetails Acknowledged { get; }
-        
-        MessageDetails DeliveryGets { get; }
+        long AvailableCores { get; }
+
+        ErlangProcessMetrics Processes { get; }
     }
 }

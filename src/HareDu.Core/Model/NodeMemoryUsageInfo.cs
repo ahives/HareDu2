@@ -11,14 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu.Core.Model
 {
-    public interface ErlangSnapshot
-    {
-        string Version { get; }
-        
-        long AvailableCPUCores { get; }
+    using Newtonsoft.Json;
 
-        ErlangProcessSnapshot Processes { get; }
+    public interface NodeMemoryUsageInfo
+    {
+        [JsonProperty("memory")]
+        MemoryInfo Memory { get; }
     }
 }

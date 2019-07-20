@@ -20,16 +20,16 @@ namespace HareDu.Internal.Snapshots
     using Core.Model;
     using Model;
 
-    public class ClusterSnapshotImpl :
+    public class RabbitMqClusterImpl :
         BaseSnapshot,
-        ClusterSnapshot
+        RabbitMqCluster
     {
-        public ClusterSnapshotImpl(IResourceFactory factory)
+        public RabbitMqClusterImpl(IResourceFactory factory)
             : base(factory)
         {
         }
         
-        public async Task<ClusterStatus> Get()
+        public async Task<ClusterSnapshot> Get()
         {
             var clusterResource = await _factory
                 .Resource<Cluster>()
@@ -54,8 +54,14 @@ namespace HareDu.Internal.Snapshots
                 .GetAll();
 
             var channels = channelResource.Select(x => x.Data);
+
+            var queueResource = await _factory
+                .Resource<Queue>()
+                .GetAll();
+
+            var queues = queueResource.Select(x => x.Data);
             
-            var summary = new ClusterStatusImpl(cluster, nodes, connections, channels);
+            var summary = new ClusterSnapshotImpl(cluster, nodes, connections, channels, queues);
 
             return summary;
         }

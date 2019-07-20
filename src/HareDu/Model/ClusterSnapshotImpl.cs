@@ -18,14 +18,16 @@ namespace HareDu.Model
     using Core.Extensions;
     using Core.Model;
 
-    class ClusterStatusImpl :
-        ClusterStatus
+    class ClusterSnapshotImpl :
+        ClusterSnapshot
     {
-        public ClusterStatusImpl(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes, IReadOnlyList<ConnectionInfo> connections, IReadOnlyList<ChannelInfo> channels)
+        public ClusterSnapshotImpl(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes,
+            IReadOnlyList<ConnectionInfo> connections, IReadOnlyList<ChannelInfo> channels,
+            IReadOnlyList<QueueInfo> queues)
         {
             ClusterName = cluster.ClusterName;
             RabbitMqVersion = cluster.RabbitMqVersion;
-            Queue = new QueueDetailsImpl(cluster.MessageStats);
+            Queue = new QueueMetricsImpl(cluster.MessageStats, queues);
             Nodes = GetNodes(cluster, nodes, connections, channels);
         }
 
@@ -38,33 +40,30 @@ namespace HareDu.Model
                 .Select(node => new NodeStatusImpl(cluster, node, connections.FilterByNode(node.Name), channels))
                 .Cast<NodeStatus>()
                 .ToList();
-//            return nodes
-//                .Select(node => new NodeStatusImpl(cluster, node, connections.Where(connection => connection.Node == node.Name), channels))
-//                .Cast<NodeStatus>()
-//                .ToList();
         }
 
         public string RabbitMqVersion { get; }
         public string ClusterName { get; }
         public IReadOnlyList<NodeStatus> Nodes { get; }
-        public QueueDetails Queue { get; }
+        public QueueMetrics Queue { get; }
+        public IReadOnlyList<QueueMetrics> Queues { get; }
 
-        
+
         class NodeStatusImpl :
             NodeStatus
         {
             public NodeStatusImpl(ClusterInfo cluster, NodeInfo node, IEnumerable<ConnectionInfo> connections, IEnumerable<ChannelInfo> channels)
             {
-                OS = new OperatingSystemDetailsImpl(node);
-                Erlang = new ErlangSnapshotImpl(cluster, node);
+                OS = new OperatingSystemMetricsImpl(node);
+                Erlang = new ErlangMetricsImpl(cluster, node);
                 IO = new IOImpl(cluster.MessageStats, node);
                 ContextSwitching = new ContextSwitchDetailsImpl(node);
                 Connections = connections
-                    .Select(connection => new ConnectionSnapshotImpl(connection, channels.FilterByConnection(connection.Name)))
+                    .Select(connection => new ConnectionMetricsImpl(connection, channels.FilterByConnection(connection.Name)))
                     .ToList();
             }
 
-            public OperatingSystemDetails OS { get; }
+            public OperatingSystemMetrics OS { get; }
             public string RatesMode { get; }
             public long Uptime { get; }
             public int RunQueue { get; }
@@ -73,31 +72,31 @@ namespace HareDu.Model
             public string Type { get; }
             public bool IsRunning { get; }
             public IO IO { get; }
-            public ErlangSnapshot Erlang { get; }
+            public ErlangMetrics Erlang { get; }
             public Mnesia Mnesia { get; }
             public MemoryDetails Memory { get; }
             public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
-            public IReadOnlyList<ConnectionSnapshot> Connections { get; }
+            public IReadOnlyList<ConnectionMetrics> Connections { get; }
 
             
-            class ConnectionSnapshotImpl :
-                ConnectionSnapshot
+            class ConnectionMetricsImpl :
+                ConnectionMetrics
             {
-                public ConnectionSnapshotImpl(ConnectionInfo connection, List<ChannelSnapshot> channels)
+                public ConnectionMetricsImpl(ConnectionInfo connection, List<ChannelMetrics> channels)
                 {
-                    Traffic = new TrafficImpl(connection);
+                    Traffic = new NetworkTrafficMetricsImpl(connection);
                     Channels = channels;
                 }
 
-                public Traffic Traffic { get; }
-                public IReadOnlyList<ChannelSnapshot> Channels { get; }
+                public NetworkTrafficMetrics Traffic { get; }
+                public IReadOnlyList<ChannelMetrics> Channels { get; }
 
                 
-                class TrafficImpl :
-                    Traffic
+                class NetworkTrafficMetricsImpl :
+                    NetworkTrafficMetrics
                 {
-                    public TrafficImpl(ConnectionInfo connection)
+                    public NetworkTrafficMetricsImpl(ConnectionInfo connection)
                     {
                         Sent = new PacketsImpl(connection.PacketsSent, connection.PacketsSentInOctets,
                             connection.RateOfPacketsSentInOctets?.Rate ?? 0);
@@ -141,23 +140,23 @@ namespace HareDu.Model
             }
 
             
-            class ErlangSnapshotImpl :
-                ErlangSnapshot
+            class ErlangMetricsImpl :
+                ErlangMetrics
             {
-                public ErlangSnapshotImpl(ClusterInfo cluster, NodeInfo node)
+                public ErlangMetricsImpl(ClusterInfo cluster, NodeInfo node)
                 {
                     Version = cluster.ErlangVerion;
                     MemoryUsed = node.MemoryUsed;
-                    AvailableCPUCores = node.Processors;
-                    Processes = new ErlangProcessSnapshotImpl(node.TotalProcesses, node.ProcessesUsed,
+                    AvailableCores = node.Processors;
+                    Processes = new ErlangProcessMetricsImpl(node.TotalProcesses, node.ProcessesUsed,
                         node.ProcessUsageDetails?.Rate ?? 0);
                 }
 
                 
-                class ErlangProcessSnapshotImpl :
-                    ErlangProcessSnapshot
+                class ErlangProcessMetricsImpl :
+                    ErlangProcessMetrics
                 {
-                    public ErlangProcessSnapshotImpl(long limit, long used, decimal usageRate)
+                    public ErlangProcessMetricsImpl(long limit, long used, decimal usageRate)
                     {
                         Limit = limit;
                         Used = used;
@@ -171,27 +170,26 @@ namespace HareDu.Model
 
                 public string Version { get; }
                 public long MemoryUsed { get; }
-                public long AvailableCPUCores { get; }
-                public MemoryUsageDetails MemoryUsageDetails { get; }
-                public ErlangProcessSnapshot Processes { get; }
+                public long AvailableCores { get; }
+                public ErlangProcessMetrics Processes { get; }
             }
 
 
-            class OperatingSystemDetailsImpl :
-                OperatingSystemDetails
+            class OperatingSystemMetricsImpl :
+                OperatingSystemMetrics
             {
-                public OperatingSystemDetailsImpl(NodeInfo node)
+                public OperatingSystemMetricsImpl(NodeInfo node)
                 {
                     ProcessId = node.OperatingSystemProcessId;
-                    FileDescriptors = new FileDescriptorDetailsImpl(node);
-                    Sockets = new SocketDetailsImpl(node);
+                    FileDescriptors = new FileDescriptorMetricsImpl(node);
+                    Sockets = new SocketMetricsImpl(node);
                 }
 
                 
-                class SocketDetailsImpl :
-                    SocketDetails
+                class SocketMetricsImpl :
+                    SocketMetrics
                 {
-                    public SocketDetailsImpl(NodeInfo node)
+                    public SocketMetricsImpl(NodeInfo node)
                     {
                         Available = node.TotalSocketsAvailable;
                         Used = node.SocketsUsed;
@@ -204,44 +202,32 @@ namespace HareDu.Model
                 }
 
 
-                class FileDescriptorDetailsImpl :
-                    FileDescriptorDetails
+                class FileDescriptorMetricsImpl :
+                    FileDescriptorMetrics
                 {
-                    public FileDescriptorDetailsImpl(NodeInfo node)
+                    public FileDescriptorMetricsImpl(NodeInfo node)
                     {
                         Available = node.TotalFileDescriptors;
                         Used = node.FileDescriptorUsed;
                         UsageRate = node.FileDescriptorUsedDetails.Rate;
-                        FileDescriptorOpenAttempts = new FileDescriptorOpenAttemptsImpl(node);
+                        OpenAttempts = node.TotalOpenFileHandleAttempts;
+                        OpenAttemptRate = node.FileHandleOpenAttemptCountDetails.Rate;
+                        OpenAttemptAvgTime = node.FileHandleOpenAttemptAvgTimeDetails.Rate;
+                        OpenAttemptAvgTimeRate = node.FileHandleOpenAttemptAvgTimeDetails.Rate;
                     }
 
                     public long Available { get; }
                     public long Used { get; }
                     public decimal UsageRate { get; }
-                    public FileDescriptorOpenAttempts FileDescriptorOpenAttempts { get; }
-
-                    
-                    class FileDescriptorOpenAttemptsImpl :
-                        FileDescriptorOpenAttempts
-                    {
-                        public FileDescriptorOpenAttemptsImpl(NodeInfo node)
-                        {
-                            OpenAttempts = node.TotalOpenFileHandleAttempts;
-                            OpenAttemptRate = node.FileHandleOpenAttemptCountDetails.Rate;
-                            OpenAttemptAvgTime = node.FileHandleOpenAttemptAvgTimeDetails.Rate;
-                            FileHandleOpenAttemptAvgTimeRate = node.FileHandleOpenAttemptAvgTimeDetails.Rate;
-                        }
-
-                        public long OpenAttempts { get; }
-                        public decimal OpenAttemptRate { get; }
-                        public decimal OpenAttemptAvgTime { get; }
-                        public decimal FileHandleOpenAttemptAvgTimeRate { get; }
-                    }
+                    public long OpenAttempts { get; }
+                    public decimal OpenAttemptRate { get; }
+                    public decimal OpenAttemptAvgTime { get; }
+                    public decimal OpenAttemptAvgTimeRate { get; }
                 }
 
                 public string ProcessId { get; }
-                public FileDescriptorDetails FileDescriptors { get; }
-                public SocketDetails Sockets { get; }
+                public FileDescriptorMetrics FileDescriptors { get; }
+                public SocketMetrics Sockets { get; }
             }
         }
 
@@ -371,18 +357,18 @@ namespace HareDu.Model
         }
 
 
-        class QueueDetailsImpl :
-            QueueDetails
+        class QueueMetricsImpl :
+            QueueMetrics
         {
-            public QueueDetailsImpl(MessageStats stats)
+            public QueueMetricsImpl(MessageStats stats, IReadOnlyList<QueueInfo> queues)
             {
                 Published = new MessageDetailsImpl(stats.TotalMessagesPublished, stats.MessagesPublishedDetails.IsNull() ? 0 : stats.MessagesPublishedDetails.Rate);
                 Confirmed = new MessageDetailsImpl(stats.TotalMessagesConfirmed, stats.MessagesConfirmedDetails.IsNull() ? 0 : stats.MessagesConfirmedDetails.Rate);
-                UnroutableMessagesReturned = new MessageDetailsImpl(stats.TotalUnroutableMessagesReturned, stats.UnroutableMessagesReturnedDetails.IsNull() ? 0 : stats.UnroutableMessagesReturnedDetails.Rate);
+                Unroutable = new MessageDetailsImpl(stats.TotalUnroutableMessages, stats.UnroutableMessagesDetails.IsNull() ? 0 : stats.UnroutableMessagesDetails.Rate);
                 Gets = new MessageDetailsImpl(stats.TotalMessageGets, stats.MessageGetDetails.IsNull() ? 0 : stats.MessageGetDetails.Rate);
-                GetsWithoutAcknowledgement = new MessageDetailsImpl(stats.TotalMessageGetsWithoutAck, stats.MessageGetsWithoutAckDetails.IsNull() ? 0 : stats.MessageGetsWithoutAckDetails.Rate);
+                GetsWithoutAck = new MessageDetailsImpl(stats.TotalMessageGetsWithoutAck, stats.MessageGetsWithoutAckDetails.IsNull() ? 0 : stats.MessageGetsWithoutAckDetails.Rate);
                 Delivered = new MessageDetailsImpl(stats.TotalMessagesDelivered, stats.MessageDeliveryDetails.IsNull() ? 0 : stats.MessageDeliveryDetails.Rate);
-                DeliveredWithoutAcknowledgement = new MessageDetailsImpl(stats.TotalMessageDeliveredWithoutAck, stats.MessagesDeliveredWithoutAckDetails.IsNull() ? 0 : stats.MessagesDeliveredWithoutAckDetails.Rate);
+                DeliveredWithoutAck = new MessageDetailsImpl(stats.TotalMessageDeliveredWithoutAck, stats.MessagesDeliveredWithoutAckDetails.IsNull() ? 0 : stats.MessagesDeliveredWithoutAckDetails.Rate);
                 Redelivered = new MessageDetailsImpl(stats.TotalMessagesRedelivered, stats.MessagesRedeliveredDetails.IsNull() ? 0 : stats.MessagesRedeliveredDetails.Rate);
                 Acknowledged = new MessageDetailsImpl(stats.TotalMessagesAcknowledged, stats.MessagesAcknowledgedDetails.IsNull() ? 0 : stats.MessagesAcknowledgedDetails.Rate);
                 DeliveryGets = new MessageDetailsImpl(stats.TotalMessageDeliveryGets, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
@@ -390,13 +376,14 @@ namespace HareDu.Model
 
             public MessageDetails Published { get; }
             public MessageDetails Confirmed { get; }
-            public MessageDetails UnroutableMessagesReturned { get; }
+            public MessageDetails Unroutable { get; }
             public MessageDetails Gets { get; }
-            public MessageDetails GetsWithoutAcknowledgement { get; }
+            public MessageDetails GetsWithoutAck { get; }
             public MessageDetails Delivered { get; }
-            public MessageDetails DeliveredWithoutAcknowledgement { get; }
+            public MessageDetails DeliveredWithoutAck { get; }
             public MessageDetails Redelivered { get; }
             public MessageDetails Acknowledged { get; }
+            public MessageDetails Unacknowledged { get; }
             public MessageDetails DeliveryGets { get; }
 
             

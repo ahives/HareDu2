@@ -20,15 +20,15 @@ namespace HareDu
 
     public static class SnapshotFilterExtensions
     {
-        public static List<ChannelSnapshot> FilterByConnection(this IEnumerable<ChannelInfo> channels, string connection)
+        public static List<ChannelMetrics> FilterByConnection(this IEnumerable<ChannelInfo> channels, string connection)
         {
             if (channels == null || !channels.Any())
-                return new List<ChannelSnapshot>();
+                return new List<ChannelMetrics>();
 
             return channels
                 .Where(x => x.ConnectionDetails?.Name == connection)
-                .Select(x => new ChannelSnapshotImpl(x))
-                .Cast<ChannelSnapshot>()
+                .Select(x => new ChannelMetricsImpl(x))
+                .Cast<ChannelMetrics>()
                 .ToList();
         }
 
@@ -41,10 +41,10 @@ namespace HareDu
         }
         
         
-        class ChannelSnapshotImpl :
-            ChannelSnapshot
+        class ChannelMetricsImpl :
+            ChannelMetrics
         {
-            public ChannelSnapshotImpl(ChannelInfo channel)
+            public ChannelMetricsImpl(ChannelInfo channel)
             {
                 Name = channel.Name;
                 TotalConsumers = channel.TotalConsumers;

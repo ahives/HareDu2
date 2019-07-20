@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface FileDescriptorDetails
+    public interface FileDescriptorMetrics
     {
         long Available { get; }
 
@@ -21,6 +21,12 @@ namespace HareDu.Model
 
         decimal UsageRate { get; }
 
-        FileDescriptorOpenAttempts FileDescriptorOpenAttempts { get; }
+        long OpenAttempts { get; }
+
+        decimal OpenAttemptRate { get; }
+
+        decimal OpenAttemptAvgTime { get; }
+
+        decimal OpenAttemptAvgTimeRate { get; }
     }
 }

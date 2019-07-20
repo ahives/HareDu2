@@ -17,7 +17,7 @@ namespace HareDu.Model
 
     public interface NodeStatus
     {
-        OperatingSystemDetails OS { get; }
+        OperatingSystemMetrics OS { get; }
 
         string RatesMode { get; }
 
@@ -35,7 +35,7 @@ namespace HareDu.Model
 
         IO IO { get; }
         
-        ErlangSnapshot Erlang { get; }
+        ErlangMetrics Erlang { get; }
         
         Mnesia Mnesia { get; }
         
@@ -45,6 +45,6 @@ namespace HareDu.Model
 
         ContextSwitchingDetails ContextSwitching { get; }
         
-        IReadOnlyList<ConnectionSnapshot> Connections { get; }
+        IReadOnlyList<ConnectionMetrics> Connections { get; }
     }
 }

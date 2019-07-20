@@ -26,25 +26,22 @@ namespace HareDu.Core.Model
         long TotalMessages { get; }
         
         [JsonProperty("messages_unacknowledged_details")]
-        Rate RateOfMessagesUnacknowledged { get; }
+        Rate RateOfUnacknowledgedMessages { get; }
         
         [JsonProperty("messages_unacknowledged")]
-        long UnacknowledgedDeliveredMessages { get; }
+        long UnacknowledgedMessages { get; }
         
         [JsonProperty("messages_ready_details")]
-        Rate RateOfMessagesReady { get; }
+        Rate RateOfReadyMessages { get; }
         
         [JsonProperty("messages_ready")]
-        long MessagesReadyForDelivery { get; }
+        long ReadyMessages { get; }
         
         [JsonProperty("reductions_details")]
         Rate RateOfReductions { get; }
         
         [JsonProperty("reductions")]
         long TotalReductions { get; }
-        
-        [JsonProperty("node")]
-        string Node { get; }
         
         [JsonProperty("arguments")]
         IDictionary<string, object> Arguments { get; }
@@ -68,7 +65,7 @@ namespace HareDu.Core.Model
         long TotalMessageBytesPagedOut { get; }
         
         [JsonProperty("messages_paged_out")]
-        long TotalMessagePagedOut { get; }
+        long TotalMessagesPagedOut { get; }
         
         [JsonProperty("backing_queue_status")]
         QueueStatus MessageRates { get; }
@@ -95,7 +92,7 @@ namespace HareDu.Core.Model
         long MessagesPersisted { get; }
         
         [JsonProperty("messages_unacknowledged_ram")]
-        long UnacknowledgedDeliveredMessagesInRam { get; }
+        long UnacknowledgedMessagesInRam { get; }
         
         [JsonProperty("messages_ready_ram")]
         long MessagesReadyForDeliveryInRam { get; }
@@ -129,5 +126,8 @@ namespace HareDu.Core.Model
         
         [JsonProperty("memory")]
         long Memory { get; }
+        
+        [JsonProperty("message_stats")]
+        QueueMessageStats MessageStats { get; }
     }
 }

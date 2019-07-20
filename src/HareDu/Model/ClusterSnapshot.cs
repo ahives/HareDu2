@@ -15,7 +15,7 @@ namespace HareDu.Model
 {
     using System.Collections.Generic;
 
-    public interface ClusterStatus
+    public interface ClusterSnapshot
     {
         string RabbitMqVersion { get; }
         
@@ -23,6 +23,33 @@ namespace HareDu.Model
         
         IReadOnlyList<NodeStatus> Nodes { get; }
         
-        QueueDetails Queue { get; }
+        ClusterPerformance Performance { get; }
+        
+        IReadOnlyList<QueueMetrics> Queues { get; }
+    }
+
+    public interface ClusterPerformance
+    {
+        MessageDetails Published { get; }
+        
+        MessageDetails Confirmed { get; }
+        
+        MessageDetails Unroutable { get; }
+        
+        MessageDetails Gets { get; }
+        
+        MessageDetails GetsWithoutAck { get; }
+        
+        MessageDetails Delivered { get; }
+        
+        MessageDetails DeliveredWithoutAck { get; }
+        
+        MessageDetails Redelivered { get; }
+        
+        MessageDetails Acknowledged { get; }
+        
+        MessageDetails Unacknowledged { get; }
+        
+        MessageDetails DeliveryGets { get; }
     }
 }

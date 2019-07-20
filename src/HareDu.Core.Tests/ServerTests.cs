@@ -61,9 +61,9 @@ namespace HareDu.Tests
                     Console.WriteLine("ExclusiveConsumerTag: {0}", queue.ExclusiveConsumerTag);
                     Console.WriteLine("ConsumerUtilization: {0}", queue.ConsumerUtilization);
                     Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
-                    Console.WriteLine("UnacknowledgedDeliveredMessagesInRam: {0}", queue.UnacknowledgedDeliveredMessagesInRam);
-                    Console.WriteLine("UnacknowledgedDeliveredMessages: {0}", queue.UnacknowledgedDeliveredMessages);
-                    Console.WriteLine("TotalMessagePagedOut: {0}", queue.TotalMessagePagedOut);
+                    Console.WriteLine("UnacknowledgedDeliveredMessagesInRam: {0}", queue.UnacknowledgedMessagesInRam);
+                    Console.WriteLine("UnacknowledgedDeliveredMessages: {0}", queue.UnacknowledgedMessages);
+                    Console.WriteLine("TotalMessagePagedOut: {0}", queue.TotalMessagesPagedOut);
                     Console.WriteLine("TotalMessageBytesPagedOut: {0}", queue.TotalMessageBytesPagedOut);
                     Console.WriteLine("TotalBytesOfMessagesReadyForDelivery: {0}", queue.TotalBytesOfMessagesReadyForDelivery);
                     Console.WriteLine("TotalBytesOfMessagesDeliveredButUnacknowledged: {0}", queue.TotalBytesOfMessagesDeliveredButUnacknowledged);
@@ -71,8 +71,8 @@ namespace HareDu.Tests
                     Console.WriteLine("State: {0}", queue.State);
                     Console.WriteLine("RecoverableSlaves: {0}", queue.RecoverableSlaves);
                     Console.WriteLine("RateOfReductions: {0}", queue.RateOfReductions?.Rate);
-                    Console.WriteLine("RateOfMessagesUnacknowledged: {0}", queue.RateOfMessagesUnacknowledged?.Rate);
-                    Console.WriteLine("RateOfMessagesReady: {0}", queue.RateOfMessagesReady?.Rate);
+                    Console.WriteLine("RateOfMessagesUnacknowledged: {0}", queue.RateOfUnacknowledgedMessages?.Rate);
+                    Console.WriteLine("RateOfMessagesReady: {0}", queue.RateOfReadyMessages?.Rate);
                     Console.WriteLine("RateOfMessage: {0}", queue.RateOfMessage?.Rate);
                     Console.WriteLine("Policy: {0}", queue.Policy);
                     Console.WriteLine("TotalTargetRam: {0}", queue.MessageRates?.TotalTargetRam);

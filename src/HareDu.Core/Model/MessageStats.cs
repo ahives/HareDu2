@@ -30,10 +30,10 @@ namespace HareDu.Core.Model
         MessagesConfirmedDetails MessagesConfirmedDetails { get; }
         
         [JsonProperty("return_unroutable")]
-        long TotalUnroutableMessagesReturned { get; }
+        long TotalUnroutableMessages { get; }
 
         [JsonProperty("return_unroutable_details")]
-        UnroutableMessagesReturnedDetails UnroutableMessagesReturnedDetails { get; }
+        UnroutableMessagesDetails UnroutableMessagesDetails { get; }
         
         [JsonProperty("disk_reads")]
         long TotalDiskReads { get; }

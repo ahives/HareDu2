@@ -13,10 +13,10 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface ChannelSnapshot
+    public interface NetworkTrafficMetrics
     {
-        long TotalConsumers { get; }
-
-        string Name { get; }
+        Packets Sent { get; }
+        
+        Packets Received { get; }
     }
 }

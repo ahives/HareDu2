@@ -12,9 +12,11 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var snapshot = await Client
-                .Snapshot<ClusterSnapshot>()
+                .Snapshot<RabbitMqCluster>()
                 .Get();
 
+            snapshot.Queues[0].Messages
+                
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {
                 for (int j = 0; j < snapshot.Nodes[i].Connections.Count; j++)
@@ -42,9 +44,15 @@ namespace HareDu.Tests
                 Console.WriteLine();
                 Console.WriteLine("***************************Erlang Details**************************************");
                 Console.WriteLine("Version => {0}", snapshot.Nodes[i].Erlang.Version);
-                Console.WriteLine("Available CPU Cores => {0}", snapshot.Nodes[i].Erlang.AvailableCPUCores);
+                Console.WriteLine("Available CPU Cores => {0}", snapshot.Nodes[i].Erlang.AvailableCores);
                 Console.WriteLine("Processes => Limit: {0}, Used: {1}, Usage Rate: {2}", snapshot.Nodes[i].Erlang.Processes.Limit, snapshot.Nodes[i].Erlang.Processes.Used, snapshot.Nodes[i].Erlang.Processes.UsageRate);
-//                Console.WriteLine(" => {0}", snapshot.Nodes[i]);
+                Console.WriteLine("File Descriptors => Available: {0}, Used: {1}, Usage Rate: {2}, Open Attempts: {3}, Open Attempt Rate: {4}, Open Attempts Avg. Time: {5}, Open Attempts Avg. Time Rate: {6}", snapshot.Nodes[i].OS.FileDescriptors.Available,
+                    snapshot.Nodes[i].OS.FileDescriptors.Used,
+                    snapshot.Nodes[i].OS.FileDescriptors.UsageRate,
+                    snapshot.Nodes[i].OS.FileDescriptors.OpenAttempts,
+                    snapshot.Nodes[i].OS.FileDescriptors.OpenAttemptRate,
+                    snapshot.Nodes[i].OS.FileDescriptors.OpenAttemptAvgTime,
+                    snapshot.Nodes[i].OS.FileDescriptors.OpenAttemptAvgTimeRate);
 //                Console.WriteLine(" => {0}", snapshot.Nodes[i]);
 //                Console.WriteLine(" => {0}", snapshot.Nodes[i]);
                 

@@ -135,4 +135,8 @@ https://www.datadoghq.com/blog/rabbitmq-monitoring/
 
 https://www.rabbitmq.com/rabbitmqctl.8.html
 
+# Using API
+
+https://www.rabbitmq.com/management.html#clustering-subset-of-nodes
+
 

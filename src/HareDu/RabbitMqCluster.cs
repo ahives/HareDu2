@@ -16,10 +16,10 @@ namespace HareDu
     using System.Threading.Tasks;
     using Model;
 
-    public interface ClusterSnapshot :
+    public interface RabbitMqCluster :
         Snapshot
     {
-        Task<ClusterStatus> Get();
+        Task<ClusterSnapshot> Get();
         
 //        Task<ClusterState> GetCurrentState();
     }

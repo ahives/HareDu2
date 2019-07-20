@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface Traffic
+    public interface OperatingSystemMetrics
     {
-        Packets Sent { get; }
+        string ProcessId { get; }
+
+        FileDescriptorMetrics FileDescriptors { get; }
         
-        Packets Received { get; }
+        SocketMetrics Sockets { get; }
     }
 }
