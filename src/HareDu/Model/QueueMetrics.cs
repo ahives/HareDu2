@@ -32,6 +32,11 @@ namespace HareDu.Model
         /// Combination of the total/rate of ready and unacknowledged messages in the queue.
         /// </summary>
         QueuedMessageDetails Depth { get; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        QueueMemoryDetails Memory { get; }
     }
 
     public interface QueueUsageMetrics
@@ -100,30 +105,19 @@ namespace HareDu.Model
 
     public interface QueueInternalMetrics
     {
-        Something Something { get; }
+        ReductionsDetails Reductions { get; }
         
+        MessagePagingDetails Paging { get; }
+        
+        decimal ConsumerUtilization { get; }
+
         long Q1 { get; }
         
-        [JsonProperty("q2")]
         long Q2 { get; }
         
-        [JsonProperty("delta")]
-        IList<object> Delta { get; }
-        
-        [JsonProperty("q3")]
         long Q3 { get; }
         
-        [JsonProperty("q4")]
         long Q4 { get; }
-        
-        [JsonProperty("len")]
-        long Length { get; }
-        
-        [JsonProperty("target_ram_count")]
-        string TotalTargetRam { get; }
-        
-        [JsonProperty("next_seq_id")]
-        long NextSequenceId { get; }
         
         [JsonProperty("avg_ingress_rate")]
         decimal AvgIngressRate { get; }
@@ -138,19 +132,60 @@ namespace HareDu.Model
         decimal AvgAcknowledgementEgressRate { get; }
     }
 
-    public interface Something
+    public interface QueueMemoryDetails
     {
-        SomeMetric Reductions { get; }
-        
-        long PagedOut { get; }
-        
-        long PagedOutBytes { get; }
-    }
-
-    public interface SomeMetric
-    {
+        /// <summary>
+        /// 
+        /// </summary>
         long Total { get; }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        QueueRAMDetails RAM { get; }
+        
+        /// <summary>
+        /// Details associated with paging of messages to disk.
+        /// </summary>
+        MessagePagingDetails Paging { get; }
+    }
+
+    public interface QueueRAMDetails
+    {
+        long Ready { get; }
+        
+        long Unacknowledged { get; }
+        
+        long Total { get; }
+        
+        long Bytes { get; }
+        
+        long Target { get; }
+    }
+
+    public interface MessagePagingDetails
+    {
+        /// <summary>
+        /// Total messages in RAM that are written (i.e. paged out) to disk.
+        /// </summary>
+        long Total { get; }
+        
+        /// <summary>
+        /// Total size in bytes of the messages that were written to disk from RAM.
+        /// </summary>
+        long Bytes { get; }
+    }
+
+    public interface ReductionsDetails
+    {
+        /// <summary>
+        /// Total number of CPU reductions.
+        /// </summary>
+        long Total { get; }
+        
+        /// <summary>
+        /// Rate at which CPU reductions are happening.
+        /// </summary>
         decimal Rate { get; }
     }
 
@@ -202,7 +237,7 @@ namespace HareDu.Model
         QueuedMessageDetails DeliveredGets { get; }
         
         /// <summary>
-        /// Total number of messages that were redelivered to consumers and the corresponding rate in msg/s.
+        /// Total number/rate (msg/s) of messages that were redelivered to consumers.
         /// </summary>
         QueuedMessageDetails Redelivered { get; }
         

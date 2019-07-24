@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface MemoryDetails
+    public interface NodeMemoryDetails
     {
         long Used { get; }
 

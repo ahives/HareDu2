@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Extensions;
@@ -29,6 +30,7 @@ namespace HareDu.Model
             RabbitMqVersion = cluster.RabbitMqVersion;
             Queue = new QueueMetricsImpl(cluster.MessageStats, queues);
             Nodes = GetNodes(cluster, nodes, connections, channels);
+            Timestamp = DateTimeOffset.Now;
         }
 
         IReadOnlyList<NodeStatus> GetNodes(ClusterInfo cluster,
@@ -45,8 +47,10 @@ namespace HareDu.Model
         public string RabbitMqVersion { get; }
         public string ClusterName { get; }
         public IReadOnlyList<NodeStatus> Nodes { get; }
+        public ClusterPerformance Performance { get; }
         public QueueMetrics Queue { get; }
         public IReadOnlyList<QueueMetrics> Queues { get; }
+        public DateTimeOffset Timestamp { get; }
 
 
         class NodeStatusImpl :
@@ -74,7 +78,7 @@ namespace HareDu.Model
             public IO IO { get; }
             public ErlangMetrics Erlang { get; }
             public Mnesia Mnesia { get; }
-            public MemoryDetails Memory { get; }
+            public NodeMemoryDetails NodeMemory { get; }
             public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
             public IReadOnlyList<ConnectionMetrics> Connections { get; }
@@ -362,42 +366,63 @@ namespace HareDu.Model
         {
             public QueueMetricsImpl(MessageStats stats, IReadOnlyList<QueueInfo> queues)
             {
-                Published = new MessageDetailsImpl(stats.TotalMessagesPublished, stats.MessagesPublishedDetails.IsNull() ? 0 : stats.MessagesPublishedDetails.Rate);
-                Confirmed = new MessageDetailsImpl(stats.TotalMessagesConfirmed, stats.MessagesConfirmedDetails.IsNull() ? 0 : stats.MessagesConfirmedDetails.Rate);
-                Unroutable = new MessageDetailsImpl(stats.TotalUnroutableMessages, stats.UnroutableMessagesDetails.IsNull() ? 0 : stats.UnroutableMessagesDetails.Rate);
-                Gets = new MessageDetailsImpl(stats.TotalMessageGets, stats.MessageGetDetails.IsNull() ? 0 : stats.MessageGetDetails.Rate);
-                GetsWithoutAck = new MessageDetailsImpl(stats.TotalMessageGetsWithoutAck, stats.MessageGetsWithoutAckDetails.IsNull() ? 0 : stats.MessageGetsWithoutAckDetails.Rate);
-                Delivered = new MessageDetailsImpl(stats.TotalMessagesDelivered, stats.MessageDeliveryDetails.IsNull() ? 0 : stats.MessageDeliveryDetails.Rate);
-                DeliveredWithoutAck = new MessageDetailsImpl(stats.TotalMessageDeliveredWithoutAck, stats.MessagesDeliveredWithoutAckDetails.IsNull() ? 0 : stats.MessagesDeliveredWithoutAckDetails.Rate);
-                Redelivered = new MessageDetailsImpl(stats.TotalMessagesRedelivered, stats.MessagesRedeliveredDetails.IsNull() ? 0 : stats.MessagesRedeliveredDetails.Rate);
-                Acknowledged = new MessageDetailsImpl(stats.TotalMessagesAcknowledged, stats.MessagesAcknowledgedDetails.IsNull() ? 0 : stats.MessagesAcknowledgedDetails.Rate);
-                DeliveryGets = new MessageDetailsImpl(stats.TotalMessageDeliveryGets, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
+                Messages = new QueuedMessageMetricsImpl(stats);
             }
 
-            public MessageDetails Published { get; }
-            public MessageDetails Confirmed { get; }
-            public MessageDetails Unroutable { get; }
-            public MessageDetails Gets { get; }
-            public MessageDetails GetsWithoutAck { get; }
-            public MessageDetails Delivered { get; }
-            public MessageDetails DeliveredWithoutAck { get; }
-            public MessageDetails Redelivered { get; }
-            public MessageDetails Acknowledged { get; }
-            public MessageDetails Unacknowledged { get; }
-            public MessageDetails DeliveryGets { get; }
+            public string Name { get; }
+            public string VirtualHost { get; }
+            public QueuedMessageMetrics Messages { get; }
+            public QueueInternalMetrics Internals { get; }
+            public QueuedMessageDetails Depth { get; }
+            public QueueMemoryDetails Memory { get; }
+            public MessagePagingDetails Paging { get; }
 
             
-            class MessageDetailsImpl :
-                MessageDetails
+            class QueuedMessageMetricsImpl :
+                QueuedMessageMetrics
             {
-                public MessageDetailsImpl(long total, decimal rate)
+                public QueuedMessageMetricsImpl(MessageStats stats)
                 {
-                    Total = total;
-                    Rate = rate;
+                    Incoming = new QueuedMessageDetailsImpl(stats.TotalMessagesPublished, stats.MessagesPublishedDetails.IsNull() ? 0 : stats.MessagesPublishedDetails.Rate);
+//                    Confirmed = new QueuedMessageDetailsImpl(stats.TotalMessageGets, stats.MessagesConfirmedDetails.IsNull() ? 0 : stats.MessagesConfirmedDetails.Rate);
+//                    Unroutable = new QueuedMessageDetailsImpl(stats.TotalUnroutableMessages, stats.UnroutableMessagesDetails.IsNull() ? 0 : stats.UnroutableMessagesDetails.Rate);
+                    Gets = new QueuedMessageDetailsImpl(stats.TotalMessageGets, stats.MessageGetDetails.IsNull() ? 0 : stats.MessageGetDetails.Rate);
+                    GetsWithoutAck = new QueuedMessageDetailsImpl(stats.TotalMessageGetsWithoutAck, stats.MessageGetsWithoutAckDetails.IsNull() ? 0 : stats.MessageGetsWithoutAckDetails.Rate);
+                    DeliveredGets = new QueuedMessageDetailsImpl(stats.TotalMessageDeliveryGets, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
+                    Delivered = new QueuedMessageDetailsImpl(stats.TotalMessagesDelivered, stats.MessageDeliveryDetails.IsNull() ? 0 : stats.MessageDeliveryDetails.Rate);
+                    DeliveredWithoutAck = new QueuedMessageDetailsImpl(stats.TotalMessageDeliveredWithoutAck, stats.MessagesDeliveredWithoutAckDetails.IsNull() ? 0 : stats.MessagesDeliveredWithoutAckDetails.Rate);
+                    Redelivered = new QueuedMessageDetailsImpl(stats.TotalMessagesRedelivered, stats.MessagesRedeliveredDetails.IsNull() ? 0 : stats.MessagesRedeliveredDetails.Rate);
+                    Acknowledged = new QueuedMessageDetailsImpl(stats.TotalMessagesAcknowledged, stats.MessagesAcknowledgedDetails.IsNull() ? 0 : stats.MessagesAcknowledgedDetails.Rate);
+//                    Ready = new QueuedMessageDetailsImpl(stats, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
+//                    Ready = new QueuedMessageDetailsImpl(stats, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
+//                    Unacknowledged = new MessageDetailsImpl(stats.TotalUnroutableMessages, stats.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
                 }
 
-                public long Total { get; }
-                public decimal Rate { get; }
+                public long Persisted { get; }
+                public QueuedMessageDetails Incoming { get; }
+                public QueuedMessageDetails Unacknowledged { get; }
+                public QueuedMessageDetails Ready { get; }
+                public QueuedMessageDetails Gets { get; }
+                public QueuedMessageDetails GetsWithoutAck { get; }
+                public QueuedMessageDetails Delivered { get; }
+                public QueuedMessageDetails DeliveredWithoutAck { get; }
+                public QueuedMessageDetails DeliveredGets { get; }
+                public QueuedMessageDetails Redelivered { get; }
+                public QueuedMessageDetails Acknowledged { get; }
+
+                
+                class QueuedMessageDetailsImpl :
+                    QueuedMessageDetails
+                {
+                    public QueuedMessageDetailsImpl(long total, decimal rate)
+                    {
+                        Total = total;
+                        Rate = rate;
+                    }
+
+                    public long Total { get; }
+                    public decimal Rate { get; }
+                }
             }
         }
     }

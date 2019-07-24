@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System;
     using System.Collections.Generic;
 
     public interface ClusterSnapshot
@@ -26,6 +27,8 @@ namespace HareDu.Model
         ClusterPerformance Performance { get; }
         
         IReadOnlyList<QueueMetrics> Queues { get; }
+        
+        DateTimeOffset Timestamp { get; }
     }
 
     public interface ClusterPerformance

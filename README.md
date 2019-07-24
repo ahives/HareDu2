@@ -139,4 +139,8 @@ https://www.rabbitmq.com/rabbitmqctl.8.html
 
 https://www.rabbitmq.com/management.html#clustering-subset-of-nodes
 
+Ensure that you have the following configuration values set to enable the API to pull statistics from your RabbitMQ cluster:
+
+Configuration value "vm_memory_calculation_strategy" is set to "rss"
+
 

@@ -39,7 +39,7 @@ namespace HareDu.Model
         
         Mnesia Mnesia { get; }
         
-        MemoryDetails Memory { get; }
+        NodeMemoryDetails NodeMemory { get; }
 
         GarbageCollection GC { get; }
 

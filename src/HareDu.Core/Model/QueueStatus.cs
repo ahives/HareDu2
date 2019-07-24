@@ -40,7 +40,7 @@ namespace HareDu.Core.Model
         long Length { get; }
         
         [JsonProperty("target_ram_count")]
-        string TotalTargetRam { get; }
+        string TargetTotalMessagesInRAM { get; }
         
         [JsonProperty("next_seq_id")]
         long NextSequenceId { get; }

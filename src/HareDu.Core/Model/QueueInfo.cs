@@ -119,7 +119,7 @@ namespace HareDu.Core.Model
         string Policy { get; }
         
         [JsonProperty("consumer_utilisation")]
-        string ConsumerUtilization { get; }
+        decimal ConsumerUtilization { get; }
         
         [JsonProperty("idle_since")]
         DateTimeOffset IdleSince { get; }

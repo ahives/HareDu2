@@ -29,7 +29,7 @@ namespace HareDu.Internal.Snapshots
         {
         }
         
-        public async Task<ClusterSnapshot> Get()
+        public async Task<ClusterSnapshot> GetDetails()
         {
             var clusterResource = await _factory
                 .Resource<Cluster>()

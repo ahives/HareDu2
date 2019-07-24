@@ -13,10 +13,10 @@ namespace HareDu.Tests
         {
             var snapshot = await Client
                 .Snapshot<RabbitMqCluster>()
-                .Get();
+                .GetDetails();
 
-            snapshot.Queues[0].Messages
-                
+//            snapshot.Queues[0].Memory.RAM
+
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {
                 for (int j = 0; j < snapshot.Nodes[i].Connections.Count; j++)

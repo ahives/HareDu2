@@ -75,7 +75,7 @@ namespace HareDu.Tests
                     Console.WriteLine("RateOfMessagesReady: {0}", queue.RateOfReadyMessages?.Rate);
                     Console.WriteLine("RateOfMessage: {0}", queue.RateOfMessage?.Rate);
                     Console.WriteLine("Policy: {0}", queue.Policy);
-                    Console.WriteLine("TotalTargetRam: {0}", queue.MessageRates?.TotalTargetRam);
+                    Console.WriteLine("TotalTargetRam: {0}", queue.MessageRates?.TargetTotalMessagesInRAM);
                     Console.WriteLine("Q4: {0}", queue.MessageRates?.Q4);
                     Console.WriteLine("Q3: {0}", queue.MessageRates?.Q3);
                     Console.WriteLine("Q2: {0}", queue.MessageRates?.Q2);

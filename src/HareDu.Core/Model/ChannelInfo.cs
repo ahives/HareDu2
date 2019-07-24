@@ -27,6 +27,9 @@ namespace HareDu.Core.Model
         [JsonProperty("vhost")]
         string VirtualHost { get; }
 
+        [JsonProperty("node")]
+        string Node { get; }
+
         [JsonProperty("user")]
         string User { get; }
 

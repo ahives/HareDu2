@@ -19,7 +19,7 @@ namespace HareDu
     public interface RabbitMqCluster :
         Snapshot
     {
-        Task<ClusterSnapshot> Get();
+        Task<ClusterSnapshot> GetDetails();
         
 //        Task<ClusterState> GetCurrentState();
     }
