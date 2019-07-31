@@ -11,13 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu.Internal.Snapshots
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Extensions;
     using Core.Model;
+    using Model;
 
     class ClusterSnapshotImpl :
         ClusterSnapshot
@@ -56,7 +57,7 @@ namespace HareDu.Model
         class NodeStatusImpl :
             NodeStatus
         {
-            public NodeStatusImpl(ClusterInfo cluster, NodeInfo node, IEnumerable<ConnectionInfo> connections, IEnumerable<ChannelInfo> channels)
+            public NodeStatusImpl(ClusterInfo cluster, NodeInfo node, IEnumerable<ConnectionInfo> connections, IReadOnlyList<ChannelInfo> channels)
             {
                 OS = new OperatingSystemMetricsImpl(node);
                 Erlang = new ErlangMetricsImpl(cluster, node);
@@ -87,13 +88,17 @@ namespace HareDu.Model
             class ConnectionMetricsImpl :
                 ConnectionMetrics
             {
-                public ConnectionMetricsImpl(ConnectionInfo connection, List<ChannelMetrics> channels)
+                public ConnectionMetricsImpl(ConnectionInfo connection, IReadOnlyList<ChannelMetrics> channels)
                 {
-                    Traffic = new NetworkTrafficMetricsImpl(connection);
+                    Identifier = connection.Name;
+                    NetworkTraffic = new NetworkTrafficMetricsImpl(connection);
                     Channels = channels;
+                    ChannelLimit = connection.MaxChannels;
                 }
 
-                public NetworkTrafficMetrics Traffic { get; }
+                public string Identifier { get; }
+                public NetworkTrafficMetrics NetworkTraffic { get; }
+                public long ChannelLimit { get; }
                 public IReadOnlyList<ChannelMetrics> Channels { get; }
 
                 
@@ -115,12 +120,12 @@ namespace HareDu.Model
                         public PacketsImpl(long total, long octets, decimal rate)
                         {
                             Total = total;
-                            Octets = octets;
+                            Bytes = octets;
                             Rate = rate;
                         }
 
                         public long Total { get; }
-                        public long Octets { get; }
+                        public long Bytes { get; }
                         public decimal Rate { get; }
                     }
 

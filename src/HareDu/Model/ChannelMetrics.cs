@@ -18,5 +18,7 @@ namespace HareDu.Model
         long TotalConsumers { get; }
 
         string Name { get; }
+        
+        string Node { get; }
     }
 }

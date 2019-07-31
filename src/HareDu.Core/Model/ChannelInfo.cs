@@ -33,14 +33,11 @@ namespace HareDu.Core.Model
         [JsonProperty("user")]
         string User { get; }
 
-        [JsonProperty("send_oct")]
-        long OctetsSent { get; }
-
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }
 
         [JsonProperty("channel_max")]
-        long ChannelMax { get; }
+        long MaxOpenedChannels { get; }
 
         [JsonProperty("frame_max")]
         long FrameMax { get; }

@@ -17,7 +17,7 @@ namespace HareDu.Model
     {
         long Total { get; }
         
-        long Octets { get; }
+        long Bytes { get; }
         
         decimal Rate { get; }
     }

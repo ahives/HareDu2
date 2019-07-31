@@ -4,7 +4,6 @@ namespace HareDu.Tests
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
-    using Core.Model;
     using NUnit.Framework;
 
     [TestFixture]
@@ -48,7 +47,7 @@ namespace HareDu.Tests
                     Console.WriteLine("Name: {0}", channel.Name);
                     Console.WriteLine("PrefetchCount: {0}", channel.PrefetchCount);
                     Console.WriteLine("AuthenticationMechanism: {0}", channel.AuthenticationMechanism);
-                    Console.WriteLine("ChannelMax: {0}", channel.ChannelMax);
+                    Console.WriteLine("ChannelMax: {0}", channel.MaxOpenedChannels);
                     Console.WriteLine("Confirm: {0}", channel.Confirm);
                     Console.WriteLine("ConnectedAt: {0}", channel.ConnectedAt);
                     Console.WriteLine("ConnectionDetailsName: {0}", channel.ConnectionDetails.Name);
@@ -76,7 +75,6 @@ namespace HareDu.Tests
                     Console.WriteLine("PrefetchCount: {0}", channel.PrefetchCount);
                     Console.WriteLine("Protocol: {0}", channel.Protocol);
                     Console.WriteLine("RateOfReduction: {0}", channel.ReductionDetails.Rate);
-                    Console.WriteLine("SendOctet: {0}", channel.OctetsSent);
                     Console.WriteLine("SentPending: {0}", channel.SentPending);
                     Console.WriteLine("Ssl: {0}", channel.Ssl);
                     Console.WriteLine("SslCipher: {0}", channel.SslCipher);

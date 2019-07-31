@@ -24,13 +24,13 @@ namespace HareDu.Tests
                     Console.WriteLine();
                     Console.WriteLine("***************************Connection Details**************************************");
                     Console.WriteLine("Traffic (Sent) => Total: {0}, Octets: {1}, Rate: {2}",
-                        snapshot.Nodes[i].Connections[j].Traffic.Sent.Total,
-                        snapshot.Nodes[i].Connections[j].Traffic.Sent.Octets,
-                        snapshot.Nodes[i].Connections[j].Traffic.Sent.Rate);
+                        snapshot.Nodes[i].Connections[j].NetworkTraffic.Sent.Total,
+                        snapshot.Nodes[i].Connections[j].NetworkTraffic.Sent.Bytes,
+                        snapshot.Nodes[i].Connections[j].NetworkTraffic.Sent.Rate);
                     Console.WriteLine("Traffic (Received) => Total: {0}, Octets: {1}, Rate: {2}",
-                        snapshot.Nodes[i].Connections[j].Traffic.Received.Total,
-                        snapshot.Nodes[i].Connections[j].Traffic.Received.Octets,
-                        snapshot.Nodes[i].Connections[j].Traffic.Received.Rate);
+                        snapshot.Nodes[i].Connections[j].NetworkTraffic.Received.Total,
+                        snapshot.Nodes[i].Connections[j].NetworkTraffic.Received.Bytes,
+                        snapshot.Nodes[i].Connections[j].NetworkTraffic.Received.Rate);
                     
                     Console.WriteLine();
                     Console.WriteLine("***************************Channel Details**************************************");
