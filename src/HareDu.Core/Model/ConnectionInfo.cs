@@ -24,7 +24,7 @@ namespace HareDu.Core.Model
         long TotalReductions { get; }
 
         [JsonProperty("recv_oct")]
-        long PacketsReceivedInOctets { get; }
+        long PacketBytesReceived { get; }
 
         [JsonProperty("recv_oct_details")]
         Rate RateOfPacketsReceivedInOctets { get; }
@@ -60,7 +60,7 @@ namespace HareDu.Core.Model
         long PacketsSent { get; }
 
         [JsonProperty("send_oct")]
-        long PacketsSentInOctets { get; }
+        long PacketBytesSent { get; }
 
         [JsonProperty("recv_cnt")]
         long PacketsReceived { get; }

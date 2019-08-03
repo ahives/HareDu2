@@ -33,7 +33,7 @@ namespace HareDu.Tests
                 Console.WriteLine("IsSecure: {0}", connection.IsSecure);
                 Console.WriteLine("MaxChannels: {0}", connection.MaxChannels);
                 Console.WriteLine("MaxFrameSizeInBytes: {0}", connection.MaxFrameSizeInBytes);
-                Console.WriteLine("OctetsReceived: {0}", connection.PacketsReceivedInOctets);
+                Console.WriteLine("OctetsReceived: {0}", connection.PacketBytesReceived);
                 Console.WriteLine("PacketsReceived: {0}", connection.PacketsReceived);
                 Console.WriteLine("PeerCertificateIssuer: {0}", connection.PeerCertificateIssuer);
                 Console.WriteLine("PeerCertificateSubject: {0}", connection.PeerCertificateSubject);

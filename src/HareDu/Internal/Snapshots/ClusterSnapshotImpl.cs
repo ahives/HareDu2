@@ -93,12 +93,16 @@ namespace HareDu.Internal.Snapshots
                     Identifier = connection.Name;
                     NetworkTraffic = new NetworkTrafficMetricsImpl(connection);
                     Channels = channels;
+                    TotalChannels = connection.Channels;
                     ChannelLimit = connection.MaxChannels;
+                    Node = connection.Node;
                 }
 
                 public string Identifier { get; }
                 public NetworkTrafficMetrics NetworkTraffic { get; }
                 public long ChannelLimit { get; }
+                public long TotalChannels { get; }
+                public string Node { get; }
                 public IReadOnlyList<ChannelMetrics> Channels { get; }
 
                 
@@ -107,9 +111,9 @@ namespace HareDu.Internal.Snapshots
                 {
                     public NetworkTrafficMetricsImpl(ConnectionInfo connection)
                     {
-                        Sent = new PacketsImpl(connection.PacketsSent, connection.PacketsSentInOctets,
+                        Sent = new PacketsImpl(connection.PacketsSent, connection.PacketBytesSent,
                             connection.RateOfPacketsSentInOctets?.Rate ?? 0);
-                        Received = new PacketsImpl(connection.PacketsReceived, connection.PacketsReceivedInOctets,
+                        Received = new PacketsImpl(connection.PacketsReceived, connection.PacketBytesReceived,
                             connection.RateOfPacketsReceivedInOctets?.Rate ?? 0);
                     }
 

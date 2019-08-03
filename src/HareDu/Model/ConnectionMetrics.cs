@@ -22,6 +22,8 @@ namespace HareDu.Model
         NetworkTrafficMetrics NetworkTraffic { get; }
         
         long ChannelLimit { get; }
+        
+        string Node { get; }
 
         IReadOnlyList<ChannelMetrics> Channels { get; }
     }

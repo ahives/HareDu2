@@ -19,6 +19,14 @@ namespace HareDu.Core.Extensions
 
     public static class ProjectionExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="projector"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static TResult Select<T, TResult>(this Task<Result<T>> source, Func<Result<T>, TResult> projector)
         {
             if (source.IsNull() || projector.IsNull())
@@ -29,12 +37,18 @@ namespace HareDu.Core.Extensions
             return result.HasData ? projector(result) : default;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="projector"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static TResult Select<T, TResult>(this Result<T> source, Func<Result<T>, TResult> projector)
         {
             if (source.IsNull() || !source.HasData || projector.IsNull())
                 return default;
-
-            TResult test = projector(source);
             
             return source.HasData ? projector(source) : default;
         }

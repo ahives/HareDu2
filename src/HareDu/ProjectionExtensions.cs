@@ -13,19 +13,16 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System.Collections.Generic;
-    using Model;
+    using System;
 
-    public interface ConnectionSnapshot
+    public static class ProjectionExtensions
     {
-        ChurnMetrics ChannelsClosed { get; }
+        public static T Select<T, U>(this U obj, Func<U, T> projection)
+        {
+            if (obj == null)
+                return default;
 
-        ChurnMetrics ChannelsCreated { get; }
-
-        ChurnMetrics ConnectionsClosed { get; }
-
-        ChurnMetrics ConnectionsCreated { get; }
-        
-        IReadOnlyList<ConnectionMetrics> Connections { get; }
+            return projection(obj);
+        }
     }
 }

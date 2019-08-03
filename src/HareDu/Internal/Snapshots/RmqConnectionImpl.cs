@@ -33,34 +33,81 @@ namespace HareDu.Internal.Snapshots
 
         public async Task<ConnectionSnapshot> Get(CancellationToken cancellationToken = default)
         {
+            Result<ClusterInfo> clusterResource = await _factory
+                .Resource<Cluster>()
+                .GetDetails(cancellationToken);
+
+            if (clusterResource.HasFaulted)
+            {
+                // TODO: Handle error scenario
+                return default;
+            }
+
+            var cluster = clusterResource.Select(x => x.Data);
+            
             Result<ConnectionInfo> connectionResource = await _factory
                 .Resource<Connection>()
                 .GetAll(cancellationToken);
 
+            if (connectionResource.HasFaulted)
+            {
+                // TODO: Handle error scenario
+                return default;
+            }
+            
             var connections = connectionResource.Select(x => x.Data);
 
             var channelResource = await _factory
                 .Resource<Channel>()
                 .GetAll(cancellationToken);
 
+            if (channelResource.HasFaulted)
+            {
+                // TODO: Handle error scenario
+                return default;
+            }
+
             var channels = channelResource.Select(x => x.Data);
 
-            return new ConnectionSnapshotImpl(connections, channels);
+            return new ConnectionSnapshotImpl(cluster.FirstOrDefault(), connections, channels);
         }
 
         
         class ConnectionSnapshotImpl :
             ConnectionSnapshot
         {
-            public ConnectionSnapshotImpl(IReadOnlyList<ConnectionInfo> connections, IReadOnlyList<ChannelInfo> channels)
+            public ConnectionSnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
+                IReadOnlyList<ChannelInfo> channels)
             {
+                ChannelsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsClosed ?? 0, cluster.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);
+                ChannelsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsCreated ?? 0, cluster.ChurnRates?.CreatedChannelDetails?.Rate ?? 0);
+                ConnectionsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsCreated ?? 0, cluster.ChurnRates?.CreatedConnectionDetails?.Rate ?? 0);
+                ConnectionsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsClosed ?? 0, cluster.ChurnRates?.ClosedConnectionDetails?.Rate ?? 0);
                 Connections = connections
                     .Select(x => new ConnectionMetricsImpl(x, channels.FilterByConnection(x.Name)))
                     .Cast<ConnectionMetrics>()
                     .ToList();
             }
 
+            public ChurnMetrics ChannelsClosed { get; }
+            public ChurnMetrics ChannelsCreated { get; }
+            public ChurnMetrics ConnectionsClosed { get; }
+            public ChurnMetrics ConnectionsCreated { get; }
             public IReadOnlyList<ConnectionMetrics> Connections { get; }
+
+            
+            class ChurnMetricsImpl :
+                ChurnMetrics
+            {
+                public ChurnMetricsImpl(int total, decimal rate)
+                {
+                    Total = total;
+                    Rate = rate;
+                }
+
+                public long Total { get; }
+                public decimal Rate { get; }
+            }
 
             
             class ConnectionMetricsImpl :
@@ -71,12 +118,16 @@ namespace HareDu.Internal.Snapshots
                     Identifier = connection.Name;
                     NetworkTraffic = new NetworkTrafficMetricsImpl(connection);
                     Channels = channels;
+                    TotalChannels = connection.Channels;
                     ChannelLimit = connection.MaxChannels;
+                    Node = connection.Node;
                 }
 
                 public string Identifier { get; }
                 public NetworkTrafficMetrics NetworkTraffic { get; }
                 public long ChannelLimit { get; }
+                public long TotalChannels { get; }
+                public string Node { get; }
                 public IReadOnlyList<ChannelMetrics> Channels { get; }
 
                 
@@ -85,9 +136,9 @@ namespace HareDu.Internal.Snapshots
                 {
                     public NetworkTrafficMetricsImpl(ConnectionInfo connection)
                     {
-                        Sent = new PacketsImpl(connection.PacketsSent, connection.PacketsSentInOctets,
+                        Sent = new PacketsImpl(connection.PacketsSent, connection.PacketBytesSent,
                             connection.RateOfPacketsSentInOctets?.Rate ?? 0);
-                        Received = new PacketsImpl(connection.PacketsReceived, connection.PacketsReceivedInOctets,
+                        Received = new PacketsImpl(connection.PacketsReceived, connection.PacketBytesReceived,
                             connection.RateOfPacketsReceivedInOctets?.Rate ?? 0);
                     }
 
