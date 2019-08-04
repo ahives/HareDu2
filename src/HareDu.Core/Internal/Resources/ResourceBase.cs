@@ -33,7 +33,7 @@ namespace HareDu.Core.Internal.Resources
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        protected async Task<Result<T>> GetAll<T>(string url, CancellationToken cancellationToken = default)
+        protected async Task<ResultList<T>> GetAll<T>(string url, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -42,15 +42,15 @@ namespace HareDu.Core.Internal.Resources
 
                 var responseMessage = await _client.GetAsync(url, cancellationToken);
                 if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
+                    return new FaultedResultList<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
                 
                 var data = await responseMessage.DeserializeResponse<List<T>>();
                 
-                return new SuccessfulResult<T>(data, new DebugInfoImpl(url, null));
+                return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, null));
             }
             catch (MissingMethodException e)
             {
-                return new FaultedResult<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+                return new FaultedResultList<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
 

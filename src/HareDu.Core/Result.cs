@@ -27,7 +27,7 @@ namespace HareDu.Core
     public interface Result<out TResult> :
         Result
     {
-        IReadOnlyList<TResult> Data { get; }
+        TResult Data { get; }
         bool HasData { get; }
     }
 }

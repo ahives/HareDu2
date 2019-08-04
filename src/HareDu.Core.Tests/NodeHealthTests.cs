@@ -3,6 +3,7 @@ namespace HareDu.Tests
     using System;
     using System.Threading.Tasks;
     using Core;
+    using Core.Extensions;
     using Core.Model;
     using NUnit.Framework;
 
@@ -19,13 +20,12 @@ namespace HareDu.Tests
 
             if (result.HasData)
             {
-                foreach (var info in result.Data)
-                {
-                    Console.WriteLine("Reason: {0}", info.Reason);
-                    Console.WriteLine("Status: {0}", info.Status);
-                    Console.WriteLine("****************************************************");
-                    Console.WriteLine();
-                }
+                var info = result.Select(x => x.Data);
+                
+                Console.WriteLine("Reason: {0}", info.Reason);
+                Console.WriteLine("Status: {0}", info.Status);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
             }
 //            Console.WriteLine(result.DebugInfo.URL);
         }

@@ -36,6 +36,24 @@ namespace HareDu.Core.Extensions
 
             return result.HasData ? projector(result) : default;
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="projector"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public static TResult Select<T, TResult>(this Task<ResultList<T>> source, Func<ResultList<T>, TResult> projector)
+        {
+            if (source.IsNull() || projector.IsNull())
+                return default;
+                
+            ResultList<T> result = source.Unfold();
+
+            return result.HasData ? projector(result) : default;
+        }
 
         /// <summary>
         /// 
@@ -61,6 +79,21 @@ namespace HareDu.Core.Extensions
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source, Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projection)
+        {
+            if (source.IsNull() || !source.HasData || projection.IsNull())
+                return Array.Empty<T>();
+
+            return source.HasData ? projection(source) : new List<T>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="projection"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IReadOnlyList<T> Select<T>(this ResultList<T> source, Func<ResultList<T>, IReadOnlyList<T>> projection)
         {
             if (source.IsNull() || !source.HasData || projection.IsNull())
                 return Array.Empty<T>();

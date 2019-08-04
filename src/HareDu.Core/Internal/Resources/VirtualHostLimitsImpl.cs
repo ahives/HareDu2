@@ -31,13 +31,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhost-limits";
             
-            Result<VirtualHostLimitsInfo> result = await GetAll<VirtualHostLimitsInfo>(url, cancellationToken);
+            ResultList<VirtualHostLimitsInfo> result = await GetAll<VirtualHostLimitsInfo>(url, cancellationToken);
 
             return result;
         }

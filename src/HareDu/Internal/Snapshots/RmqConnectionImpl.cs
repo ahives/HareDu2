@@ -45,7 +45,7 @@ namespace HareDu.Internal.Snapshots
 
             var cluster = clusterResource.Select(x => x.Data);
             
-            Result<ConnectionInfo> connectionResource = await _factory
+            ResultList<ConnectionInfo> connectionResource = await _factory
                 .Resource<Connection>()
                 .GetAll(cancellationToken);
 
@@ -69,7 +69,7 @@ namespace HareDu.Internal.Snapshots
 
             var channels = channelResource.Select(x => x.Data);
 
-            return new ConnectionSnapshotImpl(cluster.FirstOrDefault(), connections, channels);
+            return new ConnectionSnapshotImpl(cluster, connections, channels);
         }
 
         

@@ -26,7 +26,7 @@ namespace HareDu.Core
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<TopicPermissionsInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<ResultList<TopicPermissionsInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 

@@ -31,13 +31,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
             
-            Result<VirtualHostInfo> result = await GetAll<VirtualHostInfo>(url, cancellationToken);
+            ResultList<VirtualHostInfo> result = await GetAll<VirtualHostInfo>(url, cancellationToken);
 
             return result;
         }

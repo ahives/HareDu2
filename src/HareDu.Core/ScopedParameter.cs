@@ -26,7 +26,7 @@ namespace HareDu.Core
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<ResultList<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Creates a scoped parameter for a particular component and virtual host on the current RabbitMQ server.

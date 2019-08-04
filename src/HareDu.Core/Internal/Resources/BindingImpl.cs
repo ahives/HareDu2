@@ -32,13 +32,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/bindings";
             
-            Result<BindingInfo> result = await GetAll<BindingInfo>(url, cancellationToken);
+            ResultList<BindingInfo> result = await GetAll<BindingInfo>(url, cancellationToken);
 
             return result;
         }

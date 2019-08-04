@@ -1,7 +1,6 @@
 ﻿namespace HareDu.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;

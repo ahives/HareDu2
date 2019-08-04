@@ -26,7 +26,7 @@ namespace HareDu.Core
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
-        Task<Result<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates the specified virtual host on the current RabbitMQ server.

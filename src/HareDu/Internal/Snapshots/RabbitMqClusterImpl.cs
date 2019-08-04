@@ -13,11 +13,9 @@
 // limitations under the License.
 namespace HareDu.Internal.Snapshots
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
-    using Core.Model;
     using Model;
 
     public class RabbitMqClusterImpl :
@@ -35,7 +33,7 @@ namespace HareDu.Internal.Snapshots
                 .Resource<Cluster>()
                 .GetDetails();
 
-            var cluster = clusterResource.Select(x => x.Data)[0];
+            var cluster = clusterResource.Select(x => x.Data);
 
             var nodeResource = await _factory
                 .Resource<Node>()

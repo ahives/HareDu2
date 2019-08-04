@@ -17,7 +17,7 @@ namespace HareDu.Core.Extensions
     {
         public static bool IsNull<T>(this T value) => value == null;
 
-        public static bool TryGetValue<T>(this Result<T> source, int index, out T value)
+        public static bool TryGetValue<T>(this ResultList<T> source, int index, out T value)
         {
             if (!source.HasData || index < 0 || index >= source.Data.Count)
             {

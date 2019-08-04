@@ -26,7 +26,7 @@ namespace HareDu.Core
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<ResultList<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Defines specified limits on the virtual host on the current RabbitMQ server.

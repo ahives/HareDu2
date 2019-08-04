@@ -32,13 +32,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/queues";
             
-            Result<QueueInfo> result = await GetAll<QueueInfo>(url, cancellationToken);
+            ResultList<QueueInfo> result = await GetAll<QueueInfo>(url, cancellationToken);
 
             return result;
         }

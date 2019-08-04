@@ -19,11 +19,9 @@ namespace HareDu.Tests
 
             if (result.HasData)
             {
-                var definition = result.Data[0];
+                Console.WriteLine("RabbitMqVersion: {0}", result.Data.RabbitMqVersion);
                 
-                Console.WriteLine("RabbitMqVersion: {0}", definition.RabbitMqVersion);
-                
-                foreach (var binding in definition.Bindings)
+                foreach (var binding in result.Data.Bindings)
                 {
                     Console.WriteLine("Destination: {0}", binding.Destination);
                     Console.WriteLine("DestinationType: {0}", binding.DestinationType);
@@ -33,7 +31,7 @@ namespace HareDu.Tests
                     Console.WriteLine("VirtualHost: {0}", binding.VirtualHost);
                 }
                 
-                foreach (var exchange in definition.Exchanges)
+                foreach (var exchange in result.Data.Exchanges)
                 {
                     Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
                     Console.WriteLine("Durable: {0}", exchange.Durable);
@@ -43,7 +41,7 @@ namespace HareDu.Tests
                     Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
                 }
                 
-                foreach (var queue in definition.Queues)
+                foreach (var queue in result.Data.Queues)
                 {
                     Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
                     Console.WriteLine("Durable: {0}", queue.Durable);
@@ -92,7 +90,7 @@ namespace HareDu.Tests
                     Console.WriteLine("Memory: {0}", queue.Memory);
                 }
 
-                foreach (var user in definition.Users)
+                foreach (var user in result.Data.Users)
                 {
                     Console.WriteLine("HashingAlgorithm: {0}", user.HashingAlgorithm);
                     Console.WriteLine("PasswordHash: {0}", user.PasswordHash);
@@ -100,7 +98,7 @@ namespace HareDu.Tests
                     Console.WriteLine("Username: {0}", user.Username);
                 }
 
-                foreach (var virtualHost in definition.VirtualHosts)
+                foreach (var virtualHost in result.Data.VirtualHosts)
                 {
                     Console.WriteLine("Name: {0}", virtualHost.Name);
                     Console.WriteLine("Tracing: {0}", virtualHost.Tracing);

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,41 +15,28 @@ namespace HareDu.Core
 {
     using System;
     using System.Collections.Generic;
-    using Extensions;
 
-    public class SuccessfulResult :
-        Result
+    public class FaultedResultList<T> :
+        ResultList<T>
     {
-        public SuccessfulResult(DebugInfo debugInfo)
+        public FaultedResultList(List<Error> errors)
+        {
+            Errors = errors;
+            Timestamp = DateTimeOffset.UtcNow;
+        }
+
+        public FaultedResultList(List<Error> errors, DebugInfo debugInfo)
         {
             DebugInfo = debugInfo;
-            Errors = new List<Error>();
+            Errors = errors;
             Timestamp = DateTimeOffset.UtcNow;
         }
 
         public DateTimeOffset Timestamp { get; }
         public DebugInfo DebugInfo { get; }
         public IReadOnlyList<Error> Errors { get; }
-        public bool HasFaulted => false;
-    }
-    
-    public class SuccessfulResult<T> :
-        Result<T>
-    {
-        public SuccessfulResult(T data, DebugInfo debugInfo)
-        {
-            Data = data.IsNull() ? default : data;
-            DebugInfo = debugInfo;
-            Errors = new List<Error>();
-            Timestamp = DateTimeOffset.UtcNow;
-            HasData = !Data.IsNull();
-        }
-
-        public T Data { get; }
-        public bool HasData { get; }
-        public DateTimeOffset Timestamp { get; }
-        public DebugInfo DebugInfo { get; }
-        public IReadOnlyList<Error> Errors { get; }
-        public bool HasFaulted => false;
+        public bool HasFaulted => true;
+        public IReadOnlyList<T> Data { get; }
+        public bool HasData => false;
     }
 }

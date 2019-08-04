@@ -32,13 +32,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<UserPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<UserPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/users";
             
-            Result<UserPermissionsInfo> result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
+            ResultList<UserPermissionsInfo> result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
 
             return result;
         }

@@ -25,6 +25,6 @@ namespace HareDu.Core
         /// </summary>
         /// <param name="cancellationToken">Token used to cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<ChannelInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<ResultList<ChannelInfo>> GetAll(CancellationToken cancellationToken = default);
     }
 }

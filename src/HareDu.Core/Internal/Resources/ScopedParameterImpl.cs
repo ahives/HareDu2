@@ -32,13 +32,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/parameters";
             
-            Result<ScopedParameterInfo> result = await GetAll<ScopedParameterInfo>(url, cancellationToken);
+            ResultList<ScopedParameterInfo> result = await GetAll<ScopedParameterInfo>(url, cancellationToken);
 
             return result;
         }

@@ -36,7 +36,7 @@
         [Test, Explicit]
         public async Task Verify_can_filter_exchanges()
         {
-            Result<ExchangeInfo> result = await Client
+            var result = await Client
                 .Resource<Exchange>()
                 .GetAll();
 

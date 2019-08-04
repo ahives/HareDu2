@@ -26,14 +26,14 @@ namespace HareDu.Core
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result<UserInfo>> GetAll(CancellationToken cancellationToken = default);
+        Task<ResultList<UserInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns information about all users that do not have permissions on the current RabbitMQ server.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Result<UserInfo>> GetAllWithoutPermissions(CancellationToken cancellationToken = default);
+        Task<ResultList<UserInfo>> GetAllWithoutPermissions(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a user on the current RabbitMQ server.

@@ -27,13 +27,13 @@ namespace HareDu.Core.Internal.Resources
         {
         }
 
-        public async Task<Result<ConsumerInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<ConsumerInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/consumers";
             
-            Result<ConsumerInfo> result = await GetAll<ConsumerInfo>(url, cancellationToken);
+            ResultList<ConsumerInfo> result = await GetAll<ConsumerInfo>(url, cancellationToken);
 
             return result;
         }
