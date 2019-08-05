@@ -18,11 +18,11 @@ namespace HareDu.Internal.Snapshots
     using Core.Extensions;
     using Model;
 
-    public class RabbitMqClusterImpl :
+    public class RmqClusterImpl :
         BaseSnapshot,
-        RabbitMqCluster
+        RmqCluster
     {
-        public RabbitMqClusterImpl(IResourceFactory factory)
+        public RmqClusterImpl(IResourceFactory factory)
             : base(factory)
         {
         }

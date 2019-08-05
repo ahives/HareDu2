@@ -13,18 +13,12 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    using System.Collections.Generic;
-
-    public interface ConnectionMetrics
+    public interface NetworkTrafficSnapshot
     {
-        string Identifier { get; }
-        
-        NetworkTrafficMetrics NetworkTraffic { get; }
-        
-        long ChannelLimit { get; }
-        
-        string Node { get; }
+        long MaxFrameSize { get; }
 
-        IReadOnlyList<ChannelMetrics> Channels { get; }
+        Packets Sent { get; }
+        
+        Packets Received { get; }
     }
 }

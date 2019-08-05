@@ -45,6 +45,6 @@ namespace HareDu.Model
 
         ContextSwitchingDetails ContextSwitching { get; }
         
-        IReadOnlyList<ConnectionMetrics> Connections { get; }
+        IReadOnlyList<ConnectionSnapshot> Connections { get; }
     }
 }

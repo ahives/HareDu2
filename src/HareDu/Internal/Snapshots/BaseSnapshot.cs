@@ -13,6 +13,10 @@
 // limitations under the License.
 namespace HareDu.Internal.Snapshots
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Alerts;
     using Core;
 
     public class BaseSnapshot
@@ -22,6 +26,20 @@ namespace HareDu.Internal.Snapshots
         protected BaseSnapshot(IResourceFactory factory)
         {
             _factory = factory;
+        }
+
+        protected IEnumerable<IDiagnosticCheck<T>> GetDiagnosticChecks<T>()
+        {
+            var diagnosticChecks = GetType()
+                .Assembly
+                .GetTypes()
+                .Where(x => typeof(IDiagnosticCheck<T>).IsAssignableFrom(x) && !x.IsInterface)
+                .ToList();
+
+            for (int i = 0; i < diagnosticChecks.Count; i++)
+            {
+                yield return (IDiagnosticCheck<T>) Activator.CreateInstance(diagnosticChecks[i]);
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var snapshot = await Client
-                .Snapshot<RabbitMqCluster>()
+                .Snapshot<RmqCluster>()
                 .GetDetails();
 
 //            snapshot.Queues[0].Memory.RAM
@@ -37,7 +37,7 @@ namespace HareDu.Tests
                     for (int k = 0; k < snapshot.Nodes[i].Connections[j].Channels.Count; k++)
                     {
                         Console.WriteLine("Name => {0}", snapshot.Nodes[i].Connections[j].Channels[k].Name);
-                        Console.WriteLine("Consumers => {0}", snapshot.Nodes[i].Connections[j].Channels[k].TotalConsumers);
+                        Console.WriteLine("Consumers => {0}", snapshot.Nodes[i].Connections[j].Channels[k].Consumers);
                     }
                 }
                 

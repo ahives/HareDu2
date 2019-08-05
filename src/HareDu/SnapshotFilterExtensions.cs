@@ -32,15 +32,15 @@ namespace HareDu
 //                .ToList();
 //        }
 
-        public static IReadOnlyList<ChannelMetrics> FilterByConnection(this IReadOnlyList<ChannelInfo> channels, string connection)
+        public static IReadOnlyList<ChannelSnapshot> FilterByConnection(this IReadOnlyList<ChannelInfo> channels, string connection)
         {
             if (channels == null || !channels.Any())
-                return new List<ChannelMetrics>();
+                return new List<ChannelSnapshot>();
 
             return channels
                 .Where(x => x.ConnectionDetails?.Name == connection)
-                .Select(x => new ChannelMetricsImpl(x))
-                .Cast<ChannelMetrics>()
+                .Select(x => new ChannelSnapshotImpl(x))
+                .Cast<ChannelSnapshot>()
                 .ToList();
         }
 
@@ -53,18 +53,27 @@ namespace HareDu
         }
         
         
-        class ChannelMetricsImpl :
-            ChannelMetrics
+        class ChannelSnapshotImpl :
+            ChannelSnapshot
         {
-            public ChannelMetricsImpl(ChannelInfo channel)
+            public ChannelSnapshotImpl(ChannelInfo channel)
             {
                 Name = channel.Name;
-                TotalConsumers = channel.TotalConsumers;
+                Consumers = channel.TotalConsumers;
                 Node = channel.Node;
+                PrefetchCount = channel.PrefetchCount;
+                UncommittedAcknowledgements = channel.UncommittedAcknowledgements;
+                UncommittedMessages = channel.UncommittedMessages;
+                UnconfirmedMessages = channel.UnconfirmedMessages;
+                UnacknowledgedMessages = channel.UnacknowledgedMessages;
             }
 
-            public long OctetsSent { get; }
-            public long TotalConsumers { get; }
+            public long PrefetchCount { get; }
+            public long UncommittedAcknowledgements { get; }
+            public long UncommittedMessages { get; }
+            public long UnconfirmedMessages { get; }
+            public long UnacknowledgedMessages { get; }
+            public long Consumers { get; }
             public string Name { get; }
             public string Node { get; }
         }

@@ -11,21 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Core.Model
 {
-    using System.Collections.Generic;
-    using Model;
+    using Newtonsoft.Json;
 
-    public interface ConnectionSnapshot
+    public interface BytesSentDetails
     {
-        ChurnMetrics ChannelsClosed { get; }
-
-        ChurnMetrics ChannelsCreated { get; }
-
-        ChurnMetrics ConnectionsClosed { get; }
-
-        ChurnMetrics ConnectionsCreated { get; }
-        
-        IReadOnlyList<ConnectionMetrics> Connections { get; }
+        [JsonProperty("rate")]
+        decimal Rate { get; }
     }
 }

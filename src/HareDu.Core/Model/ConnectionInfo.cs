@@ -27,10 +27,10 @@ namespace HareDu.Core.Model
         long PacketBytesReceived { get; }
 
         [JsonProperty("recv_oct_details")]
-        Rate RateOfPacketsReceivedInOctets { get; }
+        Rate RateOfPacketBytesReceived { get; }
 
         [JsonProperty("send_oct_details")]
-        Rate RateOfPacketsSentInOctets { get; }
+        Rate RateOfPacketBytesSent { get; }
 
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }

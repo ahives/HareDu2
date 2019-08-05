@@ -64,7 +64,7 @@ namespace HareDu.Internal.Snapshots
                 IO = new IOImpl(cluster.MessageStats, node);
                 ContextSwitching = new ContextSwitchDetailsImpl(node);
                 Connections = connections
-                    .Select(connection => new ConnectionMetricsImpl(connection, channels.FilterByConnection(connection.Name)))
+                    .Select(connection => new ConnectionSnapshotImpl(connection, channels.FilterByConnection(connection.Name)))
                     .ToList();
             }
 
@@ -82,16 +82,16 @@ namespace HareDu.Internal.Snapshots
             public NodeMemoryDetails NodeMemory { get; }
             public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
-            public IReadOnlyList<ConnectionMetrics> Connections { get; }
+            public IReadOnlyList<ConnectionSnapshot> Connections { get; }
 
             
-            class ConnectionMetricsImpl :
-                ConnectionMetrics
+            class ConnectionSnapshotImpl :
+                ConnectionSnapshot
             {
-                public ConnectionMetricsImpl(ConnectionInfo connection, IReadOnlyList<ChannelMetrics> channels)
+                public ConnectionSnapshotImpl(ConnectionInfo connection, IReadOnlyList<ChannelSnapshot> channels)
                 {
                     Identifier = connection.Name;
-                    NetworkTraffic = new NetworkTrafficMetricsImpl(connection);
+                    NetworkTraffic = new NetworkTrafficSnapshotImpl(connection);
                     Channels = channels;
                     TotalChannels = connection.Channels;
                     ChannelLimit = connection.MaxChannels;
@@ -99,32 +99,34 @@ namespace HareDu.Internal.Snapshots
                 }
 
                 public string Identifier { get; }
-                public NetworkTrafficMetrics NetworkTraffic { get; }
+                public NetworkTrafficSnapshot NetworkTraffic { get; }
                 public long ChannelLimit { get; }
                 public long TotalChannels { get; }
                 public string Node { get; }
-                public IReadOnlyList<ChannelMetrics> Channels { get; }
+                public string VirtualHost { get; }
+                public IReadOnlyList<ChannelSnapshot> Channels { get; }
 
                 
-                class NetworkTrafficMetricsImpl :
-                    NetworkTrafficMetrics
+                class NetworkTrafficSnapshotImpl :
+                    NetworkTrafficSnapshot
                 {
-                    public NetworkTrafficMetricsImpl(ConnectionInfo connection)
+                    public NetworkTrafficSnapshotImpl(ConnectionInfo connection)
                     {
+                        MaxFrameSize = connection.MaxFrameSizeInBytes;
                         Sent = new PacketsImpl(connection.PacketsSent, connection.PacketBytesSent,
-                            connection.RateOfPacketsSentInOctets?.Rate ?? 0);
+                            connection.RateOfPacketBytesSent?.Rate ?? 0);
                         Received = new PacketsImpl(connection.PacketsReceived, connection.PacketBytesReceived,
-                            connection.RateOfPacketsReceivedInOctets?.Rate ?? 0);
+                            connection.RateOfPacketBytesReceived?.Rate ?? 0);
                     }
 
                     
                     class PacketsImpl :
                         Packets
                     {
-                        public PacketsImpl(long total, long octets, decimal rate)
+                        public PacketsImpl(long total, long bytes, decimal rate)
                         {
                             Total = total;
-                            Bytes = octets;
+                            Bytes = bytes;
                             Rate = rate;
                         }
 
@@ -133,6 +135,7 @@ namespace HareDu.Internal.Snapshots
                         public decimal Rate { get; }
                     }
 
+                    public long MaxFrameSize { get; }
                     public Packets Sent { get; }
                     public Packets Received { get; }
                 }

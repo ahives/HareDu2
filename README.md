@@ -137,6 +137,11 @@ https://www.rabbitmq.com/rabbitmqctl.8.html
 
 https://www.rabbitmq.com/channels.html
 
+https://www.rabbitmq.com/confirms.html
+
+https://www.rabbitmq.com/heartbeats.html
+
+
 
 # Using API
 

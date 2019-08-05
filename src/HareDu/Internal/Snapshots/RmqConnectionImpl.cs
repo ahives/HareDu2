@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu.Internal.Snapshots
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Alerts;
     using Core;
     using Core.Extensions;
     using Core.Model;
@@ -26,12 +28,15 @@ namespace HareDu.Internal.Snapshots
         BaseSnapshot,
         RmqConnection
     {
+        readonly List<IDiagnosticCheck<ChannelSnapshot>> _channelDiagnosticChecks;
+        
         public RmqConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
+            _channelDiagnosticChecks = GetDiagnosticChecks<ChannelSnapshot>().ToList();
         }
 
-        public async Task<ConnectionSnapshot> Get(CancellationToken cancellationToken = default)
+        public async Task<Result<ConnectivitySnapshot>> Get(CancellationToken cancellationToken = default)
         {
             Result<ClusterInfo> clusterResource = await _factory
                 .Resource<Cluster>()
@@ -68,15 +73,29 @@ namespace HareDu.Internal.Snapshots
             }
 
             var channels = channelResource.Select(x => x.Data);
-
-            return new ConnectionSnapshotImpl(cluster, connections, channels);
+            
+            return new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
         }
 
-        
-        class ConnectionSnapshotImpl :
-            ConnectionSnapshot
+        public IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot)
         {
-            public ConnectionSnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
+            for (int i = 0; i < snapshot.Connections.Count; i++)
+            {
+                for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
+                {
+                    for (int k = 0; k < _channelDiagnosticChecks.Count; k++)
+                    {
+                        yield return _channelDiagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]);
+                    }
+                }
+            }
+        }
+
+
+        class ConnectivitySnapshotImpl :
+            ConnectivitySnapshot
+        {
+            public ConnectivitySnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
                 IReadOnlyList<ChannelInfo> channels)
             {
                 ChannelsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsClosed ?? 0, cluster.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);
@@ -84,8 +103,8 @@ namespace HareDu.Internal.Snapshots
                 ConnectionsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsCreated ?? 0, cluster.ChurnRates?.CreatedConnectionDetails?.Rate ?? 0);
                 ConnectionsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsClosed ?? 0, cluster.ChurnRates?.ClosedConnectionDetails?.Rate ?? 0);
                 Connections = connections
-                    .Select(x => new ConnectionMetricsImpl(x, channels.FilterByConnection(x.Name)))
-                    .Cast<ConnectionMetrics>()
+                    .Select(x => new ConnectionSnapshotImpl(x, channels.FilterByConnection(x.Name)))
+                    .Cast<ConnectionSnapshot>()
                     .ToList();
             }
 
@@ -93,7 +112,7 @@ namespace HareDu.Internal.Snapshots
             public ChurnMetrics ChannelsCreated { get; }
             public ChurnMetrics ConnectionsClosed { get; }
             public ChurnMetrics ConnectionsCreated { get; }
-            public IReadOnlyList<ConnectionMetrics> Connections { get; }
+            public IReadOnlyList<ConnectionSnapshot> Connections { get; }
 
             
             class ChurnMetricsImpl :
@@ -110,46 +129,47 @@ namespace HareDu.Internal.Snapshots
             }
 
             
-            class ConnectionMetricsImpl :
-                ConnectionMetrics
+            class ConnectionSnapshotImpl :
+                ConnectionSnapshot
             {
-                public ConnectionMetricsImpl(ConnectionInfo connection, IReadOnlyList<ChannelMetrics> channels)
+                public ConnectionSnapshotImpl(ConnectionInfo connection, IReadOnlyList<ChannelSnapshot> channels)
                 {
                     Identifier = connection.Name;
-                    NetworkTraffic = new NetworkTrafficMetricsImpl(connection);
+                    NetworkTraffic = new NetworkTrafficSnapshotImpl(connection);
                     Channels = channels;
-                    TotalChannels = connection.Channels;
                     ChannelLimit = connection.MaxChannels;
                     Node = connection.Node;
+                    VirtualHost = connection.VirtualHost;
                 }
 
                 public string Identifier { get; }
-                public NetworkTrafficMetrics NetworkTraffic { get; }
+                public NetworkTrafficSnapshot NetworkTraffic { get; }
                 public long ChannelLimit { get; }
-                public long TotalChannels { get; }
                 public string Node { get; }
-                public IReadOnlyList<ChannelMetrics> Channels { get; }
+                public string VirtualHost { get; }
+                public IReadOnlyList<ChannelSnapshot> Channels { get; }
 
                 
-                class NetworkTrafficMetricsImpl :
-                    NetworkTrafficMetrics
+                class NetworkTrafficSnapshotImpl :
+                    NetworkTrafficSnapshot
                 {
-                    public NetworkTrafficMetricsImpl(ConnectionInfo connection)
+                    public NetworkTrafficSnapshotImpl(ConnectionInfo connection)
                     {
+                        MaxFrameSize = connection.MaxFrameSizeInBytes;
                         Sent = new PacketsImpl(connection.PacketsSent, connection.PacketBytesSent,
-                            connection.RateOfPacketsSentInOctets?.Rate ?? 0);
+                            connection.RateOfPacketBytesSent?.Rate ?? 0);
                         Received = new PacketsImpl(connection.PacketsReceived, connection.PacketBytesReceived,
-                            connection.RateOfPacketsReceivedInOctets?.Rate ?? 0);
+                            connection.RateOfPacketBytesReceived?.Rate ?? 0);
                     }
 
                     
                     class PacketsImpl :
                         Packets
                     {
-                        public PacketsImpl(long total, long octets, decimal rate)
+                        public PacketsImpl(long total, long bytes, decimal rate)
                         {
                             Total = total;
-                            Bytes = octets;
+                            Bytes = bytes;
                             Rate = rate;
                         }
 
@@ -158,6 +178,7 @@ namespace HareDu.Internal.Snapshots
                         public decimal Rate { get; }
                     }
 
+                    public long MaxFrameSize { get; }
                     public Packets Sent { get; }
                     public Packets Received { get; }
                 }

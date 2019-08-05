@@ -33,15 +33,15 @@ namespace HareDu.Tests
                 Console.WriteLine("IsSecure: {0}", connection.IsSecure);
                 Console.WriteLine("MaxChannels: {0}", connection.MaxChannels);
                 Console.WriteLine("MaxFrameSizeInBytes: {0}", connection.MaxFrameSizeInBytes);
-                Console.WriteLine("OctetsReceived: {0}", connection.PacketBytesReceived);
+                Console.WriteLine("BytessReceived: {0}", connection.PacketBytesReceived);
                 Console.WriteLine("PacketsReceived: {0}", connection.PacketsReceived);
                 Console.WriteLine("PeerCertificateIssuer: {0}", connection.PeerCertificateIssuer);
                 Console.WriteLine("PeerCertificateSubject: {0}", connection.PeerCertificateSubject);
                 Console.WriteLine("PeerHost: {0}", connection.PeerHost);
                 Console.WriteLine("PeerPort: {0}", connection.PeerPort);
                 Console.WriteLine("Port: {0}", connection.Port);
-                Console.WriteLine("RateOfOctetsRecevied: {0}", connection.RateOfPacketsReceivedInOctets.Rate);
-                Console.WriteLine("RateOfOctetsSent: {0}", connection.RateOfPacketsSentInOctets.Rate);
+                Console.WriteLine("RateOfOctetsRecevied: {0}", connection.RateOfPacketBytesReceived.Rate);
+                Console.WriteLine("RateOfOctetsSent: {0}", connection.RateOfPacketBytesSent.Rate);
                 Console.WriteLine("RateOfReduction: {0}", connection.RateOfReduction.Rate);
                 Console.WriteLine("SendPending: {0}", connection.SendPending);
                 Console.WriteLine("SslCipherAlgorithm: {0}", connection.SslCipherAlgorithm);

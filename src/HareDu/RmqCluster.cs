@@ -16,7 +16,7 @@ namespace HareDu
     using System.Threading.Tasks;
     using Model;
 
-    public interface RabbitMqCluster :
+    public interface RmqCluster :
         Snapshot
     {
         Task<ClusterSnapshot> GetDetails();

@@ -13,10 +13,19 @@
 // limitations under the License.
 namespace HareDu
 {
-    public interface ChurnMetrics
+    using System.Collections.Generic;
+    using Model;
+
+    public interface ConnectivitySnapshot
     {
-        long Total { get; }
+        ChurnMetrics ChannelsClosed { get; }
+
+        ChurnMetrics ChannelsCreated { get; }
+
+        ChurnMetrics ConnectionsClosed { get; }
+
+        ChurnMetrics ConnectionsCreated { get; }
         
-        decimal Rate { get; }
+        IReadOnlyList<ConnectionSnapshot> Connections { get; }
     }
 }

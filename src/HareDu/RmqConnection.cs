@@ -13,12 +13,17 @@
 // limitations under the License.
 namespace HareDu
 {
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using Alerts;
+    using Core;
 
     public interface RmqConnection :
         Snapshot
     {
-        Task<ConnectionSnapshot> Get(CancellationToken cancellationToken = default);
+        Task<Result<ConnectivitySnapshot>> Get(CancellationToken cancellationToken = default);
+
+        IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot);
     }
 }
