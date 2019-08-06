@@ -16,14 +16,20 @@ namespace HareDu
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using Alerts;
     using Core;
+    using Diagnostics;
 
-    public interface RmqConnection :
+    public interface RmqBrokerConnection :
         Snapshot
     {
         Task<Result<ConnectivitySnapshot>> Get(CancellationToken cancellationToken = default);
+        RmqBrokerConnection Execute(CancellationToken cancellationToken = default);
 
-        IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot);
+//        IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot);
+        RmqBrokerConnection RunDiagnostics();
+        
+        IReadOnlyList<DiagnosticResult> DiagnosticResults { get; }
+        
+        Result<ConnectivitySnapshot> Snapshot { get; }
     }
 }

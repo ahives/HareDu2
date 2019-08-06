@@ -14,6 +14,7 @@
 namespace HareDu.Core
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Net.Http;
@@ -53,6 +54,27 @@ namespace HareDu.Core
                 throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
             }
         }
+
+//        public static IResourceFactory Init(HareDuClientSettings settings)
+//        {
+//            if (settings == null)
+//                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+//            
+//            try
+//            {
+//                ValidateSettings(settings);
+//
+//                HttpClient client = RabbitMqConnectionClient.Instance.Create(settings);
+//                
+//                ResourceFactory.Instance.Init(client);
+//
+//                return ResourceFactory.Instance;
+//            }
+//            catch (Exception e)
+//            {
+//                throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
+//            }
+//        }
 
         public static IResourceFactory Init(string configuration)
         {
@@ -116,10 +138,10 @@ namespace HareDu.Core
         class ClientConfigProviderImpl :
             ClientConfigProvider
         {
-            static string _rmqServerUrl;
-            static TimeSpan _timeout;
-            static string _username;
-            static string _password;
+            string _rmqServerUrl;
+            TimeSpan _timeout;
+            string _username;
+            string _password;
 
             public Lazy<HareDuClientSettings> Settings { get; }
 
@@ -153,7 +175,6 @@ namespace HareDu.Core
                 public string RabbitMqServerUrl { get; }
                 public TimeSpan Timeout { get; }
                 public HareDuCredentials Credentials { get; }
-
 
 
                 class HareDuCredentialsImpl :

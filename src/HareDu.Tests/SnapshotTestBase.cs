@@ -1,5 +1,6 @@
 ﻿﻿namespace HareDu.Tests
 {
+    using Diagnostics.Observers;
     using NUnit.Framework;
     using Testing;
 
@@ -21,6 +22,7 @@
                 {
                     x.ConnectTo("http://localhost:15672");
                     x.UsingCredentials("guest", "guest");
+                    x.RegisterObserver(new DefaultConsoleLogger());
                 });
             }
         }

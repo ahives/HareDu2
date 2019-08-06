@@ -16,16 +16,18 @@ namespace HareDu.Internal.Snapshots
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Alerts;
     using Core;
+    using HareDu.Diagnostics;
 
-    public class BaseSnapshot
+    class BaseSnapshot
     {
+        protected readonly IList<IDisposable> _observers;
         protected readonly IResourceFactory _factory;
 
         protected BaseSnapshot(IResourceFactory factory)
         {
             _factory = factory;
+            _observers = new List<IDisposable>();
         }
 
         protected IEnumerable<IDiagnosticCheck<T>> GetDiagnosticChecks<T>()
@@ -39,6 +41,20 @@ namespace HareDu.Internal.Snapshots
             for (int i = 0; i < diagnosticChecks.Count; i++)
             {
                 yield return (IDiagnosticCheck<T>) Activator.CreateInstance(diagnosticChecks[i]);
+            }
+        }
+
+        protected void ConnectObservers<TSnapshot>(IList<IObserver<DiagnosticContext>> observers, IList<IDiagnosticCheck<TSnapshot>> diagnostic)
+        {
+            for (int i = 0; i < observers.Count; i++)
+            {
+                if (observers[i] != null)
+                {
+                    for (int j = 0; j < diagnostic.Count; j++)
+                    {
+                        _observers.Add(diagnostic[j].Subscribe(observers[i]));
+                    }
+                }
             }
         }
     }

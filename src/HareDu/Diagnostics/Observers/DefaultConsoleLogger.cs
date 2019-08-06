@@ -11,20 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Diagnostics.Observers
 {
     using System;
-    using System.Collections.Generic;
-    using Core;
-    using Diagnostics;
 
-    public interface ISnapshotFactory
+    public class DefaultConsoleLogger :
+        IObserver<DiagnosticContext>
     {
-        T Snapshot<T>()
-            where T : Snapshot;
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
 
-        void Init(IResourceFactory factory);
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
 
-        void Init(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers);
+        public void OnNext(DiagnosticContext value)
+        {
+            Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", value.Result.Identifier, value.Result.Status);
+        }
     }
 }

@@ -11,20 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Diagnostics
 {
     using System;
-    using System.Collections.Generic;
-    using Core;
-    using Diagnostics;
 
-    public interface ISnapshotFactory
+    public interface DiagnosticResult
     {
-        T Snapshot<T>()
-            where T : Snapshot;
-
-        void Init(IResourceFactory factory);
-
-        void Init(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers);
+        string Identifier { get; }
+        DiagnosticStatus Status { get; }
+        string Reason { get; }
+        string Remediation { get; }
+        DateTimeOffset Timestamp { get; }
     }
 }

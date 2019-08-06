@@ -18,22 +18,38 @@ namespace HareDu.Internal.Snapshots
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Alerts;
     using Core;
     using Core.Extensions;
     using Core.Model;
+    using HareDu.Diagnostics;
     using Model;
 
-    class RmqConnectionImpl :
+    class RmqBrokerConnectionImpl :
         BaseSnapshot,
-        RmqConnection
+        RmqBrokerConnection
     {
         readonly List<IDiagnosticCheck<ChannelSnapshot>> _channelDiagnosticChecks;
+        Result<ConnectivitySnapshot> _result;
+
+        public Result<ConnectivitySnapshot> Snapshot => _result;
+        public IReadOnlyList<DiagnosticResult> DiagnosticResults { get; private set; }
         
-        public RmqConnectionImpl(IResourceFactory factory)
+        public RmqBrokerConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
             _channelDiagnosticChecks = GetDiagnosticChecks<ChannelSnapshot>().ToList();
+
+            DiagnosticResults = new List<DiagnosticResult>();
+        }
+
+        public RmqBrokerConnectionImpl(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers)
+            : base(factory)
+        {
+            _channelDiagnosticChecks = GetDiagnosticChecks<ChannelSnapshot>().ToList();
+            
+            DiagnosticResults = new List<DiagnosticResult>();
+
+            ConnectObservers(observers, _channelDiagnosticChecks);
         }
 
         public async Task<Result<ConnectivitySnapshot>> Get(CancellationToken cancellationToken = default)
@@ -77,6 +93,50 @@ namespace HareDu.Internal.Snapshots
             return new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
         }
 
+        public RmqBrokerConnection Execute(CancellationToken cancellationToken = default)
+        {
+            var cluster = _factory
+                .Resource<Cluster>()
+                .GetDetails(cancellationToken)
+                .Select(x => x.Data);
+            
+            var connections = _factory
+                .Resource<Connection>()
+                .GetAll(cancellationToken)
+                .Select(x => x.Data);
+
+            var channels = _factory
+                .Resource<Channel>()
+                .GetAll(cancellationToken)
+                .Select(x => x.Data);
+            
+            _result = new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
+
+            return this;
+        }
+
+        public RmqBrokerConnection RunDiagnostics()
+        {
+            var snapshot = _result.Select(x => x.Data);
+            var diagnosticResults = new List<DiagnosticResult>();
+            
+            for (int i = 0; i < snapshot.Connections.Count; i++)
+            {
+                for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
+                {
+                    for (int k = 0; k < _channelDiagnosticChecks.Count; k++)
+                    {
+                        diagnosticResults.Add(_channelDiagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]));
+                    }
+                }
+            }
+
+            DiagnosticResults = diagnosticResults;
+
+            return this;
+        }
+
+
         public IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot)
         {
             for (int i = 0; i < snapshot.Connections.Count; i++)
@@ -85,7 +145,9 @@ namespace HareDu.Internal.Snapshots
                 {
                     for (int k = 0; k < _channelDiagnosticChecks.Count; k++)
                     {
-                        yield return _channelDiagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]);
+                        DiagnosticResult result = _channelDiagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]);
+
+                        yield return result;
                     }
                 }
             }

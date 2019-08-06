@@ -8,6 +8,7 @@ namespace HareDu.Tests
     using Alerts;
     using Core;
     using Core.Extensions;
+    using Diagnostics;
     using Model;
     using NUnit.Framework;
 
@@ -18,12 +19,21 @@ namespace HareDu.Tests
         [Test]
         public async Task Test()
         {
-            var snapshot = await Client
-                .Snapshot<RmqConnection>()
-                .Get();
+            var connection = Client
+                .Snapshot<RmqBrokerConnection>()
+                .Execute()
+                .RunDiagnostics();
+//            var snapshot = await Client
+//                .Snapshot<RmqConnection>()
+//                .Get();
 
-            var data = snapshot.Select(x => x.Data);
-            IReadOnlyList<ConnectionSnapshot> connections = data.Select(x => x.Connections);
+            var data = connection
+                .Select(x => x.Snapshot)
+                .Select(x => x.Data);
+            var connections = connection
+                .Select(x => x.Snapshot)
+                .Select(x => x.Data)
+                .Select(x => x.Connections);
             
             for (int i = 0; i < connections.Count; i++)
             {
@@ -66,25 +76,77 @@ namespace HareDu.Tests
         [Test]
         public async Task Test2()
         {
-            var snapshot = await Client
-                .Snapshot<RmqConnection>()
-                .Get();
+            var connection = Client
+                .Snapshot<RmqBrokerConnection>()
+                .RunDiagnostics()
+                .Execute();
+//            var snapshot = await Client
+//                .Snapshot<RmqConnection>()
+//                .Get();
             
-            Console.WriteLine(snapshot.Select(x => x.Data).ToJsonString());
+//            Console.WriteLine(snapshot.Select(x => x.Data).ToJsonString());
+            Console.WriteLine(connection.Snapshot.ToJsonString());
         }
 
         [Test]
         public async Task Test3()
         {
-            var resource = Client.Snapshot<RmqConnection>();
-            var snapshot = resource.Get();
-            var data = snapshot.Select(x => x.Data);
-            var diagnosticResults = resource.RunDiagnostics(data).ToList();
+            var connection = Client
+                .Snapshot<RmqBrokerConnection>()
+                .RunDiagnostics()
+                .Execute();
+//            var resource = Client.Snapshot<RmqConnection>();
+//            var snapshot = resource.Get();
+//            var data = snapshot.Select(x => x.Data);
+//            var diagnosticResults = resource.RunDiagnostics(data).ToList();
 
-            for (int i = 0; i < diagnosticResults.Count; i++)
+            var results = connection.Select(x => x.DiagnosticResults);
+            
+            for (int i = 0; i < results.Count; i++)
             {
-                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", diagnosticResults[i].Identifier, diagnosticResults[i].Status);
+                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", results[i].Identifier, results[i].Status);
+                
+                if (results[i].Status == DiagnosticStatus.Red)
+                {
+                    Console.WriteLine(results[i].Reason);
+                    Console.WriteLine(results[i].Remediation);
+                }
             }
+        }
+
+        [Test]
+        public async Task Test4()
+        {
+            var snapshot = Client
+                .Snapshot<RmqBrokerConnection>()
+                .RunDiagnostics()
+                .Execute();
+//            var resource = Client.Snapshot<RmqConnection>();
+//            var snapshot = resource.Get();
+//            var data = snapshot.Select(x => x.Data);
+//            var diagnosticResults = resource.RunDiagnostics(data).ToList();
+
+//            for (int i = 0; i < diagnosticResults.Count; i++)
+//            {
+//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", diagnosticResults[i].Identifier, diagnosticResults[i].Status);
+//            }
+        }
+
+        [Test]
+        public async Task Test5()
+        {
+            var snapshot = Client
+                .Snapshot<RmqBrokerConnection>()
+                .RunDiagnostics()
+                .Execute();
+//            var snapshot = resource.Get();
+//            var data = snapshot.Select(x => x.Data);
+//            var diagnosticResults = resource.RunDiagnostics(data).ToList();
+
+//            for (int i = 0; i < diagnosticResults.Count; i++)
+//            {
+//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", diagnosticResults[i].Identifier, diagnosticResults[i].Status);
+//            }
         }
 
         string Format(long bytes)

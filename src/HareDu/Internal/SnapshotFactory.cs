@@ -18,6 +18,7 @@ namespace HareDu.Internal
     using System.Linq;
     using Core;
     using Core.Exceptions;
+    using HareDu.Diagnostics;
 
     public class SnapshotFactory :
         ISnapshotFactory
@@ -26,6 +27,7 @@ namespace HareDu.Internal
         IResourceFactory _factory;
         static ISnapshotFactory _instance = null;
         static readonly object _gate = new object();
+        readonly List<IObserver<DiagnosticContext>> _observers = new List<IObserver<DiagnosticContext>>();
 
         public static ISnapshotFactory Instance
         {
@@ -46,6 +48,21 @@ namespace HareDu.Internal
             RegisterSnapshots();
         }
 
+        public void Init(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers)
+        {
+            _factory = factory;
+
+            for (int i = 0; i < observers.Count; i++)
+            {
+                if (!_observers.Contains(observers[i]))
+                    _observers.Add(observers[i]);
+            }
+
+            _snapshotCache = new Dictionary<string, object>();
+            
+            RegisterSnapshots();
+        }
+
         public T Snapshot<T>()
             where T : Snapshot
         {
@@ -59,8 +76,10 @@ namespace HareDu.Internal
 
             if (_snapshotCache.ContainsKey(type.FullName))
                 return (T)_snapshotCache[type.FullName];
-            
-            var instance = (T)Activator.CreateInstance(type, _factory);
+
+            T instance = _observers.Any()
+                ? (T) Activator.CreateInstance(type, _factory, _observers)
+                : (T) Activator.CreateInstance(type, _factory);
 
             _snapshotCache.Add(type.FullName, instance);
             

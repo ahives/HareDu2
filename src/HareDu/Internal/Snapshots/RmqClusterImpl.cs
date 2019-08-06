@@ -18,7 +18,7 @@ namespace HareDu.Internal.Snapshots
     using Core.Extensions;
     using Model;
 
-    public class RmqClusterImpl :
+    class RmqClusterImpl :
         BaseSnapshot,
         RmqCluster
     {
