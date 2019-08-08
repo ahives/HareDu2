@@ -17,7 +17,6 @@ namespace HareDu.Internal.Snapshots
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using Core.Model;
@@ -52,47 +51,6 @@ namespace HareDu.Internal.Snapshots
             ConnectObservers(observers, _diagnosticChecks);
         }
 
-        public async Task<Result<ConnectivitySnapshot>> Get(CancellationToken cancellationToken = default)
-        {
-            Result<ClusterInfo> clusterResource = await _factory
-                .Resource<Cluster>()
-                .GetDetails(cancellationToken);
-
-            if (clusterResource.HasFaulted)
-            {
-                // TODO: Handle error scenario
-                return default;
-            }
-
-            var cluster = clusterResource.Select(x => x.Data);
-            
-            ResultList<ConnectionInfo> connectionResource = await _factory
-                .Resource<Connection>()
-                .GetAll(cancellationToken);
-
-            if (connectionResource.HasFaulted)
-            {
-                // TODO: Handle error scenario
-                return default;
-            }
-            
-            var connections = connectionResource.Select(x => x.Data);
-
-            var channelResource = await _factory
-                .Resource<Channel>()
-                .GetAll(cancellationToken);
-
-            if (channelResource.HasFaulted)
-            {
-                // TODO: Handle error scenario
-                return default;
-            }
-
-            var channels = channelResource.Select(x => x.Data);
-            
-            return new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
-        }
-
         public RmqBrokerConnection Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
@@ -122,35 +80,21 @@ namespace HareDu.Internal.Snapshots
             
             for (int i = 0; i < snapshot.Connections.Count; i++)
             {
+                diagnosticResults.AddRange(_diagnosticChecks
+                    .Where(x => x.SnapshotType == SnapshotType.Connection)
+                    .Select(x => x.Execute(snapshot.Connections[i])));
+
                 for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
                 {
                     diagnosticResults.AddRange(_diagnosticChecks
                         .Where(x => x.SnapshotType == SnapshotType.Channel)
                         .Select(x => x.Execute(snapshot.Connections[i].Channels[j])));
-//                    diagnosticResults.AddRange(_diagnosticChecks.Select(t => t.Execute(snapshot.Connections[i].Channels[j])));
                 }
             }
 
             DiagnosticResults = diagnosticResults;
 
             return this;
-        }
-
-
-        public IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot)
-        {
-            for (int i = 0; i < snapshot.Connections.Count; i++)
-            {
-                for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
-                {
-                    for (int k = 0; k < _diagnosticChecks.Count; k++)
-                    {
-                        DiagnosticResult result = _diagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]);
-
-                        yield return result;
-                    }
-                }
-            }
         }
 
 

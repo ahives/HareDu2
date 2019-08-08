@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Checks
     using Internal.Diagnostics;
     using Model;
 
-    public class ChannelThroughputThrottling :
+    class ChannelThroughputThrottling :
         BaseDiagnosticCheck,
         IDiagnosticCheck
     {
@@ -37,33 +37,5 @@ namespace HareDu.Diagnostics.Checks
                 
             return result;
         }
-
-//        public DiagnosticResult Execute(ChannelSnapshot snapshot)
-//        {
-//            DiagnosticResult result = snapshot.UnacknowledgedMessages > snapshot.PrefetchCount
-//                ? new DiagnosticResultImpl(snapshot.Name, DiagnosticStatus.Red,
-//                    "Unacknowledged messages on channel exceeds prefetch count causing the RabbitMQ broker to stop delivering messages to consumers.",
-//                    "Acknowledged messages must be greater than or equal to the result of subtracting the number of unacknowledged messages from the prefetch count plus 1. Temporarily increase the number of consumers or prefetch count.")
-//                : new DiagnosticResultImpl(snapshot.Name, DiagnosticStatus.Green,
-//                    "Unacknowledged messages on channel is less than prefetch count.", null);
-//
-//            NotifyObservers(result);
-//                
-//            return result;
-//        }
-
-//        public DiagnosticResult Execute(ChannelSnapshot snapshot)
-//        {
-//            DiagnosticResult result = snapshot.UnacknowledgedMessages > snapshot.PrefetchCount
-//                ? new DiagnosticResultImpl(snapshot.Name, DiagnosticStatus.Red,
-//                    "Unacknowledged messages on channel exceeds prefetch count causing the RabbitMQ broker to stop delivering messages to consumers.",
-//                    "Acknowledged messages must be greater than or equal to the result of subtracting the number of unacknowledged messages from the prefetch count plus 1. Temporarily increase the number of consumers or prefetch count.")
-//                : new DiagnosticResultImpl(snapshot.Name, DiagnosticStatus.Green,
-//                    "Unacknowledged messages on channel is less than prefetch count.", null);
-//
-//            NotifyObservers(result);
-//                
-//            return result;
-//        }
     }
 }

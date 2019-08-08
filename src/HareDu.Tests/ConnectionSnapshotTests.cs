@@ -41,7 +41,7 @@ namespace HareDu.Tests
                 Console.WriteLine("Connection => {0}", connections[0].Select(x => x.Identifier));
 //                Console.WriteLine("Connection => {0}", snapshot.Connections[i].Identifier);
                 Console.WriteLine("Channel Limit => {0}", connections[i].ChannelLimit);
-                Console.WriteLine("Channels => {0}", connections.Count);
+                Console.WriteLine("Channels => {0}", connections[i].Channels.Count);
                 Console.WriteLine("Connections => {0} created | {1:0.0}/s, {2} closed | {3:0.0}/s",
                     data.Select(x => x.ConnectionsCreated).Select(x => x.Total),
                     data.Select(x => x.ConnectionsClosed).Select(x => x.Rate),

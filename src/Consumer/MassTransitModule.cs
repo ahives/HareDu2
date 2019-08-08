@@ -54,7 +54,7 @@ namespace Publisher
             Username = username;
             Password = password;
             QueueName = queueName;
-            HostAddress = new Uri("rabbitmq://localhost/Machete/");
+            HostAddress = new Uri("rabbitmq://localhost/TestVirtualHost/");
         }
 
         public string Username { get; }

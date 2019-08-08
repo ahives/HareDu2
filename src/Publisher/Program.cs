@@ -13,7 +13,7 @@
             Console.WriteLine("Starting Publisher");
             var bus = Bus.Factory.CreateUsingRabbitMq(config =>
             {
-                var host = config.Host(new Uri("rabbitmq://localhost/"), x =>
+                var host = config.Host(new Uri("rabbitmq://localhost/TestVirtualHost"), x =>
                 {
                     x.Username("guest");
                     x.Password("guest");
