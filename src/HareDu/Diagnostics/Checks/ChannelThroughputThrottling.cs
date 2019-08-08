@@ -20,8 +20,9 @@ namespace HareDu.Diagnostics.Checks
         BaseDiagnosticCheck,
         IDiagnosticCheck
     {
-        public string Identifier => "ChannelThroughputThrottle";
+        public string Identifier => "ChannelThroughputThrottling";
         public SnapshotType SnapshotType => SnapshotType.Channel;
+        public DiagnosticCheckCategory DiagnosticCheckCategory => DiagnosticCheckCategory.Throughput;
 
         public DiagnosticResult Execute<T>(T snapshot)
         {

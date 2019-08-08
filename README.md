@@ -152,3 +152,18 @@ Ensure that you have the following configuration values set to enable the API to
 Configuration value "vm_memory_calculation_strategy" is set to "rss"
 
 
+Testing with RabbitMQ
+=====================
+Under the "simulation" solution folder you will find two projects of note, Publisher and Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
+
+If using .NET Core...  
+1. Create a VirtualHost called "TestVirtualHost"
+   Note: This can be done by either using the low level HareDu API or by logging in to the RabbitMQ UI and creating a vhost
+2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
+   
+   dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/Consumer.dll
+   
+3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start publishing messages:
+
+    dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/Publisher.dll
+

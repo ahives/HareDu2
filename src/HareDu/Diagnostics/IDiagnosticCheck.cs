@@ -22,6 +22,8 @@ namespace HareDu.Diagnostics
         
         SnapshotType SnapshotType { get; }
         
+        DiagnosticCheckCategory DiagnosticCheckCategory { get; }
+        
         DiagnosticResult Execute<T>(T snapshot);
     }
 }

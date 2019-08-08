@@ -28,9 +28,8 @@ namespace HareDu.Internal.Snapshots
         RmqBrokerConnection
     {
         readonly List<IDiagnosticCheck> _diagnosticChecks;
-        Result<ConnectivitySnapshot> _result;
 
-        public Result<ConnectivitySnapshot> Snapshot => _result;
+        public Result<ConnectivitySnapshot> Snapshot { get; private set; }
         public IReadOnlyList<DiagnosticResult> DiagnosticResults { get; private set; }
         
         public RmqBrokerConnectionImpl(IResourceFactory factory)
@@ -68,14 +67,14 @@ namespace HareDu.Internal.Snapshots
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            _result = new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
+            Snapshot = new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
 
             return this;
         }
 
         public RmqBrokerConnection RunDiagnostics()
         {
-            var snapshot = _result.Select(x => x.Data);
+            var snapshot = Snapshot.Select(x => x.Data);
             var diagnosticResults = new List<DiagnosticResult>();
             
             for (int i = 0; i < snapshot.Connections.Count; i++)

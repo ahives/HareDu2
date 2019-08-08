@@ -17,6 +17,7 @@ namespace HareDu
     using System.Threading;
     using Core;
     using Diagnostics;
+    using Model;
 
     public interface RmqBrokerConnection :
         Snapshot
