@@ -15,13 +15,13 @@ namespace HareDu.Diagnostics
 {
     using System;
 
-    public interface IDiagnosticCheck<T> :
+    public interface IDiagnosticCheck :
         IObservable<DiagnosticContext>
     {
         string Identifier { get; }
         
         SnapshotType SnapshotType { get; }
         
-        DiagnosticResult Execute(T snapshot);
+        DiagnosticResult Execute<T>(T snapshot);
     }
 }

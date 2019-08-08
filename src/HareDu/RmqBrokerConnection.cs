@@ -27,9 +27,17 @@ namespace HareDu
 
 //        IEnumerable<DiagnosticResult> RunDiagnostics(ConnectivitySnapshot snapshot);
         RmqBrokerConnection RunDiagnostics();
-        
-        IReadOnlyList<DiagnosticResult> DiagnosticResults { get; }
+//        DiagnosticReport RunDiagnostics();
         
         Result<ConnectivitySnapshot> Snapshot { get; }
+        
+        IReadOnlyList<DiagnosticResult> DiagnosticResults { get; }
+    }
+
+    public interface DiagnosticReport
+    {
+        Result<ConnectivitySnapshot> Snapshot { get; }
+        
+        IReadOnlyList<DiagnosticResult> DiagnosticResults { get; }
     }
 }

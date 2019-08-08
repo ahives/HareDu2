@@ -93,8 +93,9 @@ namespace HareDu.Tests
         {
             var connection = Client
                 .Snapshot<RmqBrokerConnection>()
-                .RunDiagnostics()
-                .Execute();
+                .Execute()
+                .RunDiagnostics();
+
 //            var resource = Client.Snapshot<RmqConnection>();
 //            var snapshot = resource.Get();
 //            var data = snapshot.Select(x => x.Data);

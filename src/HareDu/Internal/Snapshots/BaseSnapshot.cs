@@ -30,21 +30,21 @@ namespace HareDu.Internal.Snapshots
             _observers = new List<IDisposable>();
         }
 
-        protected IEnumerable<IDiagnosticCheck<T>> GetDiagnosticChecks<T>()
+        protected IEnumerable<IDiagnosticCheck> GetDiagnosticChecks()
         {
             var diagnosticChecks = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(IDiagnosticCheck<T>).IsAssignableFrom(x) && !x.IsInterface)
+                .Where(x => typeof(IDiagnosticCheck).IsAssignableFrom(x) && !x.IsInterface)
                 .ToList();
 
             for (int i = 0; i < diagnosticChecks.Count; i++)
             {
-                yield return (IDiagnosticCheck<T>) Activator.CreateInstance(diagnosticChecks[i]);
+                yield return (IDiagnosticCheck) Activator.CreateInstance(diagnosticChecks[i]);
             }
         }
 
-        protected void ConnectObservers<TSnapshot>(IList<IObserver<DiagnosticContext>> observers, IList<IDiagnosticCheck<TSnapshot>> diagnostic)
+        protected void ConnectObservers(IList<IObserver<DiagnosticContext>> observers, IList<IDiagnosticCheck> diagnostic)
         {
             for (int i = 0; i < observers.Count; i++)
             {

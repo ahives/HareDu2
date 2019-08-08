@@ -28,7 +28,7 @@ namespace HareDu.Internal.Snapshots
         BaseSnapshot,
         RmqBrokerConnection
     {
-        readonly List<IDiagnosticCheck<ChannelSnapshot>> _channelDiagnosticChecks;
+        readonly List<IDiagnosticCheck> _diagnosticChecks;
         Result<ConnectivitySnapshot> _result;
 
         public Result<ConnectivitySnapshot> Snapshot => _result;
@@ -37,7 +37,7 @@ namespace HareDu.Internal.Snapshots
         public RmqBrokerConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
-            _channelDiagnosticChecks = GetDiagnosticChecks<ChannelSnapshot>().ToList();
+            _diagnosticChecks = GetDiagnosticChecks().ToList();
 
             DiagnosticResults = new List<DiagnosticResult>();
         }
@@ -45,11 +45,11 @@ namespace HareDu.Internal.Snapshots
         public RmqBrokerConnectionImpl(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers)
             : base(factory)
         {
-            _channelDiagnosticChecks = GetDiagnosticChecks<ChannelSnapshot>().ToList();
+            _diagnosticChecks = GetDiagnosticChecks().ToList();
             
             DiagnosticResults = new List<DiagnosticResult>();
 
-            ConnectObservers(observers, _channelDiagnosticChecks);
+            ConnectObservers(observers, _diagnosticChecks);
         }
 
         public async Task<Result<ConnectivitySnapshot>> Get(CancellationToken cancellationToken = default)
@@ -124,10 +124,10 @@ namespace HareDu.Internal.Snapshots
             {
                 for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
                 {
-                    for (int k = 0; k < _channelDiagnosticChecks.Count; k++)
-                    {
-                        diagnosticResults.Add(_channelDiagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]));
-                    }
+                    diagnosticResults.AddRange(_diagnosticChecks
+                        .Where(x => x.SnapshotType == SnapshotType.Channel)
+                        .Select(x => x.Execute(snapshot.Connections[i].Channels[j])));
+//                    diagnosticResults.AddRange(_diagnosticChecks.Select(t => t.Execute(snapshot.Connections[i].Channels[j])));
                 }
             }
 
@@ -143,9 +143,9 @@ namespace HareDu.Internal.Snapshots
             {
                 for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
                 {
-                    for (int k = 0; k < _channelDiagnosticChecks.Count; k++)
+                    for (int k = 0; k < _diagnosticChecks.Count; k++)
                     {
-                        DiagnosticResult result = _channelDiagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]);
+                        DiagnosticResult result = _diagnosticChecks[k].Execute(snapshot.Connections[i].Channels[j]);
 
                         yield return result;
                     }
