@@ -23,10 +23,10 @@ namespace HareDu.Internal
     public class SnapshotFactory :
         ISnapshotFactory
     {
-        IDictionary<string, object> _snapshotCache;
         IResourceFactory _factory;
         static ISnapshotFactory _instance = null;
         static readonly object _gate = new object();
+        readonly IDictionary<string, object> _snapshotCache = new Dictionary<string, object>();
         readonly List<IObserver<DiagnosticContext>> _observers = new List<IObserver<DiagnosticContext>>();
 
         public static ISnapshotFactory Instance
@@ -43,7 +43,6 @@ namespace HareDu.Internal
         public void Init(IResourceFactory factory)
         {
             _factory = factory;
-            _snapshotCache = new Dictionary<string, object>();
             
             RegisterSnapshots();
         }
@@ -57,14 +56,12 @@ namespace HareDu.Internal
                 if (!_observers.Contains(observers[i]))
                     _observers.Add(observers[i]);
             }
-
-            _snapshotCache = new Dictionary<string, object>();
             
             RegisterSnapshots();
         }
 
         public T Snapshot<T>()
-            where T : Snapshot
+            where T : CaptureSnapshot
         {
             Type type = GetType()
                 .Assembly
@@ -86,12 +83,29 @@ namespace HareDu.Internal
             return instance;
         }
 
+        public T Get<T>()
+            where T : CaptureSnapshot
+        {
+            Type type = GetType()
+                .Assembly
+                .GetTypes()
+                .FirstOrDefault(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface);
+
+            if (type == null)
+                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
+
+            if (_snapshotCache.ContainsKey(type.FullName))
+                return (T) _snapshotCache[type.FullName];
+
+            return default;
+        }
+
         void RegisterSnapshots()
         {
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(Snapshot).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(CaptureSnapshot).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {

@@ -17,7 +17,7 @@ namespace HareDu
     using Model;
 
     public interface RmqCluster :
-        Snapshot
+        CaptureSnapshot
     {
         Task<ClusterSnapshot> GetDetails();
         

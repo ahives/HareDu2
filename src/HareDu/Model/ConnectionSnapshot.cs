@@ -15,7 +15,8 @@ namespace HareDu.Model
 {
     using System.Collections.Generic;
 
-    public interface ConnectionSnapshot
+    public interface ConnectionSnapshot :
+        Snapshot
     {
         string Identifier { get; }
         

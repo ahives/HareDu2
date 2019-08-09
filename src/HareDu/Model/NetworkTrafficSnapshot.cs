@@ -13,7 +13,8 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface NetworkTrafficSnapshot
+    public interface NetworkTrafficSnapshot :
+        Snapshot
     {
         long MaxFrameSize { get; }
 

@@ -13,7 +13,8 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    public interface ChannelSnapshot
+    public interface ChannelSnapshot :
+        Snapshot
     {
         long PrefetchCount { get; }
 

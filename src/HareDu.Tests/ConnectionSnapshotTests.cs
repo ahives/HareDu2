@@ -1,38 +1,45 @@
 namespace HareDu.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Alerts;
-    using Core;
+    using Autofac;
     using Core.Extensions;
     using Diagnostics;
-    using Model;
     using NUnit.Framework;
 
     [TestFixture]
     public class ConnectionSnapshotTests :
         SnapshotTestBase
     {
+        IContainer _container;
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.Register(x => Client)
+                .As<ISnapshotFactory>();
+
+            builder.RegisterType<DiagnosticReportGenerator>()
+                .As<IGenerateDiagnosticReport>();
+            
+//            builder.RegisterModule<MassTransitModule>();
+
+            _container = builder.Build();
+        }
+
         [Test]
         public async Task Test()
         {
             var connection = Client
                 .Snapshot<RmqBrokerConnection>()
-                .Execute()
-                .RunDiagnostics();
-//            var snapshot = await Client
-//                .Snapshot<RmqConnection>()
-//                .Get();
+                .Execute();
 
-            var data = connection
-                .Select(x => x.Snapshot)
-                .Select(x => x.Data);
+            var data = connection.Snapshot;
             var connections = connection
                 .Select(x => x.Snapshot)
-                .Select(x => x.Data)
                 .Select(x => x.Connections);
             
             for (int i = 0; i < connections.Count; i++)
@@ -78,41 +85,9 @@ namespace HareDu.Tests
         {
             var connection = Client
                 .Snapshot<RmqBrokerConnection>()
-                .RunDiagnostics()
                 .Execute();
-//            var snapshot = await Client
-//                .Snapshot<RmqConnection>()
-//                .Get();
             
-//            Console.WriteLine(snapshot.Select(x => x.Data).ToJsonString());
             Console.WriteLine(connection.Snapshot.ToJsonString());
-        }
-
-        [Test]
-        public async Task Test3()
-        {
-            var connection = Client
-                .Snapshot<RmqBrokerConnection>()
-                .Execute()
-                .RunDiagnostics();
-
-//            var resource = Client.Snapshot<RmqConnection>();
-//            var snapshot = resource.Get();
-//            var data = snapshot.Select(x => x.Data);
-//            var diagnosticResults = resource.RunDiagnostics(data).ToList();
-
-            var results = connection.Select(x => x.DiagnosticResults);
-            
-            for (int i = 0; i < results.Count; i++)
-            {
-                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", results[i].Identifier, results[i].Status);
-                
-                if (results[i].Status == DiagnosticStatus.Red)
-                {
-                    Console.WriteLine(results[i].Reason);
-                    Console.WriteLine(results[i].Remediation);
-                }
-            }
         }
 
         [Test]
@@ -120,8 +95,8 @@ namespace HareDu.Tests
         {
             var connection = Client
                 .Snapshot<RmqBrokerConnection>()
-                .Execute()
-                .RunDiagnostics();
+                .Execute();
+
 //            var resource = Client.Snapshot<RmqConnection>();
 //            var snapshot = resource.Get();
 //            var data = snapshot.Select(x => x.Data);
@@ -138,8 +113,8 @@ namespace HareDu.Tests
         {
             var snapshot = Client
                 .Snapshot<RmqBrokerConnection>()
-                .RunDiagnostics()
                 .Execute();
+
 //            var snapshot = resource.Get();
 //            var data = snapshot.Select(x => x.Data);
 //            var diagnosticResults = resource.RunDiagnostics(data).ToList();

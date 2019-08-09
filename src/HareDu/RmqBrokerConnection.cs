@@ -13,21 +13,14 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System.Collections.Generic;
     using System.Threading;
-    using Core;
-    using Diagnostics;
     using Model;
 
     public interface RmqBrokerConnection :
-        Snapshot
+        CaptureSnapshot
     {
-        Result<ConnectivitySnapshot> Snapshot { get; }
-        
-        IReadOnlyList<DiagnosticResult> DiagnosticResults { get; }
+        ConnectivitySnapshot Snapshot { get; }
         
         RmqBrokerConnection Execute(CancellationToken cancellationToken = default);
-
-        RmqBrokerConnection RunDiagnostics();
     }
 }

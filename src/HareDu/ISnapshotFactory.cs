@@ -21,10 +21,13 @@ namespace HareDu
     public interface ISnapshotFactory
     {
         T Snapshot<T>()
-            where T : Snapshot;
+            where T : CaptureSnapshot;
 
         void Init(IResourceFactory factory);
 
         void Init(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers);
+
+        T Get<T>()
+            where T : CaptureSnapshot;
     }
 }

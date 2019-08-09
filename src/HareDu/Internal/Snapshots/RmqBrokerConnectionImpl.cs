@@ -25,27 +25,23 @@ namespace HareDu.Internal.Snapshots
 
     class RmqBrokerConnectionImpl :
         BaseSnapshot,
-        RmqBrokerConnection
+        RmqBrokerConnection,
+        IExecuteDiagnosticChecks
     {
         readonly List<IDiagnosticCheck> _diagnosticChecks;
 
-        public Result<ConnectivitySnapshot> Snapshot { get; private set; }
-        public IReadOnlyList<DiagnosticResult> DiagnosticResults { get; private set; }
+        public ConnectivitySnapshot Snapshot { get; private set; }
         
         public RmqBrokerConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
             _diagnosticChecks = GetDiagnosticChecks().ToList();
-
-            DiagnosticResults = new List<DiagnosticResult>();
         }
 
         public RmqBrokerConnectionImpl(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers)
             : base(factory)
         {
             _diagnosticChecks = GetDiagnosticChecks().ToList();
-            
-            DiagnosticResults = new List<DiagnosticResult>();
 
             ConnectObservers(observers, _diagnosticChecks);
         }
@@ -67,33 +63,30 @@ namespace HareDu.Internal.Snapshots
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            Snapshot = new SuccessfulResult<ConnectivitySnapshot>(new ConnectivitySnapshotImpl(cluster, connections, channels), null);
+            Snapshot = new ConnectivitySnapshotImpl(cluster, connections, channels);
 
             return this;
         }
 
-        public RmqBrokerConnection RunDiagnostics()
+        public IReadOnlyList<DiagnosticResult> Execute()
         {
-            var snapshot = Snapshot.Select(x => x.Data);
             var diagnosticResults = new List<DiagnosticResult>();
             
-            for (int i = 0; i < snapshot.Connections.Count; i++)
+            for (int i = 0; i < Snapshot.Connections.Count; i++)
             {
                 diagnosticResults.AddRange(_diagnosticChecks
                     .Where(x => x.SnapshotType == SnapshotType.Connection)
-                    .Select(x => x.Execute(snapshot.Connections[i])));
+                    .Select(x => x.Execute(Snapshot.Connections[i])));
 
-                for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
+                for (int j = 0; j < Snapshot.Connections[i].Channels.Count; j++)
                 {
                     diagnosticResults.AddRange(_diagnosticChecks
                         .Where(x => x.SnapshotType == SnapshotType.Channel)
-                        .Select(x => x.Execute(snapshot.Connections[i].Channels[j])));
+                        .Select(x => x.Execute(Snapshot.Connections[i].Channels[j])));
                 }
             }
 
-            DiagnosticResults = diagnosticResults;
-
-            return this;
+            return diagnosticResults;
         }
 
 

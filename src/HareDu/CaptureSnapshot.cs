@@ -11,21 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Model
+namespace HareDu
 {
-    using System.Collections.Generic;
-
-    public interface ConnectivitySnapshot :
-        Snapshot
+    public interface CaptureSnapshot
     {
-        ChurnMetrics ChannelsClosed { get; }
-
-        ChurnMetrics ChannelsCreated { get; }
-
-        ChurnMetrics ConnectionsClosed { get; }
-
-        ChurnMetrics ConnectionsCreated { get; }
-        
-        IReadOnlyList<ConnectionSnapshot> Connections { get; }
     }
 }
