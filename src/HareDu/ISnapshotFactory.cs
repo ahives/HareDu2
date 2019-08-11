@@ -16,7 +16,7 @@ namespace HareDu
     using System;
     using System.Collections.Generic;
     using Core;
-    using Diagnostics;
+    using Snapshotting;
 
     public interface ISnapshotFactory
     {
@@ -25,9 +25,6 @@ namespace HareDu
 
         void Init(IResourceFactory factory);
 
-        void Init(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers);
-
-        T Get<T>()
-            where T : CaptureSnapshot;
+        void Init(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers);
     }
 }

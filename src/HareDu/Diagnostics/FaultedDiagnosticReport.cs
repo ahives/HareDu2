@@ -13,11 +13,13 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    using Model;
+    using System;
+    using System.Collections.Generic;
 
-    public interface IGenerateDiagnosticReport
+    public class FaultedDiagnosticReport :
+        DiagnosticReport
     {
-        DiagnosticReport Run<T>(T snapshot)
-            where T : Snapshot;
+        public IReadOnlyList<DiagnosticResult> Results => new List<DiagnosticResult>();
+        public DateTimeOffset Timestamp => DateTimeOffset.Now;
     }
 }

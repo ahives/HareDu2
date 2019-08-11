@@ -11,11 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Snapshotting
 {
     using System;
     using System.Collections.Generic;
-    using Diagnostics;
 
     public interface SnapshotClientConfigProvider
     {
@@ -42,12 +41,12 @@ namespace HareDu
         /// 
         /// </summary>
         /// <param name="observers"></param>
-        void RegisterObservers(IList<IObserver<DiagnosticContext>> observers);
+        void RegisterObservers(IList<IObserver<SnapshotContext>> observers);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="observer"></param>
-        void RegisterObserver(IObserver<DiagnosticContext> observer);
+        void RegisterObserver(IObserver<SnapshotContext> observer);
     }
 }

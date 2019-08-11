@@ -7,15 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\HareDu.IntegrationTesting.Core\HareDu.IntegrationTesting.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Autofac" Version="4.9.3" />
       <PackageReference Include="MassTransit" Version="5.5.4" />
       <PackageReference Include="MassTransit.Autofac" Version="5.5.4" />
       <PackageReference Include="MassTransit.Log4Net" Version="5.5.4" />
       <PackageReference Include="MassTransit.RabbitMQ" Version="5.5.4" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
 
 </Project>

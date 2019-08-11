@@ -5,6 +5,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj" />
     <ProjectReference Include="..\HareDu.Core\HareDu.Core.csproj" />
     <ProjectReference Include="..\HareDu\HareDu.csproj" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,13 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.IntegrationTesting.Consumer
 {
-    using Model;
+    using System;
+    using Autofac;
+    using MassTransit;
 
-    public interface IGenerateDiagnosticReport
+    class Program
     {
-        DiagnosticReport Run<T>(T snapshot)
-            where T : Snapshot;
+        static void Main(string[] args)
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterModule<MassTransitModule>();
+
+            var container = builder.Build();
+
+            var bus = container.Resolve<IBusControl>();
+            bus.Start();
+            
+            Console.WriteLine("Consumer Started");
+        }
     }
 }

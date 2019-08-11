@@ -15,8 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Common\Common.csproj" />
-      <ProjectReference Include="..\Publisher\Publisher.csproj" />
+      <ProjectReference Include="..\HareDu.IntegrationTesting.Core\HareDu.IntegrationTesting.Core.csproj" />
     </ItemGroup>
 
 </Project>

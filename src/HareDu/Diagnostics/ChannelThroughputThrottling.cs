@@ -11,14 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Checks
+namespace HareDu.Diagnostics
 {
     using Internal.Diagnostics;
     using Model;
 
     class ChannelThroughputThrottling :
-        BaseDiagnosticCheck,
-        IDiagnosticCheck
+        BaseDiagnostic,
+        IDiagnostic
     {
         public string Identifier => "ChannelThroughputThrottling";
         public SnapshotType SnapshotType => SnapshotType.Channel;

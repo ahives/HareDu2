@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Snapshotting
 {
     using System;
     using System.Collections.Generic;
@@ -19,7 +19,6 @@ namespace HareDu
     using Core;
     using Core.Configuration;
     using Core.Exceptions;
-    using Diagnostics;
     using Internal;
 
     public static class SnapshotClient
@@ -53,18 +52,18 @@ namespace HareDu
             TimeSpan _timeout;
             string _username;
             string _password;
-            readonly List<IObserver<DiagnosticContext>> _observers;
+            readonly List<IObserver<SnapshotContext>> _observers;
 
             public Lazy<HareDuClientSettings> Settings { get; }
-            public Lazy<List<IObserver<DiagnosticContext>>> Observers { get; }
+            public Lazy<List<IObserver<SnapshotContext>>> Observers { get; }
 
             public SnapshotClientConfigProviderImpl()
             {
-                _observers = new List<IObserver<DiagnosticContext>>();
+                _observers = new List<IObserver<SnapshotContext>>();
                 
                 Settings = new Lazy<HareDuClientSettings>(
                         () => new HareDuClientSettingsImpl(_rmqServerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
-                Observers = new Lazy<List<IObserver<DiagnosticContext>>>(() => _observers, LazyThreadSafetyMode.PublicationOnly);
+                Observers = new Lazy<List<IObserver<SnapshotContext>>>(() => _observers, LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
@@ -77,7 +76,7 @@ namespace HareDu
                 _password = password;
             }
 
-            public void RegisterObservers(IList<IObserver<DiagnosticContext>> observers)
+            public void RegisterObservers(IList<IObserver<SnapshotContext>> observers)
             {
                 for (int i = 0; i < observers.Count; i++)
                 {
@@ -86,7 +85,7 @@ namespace HareDu
                 }
             }
 
-            public void RegisterObserver(IObserver<DiagnosticContext> observer)
+            public void RegisterObserver(IObserver<SnapshotContext> observer)
             {
                 if (!_observers.Contains(observer))
                     _observers.Add(observer);

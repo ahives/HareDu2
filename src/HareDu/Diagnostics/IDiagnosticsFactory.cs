@@ -13,28 +13,11 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    using Model;
+    using System.Collections.Generic;
     using Reporting;
 
-    public class DiagnosticReportGenerator :
-        IGenerateDiagnosticReport
+    public interface IDiagnosticsFactory
     {
-        readonly IDiagnosticsFactory _factory;
-
-        public DiagnosticReportGenerator(IDiagnosticsFactory factory)
-        {
-            _factory = factory;
-        }
-
-        public DiagnosticReport Run<T>(T snapshot)
-            where T : Snapshot
-        {
-            if (!_factory.TryGet(out IDiagnosticsRunner<T> runner))
-                return new FaultedDiagnosticReport();
-            
-            var results = runner.Execute(snapshot);
-            
-            return new SuccessfulDiagnosticReport(results);
-        }
+        bool TryGet<T>(out IDiagnosticsRunner<T> runner);
     }
 }

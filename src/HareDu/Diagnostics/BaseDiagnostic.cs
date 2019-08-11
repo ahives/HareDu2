@@ -11,17 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Checks
+namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
 
-    public class BaseDiagnosticCheck :
+    public class BaseDiagnostic :
         IObservable<DiagnosticContext>
     {
         readonly List<IObserver<DiagnosticContext>> _observers;
 
-        public BaseDiagnosticCheck()
+        public BaseDiagnostic()
         {
             _observers = new List<IObserver<DiagnosticContext>>();
         }

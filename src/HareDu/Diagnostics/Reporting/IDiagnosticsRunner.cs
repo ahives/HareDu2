@@ -11,13 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Reporting
 {
-    using Model;
+    using System.Collections.Generic;
 
-    public interface IGenerateDiagnosticReport
+    public interface IDiagnosticsRunner<in T>
     {
-        DiagnosticReport Run<T>(T snapshot)
-            where T : Snapshot;
+        IReadOnlyList<DiagnosticResult> Execute(T snapshot);
     }
 }

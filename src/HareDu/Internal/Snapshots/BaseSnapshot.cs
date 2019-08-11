@@ -15,9 +15,8 @@ namespace HareDu.Internal.Snapshots
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Core;
-    using HareDu.Diagnostics;
+    using Snapshotting;
 
     class BaseSnapshot
     {
@@ -30,30 +29,16 @@ namespace HareDu.Internal.Snapshots
             _observers = new List<IDisposable>();
         }
 
-        protected IEnumerable<IDiagnosticCheck> GetDiagnosticChecks()
-        {
-            var diagnosticChecks = GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(IDiagnosticCheck).IsAssignableFrom(x) && !x.IsInterface)
-                .ToList();
-
-            for (int i = 0; i < diagnosticChecks.Count; i++)
-            {
-                yield return (IDiagnosticCheck) Activator.CreateInstance(diagnosticChecks[i]);
-            }
-        }
-
-        protected void ConnectObservers(IList<IObserver<DiagnosticContext>> observers, IList<IDiagnosticCheck> diagnostic)
+        protected void ConnectObservers(IList<IObserver<SnapshotContext>> observers/*, IList<IDiagnostic> diagnostic*/)
         {
             for (int i = 0; i < observers.Count; i++)
             {
                 if (observers[i] != null)
                 {
-                    for (int j = 0; j < diagnostic.Count; j++)
-                    {
-                        _observers.Add(diagnostic[j].Subscribe(observers[i]));
-                    }
+//                    for (int j = 0; j < diagnostic.Count; j++)
+//                    {
+//                        _observers.Add(diagnostic[j].Subscribe(observers[i]));
+//                    }
                 }
             }
         }

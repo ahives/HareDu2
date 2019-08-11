@@ -11,23 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu.Snapshotting
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core;
     using Core.Exceptions;
-    using HareDu.Diagnostics;
 
     public class SnapshotFactory :
         ISnapshotFactory
     {
         IResourceFactory _factory;
-        static ISnapshotFactory _instance = null;
+        static ISnapshotFactory _instance;
         static readonly object _gate = new object();
         readonly IDictionary<string, object> _snapshotCache = new Dictionary<string, object>();
-        readonly List<IObserver<DiagnosticContext>> _observers = new List<IObserver<DiagnosticContext>>();
+        readonly List<IObserver<SnapshotContext>> _observers = new List<IObserver<SnapshotContext>>();
 
         public static ISnapshotFactory Instance
         {
@@ -47,7 +46,7 @@ namespace HareDu.Internal
             RegisterSnapshots();
         }
 
-        public void Init(IResourceFactory factory, IList<IObserver<DiagnosticContext>> observers)
+        public void Init(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers)
         {
             _factory = factory;
 
@@ -81,23 +80,6 @@ namespace HareDu.Internal
             _snapshotCache.Add(type.FullName, instance);
             
             return instance;
-        }
-
-        public T Get<T>()
-            where T : CaptureSnapshot
-        {
-            Type type = GetType()
-                .Assembly
-                .GetTypes()
-                .FirstOrDefault(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface);
-
-            if (type == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
-
-            if (_snapshotCache.ContainsKey(type.FullName))
-                return (T) _snapshotCache[type.FullName];
-
-            return default;
         }
 
         void RegisterSnapshots()

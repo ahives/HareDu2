@@ -19,8 +19,6 @@ namespace HareDu
     public interface RmqBrokerConnection :
         CaptureSnapshot
     {
-        ConnectivitySnapshot Snapshot { get; }
-        
-        RmqBrokerConnection Execute(CancellationToken cancellationToken = default);
+        ConnectivitySnapshot Execute(CancellationToken cancellationToken = default);
     }
 }

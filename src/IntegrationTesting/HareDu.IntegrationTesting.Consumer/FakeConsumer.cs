@@ -11,13 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.IntegrationTesting.Consumer
 {
-    using Model;
+    using System;
+    using System.Threading.Tasks;
+    using Core;
+    using MassTransit;
 
-    public interface IGenerateDiagnosticReport
+    public class FakeConsumer :
+        IConsumer<FakeMessage>
     {
-        DiagnosticReport Run<T>(T snapshot)
-            where T : Snapshot;
+        public async Task Consume(ConsumeContext<FakeMessage> context) => Console.WriteLine("Consumed message");
     }
 }
