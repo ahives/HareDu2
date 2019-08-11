@@ -24,16 +24,16 @@ namespace HareDu.Internal.Snapshots
     using Model;
     using Snapshotting;
 
-    class RmqBrokerConnectionImpl :
+    class BrokerConnectionImpl :
         BaseSnapshot,
-        RmqBrokerConnection
+        BrokerConnection
     {
-        public RmqBrokerConnectionImpl(IResourceFactory factory)
+        public BrokerConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
         }
 
-        public RmqBrokerConnectionImpl(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers)
+        public BrokerConnectionImpl(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers)
             : base(factory)
         {
 //            ConnectObservers(observers, _diagnosticChecks);

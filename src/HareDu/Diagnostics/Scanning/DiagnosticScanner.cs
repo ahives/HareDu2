@@ -11,28 +11,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Scanning
 {
     using Model;
-    using Reporting;
 
-    public class DiagnosticReportGenerator :
-        IGenerateDiagnosticReport
+    public class DiagnosticScanner :
+        IDiagnosticScanner
     {
-        readonly IDiagnosticsFactory _factory;
+        readonly IComponentDiagnosticFactory _factory;
 
-        public DiagnosticReportGenerator(IDiagnosticsFactory factory)
+        public DiagnosticScanner(IComponentDiagnosticFactory factory)
         {
             _factory = factory;
         }
 
-        public DiagnosticReport Run<T>(T snapshot)
+        public DiagnosticReport Scan<T>(T snapshot)
             where T : Snapshot
         {
-            if (!_factory.TryGet(out IDiagnosticsRunner<T> runner))
+            if (!_factory.TryGet(out IComponentDiagnostic<T> diagnostic))
                 return new FaultedDiagnosticReport();
             
-            var results = runner.Execute(snapshot);
+            var results = diagnostic.Scan(snapshot);
             
             return new SuccessfulDiagnosticReport(results);
         }

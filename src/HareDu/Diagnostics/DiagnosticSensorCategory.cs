@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    public enum DiagnosticCheckCategory
+    public enum DiagnosticSensorCategory
     {
         Throughput
     }

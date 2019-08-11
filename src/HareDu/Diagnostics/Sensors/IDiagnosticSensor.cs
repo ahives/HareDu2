@@ -11,18 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Sensors
 {
     using System;
 
-    public interface IDiagnostic :
+    public interface IDiagnosticSensor :
         IObservable<DiagnosticContext>
     {
         string Identifier { get; }
         
+        string Description { get; }
+        
         SnapshotType SnapshotType { get; }
         
-        DiagnosticCheckCategory DiagnosticCheckCategory { get; }
+        DiagnosticSensorCategory DiagnosticSensorCategory { get; }
         
         DiagnosticResult Execute<T>(T snapshot);
     }

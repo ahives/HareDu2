@@ -16,12 +16,12 @@ namespace HareDu.Diagnostics
     using System;
     using System.Collections.Generic;
 
-    public class BaseDiagnostic :
+    public class BaseDiagnosticSensor :
         IObservable<DiagnosticContext>
     {
         readonly List<IObserver<DiagnosticContext>> _observers;
 
-        public BaseDiagnostic()
+        public BaseDiagnosticSensor()
         {
             _observers = new List<IObserver<DiagnosticContext>>();
         }

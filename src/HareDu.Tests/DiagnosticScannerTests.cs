@@ -14,17 +14,15 @@
 namespace HareDu.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
     using Diagnostics;
-    using Model;
+    using Diagnostics.Scanning;
     using NUnit.Framework;
 
     [TestFixture]
-    public class DiagnosticReportGeneratorTests :
+    public class DiagnosticScannerTests :
         SnapshotTestBase
     {
         IContainer _container;
@@ -46,12 +44,12 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var snapshot = Client
-                .Snapshot<RmqBrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Execute();
 
-            var generator = _container.Resolve<IGenerateDiagnosticReport>();
+            var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            var report = generator.Run(snapshot);
+            var report = scanner.Scan(snapshot);
             
             for (int i = 0; i < report.Results.Count; i++)
             {

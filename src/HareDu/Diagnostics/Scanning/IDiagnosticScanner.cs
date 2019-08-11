@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Reporting
+namespace HareDu.Diagnostics.Scanning
 {
-    using System.Collections.Generic;
+    using Model;
 
-    public class FaultedDiagnosticsRunner<T> :
-        IDiagnosticsRunner<T>
+    public interface IDiagnosticScanner
     {
-        public IReadOnlyList<DiagnosticResult> Execute(T snapshot) => throw new System.NotImplementedException();
+        DiagnosticReport Scan<T>(T snapshot)
+            where T : Snapshot;
     }
 }

@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containers", "Containers", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.AutofacIntegration", "Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj", "{C9FD4379-156A-4389-9E6A-1CBA9E78D4E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Diagnostics", "HareDu.Diagnostics\HareDu.Diagnostics.csproj", "{FBB31CDB-26FB-45BE-B36B-1E1B9B16A20A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{C9FD4379-156A-4389-9E6A-1CBA9E78D4E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9FD4379-156A-4389-9E6A-1CBA9E78D4E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9FD4379-156A-4389-9E6A-1CBA9E78D4E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB31CDB-26FB-45BE-B36B-1E1B9B16A20A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB31CDB-26FB-45BE-B36B-1E1B9B16A20A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB31CDB-26FB-45BE-B36B-1E1B9B16A20A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB31CDB-26FB-45BE-B36B-1E1B9B16A20A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

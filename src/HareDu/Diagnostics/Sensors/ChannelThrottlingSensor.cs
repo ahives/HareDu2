@@ -11,28 +11,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Sensors
 {
     using Internal.Diagnostics;
     using Model;
 
-    class ChannelThroughputThrottling :
-        BaseDiagnostic,
-        IDiagnostic
+    class ChannelThrottlingSensor :
+        BaseDiagnosticSensor,
+        IDiagnosticSensor
     {
-        public string Identifier => "ChannelThroughputThrottling";
+        public string Identifier => "ChannelThrottling";
+        public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public SnapshotType SnapshotType => SnapshotType.Channel;
-        public DiagnosticCheckCategory DiagnosticCheckCategory => DiagnosticCheckCategory.Throughput;
+        public DiagnosticSensorCategory DiagnosticSensorCategory => DiagnosticSensorCategory.Throughput;
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
-            ChannelSnapshot temp = snapshot as ChannelSnapshot;
-            DiagnosticResult result = temp.UnacknowledgedMessages > temp.PrefetchCount
-                ? new DiagnosticResultImpl(temp.Name, DiagnosticStatus.Red,
+            ChannelSnapshot data = snapshot as ChannelSnapshot;
+            DiagnosticResult result = data.UnacknowledgedMessages > data.PrefetchCount
+                ? new NegativeDiagnosticResult(data.Name, DiagnosticStatus.Red,
                     "Unacknowledged messages on channel exceeds prefetch count causing the RabbitMQ broker to stop delivering messages to consumers.",
                     "Acknowledged messages must be greater than or equal to the result of subtracting the number of unacknowledged messages from the prefetch count plus 1. Temporarily increase the number of consumers or prefetch count.")
-                : new DiagnosticResultImpl(temp.Name, DiagnosticStatus.Green,
-                    "Unacknowledged messages on channel is less than prefetch count.", null);
+                : new PositiveDiagnosticResult(data.Name, DiagnosticStatus.Green,
+                    "Unacknowledged messages on channel is less than prefetch count.") as DiagnosticResult;
 
             NotifyObservers(result);
                 

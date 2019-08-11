@@ -19,6 +19,7 @@ namespace HareDu.Tests
     using Autofac;
     using Core.Extensions;
     using Diagnostics;
+    using Diagnostics.Scanning;
     using NUnit.Framework;
 
     [TestFixture]
@@ -34,9 +35,6 @@ namespace HareDu.Tests
 
             builder.Register(x => Client)
                 .As<ISnapshotFactory>();
-
-            builder.RegisterType<DiagnosticReportGenerator>()
-                .As<IGenerateDiagnosticReport>();
             
 //            builder.RegisterModule<MassTransitModule>();
 
@@ -47,7 +45,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var connection = Client
-                .Snapshot<RmqBrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Execute();
 
             var connections = connection
@@ -95,7 +93,7 @@ namespace HareDu.Tests
         public async Task Test2()
         {
             var connection = Client
-                .Snapshot<RmqBrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Execute();
             
             Console.WriteLine(connection.ToJsonString());
@@ -105,7 +103,7 @@ namespace HareDu.Tests
         public async Task Test4()
         {
             var connection = Client
-                .Snapshot<RmqBrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Execute();
 
 //            var resource = Client.Snapshot<RmqConnection>();
@@ -123,7 +121,7 @@ namespace HareDu.Tests
         public async Task Test5()
         {
             var snapshot = Client
-                .Snapshot<RmqBrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Execute();
 
 //            var snapshot = resource.Get();

@@ -16,7 +16,7 @@ namespace HareDu
     using System.Threading;
     using Model;
 
-    public interface RmqBrokerConnection :
+    public interface BrokerConnection :
         CaptureSnapshot
     {
         ConnectivitySnapshot Execute(CancellationToken cancellationToken = default);

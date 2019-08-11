@@ -14,18 +14,16 @@
 namespace HareDu.Internal.Diagnostics
 {
     using System;
-    using Alerts;
     using HareDu.Diagnostics;
 
-    class DiagnosticResultImpl :
+    class PositiveDiagnosticResult :
         DiagnosticResult
     {
-        public DiagnosticResultImpl(string identifier, DiagnosticStatus diagnosticStatus, string reason, string remediation)
+        public PositiveDiagnosticResult(string identifier, DiagnosticStatus status, string reason)
         {
             Identifier = identifier;
-            Status = diagnosticStatus;
+            Status = status;
             Reason = reason;
-            Remediation = remediation;
             Timestamp = DateTimeOffset.Now;
         }
 

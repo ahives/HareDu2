@@ -11,75 +11,75 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Scanning
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Exceptions;
-    using Reporting;
+    using Sensors;
 
     /// <summary>
     /// This class should be instantiate once since construction can be expensive.
     /// </summary>
-    public class DiagnosticsFactory :
-        IDiagnosticsFactory
+    public class ComponentDiagnosticFactory :
+        IComponentDiagnosticFactory
     {
-        readonly IReadOnlyList<IDiagnostic> _diagnostics;
-        readonly IDictionary<string, object> _diagnosticRunnerCache = new Dictionary<string, object>();
+        readonly IReadOnlyList<IDiagnosticSensor> _sensors;
+        readonly IDictionary<string, object> _sensorCache = new Dictionary<string, object>();
 
-        public DiagnosticsFactory(IReadOnlyList<IDiagnostic> diagnostics)
+        public ComponentDiagnosticFactory(IReadOnlyList<IDiagnosticSensor> sensors)
         {
-            _diagnostics = diagnostics;
+            _sensors = sensors;
             
-            RegisterDiagnosticRunners(diagnostics);
+            RegisterDiagnosticSensors(sensors);
         }
 
-        public bool TryGet<T>(out IDiagnosticsRunner<T> runner)
+        public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
         {
             Type type = GetType()
                 .Assembly
                 .GetTypes()
-                .FirstOrDefault(x => typeof(IDiagnosticsRunner<T>).IsAssignableFrom(x) && !x.IsInterface);
+                .FirstOrDefault(x => typeof(IComponentDiagnostic<T>).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_diagnosticRunnerCache.ContainsKey(type.FullName))
+            if (_sensorCache.ContainsKey(type.FullName))
             {
-                runner = (IDiagnosticsRunner<T>) _diagnosticRunnerCache[type.FullName];
+                diagnostic = (IComponentDiagnostic<T>) _sensorCache[type.FullName];
                 return true;
             }
 
             try
             {
-                runner = Activator.CreateInstance(type, _diagnostics) as IDiagnosticsRunner<T>;
+                diagnostic = Activator.CreateInstance(type, _sensors) as IComponentDiagnostic<T>;
 
                 // TODO: check to see if instance was created successfully
             
-                _diagnosticRunnerCache.Add(type.FullName, runner);
+                _sensorCache.Add(type.FullName, diagnostic);
                 return true;
             }
             catch (Exception e)
             {
             }
             
-            runner = new FaultedDiagnosticsRunner<T>();
+            diagnostic = new FaultedComponentDiagnostic<T>();
             return false;
         }
 
-        void RegisterDiagnosticRunners(IReadOnlyList<IDiagnostic> diagnostics)
+        void RegisterDiagnosticSensors(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(IDiagnosticsRunner<>).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(IComponentDiagnostic<>).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {
-                var instance = Activator.CreateInstance(type, diagnostics);
+                var instance = Activator.CreateInstance(type, sensors);
                 
-                _diagnosticRunnerCache.Add(type.FullName, instance);
+                _sensorCache.Add(type.FullName, instance);
             }
         }
     }

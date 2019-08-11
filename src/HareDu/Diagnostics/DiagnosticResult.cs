@@ -18,9 +18,13 @@ namespace HareDu.Diagnostics
     public interface DiagnosticResult
     {
         string Identifier { get; }
+        
         DiagnosticStatus Status { get; }
+        
         string Reason { get; }
+        
         string Remediation { get; }
+        
         DateTimeOffset Timestamp { get; }
     }
 }
