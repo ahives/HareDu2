@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Observers
 
         public void OnNext(DiagnosticContext value)
         {
-            Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", value.Result.Identifier, value.Result.Status);
+            Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", value.Result.ComponentIdentifier, value.Result.Status);
         }
     }
 }

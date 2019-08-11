@@ -26,8 +26,8 @@ namespace HareDu.Diagnostics.Scanning
 
         public ConnectivityDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
-            _connectionSensors = sensors.Where(x => x.SnapshotType == SnapshotType.Connection);
-            _channelSensors = sensors.Where(x => x.SnapshotType == SnapshotType.Channel);
+            _connectionSensors = sensors.Where(x => x.ComponentType == ComponentType.Connection);
+            _channelSensors = sensors.Where(x => x.ComponentType == ComponentType.Channel);
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ConnectivitySnapshot snapshot)

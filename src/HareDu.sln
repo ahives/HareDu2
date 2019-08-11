@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Monitoring", "HareDu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Monitoring.Tests", "HareDu.Monitoring.Tests\HareDu.Monitoring.Tests.csproj", "{8D0D0436-AD36-4647-9C09-A3544C259C43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.IntegrationTesting.Diagnostics", "IntegrationTesting\HareDu.IntegrationTesting.Diagnostics\HareDu.IntegrationTesting.Diagnostics.csproj", "{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{8D0D0436-AD36-4647-9C09-A3544C259C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D0D0436-AD36-4647-9C09-A3544C259C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D0D0436-AD36-4647-9C09-A3544C259C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +112,6 @@ Global
 		{14CB5CB0-459D-46D7-8112-FC2818DE8C15} = {C052B545-549B-46FD-8366-8CD5FBB99C6E}
 		{12F18101-BC78-468E-987F-78F3BBD3C522} = {C052B545-549B-46FD-8366-8CD5FBB99C6E}
 		{C9FD4379-156A-4389-9E6A-1CBA9E78D4E1} = {E7626643-0782-4ED0-A54C-AA4AAF377B3C}
+		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B} = {C052B545-549B-46FD-8366-8CD5FBB99C6E}
 	EndGlobalSection
 EndGlobal

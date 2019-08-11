@@ -22,9 +22,9 @@ namespace HareDu.Diagnostics.Sensors
         
         string Description { get; }
         
-        SnapshotType SnapshotType { get; }
+        ComponentType ComponentType { get; }
         
-        DiagnosticSensorCategory DiagnosticSensorCategory { get; }
+        DiagnosticSensorCategory SensorCategory { get; }
         
         DiagnosticResult Execute<T>(T snapshot);
     }

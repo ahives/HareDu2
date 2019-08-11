@@ -18,19 +18,23 @@ namespace HareDu.Diagnostics.Internal
     class NegativeDiagnosticResult :
         DiagnosticResult
     {
-        public NegativeDiagnosticResult(string identifier, DiagnosticStatus diagnosticStatus, string reason, string remediation)
+        public NegativeDiagnosticResult(string componentIdentifier, string sensorIdentifier, ComponentType componentType, DiagnosticStatus diagnosticStatus, string reason, string remediation)
         {
-            Identifier = identifier;
+            ComponentIdentifier = componentIdentifier;
+            SensorIdentifier = sensorIdentifier;
+            ComponentType = componentType;
             Status = diagnosticStatus;
             Reason = reason;
             Remediation = remediation;
             Timestamp = DateTimeOffset.Now;
         }
 
-        public string Identifier { get; }
+        public string ComponentIdentifier { get; }
+        public string SensorIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public string Reason { get; }
         public string Remediation { get; }
+        public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }
 }

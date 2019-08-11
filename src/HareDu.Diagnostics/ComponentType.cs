@@ -11,13 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Diagnostics
 {
-    using System.Collections.Generic;
-
-    public class FaultedComponentDiagnostic<T> :
-        IComponentDiagnostic<T>
+    public enum ComponentType
     {
-        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => throw new System.NotImplementedException();
+        Connection,
+        Channel
     }
 }

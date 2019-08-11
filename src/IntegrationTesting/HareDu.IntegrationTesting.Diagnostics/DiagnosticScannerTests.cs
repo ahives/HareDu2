@@ -11,14 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.IntegrationTesting.Diagnostics
 {
     using System;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using HareDu.Diagnostics;
+    using HareDu.Diagnostics.Scanning;
     using NUnit.Framework;
-    using Scanning;
     using Snapshotting;
 
     [TestFixture]
@@ -53,7 +54,7 @@ namespace HareDu.Diagnostics.Tests
             
             for (int i = 0; i < report.Results.Count; i++)
             {
-                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", report.Results[i].Identifier, report.Results[i].Status);
+                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", report.Results[i].ComponentIdentifier, report.Results[i].Status);
                 
                 if (report.Results[i].Status == DiagnosticStatus.Red)
                 {

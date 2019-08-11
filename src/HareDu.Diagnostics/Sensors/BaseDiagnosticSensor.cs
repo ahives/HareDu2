@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Sensors
     using System;
     using System.Collections.Generic;
 
-    public class BaseDiagnosticSensor :
+    public abstract class BaseDiagnosticSensor :
         IObservable<DiagnosticContext>
     {
         readonly List<IObserver<DiagnosticContext>> _observers;
@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Sensors
             _observers = new List<IObserver<DiagnosticContext>>();
         }
 
-        protected void NotifyObservers(DiagnosticResult result)
+        protected virtual void NotifyObservers(DiagnosticResult result)
         {
 //            if (!_notifyObservers)
 //                return;
