@@ -13,15 +13,11 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
-    using Core;
-    using Core.Extensions;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ShovelTests :
-        SnapshotTestBase
+    public class ShovelTests
     {
         [Test]
         public async Task Test()

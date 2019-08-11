@@ -6,17 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\HareDu.Core\HareDu.Core.csproj" />
-      <ProjectReference Include="..\HareDu.Snapshotting\HareDu.Snapshotting.csproj" />
-      <ProjectReference Include="..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Testing" />
+      <Folder Include="Snapshotting" />
     </ItemGroup>
 
 </Project>

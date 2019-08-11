@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\HareDu.Core\HareDu.Core.csproj" />
+      <ProjectReference Include="..\..\HareDu.Diagnostics\HareDu.Diagnostics.csproj" />
       <ProjectReference Include="..\..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
