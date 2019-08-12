@@ -14,6 +14,7 @@
 namespace HareDu.Diagnostics.Observers
 {
     using System;
+    using Core.Extensions;
 
     public class DefaultConsoleLogger :
         IObserver<DiagnosticContext>
@@ -30,7 +31,22 @@ namespace HareDu.Diagnostics.Observers
 
         public void OnNext(DiagnosticContext value)
         {
-            Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", value.Result.ComponentIdentifier, value.Result.Status);
+            Console.WriteLine("Timestamp: {0}", value.Timestamp.ToString());
+            Console.WriteLine();
+
+            Console.WriteLine("Component Identifier: {0}", value.Result.ComponentIdentifier);
+            Console.WriteLine("Component Type: {0}", value.Result.ComponentType);
+            Console.WriteLine("Sensor: {0}", value.Result.SensorIdentifier);
+            Console.WriteLine("Status: {0}", value.Result.Status);
+            Console.WriteLine("Data => {0}", value.Result.SensorData.ToJsonString());
+
+            if (value.Result.Status == DiagnosticStatus.Red)
+            {
+                Console.WriteLine("Reason: {0}", value.Result.Reason);
+                Console.WriteLine("Remediation: {0}", value.Result.Remediation);
+            }
+
+            Console.WriteLine();
         }
     }
 }

@@ -18,6 +18,8 @@ namespace HareDu.Diagnostics
 
     public interface DiagnosticReport
     {
+        Guid Identifier { get; }
+        
         IReadOnlyList<DiagnosticResult> Results { get; }
         
         DateTimeOffset Timestamp { get; }

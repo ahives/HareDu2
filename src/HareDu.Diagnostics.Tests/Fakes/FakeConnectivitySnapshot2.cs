@@ -35,7 +35,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         {
             yield return new FakeConnectionSnapshot("Connection1", 6);
             yield return new FakeConnectionSnapshot("Connection2", 8);
-            yield return new FakeConnectionSnapshot("Connection36", 10);
+            yield return new FakeConnectionSnapshot("Connection3", 10);
         }
 
             

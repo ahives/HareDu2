@@ -27,10 +27,12 @@ namespace HareDu.Diagnostics.Scanning
     {
         readonly IReadOnlyList<IDiagnosticSensor> _sensors;
         readonly IDictionary<string, object> _sensorCache = new Dictionary<string, object>();
+        readonly IList<IDisposable> _observers;
 
         public ComponentDiagnosticFactory(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             _sensors = sensors;
+            _observers = new List<IDisposable>();
             
             RegisterDiagnosticSensors(sensors);
         }
@@ -66,6 +68,31 @@ namespace HareDu.Diagnostics.Scanning
             
             diagnostic = new DoNothingDiagnostic<T>();
             return false;
+        }
+
+        public void RegisterObservers(IList<IObserver<DiagnosticContext>> observers)
+        {
+            for (int i = 0; i < observers.Count; i++)
+            {
+                if (observers[i] != null)
+                {
+                    for (int j = 0; j < _sensors.Count; j++)
+                    {
+                        _observers.Add(_sensors[j].Subscribe(observers[i]));
+                    }
+                }
+            }
+        }
+
+        public void RegisterObserver(IObserver<DiagnosticContext> observer)
+        {
+            if (observer != null)
+            {
+                for (int j = 0; j < _sensors.Count; j++)
+                {
+                    _observers.Add(_sensors[j].Subscribe(observer));
+                }
+            }
         }
 
         void RegisterDiagnosticSensors(IReadOnlyList<IDiagnosticSensor> sensors)

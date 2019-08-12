@@ -13,8 +13,15 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Scanning
 {
+    using System;
+    using System.Collections.Generic;
+
     public interface IComponentDiagnosticFactory
     {
         bool TryGet<T>(out IComponentDiagnostic<T> diagnostic);
+
+        void RegisterObservers(IList<IObserver<DiagnosticContext>> observers);
+
+        void RegisterObserver(IObserver<DiagnosticContext> observer);
     }
 }

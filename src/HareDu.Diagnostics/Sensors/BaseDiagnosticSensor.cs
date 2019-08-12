@@ -28,9 +28,6 @@ namespace HareDu.Diagnostics.Sensors
 
         protected virtual void NotifyObservers(DiagnosticResult result)
         {
-//            if (!_notifyObservers)
-//                return;
-            
             foreach (var observer in _observers)
             {
                 observer.OnNext(new DiagnosticContextImpl(result));

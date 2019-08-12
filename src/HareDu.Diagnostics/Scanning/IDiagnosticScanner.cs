@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Scanning
 {
+    using System;
+    using System.Collections.Generic;
     using Snapshotting.Model;
 
     public interface IDiagnosticScanner
@@ -25,5 +27,17 @@ namespace HareDu.Diagnostics.Scanning
         /// <returns></returns>
         DiagnosticReport Scan<T>(T snapshot)
             where T : Snapshot;
+        
+        /// <summary>
+        /// Registers a list of observers that receives the output in real-time as the each sensor executes.
+        /// </summary>
+        /// <param name="observers"></param>
+        void RegisterObservers(IList<IObserver<DiagnosticContext>> observers);
+
+        /// <summary>
+        /// Registers an observer that receives the output in real-time as the each sensor executes.
+        /// </summary>
+        /// <param name="observer"></param>
+        void RegisterObserver(IObserver<DiagnosticContext> observer);
     }
 }

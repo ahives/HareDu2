@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Scanning
 {
+    using System;
+    using System.Collections.Generic;
     using Snapshotting.Model;
 
     public class DiagnosticScanner :
@@ -34,6 +36,16 @@ namespace HareDu.Diagnostics.Scanning
             var results = diagnostic.Scan(snapshot);
             
             return new SuccessfulDiagnosticReport(results);
+        }
+
+        public void RegisterObservers(IList<IObserver<DiagnosticContext>> observers)
+        {
+            _factory.RegisterObservers(observers);
+        }
+
+        public void RegisterObserver(IObserver<DiagnosticContext> observer)
+        {
+            _factory.RegisterObserver(observer);
         }
     }
 }

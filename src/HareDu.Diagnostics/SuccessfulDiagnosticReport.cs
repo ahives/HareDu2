@@ -15,16 +15,19 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
+    using MassTransit;
 
     public class SuccessfulDiagnosticReport :
         DiagnosticReport
     {
         public SuccessfulDiagnosticReport(IReadOnlyList<DiagnosticResult> results)
         {
+            Identifier = NewId.NextGuid();
             Results = results;
             Timestamp = DateTimeOffset.Now;
         }
 
+        public Guid Identifier { get; }
         public IReadOnlyList<DiagnosticResult> Results { get; }
         public DateTimeOffset Timestamp { get; }
     }

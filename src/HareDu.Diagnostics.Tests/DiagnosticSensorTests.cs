@@ -20,6 +20,7 @@ namespace HareDu.Diagnostics.Tests
     using Core.Extensions;
     using Fakes;
     using NUnit.Framework;
+    using Observers;
     using Scanning;
     using Snapshotting;
     using Snapshotting.Model;
@@ -46,25 +47,27 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Test()
         {
-            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
+            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var report = scanner.Scan(snapshot);
+
+            Console.WriteLine("Diagnostic Report: {0}", report.Identifier.ToString());
+            Console.WriteLine("Timestamp: {0}", report.Timestamp.ToString());
+            Console.WriteLine();
             
             for (int i = 0; i < report.Results.Count; i++)
             {
-                Console.WriteLine("Diagnostic => Sensor: {0}, Status: {1} [Info => {2} \"{3}\"]",
-                    report.Results[i].SensorIdentifier,
-                    report.Results[i].Status,
-                    report.Results[i].ComponentType,
-                    report.Results[i].ComponentIdentifier);
-                
-                Console.WriteLine("Sensor Data => {0}", report.Results[i].SensorData.ToJsonString());
+                Console.WriteLine("Component Identifier: {0}", report.Results[i].ComponentIdentifier);
+                Console.WriteLine("Component Type: {0}", report.Results[i].ComponentType);
+                Console.WriteLine("Sensor: {0}", report.Results[i].SensorIdentifier);
+                Console.WriteLine("Status: {0}", report.Results[i].Status);
+                Console.WriteLine("Data => {0}", report.Results[i].SensorData.ToJsonString());
                 
                 if (report.Results[i].Status == DiagnosticStatus.Red)
                 {
-                    Console.WriteLine("\tReason: {0}", report.Results[i].Reason);
-                    Console.WriteLine("\tRemediation: {0}", report.Results[i].Remediation);
+                    Console.WriteLine("Reason: {0}", report.Results[i].Reason);
+                    Console.WriteLine("Remediation: {0}", report.Results[i].Remediation);
                 }
                 
                 Console.WriteLine();
@@ -77,6 +80,8 @@ namespace HareDu.Diagnostics.Tests
             ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
+            scanner.RegisterObserver(new DefaultConsoleLogger());
+
             var report = scanner.Scan(snapshot);
 
             var results = report.Results.Where(x => x.Status == DiagnosticStatus.Red && x.ComponentType == ComponentType.Connection).ToList();
@@ -84,6 +89,21 @@ namespace HareDu.Diagnostics.Tests
             Assert.IsNotNull(results);
             Assert.IsNotEmpty(results);
             Assert.AreEqual(1, results.Count);
+        }
+
+        [Test]
+        public void Verify_unacknowledged_messages_on_channel_not_greater_than_prefetch_count()
+        {
+            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
+            var scanner = _container.Resolve<IDiagnosticScanner>();
+
+            var report = scanner.Scan(snapshot);
+
+            var results = report.Results.Where(x => x.Status == DiagnosticStatus.Red && x.ComponentType == ComponentType.Channel).ToList();
+            
+            Assert.IsNotNull(results);
+            Assert.IsNotEmpty(results);
+            Assert.AreEqual(6, results.Count);
         }
     }
 }
