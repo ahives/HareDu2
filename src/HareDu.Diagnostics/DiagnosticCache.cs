@@ -13,25 +13,10 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    using System;
     using System.Collections.Generic;
 
-    public interface DiagnosticResult
+    static class DiagnosticCache
     {
-        string ComponentIdentifier { get; }
-        
-        ComponentType ComponentType { get; }
-        
-        string SensorIdentifier { get; }
-        
-        DiagnosticStatus Status { get; }
-        
-        string Reason { get; }
-        
-        string Remediation { get; }
-        
-        IReadOnlyList<DiagnosticSensorData> SensorData { get; }
-        
-        DateTimeOffset Timestamp { get; }
+        public static readonly IReadOnlyList<DiagnosticResult> EmptyDiagnosticResults = new List<DiagnosticResult>();
     }
 }

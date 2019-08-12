@@ -14,15 +14,19 @@
 namespace HareDu.Diagnostics.Internal
 {
     using System;
+    using System.Collections.Generic;
 
     class NegativeDiagnosticResult :
         DiagnosticResult
     {
-        public NegativeDiagnosticResult(string componentIdentifier, string sensorIdentifier, ComponentType componentType, DiagnosticStatus diagnosticStatus, string reason, string remediation)
+        public NegativeDiagnosticResult(string componentIdentifier, string sensorIdentifier,
+            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData, DiagnosticStatus diagnosticStatus,
+            string reason, string remediation)
         {
             ComponentIdentifier = componentIdentifier;
             SensorIdentifier = sensorIdentifier;
             ComponentType = componentType;
+            SensorData = sensorData;
             Status = diagnosticStatus;
             Reason = reason;
             Remediation = remediation;
@@ -34,6 +38,7 @@ namespace HareDu.Diagnostics.Internal
         public DiagnosticStatus Status { get; }
         public string Reason { get; }
         public string Remediation { get; }
+        public IReadOnlyList<DiagnosticSensorData> SensorData { get; }
         public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }

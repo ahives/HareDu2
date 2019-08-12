@@ -11,27 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Scanning
 {
-    using System;
     using System.Collections.Generic;
 
-    public interface DiagnosticResult
+    public class DoNothingDiagnostic<T> :
+        IComponentDiagnostic<T>
     {
-        string ComponentIdentifier { get; }
-        
-        ComponentType ComponentType { get; }
-        
-        string SensorIdentifier { get; }
-        
-        DiagnosticStatus Status { get; }
-        
-        string Reason { get; }
-        
-        string Remediation { get; }
-        
-        IReadOnlyList<DiagnosticSensorData> SensorData { get; }
-        
-        DateTimeOffset Timestamp { get; }
+        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => throw new System.NotImplementedException();
     }
 }

@@ -17,6 +17,12 @@ namespace HareDu.Diagnostics.Scanning
 
     public interface IDiagnosticScanner
     {
+        /// <summary>
+        /// Executes a list of predefined diagnostic sensors against the snapshot and returns a concatenated report of the results from executing said sensors.
+        /// </summary>
+        /// <param name="snapshot"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         DiagnosticReport Scan<T>(T snapshot)
             where T : Snapshot;
     }

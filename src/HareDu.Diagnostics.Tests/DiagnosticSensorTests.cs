@@ -14,10 +14,11 @@
 namespace HareDu.Diagnostics.Tests
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using Autofac;
     using AutofacIntegration;
+    using Core.Extensions;
+    using Fakes;
     using NUnit.Framework;
     using Scanning;
     using Snapshotting;
@@ -45,7 +46,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Test()
         {
-            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot();
+            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var report = scanner.Scan(snapshot);
@@ -58,84 +59,31 @@ namespace HareDu.Diagnostics.Tests
                     report.Results[i].ComponentType,
                     report.Results[i].ComponentIdentifier);
                 
+                Console.WriteLine("Sensor Data => {0}", report.Results[i].SensorData.ToJsonString());
+                
                 if (report.Results[i].Status == DiagnosticStatus.Red)
                 {
                     Console.WriteLine("\tReason: {0}", report.Results[i].Reason);
                     Console.WriteLine("\tRemediation: {0}", report.Results[i].Remediation);
                 }
+                
+                Console.WriteLine();
             }
         }
 
-        class FakeConnectivitySnapshot :
-            ConnectivitySnapshot
+        [Test]
+        public void Verify_connection_channel_limit_reached_sensor_returns_red_status()
         {
-            public FakeConnectivitySnapshot()
-            {
-                Connections = GetConnections().ToList();
-            }
+            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
+            var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            IEnumerable<ConnectionSnapshot> GetConnections()
-            {
-                yield return new FakeConnectionSnapshot("Connection1", 2);
-                yield return new FakeConnectionSnapshot("Connection2", 4);
-            }
+            var report = scanner.Scan(snapshot);
 
+            var results = report.Results.Where(x => x.Status == DiagnosticStatus.Red && x.ComponentType == ComponentType.Connection).ToList();
             
-            class FakeConnectionSnapshot :
-                ConnectionSnapshot
-            {
-                public FakeConnectionSnapshot(string identifier, long channelLimit)
-                {
-                    Identifier = identifier;
-                    ChannelLimit = channelLimit;
-                    Channels = GetChannels().ToList();
-                }
-
-                IEnumerable<ChannelSnapshot> GetChannels()
-                {
-                    yield return new FakeChannelSnapshot("Channel1", 4, 2, 5, 8, 5, 1);
-                    yield return new FakeChannelSnapshot("Channel2", 4, 2, 5, 8, 2, 1);
-                }
-
-                
-                class FakeChannelSnapshot :
-                    ChannelSnapshot
-                {
-                    public FakeChannelSnapshot(string name, long prefetchCount, long uncommittedAcknowledgements,
-                        long uncommittedMessages, long unconfirmedMessages, long unacknowledgedMessages, long consumers)
-                    {
-                        PrefetchCount = prefetchCount;
-                        UncommittedAcknowledgements = uncommittedAcknowledgements;
-                        UncommittedMessages = uncommittedMessages;
-                        UnconfirmedMessages = unconfirmedMessages;
-                        UnacknowledgedMessages = unacknowledgedMessages;
-                        Consumers = consumers;
-                        Name = name;
-                    }
-
-                    public long PrefetchCount { get; }
-                    public long UncommittedAcknowledgements { get; }
-                    public long UncommittedMessages { get; }
-                    public long UnconfirmedMessages { get; }
-                    public long UnacknowledgedMessages { get; }
-                    public long Consumers { get; }
-                    public string Name { get; }
-                    public string Node { get; }
-                }
-
-                public string Identifier { get; }
-                public NetworkTrafficSnapshot NetworkTraffic { get; }
-                public long ChannelLimit { get; }
-                public string Node { get; }
-                public string VirtualHost { get; }
-                public IReadOnlyList<ChannelSnapshot> Channels { get; }
-            }
-
-            public ChurnMetrics ChannelsClosed { get; }
-            public ChurnMetrics ChannelsCreated { get; }
-            public ChurnMetrics ConnectionsClosed { get; }
-            public ChurnMetrics ConnectionsCreated { get; }
-            public IReadOnlyList<ConnectionSnapshot> Connections { get; }
+            Assert.IsNotNull(results);
+            Assert.IsNotEmpty(results);
+            Assert.AreEqual(1, results.Count);
         }
     }
 }

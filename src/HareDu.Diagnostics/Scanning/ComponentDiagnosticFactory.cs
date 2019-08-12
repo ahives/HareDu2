@@ -64,7 +64,7 @@ namespace HareDu.Diagnostics.Scanning
             {
             }
             
-            diagnostic = new DoNothingComponentDiagnostic<T>();
+            diagnostic = new DoNothingDiagnostic<T>();
             return false;
         }
 

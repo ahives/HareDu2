@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Sensors
 {
+    using System.Collections.Generic;
     using Internal;
     using Snapshotting.Model;
 
@@ -28,11 +29,17 @@ namespace HareDu.Diagnostics.Sensors
         public DiagnosticResult Execute<T>(T snapshot)
         {
             ChannelSnapshot data = snapshot as ChannelSnapshot;
+            var sensorData = new List<DiagnosticSensorData>
+            {
+                new DiagnosticSensorDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
+                new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
+            };
+
             DiagnosticResult result = data.UnacknowledgedMessages > data.PrefetchCount
-                ? new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, DiagnosticStatus.Red,
+                ? new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, DiagnosticStatus.Red,
                     "Unacknowledged messages on channel exceeds prefetch count causing the RabbitMQ broker to stop delivering messages to consumers.",
                     "Acknowledged messages must be greater than or equal to the result of subtracting the number of unacknowledged messages from the prefetch count plus 1. Temporarily increase the number of consumers or prefetch count.")
-                : new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, DiagnosticStatus.Green,
+                : new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, DiagnosticStatus.Green,
                     "Unacknowledged messages on channel is less than prefetch count.") as DiagnosticResult;
 
             NotifyObservers(result);

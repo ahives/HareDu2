@@ -32,6 +32,9 @@ namespace HareDu.Diagnostics.Scanning
 
         public IReadOnlyList<DiagnosticResult> Scan(ConnectivitySnapshot snapshot)
         {
+            if (snapshot == null)
+                return DiagnosticCache.EmptyDiagnosticResults;
+            
             var results = new List<DiagnosticResult>();
             
             for (int i = 0; i < snapshot.Connections.Count; i++)
