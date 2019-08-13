@@ -44,8 +44,7 @@ namespace HareDu.Snapshotting.Tests
         {
             var connection = Client
                 .Snapshot<BrokerConnection>()
-//                .RegisterObserver()
-                .Capture();
+                .Take();
 
             var connections = connection
                 .Select(x => x.Connections);
@@ -93,7 +92,7 @@ namespace HareDu.Snapshotting.Tests
         {
             var connection = Client
                 .Snapshot<BrokerConnection>()
-                .Capture();
+                .Take();
             
             Console.WriteLine(connection.ToJsonString());
         }
@@ -103,7 +102,7 @@ namespace HareDu.Snapshotting.Tests
         {
             var connection = Client
                 .Snapshot<BrokerConnection>()
-                .Capture();
+                .Take();
 
 //            var resource = Client.Snapshot<RmqConnection>();
 //            var snapshot = resource.Get();
@@ -121,7 +120,7 @@ namespace HareDu.Snapshotting.Tests
         {
             var snapshot = Client
                 .Snapshot<BrokerConnection>()
-                .Capture();
+                .Take();
 
 //            var snapshot = resource.Get();
 //            var data = snapshot.Select(x => x.Data);

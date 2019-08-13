@@ -31,7 +31,7 @@ namespace HareDu.Snapshotting.Internal
         {
         }
 
-        public ConnectivitySnapshot Capture(CancellationToken cancellationToken = default)
+        public ConnectivitySnapshot Take(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Resource<Cluster>()

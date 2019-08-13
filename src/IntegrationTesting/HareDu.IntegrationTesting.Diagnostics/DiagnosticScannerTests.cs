@@ -46,7 +46,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         {
             var snapshot = Client
                 .Snapshot<BrokerConnection>()
-                .Capture();
+                .Take();
 
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
