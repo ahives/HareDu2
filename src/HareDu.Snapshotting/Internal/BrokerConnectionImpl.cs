@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Snapshots
+namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace HareDu.Snapshotting.Snapshots
     using Model;
 
     class BrokerConnectionImpl :
-        BaseSnapshot,
+        BaseSnapshot<ConnectivitySnapshot>,
         BrokerConnection
     {
         public BrokerConnectionImpl(IResourceFactory factory)
@@ -31,13 +31,7 @@ namespace HareDu.Snapshotting.Snapshots
         {
         }
 
-        public BrokerConnectionImpl(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers)
-            : base(factory)
-        {
-//            ConnectObservers(observers, _diagnosticChecks);
-        }
-
-        public ConnectivitySnapshot Execute(CancellationToken cancellationToken = default)
+        public ConnectivitySnapshot Capture(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Resource<Cluster>()
@@ -54,7 +48,11 @@ namespace HareDu.Snapshotting.Snapshots
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            return new ConnectivitySnapshotImpl(cluster, connections, channels);
+            ConnectivitySnapshot snapshot = new ConnectivitySnapshotImpl(cluster, connections, channels);
+
+            NotifyObservers(snapshot);
+
+            return snapshot;
         }
 
 

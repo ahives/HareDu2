@@ -13,17 +13,11 @@
 // limitations under the License.
 namespace HareDu.Snapshotting
 {
-    using System;
-    using System.Collections.Generic;
-    using Core;
+    using Model;
 
     public interface ISnapshotFactory
     {
         T Snapshot<T>()
             where T : CaptureSnapshot;
-
-        void Init(IResourceFactory factory);
-
-        void Init(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers);
     }
 }

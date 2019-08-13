@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics
     using System.Collections.Generic;
     using MassTransit;
 
-    public class FaultedDiagnosticReport :
+    class FaultedDiagnosticReport :
         DiagnosticReport
     {
         public Guid Identifier => NewId.NextGuid();

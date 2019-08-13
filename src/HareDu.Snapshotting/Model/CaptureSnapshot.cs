@@ -13,8 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface Snapshot
+    public interface CaptureSnapshot
     {
-        
     }
 }

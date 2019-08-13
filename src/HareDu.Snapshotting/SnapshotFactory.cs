@@ -18,43 +18,17 @@ namespace HareDu.Snapshotting
     using System.Linq;
     using Core;
     using Core.Exceptions;
+    using Model;
 
     public class SnapshotFactory :
         ISnapshotFactory
     {
-        IResourceFactory _factory;
-        static ISnapshotFactory _instance;
-        static readonly object _gate = new object();
+        readonly IResourceFactory _factory;
         readonly IDictionary<string, object> _snapshotCache = new Dictionary<string, object>();
-        readonly List<IObserver<SnapshotContext>> _observers = new List<IObserver<SnapshotContext>>();
 
-        public static ISnapshotFactory Instance
-        {
-            get
-            {
-                lock (_gate)
-                {
-                    return _instance ?? (_instance = new SnapshotFactory());
-                }
-            }
-        }
-
-        public void Init(IResourceFactory factory)
+        public SnapshotFactory(IResourceFactory factory)
         {
             _factory = factory;
-            
-            RegisterSnapshots();
-        }
-
-        public void Init(IResourceFactory factory, IList<IObserver<SnapshotContext>> observers)
-        {
-            _factory = factory;
-
-            for (int i = 0; i < observers.Count; i++)
-            {
-                if (!_observers.Contains(observers[i]))
-                    _observers.Add(observers[i]);
-            }
             
             RegisterSnapshots();
         }
@@ -73,13 +47,11 @@ namespace HareDu.Snapshotting
             if (_snapshotCache.ContainsKey(type.FullName))
                 return (T)_snapshotCache[type.FullName];
 
-            T instance = _observers.Any()
-                ? (T) Activator.CreateInstance(type, _factory, _observers)
-                : (T) Activator.CreateInstance(type, _factory);
+            var instance = Activator.CreateInstance(type, _factory);
 
             _snapshotCache.Add(type.FullName, instance);
             
-            return instance;
+            return (T)instance;
         }
 
         void RegisterSnapshots()

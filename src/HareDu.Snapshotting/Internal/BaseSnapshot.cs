@@ -11,30 +11,34 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Sensors
+namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
+    using Core;
 
-    abstract class BaseDiagnosticSensor :
-        IObservable<DiagnosticContext>
+    abstract class BaseSnapshot<T> :
+        IObservable<SnapshotContext<T>>
+        where T : Snapshot
     {
-        readonly List<IObserver<DiagnosticContext>> _observers;
+        protected readonly IResourceFactory _factory;
+        readonly List<IObserver<SnapshotContext<T>>> _observers;
 
-        public BaseDiagnosticSensor()
+        protected BaseSnapshot(IResourceFactory factory)
         {
-            _observers = new List<IObserver<DiagnosticContext>>();
+            _factory = factory;
+            _observers = new List<IObserver<SnapshotContext<T>>>();
         }
 
-        protected virtual void NotifyObservers(DiagnosticResult result)
+        protected virtual void NotifyObservers(T snapshot)
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(new DiagnosticContextImpl(result));
+                observer.OnNext(new SnapshotContextImpl(snapshot));
             }
         }
 
-        public IDisposable Subscribe(IObserver<DiagnosticContext> observer)
+        public IDisposable Subscribe(IObserver<SnapshotContext<T>> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -43,27 +47,28 @@ namespace HareDu.Diagnostics.Sensors
         }
 
         
-        class DiagnosticContextImpl :
-            DiagnosticContext
+        class SnapshotContextImpl :
+            SnapshotContext<T>
         {
-            public DiagnosticContextImpl(DiagnosticResult result)
+            public SnapshotContextImpl(T snapshot)
             {
-                Result = result;
+                Snapshot = snapshot;
                 Timestamp = DateTimeOffset.Now;
             }
 
-            public DiagnosticResult Result { get; }
+            public string Identifier { get; }
+            public T Snapshot { get; }
             public DateTimeOffset Timestamp { get; }
         }
-        
-        
+
+
         class UnsubscribeObserver :
             IDisposable
         {
-            readonly List<IObserver<DiagnosticContext>> _observers;
-            readonly IObserver<DiagnosticContext> _observer;
+            readonly List<IObserver<SnapshotContext<T>>> _observers;
+            readonly IObserver<SnapshotContext<T>> _observer;
 
-            public UnsubscribeObserver(List<IObserver<DiagnosticContext>> observers, IObserver<DiagnosticContext> observer)
+            public UnsubscribeObserver(List<IObserver<SnapshotContext<T>>> observers, IObserver<SnapshotContext<T>> observer)
             {
                 _observers = observers;
                 _observer = observer;

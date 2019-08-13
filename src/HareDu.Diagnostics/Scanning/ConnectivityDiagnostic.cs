@@ -16,6 +16,7 @@ namespace HareDu.Diagnostics.Scanning
     using System.Collections.Generic;
     using System.Linq;
     using Sensors;
+    using Snapshotting;
     using Snapshotting.Model;
 
     public class ConnectivityDiagnostic :

@@ -16,7 +16,8 @@ namespace HareDu.Snapshotting.Model
     using System;
     using System.Collections.Generic;
 
-    public interface ClusterSnapshot
+    public interface ClusterSnapshot :
+        Snapshot
     {
         string RabbitMqVersion { get; }
         
@@ -29,30 +30,5 @@ namespace HareDu.Snapshotting.Model
         IReadOnlyList<QueueMetrics> Queues { get; }
         
         DateTimeOffset Timestamp { get; }
-    }
-
-    public interface ClusterPerformance
-    {
-        MessageDetails Published { get; }
-        
-        MessageDetails Confirmed { get; }
-        
-        MessageDetails Unroutable { get; }
-        
-        MessageDetails Gets { get; }
-        
-        MessageDetails GetsWithoutAck { get; }
-        
-        MessageDetails Delivered { get; }
-        
-        MessageDetails DeliveredWithoutAck { get; }
-        
-        MessageDetails Redelivered { get; }
-        
-        MessageDetails Acknowledged { get; }
-        
-        MessageDetails Unacknowledged { get; }
-        
-        MessageDetails DeliveryGets { get; }
     }
 }

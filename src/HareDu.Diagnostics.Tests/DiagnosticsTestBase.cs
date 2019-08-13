@@ -29,7 +29,9 @@ namespace HareDu.Diagnostics.Tests
         {
             protected override ISnapshotFactory InitializeClient()
             {
-                return SnapshotClient.Init(x =>
+                ISnapshotClient client = new SnapshotClient();
+                
+                return client.Init(x =>
                 {
                     x.ConnectTo("http://localhost:15672");
                     x.UsingCredentials("guest", "guest");

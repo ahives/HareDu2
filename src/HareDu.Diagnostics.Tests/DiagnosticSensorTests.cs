@@ -98,6 +98,8 @@ namespace HareDu.Diagnostics.Tests
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var report = scanner.Scan(snapshot);
+            
+            Console.WriteLine(report.ToJsonString());
 
             var results = report.Results.Where(x => x.Status == DiagnosticStatus.Red && x.ComponentType == ComponentType.Channel).ToList();
             

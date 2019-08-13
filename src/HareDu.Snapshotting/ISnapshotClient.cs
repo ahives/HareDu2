@@ -15,13 +15,8 @@ namespace HareDu.Snapshotting
 {
     using System;
 
-    public interface SnapshotContext<out T>
-        where T : Snapshot
+    public interface ISnapshotClient
     {
-        string Identifier { get; }
-
-        T Snapshot { get; }
-
-        DateTimeOffset Timestamp { get; }
+        ISnapshotFactory Init(Action<SnapshotClientConfigProvider> configuration);
     }
 }

@@ -19,6 +19,6 @@ namespace HareDu.Snapshotting
     public interface BrokerConnection :
         CaptureSnapshot
     {
-        ConnectivitySnapshot Execute(CancellationToken cancellationToken = default);
+        ConnectivitySnapshot Capture(CancellationToken cancellationToken = default);
     }
 }

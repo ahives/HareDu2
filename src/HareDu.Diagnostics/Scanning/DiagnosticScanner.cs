@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Scanning
 {
     using System;
     using System.Collections.Generic;
-    using Snapshotting.Model;
+    using Snapshotting;
 
     public class DiagnosticScanner :
         IDiagnosticScanner
@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Scanning
             where T : Snapshot
         {
             if (!_factory.TryGet(out IComponentDiagnostic<T> diagnostic))
-                return new FaultedDiagnosticReport();
+                return DiagnosticCache.EmptyDiagnosticReport;
             
             var results = diagnostic.Scan(snapshot);
             

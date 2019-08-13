@@ -14,7 +14,6 @@
 namespace HareDu.Snapshotting
 {
     using System;
-    using System.Collections.Generic;
 
     public interface SnapshotClientConfigProvider
     {
@@ -29,24 +28,12 @@ namespace HareDu.Snapshotting
         /// </summary>
         /// <param name="timeout"></param>
         void TimeoutAfter(TimeSpan timeout);
-        
+
         /// <summary>
         /// Specify the user credentials to connect to the RabbitMQ server.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         void UsingCredentials(string username, string password);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="observers"></param>
-        void RegisterObservers(IList<IObserver<SnapshotContext>> observers);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="observer"></param>
-        void RegisterObserver(IObserver<SnapshotContext> observer);
     }
 }

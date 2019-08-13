@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Snapshots
+namespace HareDu.Snapshotting.Internal
 {
     using System.Threading.Tasks;
     using Core;
@@ -19,7 +19,7 @@ namespace HareDu.Snapshotting.Snapshots
     using Model;
 
     class RmqClusterImpl :
-        BaseSnapshot,
+        BaseSnapshot<ClusterSnapshot>,
         RmqCluster
     {
         public RmqClusterImpl(IResourceFactory factory)

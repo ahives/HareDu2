@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Sensors
 {
     using System.Collections.Generic;
     using Internal;
+    using Snapshotting;
     using Snapshotting.Model;
 
     class ChannelThrottlingSensor :

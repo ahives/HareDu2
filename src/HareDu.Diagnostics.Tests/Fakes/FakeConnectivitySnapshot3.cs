@@ -2,6 +2,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Snapshotting;
     using Snapshotting.Model;
 
     public class FakeConnectivitySnapshot3 :

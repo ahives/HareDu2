@@ -14,35 +14,35 @@
 namespace HareDu.Snapshotting
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using Core;
     using Core.Configuration;
     using Core.Exceptions;
 
-    public static class SnapshotClient
+    public class SnapshotClient :
+        ISnapshotClient
     {
-        public static ISnapshotFactory Init(Action<SnapshotClientConfigProvider> configuration)
+        public ISnapshotFactory Init(Action<SnapshotClientConfigProvider> configuration)
         {
             if (configuration == null)
-                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+                throw new HareDuClientConfigurationException(
+                    "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
             try
             {
                 var init = new SnapshotClientConfigProviderImpl();
                 configuration(init);
 
-                var resourceFactory = ResourceClient.Init(() => init.Settings.Value);
-                
-                SnapshotFactory.Instance.Init(resourceFactory, init.Observers.Value);
+                IResourceFactory resourceFactory = ResourceClient.Init(() => init.Settings.Value);
 
-                return SnapshotFactory.Instance;
+                return new SnapshotFactory(resourceFactory);
             }
             catch (Exception e)
             {
                 throw new HareDuClientInitException("Unable to initialize the HareDu client.", e);
             }
         }
+
 
         class SnapshotClientConfigProviderImpl :
             SnapshotClientConfigProvider
@@ -51,18 +51,14 @@ namespace HareDu.Snapshotting
             TimeSpan _timeout;
             string _username;
             string _password;
-            readonly List<IObserver<SnapshotContext>> _observers;
 
             public Lazy<HareDuClientSettings> Settings { get; }
-            public Lazy<List<IObserver<SnapshotContext>>> Observers { get; }
 
             public SnapshotClientConfigProviderImpl()
             {
-                _observers = new List<IObserver<SnapshotContext>>();
-                
                 Settings = new Lazy<HareDuClientSettings>(
-                        () => new HareDuClientSettingsImpl(_rmqServerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
-                Observers = new Lazy<List<IObserver<SnapshotContext>>>(() => _observers, LazyThreadSafetyMode.PublicationOnly);
+                    () => new HareDuClientSettingsImpl(_rmqServerUrl, _timeout, _username, _password),
+                    LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
@@ -73,21 +69,6 @@ namespace HareDu.Snapshotting
             {
                 _username = username;
                 _password = password;
-            }
-
-            public void RegisterObservers(IList<IObserver<SnapshotContext>> observers)
-            {
-                for (int i = 0; i < observers.Count; i++)
-                {
-                    if (!_observers.Contains(observers[i]))
-                        _observers.Add(observers[i]);
-                }
-            }
-
-            public void RegisterObserver(IObserver<SnapshotContext> observer)
-            {
-                if (!_observers.Contains(observer))
-                    _observers.Add(observer);
             }
 
 
