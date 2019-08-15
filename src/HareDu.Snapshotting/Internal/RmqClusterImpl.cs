@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
@@ -63,5 +64,7 @@ namespace HareDu.Snapshotting.Internal
 
             return summary;
         }
+
+        public Result<ClusterSnapshot> Take(CancellationToken cancellationToken = default) => throw new System.NotImplementedException();
     }
 }

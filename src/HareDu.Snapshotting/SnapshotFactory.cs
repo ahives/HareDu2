@@ -33,25 +33,26 @@ namespace HareDu.Snapshotting
             RegisterSnapshots();
         }
 
-        public T Snapshot<T>()
-            where T : CaptureSnapshot
+        public U Snapshot<T, U>()
+            where T : Snapshot
+            where U : ComponentSnapshot<T>
         {
             Type type = GetType()
                 .Assembly
                 .GetTypes()
-                .FirstOrDefault(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface);
+                .FirstOrDefault(x => typeof(U).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
+                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(U)}");
 
             if (_snapshotCache.ContainsKey(type.FullName))
-                return (T)_snapshotCache[type.FullName];
+                return (U)_snapshotCache[type.FullName];
 
             var instance = Activator.CreateInstance(type, _factory);
 
             _snapshotCache.Add(type.FullName, instance);
             
-            return (T)instance;
+            return (U)instance;
         }
 
         void RegisterSnapshots()
@@ -59,7 +60,7 @@ namespace HareDu.Snapshotting
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(CaptureSnapshot).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(ComponentSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {

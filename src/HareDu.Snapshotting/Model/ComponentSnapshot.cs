@@ -13,7 +13,12 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface CaptureSnapshot
+    using System.Threading;
+    using Core;
+
+    public interface ComponentSnapshot<out T>
+        where T : Snapshot
     {
+        Result<T> Take(CancellationToken cancellationToken = default);
     }
 }

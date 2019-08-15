@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -31,7 +30,7 @@ namespace HareDu.Snapshotting.Internal
         {
         }
 
-        public ConnectivitySnapshot Take(CancellationToken cancellationToken = default)
+        public Result<ConnectivitySnapshot> Take(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Resource<Cluster>()
@@ -51,8 +50,8 @@ namespace HareDu.Snapshotting.Internal
             ConnectivitySnapshot snapshot = new ConnectivitySnapshotImpl(cluster, connections, channels);
 
             NotifyObservers(snapshot);
-
-            return snapshot;
+            
+            return new SuccessfulResult<ConnectivitySnapshot>(snapshot, null);
         }
 
 

@@ -15,6 +15,7 @@ namespace HareDu.Snapshotting.Tests
 {
     using System;
     using System.Threading.Tasks;
+    using Model;
     using NUnit.Framework;
 
     [TestFixture]
@@ -25,7 +26,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test()
         {
             var snapshot = await Client
-                .Snapshot<RmqCluster>()
+                .Snapshot<ClusterSnapshot, RmqCluster>()
                 .GetDetails();
 
 //            snapshot.Queues[0].Memory.RAM

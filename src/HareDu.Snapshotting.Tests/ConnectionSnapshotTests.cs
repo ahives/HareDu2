@@ -18,6 +18,7 @@ namespace HareDu.Snapshotting.Tests
     using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
+    using Model;
     using NUnit.Framework;
 
     [TestFixture]
@@ -43,10 +44,11 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test()
         {
             var connection = Client
-                .Snapshot<BrokerConnection>()
+                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
                 .Take();
 
             var connections = connection
+                .Select(x => x.Data)
                 .Select(x => x.Connections);
             
             for (int i = 0; i < connections.Count; i++)
@@ -57,10 +59,10 @@ namespace HareDu.Snapshotting.Tests
                 Console.WriteLine("Channel Limit => {0}", connections[i].ChannelLimit);
                 Console.WriteLine("Channels => {0}", connections[i].Channels.Count);
                 Console.WriteLine("Connections => {0} created | {1:0.0}/s, {2} closed | {3:0.0}/s",
-                    connection.Select(x => x.ConnectionsCreated).Select(x => x.Total),
-                    connection.Select(x => x.ConnectionsClosed).Select(x => x.Rate),
-                    connection.Select(x => x.ConnectionsClosed).Select(x => x.Total),
-                    connection.Select(x => x.ConnectionsClosed).Select(x => x.Rate));
+                    connection.Select(x => x.Data).Select(x => x.ConnectionsCreated).Select(x => x.Total),
+                    connection.Select(x => x.Data).Select(x => x.ConnectionsClosed).Select(x => x.Rate),
+                    connection.Select(x => x.Data).Select(x => x.ConnectionsClosed).Select(x => x.Total),
+                    connection.Select(x => x.Data).Select(x => x.ConnectionsClosed).Select(x => x.Rate));
 //                Console.WriteLine("=> {0} created, {1} closed", snapshot.Select(x => x.ConnectionsCreated), snapshot.Select(x => x.ConnectionsClosed));
 //                Console.WriteLine("=> {0} created, {1} closed", snapshot.Select(x => x.ConnectionsCreated), snapshot.Select(x => x.ConnectionsClosed));
                 Console.WriteLine("Network Traffic");
@@ -91,7 +93,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test2()
         {
             var connection = Client
-                .Snapshot<BrokerConnection>()
+                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
                 .Take();
             
             Console.WriteLine(connection.ToJsonString());
@@ -101,7 +103,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test4()
         {
             var connection = Client
-                .Snapshot<BrokerConnection>()
+                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
                 .Take();
 
 //            var resource = Client.Snapshot<RmqConnection>();
@@ -119,7 +121,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test5()
         {
             var snapshot = Client
-                .Snapshot<BrokerConnection>()
+                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
                 .Take();
 
 //            var snapshot = resource.Get();

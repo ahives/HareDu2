@@ -13,12 +13,10 @@
 // limitations under the License.
 namespace HareDu.Snapshotting
 {
-    using System.Threading;
     using Model;
 
     public interface BrokerConnection :
-        CaptureSnapshot
+        ComponentSnapshot<ConnectivitySnapshot>
     {
-        ConnectivitySnapshot Take(CancellationToken cancellationToken = default);
     }
 }

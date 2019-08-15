@@ -21,6 +21,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using HareDu.Diagnostics.Scanning;
     using NUnit.Framework;
     using Snapshotting;
+    using Snapshotting.Model;
 
     [TestFixture]
     public class DiagnosticScannerTests :
@@ -45,12 +46,12 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test()
         {
             var snapshot = Client
-                .Snapshot<BrokerConnection>()
+                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
                 .Take();
 
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            var report = scanner.Scan(snapshot);
+            var report = scanner.Scan(snapshot.Select(x => x.Data));
             
             for (int i = 0; i < report.Results.Count; i++)
             {
