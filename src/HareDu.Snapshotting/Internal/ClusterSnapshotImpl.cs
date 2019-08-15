@@ -18,6 +18,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Linq;
     using Core.Extensions;
     using Core.Model;
+    using Extensions;
     using Model;
 
     class ClusterSnapshotImpl :

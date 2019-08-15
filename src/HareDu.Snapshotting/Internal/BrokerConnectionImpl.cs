@@ -20,6 +20,7 @@ namespace HareDu.Snapshotting.Internal
     using Core;
     using Core.Extensions;
     using Core.Model;
+    using Extensions;
     using Model;
 
     class BrokerConnectionImpl :
