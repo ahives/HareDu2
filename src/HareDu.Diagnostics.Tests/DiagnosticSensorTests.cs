@@ -78,11 +78,9 @@ namespace HareDu.Diagnostics.Tests
         public void Verify_connection_channel_limit_reached_sensor_returns_red_status()
         {
             ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
-            var scanner = _container.Resolve<IDiagnosticScanner>();
-
-            scanner.RegisterObserver(new DefaultDiagnosticConsoleLogger());
-
-            var report = scanner.Scan(snapshot);
+            var report = _container.Resolve<IDiagnosticScanner>()
+                .RegisterObserver(new DefaultDiagnosticConsoleLogger())
+                .Scan(snapshot);
 
             var results = report.Results.Where(x => x.Status == DiagnosticStatus.Red && x.ComponentType == ComponentType.Connection).ToList();
             

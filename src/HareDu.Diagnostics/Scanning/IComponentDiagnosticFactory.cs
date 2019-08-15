@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Scanning
     {
         bool TryGet<T>(out IComponentDiagnostic<T> diagnostic);
 
-        void RegisterObservers(IList<IObserver<DiagnosticContext>> observers);
+        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers);
 
         void RegisterObserver(IObserver<DiagnosticContext> observer);
     }

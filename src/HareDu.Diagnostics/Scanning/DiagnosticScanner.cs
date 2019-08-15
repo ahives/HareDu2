@@ -38,14 +38,18 @@ namespace HareDu.Diagnostics.Scanning
             return new SuccessfulDiagnosticReport(results);
         }
 
-        public void RegisterObservers(IList<IObserver<DiagnosticContext>> observers)
+        public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers)
         {
             _factory.RegisterObservers(observers);
+
+            return this;
         }
 
-        public void RegisterObserver(IObserver<DiagnosticContext> observer)
+        public IDiagnosticScanner RegisterObserver(IObserver<DiagnosticContext> observer)
         {
             _factory.RegisterObserver(observer);
+
+            return this;
         }
     }
 }

@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Scanning
             return false;
         }
 
-        public void RegisterObservers(IList<IObserver<DiagnosticContext>> observers)
+        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers)
         {
             for (int i = 0; i < observers.Count; i++)
             {
