@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Scanning
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Exceptions;
     using Sensors;
 
     /// <summary>
@@ -45,7 +44,7 @@ namespace HareDu.Diagnostics.Scanning
                 .FirstOrDefault(x => typeof(IComponentDiagnostic<T>).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
+                throw new HareDuComponentDiagnosticInitException($"Failed to find implementation class for interface {typeof(T)}");
 
             if (_sensorCache.ContainsKey(type.FullName))
             {

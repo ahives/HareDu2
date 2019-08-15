@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting
     using System.Collections.Generic;
     using System.Linq;
     using Core;
-    using Core.Exceptions;
     using Model;
 
     public class SnapshotFactory :
@@ -33,26 +32,25 @@ namespace HareDu.Snapshotting
             RegisterSnapshots();
         }
 
-        public U Snapshot<T, U>()
-            where T : Snapshot
-            where U : ComponentSnapshot<T>
+        public T Snapshot<T>()
+            where T : ComponentSnapshot<Snapshot>
         {
             Type type = GetType()
                 .Assembly
                 .GetTypes()
-                .FirstOrDefault(x => typeof(U).IsAssignableFrom(x) && !x.IsInterface);
+                .FirstOrDefault(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(U)}");
+                throw new HareDuSnapshotInitException($"Failed to find implementation class for interface {typeof(T)}");
 
             if (_snapshotCache.ContainsKey(type.FullName))
-                return (U)_snapshotCache[type.FullName];
+                return (T)_snapshotCache[type.FullName];
 
             var instance = Activator.CreateInstance(type, _factory);
 
             _snapshotCache.Add(type.FullName, instance);
             
-            return (U)instance;
+            return (T)instance;
         }
 
         void RegisterSnapshots()

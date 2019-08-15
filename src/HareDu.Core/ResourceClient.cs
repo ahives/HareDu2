@@ -21,7 +21,6 @@ namespace HareDu.Core
     using System.Net.Http.Headers;
     using System.Threading;
     using Configuration;
-    using Exceptions;
     using Extensions;
     using Internal;
     using Internal.Serialization;

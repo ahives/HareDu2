@@ -44,7 +44,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test()
         {
             var connection = Client
-                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Take();
 
             var connections = connection
@@ -93,7 +93,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test2()
         {
             var connection = Client
-                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Take();
             
             Console.WriteLine(connection.ToJsonString());
@@ -103,7 +103,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test4()
         {
             var connection = Client
-                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Take();
 
 //            var resource = Client.Snapshot<RmqConnection>();
@@ -121,7 +121,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test5()
         {
             var snapshot = Client
-                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Take();
 
 //            var snapshot = resource.Get();

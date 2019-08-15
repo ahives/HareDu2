@@ -46,7 +46,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test()
         {
             var snapshot = Client
-                .Snapshot<ConnectivitySnapshot, BrokerConnection>()
+                .Snapshot<BrokerConnection>()
                 .Take();
 
             var scanner = _container.Resolve<IDiagnosticScanner>();

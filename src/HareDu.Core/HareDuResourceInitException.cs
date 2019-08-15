@@ -11,29 +11,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Exceptions
+namespace HareDu.Core
 {
     using System;
     using System.Runtime.Serialization;
 
-    public class HareDuClientInitException :
+    public class HareDuResourceInitException :
         Exception
     {
-        public HareDuClientInitException()
+        public HareDuResourceInitException()
         {
         }
 
-        protected HareDuClientInitException(SerializationInfo info, StreamingContext context)
+        protected HareDuResourceInitException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
 
-        public HareDuClientInitException(string message)
+        public HareDuResourceInitException(string message)
             : base(message)
         {
         }
 
-        public HareDuClientInitException(string message, Exception innerException)
+        public HareDuResourceInitException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

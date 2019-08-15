@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting
     using System.Threading;
     using Core;
     using Core.Configuration;
-    using Core.Exceptions;
 
     public class SnapshotClient :
         ISnapshotClient

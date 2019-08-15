@@ -26,7 +26,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test()
         {
             var snapshot = await Client
-                .Snapshot<ClusterSnapshot, RmqCluster>()
+                .Snapshot<RmqCluster>()
                 .GetDetails();
 
 //            snapshot.Queues[0].Memory.RAM

@@ -17,8 +17,7 @@ namespace HareDu.Snapshotting
 
     public interface ISnapshotFactory
     {
-        U Snapshot<T, U>()
-            where T : Snapshot
-            where U : ComponentSnapshot<T>;
+        T Snapshot<T>()
+            where T : ComponentSnapshot<Snapshot>;
     }
 }

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,29 +11,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Exceptions
+namespace HareDu.Snapshotting
 {
     using System;
     using System.Runtime.Serialization;
 
-    public class HostUrlMissingException :
+    public class HareDuSnapshotInitException :
         Exception
     {
-        public HostUrlMissingException()
+        public HareDuSnapshotInitException()
         {
         }
 
-        protected HostUrlMissingException(SerializationInfo info, StreamingContext context)
+        protected HareDuSnapshotInitException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
 
-        public HostUrlMissingException(string message)
+        public HareDuSnapshotInitException(string message)
             : base(message)
         {
         }
 
-        public HostUrlMissingException(string message, Exception innerException)
+        public HareDuSnapshotInitException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
