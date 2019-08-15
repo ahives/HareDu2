@@ -13,10 +13,10 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests
 {
-    using System.Globalization;
     using System.Threading.Tasks;
     using Autofac;
     using NUnit.Framework;
+    using Observers;
 
     [TestFixture]
     public class ConnectionSnapshotTests :
@@ -90,23 +90,6 @@ namespace HareDu.Snapshotting.Tests
 //            {
 //                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", diagnosticResults[i].Identifier, diagnosticResults[i].Status);
 //            }
-        }
-
-        string Format(long bytes)
-        {
-            if (bytes < 1000f)
-                return $"{bytes}";
-
-            if (bytes / 1000f < 1000)
-                return string.Format(CultureInfo.CurrentCulture, "{0:0.000} KB", bytes / 1000f);
-
-            if (bytes / 1000000f < 1000)
-                return string.Format(CultureInfo.CurrentCulture, "{0:0.000} MB", bytes / 1000000f);
-            
-            if (bytes / 1000000000f < 1000)
-                return string.Format(CultureInfo.CurrentCulture, "{0:0.000} GB", bytes / 1000000000f);
-            
-            return $"{bytes}";
         }
     }
 }

@@ -11,10 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting
+namespace HareDu.Snapshotting.Observers
 {
     using System;
-    using System.Globalization;
+    using Extensions;
     using Model;
 
     public class DefaultSnapshotConsoleLogger :
@@ -47,11 +47,11 @@ namespace HareDu.Snapshotting
                 Console.WriteLine("Network Traffic");
                 Console.WriteLine("\tSent: {0} packets | {1} | {2} msg/s",
                     connections[i].NetworkTraffic.Sent.Total,
-                    $"{connections[i].NetworkTraffic.Sent.Bytes} bytes ({Format(connections[i].NetworkTraffic.Sent.Bytes)})",
+                    $"{connections[i].NetworkTraffic.Sent.Bytes} bytes ({connections[i].NetworkTraffic.Sent.Bytes.Format()})",
                     connections[i].NetworkTraffic.Sent.Rate);
                 Console.WriteLine("\tReceived: {0} packets | {1} | {2} msg/s",
                     connections[i].NetworkTraffic.Received.Total,
-                    $"{connections[i].NetworkTraffic.Received.Bytes} bytes ({Format(connections[i].NetworkTraffic.Received.Bytes)})",
+                    $"{connections[i].NetworkTraffic.Received.Bytes} bytes ({connections[i].NetworkTraffic.Received.Bytes.Format()})",
                     connections[i].NetworkTraffic.Received.Rate);
 
                 Console.WriteLine("Channels");
@@ -65,23 +65,6 @@ namespace HareDu.Snapshotting
                 Console.WriteLine("****************************");
                 Console.WriteLine();
             }
-        }
-
-        string Format(long bytes)
-        {
-            if (bytes < 1000f)
-                return $"{bytes}";
-
-            if (bytes / 1000f < 1000)
-                return string.Format(CultureInfo.CurrentCulture, "{0:0.000} KB", bytes / 1000f);
-
-            if (bytes / 1000000f < 1000)
-                return string.Format(CultureInfo.CurrentCulture, "{0:0.000} MB", bytes / 1000000f);
-            
-            if (bytes / 1000000000f < 1000)
-                return string.Format(CultureInfo.CurrentCulture, "{0:0.000} GB", bytes / 1000000000f);
-            
-            return $"{bytes}";
         }
     }
 }
