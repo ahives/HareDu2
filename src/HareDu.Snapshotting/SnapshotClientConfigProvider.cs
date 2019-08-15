@@ -21,7 +21,7 @@ namespace HareDu.Snapshotting
         /// Specify the RabbitMQ server url to connect to.
         /// </summary>
         /// <param name="rmqServerUrl"></param>
-        void ConnectTo(string rmqServerUrl);
+        void ConnectTo(string url);
 
         /// <summary>
         /// Specify the maximum time before the HTTP request to the RAbbitMQ server will fail.

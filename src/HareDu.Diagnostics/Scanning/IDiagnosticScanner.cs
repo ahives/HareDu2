@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Scanning
     using System;
     using System.Collections.Generic;
     using Snapshotting;
-    using Snapshotting.Model;
 
     public interface IDiagnosticScanner
     {

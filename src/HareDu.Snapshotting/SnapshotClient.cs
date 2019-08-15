@@ -14,6 +14,7 @@
 namespace HareDu.Snapshotting
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using Core;
     using Core.Configuration;
@@ -60,7 +61,7 @@ namespace HareDu.Snapshotting
                     LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
+            public void ConnectTo(string url) => _rmqServerUrl = url;
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 

@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
@@ -66,5 +68,9 @@ namespace HareDu.Snapshotting.Internal
         }
 
         public Result<ClusterSnapshot> Take(CancellationToken cancellationToken = default) => throw new System.NotImplementedException();
+        public ComponentSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
+        public ComponentSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
+
+        public ComponentSnapshot<ClusterSnapshot> RegisterObserver() => throw new System.NotImplementedException();
     }
 }

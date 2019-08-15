@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Observers
     using System;
     using Core.Extensions;
 
-    public class DefaultConsoleLogger :
+    public class DefaultDiagnosticConsoleLogger :
         IObserver<DiagnosticContext>
     {
         public void OnCompleted()

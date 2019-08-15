@@ -80,7 +80,7 @@ namespace HareDu.Diagnostics.Tests
             ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            scanner.RegisterObserver(new DefaultConsoleLogger());
+            scanner.RegisterObserver(new DefaultDiagnosticConsoleLogger());
 
             var report = scanner.Scan(snapshot);
 

@@ -16,6 +16,7 @@ namespace HareDu.Snapshotting.Internal
     using System;
     using System.Collections.Generic;
     using Core;
+    using Model;
 
     abstract class BaseSnapshot<T> :
         IObservable<SnapshotContext<T>>

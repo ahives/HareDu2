@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading;
     using Core;
 
@@ -20,5 +22,9 @@ namespace HareDu.Snapshotting.Model
         where T : Snapshot
     {
         Result<T> Take(CancellationToken cancellationToken = default);
+
+        ComponentSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
+        
+        ComponentSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
     }
 }

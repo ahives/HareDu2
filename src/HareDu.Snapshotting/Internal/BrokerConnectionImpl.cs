@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -25,9 +26,12 @@ namespace HareDu.Snapshotting.Internal
         BaseSnapshot<ConnectivitySnapshot>,
         BrokerConnection
     {
+        readonly List<IDisposable> _observers;
+        
         public BrokerConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
+            _observers = new List<IDisposable>();
         }
 
         public Result<ConnectivitySnapshot> Take(CancellationToken cancellationToken = default)
@@ -52,6 +56,30 @@ namespace HareDu.Snapshotting.Internal
             NotifyObservers(snapshot);
             
             return new SuccessfulResult<ConnectivitySnapshot>(snapshot, null);
+        }
+
+        public ComponentSnapshot<ConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<ConnectivitySnapshot>> observer)
+        {
+            if (observer != null)
+            {
+                _observers.Add(Subscribe(observer));
+            }
+
+            return this;
+        }
+
+        public ComponentSnapshot<ConnectivitySnapshot> RegisterObservers(
+            IReadOnlyList<IObserver<SnapshotContext<ConnectivitySnapshot>>> observers)
+        {
+            if (observers != null)
+            {
+                for (int i = 0; i < observers.Count; i++)
+                {
+                    _observers.Add(Subscribe(observers[i]));
+                }
+            }
+
+            return this;
         }
 
 
