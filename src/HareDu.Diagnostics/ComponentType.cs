@@ -16,6 +16,7 @@ namespace HareDu.Diagnostics
     public enum ComponentType
     {
         Connection,
-        Channel
+        Channel,
+        NA
     }
 }

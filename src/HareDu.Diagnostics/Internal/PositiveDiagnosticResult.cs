@@ -20,13 +20,13 @@ namespace HareDu.Diagnostics.Internal
         DiagnosticResult
     {
         public PositiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, List<DiagnosticSensorData> sensorData, DiagnosticStatus status, string reason)
+            ComponentType componentType, List<DiagnosticSensorData> sensorData, string reason)
         {
             ComponentIdentifier = componentIdentifier;
             SensorIdentifier = sensorIdentifier;
             ComponentType = componentType;
             SensorData = sensorData;
-            Status = status;
+            Status = DiagnosticStatus.Green;
             Reason = reason;
             Timestamp = DateTimeOffset.Now;
         }

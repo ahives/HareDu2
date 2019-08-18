@@ -16,30 +16,35 @@ namespace HareDu.Diagnostics.Internal
     using System;
     using System.Collections.Generic;
 
-    class NegativeDiagnosticResult :
+    class InconclusiveDiagnosticResult :
         DiagnosticResult
     {
-        public NegativeDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData,
-            string reason, string remediation)
+        public InconclusiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
+            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData)
         {
             ComponentIdentifier = componentIdentifier;
             SensorIdentifier = sensorIdentifier;
             ComponentType = componentType;
             SensorData = sensorData;
-            Status = DiagnosticStatus.Red;
-            Reason = reason;
-            Remediation = remediation;
-            Timestamp = DateTimeOffset.Now;
+            Status = DiagnosticStatus.Inconclusive;
+        }
+
+        public InconclusiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
+            ComponentType componentType)
+        {
+            ComponentIdentifier = componentIdentifier;
+            SensorIdentifier = sensorIdentifier;
+            ComponentType = componentType;
+            Status = DiagnosticStatus.Inconclusive;
         }
 
         public string ComponentIdentifier { get; }
+        public ComponentType ComponentType { get; }
         public string SensorIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public string Reason { get; }
         public string Remediation { get; }
         public IReadOnlyList<DiagnosticSensorData> SensorData { get; }
-        public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }
 }

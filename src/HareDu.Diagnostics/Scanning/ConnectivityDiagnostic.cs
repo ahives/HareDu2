@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Scanning
     using System.Collections.Generic;
     using System.Linq;
     using Sensors;
-    using Snapshotting;
     using Snapshotting.Model;
 
     public class ConnectivityDiagnostic :
@@ -24,11 +23,13 @@ namespace HareDu.Diagnostics.Scanning
     {
         readonly IEnumerable<IDiagnosticSensor> _channelSensors;
         readonly IEnumerable<IDiagnosticSensor> _connectionSensors;
+        readonly IEnumerable<IDiagnosticSensor> _connectivitySensors;
 
         public ConnectivityDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
-            _connectionSensors = sensors.Where(x => x.ComponentType == ComponentType.Connection);
-            _channelSensors = sensors.Where(x => x.ComponentType == ComponentType.Channel);
+            _connectionSensors = sensors.Where(IsConnectionThroughputSensor);
+            _channelSensors = sensors.Where(IsChannelThroughputSensor);
+            _connectivitySensors = sensors.Where(IsConnectivitySensor);
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ConnectivitySnapshot snapshot)
@@ -37,6 +38,8 @@ namespace HareDu.Diagnostics.Scanning
                 return DiagnosticCache.EmptyDiagnosticResults;
             
             var results = new List<DiagnosticResult>();
+            
+            results.AddRange(_connectivitySensors.Select(x => x.Execute(snapshot)));
             
             for (int i = 0; i < snapshot.Connections.Count; i++)
             {
@@ -50,5 +53,17 @@ namespace HareDu.Diagnostics.Scanning
 
             return results;
         }
+
+        bool IsChannelThroughputSensor(IDiagnosticSensor sensor) =>
+            sensor.ComponentType == ComponentType.Channel &&
+            sensor.SensorCategory != DiagnosticSensorCategory.Connectivity;
+
+        bool IsConnectionThroughputSensor(IDiagnosticSensor sensor) =>
+            sensor.ComponentType == ComponentType.Connection &&
+            sensor.SensorCategory != DiagnosticSensorCategory.Connectivity;
+
+        bool IsConnectivitySensor(IDiagnosticSensor sensor) =>
+            (sensor.ComponentType == ComponentType.Connection || sensor.ComponentType == ComponentType.Channel) &&
+            sensor.SensorCategory == DiagnosticSensorCategory.Connectivity;
     }
 }

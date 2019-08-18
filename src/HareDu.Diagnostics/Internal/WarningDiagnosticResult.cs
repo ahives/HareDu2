@@ -16,10 +16,10 @@ namespace HareDu.Diagnostics.Internal
     using System;
     using System.Collections.Generic;
 
-    class NegativeDiagnosticResult :
+    class WarningDiagnosticResult :
         DiagnosticResult
     {
-        public NegativeDiagnosticResult(string componentIdentifier, string sensorIdentifier,
+        public WarningDiagnosticResult(string componentIdentifier, string sensorIdentifier,
             ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData,
             string reason, string remediation)
         {
@@ -27,19 +27,19 @@ namespace HareDu.Diagnostics.Internal
             SensorIdentifier = sensorIdentifier;
             ComponentType = componentType;
             SensorData = sensorData;
-            Status = DiagnosticStatus.Red;
+            Status = DiagnosticStatus.Yellow;
             Reason = reason;
             Remediation = remediation;
             Timestamp = DateTimeOffset.Now;
         }
 
         public string ComponentIdentifier { get; }
+        public ComponentType ComponentType { get; }
         public string SensorIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public string Reason { get; }
         public string Remediation { get; }
         public IReadOnlyList<DiagnosticSensorData> SensorData { get; }
-        public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }
 }

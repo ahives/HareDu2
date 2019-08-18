@@ -11,6 +11,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public FakeConnectivitySnapshot3()
         {
             Connections = GetConnections().ToList();
+            ConnectionsCreated = new ChurnMetricsImpl(100000, 102);
+            ConnectionsClosed = new ChurnMetricsImpl(174000, 100);
         }
 
         public ChurnMetrics ChannelsClosed { get; }
@@ -24,7 +26,21 @@ namespace HareDu.Diagnostics.Tests.Fakes
             yield return new FakeConnectionSnapshot("Connection1", 6);
         }
 
-            
+        
+        class ChurnMetricsImpl :
+            ChurnMetrics
+        {
+            public ChurnMetricsImpl(int total, decimal rate)
+            {
+                Total = total;
+                Rate = rate;
+            }
+
+            public long Total { get; }
+            public decimal Rate { get; }
+        }
+
+
         class FakeConnectionSnapshot :
             ConnectionSnapshot
         {

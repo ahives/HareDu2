@@ -14,8 +14,8 @@
 namespace HareDu.Diagnostics.Sensors
 {
     using System.Collections.Generic;
+    using Configuration;
     using Internal;
-    using Snapshotting;
     using Snapshotting.Model;
 
     class ChannelLimitReachedSensor :
@@ -27,6 +27,11 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
+        public ChannelLimitReachedSensor(IDiagnosticSensorConfigProvider provider)
+            : base(provider)
+        {
+        }
+
         public DiagnosticResult Execute<T>(T snapshot)
         {
             ConnectionSnapshot data = snapshot as ConnectionSnapshot;
@@ -37,10 +42,10 @@ namespace HareDu.Diagnostics.Sensors
             };
 
             DiagnosticResult result = data.Channels.Count >= data.ChannelLimit
-                ? new NegativeDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData, DiagnosticStatus.Red,
+                ? new NegativeDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData,
                     "Number of channels on connection exceeds the defined limit.",
                     "Adjust application settings to reduce the number of connections to the RabbitMQ broker.")
-                : new PositiveDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData, DiagnosticStatus.Green,
+                : new PositiveDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData,
                     "Number of channels on connection is less than defined limit.") as DiagnosticResult;
 
             NotifyObservers(result);

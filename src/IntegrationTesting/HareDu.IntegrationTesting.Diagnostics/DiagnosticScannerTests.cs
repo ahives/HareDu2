@@ -21,7 +21,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using HareDu.Diagnostics.Scanning;
     using NUnit.Framework;
     using Snapshotting;
-    using Snapshotting.Model;
 
     [TestFixture]
     public class DiagnosticScannerTests :

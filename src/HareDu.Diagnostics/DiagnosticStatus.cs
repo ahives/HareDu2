@@ -16,6 +16,8 @@ namespace HareDu.Diagnostics
     public enum DiagnosticStatus
     {
         Red,
-        Green
+        Green,
+        Yellow,
+        Inconclusive
     }
 }
