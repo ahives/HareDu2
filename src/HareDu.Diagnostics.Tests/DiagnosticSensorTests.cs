@@ -113,9 +113,11 @@ namespace HareDu.Diagnostics.Tests
             ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            string report = scanner.Scan(snapshot).Format();
+            var report = scanner.Scan(snapshot);
+
+            var formatter = _container.Resolve<IDiagnosticReportFormatter>();
             
-            Console.WriteLine(report);
+            Console.WriteLine(formatter.Format(report));
         }
     }
 }

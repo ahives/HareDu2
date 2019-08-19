@@ -11,13 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting
+namespace HareDu.Diagnostics.Formatting
 {
-    using System;
-    using Configuration;
-
-    public interface ISnapshotClient
+    public interface IDiagnosticReportFormatter
     {
-        ISnapshotFactory Init(Action<SnapshotClientConfigProvider> configuration);
+        string Format(DiagnosticReport report);
     }
 }

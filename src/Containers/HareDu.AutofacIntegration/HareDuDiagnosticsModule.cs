@@ -18,6 +18,7 @@ namespace HareDu.AutofacIntegration
     using System.Linq;
     using Autofac;
     using Diagnostics.Configuration;
+    using Diagnostics.Formatting;
     using Diagnostics.Scanning;
     using Diagnostics.Sensors;
 
@@ -42,6 +43,10 @@ namespace HareDu.AutofacIntegration
 
             builder.RegisterType<DiagnosticSensorConfigProvider>()
                 .As<IDiagnosticSensorConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<TextFormatter>()
+                .As<IDiagnosticReportFormatter>()
                 .SingleInstance();
 
             base.Load(builder);

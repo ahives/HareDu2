@@ -1,10 +1,24 @@
+// Copyright 2013-2019 Albert L. Hives
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 namespace HareDu.Diagnostics.Formatting
 {
     using System.Text;
 
-    public static class FormatterExtensions
+    public class TextFormatter :
+        IDiagnosticReportFormatter
     {
-        public static string Format(this DiagnosticReport report)
+        public string Format(DiagnosticReport report)
         {
             var builder = new StringBuilder();
 
@@ -22,10 +36,10 @@ namespace HareDu.Diagnostics.Formatting
             return builder.ToString();
         }
         
-        static void Format(DiagnosticSensorData data, ref StringBuilder builder) =>
+        void Format(DiagnosticSensorData data, ref StringBuilder builder) =>
             builder.AppendLine($"\t\t{data?.PropertyName} => {data?.PropertyValue}");
 
-        static void Format(this DiagnosticResult result, ref StringBuilder builder)
+        void Format(DiagnosticResult result, ref StringBuilder builder)
         {
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
             builder.AppendLine($"\tComponent Identifier: {result.ComponentIdentifier}");
