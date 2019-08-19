@@ -15,17 +15,17 @@ namespace HareDu.Diagnostics.Internal
 {
     using Configuration;
 
-    class DefaultDiagnosticSensorConfig :
+    public class DefaultDiagnosticSensorConfig :
         DiagnosticSensorConfig
     {
         public DefaultDiagnosticSensorConfig()
         {
-            ConnectionSensorConfig = new ConnectionSensorConfigImpl();
-            ChannelSensorConfig = new ChannelSensorConfigImpl();
+            Connection = new ConnectionSensorConfigImpl();
+            Channel = new ChannelSensorConfigImpl();
         }
 
-        public ConnectionSensorConfig ConnectionSensorConfig { get; }
-        public ChannelSensorConfig ChannelSensorConfig { get; }
+        public ConnectionSensorConfig Connection { get; }
+        public ChannelSensorConfig Channel { get; }
 
         
         class ChannelSensorConfigImpl :

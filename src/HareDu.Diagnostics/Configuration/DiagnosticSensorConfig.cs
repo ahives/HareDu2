@@ -15,8 +15,8 @@ namespace HareDu.Diagnostics.Configuration
 {
     public interface DiagnosticSensorConfig
     {
-        ConnectionSensorConfig ConnectionSensorConfig { get; }
+        ConnectionSensorConfig Connection { get; }
         
-        ChannelSensorConfig ChannelSensorConfig { get; }
+        ChannelSensorConfig Channel { get; }
     }
 }

@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier { get; }
+        public string Identifier => GetType().FullName;
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
@@ -40,7 +40,7 @@ namespace HareDu.Diagnostics.Sensors
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType.Connection);
+                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -54,18 +54,18 @@ namespace HareDu.Diagnostics.Sensors
 
             if (!_provider.TryGet(out DiagnosticSensorConfig config))
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType.Connection, sensorData);
+                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType, sensorData);
 
                 NotifyObservers(result);
 
                 return result;
             }
 
-            sensorData.Add(new DiagnosticSensorDataImpl("RateThreshold", config.ConnectionSensorConfig.HighCreationRateThreshold.ToString()));
+            sensorData.Add(new DiagnosticSensorDataImpl("RateThreshold", config.Connection.HighCreationRateThreshold.ToString()));
             
-            result = data.ConnectionsCreated.Rate >= config.ConnectionSensorConfig.HighCreationRateThreshold
-                ? new WarningDiagnosticResult(null, Identifier, ComponentType.Connection, sensorData, null, null)
-                : new PositiveDiagnosticResult(null, Identifier, ComponentType.Connection, sensorData, null) as DiagnosticResult;
+            result = data.ConnectionsCreated.Rate >= config.Connection.HighCreationRateThreshold
+                ? new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, null, null)
+                : new PositiveDiagnosticResult(null, Identifier, ComponentType, sensorData, null) as DiagnosticResult;
 
             NotifyObservers(result);
 

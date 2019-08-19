@@ -32,8 +32,6 @@ namespace HareDu.Diagnostics.Observers
         public void OnNext(DiagnosticContext value)
         {
             Console.WriteLine("Timestamp: {0}", value.Timestamp.ToString());
-            Console.WriteLine();
-
             Console.WriteLine("Component Identifier: {0}", value.Result.ComponentIdentifier);
             Console.WriteLine("Component Type: {0}", value.Result.ComponentType);
             Console.WriteLine("Sensor: {0}", value.Result.SensorIdentifier);

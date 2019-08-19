@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics.Tests
     using AutofacIntegration;
     using Core.Extensions;
     using Fakes;
+    using Formatting;
     using NUnit.Framework;
     using Observers;
     using Scanning;
@@ -45,7 +46,7 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Test()
+        public void Test1()
         {
             ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
             var scanner = _container.Resolve<IDiagnosticScanner>();
@@ -104,6 +105,17 @@ namespace HareDu.Diagnostics.Tests
             Assert.IsNotNull(results);
             Assert.IsNotEmpty(results);
             Assert.AreEqual(6, results.Count);
+        }
+
+        [Test]
+        public void Verify_formatter_works()
+        {
+            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
+            var scanner = _container.Resolve<IDiagnosticScanner>();
+
+            string report = scanner.Scan(snapshot).Format();
+            
+            Console.WriteLine(report);
         }
     }
 }

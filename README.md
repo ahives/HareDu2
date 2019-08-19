@@ -141,6 +141,9 @@ https://www.rabbitmq.com/confirms.html
 
 https://www.rabbitmq.com/heartbeats.html
 
+https://www.rabbitmq.com/logging.html#connection-lifecycle-events
+
+
 
 
 # Using API

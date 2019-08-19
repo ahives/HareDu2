@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
             IEnumerable<ChannelSnapshot> GetChannels()
             {
-                yield return new FakeChannelSnapshot("Channel1", 4, 2, 5, 8, 2, 1);
+                yield return new FakeChannelSnapshot("Channel1", 0, 2, 5, 8, 2, 1);
                 yield return new FakeChannelSnapshot("Channel2", 4, 2, 5, 8, 2, 1);
                 yield return new FakeChannelSnapshot("Channel3", 4, 2, 5, 8, 2, 1);
                 yield return new FakeChannelSnapshot("Channel4", 4, 2, 5, 8, 2, 1);

@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Sensors
 {
     using System.Collections.Generic;
     using Configuration;
+    using Core.Extensions;
     using Internal;
     using Snapshotting.Model;
 
@@ -22,7 +23,7 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => "ChannelThrottling";
+        public string Identifier => GetType().FullName;
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
@@ -35,13 +36,24 @@ namespace HareDu.Diagnostics.Sensors
         public DiagnosticResult Execute<T>(T snapshot)
         {
             ChannelSnapshot data = snapshot as ChannelSnapshot;
+            DiagnosticResult result;
+            
+            if (data.IsNull())
+            {
+                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+
+                NotifyObservers(result);
+
+                return result;
+            }
+            
             var sensorData = new List<DiagnosticSensorData>
             {
                 new DiagnosticSensorDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
                 new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
 
-            DiagnosticResult result = data.UnacknowledgedMessages > data.PrefetchCount
+            result = data.UnacknowledgedMessages > data.PrefetchCount
                 ? new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData,
                     "Unacknowledged messages on channel exceeds prefetch count causing the RabbitMQ broker to stop delivering messages to consumers.",
                     "Acknowledged messages must be greater than or equal to the result of subtracting the number of unacknowledged messages from the prefetch count plus 1. Temporarily increase the number of consumers or prefetch count.")
