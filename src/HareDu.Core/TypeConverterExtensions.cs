@@ -11,12 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting
+namespace HareDu.Core
 {
-    using Model;
-
-    public interface BrokerConnection :
-        ComponentSnapshot<BrokerConnectivitySnapshot>
+    public static class TypeConverterExtensions
     {
+        public static long ToLong(this string value)
+        {
+            if (value.Equals("infinity"))
+                return long.MaxValue;
+
+            return long.TryParse(value, out long result) ? result : long.MaxValue;
+        }
     }
 }

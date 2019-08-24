@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Tests
     using Snapshotting.Model;
 
     [TestFixture]
-    public class DiagnosticSensorTests :
+    public class BrokerConnectivityDiagnosticSensorTests :
         DiagnosticsTestBase
     {
         IContainer _container;
@@ -48,7 +48,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Test1()
         {
-            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var report = scanner.Scan(snapshot);
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_connection_channel_limit_reached_sensor_returns_red_status()
         {
-            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot2();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2();
             var report = _container.Resolve<IDiagnosticScanner>()
                 .RegisterObserver(new DefaultDiagnosticConsoleLogger())
                 .Scan(snapshot);
@@ -93,7 +93,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_unacknowledged_messages_on_channel_not_greater_than_prefetch_count()
         {
-            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var report = scanner.Scan(snapshot);
@@ -110,7 +110,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_formatter_works()
         {
-            ConnectivitySnapshot snapshot = new FakeConnectivitySnapshot3();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var report = scanner.Scan(snapshot);

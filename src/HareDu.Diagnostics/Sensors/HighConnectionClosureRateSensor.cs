@@ -35,7 +35,7 @@ namespace HareDu.Diagnostics.Sensors
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
-            ConnectivitySnapshot data = snapshot as ConnectivitySnapshot;
+            BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
             DiagnosticResult result;
             
             if (data.IsNull())

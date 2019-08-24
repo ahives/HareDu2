@@ -11,13 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Snapshotting.Model
 {
-    public enum ComponentType
+    using System.Collections.Generic;
+
+    public interface BrokerConnectivitySnapshot :
+        Snapshot
     {
-        Connection,
-        Channel,
-        Queue,
-        NA
+        ChurnMetrics ChannelsClosed { get; }
+
+        ChurnMetrics ChannelsCreated { get; }
+
+        ChurnMetrics ConnectionsClosed { get; }
+
+        ChurnMetrics ConnectionsCreated { get; }
+        
+        IReadOnlyList<ConnectionSnapshot> Connections { get; }
     }
 }

@@ -16,6 +16,7 @@ namespace HareDu.Diagnostics
     public enum DiagnosticSensorCategory
     {
         Throughput,
-        Connectivity
+        Connectivity,
+        Memory
     }
 }

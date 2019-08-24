@@ -11,13 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Snapshotting.Model
 {
-    public enum ComponentType
+    public interface RAM
     {
-        Connection,
-        Channel,
-        Queue,
-        NA
+        long Target { get; }
+        
+        /// <summary>
+        /// Total messages in RAM that are written (i.e. paged out) to disk.
+        /// </summary>
+        long Total { get; }
+        
+        /// <summary>
+        /// Total size in bytes of the messages that were written to disk from RAM.
+        /// </summary>
+        long Bytes { get; }
+        
+        long Unacknowledged { get; }
+        
+        long Ready { get; }
     }
 }

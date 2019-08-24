@@ -5,10 +5,10 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using Snapshotting;
     using Snapshotting.Model;
 
-    public class FakeConnectivitySnapshot3 :
-        ConnectivitySnapshot
+    public class FakeBrokerConnectivitySnapshot3 :
+        BrokerConnectivitySnapshot
     {
-        public FakeConnectivitySnapshot3()
+        public FakeBrokerConnectivitySnapshot3()
         {
             Connections = GetConnections().ToList();
             ConnectionsCreated = new ChurnMetricsImpl(100000, 102);

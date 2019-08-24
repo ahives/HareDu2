@@ -16,7 +16,7 @@ namespace HareDu.Core.Model
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface QueueStatus
+    public interface BackingQueueStatus
     {
         [JsonProperty("mode")]
         string Mode { get; }

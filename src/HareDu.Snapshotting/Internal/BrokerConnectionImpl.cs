@@ -24,7 +24,7 @@ namespace HareDu.Snapshotting.Internal
     using Model;
 
     class BrokerConnectionImpl :
-        BaseSnapshot<ConnectivitySnapshot>,
+        BaseSnapshot<BrokerConnectivitySnapshot>,
         BrokerConnection
     {
         readonly List<IDisposable> _observers;
@@ -35,7 +35,7 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public Result<ConnectivitySnapshot> Take(CancellationToken cancellationToken = default)
+        public Result<BrokerConnectivitySnapshot> Take(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Resource<Cluster>()
@@ -52,14 +52,14 @@ namespace HareDu.Snapshotting.Internal
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            ConnectivitySnapshot snapshot = new ConnectivitySnapshotImpl(cluster, connections, channels);
+            BrokerConnectivitySnapshot snapshot = new BrokerConnectivitySnapshotImpl(cluster, connections, channels);
 
             NotifyObservers(snapshot);
             
-            return new SuccessfulResult<ConnectivitySnapshot>(snapshot, null);
+            return new SuccessfulResult<BrokerConnectivitySnapshot>(snapshot, null);
         }
 
-        public ComponentSnapshot<ConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<ConnectivitySnapshot>> observer)
+        public ComponentSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerConnectivitySnapshot>> observer)
         {
             if (observer != null)
             {
@@ -69,8 +69,8 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public ComponentSnapshot<ConnectivitySnapshot> RegisterObservers(
-            IReadOnlyList<IObserver<SnapshotContext<ConnectivitySnapshot>>> observers)
+        public ComponentSnapshot<BrokerConnectivitySnapshot> RegisterObservers(
+            IReadOnlyList<IObserver<SnapshotContext<BrokerConnectivitySnapshot>>> observers)
         {
             if (observers != null)
             {
@@ -84,10 +84,10 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        class ConnectivitySnapshotImpl :
-            ConnectivitySnapshot
+        class BrokerConnectivitySnapshotImpl :
+            BrokerConnectivitySnapshot
         {
-            public ConnectivitySnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
+            public BrokerConnectivitySnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
                 IReadOnlyList<ChannelInfo> channels)
             {
                 ChannelsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsClosed ?? 0, cluster.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);

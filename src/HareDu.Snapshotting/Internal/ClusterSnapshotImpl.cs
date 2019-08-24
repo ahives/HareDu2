@@ -30,7 +30,7 @@ namespace HareDu.Snapshotting.Internal
         {
             ClusterName = cluster.ClusterName;
             RabbitMqVersion = cluster.RabbitMqVersion;
-            Queue = new QueueMetricsImpl(cluster.MessageStats, queues);
+            BrokerQueues = new BrokerQueuesSnapshotImpl(cluster.MessageStats, queues);
             Nodes = GetNodes(cluster, nodes, connections, channels);
             Timestamp = DateTimeOffset.Now;
         }
@@ -50,8 +50,8 @@ namespace HareDu.Snapshotting.Internal
         public string ClusterName { get; }
         public IReadOnlyList<NodeStatus> Nodes { get; }
         public ClusterPerformance Performance { get; }
-        public QueueMetrics Queue { get; }
-        public IReadOnlyList<QueueMetrics> Queues { get; }
+        public BrokerQueuesSnapshot BrokerQueues { get; }
+        public IReadOnlyList<BrokerQueuesSnapshot> Queues { get; }
         public DateTimeOffset Timestamp { get; }
 
 
@@ -374,60 +374,62 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        class QueueMetricsImpl :
-            QueueMetrics
+        class BrokerQueuesSnapshotImpl :
+            BrokerQueuesSnapshot
         {
-            public QueueMetricsImpl(MessageStats stats, IReadOnlyList<QueueInfo> queues)
+            public BrokerQueuesSnapshotImpl(MessageStats stats, IReadOnlyList<QueueInfo> queues)
             {
-                Messages = new QueuedMessageMetricsImpl(stats);
+                Churn = new BrokerQueueChurnMetricsImpl(stats);
             }
 
             public string Name { get; }
             public string VirtualHost { get; }
-            public QueuedMessageMetrics Messages { get; }
-            public QueueInternalMetrics Internals { get; }
-            public QueuedMessageDetails Depth { get; }
+            public BrokerQueueChurnMetrics Churn { get; }
+            public QueueInternals Internals { get; }
+            public QueueDepth Depth { get; }
             public QueueMemoryDetails Memory { get; }
-            public MessagePagingDetails Paging { get; }
+            public IReadOnlyList<QueueSnapshot> Queues { get; }
 
             
-            class QueuedMessageMetricsImpl :
-                QueuedMessageMetrics
+            class BrokerQueueChurnMetricsImpl :
+                BrokerQueueChurnMetrics
             {
-                public QueuedMessageMetricsImpl(MessageStats stats)
+                public BrokerQueueChurnMetricsImpl(MessageStats stats)
                 {
-                    Incoming = new QueuedMessageDetailsImpl(stats.TotalMessagesPublished, stats.MessagesPublishedDetails.IsNull() ? 0 : stats.MessagesPublishedDetails.Rate);
+                    Incoming = new QueueDepthImpl(stats.TotalMessagesPublished, stats.MessagesPublishedDetails.IsNull() ? 0 : stats.MessagesPublishedDetails.Rate);
 //                    Confirmed = new QueuedMessageDetailsImpl(stats.TotalMessageGets, stats.MessagesConfirmedDetails.IsNull() ? 0 : stats.MessagesConfirmedDetails.Rate);
 //                    Unroutable = new QueuedMessageDetailsImpl(stats.TotalUnroutableMessages, stats.UnroutableMessagesDetails.IsNull() ? 0 : stats.UnroutableMessagesDetails.Rate);
-                    Gets = new QueuedMessageDetailsImpl(stats.TotalMessageGets, stats.MessageGetDetails.IsNull() ? 0 : stats.MessageGetDetails.Rate);
-                    GetsWithoutAck = new QueuedMessageDetailsImpl(stats.TotalMessageGetsWithoutAck, stats.MessageGetsWithoutAckDetails.IsNull() ? 0 : stats.MessageGetsWithoutAckDetails.Rate);
-                    DeliveredGets = new QueuedMessageDetailsImpl(stats.TotalMessageDeliveryGets, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
-                    Delivered = new QueuedMessageDetailsImpl(stats.TotalMessagesDelivered, stats.MessageDeliveryDetails.IsNull() ? 0 : stats.MessageDeliveryDetails.Rate);
-                    DeliveredWithoutAck = new QueuedMessageDetailsImpl(stats.TotalMessageDeliveredWithoutAck, stats.MessagesDeliveredWithoutAckDetails.IsNull() ? 0 : stats.MessagesDeliveredWithoutAckDetails.Rate);
-                    Redelivered = new QueuedMessageDetailsImpl(stats.TotalMessagesRedelivered, stats.MessagesRedeliveredDetails.IsNull() ? 0 : stats.MessagesRedeliveredDetails.Rate);
-                    Acknowledged = new QueuedMessageDetailsImpl(stats.TotalMessagesAcknowledged, stats.MessagesAcknowledgedDetails.IsNull() ? 0 : stats.MessagesAcknowledgedDetails.Rate);
+                    Gets = new QueueDepthImpl(stats.TotalMessageGets, stats.MessageGetDetails.IsNull() ? 0 : stats.MessageGetDetails.Rate);
+                    GetsWithoutAck = new QueueDepthImpl(stats.TotalMessageGetsWithoutAck, stats.MessageGetsWithoutAckDetails.IsNull() ? 0 : stats.MessageGetsWithoutAckDetails.Rate);
+                    DeliveredGets = new QueueDepthImpl(stats.TotalMessageDeliveryGets, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
+                    Delivered = new QueueDepthImpl(stats.TotalMessagesDelivered, stats.MessageDeliveryDetails.IsNull() ? 0 : stats.MessageDeliveryDetails.Rate);
+                    DeliveredWithoutAck = new QueueDepthImpl(stats.TotalMessageDeliveredWithoutAck, stats.MessagesDeliveredWithoutAckDetails.IsNull() ? 0 : stats.MessagesDeliveredWithoutAckDetails.Rate);
+                    Redelivered = new QueueDepthImpl(stats.TotalMessagesRedelivered, stats.MessagesRedeliveredDetails.IsNull() ? 0 : stats.MessagesRedeliveredDetails.Rate);
+                    Acknowledged = new QueueDepthImpl(stats.TotalMessagesAcknowledged, stats.MessagesAcknowledgedDetails.IsNull() ? 0 : stats.MessagesAcknowledgedDetails.Rate);
 //                    Ready = new QueuedMessageDetailsImpl(stats, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
 //                    Ready = new QueuedMessageDetailsImpl(stats, stats.MessageDeliveryGetDetails.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
 //                    Unacknowledged = new MessageDetailsImpl(stats.TotalUnroutableMessages, stats.IsNull() ? 0 : stats.MessageDeliveryGetDetails.Rate);
                 }
 
                 public long Persisted { get; }
-                public QueuedMessageDetails Incoming { get; }
-                public QueuedMessageDetails Unacknowledged { get; }
-                public QueuedMessageDetails Ready { get; }
-                public QueuedMessageDetails Gets { get; }
-                public QueuedMessageDetails GetsWithoutAck { get; }
-                public QueuedMessageDetails Delivered { get; }
-                public QueuedMessageDetails DeliveredWithoutAck { get; }
-                public QueuedMessageDetails DeliveredGets { get; }
-                public QueuedMessageDetails Redelivered { get; }
-                public QueuedMessageDetails Acknowledged { get; }
+                public QueueDepth Incoming { get; }
+                public QueueDepth Unacknowledged { get; }
+                public QueueDepth Ready { get; }
+                public QueueDepth Gets { get; }
+                public QueueDepth GetsWithoutAck { get; }
+                public QueueDepth Delivered { get; }
+                public QueueDepth DeliveredWithoutAck { get; }
+                public QueueDepth DeliveredGets { get; }
+                public QueueDepth Redelivered { get; }
+                public QueueDepth Acknowledged { get; }
+                public QueueDepth NotRouted { get; }
+                public QueueDepth Broker { get; }
 
-                
-                class QueuedMessageDetailsImpl :
-                    QueuedMessageDetails
+
+                class QueueDepthImpl :
+                    QueueDepth
                 {
-                    public QueuedMessageDetailsImpl(long total, decimal rate)
+                    public QueueDepthImpl(long total, decimal rate)
                     {
                         Total = total;
                         Rate = rate;

@@ -27,7 +27,7 @@ namespace HareDu.Snapshotting.Model
         
         ClusterPerformance Performance { get; }
         
-        IReadOnlyList<QueueMetrics> Queues { get; }
+        IReadOnlyList<BrokerQueuesSnapshot> Queues { get; }
         
         DateTimeOffset Timestamp { get; }
     }

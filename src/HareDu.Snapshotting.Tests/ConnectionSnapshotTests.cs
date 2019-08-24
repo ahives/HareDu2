@@ -42,7 +42,7 @@ namespace HareDu.Snapshotting.Tests
         {
             var connection = Client
                 .Snapshot<BrokerConnection>()
-                .RegisterObserver(new DefaultSnapshotConsoleLogger())
+                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Take();
         }
 
@@ -51,7 +51,7 @@ namespace HareDu.Snapshotting.Tests
         {
             var connection = Client
                 .Snapshot<BrokerConnection>()
-                .RegisterObserver(new DefaultSnapshotConsoleLogger())
+                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Take();
             
 //            Console.WriteLine(connection.ToJsonString());

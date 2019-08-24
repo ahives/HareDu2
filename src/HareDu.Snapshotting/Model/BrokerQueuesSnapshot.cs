@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,67 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Model
+namespace HareDu.Snapshotting.Model
 {
     using System;
     using System.Collections.Generic;
+    using Core.Model;
     using Newtonsoft.Json;
 
-    public interface QueueInfo
+    public interface BrokerQueuesSnapshot :
+        Snapshot
     {
-        [JsonProperty("messages_details")]
-        Rate RateOfMessages { get; }
+        BrokerQueueChurnMetrics Churn { get; }
         
-        [JsonProperty("messages")]
-        long TotalMessages { get; }
-        
-        [JsonProperty("messages_unacknowledged_details")]
-        Rate RateOfUnacknowledgedMessages { get; }
-        
-        [JsonProperty("messages_unacknowledged")]
-        long UnacknowledgedMessages { get; }
-        
-        [JsonProperty("messages_ready_details")]
-        Rate RateOfReadyMessages { get; }
-        
-        [JsonProperty("messages_ready")]
-        long ReadyMessages { get; }
-        
-        [JsonProperty("reductions_details")]
-        Rate RateOfReductions { get; }
-        
-        [JsonProperty("reductions")]
-        long TotalReductions { get; }
-        
-        [JsonProperty("arguments")]
-        IDictionary<string, object> Arguments { get; }
-        
-        [JsonProperty("exclusive")]
-        bool Exclusive { get; }
-        
-        [JsonProperty("auto_delete")]
-        bool AutoDelete { get; }
-        
-        [JsonProperty("durable")]
-        bool Durable { get; }
-        
-        [JsonProperty("vhost")]
-        string VirtualHost { get; }
-        
-        [JsonProperty("name")]
-        string Name { get; }
-        
-        [JsonProperty("node")]
-        string Node { get; }
-        
-        [JsonProperty("message_bytes_paged_out")]
-        long TotalMessageBytesPagedOut { get; }
-        
-        [JsonProperty("messages_paged_out")]
-        long TotalMessagesPagedOut { get; }
+        IReadOnlyList<QueueSnapshot> Queues { get; }
+    }
+
+    public interface QueueUsageMetrics
+    {
         
         [JsonProperty("backing_queue_status")]
-        BackingQueueStatus BackingQueueStatus { get; }
+        BackingQueueStatus MessageRates { get; }
         
         [JsonProperty("head_message_timestamp")]
         DateTimeOffset HeadMessageTimestamp { get; }
@@ -122,15 +81,41 @@ namespace HareDu.Core.Model
         string Policy { get; }
         
         [JsonProperty("consumer_utilisation")]
-        decimal ConsumerUtilization { get; }
+        string ConsumerUtilization { get; }
         
         [JsonProperty("idle_since")]
         DateTimeOffset IdleSince { get; }
         
         [JsonProperty("memory")]
         long Memory { get; }
+    }
+
+    public interface QueueInternals
+    {
+        Reductions Reductions { get; }
         
-        [JsonProperty("message_stats")]
-        QueueMessageStats MessageStats { get; }
+        long TargetCountOfMessagesAllowedInRAM { get; }
+        
+        decimal ConsumerUtilization { get; }
+
+        long Q1 { get; }
+        
+        long Q2 { get; }
+        
+        long Q3 { get; }
+        
+        long Q4 { get; }
+        
+        [JsonProperty("avg_ingress_rate")]
+        decimal AvgIngressRate { get; }
+        
+        [JsonProperty("avg_egress_rate")]
+        decimal AvgEgressRate { get; }
+        
+        [JsonProperty("avg_ack_ingress_rate")]
+        decimal AvgAcknowledgementIngressRate { get; }
+        
+        [JsonProperty("avg_ack_egress_rate")]
+        decimal AvgAcknowledgementEgressRate { get; }
     }
 }

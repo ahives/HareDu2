@@ -18,21 +18,21 @@ namespace HareDu.Diagnostics.Scanning
     using Sensors;
     using Snapshotting.Model;
 
-    public class ConnectivityDiagnostic :
-        IComponentDiagnostic<ConnectivitySnapshot>
+    public class BrokerConnectivityDiagnostic :
+        IComponentDiagnostic<BrokerConnectivitySnapshot>
     {
         readonly IEnumerable<IDiagnosticSensor> _channelSensors;
         readonly IEnumerable<IDiagnosticSensor> _connectionSensors;
         readonly IEnumerable<IDiagnosticSensor> _connectivitySensors;
 
-        public ConnectivityDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
+        public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             _connectionSensors = sensors.Where(IsConnectionThroughputSensor);
             _channelSensors = sensors.Where(IsChannelThroughputSensor);
             _connectivitySensors = sensors.Where(IsConnectivitySensor);
         }
 
-        public IReadOnlyList<DiagnosticResult> Scan(ConnectivitySnapshot snapshot)
+        public IReadOnlyList<DiagnosticResult> Scan(BrokerConnectivitySnapshot snapshot)
         {
             if (snapshot == null)
                 return DiagnosticCache.EmptyDiagnosticResults;
