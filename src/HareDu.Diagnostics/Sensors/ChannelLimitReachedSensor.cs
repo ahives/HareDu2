@@ -17,19 +17,20 @@ namespace HareDu.Diagnostics.Sensors
     using Configuration;
     using Core.Extensions;
     using Internal;
+    using KnowledgeBase;
     using Snapshotting.Model;
 
     class ChannelLimitReachedSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName;
+        public string Identifier => GetType().FullName.ComputeHash();
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public ChannelLimitReachedSensor(IDiagnosticSensorConfigProvider provider)
-            : base(provider)
+        public ChannelLimitReachedSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(provider, knowledgeBaseProvider)
         {
         }
 
@@ -53,12 +54,17 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("ChannelLimit", data.ChannelLimit.ToString())
             };
 
-            result = data.Channels.Count >= data.ChannelLimit
-                ? new NegativeDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData,
-                    "Number of channels on connection exceeds the defined limit.",
-                    "Adjust application settings to reduce the number of connections to the RabbitMQ broker.")
-                : new PositiveDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData,
-                    "Number of channels on connection is less than defined limit.") as DiagnosticResult;
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            if (data.Channels.Count >= data.ChannelLimit)
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
 

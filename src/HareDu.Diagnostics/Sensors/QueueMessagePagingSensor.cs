@@ -17,19 +17,20 @@ namespace HareDu.Diagnostics.Sensors
     using Configuration;
     using Core.Extensions;
     using Internal;
+    using KnowledgeBase;
     using Snapshotting.Model;
 
     class QueueMessagePagingSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName;
+        public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Memory;
 
-        public QueueMessagePagingSensor(IDiagnosticSensorConfigProvider provider)
-            : base(provider)
+        public QueueMessagePagingSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(provider, knowledgeBaseProvider)
         {
         }
 
@@ -52,9 +53,17 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("Memory.RAM.Total", data.Memory.RAM.Total.ToString())
             };
             
-            result = data.Memory.RAM.Total > 0
-                ? new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, null, null)
-                : new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, null) as DiagnosticResult;
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            if (data.Memory.RAM.Total > 0)
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
 

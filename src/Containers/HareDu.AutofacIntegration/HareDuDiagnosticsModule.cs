@@ -19,6 +19,7 @@ namespace HareDu.AutofacIntegration
     using Autofac;
     using Diagnostics.Configuration;
     using Diagnostics.Formatting;
+    using Diagnostics.KnowledgeBase;
     using Diagnostics.Scanning;
     using Diagnostics.Sensors;
 
@@ -30,7 +31,10 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var configProvider = x.Resolve<IDiagnosticSensorConfigProvider>();
-                    var sensors = RegisterDiagnosticSensors(configProvider).ToList();
+                    
+                    var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
+                    
+                    var sensors = RegisterDiagnosticSensors(configProvider, knowledgeBaseProvider).ToList();
 
                     return new ComponentDiagnosticFactory(sensors);
                 })
@@ -49,10 +53,15 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticReportFormatter>()
                 .SingleInstance();
 
+            builder.RegisterType<DefaultKnowledgeBaseProvider>()
+                .As<IKnowledgeBaseProvider>()
+                .SingleInstance();
+
             base.Load(builder);
         }
         
-        IEnumerable<IDiagnosticSensor> RegisterDiagnosticSensors(IDiagnosticSensorConfigProvider configProvider)
+        IEnumerable<IDiagnosticSensor> RegisterDiagnosticSensors(IDiagnosticSensorConfigProvider configProvider,
+            IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             var diagnostics = typeof(IDiagnosticSensor)
                 .Assembly
@@ -62,7 +71,7 @@ namespace HareDu.AutofacIntegration
 
             for (int i = 0; i < diagnostics.Count; i++)
             {
-                yield return (IDiagnosticSensor) Activator.CreateInstance(diagnostics[i], configProvider);
+                yield return (IDiagnosticSensor) Activator.CreateInstance(diagnostics[i], configProvider, knowledgeBaseProvider);
             }
         }
     }

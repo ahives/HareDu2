@@ -33,7 +33,7 @@ namespace HareDu.Diagnostics.Scanning
             _sensors = sensors;
             _observers = new List<IDisposable>();
             
-            RegisterDiagnosticSensors(sensors);
+            RegisterComponentDiagnostics(sensors);
         }
 
         public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
@@ -94,7 +94,7 @@ namespace HareDu.Diagnostics.Scanning
             }
         }
 
-        void RegisterDiagnosticSensors(IReadOnlyList<IDiagnosticSensor> sensors)
+        void RegisterComponentDiagnostics(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             var types = GetType()
                 .Assembly

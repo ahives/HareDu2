@@ -11,26 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.KnowledgeBase
 {
-    using System;
     using System.Collections.Generic;
-    using KnowledgeBase;
 
-    public interface DiagnosticResult
+    public interface IKnowledgeBaseProvider
     {
-        string ComponentIdentifier { get; }
+        bool TryGet(string identifier, DiagnosticStatus diagnosticStatus, out KnowledgeBaseArticle article);
         
-        ComponentType ComponentType { get; }
-        
-        string SensorIdentifier { get; }
-        
-        DiagnosticStatus Status { get; }
-        
-        KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-        
-        IReadOnlyList<DiagnosticSensorData> SensorData { get; }
-        
-        DateTimeOffset Timestamp { get; }
+        bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles);
     }
 }

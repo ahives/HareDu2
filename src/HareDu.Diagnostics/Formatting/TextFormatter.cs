@@ -53,8 +53,8 @@ namespace HareDu.Diagnostics.Formatting
                 Format(data, ref builder);
             }
 
-            builder.AppendLine($"\tReason: {result.Reason}");
-            builder.AppendLine($"\tRemediation: {result.Remediation}");
+            builder.AppendLine($"\tReason: {result.KnowledgeBaseArticle?.Reason}");
+            builder.AppendLine($"\tRemediation: {result.KnowledgeBaseArticle?.Remediation}");
             builder.AppendLine();
         }
     }

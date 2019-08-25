@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Fakes
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Snapshotting.Model;
@@ -27,33 +28,117 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         IEnumerable<QueueSnapshot> GetQueues()
         {
-            yield return new FakeQueueSnapshot("FakeQueue1", "FakeVirtualHost", "FakeNode", 100, 150, 20394, 5, 9);
-            yield return new FakeQueueSnapshot("FakeQueue2", "FakeVirtualHost", "FakeNode", 50, 34, 82341, 95, 5);
-            yield return new FakeQueueSnapshot("FakeQueue3", "FakeVirtualHost", "FakeNode", 69, 95, 8384, 82, 94);
-            yield return new FakeQueueSnapshot("FakeQueue4", "FakeVirtualHost", "FakeNode", 94, 49, 23484, 74, 4);
+//            yield return new FakeQueueSnapshot("FakeQueue1", "FakeVirtualHost", "FakeNode", 100, 150, 20394, 5, 9);
+//            yield return new FakeQueueSnapshot("FakeQueue2", "FakeVirtualHost", "FakeNode", 50, 34, 82341, 95, 5);
+//            yield return new FakeQueueSnapshot("FakeQueue3", "FakeVirtualHost", "FakeNode", 69, 95, 8384, 82, 94);
+//            yield return new FakeQueueSnapshot("FakeQueue4", "FakeVirtualHost", "FakeNode", 94, 49, 23484, 74, 4);
 //            yield return new FakeQueueSnapshot("FakeQueue5", "FakeVirtualHost", "FakeNode", 100, 833, 87432, 39, 74);
-            yield return new FakeQueueSnapshot("FakeQueue5", "FakeVirtualHost", "FakeNode", 100, 0, 87432, 39, 74);
+            yield return new FakeQueueSnapshot("FakeQueue1",
+                "FakeVirtualHost",
+                "FakeNode",
+                83,
+                33,
+                8929,
+                62,
+                93,
+                2,
+                1.57M,
+                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
+            yield return new FakeQueueSnapshot("FakeQueue2",
+                "FakeVirtualHost",
+                "FakeNode",
+                74,
+                0,
+                82334,
+                94,
+                894,
+                34,
+                29.9M,
+                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
+            yield return new FakeQueueSnapshot("FakeQueue3",
+                "FakeVirtualHost",
+                "FakeNode",
+                100,
+                0,
+                87432,
+                39,
+                74,
+                0,
+                0,
+                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
+            yield return new FakeQueueSnapshot("FakeQueue4",
+                "FakeVirtualHost",
+                "FakeNode",
+                8349,
+                8292,
+                723894,
+                3445,
+                949,
+                74,
+                30.5M,
+                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
+            yield return new FakeQueueSnapshot("FakeQueue5",
+                "FakeVirtualHost",
+                "FakeNode",
+                100,
+                0,
+                892389,
+                84,
+                23,
+                93,
+                84.0M,
+                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
         }
 
         class FakeQueueSnapshot :
             QueueSnapshot
         {
-            public FakeQueueSnapshot(string name, string virtualHost, string node, long target, long total, long bytes, long unacknowledged, long ready)
+            public FakeQueueSnapshot(string name,
+                string virtualHost,
+                string node,
+                long target,
+                long total,
+                long bytes,
+                long unacknowledged,
+                long ready,
+                long consumers,
+                decimal consumerUtilization,
+                DateTimeOffset idleSince)
             {
                 Name = name;
                 VirtualHost = virtualHost;
                 Node = node;
+                Consumers = consumers;
+                ConsumerUtilization = consumerUtilization;
+                IdleSince = idleSince;
                 Memory = new FakeQueueMemory(target, total, bytes, unacknowledged, ready);
             }
 
-            class FakeQueueMemory : QueueMemoryDetails
+            public string Name { get; }
+            public string VirtualHost { get; }
+            public string Node { get; }
+            public QueueChurnMetrics Churn { get; }
+            public QueueMemoryDetails Memory { get; }
+            public QueueInternals Internals { get; }
+            public long Consumers { get; }
+            public decimal ConsumerUtilization { get; }
+            public DateTimeOffset IdleSince { get; }
+
+            
+            class FakeQueueMemory :
+                QueueMemoryDetails
             {
                 public FakeQueueMemory(long target, long total, long bytes, long unacknowledged, long ready)
                 {
                     RAM = new FakeRAM(target, total, bytes, unacknowledged, ready);
                 }
 
-                class FakeRAM : RAM
+                public long Total { get; }
+                public RAM RAM { get; }
+                
+
+                class FakeRAM :
+                    RAM
                 {
                     public FakeRAM(long target, long total, long bytes, long unacknowledged, long ready)
                     {
@@ -70,17 +155,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                     public long Unacknowledged { get; }
                     public long Ready { get; }
                 }
-
-                public long Total { get; }
-                public RAM RAM { get; }
             }
-
-            public string Name { get; }
-            public string VirtualHost { get; }
-            public string Node { get; }
-            public QueueChurnMetrics Churn { get; }
-            public QueueMemoryDetails Memory { get; }
-            public QueueInternals Internals { get; }
         }
 
         public BrokerQueueChurnMetrics Churn { get; }

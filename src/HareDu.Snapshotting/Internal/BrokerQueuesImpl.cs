@@ -104,6 +104,9 @@ namespace HareDu.Snapshotting.Internal
                     Node = queue.Node;
                     Churn = new QueueChurnMetricsImpl(queue);
                     Memory = new QueueMemoryDetailsImpl(queue);
+                    Consumers = queue.Consumers;
+                    ConsumerUtilization = queue.ConsumerUtilization;
+                    IdleSince = queue.IdleSince;
                 }
 
                 public string Name { get; }
@@ -112,8 +115,11 @@ namespace HareDu.Snapshotting.Internal
                 public QueueChurnMetrics Churn { get; }
                 public QueueMemoryDetails Memory { get; }
                 public QueueInternals Internals { get; }
+                public long Consumers { get; }
+                public decimal ConsumerUtilization { get; }
+                public DateTimeOffset IdleSince { get; }
 
-                
+
                 class QueueMemoryDetailsImpl :
                     QueueMemoryDetails
                 {

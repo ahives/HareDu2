@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
+    using System;
+
     public interface QueueSnapshot
     {
         /// <summary>
@@ -41,5 +43,11 @@ namespace HareDu.Snapshotting.Model
         QueueMemoryDetails Memory { get; }
         
         QueueInternals Internals { get; }
+        
+        long Consumers { get; }
+        
+        decimal ConsumerUtilization { get; }
+        
+        DateTimeOffset IdleSince { get; }
     }
 }

@@ -67,8 +67,8 @@ namespace HareDu.Diagnostics.Tests
                 
                 if (report.Results[i].Status == DiagnosticStatus.Red)
                 {
-                    Console.WriteLine("Reason: {0}", report.Results[i].Reason);
-                    Console.WriteLine("Remediation: {0}", report.Results[i].Remediation);
+                    Console.WriteLine("Reason: {0}", report.Results[i].KnowledgeBaseArticle.Reason);
+                    Console.WriteLine("Remediation: {0}", report.Results[i].KnowledgeBaseArticle.Remediation);
                 }
                 
                 Console.WriteLine();

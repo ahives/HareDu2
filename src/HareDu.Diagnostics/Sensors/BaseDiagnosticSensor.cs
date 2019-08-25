@@ -15,17 +15,22 @@ namespace HareDu.Diagnostics.Sensors
 {
     using System;
     using System.Collections.Generic;
+    using System.Security.Cryptography;
+    using System.Text;
     using Configuration;
+    using KnowledgeBase;
 
     abstract class BaseDiagnosticSensor :
         IObservable<DiagnosticContext>
     {
         protected readonly IDiagnosticSensorConfigProvider _provider;
+        protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         readonly List<IObserver<DiagnosticContext>> _observers;
 
-        protected BaseDiagnosticSensor(IDiagnosticSensorConfigProvider provider)
+        protected BaseDiagnosticSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _provider = provider;
+            _knowledgeBaseProvider = knowledgeBaseProvider;
             _observers = new List<IObserver<DiagnosticContext>>();
         }
 

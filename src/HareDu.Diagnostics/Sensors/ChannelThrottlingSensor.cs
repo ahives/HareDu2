@@ -17,19 +17,20 @@ namespace HareDu.Diagnostics.Sensors
     using Configuration;
     using Core.Extensions;
     using Internal;
+    using KnowledgeBase;
     using Snapshotting.Model;
 
     class ChannelThrottlingSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName;
+        public string Identifier => GetType().FullName.ComputeHash();
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public ChannelThrottlingSensor(IDiagnosticSensorConfigProvider provider)
-            : base(provider)
+        public ChannelThrottlingSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(provider, knowledgeBaseProvider)
         {
         }
 
@@ -53,12 +54,17 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
 
-            result = data.UnacknowledgedMessages > data.PrefetchCount
-                ? new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData,
-                    "Unacknowledged messages on channel exceeds prefetch count causing the RabbitMQ broker to stop delivering messages to consumers.",
-                    "Acknowledged messages must be greater than or equal to the result of subtracting the number of unacknowledged messages from the prefetch count plus 1. Temporarily increase the number of consumers or prefetch count.")
-                : new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData,
-                    "Unacknowledged messages on channel is less than prefetch count.") as DiagnosticResult;
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            if (data.UnacknowledgedMessages > data.PrefetchCount)
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
                 

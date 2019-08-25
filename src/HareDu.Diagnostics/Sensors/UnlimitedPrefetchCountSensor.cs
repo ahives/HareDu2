@@ -17,19 +17,20 @@ namespace HareDu.Diagnostics.Sensors
     using Configuration;
     using Core.Extensions;
     using Internal;
+    using KnowledgeBase;
     using Snapshotting.Model;
 
     class UnlimitedPrefetchCountSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName;
+        public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public UnlimitedPrefetchCountSensor(IDiagnosticSensorConfigProvider provider)
-            : base(provider)
+        public UnlimitedPrefetchCountSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(provider, knowledgeBaseProvider)
         {
         }
 
@@ -52,11 +53,13 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
 
-            result = data.PrefetchCount <= 0
-                ? new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData,
-                    "Prefetch count of 0 means unlimited prefetch count, which can translate into high CPU utilization.",
-                    "Set a prefetch count above zero based on how many consumer cores available.")
-                : new InconclusiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData) as DiagnosticResult;
+            if (data.PrefetchCount <= 0)
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out var knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else
+                result = new InconclusiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData);
 
             NotifyObservers(result);
                 

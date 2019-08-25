@@ -38,9 +38,6 @@ namespace HareDu.Snapshotting.Model
         [JsonProperty("message_bytes_persistent")]
         long MessageBytesPersisted { get; }
         
-        [JsonProperty("message_bytes_ram")]
-        long MessageBytesInRam { get; }
-        
         [JsonProperty("message_bytes_unacknowledged")]
         long TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
         
@@ -53,15 +50,6 @@ namespace HareDu.Snapshotting.Model
         [JsonProperty("messages_persistent")]
         long MessagesPersisted { get; }
         
-        [JsonProperty("messages_unacknowledged_ram")]
-        long UnacknowledgedMessagesInRam { get; }
-        
-        [JsonProperty("messages_ready_ram")]
-        long MessagesReadyForDeliveryInRam { get; }
-        
-        [JsonProperty("messages_ram")]
-        long MessagesInRam { get; }
-        
         [JsonProperty("garbage_collection")]
         GarbageCollectionDetails GC { get; }
         
@@ -71,20 +59,11 @@ namespace HareDu.Snapshotting.Model
         [JsonProperty("recoverable_slaves")]
         long RecoverableSlaves { get; }
         
-        [JsonProperty("consumers")]
-        long Consumers { get; }
-        
         [JsonProperty("exclusive_consumer_tag")]
         string ExclusiveConsumerTag { get; }
         
         [JsonProperty("policy")]
         string Policy { get; }
-        
-        [JsonProperty("consumer_utilisation")]
-        string ConsumerUtilization { get; }
-        
-        [JsonProperty("idle_since")]
-        DateTimeOffset IdleSince { get; }
         
         [JsonProperty("memory")]
         long Memory { get; }

@@ -17,19 +17,20 @@ namespace HareDu.Diagnostics.Sensors
     using Configuration;
     using Core.Extensions;
     using Internal;
+    using KnowledgeBase;
     using Snapshotting.Model;
 
     class HighConnectionCreationRateSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName;
+        public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
 
-        public HighConnectionCreationRateSensor(IDiagnosticSensorConfigProvider provider)
-            : base(provider)
+        public HighConnectionCreationRateSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(provider, knowledgeBaseProvider)
         {
         }
 
@@ -63,9 +64,17 @@ namespace HareDu.Diagnostics.Sensors
 
             sensorData.Add(new DiagnosticSensorDataImpl("RateThreshold", config.Connection.HighCreationRateThreshold.ToString()));
             
-            result = data.ConnectionsCreated.Rate >= config.Connection.HighCreationRateThreshold
-                ? new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, null, null)
-                : new PositiveDiagnosticResult(null, Identifier, ComponentType, sensorData, null) as DiagnosticResult;
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            if (data.ConnectionsCreated.Rate >= config.Connection.HighCreationRateThreshold)
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
 

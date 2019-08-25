@@ -58,8 +58,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 
                 if (report.Results[i].Status == DiagnosticStatus.Red)
                 {
-                    Console.WriteLine(report.Results[i].Reason);
-                    Console.WriteLine(report.Results[i].Remediation);
+                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Reason);
+                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Remediation);
                 }
             }
         }

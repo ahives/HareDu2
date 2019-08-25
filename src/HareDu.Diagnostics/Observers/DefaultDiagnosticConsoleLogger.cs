@@ -40,8 +40,8 @@ namespace HareDu.Diagnostics.Observers
 
             if (value.Result.Status == DiagnosticStatus.Red)
             {
-                Console.WriteLine("Reason: {0}", value.Result.Reason);
-                Console.WriteLine("Remediation: {0}", value.Result.Remediation);
+                Console.WriteLine("Reason: {0}", value.Result.KnowledgeBaseArticle.Reason);
+                Console.WriteLine("Remediation: {0}", value.Result.KnowledgeBaseArticle.Remediation);
             }
 
             Console.WriteLine();
