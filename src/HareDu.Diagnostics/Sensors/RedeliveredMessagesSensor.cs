@@ -20,16 +20,16 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class QueueMessagePagingSensor :
+    class RedeliveredMessagesSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
-        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Memory;
+        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.FaultTolerance;
 
-        public QueueMessagePagingSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public RedeliveredMessagesSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
         }
@@ -50,13 +50,29 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("Memory.RAM.Total", data.Memory.RAM.Total.ToString())
+                new DiagnosticSensorDataImpl("Churn.Incoming.Total", data.Churn.Incoming.Total.ToString()),
+                new DiagnosticSensorDataImpl("Churn.Redelivered.Total", data.Churn.Redelivered.Total.ToString())
             };
+
+            if (!_configProvider.TryGet(out DiagnosticSensorConfig config))
+            {
+                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType, sensorData);
+
+                NotifyObservers(result);
+
+                return result;
+            }
             
             KnowledgeBaseArticle knowledgeBaseArticle;
-            if (data.Memory.RAM.Total > 0)
+            if (data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * config.Queue.MessageRedeliveryCoefficient
+                && data.Churn.Redelivered.Total < data.Churn.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else if (data.Churn.Redelivered.Total >= data.Churn.Incoming.Total)
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
             else

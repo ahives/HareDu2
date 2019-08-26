@@ -44,7 +44,6 @@ namespace HareDu.Diagnostics.Scanning
         }
 
         bool IsQueueSensor(IDiagnosticSensor sensor) =>
-            sensor.ComponentType == ComponentType.Queue &&
-            sensor.SensorCategory == DiagnosticSensorCategory.Memory;
+            sensor.ComponentType == ComponentType.Queue;
     }
 }

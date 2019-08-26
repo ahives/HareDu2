@@ -29,8 +29,8 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public ChannelThrottlingSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(provider, knowledgeBaseProvider)
+        public ChannelThrottlingSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(configProvider, knowledgeBaseProvider)
         {
         }
 

@@ -19,7 +19,7 @@ namespace HareDu.Diagnostics.Configuration
         public bool TryGet(out DiagnosticSensorConfig config)
         {
             config = DiagnosticSensorConfigCache.Default;
-            return false;
+            return true;
         }
     }
 }

@@ -22,6 +22,17 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesSensor>(DiagnosticStatus.Yellow,
+                "The number of redelivered messages is less than or equal to the number of incoming messages and greater than or equal to the number of incoming messages multiplied a configurable coefficient.",
+                ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesSensor>(DiagnosticStatus.Red,
+                "The number of redelivered messages is less than or equal to the number of incoming messages.",
+                ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueGrowthSensor>(DiagnosticStatus.Yellow,
+                "Messages are being published to the queue at a higher rate than are being consumed and acknowledged by consumers.",
+                "Adjust application settings to spawn more consumers."));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueGrowthSensor>(DiagnosticStatus.Green, "Messages are being consumed and acknowledged at a higher rate than are being published to the queue."));
             _articles.Add(new KnowledgeBaseArticleImpl<ChannelLimitReachedSensor>(DiagnosticStatus.Red,
                 "Number of channels on connection exceeds the defined limit.",
                 "Adjust application settings to reduce the number of connections to the RabbitMQ broker."));

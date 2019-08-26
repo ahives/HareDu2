@@ -20,23 +20,23 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class UnlimitedPrefetchCountSensor :
+    class QueueGrowthSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Channel;
+        public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public UnlimitedPrefetchCountSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public QueueGrowthSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
-            ChannelSnapshot data = snapshot as ChannelSnapshot;
+            QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticResult result;
             
             if (data.IsNull())
@@ -50,19 +50,24 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
+                new DiagnosticSensorDataImpl("Churn.Incoming.Rate", data.Churn.Incoming.Rate.ToString()),
+                new DiagnosticSensorDataImpl("Churn.Acknowledged.Rate", data.Churn.Acknowledged.Rate.ToString())
             };
-
-            if (data.PrefetchCount <= 0)
+            
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            if (data.Churn.Incoming.Rate > data.Churn.Acknowledged.Rate)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out var knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
             else
-                result = new InconclusiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData);
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
-                
+
             return result;
         }
     }

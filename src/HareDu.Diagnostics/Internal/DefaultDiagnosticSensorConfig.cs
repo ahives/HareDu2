@@ -22,17 +22,32 @@ namespace HareDu.Diagnostics.Internal
         {
             Connection = new ConnectionSensorConfigImpl();
             Channel = new ChannelSensorConfigImpl();
+            Queue = new QueueSensorConfigImpl();
         }
 
         public ConnectionSensorConfig Connection { get; }
         public ChannelSensorConfig Channel { get; }
+        public QueueSensorConfig Queue { get; }
 
-        
+
         class ChannelSensorConfigImpl :
             ChannelSensorConfig
         {
         }
 
+        
+        class QueueSensorConfigImpl :
+            QueueSensorConfig
+        {
+            public QueueSensorConfigImpl()
+            {
+                MessageRedeliveryCoefficient = 0.50M;
+            }
+
+            public decimal MessageRedeliveryCoefficient { get; }
+        }
+
+        
         class ConnectionSensorConfigImpl :
             ConnectionSensorConfig
         {

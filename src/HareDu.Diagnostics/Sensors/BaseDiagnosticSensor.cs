@@ -23,13 +23,13 @@ namespace HareDu.Diagnostics.Sensors
     abstract class BaseDiagnosticSensor :
         IObservable<DiagnosticContext>
     {
-        protected readonly IDiagnosticSensorConfigProvider _provider;
+        protected readonly IDiagnosticSensorConfigProvider _configProvider;
         protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         readonly List<IObserver<DiagnosticContext>> _observers;
 
-        protected BaseDiagnosticSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        protected BaseDiagnosticSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
-            _provider = provider;
+            _configProvider = configProvider;
             _knowledgeBaseProvider = knowledgeBaseProvider;
             _observers = new List<IObserver<DiagnosticContext>>();
         }

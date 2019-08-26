@@ -29,8 +29,8 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
 
-        public HighConnectionCreationRateSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(provider, knowledgeBaseProvider)
+        public HighConnectionCreationRateSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(configProvider, knowledgeBaseProvider)
         {
         }
 
@@ -53,7 +53,7 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString())
             };
 
-            if (!_provider.TryGet(out DiagnosticSensorConfig config))
+            if (!_configProvider.TryGet(out DiagnosticSensorConfig config))
             {
                 result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType, sensorData);
 

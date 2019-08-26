@@ -56,12 +56,12 @@ namespace HareDu.Snapshotting.Model
         QueueDepth DeliveredGets { get; }
         
         /// <summary>
-        /// Total number/rate (msg/s) of messages that were redelivered to consumers.
+        /// Total/rate (msg/s) of messages that were redelivered to consumers.
         /// </summary>
         QueueDepth Redelivered { get; }
         
         /// <summary>
-        /// Total number of messages that were acknowledged to have been consumed and the corresponding rate in msg/s.
+        /// Total/rate (msg/s) of messages that were acknowledged to have been consumed.
         /// </summary>
         QueueDepth Acknowledged { get; }
         

@@ -13,12 +13,8 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Configuration
 {
-    public interface DiagnosticSensorConfig
+    public interface QueueSensorConfig
     {
-        ConnectionSensorConfig Connection { get; }
-        
-        ChannelSensorConfig Channel { get; }
-        
-        QueueSensorConfig Queue { get; }
+        decimal MessageRedeliveryCoefficient { get; }
     }
 }

@@ -18,21 +18,16 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using System.Linq;
     using Snapshotting.Model;
 
-    public class FakeBrokerQueuesSnapshot :
+    public class FakeBrokerQueuesSnapshot2 :
         BrokerQueuesSnapshot
     {
-        public FakeBrokerQueuesSnapshot()
+        public FakeBrokerQueuesSnapshot2()
         {
             Queues = GetQueues().ToList();
         }
 
         IEnumerable<QueueSnapshot> GetQueues()
         {
-//            yield return new FakeQueueSnapshot("FakeQueue1", "FakeVirtualHost", "FakeNode", 100, 150, 20394, 5, 9);
-//            yield return new FakeQueueSnapshot("FakeQueue2", "FakeVirtualHost", "FakeNode", 50, 34, 82341, 95, 5);
-//            yield return new FakeQueueSnapshot("FakeQueue3", "FakeVirtualHost", "FakeNode", 69, 95, 8384, 82, 94);
-//            yield return new FakeQueueSnapshot("FakeQueue4", "FakeVirtualHost", "FakeNode", 94, 49, 23484, 74, 4);
-//            yield return new FakeQueueSnapshot("FakeQueue5", "FakeVirtualHost", "FakeNode", 100, 833, 87432, 39, 74);
             yield return new FakeQueueSnapshot("FakeQueue1",
                 "FakeVirtualHost",
                 "FakeNode",
@@ -112,6 +107,53 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 ConsumerUtilization = consumerUtilization;
                 IdleSince = idleSince;
                 Memory = new FakeQueueMemory(target, total, bytes, unacknowledged, ready);
+                Churn = new QueueChurnMetricsImpl();
+            }
+
+            
+            class QueueChurnMetricsImpl :
+                QueueChurnMetrics
+            {
+                public QueueChurnMetricsImpl()
+                {
+                    Incoming = new QueueDepthImpl(8348, 33845.5M);
+                    Unacknowledged = new QueueDepthImpl(8293, 774.5M);
+                    Ready = new QueueDepthImpl(8381, 3433.5M);
+                    Gets = new QueueDepthImpl(934, 500.5M);
+                    GetsWithoutAck = new QueueDepthImpl(0, 0M);
+                    Delivered = new QueueDepthImpl(7339, 948.5M);
+                    DeliveredWithoutAck = new QueueDepthImpl(34, 5.5M);
+                    DeliveredGets = new QueueDepthImpl(0, 0M);
+                    Redelivered = new QueueDepthImpl(0, 0M);
+                    Acknowledged = new QueueDepthImpl(9238, 8934.5M);
+                    Aggregate = new QueueDepthImpl(823847, 9847.5M);
+                }
+
+                
+                class QueueDepthImpl :
+                    QueueDepth
+                {
+                    public QueueDepthImpl(int total, decimal rate)
+                    {
+                        Total = total;
+                        Rate = rate;
+                    }
+
+                    public long Total { get; }
+                    public decimal Rate { get; }
+                }
+
+                public QueueDepth Incoming { get; }
+                public QueueDepth Unacknowledged { get; }
+                public QueueDepth Ready { get; }
+                public QueueDepth Gets { get; }
+                public QueueDepth GetsWithoutAck { get; }
+                public QueueDepth Delivered { get; }
+                public QueueDepth DeliveredWithoutAck { get; }
+                public QueueDepth DeliveredGets { get; }
+                public QueueDepth Redelivered { get; }
+                public QueueDepth Acknowledged { get; }
+                public QueueDepth Aggregate { get; }
             }
 
             public string Name { get; }

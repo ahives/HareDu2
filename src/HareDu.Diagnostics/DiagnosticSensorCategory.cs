@@ -17,6 +17,7 @@ namespace HareDu.Diagnostics
     {
         Throughput,
         Connectivity,
-        Memory
+        Memory,
+        FaultTolerance
     }
 }

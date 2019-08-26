@@ -29,8 +29,8 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public ChannelLimitReachedSensor(IDiagnosticSensorConfigProvider provider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(provider, knowledgeBaseProvider)
+        public ChannelLimitReachedSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(configProvider, knowledgeBaseProvider)
         {
         }
 
