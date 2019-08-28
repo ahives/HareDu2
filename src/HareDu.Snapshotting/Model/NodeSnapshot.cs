@@ -13,9 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    using System.Collections.Generic;
-
-    public interface NodeStatus
+    public interface NodeSnapshot :
+        Snapshot
     {
         OperatingSystemMetrics OS { get; }
 
@@ -44,7 +43,5 @@ namespace HareDu.Snapshotting.Model
         GarbageCollection GC { get; }
 
         ContextSwitchingDetails ContextSwitching { get; }
-        
-        IReadOnlyList<ConnectionSnapshot> Connections { get; }
     }
 }

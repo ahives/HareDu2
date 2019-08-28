@@ -17,6 +17,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using Core.Model;
@@ -27,14 +28,16 @@ namespace HareDu.Snapshotting.Internal
         BrokerQueues
     {
         readonly List<IDisposable> _observers;
-        
+        readonly List<Result<BrokerQueuesSnapshot>> _snapshots;
+
         public BrokerQueuesImpl(IResourceFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
+            _snapshots = new List<Result<BrokerQueuesSnapshot>>();
         }
 
-        public Result<BrokerQueuesSnapshot> Take(CancellationToken cancellationToken = default)
+        public ResourceSnapshot<BrokerQueuesSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Resource<Cluster>()
@@ -46,14 +49,18 @@ namespace HareDu.Snapshotting.Internal
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(cluster, queues);
+            BrokerQueuesSnapshot data = new BrokerQueuesSnapshotImpl(cluster, queues);
 
-            NotifyObservers(snapshot);
+            NotifyObservers(data);
             
-            return new SuccessfulResult<BrokerQueuesSnapshot>(snapshot, null);
+            var snapshot = new SuccessfulResult<BrokerQueuesSnapshot>(data, null);
+
+            _snapshots.Add(snapshot);
+
+            return this;
         }
 
-        public ComponentSnapshot<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerQueuesSnapshot>> observer)
+        public ResourceSnapshot<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerQueuesSnapshot>> observer)
         {
             if (observer != null)
             {
@@ -63,7 +70,7 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public ComponentSnapshot<BrokerQueuesSnapshot> RegisterObservers(
+        public ResourceSnapshot<BrokerQueuesSnapshot> RegisterObservers(
             IReadOnlyList<IObserver<SnapshotContext<BrokerQueuesSnapshot>>> observers)
         {
             if (observers != null)
@@ -77,7 +84,9 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        
+        public IReadOnlyList<Result<BrokerQueuesSnapshot>> Snapshots { get; }
+
+
         class BrokerQueuesSnapshotImpl :
             BrokerQueuesSnapshot
         {

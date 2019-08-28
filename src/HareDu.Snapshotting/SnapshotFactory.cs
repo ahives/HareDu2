@@ -32,8 +32,8 @@ namespace HareDu.Snapshotting
             RegisterSnapshots();
         }
 
-        public T Snapshot<T>()
-            where T : ComponentSnapshot<Snapshot>
+        public T Resource<T>()
+            where T : ResourceSnapshot<Snapshot>
         {
             Type type = GetType()
                 .Assembly
@@ -58,7 +58,7 @@ namespace HareDu.Snapshotting
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(ComponentSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(ResourceSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {

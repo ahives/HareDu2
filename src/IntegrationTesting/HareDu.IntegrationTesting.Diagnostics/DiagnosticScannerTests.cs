@@ -14,6 +14,7 @@
 namespace HareDu.IntegrationTesting.Diagnostics
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
@@ -44,13 +45,13 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test()
         {
-            var snapshot = Client
-                .Snapshot<BrokerConnection>()
-                .Take();
+            var resource = Client
+                .Resource<BrokerConnection>()
+                .TakeSnapshot();
 
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            var report = scanner.Scan(snapshot.Select(x => x.Data));
+            var report = scanner.Scan(resource.Snapshots.First().Select(x => x.Data));
             
             for (int i = 0; i < report.Results.Count; i++)
             {

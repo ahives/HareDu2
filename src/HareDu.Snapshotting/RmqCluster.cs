@@ -13,18 +13,10 @@
 // limitations under the License.
 namespace HareDu.Snapshotting
 {
-    using System.Threading.Tasks;
     using Model;
 
     public interface RmqCluster :
-        ComponentSnapshot<ClusterSnapshot>
-    {
-        Task<ClusterSnapshot> GetDetails();
-        
-//        Task<ClusterState> GetCurrentState();
-    }
-
-    public interface ClusterState
+        ResourceSnapshot<ClusterSnapshot>
     {
     }
 }

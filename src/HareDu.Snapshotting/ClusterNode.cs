@@ -15,9 +15,8 @@ namespace HareDu.Snapshotting
 {
     using Model;
 
-    public interface ISnapshotFactory
+    public interface ClusterNode :
+        ResourceSnapshot<NodeSnapshot>
     {
-        T Resource<T>()
-            where T : ResourceSnapshot<Snapshot>;
     }
 }

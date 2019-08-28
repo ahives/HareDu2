@@ -18,13 +18,15 @@ namespace HareDu.Snapshotting.Model
     using System.Threading;
     using Core;
 
-    public interface ComponentSnapshot<out T>
+    public interface ResourceSnapshot<out T>
         where T : Snapshot
     {
-        Result<T> Take(CancellationToken cancellationToken = default);
+        ResourceSnapshot<T> TakeSnapshot(CancellationToken cancellationToken = default);
 
-        ComponentSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
+        ResourceSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
         
-        ComponentSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
+        ResourceSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
+        
+        IReadOnlyList<Result<T>> Snapshots { get; }
     }
 }

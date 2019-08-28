@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    using System;
     using System.Collections.Generic;
 
     public interface ClusterSnapshot :
@@ -23,12 +22,6 @@ namespace HareDu.Snapshotting.Model
         
         string ClusterName { get; }
         
-        IReadOnlyList<NodeStatus> Nodes { get; }
-        
-        ClusterPerformance Performance { get; }
-        
-        IReadOnlyList<BrokerQueuesSnapshot> Queues { get; }
-        
-        DateTimeOffset Timestamp { get; }
+        IReadOnlyList<NodeSnapshot> Nodes { get; }
     }
 }

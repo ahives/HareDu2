@@ -64,8 +64,8 @@ namespace HareDu.Diagnostics.Sensors
             }
             
             KnowledgeBaseArticle knowledgeBaseArticle;
-            if (data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * config.Queue.MessageRedeliveryCoefficient
-                && data.Churn.Redelivered.Total < data.Churn.Incoming.Total)
+            if (data.Churn.Redelivered.Total < data.Churn.Incoming.Total
+                && data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * config.Queue.MessageRedeliveryCoefficient)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

@@ -17,6 +17,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using Core.Model;
@@ -28,14 +29,18 @@ namespace HareDu.Snapshotting.Internal
         BrokerConnection
     {
         readonly List<IDisposable> _observers;
-        
+        readonly List<Result<BrokerConnectivitySnapshot>> _snapshots;
+
+        public IReadOnlyList<Result<BrokerConnectivitySnapshot>> Snapshots { get; }
+
         public BrokerConnectionImpl(IResourceFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
+            _snapshots = new List<Result<BrokerConnectivitySnapshot>>();
         }
 
-        public Result<BrokerConnectivitySnapshot> Take(CancellationToken cancellationToken = default)
+        public ResourceSnapshot<BrokerConnectivitySnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Resource<Cluster>()
@@ -52,14 +57,18 @@ namespace HareDu.Snapshotting.Internal
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            BrokerConnectivitySnapshot snapshot = new BrokerConnectivitySnapshotImpl(cluster, connections, channels);
+            BrokerConnectivitySnapshot data = new BrokerConnectivitySnapshotImpl(cluster, connections, channels);
 
-            NotifyObservers(snapshot);
+            NotifyObservers(data);
             
-            return new SuccessfulResult<BrokerConnectivitySnapshot>(snapshot, null);
+            var snapshot = new SuccessfulResult<BrokerConnectivitySnapshot>(data, null);
+
+            _snapshots.Add(snapshot);
+
+            return this;
         }
 
-        public ComponentSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerConnectivitySnapshot>> observer)
+        public ResourceSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerConnectivitySnapshot>> observer)
         {
             if (observer != null)
             {
@@ -69,7 +78,7 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public ComponentSnapshot<BrokerConnectivitySnapshot> RegisterObservers(
+        public ResourceSnapshot<BrokerConnectivitySnapshot> RegisterObservers(
             IReadOnlyList<IObserver<SnapshotContext<BrokerConnectivitySnapshot>>> observers)
         {
             if (observers != null)
