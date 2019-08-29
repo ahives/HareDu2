@@ -13,12 +13,12 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface ErlangMetrics
+    public interface OperatingSystemDetails
     {
-        string Version { get; }
-        
-        long AvailableCores { get; }
+        string ProcessId { get; }
 
-        ErlangProcessMetrics Processes { get; }
+        FileDescriptorChurnMetrics FileDescriptors { get; }
+        
+        SocketChurnMetrics Sockets { get; }
     }
 }

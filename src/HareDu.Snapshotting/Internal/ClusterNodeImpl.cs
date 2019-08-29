@@ -61,7 +61,7 @@ namespace HareDu.Snapshotting.Internal
 //                ContextSwitching = new ContextSwitchDetailsImpl(node);
             }
 
-            public OperatingSystemMetrics OS { get; }
+            public OperatingSystemDetails OS { get; }
             public string RatesMode { get; }
             public long Uptime { get; }
             public int RunQueue { get; }
@@ -69,8 +69,9 @@ namespace HareDu.Snapshotting.Internal
             public string Name { get; }
             public string Type { get; }
             public bool IsRunning { get; }
+            public DiskDetails Disk { get; }
             public IO IO { get; }
-            public ErlangMetrics Erlang { get; }
+            public ErlangDetails Erlang { get; }
             public Mnesia Mnesia { get; }
             public NodeMemoryDetails NodeMemory { get; }
             public GarbageCollection GC { get; }

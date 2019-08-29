@@ -16,7 +16,7 @@ namespace HareDu.Snapshotting.Model
     public interface NodeSnapshot :
         Snapshot
     {
-        OperatingSystemMetrics OS { get; }
+        OperatingSystemDetails OS { get; }
 
         string RatesMode { get; }
 
@@ -32,9 +32,11 @@ namespace HareDu.Snapshotting.Model
 
         bool IsRunning { get; }
 
+        DiskDetails Disk { get; }
+        
         IO IO { get; }
         
-        ErlangMetrics Erlang { get; }
+        ErlangDetails Erlang { get; }
         
         Mnesia Mnesia { get; }
         

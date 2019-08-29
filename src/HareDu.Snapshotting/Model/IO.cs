@@ -15,8 +15,6 @@ namespace HareDu.Snapshotting.Model
 {
     public interface IO
     {
-        DiskDetails Disk { get; }
-        
         DiskUsageDetails Reads { get; }
         
         DiskUsageDetails Writes { get; }

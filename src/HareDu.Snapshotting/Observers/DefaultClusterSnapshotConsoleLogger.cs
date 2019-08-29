@@ -36,7 +36,7 @@ namespace HareDu.Snapshotting.Observers
             for (int i = 0; i < value.Snapshot.Nodes.Count; i++)
             {
                 Console.WriteLine($"Node: {value.Snapshot.Nodes[i].Name}");
-                Console.WriteLine($"Disk Capacity: {value.Snapshot.Nodes[i].IO.Disk.Capacity.Available}");
+                Console.WriteLine($"Disk Capacity: {value.Snapshot.Nodes[i].Disk.Capacity.Available}");
                 Console.WriteLine($"Disk Reads: {value.Snapshot.Nodes[i].IO.Reads.Total}");
                 Console.WriteLine($"Bytes Read: {value.Snapshot.Nodes[i].IO.Reads.Bytes.Total}");
                 Console.WriteLine($"Disk Read Rate: {value.Snapshot.Nodes[i].IO.Reads.Rate}");

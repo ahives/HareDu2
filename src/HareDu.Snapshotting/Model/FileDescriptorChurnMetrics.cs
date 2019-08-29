@@ -13,12 +13,20 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface OperatingSystemMetrics
+    public interface FileDescriptorChurnMetrics
     {
-        string ProcessId { get; }
+        long Available { get; }
 
-        FileDescriptorMetrics FileDescriptors { get; }
-        
-        SocketMetrics Sockets { get; }
+        long Used { get; }
+
+        decimal UsageRate { get; }
+
+        long OpenAttempts { get; }
+
+        decimal OpenAttemptRate { get; }
+
+        decimal AvgTimePerOpenAttempt { get; }
+
+        decimal AvgTimeRatePerOpenAttempt { get; }
     }
 }

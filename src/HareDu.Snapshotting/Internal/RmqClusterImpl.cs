@@ -116,13 +116,14 @@ namespace HareDu.Snapshotting.Internal
             {
                 public NodeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                 {
-                    OS = new OperatingSystemMetricsImpl(node);
-                    Erlang = new ErlangMetricsImpl(cluster, node);
+                    OS = new OperatingSystemDetailsImpl(node);
+                    Erlang = new ErlangDetailsImpl(cluster, node);
                     IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
+                    Disk = new DiskDetailsImpl(node);
                 }
 
-                public OperatingSystemMetrics OS { get; }
+                public OperatingSystemDetails OS { get; }
                 public string RatesMode { get; }
                 public long Uptime { get; }
                 public int RunQueue { get; }
@@ -130,165 +131,13 @@ namespace HareDu.Snapshotting.Internal
                 public string Name { get; }
                 public string Type { get; }
                 public bool IsRunning { get; }
+                public DiskDetails Disk { get; }
                 public IO IO { get; }
-                public ErlangMetrics Erlang { get; }
+                public ErlangDetails Erlang { get; }
                 public Mnesia Mnesia { get; }
                 public NodeMemoryDetails NodeMemory { get; }
                 public GarbageCollection GC { get; }
                 public ContextSwitchingDetails ContextSwitching { get; }
-
-
-                class ContextSwitchDetailsImpl :
-                    ContextSwitchingDetails
-                {
-                    public ContextSwitchDetailsImpl(NodeInfo node)
-                    {
-                        Total = node.ContextSwitches;
-                        Rate = node.ContextSwitchDetails?.Rate ?? 0;
-                    }
-
-                    public long Total { get; }
-                    public decimal Rate { get; }
-                }
-
-
-                class ErlangMetricsImpl :
-                    ErlangMetrics
-                {
-                    public ErlangMetricsImpl(ClusterInfo cluster, NodeInfo node)
-                    {
-                        Version = cluster.ErlangVerion;
-                        MemoryUsed = node.MemoryUsed;
-                        AvailableCores = node.Processors;
-                        Processes = new ErlangProcessMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
-                    }
-
-
-                    class ErlangProcessMetricsImpl :
-                        ErlangProcessMetrics
-                    {
-                        public ErlangProcessMetricsImpl(long limit, long used, decimal usageRate)
-                        {
-                            Limit = limit;
-                            Used = used;
-                            UsageRate = usageRate;
-                        }
-
-                        public long Limit { get; }
-                        public long Used { get; }
-                        public decimal UsageRate { get; }
-                    }
-
-                    public string Version { get; }
-                    public long MemoryUsed { get; }
-                    public long AvailableCores { get; }
-                    public ErlangProcessMetrics Processes { get; }
-                }
-
-
-                class OperatingSystemMetricsImpl :
-                    OperatingSystemMetrics
-                {
-                    public OperatingSystemMetricsImpl(NodeInfo node)
-                    {
-                        ProcessId = node.OperatingSystemProcessId;
-                        FileDescriptors = new FileDescriptorMetricsImpl(node);
-                        Sockets = new SocketMetricsImpl(node);
-                    }
-
-
-                    class SocketMetricsImpl :
-                        SocketMetrics
-                    {
-                        public SocketMetricsImpl(NodeInfo node)
-                        {
-                            Available = node.TotalSocketsAvailable;
-                            Used = node.SocketsUsed;
-                            UsageRate = node.SocketsUsedDetails?.Rate ?? 0;
-                        }
-
-                        public long Available { get; }
-                        public long Used { get; }
-                        public decimal UsageRate { get; }
-                    }
-
-
-                    class FileDescriptorMetricsImpl :
-                        FileDescriptorMetrics
-                    {
-                        public FileDescriptorMetricsImpl(NodeInfo node)
-                        {
-                            Available = node.TotalFileDescriptors;
-                            Used = node.FileDescriptorUsed;
-                            UsageRate = node.FileDescriptorUsedDetails?.Rate ?? 0;
-                            OpenAttempts = node.TotalOpenFileHandleAttempts;
-                            OpenAttemptRate = node.FileHandleOpenAttemptCountDetails?.Rate ?? 0;
-                            OpenAttemptAvgTime = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
-                            OpenAttemptAvgTimeRate = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
-                        }
-
-                        public long Available { get; }
-                        public long Used { get; }
-                        public decimal UsageRate { get; }
-                        public long OpenAttempts { get; }
-                        public decimal OpenAttemptRate { get; }
-                        public decimal OpenAttemptAvgTime { get; }
-                        public decimal OpenAttemptAvgTimeRate { get; }
-                    }
-
-                    public string ProcessId { get; }
-                    public FileDescriptorMetrics FileDescriptors { get; }
-                    public SocketMetrics Sockets { get; }
-                }
-            }
-
-
-            class IOImpl :
-                IO
-            {
-                public IOImpl(MessageStats stats, NodeInfo node)
-                {
-                    Disk = new DiskDetailsImpl(node);
-                    Reads = new DiskUsageDetailsImpl(stats.TotalDiskReads,
-                        stats.DiskReadDetails?.Rate ?? 0,
-                        node.TotalIOBytesRead,
-                        node.IOReadBytesDetails?.Rate ?? 0,
-                        node.AvgIOReadTime,
-                        node.AvgIOReadTimeDetails?.Rate ?? 0);
-                    Writes = new DiskUsageDetailsImpl(stats.TotalDiskWrites,
-                        stats.DiskWriteDetails?.Rate ?? 0,
-                        node.TotalIOWriteBytes,
-                        node.IOWriteBytesDetail?.Rate ?? 0,
-                        node.AvgTimePerIOWrite,
-                        node.AvgTimePerIOWriteDetails?.Rate ?? 0);
-                    Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
-                        node.RateOfIOSeeks?.Rate ?? 0,
-                        0,
-                        0,
-                        node.AverageIOSeekTime,
-                        node.AvgIOSeekTimeDetails?.Rate ?? 0);
-                    FileHandles = new FileHandlesImpl(node);
-                }
-
-                public DiskDetails Disk { get; }
-                public DiskUsageDetails Reads { get; }
-                public DiskUsageDetails Writes { get; }
-                public DiskUsageDetails Seeks { get; }
-                public FileHandles FileHandles { get; }
-
-
-                class FileHandlesImpl :
-                    FileHandles
-                {
-                    public FileHandlesImpl(NodeInfo node)
-                    {
-                        Recycled = node.IOReopenCount;
-                        Rate = node.RateOfIOReopened?.Rate ?? 0;
-                    }
-
-                    public long Recycled { get; }
-                    public decimal Rate { get; }
-                }
 
 
                 class DiskDetailsImpl :
@@ -318,6 +167,157 @@ namespace HareDu.Snapshotting.Internal
                         public long Available { get; }
                         public decimal Rate { get; }
                     }
+                }
+
+
+                class ContextSwitchDetailsImpl :
+                    ContextSwitchingDetails
+                {
+                    public ContextSwitchDetailsImpl(NodeInfo node)
+                    {
+                        Total = node.ContextSwitches;
+                        Rate = node.ContextSwitchDetails?.Rate ?? 0;
+                    }
+
+                    public long Total { get; }
+                    public decimal Rate { get; }
+                }
+
+
+                class ErlangDetailsImpl :
+                    ErlangDetails
+                {
+                    public ErlangDetailsImpl(ClusterInfo cluster, NodeInfo node)
+                    {
+                        Version = cluster.ErlangVerion;
+                        MemoryUsed = node.MemoryUsed;
+                        AvailableCores = node.Processors;
+                        Processes = new ErlangProcessMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
+                    }
+
+                    public string Version { get; }
+                    public long MemoryUsed { get; }
+                    public long AvailableCores { get; }
+                    public ErlangProcessMetrics Processes { get; }
+
+
+                    class ErlangProcessMetricsImpl :
+                        ErlangProcessMetrics
+                    {
+                        public ErlangProcessMetricsImpl(long limit, long used, decimal usageRate)
+                        {
+                            Limit = limit;
+                            Used = used;
+                            UsageRate = usageRate;
+                        }
+
+                        public long Limit { get; }
+                        public long Used { get; }
+                        public decimal UsageRate { get; }
+                    }
+                }
+
+
+                class OperatingSystemDetailsImpl :
+                    OperatingSystemDetails
+                {
+                    public OperatingSystemDetailsImpl(NodeInfo node)
+                    {
+                        ProcessId = node.OperatingSystemProcessId;
+                        FileDescriptors = new FileDescriptorChurnMetricsImpl(node);
+                        Sockets = new SocketChurnMetricsImpl(node);
+                    }
+
+                    public string ProcessId { get; }
+                    public FileDescriptorChurnMetrics FileDescriptors { get; }
+                    public SocketChurnMetrics Sockets { get; }
+
+
+                    class SocketChurnMetricsImpl :
+                        SocketChurnMetrics
+                    {
+                        public SocketChurnMetricsImpl(NodeInfo node)
+                        {
+                            Available = node.TotalSocketsAvailable;
+                            Used = node.SocketsUsed;
+                            UsageRate = node.SocketsUsedDetails?.Rate ?? 0;
+                        }
+
+                        public long Available { get; }
+                        public long Used { get; }
+                        public decimal UsageRate { get; }
+                    }
+
+
+                    class FileDescriptorChurnMetricsImpl :
+                        FileDescriptorChurnMetrics
+                    {
+                        public FileDescriptorChurnMetricsImpl(NodeInfo node)
+                        {
+                            Available = node.TotalFileDescriptors;
+                            Used = node.FileDescriptorUsed;
+                            UsageRate = node.FileDescriptorUsedDetails?.Rate ?? 0;
+                            OpenAttempts = node.TotalOpenFileHandleAttempts;
+                            OpenAttemptRate = node.FileHandleOpenAttemptCountDetails?.Rate ?? 0;
+                            AvgTimePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
+                            AvgTimeRatePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
+                        }
+
+                        public long Available { get; }
+                        public long Used { get; }
+                        public decimal UsageRate { get; }
+                        public long OpenAttempts { get; }
+                        public decimal OpenAttemptRate { get; }
+                        public decimal AvgTimePerOpenAttempt { get; }
+                        public decimal AvgTimeRatePerOpenAttempt { get; }
+                    }
+                }
+            }
+
+
+            class IOImpl :
+                IO
+            {
+                public IOImpl(MessageStats stats, NodeInfo node)
+                {
+                    Reads = new DiskUsageDetailsImpl(stats.TotalDiskReads,
+                        stats.DiskReadDetails?.Rate ?? 0,
+                        node.TotalIOBytesRead,
+                        node.IOReadBytesDetails?.Rate ?? 0,
+                        node.AvgIOReadTime,
+                        node.AvgIOReadTimeDetails?.Rate ?? 0);
+                    Writes = new DiskUsageDetailsImpl(stats.TotalDiskWrites,
+                        stats.DiskWriteDetails?.Rate ?? 0,
+                        node.TotalIOWriteBytes,
+                        node.IOWriteBytesDetail?.Rate ?? 0,
+                        node.AvgTimePerIOWrite,
+                        node.AvgTimePerIOWriteDetails?.Rate ?? 0);
+                    Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
+                        node.RateOfIOSeeks?.Rate ?? 0,
+                        0,
+                        0,
+                        node.AverageIOSeekTime,
+                        node.AvgIOSeekTimeDetails?.Rate ?? 0);
+                    FileHandles = new FileHandlesImpl(node);
+                }
+
+                public DiskUsageDetails Reads { get; }
+                public DiskUsageDetails Writes { get; }
+                public DiskUsageDetails Seeks { get; }
+                public FileHandles FileHandles { get; }
+
+
+                class FileHandlesImpl :
+                    FileHandles
+                {
+                    public FileHandlesImpl(NodeInfo node)
+                    {
+                        Recycled = node.IOReopenCount;
+                        Rate = node.RateOfIOReopened?.Rate ?? 0;
+                    }
+
+                    public long Recycled { get; }
+                    public decimal Rate { get; }
                 }
 
 
