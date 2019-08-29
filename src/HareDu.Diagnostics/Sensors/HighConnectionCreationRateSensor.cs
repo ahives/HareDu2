@@ -32,12 +32,23 @@ namespace HareDu.Diagnostics.Sensors
         public HighConnectionCreationRateSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
+            _canReadConfig = _configProvider.TryGet(out _config);
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
-            BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
             DiagnosticResult result;
+            
+            if (!_canReadConfig)
+            {
+                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+
+                NotifyObservers(result);
+
+                return result;
+            }
+
+            BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
             
             if (data.IsNull())
             {
@@ -50,22 +61,12 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString())
+                new DiagnosticSensorDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
+                new DiagnosticSensorDataImpl("RateThreshold", _config.Connection.HighCreationRateThreshold.ToString())
             };
-
-            if (!_configProvider.TryGet(out DiagnosticSensorConfig config))
-            {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType, sensorData);
-
-                NotifyObservers(result);
-
-                return result;
-            }
-
-            sensorData.Add(new DiagnosticSensorDataImpl("RateThreshold", config.Connection.HighCreationRateThreshold.ToString()));
             
             KnowledgeBaseArticle knowledgeBaseArticle;
-            if (data.ConnectionsCreated.Rate >= config.Connection.HighCreationRateThreshold)
+            if (data.ConnectionsCreated.Rate >= _config.Connection.HighCreationRateThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

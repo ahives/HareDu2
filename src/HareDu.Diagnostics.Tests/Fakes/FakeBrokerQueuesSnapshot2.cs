@@ -110,6 +110,16 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Churn = new QueueChurnMetricsImpl();
             }
 
+            public string Name { get; }
+            public string VirtualHost { get; }
+            public string Node { get; }
+            public QueueChurnMetrics Churn { get; }
+            public QueueMemoryDetails Memory { get; }
+            public QueueInternals Internals { get; }
+            public long Consumers { get; }
+            public decimal ConsumerUtilization { get; }
+            public DateTimeOffset IdleSince { get; }
+
             
             class QueueChurnMetricsImpl :
                 QueueChurnMetrics
@@ -155,16 +165,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 public QueueDepth Acknowledged { get; }
                 public QueueDepth Aggregate { get; }
             }
-
-            public string Name { get; }
-            public string VirtualHost { get; }
-            public string Node { get; }
-            public QueueChurnMetrics Churn { get; }
-            public QueueMemoryDetails Memory { get; }
-            public QueueInternals Internals { get; }
-            public long Consumers { get; }
-            public decimal ConsumerUtilization { get; }
-            public DateTimeOffset IdleSince { get; }
 
             
             class FakeQueueMemory :

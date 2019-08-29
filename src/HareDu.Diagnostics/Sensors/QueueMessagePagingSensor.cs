@@ -54,6 +54,7 @@ namespace HareDu.Diagnostics.Sensors
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.Memory.RAM.Total > 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);

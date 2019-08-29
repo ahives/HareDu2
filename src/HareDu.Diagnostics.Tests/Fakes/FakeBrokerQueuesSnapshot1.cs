@@ -107,6 +107,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 ConsumerUtilization = consumerUtilization;
                 IdleSince = idleSince;
                 Memory = new FakeQueueMemory(target, total, bytes, unacknowledged, ready);
+                Churn = new QueueChurnMetricsImpl();
             }
 
             public string Name { get; }
@@ -118,6 +119,52 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public long Consumers { get; }
             public decimal ConsumerUtilization { get; }
             public DateTimeOffset IdleSince { get; }
+
+            
+            class QueueChurnMetricsImpl :
+                QueueChurnMetrics
+            {
+                public QueueChurnMetricsImpl()
+                {
+                    Incoming = new QueueDepthImpl(8348, 33845.5M);
+                    Unacknowledged = new QueueDepthImpl(8293, 774.5M);
+                    Ready = new QueueDepthImpl(8381, 3433.5M);
+                    Gets = new QueueDepthImpl(934, 500.5M);
+                    GetsWithoutAck = new QueueDepthImpl(0, 0M);
+                    Delivered = new QueueDepthImpl(7339, 948.5M);
+                    DeliveredWithoutAck = new QueueDepthImpl(34, 5.5M);
+                    DeliveredGets = new QueueDepthImpl(0, 0M);
+                    Redelivered = new QueueDepthImpl(0, 0M);
+                    Acknowledged = new QueueDepthImpl(9238, 8934.5M);
+                    Aggregate = new QueueDepthImpl(823847, 9847.5M);
+                }
+
+                
+                class QueueDepthImpl :
+                    QueueDepth
+                {
+                    public QueueDepthImpl(int total, decimal rate)
+                    {
+                        Total = total;
+                        Rate = rate;
+                    }
+
+                    public long Total { get; }
+                    public decimal Rate { get; }
+                }
+
+                public QueueDepth Incoming { get; }
+                public QueueDepth Unacknowledged { get; }
+                public QueueDepth Ready { get; }
+                public QueueDepth Gets { get; }
+                public QueueDepth GetsWithoutAck { get; }
+                public QueueDepth Delivered { get; }
+                public QueueDepth DeliveredWithoutAck { get; }
+                public QueueDepth DeliveredGets { get; }
+                public QueueDepth Redelivered { get; }
+                public QueueDepth Acknowledged { get; }
+                public QueueDepth Aggregate { get; }
+            }
 
             
             class FakeQueueMemory :

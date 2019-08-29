@@ -55,6 +55,7 @@ namespace HareDu.Diagnostics.Sensors
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.Churn.Incoming.Rate > data.Churn.Acknowledged.Rate)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);

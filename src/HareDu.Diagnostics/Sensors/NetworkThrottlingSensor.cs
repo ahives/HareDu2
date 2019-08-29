@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Sensors
 {
+    using System;
     using System.Collections.Generic;
     using Configuration;
     using Core.Extensions;
@@ -20,16 +21,16 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class RedeliveredMessagesSensor :
+    class NetworkThrottlingSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Queue;
-        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.FaultTolerance;
+        public ComponentType ComponentType => ComponentType.Node;
+        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public RedeliveredMessagesSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public NetworkThrottlingSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -38,7 +39,7 @@ namespace HareDu.Diagnostics.Sensors
         public DiagnosticResult Execute<T>(T snapshot)
         {
             DiagnosticResult result;
-
+            
             if (!_canReadConfig)
             {
                 result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
@@ -47,8 +48,8 @@ namespace HareDu.Diagnostics.Sensors
 
                 return result;
             }
-            
-            QueueSnapshot data = snapshot as QueueSnapshot;
+
+            NodeSnapshot data = snapshot as NodeSnapshot;
             
             if (data.IsNull())
             {
@@ -61,23 +62,17 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("Churn.Incoming.Total", data.Churn.Incoming.Total.ToString()),
-                new DiagnosticSensorDataImpl("Churn.Redelivered.Total", data.Churn.Redelivered.Total.ToString()),
-                new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.Queue.MessageRedeliveryCoefficient.ToString())
+//                new DiagnosticSensorDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
+//                new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
-            
+
             KnowledgeBaseArticle knowledgeBaseArticle;
+            long highWatermark = CalculateHighWatermark(data.OS.Sockets.Available);
             
-            if (data.Churn.Redelivered.Total < data.Churn.Incoming.Total
-                && data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * _config.Queue.MessageRedeliveryCoefficient)
+            if (data.OS.Sockets.Used >= highWatermark)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-            }
-            else if (data.Churn.Redelivered.Total >= data.Churn.Incoming.Total)
-            {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
             else
             {
@@ -86,8 +81,18 @@ namespace HareDu.Diagnostics.Sensors
             }
 
             NotifyObservers(result);
-
+                
             return result;
+        }
+
+        long CalculateHighWatermark(long socketsAvailable)
+        {
+            if (_config.Node.SocketUsageCoefficient == 1.0M)
+                return socketsAvailable;
+            
+            long highWatermark = Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.Node.SocketUsageCoefficient));
+
+            return highWatermark;
         }
     }
 }

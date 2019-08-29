@@ -20,5 +20,7 @@ namespace HareDu.Diagnostics.Configuration
         ChannelSensorConfig Channel { get; }
         
         QueueSensorConfig Queue { get; }
+        
+        NodeSensorConfig Node { get; }
     }
 }
