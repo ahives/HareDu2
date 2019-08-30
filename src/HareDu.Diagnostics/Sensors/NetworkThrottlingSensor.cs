@@ -59,25 +59,34 @@ namespace HareDu.Diagnostics.Sensors
 
                 return result;
             }
-            
-            var sensorData = new List<DiagnosticSensorData>
-            {
-//                new DiagnosticSensorDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
-//                new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
-            };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             long highWatermark = CalculateHighWatermark(data.OS.Sockets.Available);
             
-            if (data.OS.Sockets.Used >= highWatermark)
+            var sensorData = new List<DiagnosticSensorData>
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+                new DiagnosticSensorDataImpl("OS.Sockets.Available", data.OS.Sockets.Available.ToString()),
+                new DiagnosticSensorDataImpl("OS.Sockets.Used", data.OS.Sockets.Used.ToString()),
+                new DiagnosticSensorDataImpl("CalculatedHighWatermark", highWatermark.ToString())
+            };
+            
+            if (highWatermark < data.OS.Sockets.Available)
+            {
+                if (data.OS.Sockets.Used >= highWatermark)
+                {
+                    _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                    result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+                }
+                else
+                {
+                    _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                    result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+                }
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

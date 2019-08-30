@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class ChannelLimitReachedSensor :
+    public class ChannelLimitReachedSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {

@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class HighConnectionClosureRateSensor :
+    public class HighConnectionClosureRateSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {

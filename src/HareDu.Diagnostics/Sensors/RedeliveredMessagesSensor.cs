@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class RedeliveredMessagesSensor :
+    public class RedeliveredMessagesSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {

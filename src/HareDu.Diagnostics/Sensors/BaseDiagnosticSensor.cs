@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using Configuration;
     using KnowledgeBase;
 
-    abstract class BaseDiagnosticSensor :
+    public abstract class BaseDiagnosticSensor :
         IObservable<DiagnosticContext>
     {
         protected bool _canReadConfig;

@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    class QueueMessagePagingSensor :
+    public class QueueMessagePagingSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
