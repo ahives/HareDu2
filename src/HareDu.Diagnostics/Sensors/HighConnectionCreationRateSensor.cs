@@ -66,6 +66,7 @@ namespace HareDu.Diagnostics.Sensors
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.ConnectionsCreated.Rate >= _config.Connection.HighCreationRateThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);

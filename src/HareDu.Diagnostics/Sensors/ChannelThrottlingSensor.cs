@@ -55,6 +55,7 @@ namespace HareDu.Diagnostics.Sensors
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.UnacknowledgedMessages > data.PrefetchCount)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);

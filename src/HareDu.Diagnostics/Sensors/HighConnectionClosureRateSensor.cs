@@ -66,6 +66,7 @@ namespace HareDu.Diagnostics.Sensors
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.ConnectionsClosed.Rate >= _config.Connection.HighClosureRateThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
