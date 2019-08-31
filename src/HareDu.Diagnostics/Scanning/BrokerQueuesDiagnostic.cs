@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Scanning
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Extensions;
     using Sensors;
     using Snapshotting.Model;
 
@@ -44,6 +45,6 @@ namespace HareDu.Diagnostics.Scanning
         }
 
         bool IsQueueSensor(IDiagnosticSensor sensor) =>
-            sensor.ComponentType == ComponentType.Queue;
+            !sensor.IsNull() && sensor.ComponentType == ComponentType.Queue;
     }
 }

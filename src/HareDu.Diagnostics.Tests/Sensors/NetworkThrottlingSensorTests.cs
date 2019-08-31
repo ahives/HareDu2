@@ -11,14 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Diagnostics.Tests.Sensors
 {
     using Autofac;
     using Configuration;
+    using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Sensors;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Tests
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
         public void Verify_sensor_red_condition()
         {
-            var configProvider = new DefaultConfigProvider();
+            var configProvider = new DefaultConfigProvider1();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
 
@@ -85,7 +85,7 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_sensor_inconclusive_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
@@ -98,8 +98,22 @@ namespace HareDu.Diagnostics.Tests
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }
 
+        [Test]
+        public void Verify_sensor_inconclusive_condition_2()
+        {
+            var configProvider = new DefaultConfigProvider2();
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
+            
+            NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
+
+            var result = sensor.Execute(snapshot);
+            
+            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
+        }
+
         
-        class DefaultConfigProvider :
+        class DefaultConfigProvider1 :
             IDiagnosticSensorConfigProvider
         {
             public bool TryGet(out DiagnosticSensorConfig config)
@@ -133,6 +147,17 @@ namespace HareDu.Diagnostics.Tests
 
                     public decimal SocketUsageCoefficient { get; }
                 }
+            }
+        }
+
+        
+        class DefaultConfigProvider2 :
+            IDiagnosticSensorConfigProvider
+        {
+            public bool TryGet(out DiagnosticSensorConfig config)
+            {
+                config = null;
+                return false;
             }
         }
     }

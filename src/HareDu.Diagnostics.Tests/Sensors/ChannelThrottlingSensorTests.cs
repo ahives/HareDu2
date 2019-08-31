@@ -11,18 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Diagnostics.Tests.Sensors
 {
     using Autofac;
     using Configuration;
+    using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Sensors;
     using Snapshotting.Model;
 
     [TestFixture]
-    public class HighConnectionClosureRateSensorTests
+    public class ChannelThrottlingSensorTests
     {
         IContainer _container;
 
@@ -43,41 +43,27 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Verify_sensor_yellow_when_connections_created_rate_is_greater_than_threshold()
+        public void Verify_sensor_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
-            
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(102, 102);
+            var sensor = new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider);
+
+            ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 4, 2, 5, 8, 6, 1);
 
             var result = sensor.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
+            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
         }
 
         [Test]
-        public void Verify_sensor_yellow_when_connections_created_rate_is_equal_to_threshold()
+        public void Verify_sensor_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(100, 100);
-
-            var result = sensor.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-        }
-
-        [Test]
-        public void Verify_sensor_green_when_connections_created_rate_is_less_than_threshold()
-        {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
-            
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(99, 99);
+            ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 6, 2, 5, 8, 4, 1);
 
             var result = sensor.Execute(snapshot);
             
@@ -85,13 +71,13 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_when_snapshot_null()
+        public void Verify_sensor_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = null;
+            ChannelSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             

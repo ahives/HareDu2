@@ -26,7 +26,8 @@ namespace HareDu.Diagnostics.Sensors
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.ComputeHash();
-        public string Description { get; }
+        public string Description =>
+            "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
@@ -70,36 +71,12 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("CalculatedHighWatermark", highWatermark.ToString())
             };
 
-//            if (highWatermark < data.OS.Sockets.Available)
-//            {
-//                if (data.OS.Sockets.Used >= highWatermark && data.OS.Sockets.Used < data.OS.Sockets.Available)
-//                {
-//                    _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-//                    result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-//                }
-//            }
-//            if (data.OS.Sockets.Used >= highWatermark && highWatermark < data.OS.Sockets.Available)
-//            {
-//                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-//                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-//            }
-//            else if (data.OS.Sockets.Used == highWatermark && highWatermark == data.OS.Sockets.Available)
-//            {
-//                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-//                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-//            }
-//            else
-//            {
-//                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-//                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-//            }
-
-            if (data.OS.Sockets.Used < highWatermark)
+            if (data.OS.Sockets.Used < highWatermark && highWatermark < data.OS.Sockets.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
-            else if (data.OS.Sockets.Used >= highWatermark && highWatermark >= data.OS.Sockets.Available)
+            else if (data.OS.Sockets.Used == data.OS.Sockets.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

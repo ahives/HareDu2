@@ -11,18 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Diagnostics.Tests.Sensors
 {
     using Autofac;
     using Configuration;
+    using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Sensors;
     using Snapshotting.Model;
 
     [TestFixture]
-    public class ChannelThrottlingSensorTests
+    public class ChannelLimitReachedSensorTests
     {
         IContainer _container;
 
@@ -43,13 +43,13 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Verify_sensor_red_when_unacknowledged_messages_greater_than_prefetch_count()
+        public void Verify_sensor_red_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider);
-
-            ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 4, 2, 5, 8, 6, 1);
+            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            
+            ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(102, 100, 3, 2);
 
             var result = sensor.Execute(snapshot);
             
@@ -57,13 +57,27 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Verify_sensor_green_when_unacknowledged_messages_less_than_prefetch_count()
+        public void Verify_sensor_red_condition_2()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
             
-            ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 6, 2, 5, 8, 4, 1);
+            ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(102, 100, 3, 3);
+
+            var result = sensor.Execute(snapshot);
+            
+            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
+        }
+
+        [Test]
+        public void Verify_sensor_green_condition()
+        {
+            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            
+            ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(102, 100, 2, 3);
 
             var result = sensor.Execute(snapshot);
             
@@ -71,13 +85,13 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_when_snapshot_null()
+        public void Verify_sensor_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
             
-            ChannelSnapshot snapshot = null;
+            ConnectionSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             
