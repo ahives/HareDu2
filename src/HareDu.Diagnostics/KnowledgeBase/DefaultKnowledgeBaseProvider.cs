@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitReachedSensor>(DiagnosticStatus.Red,
+                "The number of Erlang runtime processes in use is greater than or equal to the max number available.",
+                ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitReachedSensor>(DiagnosticStatus.Green, "The number of Erlang runtime processes in use is less than the max number available."));
             _articles.Add(new KnowledgeBaseArticleImpl<MemoryThrottlingSensor>(DiagnosticStatus.Red,
                 "The threshold was reached for how much RAM can be used by the RabbitMQ Broker.",
                 "Do one or a combination of the following:\n1) Increase the threshold of available RAM by changing either the vm_memory_high_watermark.absolute or vm_memory_high_watermark.relative broker configuration values.\n2) Spawn more consumers so that messages are not held in RAM for long periods.\n3) Increase the cluster hardware specification by adding more RAM."));

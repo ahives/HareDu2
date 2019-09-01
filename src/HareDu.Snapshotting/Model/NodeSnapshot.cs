@@ -36,7 +36,7 @@ namespace HareDu.Snapshotting.Model
         
         IO IO { get; }
         
-        ErlangDetails Erlang { get; }
+        BrokerRuntimeSnapshot Runtime { get; }
         
         Mnesia Mnesia { get; }
         

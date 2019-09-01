@@ -128,25 +128,14 @@ namespace HareDu.Diagnostics.Tests.Sensors
             {
                 public FakeDiagnosticSensorConfig()
                 {
-                    Node = new NodeSensorConfigImpl();
+                    SocketUsageCoefficient = 1.0M;
                 }
 
-                public ConnectionSensorConfig Connection { get; }
-                public ChannelSensorConfig Channel { get; }
-                public QueueSensorConfig Queue { get; }
-                public NodeSensorConfig Node { get; }
-
-                
-                class NodeSensorConfigImpl :
-                    NodeSensorConfig
-                {
-                    public NodeSensorConfigImpl()
-                    {
-                        SocketUsageCoefficient = 1.0M;
-                    }
-
-                    public decimal SocketUsageCoefficient { get; }
-                }
+                public int HighClosureRateThreshold { get; }
+                public int HighCreationRateThreshold { get; }
+                public decimal MessageRedeliveryCoefficient { get; }
+                public decimal SocketUsageCoefficient { get; }
+                public decimal RuntimeProcessUsageCoefficient { get; }
             }
         }
 

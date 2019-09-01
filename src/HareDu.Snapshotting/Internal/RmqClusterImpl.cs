@@ -117,7 +117,7 @@ namespace HareDu.Snapshotting.Internal
                 public NodeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                 {
                     OS = new OperatingSystemDetailsImpl(node);
-                    Erlang = new ErlangDetailsImpl(cluster, node);
+                    Runtime = new BrokerRuntimeSnapshotImpl(cluster, node);
                     IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
                     Disk = new DiskSnapshotImpl(node);
@@ -133,7 +133,7 @@ namespace HareDu.Snapshotting.Internal
                 public bool IsRunning { get; }
                 public DiskSnapshot Disk { get; }
                 public IO IO { get; }
-                public ErlangDetails Erlang { get; }
+                public BrokerRuntimeSnapshot Runtime { get; }
                 public Mnesia Mnesia { get; }
                 public MemorySnapshot Memory { get; }
                 public GarbageCollection GC { get; }
@@ -184,27 +184,27 @@ namespace HareDu.Snapshotting.Internal
                 }
 
 
-                class ErlangDetailsImpl :
-                    ErlangDetails
+                class BrokerRuntimeSnapshotImpl :
+                    BrokerRuntimeSnapshot
                 {
-                    public ErlangDetailsImpl(ClusterInfo cluster, NodeInfo node)
+                    public BrokerRuntimeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                     {
                         Version = cluster.ErlangVerion;
                         MemoryUsed = node.MemoryUsed;
                         AvailableCores = node.Processors;
-                        Processes = new ErlangProcessMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
+                        Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
                     }
 
                     public string Version { get; }
                     public long MemoryUsed { get; }
                     public long AvailableCores { get; }
-                    public ErlangProcessMetrics Processes { get; }
+                    public RuntimeProcessChurnMetrics Processes { get; }
 
 
-                    class ErlangProcessMetricsImpl :
-                        ErlangProcessMetrics
+                    class RuntimeProcessChurnMetricsImpl :
+                        RuntimeProcessChurnMetrics
                     {
-                        public ErlangProcessMetricsImpl(long limit, long used, decimal usageRate)
+                        public RuntimeProcessChurnMetricsImpl(long limit, long used, decimal usageRate)
                         {
                             Limit = limit;
                             Used = used;

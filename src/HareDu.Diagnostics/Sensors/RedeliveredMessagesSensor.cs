@@ -63,13 +63,13 @@ namespace HareDu.Diagnostics.Sensors
             {
                 new DiagnosticSensorDataImpl("Churn.Incoming.Total", data.Churn.Incoming.Total.ToString()),
                 new DiagnosticSensorDataImpl("Churn.Redelivered.Total", data.Churn.Redelivered.Total.ToString()),
-                new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.Queue.MessageRedeliveryCoefficient.ToString())
+                new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
             if (data.Churn.Redelivered.Total < data.Churn.Incoming.Total
-                && data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * _config.Queue.MessageRedeliveryCoefficient)
+                && data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * _config.MessageRedeliveryCoefficient)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

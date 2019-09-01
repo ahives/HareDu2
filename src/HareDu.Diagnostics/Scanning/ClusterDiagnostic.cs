@@ -25,12 +25,14 @@ namespace HareDu.Diagnostics.Scanning
         readonly IEnumerable<IDiagnosticSensor> _nodeSensors;
         readonly IEnumerable<IDiagnosticSensor> _diskSensors;
         readonly IEnumerable<IDiagnosticSensor> _memorySensors;
+        readonly IEnumerable<IDiagnosticSensor> _runtimeSensors;
 
         public ClusterDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             _nodeSensors = sensors.Where(IsNodeSensor);
             _diskSensors = sensors.Where(IsDiskSensor);
             _memorySensors = sensors.Where(IsMemorySensor);
+            _runtimeSensors = sensors.Where(IsRuntimeSensor);
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ClusterSnapshot snapshot)
@@ -45,12 +47,15 @@ namespace HareDu.Diagnostics.Scanning
                 results.AddRange(_nodeSensors.Select(x => x.Execute(snapshot.Nodes[i])));
                 results.AddRange(_diskSensors.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
                 results.AddRange(_memorySensors.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
+                results.AddRange(_runtimeSensors.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
             }
 
             return results;
         }
 
-        bool IsMemorySensor(IDiagnosticSensor arg) => !arg.IsNull() && arg.ComponentType == ComponentType.Memory;
+        bool IsRuntimeSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Runtime;
+
+        bool IsMemorySensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Memory;
 
         bool IsDiskSensor(IDiagnosticSensor sensor) => sensor.IsNull() && sensor.ComponentType == ComponentType.Disk;
 

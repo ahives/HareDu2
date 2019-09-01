@@ -15,12 +15,14 @@ namespace HareDu.Diagnostics.Configuration
 {
     public interface DiagnosticSensorConfig
     {
-        ConnectionSensorConfig Connection { get; }
+        int HighClosureRateThreshold { get; }
         
-        ChannelSensorConfig Channel { get; }
+        int HighCreationRateThreshold { get; }
         
-        QueueSensorConfig Queue { get; }
+        decimal MessageRedeliveryCoefficient { get; }
+
+        decimal SocketUsageCoefficient { get; }
         
-        NodeSensorConfig Node { get; }
+        decimal RuntimeProcessUsageCoefficient { get; }
     }
 }

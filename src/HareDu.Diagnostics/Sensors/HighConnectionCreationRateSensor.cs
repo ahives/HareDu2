@@ -62,12 +62,12 @@ namespace HareDu.Diagnostics.Sensors
             var sensorData = new List<DiagnosticSensorData>
             {
                 new DiagnosticSensorDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
-                new DiagnosticSensorDataImpl("RateThreshold", _config.Connection.HighCreationRateThreshold.ToString())
+                new DiagnosticSensorDataImpl("RateThreshold", _config.HighCreationRateThreshold.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsCreated.Rate >= _config.Connection.HighCreationRateThreshold)
+            if (data.ConnectionsCreated.Rate >= _config.HighCreationRateThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

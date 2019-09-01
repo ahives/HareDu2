@@ -71,7 +71,7 @@ namespace HareDu.Snapshotting.Internal
             public bool IsRunning { get; }
             public DiskSnapshot Disk { get; }
             public IO IO { get; }
-            public ErlangDetails Erlang { get; }
+            public BrokerRuntimeSnapshot Runtime { get; }
             public Mnesia Mnesia { get; }
             public MemorySnapshot Memory { get; }
             public GarbageCollection GC { get; }

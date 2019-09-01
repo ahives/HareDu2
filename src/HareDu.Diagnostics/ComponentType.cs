@@ -21,6 +21,7 @@ namespace HareDu.Diagnostics
         Node,
         Disk,
         Memory,
+        Runtime,
         NA
     }
 }

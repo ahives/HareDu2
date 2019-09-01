@@ -20,16 +20,16 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class HighConnectionClosureRateSensor :
+    public class RuntimeProcessLimitReachedSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.ComputeHash();
-        public string Description => "";
-        public ComponentType ComponentType => ComponentType.Connection;
-        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
+        public string Description { get; }
+        public ComponentType ComponentType => ComponentType.Runtime;
+        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public HighConnectionClosureRateSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public RuntimeProcessLimitReachedSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -38,17 +38,7 @@ namespace HareDu.Diagnostics.Sensors
         public DiagnosticResult Execute<T>(T snapshot)
         {
             DiagnosticResult result;
-
-            if (!_canReadConfig)
-            {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
-
-            BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
+            BrokerRuntimeSnapshot data = snapshot as BrokerRuntimeSnapshot;
             
             if (data.IsNull())
             {
@@ -61,21 +51,21 @@ namespace HareDu.Diagnostics.Sensors
 
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("ConnectionsClosed.Rate", data.ConnectionsClosed.Rate.ToString()),
-                new DiagnosticSensorDataImpl("RateThreshold", _config.HighClosureRateThreshold.ToString())
+                new DiagnosticSensorDataImpl("Processes.Limit", data.Processes.Limit.ToString()),
+                new DiagnosticSensorDataImpl("Processes.Used", data.Processes.Used.ToString())
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsClosed.Rate >= _config.HighClosureRateThreshold)
-            {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-            }
-            else
+            if (data.Processes.Used < data.Processes.Limit)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
+            else
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

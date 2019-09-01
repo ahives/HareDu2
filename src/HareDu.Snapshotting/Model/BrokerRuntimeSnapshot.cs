@@ -13,12 +13,13 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface ErlangProcessMetrics
+    public interface BrokerRuntimeSnapshot :
+        Snapshot
     {
-        long Limit { get; }
+        string Version { get; }
         
-        long Used { get; }
+        long AvailableCores { get; }
 
-        decimal UsageRate { get; }
+        RuntimeProcessChurnMetrics Processes { get; }
     }
 }

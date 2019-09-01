@@ -20,59 +20,17 @@ namespace HareDu.Diagnostics.Internal
     {
         public DefaultDiagnosticSensorConfig()
         {
-            Connection = new ConnectionSensorConfigImpl();
-            Channel = new ChannelSensorConfigImpl();
-            Queue = new QueueSensorConfigImpl();
-            Node = new NodeSensorConfigImpl();
+            SocketUsageCoefficient = 0.50M;
+            MessageRedeliveryCoefficient = 0.50M;
+            HighClosureRateThreshold = 100;
+            HighCreationRateThreshold = 100;
+            RuntimeProcessUsageCoefficient = 0.7M;
         }
 
-        public ConnectionSensorConfig Connection { get; }
-        public ChannelSensorConfig Channel { get; }
-        public QueueSensorConfig Queue { get; }
-        public NodeSensorConfig Node { get; }
-
-        
-        class NodeSensorConfigImpl :
-            NodeSensorConfig
-        {
-            public NodeSensorConfigImpl()
-            {
-                SocketUsageCoefficient = 0.50M;
-            }
-
-            public decimal SocketUsageCoefficient { get; }
-        }
-
-
-        class ChannelSensorConfigImpl :
-            ChannelSensorConfig
-        {
-        }
-
-        
-        class QueueSensorConfigImpl :
-            QueueSensorConfig
-        {
-            public QueueSensorConfigImpl()
-            {
-                MessageRedeliveryCoefficient = 0.50M;
-            }
-
-            public decimal MessageRedeliveryCoefficient { get; }
-        }
-
-        
-        class ConnectionSensorConfigImpl :
-            ConnectionSensorConfig
-        {
-            public ConnectionSensorConfigImpl()
-            {
-                HighClosureRateThreshold = 100;
-                HighCreationRateThreshold = 100;
-            }
-
-            public int HighClosureRateThreshold { get; }
-            public int HighCreationRateThreshold { get; }
-        }
+        public int HighClosureRateThreshold { get; }
+        public int HighCreationRateThreshold { get; }
+        public decimal MessageRedeliveryCoefficient { get; }
+        public decimal SocketUsageCoefficient { get; }
+        public decimal RuntimeProcessUsageCoefficient { get; }
     }
 }
