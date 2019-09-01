@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<MemoryThrottlingSensor>(DiagnosticStatus.Red,
+                "The threshold was reached for how much RAM can be used by the RabbitMQ Broker.",
+                "Do one or a combination of the following:\n1) Increase the threshold of available RAM by changing either the vm_memory_high_watermark.absolute or vm_memory_high_watermark.relative broker configuration values.\n2) Spawn more consumers so that messages are not held in RAM for long periods.\n3) Increase the cluster hardware specification by adding more RAM."));
+            _articles.Add(new KnowledgeBaseArticleImpl<MemoryThrottlingSensor>(DiagnosticStatus.Green, "The amount of RAM used is less than the current threshold (i.e. vm_memory_high_watermark.absolute or vm_memory_high_watermark.relative)."));
             _articles.Add(new KnowledgeBaseArticleImpl<DiskThrottlingSensor>(DiagnosticStatus.Red,
                 "The node has reached the threshold for usable disk space.",
                 "Increase message consumption throughput by spawning more consumers and/or increase disk size to keep up with incoming demand."));

@@ -24,11 +24,13 @@ namespace HareDu.Diagnostics.Scanning
     {
         readonly IEnumerable<IDiagnosticSensor> _nodeSensors;
         readonly IEnumerable<IDiagnosticSensor> _diskSensors;
+        readonly IEnumerable<IDiagnosticSensor> _memorySensors;
 
         public ClusterDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             _nodeSensors = sensors.Where(IsNodeSensor);
             _diskSensors = sensors.Where(IsDiskSensor);
+            _memorySensors = sensors.Where(IsMemorySensor);
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ClusterSnapshot snapshot)
@@ -42,10 +44,13 @@ namespace HareDu.Diagnostics.Scanning
             {
                 results.AddRange(_nodeSensors.Select(x => x.Execute(snapshot.Nodes[i])));
                 results.AddRange(_diskSensors.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
+                results.AddRange(_memorySensors.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
             }
 
             return results;
         }
+
+        bool IsMemorySensor(IDiagnosticSensor arg) => !arg.IsNull() && arg.ComponentType == ComponentType.Memory;
 
         bool IsDiskSensor(IDiagnosticSensor sensor) => sensor.IsNull() && sensor.ComponentType == ComponentType.Disk;
 

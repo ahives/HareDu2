@@ -40,7 +40,7 @@ namespace HareDu.Snapshotting.Model
         
         Mnesia Mnesia { get; }
         
-        NodeMemoryDetails NodeMemory { get; }
+        MemorySnapshot Memory { get; }
 
         GarbageCollection GC { get; }
 

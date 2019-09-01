@@ -11,14 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Model
+namespace HareDu.Diagnostics.Tests.Fakes
 {
-    public interface NodeMemoryDetails
+    using Snapshotting.Model;
+
+    public class FakeMemorySnapshot1 :
+        MemorySnapshot
     {
-        long Used { get; }
+        public FakeMemorySnapshot1(long used, long limit, bool alarmInEffect)
+        {
+            Used = used;
+            Limit = limit;
+            AlarmInEffect = alarmInEffect;
+        }
 
-        long Limit { get; }
-
-        bool Alarm { get; }
+        public long Used { get; }
+        public long Limit { get; }
+        public bool AlarmInEffect { get; }
     }
 }

@@ -73,7 +73,7 @@ namespace HareDu.Snapshotting.Internal
             public IO IO { get; }
             public ErlangDetails Erlang { get; }
             public Mnesia Mnesia { get; }
-            public NodeMemoryDetails NodeMemory { get; }
+            public MemorySnapshot Memory { get; }
             public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
             public IReadOnlyList<ConnectionSnapshot> Connections { get; }
