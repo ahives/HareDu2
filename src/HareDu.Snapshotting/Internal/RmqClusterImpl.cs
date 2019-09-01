@@ -120,7 +120,7 @@ namespace HareDu.Snapshotting.Internal
                     Erlang = new ErlangDetailsImpl(cluster, node);
                     IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
-                    Disk = new DiskDetailsImpl(node);
+                    Disk = new DiskSnapshotImpl(node);
                 }
 
                 public OperatingSystemDetails OS { get; }
@@ -131,7 +131,7 @@ namespace HareDu.Snapshotting.Internal
                 public string Name { get; }
                 public string Type { get; }
                 public bool IsRunning { get; }
-                public DiskDetails Disk { get; }
+                public DiskSnapshot Disk { get; }
                 public IO IO { get; }
                 public ErlangDetails Erlang { get; }
                 public Mnesia Mnesia { get; }
@@ -140,19 +140,19 @@ namespace HareDu.Snapshotting.Internal
                 public ContextSwitchingDetails ContextSwitching { get; }
 
 
-                class DiskDetailsImpl :
-                    DiskDetails
+                class DiskSnapshotImpl :
+                    DiskSnapshot
                 {
-                    public DiskDetailsImpl(NodeInfo node)
+                    public DiskSnapshotImpl(NodeInfo node)
                     {
                         Capacity = new DiskCapacityDetailsImpl(node);
                         FreeLimit = node.FreeDiskLimit;
-                        FreeAlarm = node.FreeDiskAlarm;
+                        AlarmInEffect = node.FreeDiskAlarm;
                     }
 
                     public DiskCapacityDetails Capacity { get; }
                     public string FreeLimit { get; }
-                    public bool FreeAlarm { get; }
+                    public bool AlarmInEffect { get; }
 
 
                     class DiskCapacityDetailsImpl :

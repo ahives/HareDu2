@@ -13,12 +13,13 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface DiskDetails
+    public interface DiskSnapshot :
+        Snapshot
     {
         DiskCapacityDetails Capacity { get; }
 
         string FreeLimit { get; }
 
-        bool FreeAlarm { get; }
+        bool AlarmInEffect { get; }
     }
 }

@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<DiskThrottlingSensor>(DiagnosticStatus.Red,
+                "The node has reached the threshold for usable disk space.",
+                "Increase message consumption throughput by spawning more consumers and/or increase disk size to keep up with incoming demand."));
+            _articles.Add(new KnowledgeBaseArticleImpl<DiskThrottlingSensor>(DiagnosticStatus.Green, "The node is under the allowable threshold for usable disk space."));
             _articles.Add(new KnowledgeBaseArticleImpl<NetworkThrottlingSensor>(DiagnosticStatus.Yellow,
                 "The number of network sockets being used is greater than the calculated high watermark but less than max number available.",
                 ""));

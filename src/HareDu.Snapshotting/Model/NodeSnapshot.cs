@@ -32,7 +32,7 @@ namespace HareDu.Snapshotting.Model
 
         bool IsRunning { get; }
 
-        DiskDetails Disk { get; }
+        DiskSnapshot Disk { get; }
         
         IO IO { get; }
         

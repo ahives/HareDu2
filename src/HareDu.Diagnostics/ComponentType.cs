@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics
         Channel,
         Queue,
         Node,
+        Disk,
         NA
     }
 }
