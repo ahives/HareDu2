@@ -121,6 +121,7 @@ namespace HareDu.Snapshotting.Internal
                     IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
                     Disk = new DiskSnapshotImpl(node);
+                    NetworkPartitions = node.Partitions;
                 }
 
                 public OperatingSystemDetails OS { get; }
@@ -131,6 +132,7 @@ namespace HareDu.Snapshotting.Internal
                 public string Name { get; }
                 public string Type { get; }
                 public bool IsRunning { get; }
+                public IList<string> NetworkPartitions { get; }
                 public DiskSnapshot Disk { get; }
                 public IO IO { get; }
                 public BrokerRuntimeSnapshot Runtime { get; }

@@ -16,12 +16,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using System.Collections.Generic;
     using Snapshotting.Model;
 
-    public class FakeNodeSnapshot1 :
+    public class FakeNodeSnapshot2 :
         NodeSnapshot
     {
-        public FakeNodeSnapshot1(long availableSockets, long usedSockets, decimal socketUsageRate)
+        public FakeNodeSnapshot2(IList<string> networkPartitions)
         {
-            OS = new OperatingSystemDetailsImpl(availableSockets, usedSockets, socketUsageRate);
+            NetworkPartitions = networkPartitions;
         }
 
         public OperatingSystemDetails OS { get; }
@@ -40,35 +40,5 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public MemorySnapshot Memory { get; }
         public GarbageCollection GC { get; }
         public ContextSwitchingDetails ContextSwitching { get; }
-
-        
-        class OperatingSystemDetailsImpl :
-            OperatingSystemDetails
-        {
-            public OperatingSystemDetailsImpl(long available, long used, decimal usageRate)
-            {
-                Sockets = new SocketChurnMetricsImpl(available, used, usageRate);
-            }
-
-            public string ProcessId { get; }
-            public FileDescriptorChurnMetrics FileDescriptors { get; }
-            public SocketChurnMetrics Sockets { get; }
-
-            
-            class SocketChurnMetricsImpl :
-                SocketChurnMetrics
-            {
-                public SocketChurnMetricsImpl(long available, long used, decimal usageRate)
-                {
-                    Available = available;
-                    Used = used;
-                    UsageRate = usageRate;
-                }
-
-                public long Available { get; }
-                public long Used { get; }
-                public decimal UsageRate { get; }
-            }
-        }
     }
 }

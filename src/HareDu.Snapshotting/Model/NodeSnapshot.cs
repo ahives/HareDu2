@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
+    using System.Collections.Generic;
+
     public interface NodeSnapshot :
         Snapshot
     {
@@ -32,6 +34,8 @@ namespace HareDu.Snapshotting.Model
 
         bool IsRunning { get; }
 
+        IList<string> NetworkPartitions { get; }
+        
         DiskSnapshot Disk { get; }
         
         IO IO { get; }

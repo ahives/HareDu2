@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<NetworkPartitionSensor>(DiagnosticStatus.Red,
+                "Network partitions detected between one or more nodes.",
+                "Please consult the RabbitMQ documentation (https://www.rabbitmq.com/partitions.html) on which strategy best fits your scenario."));
+            _articles.Add(new KnowledgeBaseArticleImpl<NetworkPartitionSensor>(DiagnosticStatus.Green, "No network partitions were detected between nodes."));
             _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitReachedSensor>(DiagnosticStatus.Red,
                 "The number of Erlang runtime processes in use is greater than or equal to the max number available.",
                 ""));
