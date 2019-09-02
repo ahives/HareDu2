@@ -16,12 +16,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using System;
     using Snapshotting.Model;
 
-    public class FakeQueueSnapshot1 :
+    public class FakeQueueSnapshot2 :
         QueueSnapshot
     {
-        public FakeQueueSnapshot1(long incomingTotal, decimal incomingRate, long acknowledgedTotal, decimal acknowledgedRate)
+        public FakeQueueSnapshot2(long incomingTotal, decimal incomingRate, long redeliveredTotal, decimal redeliveredRate)
         {
-            Churn = new QueueChurnMetricsImpl(incomingTotal, incomingRate, acknowledgedTotal, acknowledgedRate);
+            Churn = new QueueChurnMetricsImpl(incomingTotal, incomingRate, redeliveredTotal, redeliveredRate);
         }
 
         public string Name { get; }
@@ -38,10 +38,10 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class QueueChurnMetricsImpl :
             QueueChurnMetrics
         {
-            public QueueChurnMetricsImpl(long incomingTotal, decimal incomingRate, long acknowledgedTotal, decimal acknowledgedRate)
+            public QueueChurnMetricsImpl(long incomingTotal, decimal incomingRate, long redeliveredTotal, decimal redeliveredRate)
             {
                 Incoming = new QueueDepthImpl(incomingTotal, incomingRate);
-                Acknowledged = new QueueDepthImpl(acknowledgedTotal, acknowledgedRate);
+                Redelivered = new QueueDepthImpl(redeliveredTotal, redeliveredRate);
             }
 
             public QueueDepth Incoming { get; }

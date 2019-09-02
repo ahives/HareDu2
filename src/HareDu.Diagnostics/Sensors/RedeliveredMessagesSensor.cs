@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Sensors
 {
+    using System;
     using System.Collections.Generic;
     using Configuration;
     using Core.Extensions;
@@ -67,9 +68,9 @@ namespace HareDu.Diagnostics.Sensors
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
+            long highWatermark = CalculateHighWatermark(data.Churn.Incoming.Total);
             
-            if (data.Churn.Redelivered.Total < data.Churn.Incoming.Total
-                && data.Churn.Redelivered.Total >= data.Churn.Incoming.Total * _config.MessageRedeliveryCoefficient)
+            if (data.Churn.Redelivered.Total >= highWatermark && data.Churn.Redelivered.Total < data.Churn.Incoming.Total && highWatermark < data.Churn.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
@@ -89,5 +90,10 @@ namespace HareDu.Diagnostics.Sensors
 
             return result;
         }
+
+        long CalculateHighWatermark(long total)
+            => _config.MessageRedeliveryCoefficient >= 1
+                ? total
+                : Convert.ToInt64(Math.Ceiling(total * _config.MessageRedeliveryCoefficient));
     }
 }

@@ -50,7 +50,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new NetworkPartitionSensor(configProvider, knowledgeBaseProvider);
 
-            NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>()
+            NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>
             {
                 "node1@rabbitmq",
                 "node2@rabbitmq",

@@ -93,13 +93,8 @@ namespace HareDu.Diagnostics.Sensors
         }
 
         long CalculateHighWatermark(long socketsAvailable)
-        {
-            if (_config.SocketUsageCoefficient == 1.0M)
-                return socketsAvailable;
-            
-            long highWatermark = Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.SocketUsageCoefficient));
-
-            return highWatermark;
-        }
+            => _config.SocketUsageCoefficient >= 1
+                ? socketsAvailable
+                : Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.SocketUsageCoefficient));
     }
 }
