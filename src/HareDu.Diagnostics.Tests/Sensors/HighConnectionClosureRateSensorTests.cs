@@ -49,7 +49,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(102, 102);
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(102, 102);
 
             var result = sensor.Execute(snapshot);
             
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(100, 100);
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(100, 100);
 
             var result = sensor.Execute(snapshot);
             
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(99, 99);
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 99);
 
             var result = sensor.Execute(snapshot);
             
@@ -105,7 +105,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot4(99, 100);
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
 
             var result = sensor.Execute(snapshot);
             

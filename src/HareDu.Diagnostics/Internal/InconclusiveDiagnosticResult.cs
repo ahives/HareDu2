@@ -21,12 +21,14 @@ namespace HareDu.Diagnostics.Internal
         DiagnosticResult
     {
         public InconclusiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData)
+            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData,
+            KnowledgeBaseArticle knowledgeBaseArticle)
         {
             ComponentIdentifier = componentIdentifier;
             SensorIdentifier = sensorIdentifier;
             ComponentType = componentType;
             SensorData = sensorData;
+            KnowledgeBaseArticle = knowledgeBaseArticle;
             Status = DiagnosticStatus.Inconclusive;
         }
 

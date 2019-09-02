@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Scanning
 
         bool IsMemorySensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Memory;
 
-        bool IsDiskSensor(IDiagnosticSensor sensor) => sensor.IsNull() && sensor.ComponentType == ComponentType.Disk;
+        bool IsDiskSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Disk;
 
         bool IsNodeSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Node;
     }

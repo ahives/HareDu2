@@ -53,13 +53,18 @@ namespace HareDu.Diagnostics.Sensors
                 new DiagnosticSensorDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
 
-            if (data.PrefetchCount <= 0)
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
+            if (data.PrefetchCount == 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out var knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
             else
-                result = new InconclusiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData);
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Inconclusive, out knowledgeBaseArticle);
+                result = new InconclusiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
                 

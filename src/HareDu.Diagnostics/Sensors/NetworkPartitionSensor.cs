@@ -25,10 +25,10 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier { get; }
+        public string Identifier => GetType().FullName.ComputeHash();
         public string Description { get; }
-        public ComponentType ComponentType { get; }
-        public DiagnosticSensorCategory SensorCategory { get; }
+        public ComponentType ComponentType => ComponentType.Node;
+        public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
 
         public NetworkPartitionSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)

@@ -18,12 +18,14 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using Snapshotting;
     using Snapshotting.Model;
 
-    class FakeBrokerConnectivitySnapshot :
+    public class FakeBrokerConnectivitySnapshot1 :
         BrokerConnectivitySnapshot
     {
-        public FakeBrokerConnectivitySnapshot()
+        public FakeBrokerConnectivitySnapshot1()
         {
             Connections = GetConnections().ToList();
+            ConnectionsCreated = new ChurnMetricsImpl(100000, 102);
+            ConnectionsClosed = new ChurnMetricsImpl(174000, 100);
         }
 
         public ChurnMetrics ChannelsClosed { get; }
@@ -35,7 +37,20 @@ namespace HareDu.Diagnostics.Tests.Fakes
         IEnumerable<ConnectionSnapshot> GetConnections()
         {
             yield return new FakeConnectionSnapshot("Connection1", 2);
-            yield return new FakeConnectionSnapshot("Connection2", 4);
+        }
+
+        
+        class ChurnMetricsImpl :
+            ChurnMetrics
+        {
+            public ChurnMetricsImpl(int total, decimal rate)
+            {
+                Total = total;
+                Rate = rate;
+            }
+
+            public long Total { get; }
+            public decimal Rate { get; }
         }
 
             
@@ -52,7 +67,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
             IEnumerable<ChannelSnapshot> GetChannels()
             {
                 yield return new FakeChannelSnapshot("Channel1", 4, 2, 5, 8, 5, 1);
-                yield return new FakeChannelSnapshot("Channel2", 4, 2, 5, 8, 2, 1);
             }
 
                 

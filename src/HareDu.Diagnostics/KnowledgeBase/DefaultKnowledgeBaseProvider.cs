@@ -76,7 +76,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
             _articles.Add(new KnowledgeBaseArticleImpl<UnlimitedPrefetchCountSensor>(DiagnosticStatus.Yellow,
                 "Prefetch count of 0 means unlimited prefetch count, which can translate into high CPU utilization.",
                 "Set a prefetch count above zero based on how many consumer cores available."));
-            _articles.Add(new KnowledgeBaseArticleImpl<UnlimitedPrefetchCountSensor>(DiagnosticStatus.Inconclusive, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<UnlimitedPrefetchCountSensor>(DiagnosticStatus.Inconclusive, "Unable to determine whether prefetch count has an inappropriate value."));
         }
 
 

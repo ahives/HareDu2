@@ -27,11 +27,153 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         IEnumerable<NodeSnapshot> GetNodes()
         {
-            yield return new FakeNodeSnapshot1(10, 10, 3.5M);
+            yield return new FakeNodeSnapshot();
         }
 
         public string RabbitMqVersion { get; }
         public string ClusterName { get; }
         public IReadOnlyList<NodeSnapshot> Nodes { get; }
+
+        
+        class FakeNodeSnapshot :
+            NodeSnapshot
+        {
+            public FakeNodeSnapshot()
+            {
+                NetworkPartitions = new List<string>
+                {
+                    "node1@rabbitmq",
+                    "node2@rabbitmq",
+                    "node3@rabbitmq"
+                };
+                Runtime = new FakeBrokerRuntimeSnapshot(4, 38, 36, 5.3M);
+                Disk = new FakeDiskSnapshot(8, true, 5.5M);
+                Memory = new FakeMemorySnapshot(273, 270, true);
+                OS = new OperatingSystemDetailsImpl(100, 90, 5.5M);
+            }
+
+            public OperatingSystemDetails OS { get; }
+            public string RatesMode { get; }
+            public long Uptime { get; }
+            public int RunQueue { get; }
+            public long InterNodeHeartbeat { get; }
+            public string Name { get; }
+            public string Type { get; }
+            public bool IsRunning { get; }
+            public IList<string> NetworkPartitions { get; }
+            public DiskSnapshot Disk { get; }
+            public IO IO { get; }
+            public BrokerRuntimeSnapshot Runtime { get; }
+            public Mnesia Mnesia { get; }
+            public MemorySnapshot Memory { get; }
+            public GarbageCollection GC { get; }
+            public ContextSwitchingDetails ContextSwitching { get; }
+        }
+
+        
+        class OperatingSystemDetailsImpl :
+            OperatingSystemDetails
+        {
+            public OperatingSystemDetailsImpl(long available, long used, decimal usageRate)
+            {
+                Sockets = new SocketChurnMetricsImpl(available, used, usageRate);
+            }
+
+            public string ProcessId { get; }
+            public FileDescriptorChurnMetrics FileDescriptors { get; }
+            public SocketChurnMetrics Sockets { get; }
+
+            
+            class SocketChurnMetricsImpl :
+                SocketChurnMetrics
+            {
+                public SocketChurnMetricsImpl(long available, long used, decimal usageRate)
+                {
+                    Available = available;
+                    Used = used;
+                    UsageRate = usageRate;
+                }
+
+                public long Available { get; }
+                public long Used { get; }
+                public decimal UsageRate { get; }
+            }
+        }
+
+
+        class FakeMemorySnapshot :
+            MemorySnapshot
+        {
+            public FakeMemorySnapshot(long used, long limit, bool alarmInEffect)
+            {
+                Used = used;
+                Limit = limit;
+                AlarmInEffect = alarmInEffect;
+            }
+
+            public long Used { get; }
+            public long Limit { get; }
+            public bool AlarmInEffect { get; }
+        }
+
+        
+        class FakeBrokerRuntimeSnapshot :
+            BrokerRuntimeSnapshot
+        {
+            public FakeBrokerRuntimeSnapshot(long availableCores, long limit, long used, decimal usageRate)
+            {
+                AvailableCores = availableCores;
+                Processes = new RuntimeProcessChurnMetricsImpl(limit, used, usageRate);
+            }
+
+            public string Version { get; }
+            public long AvailableCores { get; }
+            public RuntimeProcessChurnMetrics Processes { get; }
+
+        
+            class RuntimeProcessChurnMetricsImpl :
+                RuntimeProcessChurnMetrics
+            {
+                public RuntimeProcessChurnMetricsImpl(long limit, long used, decimal usageRate)
+                {
+                    Limit = limit;
+                    Used = used;
+                    UsageRate = usageRate;
+                }
+
+                public long Limit { get; }
+                public long Used { get; }
+                public decimal UsageRate { get; }
+            }
+        }
+
+        
+        class FakeDiskSnapshot :
+            DiskSnapshot
+        {
+            public FakeDiskSnapshot(long available, bool alarmInEffect, decimal rate)
+            {
+                AlarmInEffect = alarmInEffect;
+                Capacity = new DiskCapacityDetailsImpl(available, rate);
+            }
+
+            public DiskCapacityDetails Capacity { get; }
+            public string FreeLimit { get; }
+            public bool AlarmInEffect { get; }
+
+        
+            class DiskCapacityDetailsImpl :
+                DiskCapacityDetails
+            {
+                public DiskCapacityDetailsImpl(long available, decimal rate)
+                {
+                    Available = available;
+                    Rate = rate;
+                }
+
+                public long Available { get; }
+                public decimal Rate { get; }
+            }
+        }
     }
 }

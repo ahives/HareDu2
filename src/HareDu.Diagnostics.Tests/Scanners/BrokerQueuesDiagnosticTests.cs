@@ -11,21 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Linq;
     using Autofac;
     using AutofacIntegration;
+    using Diagnostics.Sensors;
     using Fakes;
     using NUnit.Framework;
-    using Observers;
     using Scanning;
-    using Snapshotting;
     using Snapshotting.Model;
 
     [TestFixture]
-    public class ClusterDiagnosticTests :
-        DiagnosticsTestBase
+    public class BrokerQueuesDiagnosticTests
     {
         IContainer _container;
 
@@ -33,9 +31,6 @@ namespace HareDu.Diagnostics.Tests
         public void Init()
         {
             var builder = new ContainerBuilder();
-
-            builder.Register(x => Client)
-                .As<ISnapshotFactory>();
             
             builder.RegisterModule<HareDuDiagnosticsModule>();
 
@@ -43,17 +38,16 @@ namespace HareDu.Diagnostics.Tests
         }
 
         [Test]
-        public void Test()
+        public void Verify_sensors_fired()
         {
-            ClusterSnapshot snapshot = new FakeClusterSnapshotSnapshot1();
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1();
             var report = _container.Resolve<IDiagnosticScanner>()
-                .RegisterObserver(new DefaultDiagnosticConsoleLogger())
                 .Scan(snapshot);
 
-            var results = report.Results.Where(x => x.Status == DiagnosticStatus.Yellow && x.ComponentType == ComponentType.Node).ToList();
-            
-            Assert.IsNotNull(results);
-            Assert.IsNotEmpty(results);
+            Assert.AreEqual(3, report.Results.Count);
+            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.ComputeHash()));
         }
     }
 }

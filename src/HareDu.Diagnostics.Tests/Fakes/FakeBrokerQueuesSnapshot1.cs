@@ -26,6 +26,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Queues = GetQueues().ToList();
         }
 
+        public BrokerQueueChurnMetrics Churn { get; }
+        public IReadOnlyList<QueueSnapshot> Queues { get; }
+
         IEnumerable<QueueSnapshot> GetQueues()
         {
             yield return new FakeQueueSnapshot("FakeQueue1",
@@ -38,50 +41,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 93,
                 2,
                 1.57M,
-                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
-            yield return new FakeQueueSnapshot("FakeQueue2",
-                "FakeVirtualHost",
-                "FakeNode",
-                74,
-                0,
-                82334,
-                94,
-                894,
-                34,
-                29.9M,
-                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
-            yield return new FakeQueueSnapshot("FakeQueue3",
-                "FakeVirtualHost",
-                "FakeNode",
-                100,
-                0,
-                87432,
-                39,
-                74,
-                0,
-                0,
-                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
-            yield return new FakeQueueSnapshot("FakeQueue4",
-                "FakeVirtualHost",
-                "FakeNode",
-                8349,
-                8292,
-                723894,
-                3445,
-                949,
-                74,
-                30.5M,
-                new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
-            yield return new FakeQueueSnapshot("FakeQueue5",
-                "FakeVirtualHost",
-                "FakeNode",
-                100,
-                0,
-                892389,
-                84,
-                23,
-                93,
-                84.0M,
                 new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
         }
 
@@ -110,23 +69,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Churn = new QueueChurnMetricsImpl();
             }
 
-            public string Name { get; }
-            public string VirtualHost { get; }
-            public string Node { get; }
-            public QueueChurnMetrics Churn { get; }
-            public QueueMemoryDetails Memory { get; }
-            public QueueInternals Internals { get; }
-            public long Consumers { get; }
-            public decimal ConsumerUtilization { get; }
-            public DateTimeOffset IdleSince { get; }
-
             
             class QueueChurnMetricsImpl :
                 QueueChurnMetrics
             {
                 public QueueChurnMetricsImpl()
                 {
-                    Incoming = new QueueDepthImpl(8348, 33845.5M);
+                    Incoming = new QueueDepthImpl(768578, 3845.5M);
                     Unacknowledged = new QueueDepthImpl(8293, 774.5M);
                     Ready = new QueueDepthImpl(8381, 3433.5M);
                     Gets = new QueueDepthImpl(934, 500.5M);
@@ -134,7 +83,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                     Delivered = new QueueDepthImpl(7339, 948.5M);
                     DeliveredWithoutAck = new QueueDepthImpl(34, 5.5M);
                     DeliveredGets = new QueueDepthImpl(0, 0M);
-                    Redelivered = new QueueDepthImpl(0, 0M);
+                    Redelivered = new QueueDepthImpl(768578, 3845.5M);
                     Acknowledged = new QueueDepthImpl(9238, 8934.5M);
                     Aggregate = new QueueDepthImpl(823847, 9847.5M);
                 }
@@ -165,6 +114,16 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 public QueueDepth Acknowledged { get; }
                 public QueueDepth Aggregate { get; }
             }
+
+            public string Name { get; }
+            public string VirtualHost { get; }
+            public string Node { get; }
+            public QueueChurnMetrics Churn { get; }
+            public QueueMemoryDetails Memory { get; }
+            public QueueInternals Internals { get; }
+            public long Consumers { get; }
+            public decimal ConsumerUtilization { get; }
+            public DateTimeOffset IdleSince { get; }
 
             
             class FakeQueueMemory :
@@ -199,8 +158,5 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 }
             }
         }
-
-        public BrokerQueueChurnMetrics Churn { get; }
-        public IReadOnlyList<QueueSnapshot> Queues { get; }
     }
 }

@@ -15,17 +15,16 @@ namespace HareDu.Diagnostics.Tests.Fakes
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Snapshotting;
     using Snapshotting.Model;
 
     public class FakeBrokerConnectivitySnapshot2 :
         BrokerConnectivitySnapshot
     {
-        public FakeBrokerConnectivitySnapshot2()
+        public FakeBrokerConnectivitySnapshot2(decimal connectionsCreatedRate, decimal connectionsClosedRate)
         {
             Connections = GetConnections().ToList();
-            ConnectionsCreated = new ChurnMetricsImpl(100000, 102);
-            ConnectionsClosed = new ChurnMetricsImpl(174000, 100);
+            ConnectionsCreated = new ChurnMetricsImpl(100000, connectionsCreatedRate);
+            ConnectionsClosed = new ChurnMetricsImpl(174000, connectionsClosedRate);
         }
 
         public ChurnMetrics ChannelsClosed { get; }
@@ -37,8 +36,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
         IEnumerable<ConnectionSnapshot> GetConnections()
         {
             yield return new FakeConnectionSnapshot("Connection1", 6);
-            yield return new FakeConnectionSnapshot("Connection2", 8);
-            yield return new FakeConnectionSnapshot("Connection3", 10);
         }
 
         
@@ -55,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public decimal Rate { get; }
         }
 
-            
+
         class FakeConnectionSnapshot :
             ConnectionSnapshot
         {
@@ -68,12 +65,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
             IEnumerable<ChannelSnapshot> GetChannels()
             {
-                yield return new FakeChannelSnapshot("Channel1", 0, 2, 5, 8, 2, 1);
-                yield return new FakeChannelSnapshot("Channel2", 4, 2, 5, 8, 2, 1);
-                yield return new FakeChannelSnapshot("Channel3", 4, 2, 5, 8, 2, 1);
-                yield return new FakeChannelSnapshot("Channel4", 4, 2, 5, 8, 2, 1);
-                yield return new FakeChannelSnapshot("Channel5", 4, 2, 5, 8, 2, 1);
-                yield return new FakeChannelSnapshot("Channel6", 4, 2, 5, 8, 2, 1);
+                yield return new FakeChannelSnapshot("Channel1", 4, 2, 5, 8, 6, 1);
+                yield return new FakeChannelSnapshot("Channel2", 4, 2, 5, 8, 6, 1);
+                yield return new FakeChannelSnapshot("Channel3", 4, 2, 5, 8, 6, 1);
+                yield return new FakeChannelSnapshot("Channel4", 4, 2, 5, 8, 6, 1);
+                yield return new FakeChannelSnapshot("Channel5", 4, 2, 5, 8, 6, 1);
+                yield return new FakeChannelSnapshot("Channel6", 4, 2, 5, 8, 6, 1);
             }
 
                 

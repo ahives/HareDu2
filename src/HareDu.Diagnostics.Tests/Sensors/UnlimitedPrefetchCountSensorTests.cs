@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using Snapshotting.Model;
 
     [TestFixture]
-    public class HighConnectionCreationRateSensorTests
+    public class UnlimitedPrefetchCountSensorTests
     {
         IContainer _container;
 
@@ -42,46 +42,18 @@ namespace HareDu.Diagnostics.Tests.Sensors
             _container = builder.Build();
         }
 
-        [Test]
-        public void Verify_sensor_yellow_condition_1()
+        [Test(Description = "")]
+        public void Verify_sensor_yellow_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider);
-            
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(102, 100);
+            var sensor = new UnlimitedPrefetchCountSensor(configProvider, knowledgeBaseProvider);
+
+            ChannelSnapshot snapshot = new FakeChannelSnapshot2(0);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-        }
-
-        [Test]
-        public void Verify_sensor_yellow_condition_2()
-        {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider);
-            
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(100, 100);
-
-            var result = sensor.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-        }
-
-        [Test]
-        public void Verify_sensor_green_condition()
-        {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider);
-            
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
-
-            var result = sensor.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Green,result.Status);
         }
 
         [Test]
@@ -89,9 +61,9 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new UnlimitedPrefetchCountSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = null;
+            ChannelSnapshot snapshot = new FakeChannelSnapshot2(5);
 
             var result = sensor.Execute(snapshot);
             
@@ -101,26 +73,15 @@ namespace HareDu.Diagnostics.Tests.Sensors
         [Test]
         public void Verify_sensor_inconclusive_condition_2()
         {
-            var configProvider = new DefaultConfigProvider();
+            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new UnlimitedPrefetchCountSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
+            ChannelSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-        }
-
-        
-        class DefaultConfigProvider :
-            IDiagnosticSensorConfigProvider
-        {
-            public bool TryGet(out DiagnosticSensorConfig config)
-            {
-                config = null;
-                return false;
-            }
         }
     }
 }
