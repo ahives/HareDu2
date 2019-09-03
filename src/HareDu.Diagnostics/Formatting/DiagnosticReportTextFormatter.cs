@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Formatting
 {
     using System.Text;
 
-    public class TextFormatter :
+    public class DiagnosticReportTextFormatter :
         IDiagnosticReportFormatter
     {
         public string Format(DiagnosticReport report)

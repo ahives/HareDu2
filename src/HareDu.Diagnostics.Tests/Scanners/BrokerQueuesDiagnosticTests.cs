@@ -13,11 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Scanners
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using Autofac;
-    using AutofacIntegration;
+    using Configuration;
     using Diagnostics.Sensors;
     using Fakes;
+    using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
     using Snapshotting.Model;
@@ -25,29 +26,45 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerQueuesDiagnosticTests
     {
-        IContainer _container;
+        IReadOnlyList<IDiagnosticSensor> _sensors;
 
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
+            var configProvider = new DiagnosticSensorConfigProvider();
+            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            builder.RegisterModule<HareDuDiagnosticsModule>();
-
-            _container = builder.Build();
+            _sensors = new List<IDiagnosticSensor>
+            {
+                new QueueGrowthSensor(configProvider, knowledgeBaseProvider),
+                new QueueMessagePagingSensor(configProvider, knowledgeBaseProvider),
+                new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider),
+            };
         }
 
         [Test]
         public void Verify_sensors_fired()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1();
-            var report = _container.Resolve<IDiagnosticScanner>()
+
+            var report = new BrokerQueuesDiagnostic(_sensors)
                 .Scan(snapshot);
 
-            Assert.AreEqual(3, report.Results.Count);
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.ComputeHash()));
+            Assert.AreEqual(3, report.Count);
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.ComputeHash()));
+        }
+
+        [Test]
+        public void Verify_empty_result_returned_when_snapshot_null()
+        {
+            BrokerQueuesSnapshot snapshot = null;
+            
+            var report = new BrokerQueuesDiagnostic(_sensors)
+                .Scan(snapshot);
+
+            Assert.IsEmpty(report);
         }
     }
 }

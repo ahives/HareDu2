@@ -22,11 +22,11 @@ namespace HareDu.Diagnostics.Scanning
     public class BrokerQueuesDiagnostic :
         IComponentDiagnostic<BrokerQueuesSnapshot>
     {
-        readonly IEnumerable<IDiagnosticSensor> _queueSensors;
+        readonly IReadOnlyList<IDiagnosticSensor> _queueSensors;
 
         public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
-            _queueSensors = sensors.Where(IsQueueSensor);
+            _queueSensors = sensors.Where(IsQueueSensor).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(BrokerQueuesSnapshot snapshot)

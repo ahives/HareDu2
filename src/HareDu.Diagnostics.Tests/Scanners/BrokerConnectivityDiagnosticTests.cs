@@ -13,11 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Scanners
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using Autofac;
-    using AutofacIntegration;
+    using Configuration;
     using Diagnostics.Sensors;
     using Fakes;
+    using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
     using Snapshotting.Model;
@@ -25,31 +26,49 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerConnectivityDiagnosticTests
     {
-        IContainer _container;
+        IReadOnlyList<IDiagnosticSensor> _sensors;
 
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
+            var configProvider = new DiagnosticSensorConfigProvider();
+            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            builder.RegisterModule<HareDuDiagnosticsModule>();
-
-            _container = builder.Build();
+            _sensors = new List<IDiagnosticSensor>
+            {
+                new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider),
+                new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountSensor(configProvider, knowledgeBaseProvider),
+                new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider),
+                new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider)
+            };
         }
 
         [Test]
         public void Verify_sensors_fired()
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
-            var report = _container.Resolve<IDiagnosticScanner>()
+            
+            var report = new BrokerConnectivityDiagnostic(_sensors)
                 .Scan(snapshot);
 
-            Assert.AreEqual(5, report.Results.Count);
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(HighConnectionCreationRateSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(HighConnectionClosureRateSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(UnlimitedPrefetchCountSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(ChannelThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(ChannelLimitReachedSensor).FullName.ComputeHash()));
+            Assert.AreEqual(5, report.Count);
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionCreationRateSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionClosureRateSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnlimitedPrefetchCountSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelThrottlingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelLimitReachedSensor).FullName.ComputeHash()));
+        }
+
+        [Test]
+        public void Verify_empty_result_returned_when_snapshot_null()
+        {
+            BrokerConnectivitySnapshot snapshot = null;
+            
+            var report = new BrokerConnectivityDiagnostic(_sensors)
+                .Scan(snapshot);
+
+            Assert.IsEmpty(report);
         }
     }
 }

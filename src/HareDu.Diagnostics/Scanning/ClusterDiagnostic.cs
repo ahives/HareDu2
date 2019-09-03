@@ -22,17 +22,17 @@ namespace HareDu.Diagnostics.Scanning
     public class ClusterDiagnostic :
         IComponentDiagnostic<ClusterSnapshot>
     {
-        readonly IEnumerable<IDiagnosticSensor> _nodeSensors;
-        readonly IEnumerable<IDiagnosticSensor> _diskSensors;
-        readonly IEnumerable<IDiagnosticSensor> _memorySensors;
-        readonly IEnumerable<IDiagnosticSensor> _runtimeSensors;
+        readonly IReadOnlyList<IDiagnosticSensor> _nodeSensors;
+        readonly IReadOnlyList<IDiagnosticSensor> _diskSensors;
+        readonly IReadOnlyList<IDiagnosticSensor> _memorySensors;
+        readonly IReadOnlyList<IDiagnosticSensor> _runtimeSensors;
 
         public ClusterDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
-            _nodeSensors = sensors.Where(IsNodeSensor);
-            _diskSensors = sensors.Where(IsDiskSensor);
-            _memorySensors = sensors.Where(IsMemorySensor);
-            _runtimeSensors = sensors.Where(IsRuntimeSensor);
+            _nodeSensors = sensors.Where(IsNodeSensor).ToList();
+            _diskSensors = sensors.Where(IsDiskSensor).ToList();
+            _memorySensors = sensors.Where(IsMemorySensor).ToList();
+            _runtimeSensors = sensors.Where(IsRuntimeSensor).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ClusterSnapshot snapshot)

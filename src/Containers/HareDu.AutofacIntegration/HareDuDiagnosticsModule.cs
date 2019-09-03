@@ -49,7 +49,7 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticSensorConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<TextFormatter>()
+            builder.RegisterType<DiagnosticReportTextFormatter>()
                 .As<IDiagnosticReportFormatter>()
                 .SingleInstance();
 
@@ -63,15 +63,15 @@ namespace HareDu.AutofacIntegration
         IEnumerable<IDiagnosticSensor> RegisterDiagnosticSensors(IDiagnosticSensorConfigProvider configProvider,
             IKnowledgeBaseProvider knowledgeBaseProvider)
         {
-            var diagnostics = typeof(IDiagnosticSensor)
+            var sensors = typeof(IDiagnosticSensor)
                 .Assembly
                 .GetTypes()
                 .Where(x => typeof(IDiagnosticSensor).IsAssignableFrom(x) && !x.IsInterface)
                 .ToList();
 
-            for (int i = 0; i < diagnostics.Count; i++)
+            for (int i = 0; i < sensors.Count; i++)
             {
-                yield return (IDiagnosticSensor) Activator.CreateInstance(diagnostics[i], configProvider, knowledgeBaseProvider);
+                yield return (IDiagnosticSensor) Activator.CreateInstance(sensors[i], configProvider, knowledgeBaseProvider);
             }
         }
     }

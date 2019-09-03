@@ -18,6 +18,8 @@ namespace HareDu.Diagnostics.Configuration
     {
         public bool TryGet(out DiagnosticSensorConfig config)
         {
+            // TODO: add code to pull from configuration file
+            
             config = DiagnosticSensorConfigCache.Default;
             return true;
         }

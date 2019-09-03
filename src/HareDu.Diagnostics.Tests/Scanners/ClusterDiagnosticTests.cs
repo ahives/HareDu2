@@ -13,11 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Scanners
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using Autofac;
-    using AutofacIntegration;
+    using Configuration;
     using Diagnostics.Sensors;
     using Fakes;
+    using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
     using Snapshotting.Model;
@@ -25,31 +26,49 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class ClusterDiagnosticTests
     {
-        IContainer _container;
+        IReadOnlyList<IDiagnosticSensor> _sensors;
 
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
+            var configProvider = new DiagnosticSensorConfigProvider();
+            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            builder.RegisterModule<HareDuDiagnosticsModule>();
-
-            _container = builder.Build();
+            _sensors = new List<IDiagnosticSensor>
+            {
+                new RuntimeProcessLimitReachedSensor(configProvider, knowledgeBaseProvider),
+                new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider),
+                new NetworkPartitionSensor(configProvider, knowledgeBaseProvider),
+                new MemoryThrottlingSensor(configProvider, knowledgeBaseProvider),
+                new DiskThrottlingSensor(configProvider, knowledgeBaseProvider),
+            };
         }
 
         [Test]
         public void Verify_sensors_fired()
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshotSnapshot1();
-            var report = _container.Resolve<IDiagnosticScanner>()
+            
+            var report = new ClusterDiagnostic(_sensors)
                 .Scan(snapshot);
 
-            Assert.AreEqual(5, report.Results.Count);
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitReachedSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(NetworkThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(MemoryThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Results.Count(x => x.SensorIdentifier == typeof(DiskThrottlingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(5, report.Count);
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitReachedSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkThrottlingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MemoryThrottlingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(DiskThrottlingSensor).FullName.ComputeHash()));
+        }
+
+        [Test]
+        public void Verify_empty_result_returned_when_snapshot_null()
+        {
+            ClusterSnapshot snapshot = null;
+            
+            var report = new ClusterDiagnostic(_sensors)
+                .Scan(snapshot);
+
+            Assert.IsEmpty(report);
         }
     }
 }
