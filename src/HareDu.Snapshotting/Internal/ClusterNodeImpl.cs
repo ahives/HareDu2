@@ -69,6 +69,7 @@ namespace HareDu.Snapshotting.Internal
             public string Name { get; }
             public string Type { get; }
             public bool IsRunning { get; }
+            public long AvailableCoresDetected { get; }
             public IList<string> NetworkPartitions { get; }
             public DiskSnapshot Disk { get; }
             public IO IO { get; }

@@ -55,7 +55,7 @@ namespace HareDu.Core.Model
         int RunQueue { get; }
 
         [JsonProperty("processors")]
-        int Processors { get; }
+        int AvailableCoresDetected { get; }
 
         [JsonProperty("exchange_types")]
         IList<ExchangeType> ExchangeTypes { get; }

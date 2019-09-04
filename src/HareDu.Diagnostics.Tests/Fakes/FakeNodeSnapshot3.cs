@@ -16,12 +16,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using System.Collections.Generic;
     using Snapshotting.Model;
 
-    public class FakeNodeSnapshot2 :
+    public class FakeNodeSnapshot3 :
         NodeSnapshot
     {
-        public FakeNodeSnapshot2(IList<string> networkPartitions)
+        public FakeNodeSnapshot3(long availableCoresDetected)
         {
-            NetworkPartitions = networkPartitions;
+            AvailableCoresDetected = availableCoresDetected;
         }
 
         public OperatingSystemDetails OS { get; }

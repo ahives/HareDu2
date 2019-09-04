@@ -46,10 +46,11 @@ namespace HareDu.Diagnostics.Tests.Fakes
                     "node2@rabbitmq",
                     "node3@rabbitmq"
                 };
-                Runtime = new FakeBrokerRuntimeSnapshot(4, 38, 36, 5.3M);
+                Runtime = new FakeBrokerRuntimeSnapshot(38, 36, 5.3M);
                 Disk = new FakeDiskSnapshot(8, true, 5.5M);
                 Memory = new FakeMemorySnapshot(273, 270, true);
                 OS = new OperatingSystemDetailsImpl(100, 90, 5.5M);
+                AvailableCoresDetected = 1;
             }
 
             public OperatingSystemDetails OS { get; }
@@ -60,6 +61,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public string Name { get; }
             public string Type { get; }
             public bool IsRunning { get; }
+            public long AvailableCoresDetected { get; }
             public IList<string> NetworkPartitions { get; }
             public DiskSnapshot Disk { get; }
             public IO IO { get; }
@@ -120,9 +122,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FakeBrokerRuntimeSnapshot :
             BrokerRuntimeSnapshot
         {
-            public FakeBrokerRuntimeSnapshot(long availableCores, long limit, long used, decimal usageRate)
+            public FakeBrokerRuntimeSnapshot(long limit, long used, decimal usageRate)
             {
-                AvailableCores = availableCores;
                 Processes = new RuntimeProcessChurnMetricsImpl(limit, used, usageRate);
             }
 

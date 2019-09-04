@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<AvailableCoresSensor>(DiagnosticStatus.Red,
+                "Could not detect any CPU cores or none are available to the RabbitMQ broker.",
+                "Add more CPU cores to the RabbitMQ node."));
+            _articles.Add(new KnowledgeBaseArticleImpl<AvailableCoresSensor>(DiagnosticStatus.Green, "Detected at least 1 CPU core available to the RabbitMQ broker."));
             _articles.Add(new KnowledgeBaseArticleImpl<NetworkPartitionSensor>(DiagnosticStatus.Red,
                 "Network partitions detected between one or more nodes.",
                 "Please consult the RabbitMQ documentation (https://www.rabbitmq.com/partitions.html) on which strategy best fits your scenario."));

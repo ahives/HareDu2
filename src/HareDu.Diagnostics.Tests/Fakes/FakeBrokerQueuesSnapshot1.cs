@@ -66,7 +66,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 ConsumerUtilization = consumerUtilization;
                 IdleSince = idleSince;
                 Memory = new FakeQueueMemory(target, total, bytes, unacknowledged, ready);
-                Churn = new QueueChurnMetricsImpl();
+                Messages = new QueueChurnMetricsImpl();
             }
 
             
@@ -118,7 +118,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public string Name { get; }
             public string VirtualHost { get; }
             public string Node { get; }
-            public QueueChurnMetrics Churn { get; }
+            public QueueChurnMetrics Messages { get; }
             public QueueMemoryDetails Memory { get; }
             public QueueInternals Internals { get; }
             public long Consumers { get; }

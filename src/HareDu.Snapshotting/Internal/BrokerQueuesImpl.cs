@@ -111,7 +111,7 @@ namespace HareDu.Snapshotting.Internal
                     Name = queue.Name;
                     VirtualHost = queue.VirtualHost;
                     Node = queue.Node;
-                    Churn = new QueueChurnMetricsImpl(queue);
+                    Messages = new QueueChurnMetricsImpl(queue);
                     Memory = new QueueMemoryDetailsImpl(queue);
                     Consumers = queue.Consumers;
                     ConsumerUtilization = queue.ConsumerUtilization;
@@ -121,7 +121,7 @@ namespace HareDu.Snapshotting.Internal
                 public string Name { get; }
                 public string VirtualHost { get; }
                 public string Node { get; }
-                public QueueChurnMetrics Churn { get; }
+                public QueueChurnMetrics Messages { get; }
                 public QueueMemoryDetails Memory { get; }
                 public QueueInternals Internals { get; }
                 public long Consumers { get; }

@@ -39,10 +39,10 @@ namespace HareDu.Snapshotting.Observers
                 Console.WriteLine($"VHost: {queue.VirtualHost}");
                 Console.WriteLine($"Node: {queue.Node}");
                 Console.WriteLine("Churn Metrics");
-                Console.WriteLine($"\tReady: {queue.Churn.Ready.Total} | {queue.Churn.Ready.Rate} msg/s");
-                Console.WriteLine($"\tAcknowledged: {queue.Churn.Acknowledged.Total} | {queue.Churn.Acknowledged.Rate} msg/s");
-                Console.WriteLine($"\tUnacknowledged: {queue.Churn.Unacknowledged.Total} | {queue.Churn.Unacknowledged.Rate} msg/s");
-                Console.WriteLine($"\tDelivered: {queue.Churn.Delivered.Total} | {queue.Churn.Delivered.Rate} msg/s");
+                Console.WriteLine($"\tReady: {queue.Messages.Ready.Total} | {queue.Messages.Ready.Rate} msg/s");
+                Console.WriteLine($"\tAcknowledged: {queue.Messages.Acknowledged.Total} | {queue.Messages.Acknowledged.Rate} msg/s");
+                Console.WriteLine($"\tUnacknowledged: {queue.Messages.Unacknowledged.Total} | {queue.Messages.Unacknowledged.Rate} msg/s");
+                Console.WriteLine($"\tDelivered: {queue.Messages.Delivered.Total} | {queue.Messages.Delivered.Rate} msg/s");
                 Console.WriteLine($"Target Count in RAM: {queue.Internals.TargetCountOfMessagesAllowedInRAM}");
 //                Console.WriteLine($"");
             }

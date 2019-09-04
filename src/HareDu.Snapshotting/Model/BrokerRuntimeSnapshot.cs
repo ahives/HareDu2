@@ -17,8 +17,6 @@ namespace HareDu.Snapshotting.Model
         Snapshot
     {
         string Version { get; }
-        
-        long AvailableCores { get; }
 
         RuntimeProcessChurnMetrics Processes { get; }
     }

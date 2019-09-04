@@ -41,6 +41,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 new NetworkPartitionSensor(configProvider, knowledgeBaseProvider),
                 new MemoryThrottlingSensor(configProvider, knowledgeBaseProvider),
                 new DiskThrottlingSensor(configProvider, knowledgeBaseProvider),
+                new AvailableCoresSensor(configProvider, knowledgeBaseProvider),
             };
         }
 
@@ -52,12 +53,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new ClusterDiagnostic(_sensors)
                 .Scan(snapshot);
 
-            Assert.AreEqual(5, report.Count);
+            Assert.AreEqual(6, report.Count);
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitReachedSensor).FullName.ComputeHash()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkThrottlingSensor).FullName.ComputeHash()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).FullName.ComputeHash()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MemoryThrottlingSensor).FullName.ComputeHash()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(DiskThrottlingSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(AvailableCoresSensor).FullName.ComputeHash()));
         }
 
         [Test]

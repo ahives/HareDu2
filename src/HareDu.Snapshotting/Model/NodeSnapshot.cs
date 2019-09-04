@@ -33,6 +33,8 @@ namespace HareDu.Snapshotting.Model
         string Type { get; }
 
         bool IsRunning { get; }
+        
+        long AvailableCoresDetected { get; }
 
         IList<string> NetworkPartitions { get; }
         

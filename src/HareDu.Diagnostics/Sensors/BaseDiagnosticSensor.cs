@@ -15,8 +15,6 @@ namespace HareDu.Diagnostics.Sensors
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Cryptography;
-    using System.Text;
     using Configuration;
     using KnowledgeBase;
 

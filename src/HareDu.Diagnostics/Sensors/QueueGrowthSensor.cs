@@ -50,13 +50,13 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("Churn.Incoming.Rate", data.Churn.Incoming.Rate.ToString()),
-                new DiagnosticSensorDataImpl("Churn.Acknowledged.Rate", data.Churn.Acknowledged.Rate.ToString())
+                new DiagnosticSensorDataImpl("Messages.Incoming.Rate", data.Messages.Incoming.Rate.ToString()),
+                new DiagnosticSensorDataImpl("Messages.Acknowledged.Rate", data.Messages.Acknowledged.Rate.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.Churn.Incoming.Rate > data.Churn.Acknowledged.Rate)
+            if (data.Messages.Incoming.Rate > data.Messages.Acknowledged.Rate)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

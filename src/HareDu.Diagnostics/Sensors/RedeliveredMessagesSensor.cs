@@ -62,20 +62,20 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("Churn.Incoming.Total", data.Churn.Incoming.Total.ToString()),
-                new DiagnosticSensorDataImpl("Churn.Redelivered.Total", data.Churn.Redelivered.Total.ToString()),
+                new DiagnosticSensorDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
+                new DiagnosticSensorDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
                 new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
-            long highWatermark = CalculateHighWatermark(data.Churn.Incoming.Total);
+            long highWatermark = CalculateHighWatermark(data.Messages.Incoming.Total);
             
-            if (data.Churn.Redelivered.Total >= highWatermark && data.Churn.Redelivered.Total < data.Churn.Incoming.Total && highWatermark < data.Churn.Incoming.Total)
+            if (data.Messages.Redelivered.Total >= highWatermark && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && highWatermark < data.Messages.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
-            else if (data.Churn.Redelivered.Total >= data.Churn.Incoming.Total)
+            else if (data.Messages.Redelivered.Total >= data.Messages.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

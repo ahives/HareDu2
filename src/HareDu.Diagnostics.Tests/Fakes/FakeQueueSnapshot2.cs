@@ -21,13 +21,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
     {
         public FakeQueueSnapshot2(long incomingTotal, decimal incomingRate, long redeliveredTotal, decimal redeliveredRate)
         {
-            Churn = new QueueChurnMetricsImpl(incomingTotal, incomingRate, redeliveredTotal, redeliveredRate);
+            Messages = new QueueChurnMetricsImpl(incomingTotal, incomingRate, redeliveredTotal, redeliveredRate);
         }
 
         public string Name { get; }
         public string VirtualHost { get; }
         public string Node { get; }
-        public QueueChurnMetrics Churn { get; }
+        public QueueChurnMetrics Messages { get; }
         public QueueMemoryDetails Memory { get; }
         public QueueInternals Internals { get; }
         public long Consumers { get; }

@@ -35,7 +35,7 @@ namespace HareDu.Snapshotting.Model
         /// <summary>
         /// 
         /// </summary>
-        QueueChurnMetrics Churn { get; }
+        QueueChurnMetrics Messages { get; }
         
         /// <summary>
         /// 
