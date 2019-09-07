@@ -48,7 +48,9 @@ namespace HareDu.Diagnostics.Scanning
 
             if (_sensorCache.ContainsKey(type.FullName))
             {
-                diagnostic = (IComponentDiagnostic<T>) _sensorCache[type.FullName];
+                string identifier = type.FullName.GenerateIdentifier();
+                
+                diagnostic = (IComponentDiagnostic<T>) _sensorCache[identifier];
                 return true;
             }
 
@@ -58,12 +60,10 @@ namespace HareDu.Diagnostics.Scanning
 
                 // TODO: check to see if instance was created successfully
             
-                _sensorCache.Add(type.FullName, diagnostic);
+                _sensorCache.Add(diagnostic.Identifier, diagnostic);
                 return true;
             }
-            catch (Exception e)
-            {
-            }
+            catch { }
             
             diagnostic = new DoNothingDiagnostic<T>();
             return false;

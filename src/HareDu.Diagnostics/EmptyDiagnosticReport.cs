@@ -16,12 +16,15 @@ namespace HareDu.Diagnostics
     using System;
     using System.Collections.Generic;
     using MassTransit;
+    using Scanning;
+    using Snapshotting.Model;
 
-    class FaultedDiagnosticReport :
+    class EmptyDiagnosticReport :
         DiagnosticReport
     {
         public Guid Identifier => NewId.NextGuid();
+        public string ScannerIdentifier => typeof(DoNothingDiagnostic<EmptySnapshot>).FullName.GenerateIdentifier();
         public IReadOnlyList<DiagnosticResult> Results => new List<DiagnosticResult>();
-        public DateTimeOffset Timestamp => DateTimeOffset.Now;
+        public DateTimeOffset Timestamp => DateTimeOffset.UtcNow;
     }
 }

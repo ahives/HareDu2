@@ -18,6 +18,8 @@ namespace HareDu.Diagnostics.Scanning
     public class DoNothingDiagnostic<T> :
         IComponentDiagnostic<T>
     {
-        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => throw new System.NotImplementedException();
+        public string Identifier => GetType().FullName.GenerateIdentifier();
+
+        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => DiagnosticCache.EmptyDiagnosticResults;
     }
 }

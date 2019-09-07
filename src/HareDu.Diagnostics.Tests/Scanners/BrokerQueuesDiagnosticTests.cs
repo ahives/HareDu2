@@ -51,9 +51,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             Assert.AreEqual(3, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.GenerateIdentifier()));
         }
 
         [Test]

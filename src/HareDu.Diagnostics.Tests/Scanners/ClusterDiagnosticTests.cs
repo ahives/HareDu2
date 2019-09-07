@@ -54,12 +54,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             Assert.AreEqual(6, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitReachedSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MemoryThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(DiskThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(AvailableCoresSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitReachedSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkThrottlingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MemoryThrottlingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(DiskThrottlingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(AvailableCoresSensor).FullName.GenerateIdentifier()));
         }
 
         [Test]

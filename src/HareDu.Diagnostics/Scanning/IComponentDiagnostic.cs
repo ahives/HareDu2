@@ -17,6 +17,8 @@ namespace HareDu.Diagnostics.Scanning
 
     public interface IComponentDiagnostic<in T>
     {
+        string Identifier { get; }
+        
         IReadOnlyList<DiagnosticResult> Scan(T snapshot);
     }
 }

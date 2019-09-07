@@ -93,14 +93,14 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 DiagnosticStatus = diagnosticStatus;
                 Reason = reason;
                 Remediation = remediation;
-                Identifier = typeof(T).FullName.ComputeHash();
+                Identifier = typeof(T).FullName.GenerateIdentifier();
             }
 
             public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason)
             {
                 DiagnosticStatus = diagnosticStatus;
                 Reason = reason;
-                Identifier = typeof(T).FullName.ComputeHash();
+                Identifier = typeof(T).FullName.GenerateIdentifier();
             }
 
             public string Identifier { get; }

@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName.ComputeHash();
+        public string Identifier => GetType().FullName.GenerateIdentifier();
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;

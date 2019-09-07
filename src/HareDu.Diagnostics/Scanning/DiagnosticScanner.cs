@@ -35,7 +35,7 @@ namespace HareDu.Diagnostics.Scanning
             
             var results = diagnostic.Scan(snapshot);
             
-            return new SuccessfulDiagnosticReport(results);
+            return new SuccessfulDiagnosticReport(diagnostic.Identifier, results);
         }
 
         public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers)

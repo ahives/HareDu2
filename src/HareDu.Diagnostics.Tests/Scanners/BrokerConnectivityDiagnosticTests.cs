@@ -53,11 +53,11 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             Assert.AreEqual(5, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionCreationRateSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionClosureRateSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnlimitedPrefetchCountSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelThrottlingSensor).FullName.ComputeHash()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelLimitReachedSensor).FullName.ComputeHash()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionCreationRateSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionClosureRateSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnlimitedPrefetchCountSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelThrottlingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelLimitReachedSensor).FullName.GenerateIdentifier()));
         }
 
         [Test]

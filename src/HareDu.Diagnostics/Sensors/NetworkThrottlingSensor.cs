@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName.ComputeHash();
+        public string Identifier => GetType().FullName.GenerateIdentifier();
         public string Description =>
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
