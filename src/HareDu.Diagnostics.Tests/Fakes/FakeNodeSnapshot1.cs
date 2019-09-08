@@ -21,10 +21,10 @@ namespace HareDu.Diagnostics.Tests.Fakes
     {
         public FakeNodeSnapshot1(long availableSockets, long usedSockets, decimal socketUsageRate)
         {
-            OS = new OperatingSystemDetailsImpl(availableSockets, usedSockets, socketUsageRate);
+            OS = new OperatingSystemSnapshotImpl(availableSockets, usedSockets, socketUsageRate);
         }
 
-        public OperatingSystemDetails OS { get; }
+        public OperatingSystemSnapshot OS { get; }
         public string RatesMode { get; }
         public long Uptime { get; }
         public int RunQueue { get; }
@@ -43,10 +43,10 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public ContextSwitchingDetails ContextSwitching { get; }
 
         
-        class OperatingSystemDetailsImpl :
-            OperatingSystemDetails
+        class OperatingSystemSnapshotImpl :
+            OperatingSystemSnapshot
         {
-            public OperatingSystemDetailsImpl(long available, long used, decimal usageRate)
+            public OperatingSystemSnapshotImpl(long available, long used, decimal usageRate)
             {
                 Sockets = new SocketChurnMetricsImpl(available, used, usageRate);
             }

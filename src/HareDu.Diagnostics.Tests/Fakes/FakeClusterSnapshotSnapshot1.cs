@@ -49,11 +49,11 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Runtime = new FakeBrokerRuntimeSnapshot(38, 36, 5.3M);
                 Disk = new FakeDiskSnapshot(8, true, 5.5M);
                 Memory = new FakeMemorySnapshot(273, 270, true);
-                OS = new OperatingSystemDetailsImpl(100, 90, 5.5M);
+                OS = new OperatingSystemSnapshotImpl(100, 90, 5.5M);
                 AvailableCoresDetected = 1;
             }
 
-            public OperatingSystemDetails OS { get; }
+            public OperatingSystemSnapshot OS { get; }
             public string RatesMode { get; }
             public long Uptime { get; }
             public int RunQueue { get; }
@@ -73,10 +73,10 @@ namespace HareDu.Diagnostics.Tests.Fakes
         }
 
         
-        class OperatingSystemDetailsImpl :
-            OperatingSystemDetails
+        class OperatingSystemSnapshotImpl :
+            OperatingSystemSnapshot
         {
-            public OperatingSystemDetailsImpl(long available, long used, decimal usageRate)
+            public OperatingSystemSnapshotImpl(long available, long used, decimal usageRate)
             {
                 Sockets = new SocketChurnMetricsImpl(available, used, usageRate);
             }

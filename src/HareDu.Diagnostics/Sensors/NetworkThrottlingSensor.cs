@@ -62,16 +62,16 @@ namespace HareDu.Diagnostics.Sensors
             }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
-            long highWatermark = CalculateHighWatermark(data.OS.Sockets.Available);
+            long warningThreshold = ComputeWarningThreshold(data.OS.Sockets.Available);
             
             var sensorData = new List<DiagnosticSensorData>
             {
                 new DiagnosticSensorDataImpl("OS.Sockets.Available", data.OS.Sockets.Available.ToString()),
                 new DiagnosticSensorDataImpl("OS.Sockets.Used", data.OS.Sockets.Used.ToString()),
-                new DiagnosticSensorDataImpl("CalculatedHighWatermark", highWatermark.ToString())
+                new DiagnosticSensorDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
             };
 
-            if (data.OS.Sockets.Used < highWatermark && highWatermark < data.OS.Sockets.Available)
+            if (data.OS.Sockets.Used < warningThreshold && warningThreshold < data.OS.Sockets.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
@@ -92,7 +92,7 @@ namespace HareDu.Diagnostics.Sensors
             return result;
         }
 
-        long CalculateHighWatermark(long socketsAvailable)
+        long ComputeWarningThreshold(long socketsAvailable)
             => _config.SocketUsageCoefficient >= 1
                 ? socketsAvailable
                 : Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.SocketUsageCoefficient));

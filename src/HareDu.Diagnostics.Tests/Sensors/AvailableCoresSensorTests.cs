@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCoresSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot3(0);
 
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCoresSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot3(5);
 
@@ -75,7 +75,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCoresSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = null;
 

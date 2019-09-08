@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class AvailableCoresSensor :
+    public class AvailableCpuCoresSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public AvailableCoresSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public AvailableCpuCoresSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
         }

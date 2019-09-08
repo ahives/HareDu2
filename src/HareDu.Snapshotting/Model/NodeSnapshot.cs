@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting.Model
     public interface NodeSnapshot :
         Snapshot
     {
-        OperatingSystemDetails OS { get; }
+        OperatingSystemSnapshot OS { get; }
 
         string RatesMode { get; }
 

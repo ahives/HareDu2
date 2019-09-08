@@ -21,8 +21,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using NUnit.Framework;
     using Snapshotting.Model;
 
-    [TestFixture]
-    public class RedeliveredMessagesSensorTests
+    public class FileDescriptorThrottlingSensorTests
     {
         IContainer _container;
 
@@ -45,11 +44,11 @@ namespace HareDu.Diagnostics.Tests.Sensors
         [Test]
         public void Verify_sensor_yellow_condition()
         {
-            var configProvider = new DefaultConfigProvider1();
+            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new FileDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 90, 32.3M);
+            OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 90);
 
             var result = sensor.Execute(snapshot);
             
@@ -57,13 +56,27 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
+        public void Verify_sensor_red_condition()
+        {
+            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var sensor = new FileDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
+            
+            OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 100);
+
+            var result = sensor.Execute(snapshot);
+            
+            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
+        }
+
+        [Test]
         public void Verify_sensor_green_condition()
         {
-            var configProvider = new DefaultConfigProvider1();
+            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new FileDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 50, 32.3M);
+            OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 60);
 
             var result = sensor.Execute(snapshot);
             
@@ -75,9 +88,9 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new FileDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            QueueSnapshot snapshot = null;
+            OperatingSystemSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             
@@ -89,42 +102,13 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new FileDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            QueueSnapshot snapshot = new FakeQueueSnapshot2(99, 54.4M, 100, 32.3M);
+            OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 60);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-        }
-
-        
-        class DefaultConfigProvider1 :
-            IDiagnosticSensorConfigProvider
-        {
-            public bool TryGet(out DiagnosticSensorConfig config)
-            {
-                config = new FakeDiagnosticSensorConfig();
-                return true;
-            }
-
-            
-            class FakeDiagnosticSensorConfig :
-                DiagnosticSensorConfig
-            {
-                public FakeDiagnosticSensorConfig()
-                {
-                    SocketUsageCoefficient = 1.0M;
-                    MessageRedeliveryCoefficient = 0.8M;
-                }
-
-                public int HighClosureRateThreshold { get; }
-                public int HighCreationRateThreshold { get; }
-                public decimal MessageRedeliveryCoefficient { get; }
-                public decimal SocketUsageCoefficient { get; }
-                public decimal RuntimeProcessUsageCoefficient { get; }
-                public decimal FileDescriptorUsageWarningThreshold { get; }
-            }
         }
 
         

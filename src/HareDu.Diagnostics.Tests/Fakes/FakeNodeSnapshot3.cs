@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             AvailableCoresDetected = availableCoresDetected;
         }
 
-        public OperatingSystemDetails OS { get; }
+        public OperatingSystemSnapshot OS { get; }
         public string RatesMode { get; }
         public long Uptime { get; }
         public int RunQueue { get; }

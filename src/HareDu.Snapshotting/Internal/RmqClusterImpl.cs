@@ -116,7 +116,7 @@ namespace HareDu.Snapshotting.Internal
             {
                 public NodeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                 {
-                    OS = new OperatingSystemDetailsImpl(node);
+                    OS = new OperatingSystemSnapshotImpl(node);
                     Runtime = new BrokerRuntimeSnapshotImpl(cluster, node);
                     IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
@@ -125,7 +125,7 @@ namespace HareDu.Snapshotting.Internal
                     AvailableCoresDetected = node.AvailableCoresDetected;
                 }
 
-                public OperatingSystemDetails OS { get; }
+                public OperatingSystemSnapshot OS { get; }
                 public string RatesMode { get; }
                 public long Uptime { get; }
                 public int RunQueue { get; }
@@ -222,10 +222,10 @@ namespace HareDu.Snapshotting.Internal
                 }
 
 
-                class OperatingSystemDetailsImpl :
-                    OperatingSystemDetails
+                class OperatingSystemSnapshotImpl :
+                    OperatingSystemSnapshot
                 {
-                    public OperatingSystemDetailsImpl(NodeInfo node)
+                    public OperatingSystemSnapshotImpl(NodeInfo node)
                     {
                         ProcessId = node.OperatingSystemProcessId;
                         FileDescriptors = new FileDescriptorChurnMetricsImpl(node);

@@ -24,5 +24,7 @@ namespace HareDu.Diagnostics.Configuration
         decimal SocketUsageCoefficient { get; }
         
         decimal RuntimeProcessUsageCoefficient { get; }
+        
+        decimal FileDescriptorUsageWarningThreshold { get; }
     }
 }

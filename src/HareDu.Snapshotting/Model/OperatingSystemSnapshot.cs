@@ -13,7 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface OperatingSystemDetails
+    public interface OperatingSystemSnapshot :
+        Snapshot
     {
         string ProcessId { get; }
 

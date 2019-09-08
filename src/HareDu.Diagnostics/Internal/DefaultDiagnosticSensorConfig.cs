@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Internal
             HighClosureRateThreshold = 100;
             HighCreationRateThreshold = 100;
             RuntimeProcessUsageCoefficient = 0.7M;
+            FileDescriptorUsageWarningThreshold = 0.7M;
         }
 
         public int HighClosureRateThreshold { get; }
@@ -32,5 +33,6 @@ namespace HareDu.Diagnostics.Internal
         public decimal MessageRedeliveryCoefficient { get; }
         public decimal SocketUsageCoefficient { get; }
         public decimal RuntimeProcessUsageCoefficient { get; }
+        public decimal FileDescriptorUsageWarningThreshold { get; }
     }
 }

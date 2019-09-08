@@ -61,7 +61,7 @@ namespace HareDu.Snapshotting.Internal
 //                ContextSwitching = new ContextSwitchDetailsImpl(node);
             }
 
-            public OperatingSystemDetails OS { get; }
+            public OperatingSystemSnapshot OS { get; }
             public string RatesMode { get; }
             public long Uptime { get; }
             public int RunQueue { get; }

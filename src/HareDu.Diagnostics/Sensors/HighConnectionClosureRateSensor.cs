@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Sensors
             var sensorData = new List<DiagnosticSensorData>
             {
                 new DiagnosticSensorDataImpl("ConnectionsClosed.Rate", data.ConnectionsClosed.Rate.ToString()),
-                new DiagnosticSensorDataImpl("RateThreshold", _config.HighClosureRateThreshold.ToString())
+                new DiagnosticSensorDataImpl("HighClosureRateThreshold", _config.HighClosureRateThreshold.ToString())
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
