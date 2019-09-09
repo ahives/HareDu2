@@ -11,17 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Diagnostics.Tests.Configuration
 {
-    public class DiagnosticSensorConfigProvider :
-        IDiagnosticSensorConfigProvider
+    using Diagnostics.Configuration;
+    using NUnit.Framework;
+
+    [TestFixture]
+    public class DiagnosticScannerConfigProviderTests
     {
-        public bool TryGet(out DiagnosticSensorConfig config)
+        [Test]
+        public void Test()
         {
-            // TODO: add code to pull from configuration file
-            
-            config = DiagnosticSensorConfigCache.Default;
-            return true;
+            var provider = new DiagnosticScannerConfigProvider();
+
+            Assert.IsTrue(provider.TryGet(out var config));
+            Assert.IsTrue(config.OverrideSensorConfig);
+//            Assert.AreEqual(90, config.Sensor.HighClosureRateWarningThreshold);
         }
     }
 }

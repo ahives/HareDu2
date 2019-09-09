@@ -22,12 +22,12 @@ namespace HareDu.Diagnostics.Sensors
         IObservable<DiagnosticContext>
     {
         protected bool _canReadConfig;
-        protected readonly IDiagnosticSensorConfigProvider _configProvider;
+        protected readonly IDiagnosticScannerConfigProvider _configProvider;
         protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
-        protected DiagnosticSensorConfig _config;
+        protected DiagnosticScannerConfig _config;
         readonly List<IObserver<DiagnosticContext>> _observers;
 
-        protected BaseDiagnosticSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        protected BaseDiagnosticSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _configProvider = configProvider;
             _knowledgeBaseProvider = knowledgeBaseProvider;

@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
 
-        public HighConnectionCreationRateSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public HighConnectionCreationRateSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -62,12 +62,12 @@ namespace HareDu.Diagnostics.Sensors
             var sensorData = new List<DiagnosticSensorData>
             {
                 new DiagnosticSensorDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
-                new DiagnosticSensorDataImpl("HighCreationRateThreshold", _config.HighCreationRateThreshold.ToString())
+                new DiagnosticSensorDataImpl("HighCreationRateThreshold", _config.Sensor.HighCreationRateWarningThreshold.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsCreated.Rate >= _config.HighCreationRateThreshold)
+            if (data.ConnectionsCreated.Rate >= _config.Sensor.HighCreationRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

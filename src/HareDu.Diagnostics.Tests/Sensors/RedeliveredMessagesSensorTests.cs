@@ -14,7 +14,7 @@
 namespace HareDu.Diagnostics.Tests.Sensors
 {
     using Autofac;
-    using Configuration;
+    using Diagnostics.Configuration;
     using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
@@ -35,8 +35,8 @@ namespace HareDu.Diagnostics.Tests.Sensors
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticSensorConfigProvider>()
-                .As<IDiagnosticSensorConfigProvider>()
+            builder.RegisterType<DiagnosticScannerConfigProvider>()
+                .As<IDiagnosticScannerConfigProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -73,7 +73,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         [Test]
         public void Verify_sensor_inconclusive_condition_1()
         {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider);
             
@@ -100,38 +100,51 @@ namespace HareDu.Diagnostics.Tests.Sensors
 
         
         class DefaultConfigProvider1 :
-            IDiagnosticSensorConfigProvider
+            IDiagnosticScannerConfigProvider
         {
-            public bool TryGet(out DiagnosticSensorConfig config)
+            public bool TryGet(out DiagnosticScannerConfig config)
             {
-                config = new FakeDiagnosticSensorConfig();
+                config = new FakeDiagnosticScannerConfig();
                 return true;
             }
 
-            
-            class FakeDiagnosticSensorConfig :
-                DiagnosticSensorConfig
+
+            class FakeDiagnosticScannerConfig :
+                DiagnosticScannerConfig
             {
-                public FakeDiagnosticSensorConfig()
+                public FakeDiagnosticScannerConfig()
                 {
-                    SocketUsageCoefficient = 1.0M;
-                    MessageRedeliveryCoefficient = 0.8M;
+                    Sensor = new FakeDiagnosticSensorConfig();
                 }
 
-                public int HighClosureRateThreshold { get; }
-                public int HighCreationRateThreshold { get; }
-                public decimal MessageRedeliveryCoefficient { get; }
-                public decimal SocketUsageCoefficient { get; }
-                public decimal RuntimeProcessUsageCoefficient { get; }
-                public decimal FileDescriptorUsageWarningThreshold { get; }
+                public bool OverrideSensorConfig { get; }
+                public DiagnosticSensorConfig Sensor { get; }
+
+
+                class FakeDiagnosticSensorConfig :
+                    DiagnosticSensorConfig
+                {
+                    public FakeDiagnosticSensorConfig()
+                    {
+                        SocketUsageCoefficient = 1.0M;
+                        MessageRedeliveryCoefficient = 0.8M;
+                    }
+
+                    public int HighClosureRateWarningThreshold { get; }
+                    public int HighCreationRateWarningThreshold { get; }
+                    public decimal MessageRedeliveryCoefficient { get; }
+                    public decimal SocketUsageCoefficient { get; }
+                    public decimal RuntimeProcessUsageCoefficient { get; }
+                    public decimal FileDescriptorUsageWarningCoefficient { get; }
+                }
             }
         }
 
         
         class DefaultConfigProvider :
-            IDiagnosticSensorConfigProvider
+            IDiagnosticScannerConfigProvider
         {
-            public bool TryGet(out DiagnosticSensorConfig config)
+            public bool TryGet(out DiagnosticScannerConfig config)
             {
                 config = null;
                 return false;

@@ -1,0 +1,9 @@
+---
+  -overrideSensorConfig: true
+sensor:
+  -highClosureRateWarningThreshold: 90
+  -highCreationRateWarningThreshold: 100
+  -runtimeProcessUsageCoefficient: 0.7
+  -fileDescriptorUsageWarningCoefficient: 0.7
+  -socketUsageCoefficient: 0.5
+  -messageRedeliveryCoefficient: 0.5

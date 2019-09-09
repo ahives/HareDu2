@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
 {
     using System.Collections.Generic;
     using Autofac;
-    using Configuration;
+    using Diagnostics.Configuration;
     using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
@@ -36,8 +36,8 @@ namespace HareDu.Diagnostics.Tests.Sensors
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticSensorConfigProvider>()
-                .As<IDiagnosticSensorConfigProvider>()
+            builder.RegisterType<DiagnosticScannerConfigProvider>()
+                .As<IDiagnosticScannerConfigProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -46,7 +46,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         [Test(Description = "")]
         public void Verify_sensor_red_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new NetworkPartitionSensor(configProvider, knowledgeBaseProvider);
 
@@ -65,7 +65,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         [Test]
         public void Verify_sensor_green_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new NetworkPartitionSensor(configProvider, knowledgeBaseProvider);
             
@@ -79,7 +79,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         [Test]
         public void Verify_sensor_inconclusive_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticSensorConfigProvider>();
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new NetworkPartitionSensor(configProvider, knowledgeBaseProvider);
             

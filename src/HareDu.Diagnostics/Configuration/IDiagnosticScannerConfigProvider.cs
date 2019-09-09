@@ -13,10 +13,8 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Configuration
 {
-    using Internal;
-
-    public static class DiagnosticSensorConfigCache
+    public interface IDiagnosticScannerConfigProvider
     {
-        public static readonly DiagnosticScannerConfig Default = new DefaultDiagnosticScannerConfig();
+        bool TryGet(out DiagnosticScannerConfig config);
     }
 }

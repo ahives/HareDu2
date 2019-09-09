@@ -22,6 +22,12 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingSensor>(DiagnosticStatus.Red,
+                "The max limit of available file descriptors that are in use has been reached. This will prevent applications from being able to open more connections to the broker and the RabbitMQ node from opening any files in support of current transactions.",
+                "Increase the max number of allowed file handles (see https://www.rabbitmq.com/networking.html#open-file-handle-limit)."));
+            _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingSensor>(DiagnosticStatus.Yellow, "", ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingSensor>(DiagnosticStatus.Green,
+                "The number of file handles currently in use is below the max number allowed."));
             _articles.Add(new KnowledgeBaseArticleImpl<AvailableCpuCoresSensor>(DiagnosticStatus.Red,
                 "Could not detect any CPU cores or none are available to the RabbitMQ broker.",
                 "Add more CPU cores to the RabbitMQ node."));

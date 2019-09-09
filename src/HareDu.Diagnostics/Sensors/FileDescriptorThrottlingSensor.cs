@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
         
-        public FileDescriptorThrottlingSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public FileDescriptorThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -67,7 +67,7 @@ namespace HareDu.Diagnostics.Sensors
             {
                 new DiagnosticSensorDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
                 new DiagnosticSensorDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
-                new DiagnosticSensorDataImpl("FileDescriptorUsageWarningThreshold", _config.FileDescriptorUsageWarningThreshold.ToString()),
+                new DiagnosticSensorDataImpl("FileDescriptorUsageWarningThreshold", _config.Sensor.FileDescriptorUsageWarningCoefficient.ToString()),
                 new DiagnosticSensorDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
             };
 
@@ -93,8 +93,8 @@ namespace HareDu.Diagnostics.Sensors
         }
 
         long ComputeWarningThreshold(long fileDescriptorsAvailable)
-            => _config.FileDescriptorUsageWarningThreshold >= 1
+            => _config.Sensor.FileDescriptorUsageWarningCoefficient >= 1
                 ? fileDescriptorsAvailable
-                : Convert.ToInt64(Math.Ceiling(fileDescriptorsAvailable * _config.FileDescriptorUsageWarningThreshold));
+                : Convert.ToInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Sensor.FileDescriptorUsageWarningCoefficient));
     }
 }

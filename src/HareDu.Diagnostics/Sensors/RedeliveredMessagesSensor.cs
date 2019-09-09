@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.FaultTolerance;
 
-        public RedeliveredMessagesSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public RedeliveredMessagesSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -64,13 +64,14 @@ namespace HareDu.Diagnostics.Sensors
             {
                 new DiagnosticSensorDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
                 new DiagnosticSensorDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
-                new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString())
+                new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.Sensor.MessageRedeliveryCoefficient.ToString()),
+                new DiagnosticSensorDataImpl("MessageRedeliveryCoefficient", _config.Sensor.MessageRedeliveryCoefficient.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
-            long highWatermark = CalculateHighWatermark(data.Messages.Incoming.Total);
+            long warningThreshold = ComputeWarningThreshold(data.Messages.Incoming.Total);
             
-            if (data.Messages.Redelivered.Total >= highWatermark && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && highWatermark < data.Messages.Incoming.Total)
+            if (data.Messages.Redelivered.Total >= warningThreshold && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && warningThreshold < data.Messages.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
@@ -91,9 +92,9 @@ namespace HareDu.Diagnostics.Sensors
             return result;
         }
 
-        long CalculateHighWatermark(long total)
-            => _config.MessageRedeliveryCoefficient >= 1
+        long ComputeWarningThreshold(long total)
+            => _config.Sensor.MessageRedeliveryCoefficient >= 1
                 ? total
-                : Convert.ToInt64(Math.Ceiling(total * _config.MessageRedeliveryCoefficient));
+                : Convert.ToInt64(Math.Ceiling(total * _config.Sensor.MessageRedeliveryCoefficient));
     }
 }

@@ -15,9 +15,9 @@ namespace HareDu.Diagnostics.Configuration
 {
     public interface DiagnosticSensorConfig
     {
-        int HighClosureRateThreshold { get; }
+        int HighClosureRateWarningThreshold { get; }
         
-        int HighCreationRateThreshold { get; }
+        int HighCreationRateWarningThreshold { get; }
         
         decimal MessageRedeliveryCoefficient { get; }
 
@@ -25,6 +25,6 @@ namespace HareDu.Diagnostics.Configuration
         
         decimal RuntimeProcessUsageCoefficient { get; }
         
-        decimal FileDescriptorUsageWarningThreshold { get; }
+        decimal FileDescriptorUsageWarningCoefficient { get; }
     }
 }

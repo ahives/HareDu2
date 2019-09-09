@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public NetworkThrottlingSensor(IDiagnosticSensorConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public NetworkThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -93,8 +93,8 @@ namespace HareDu.Diagnostics.Sensors
         }
 
         long ComputeWarningThreshold(long socketsAvailable)
-            => _config.SocketUsageCoefficient >= 1
+            => _config.Sensor.SocketUsageCoefficient >= 1
                 ? socketsAvailable
-                : Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.SocketUsageCoefficient));
+                : Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.Sensor.SocketUsageCoefficient));
     }
 }

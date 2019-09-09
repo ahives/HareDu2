@@ -13,8 +13,10 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Configuration
 {
-    public interface IDiagnosticSensorConfigProvider
+    public interface DiagnosticScannerConfig
     {
-        bool TryGet(out DiagnosticSensorConfig config);
+        bool OverrideSensorConfig { get; }
+        
+        DiagnosticSensorConfig Sensor { get; }
     }
 }

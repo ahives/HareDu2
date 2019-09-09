@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Configuration;
+    using Diagnostics.Configuration;
     using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [OneTimeSetUp]
         public void Init()
         {
-            var configProvider = new DiagnosticSensorConfigProvider();
+            var configProvider = new DiagnosticScannerConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
             _sensors = new List<IDiagnosticSensor>
