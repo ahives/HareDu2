@@ -19,7 +19,7 @@ namespace HareDu.Diagnostics.Tests.Configuration
     [TestFixture]
     public class DiagnosticScannerConfigProviderTests
     {
-        [Test]
+        [Test, Explicit]
         public void Test()
         {
             var provider = new DiagnosticScannerConfigProvider();

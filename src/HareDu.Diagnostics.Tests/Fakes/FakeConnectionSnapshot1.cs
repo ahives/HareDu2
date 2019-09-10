@@ -20,8 +20,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeConnectionSnapshot1 :
         ConnectionSnapshot
     {
-        public FakeConnectionSnapshot1(decimal connectionsCreatedRate, decimal connectionsClosedRate,
-            int numOfChannels, long channelLimit)
+        public FakeConnectionSnapshot1(int numOfChannels, long channelLimit)
         {
             Identifier = "Connection1";
             ChannelLimit = channelLimit;
@@ -33,6 +32,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public long ChannelLimit { get; }
         public string Node { get; }
         public string VirtualHost { get; }
+        public ConnectionState State { get; }
         public IReadOnlyList<ChannelSnapshot> Channels { get; }
 
         IEnumerable<ChannelSnapshot> GetChannels(int numOfChannels)

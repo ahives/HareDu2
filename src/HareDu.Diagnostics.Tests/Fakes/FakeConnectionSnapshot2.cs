@@ -11,17 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Diagnostics.Tests.Fakes
 {
     using System.Collections.Generic;
-    using Snapshotting;
+    using Snapshotting.Extensions;
+    using Snapshotting.Model;
 
-    public class DoNothingDiagnostic<T> :
-        IComponentDiagnostic<T>
-        where T : Snapshot
+    public class FakeConnectionSnapshot2 :
+        ConnectionSnapshot
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
+        public FakeConnectionSnapshot2(string state)
+        {
+            State = state.Convert();
+        }
 
-        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => DiagnosticCache.EmptyDiagnosticResults;
+        public string Identifier { get; }
+        public NetworkTrafficSnapshot NetworkTraffic { get; }
+        public long ChannelLimit { get; }
+        public string Node { get; }
+        public string VirtualHost { get; }
+        public ConnectionState State { get; }
+        public IReadOnlyList<ChannelSnapshot> Channels { get; }
     }
 }

@@ -141,6 +141,7 @@ namespace HareDu.Snapshotting.Internal
                     ChannelLimit = connection.MaxChannels;
                     Node = connection.Node;
                     VirtualHost = connection.VirtualHost;
+                    State = connection.State.Convert();
                 }
 
                 public string Identifier { get; }
@@ -148,6 +149,7 @@ namespace HareDu.Snapshotting.Internal
                 public long ChannelLimit { get; }
                 public string Node { get; }
                 public string VirtualHost { get; }
+                public ConnectionState State { get; }
                 public IReadOnlyList<ChannelSnapshot> Channels { get; }
 
                 

@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<BlockedConnectionSensor>(DiagnosticStatus.Red,
+                "The connection is blocked meaning that an application has published but is now prevented from consuming. This is not the case with consume only connections.",
+                ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<BlockedConnectionSensor>(DiagnosticStatus.Green, "Client applications are able to publish and/or consume on this connection."));
             _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingSensor>(DiagnosticStatus.Red,
                 "The max limit of available file descriptors that are in use has been reached. This will prevent applications from being able to open more connections to the broker and the RabbitMQ node from opening any files in support of current transactions.",
                 "Increase the max number of allowed file handles (see https://www.rabbitmq.com/networking.html#open-file-handle-limit)."));

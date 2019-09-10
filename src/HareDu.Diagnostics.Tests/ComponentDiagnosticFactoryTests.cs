@@ -11,20 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests.Scanners
+namespace HareDu.Diagnostics.Tests
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Diagnostics.Configuration;
     using Diagnostics.Sensors;
-    using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
     using Snapshotting.Model;
 
     [TestFixture]
-    public class BrokerConnectivityDiagnosticTests
+    public class ComponentDiagnosticFactoryTests
     {
         IReadOnlyList<IDiagnosticSensor> _sensors;
 
@@ -46,31 +44,21 @@ namespace HareDu.Diagnostics.Tests.Scanners
         }
 
         [Test]
-        public void Verify_sensors_fired()
+        public void Verify_can_get_diagnostic()
         {
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
+            var factory = new ComponentDiagnosticFactory(_sensors);
             
-            var report = new BrokerConnectivityDiagnostic(_sensors)
-                .Scan(snapshot);
-
-            Assert.AreEqual(6, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionCreationRateSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionClosureRateSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnlimitedPrefetchCountSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelThrottlingSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelLimitReachedSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(BlockedConnectionSensor).FullName.GenerateIdentifier()));
+            Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
+            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
         [Test]
-        public void Verify_empty_result_returned_when_snapshot_null()
+        public void Verify_TryGet_does_not_throw()
         {
-            BrokerConnectivitySnapshot snapshot = null;
+            var factory = new ComponentDiagnosticFactory(_sensors);
             
-            var report = new BrokerConnectivityDiagnostic(_sensors)
-                .Scan(snapshot);
-
-            Assert.IsEmpty(report);
+            Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
+            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
     }
 }

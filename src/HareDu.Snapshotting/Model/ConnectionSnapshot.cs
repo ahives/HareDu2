@@ -27,6 +27,8 @@ namespace HareDu.Snapshotting.Model
         string Node { get; }
         
         string VirtualHost { get; }
+        
+        ConnectionState State { get; }
 
         IReadOnlyList<ChannelSnapshot> Channels { get; }
     }

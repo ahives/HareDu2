@@ -14,8 +14,10 @@
 namespace HareDu.Diagnostics.Scanning
 {
     using System.Collections.Generic;
+    using Snapshotting;
 
     public interface IComponentDiagnostic<in T>
+    where T : Snapshot
     {
         string Identifier { get; }
         

@@ -11,17 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Snapshotting.Model
 {
-    using System.Collections.Generic;
-    using Snapshotting;
-
-    public class DoNothingDiagnostic<T> :
-        IComponentDiagnostic<T>
-        where T : Snapshot
+    public enum ConnectionState
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
-
-        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => DiagnosticCache.EmptyDiagnosticResults;
+        Starting,
+        Tuning,
+        Opening,
+        Running,
+        Flow,
+        Blocking,
+        Blocked,
+        Closing,
+        Closed,
+        Inconclusive
     }
 }

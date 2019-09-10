@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using Snapshotting.Model;
 
     [TestFixture]
-    public class ChannelLimitReachedSensorTests
+    public class BlockedConnectionSensorTest
     {
         IContainer _container;
 
@@ -43,27 +43,13 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
-        public void Verify_sensor_red_condition_1()
+        public void Verify_sensor_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new BlockedConnectionSensor(configProvider, knowledgeBaseProvider);
             
-            ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(3, 2);
-
-            var result = sensor.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-        }
-
-        [Test]
-        public void Verify_sensor_red_condition_2()
-        {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
-            
-            ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(3, 3);
+            ConnectionSnapshot snapshot = new FakeConnectionSnapshot2("blocked");
 
             var result = sensor.Execute(snapshot);
             
@@ -75,9 +61,9 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new BlockedConnectionSensor(configProvider, knowledgeBaseProvider);
             
-            ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(2, 3);
+            ConnectionSnapshot snapshot = new FakeConnectionSnapshot2("running");
 
             var result = sensor.Execute(snapshot);
             
@@ -89,7 +75,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new BlockedConnectionSensor(configProvider, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = null;
 

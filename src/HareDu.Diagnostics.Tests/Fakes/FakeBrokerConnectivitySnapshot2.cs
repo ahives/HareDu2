@@ -104,6 +104,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public long ChannelLimit { get; }
             public string Node { get; }
             public string VirtualHost { get; }
+            public ConnectionState State { get; }
             public IReadOnlyList<ChannelSnapshot> Channels { get; }
         }
     }

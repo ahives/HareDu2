@@ -17,6 +17,7 @@ namespace HareDu.Diagnostics.Scanning
     using System.Collections.Generic;
     using System.Linq;
     using Sensors;
+    using Snapshotting;
 
     /// <summary>
     /// This class should be instantiate once since construction can be expensive.
@@ -25,7 +26,7 @@ namespace HareDu.Diagnostics.Scanning
         IComponentDiagnosticFactory
     {
         readonly IReadOnlyList<IDiagnosticSensor> _sensors;
-        readonly IDictionary<string, object> _sensorCache = new Dictionary<string, object>();
+        readonly IDictionary<string, object> _diagnosticCache = new Dictionary<string, object>();
         readonly IList<IDisposable> _observers;
 
         public ComponentDiagnosticFactory(IReadOnlyList<IDiagnosticSensor> sensors)
@@ -37,6 +38,7 @@ namespace HareDu.Diagnostics.Scanning
         }
 
         public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
+            where T : Snapshot
         {
             Type type = GetType()
                 .Assembly
@@ -44,13 +46,16 @@ namespace HareDu.Diagnostics.Scanning
                 .FirstOrDefault(x => typeof(IComponentDiagnostic<T>).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
-                throw new HareDuComponentDiagnosticInitException($"Failed to find implementation class for interface {typeof(T)}");
+            {
+                diagnostic = new DoNothingDiagnostic<T>();
+                return false;
+            }
 
-            if (_sensorCache.ContainsKey(type.FullName))
+            if (_diagnosticCache.ContainsKey(type.FullName))
             {
                 string identifier = type.FullName.GenerateIdentifier();
                 
-                diagnostic = (IComponentDiagnostic<T>) _sensorCache[identifier];
+                diagnostic = (IComponentDiagnostic<T>) _diagnosticCache[identifier];
                 return true;
             }
 
@@ -60,7 +65,7 @@ namespace HareDu.Diagnostics.Scanning
 
                 // TODO: check to see if instance was created successfully
             
-                _sensorCache.Add(diagnostic.Identifier, diagnostic);
+                _diagnosticCache.Add(diagnostic.Identifier, diagnostic);
                 return true;
             }
             catch { }
@@ -105,7 +110,7 @@ namespace HareDu.Diagnostics.Scanning
             {
                 var instance = Activator.CreateInstance(type, sensors);
                 
-                _sensorCache.Add(type.FullName, instance);
+                _diagnosticCache.Add(type.FullName, instance);
             }
         }
     }
