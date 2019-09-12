@@ -13,15 +13,12 @@
 // limitations under the License.
 namespace HareDu.AutofacIntegration
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Autofac;
+    using Diagnostics;
     using Diagnostics.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Scanning;
-    using Diagnostics.Sensors;
 
     public class HareDuDiagnosticsModule :
         Module
@@ -33,12 +30,24 @@ namespace HareDu.AutofacIntegration
                     var configProvider = x.Resolve<IDiagnosticScannerConfigProvider>();
                     
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
-                    
-                    var sensors = RegisterDiagnosticSensors(configProvider, knowledgeBaseProvider).ToList();
 
-                    return new ComponentDiagnosticFactory(sensors);
+                    var sensorRegistrar = x.Resolve<IDiagnosticSensorRegistrar>();
+                    sensorRegistrar.RegisterAll(configProvider, knowledgeBaseProvider);
+
+                    var diagnosticsRegistrar = x.Resolve<IDiagnosticsRegistrar>();
+                    diagnosticsRegistrar.RegisterAll(sensorRegistrar.Sensors);
+
+                    return new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, sensorRegistrar.Sensors);
                 })
                 .As<IComponentDiagnosticFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<ComponentDiagnosticRegistrar>()
+                .As<IDiagnosticsRegistrar>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticSensorRegistrar>()
+                .As<IDiagnosticSensorRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()
@@ -58,21 +67,6 @@ namespace HareDu.AutofacIntegration
                 .SingleInstance();
 
             base.Load(builder);
-        }
-        
-        IEnumerable<IDiagnosticSensor> RegisterDiagnosticSensors(IDiagnosticScannerConfigProvider configProvider,
-            IKnowledgeBaseProvider knowledgeBaseProvider)
-        {
-            var sensors = typeof(IDiagnosticSensor)
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(IDiagnosticSensor).IsAssignableFrom(x) && !x.IsInterface)
-                .ToList();
-
-            for (int i = 0; i < sensors.Count; i++)
-            {
-                yield return (IDiagnosticSensor) Activator.CreateInstance(sensors[i], configProvider, knowledgeBaseProvider);
-            }
         }
     }
 }

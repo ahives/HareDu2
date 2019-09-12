@@ -14,21 +14,30 @@
 namespace HareDu.Diagnostics.Tests
 {
     using System.Collections.Generic;
+    using Autofac;
+    using AutofacIntegration;
     using Diagnostics.Configuration;
     using Diagnostics.Sensors;
     using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
+    using Snapshotting;
     using Snapshotting.Model;
 
     [TestFixture]
     public class ComponentDiagnosticFactoryTests
     {
         IReadOnlyList<IDiagnosticSensor> _sensors;
+        IContainer _container;
 
         [OneTimeSetUp]
         public void Init()
         {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterModule<HareDuDiagnosticsModule>();
+            
+            _container = builder.Build();
             var configProvider = new DiagnosticScannerConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
@@ -46,19 +55,56 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic()
         {
-            var factory = new ComponentDiagnosticFactory(_sensors);
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
+            diagnosticsRegistrar.RegisterAll(_sensors);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
             Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
         [Test]
+        public void Test()
+        {
+            var factory = _container.Resolve<IComponentDiagnosticFactory>();
+            
+            Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
+//            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
+        }
+
+        [Test]
         public void Verify_TryGet_does_not_throw()
         {
-            var factory = new ComponentDiagnosticFactory(_sensors);
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
+            diagnosticsRegistrar.RegisterAll(_sensors);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
             Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
+
+        [Test]
+        public void Verify_can_get_diagnostic_after_instantiation()
+        {
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
+            diagnosticsRegistrar.RegisterAll(_sensors);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, _sensors);
+            
+            Assert.IsFalse(factory.TryGet<FakeSnapshot>(out var diagnostic));
+//            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
+        }
+
+        class FakeDiagnostic :
+            IComponentDiagnostic<FakeSnapshot>
+        {
+            public string Identifier => GetType().FullName.GenerateIdentifier();
+            
+            public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) => throw new System.NotImplementedException();
+        }
+    }
+
+    interface FakeSnapshot :
+        Snapshot
+    {
     }
 }

@@ -25,25 +25,24 @@ namespace HareDu.Diagnostics.Scanning
     public class ComponentDiagnosticFactory :
         IComponentDiagnosticFactory
     {
+        readonly IDiagnosticsRegistrar _diagnosticsRegistrar;
+        readonly IDictionary<string, object> _diagnosticCache;
         readonly IReadOnlyList<IDiagnosticSensor> _sensors;
-        readonly IDictionary<string, object> _diagnosticCache = new Dictionary<string, object>();
         readonly IList<IDisposable> _observers;
+        readonly IEnumerable<Type> _types;
 
-        public ComponentDiagnosticFactory(IReadOnlyList<IDiagnosticSensor> sensors)
+        public ComponentDiagnosticFactory(IDictionary<string, object> diagnosticCache, IReadOnlyList<Type> types, IReadOnlyList<IDiagnosticSensor> sensors)
         {
+            _diagnosticCache = diagnosticCache;
+            _types = types;
             _sensors = sensors;
             _observers = new List<IDisposable>();
-            
-            RegisterComponentDiagnostics(sensors);
         }
 
         public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
             where T : Snapshot
         {
-            Type type = GetType()
-                .Assembly
-                .GetTypes()
-                .FirstOrDefault(x => typeof(IComponentDiagnostic<T>).IsAssignableFrom(x) && !x.IsInterface);
+            Type type = _types.FirstOrDefault(x => typeof(IComponentDiagnostic<T>).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
             {
@@ -51,24 +50,13 @@ namespace HareDu.Diagnostics.Scanning
                 return false;
             }
 
-            if (_diagnosticCache.ContainsKey(type.FullName))
+            string identifier = type.FullName.GenerateIdentifier();
+            
+            if (_diagnosticCache.ContainsKey(identifier))
             {
-                string identifier = type.FullName.GenerateIdentifier();
-                
                 diagnostic = (IComponentDiagnostic<T>) _diagnosticCache[identifier];
                 return true;
             }
-
-            try
-            {
-                diagnostic = Activator.CreateInstance(type, _sensors) as IComponentDiagnostic<T>;
-
-                // TODO: check to see if instance was created successfully
-            
-                _diagnosticCache.Add(diagnostic.Identifier, diagnostic);
-                return true;
-            }
-            catch { }
             
             diagnostic = new DoNothingDiagnostic<T>();
             return false;
@@ -96,21 +84,6 @@ namespace HareDu.Diagnostics.Scanning
                 {
                     _observers.Add(_sensors[j].Subscribe(observer));
                 }
-            }
-        }
-
-        void RegisterComponentDiagnostics(IReadOnlyList<IDiagnosticSensor> sensors)
-        {
-            var types = GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(IComponentDiagnostic<>).IsAssignableFrom(x) && !x.IsInterface);
-
-            foreach (var type in types)
-            {
-                var instance = Activator.CreateInstance(type, sensors);
-                
-                _diagnosticCache.Add(type.FullName, instance);
             }
         }
     }
