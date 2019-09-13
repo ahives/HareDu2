@@ -25,13 +25,13 @@ namespace HareDu.Core.Model
         string OperatingSystemProcessId { get; }
 
         [JsonProperty("fd_total")]
-        long TotalFileDescriptors { get; }
+        ulong TotalFileDescriptors { get; }
 
         [JsonProperty("sockets_total")]
-        long TotalSocketsAvailable { get; }
+        ulong TotalSocketsAvailable { get; }
 
         [JsonProperty("mem_limit")]
-        long MemoryLimit { get; }
+        ulong MemoryLimit { get; }
 
         [JsonProperty("mem_alarm")]
         bool MemoryAlarm { get; }
@@ -109,13 +109,13 @@ namespace HareDu.Core.Model
         MemoryUsageDetails MemoryUsageDetails { get; }
 
         [JsonProperty("fd_used")]
-        long FileDescriptorUsed { get; }
+        ulong FileDescriptorUsed { get; }
 
         [JsonProperty("fd_used_details")]
         FileDescriptorUsedDetails FileDescriptorUsedDetails { get; }
 
         [JsonProperty("sockets_used")]
-        long SocketsUsed { get; }
+        ulong SocketsUsed { get; }
 
         [JsonProperty("sockets_used_details")]
         SocketsUsedDetails SocketsUsedDetails { get; }
@@ -259,7 +259,7 @@ namespace HareDu.Core.Model
         QueueIndexReadCountDetails RateOfQueueIndexReads { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count")]
-        long TotalOpenFileHandleAttempts { get; }
+        ulong TotalOpenFileHandleAttempts { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count_details")]
         FileHandleOpenAttemptCountDetails FileHandleOpenAttemptCountDetails { get; }

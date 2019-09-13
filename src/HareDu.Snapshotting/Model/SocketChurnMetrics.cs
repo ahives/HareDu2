@@ -15,9 +15,9 @@ namespace HareDu.Snapshotting.Model
 {
     public interface SocketChurnMetrics
     {
-        long Available { get; }
+        ulong Available { get; }
 
-        long Used { get; }
+        ulong Used { get; }
 
         decimal UsageRate { get; }
     }

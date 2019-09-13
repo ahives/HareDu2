@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Sensors
             }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
-            long warningThreshold = ComputeWarningThreshold(data.OS.Sockets.Available);
+            ulong warningThreshold = ComputeWarningThreshold(data.OS.Sockets.Available);
             
             var sensorData = new List<DiagnosticSensorData>
             {
@@ -92,9 +92,9 @@ namespace HareDu.Diagnostics.Sensors
             return result;
         }
 
-        long ComputeWarningThreshold(long socketsAvailable)
+        ulong ComputeWarningThreshold(ulong socketsAvailable)
             => _config.Sensor.SocketUsageCoefficient >= 1
                 ? socketsAvailable
-                : Convert.ToInt64(Math.Ceiling(socketsAvailable * _config.Sensor.SocketUsageCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.Sensor.SocketUsageCoefficient));
     }
 }

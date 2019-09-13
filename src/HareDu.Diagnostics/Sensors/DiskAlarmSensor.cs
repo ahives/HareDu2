@@ -53,8 +53,8 @@ namespace HareDu.Diagnostics.Sensors
             var sensorData = new List<DiagnosticSensorData>
             {
                 new DiagnosticSensorDataImpl("Disk.FreeAlarm", data.AlarmInEffect.ToString()),
-                new DiagnosticSensorDataImpl("Disk.FreeAlarm", data.Limit.ToString()),
-                new DiagnosticSensorDataImpl("Disk.FreeAlarm", data.AlarmInEffect.ToString())
+                new DiagnosticSensorDataImpl("Disk.Limit", data.Limit.ToString()),
+                new DiagnosticSensorDataImpl("Disk.Capacity.Available", data.Capacity.Available.ToString())
             };
 
             if (data.AlarmInEffect)

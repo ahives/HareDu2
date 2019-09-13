@@ -19,7 +19,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeNodeSnapshot1 :
         NodeSnapshot
     {
-        public FakeNodeSnapshot1(long availableSockets, long usedSockets, decimal socketUsageRate)
+        public FakeNodeSnapshot1(ulong availableSockets, ulong usedSockets, decimal socketUsageRate)
         {
             OS = new OperatingSystemSnapshotImpl(availableSockets, usedSockets, socketUsageRate);
         }
@@ -46,7 +46,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class OperatingSystemSnapshotImpl :
             OperatingSystemSnapshot
         {
-            public OperatingSystemSnapshotImpl(long available, long used, decimal usageRate)
+            public OperatingSystemSnapshotImpl(ulong available, ulong used, decimal usageRate)
             {
                 Sockets = new SocketChurnMetricsImpl(available, used, usageRate);
             }
@@ -59,15 +59,15 @@ namespace HareDu.Diagnostics.Tests.Fakes
             class SocketChurnMetricsImpl :
                 SocketChurnMetrics
             {
-                public SocketChurnMetricsImpl(long available, long used, decimal usageRate)
+                public SocketChurnMetricsImpl(ulong available, ulong used, decimal usageRate)
                 {
                     Available = available;
                     Used = used;
                     UsageRate = usageRate;
                 }
 
-                public long Available { get; }
-                public long Used { get; }
+                public ulong Available { get; }
+                public ulong Used { get; }
                 public decimal UsageRate { get; }
             }
         }

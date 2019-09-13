@@ -18,7 +18,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeOperatingSystemSnapshot1 :
         OperatingSystemSnapshot
     {
-        public FakeOperatingSystemSnapshot1(long available, long used)
+        public FakeOperatingSystemSnapshot1(ulong available, ulong used)
         {
             FileDescriptors = new FileDescriptorChurnMetricsImpl(available, used);
         }
@@ -31,16 +31,16 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FileDescriptorChurnMetricsImpl :
             FileDescriptorChurnMetrics
         {
-            public FileDescriptorChurnMetricsImpl(long available, long used)
+            public FileDescriptorChurnMetricsImpl(ulong available, ulong used)
             {
                 Available = available;
                 Used = used;
             }
 
-            public long Available { get; }
-            public long Used { get; }
+            public ulong Available { get; }
+            public ulong Used { get; }
             public decimal UsageRate { get; }
-            public long OpenAttempts { get; }
+            public ulong OpenAttempts { get; }
             public decimal OpenAttemptRate { get; }
             public decimal AvgTimePerOpenAttempt { get; }
             public decimal AvgTimeRatePerOpenAttempt { get; }

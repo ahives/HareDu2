@@ -15,13 +15,13 @@ namespace HareDu.Snapshotting.Model
 {
     public interface FileDescriptorChurnMetrics
     {
-        long Available { get; }
+        ulong Available { get; }
 
-        long Used { get; }
+        ulong Used { get; }
 
         decimal UsageRate { get; }
 
-        long OpenAttempts { get; }
+        ulong OpenAttempts { get; }
 
         decimal OpenAttemptRate { get; }
 

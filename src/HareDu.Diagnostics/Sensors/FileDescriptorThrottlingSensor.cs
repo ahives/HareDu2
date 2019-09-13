@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Sensors
             }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
-            long warningThreshold = ComputeWarningThreshold(data.FileDescriptors.Available);
+            ulong warningThreshold = ComputeWarningThreshold(data.FileDescriptors.Available);
 
             var sensorData = new List<DiagnosticSensorData>
             {
@@ -92,9 +92,9 @@ namespace HareDu.Diagnostics.Sensors
             return result;
         }
 
-        long ComputeWarningThreshold(long fileDescriptorsAvailable)
+        ulong ComputeWarningThreshold(ulong fileDescriptorsAvailable)
             => _config.Sensor.FileDescriptorUsageWarningCoefficient >= 1
                 ? fileDescriptorsAvailable
-                : Convert.ToInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Sensor.FileDescriptorUsageWarningCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Sensor.FileDescriptorUsageWarningCoefficient));
     }
 }

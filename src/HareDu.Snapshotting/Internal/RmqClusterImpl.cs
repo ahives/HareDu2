@@ -247,8 +247,8 @@ namespace HareDu.Snapshotting.Internal
                             UsageRate = node.SocketsUsedDetails?.Rate ?? 0;
                         }
 
-                        public long Available { get; }
-                        public long Used { get; }
+                        public ulong Available { get; }
+                        public ulong Used { get; }
                         public decimal UsageRate { get; }
                     }
 
@@ -267,10 +267,10 @@ namespace HareDu.Snapshotting.Internal
                             AvgTimeRatePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
                         }
 
-                        public long Available { get; }
-                        public long Used { get; }
+                        public ulong Available { get; }
+                        public ulong Used { get; }
                         public decimal UsageRate { get; }
-                        public long OpenAttempts { get; }
+                        public ulong OpenAttempts { get; }
                         public decimal OpenAttemptRate { get; }
                         public decimal AvgTimePerOpenAttempt { get; }
                         public decimal AvgTimeRatePerOpenAttempt { get; }
