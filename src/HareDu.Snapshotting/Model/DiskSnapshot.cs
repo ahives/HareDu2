@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting.Model
     {
         DiskCapacityDetails Capacity { get; }
 
-        string FreeLimit { get; }
+        ulong Limit { get; }
 
         bool AlarmInEffect { get; }
     }

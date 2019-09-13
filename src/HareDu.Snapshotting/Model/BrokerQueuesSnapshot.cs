@@ -68,33 +68,4 @@ namespace HareDu.Snapshotting.Model
         [JsonProperty("memory")]
         long Memory { get; }
     }
-
-    public interface QueueInternals
-    {
-        Reductions Reductions { get; }
-        
-        long TargetCountOfMessagesAllowedInRAM { get; }
-        
-        decimal ConsumerUtilization { get; }
-
-        long Q1 { get; }
-        
-        long Q2 { get; }
-        
-        long Q3 { get; }
-        
-        long Q4 { get; }
-        
-        [JsonProperty("avg_ingress_rate")]
-        decimal AvgIngressRate { get; }
-        
-        [JsonProperty("avg_egress_rate")]
-        decimal AvgEgressRate { get; }
-        
-        [JsonProperty("avg_ack_ingress_rate")]
-        decimal AvgAcknowledgementIngressRate { get; }
-        
-        [JsonProperty("avg_ack_egress_rate")]
-        decimal AvgAcknowledgementEgressRate { get; }
-    }
 }

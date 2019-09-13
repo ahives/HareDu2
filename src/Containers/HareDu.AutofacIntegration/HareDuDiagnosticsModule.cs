@@ -37,7 +37,7 @@ namespace HareDu.AutofacIntegration
                     var diagnosticsRegistrar = x.Resolve<IDiagnosticsRegistrar>();
                     diagnosticsRegistrar.RegisterAll(sensorRegistrar.Sensors);
 
-                    return new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, sensorRegistrar.Sensors);
+                    return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, sensorRegistrar.Sensors);
                 })
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();

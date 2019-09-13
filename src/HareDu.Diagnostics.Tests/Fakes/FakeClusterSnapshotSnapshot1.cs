@@ -106,15 +106,15 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FakeMemorySnapshot :
             MemorySnapshot
         {
-            public FakeMemorySnapshot(long used, long limit, bool alarmInEffect)
+            public FakeMemorySnapshot(ulong used, ulong limit, bool alarmInEffect)
             {
                 Used = used;
                 Limit = limit;
                 AlarmInEffect = alarmInEffect;
             }
 
-            public long Used { get; }
-            public long Limit { get; }
+            public ulong Used { get; }
+            public ulong Limit { get; }
             public bool AlarmInEffect { get; }
         }
 
@@ -152,27 +152,27 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FakeDiskSnapshot :
             DiskSnapshot
         {
-            public FakeDiskSnapshot(long available, bool alarmInEffect, decimal rate)
+            public FakeDiskSnapshot(ulong available, bool alarmInEffect, decimal rate)
             {
                 AlarmInEffect = alarmInEffect;
                 Capacity = new DiskCapacityDetailsImpl(available, rate);
             }
 
             public DiskCapacityDetails Capacity { get; }
-            public string FreeLimit { get; }
+            public ulong Limit { get; }
             public bool AlarmInEffect { get; }
 
         
             class DiskCapacityDetailsImpl :
                 DiskCapacityDetails
             {
-                public DiskCapacityDetailsImpl(long available, decimal rate)
+                public DiskCapacityDetailsImpl(ulong available, decimal rate)
                 {
                     Available = available;
                     Rate = rate;
                 }
 
-                public long Available { get; }
+                public ulong Available { get; }
                 public decimal Rate { get; }
             }
         }

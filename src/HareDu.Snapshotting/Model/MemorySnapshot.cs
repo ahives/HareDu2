@@ -16,9 +16,9 @@ namespace HareDu.Snapshotting.Model
     public interface MemorySnapshot :
         Snapshot
     {
-        long Used { get; }
+        ulong Used { get; }
 
-        long Limit { get; }
+        ulong Limit { get; }
 
         bool AlarmInEffect { get; }
     }

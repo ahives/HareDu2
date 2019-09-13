@@ -31,7 +31,7 @@ namespace HareDu.Snapshotting.Internal
         readonly List<IDisposable> _observers;
         readonly List<Result<BrokerConnectivitySnapshot>> _snapshots;
 
-        public IReadOnlyList<Result<BrokerConnectivitySnapshot>> Snapshots { get; }
+        public IReadOnlyList<Result<BrokerConnectivitySnapshot>> Snapshots => _snapshots;
 
         public BrokerConnectionImpl(IResourceFactory factory)
             : base(factory)

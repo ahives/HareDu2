@@ -150,12 +150,12 @@ namespace HareDu.Snapshotting.Internal
                     public DiskSnapshotImpl(NodeInfo node)
                     {
                         Capacity = new DiskCapacityDetailsImpl(node);
-                        FreeLimit = node.FreeDiskLimit;
+                        Limit = node.FreeDiskLimit;
                         AlarmInEffect = node.FreeDiskAlarm;
                     }
 
                     public DiskCapacityDetails Capacity { get; }
-                    public string FreeLimit { get; }
+                    public ulong Limit { get; }
                     public bool AlarmInEffect { get; }
 
 
@@ -168,7 +168,7 @@ namespace HareDu.Snapshotting.Internal
                             Rate = node.FreeDiskSpaceDetails?.Rate ?? 0;
                         }
 
-                        public long Available { get; }
+                        public ulong Available { get; }
                         public decimal Rate { get; }
                     }
                 }

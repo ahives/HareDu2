@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using Snapshotting.Model;
 
     [TestFixture]
-    public class RuntimeProcessLimitReachedSensorTests
+    public class MemoryAlarmSensorTests
     {
         IContainer _container;
 
@@ -42,28 +42,14 @@ namespace HareDu.Diagnostics.Tests.Sensors
             _container = builder.Build();
         }
 
-        [Test(Description = "")]
-        public void Verify_sensor_red_condition_1()
+        [Test]
+        public void Verify_sensor_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitReachedSensor(configProvider, knowledgeBaseProvider);
-
-            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3, 3.2M);
-
-            var result = sensor.Execute(snapshot);
+            var sensor = new MemoryAlarmSensor(configProvider, knowledgeBaseProvider);
             
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-        }
-
-        [Test(Description = "")]
-        public void Verify_sensor_red_condition_2()
-        {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitReachedSensor(configProvider, knowledgeBaseProvider);
-
-            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 4, 3.2M);
+            MemorySnapshot snapshot = new FakeMemorySnapshot1(103283, 823983, true);
 
             var result = sensor.Execute(snapshot);
             
@@ -75,9 +61,9 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new MemoryAlarmSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 4, 3, 3.2M);
+            MemorySnapshot snapshot = new FakeMemorySnapshot1(103283, 823983, false);
 
             var result = sensor.Execute(snapshot);
             
@@ -85,13 +71,13 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_1()
+        public void Verify_sensor_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitReachedSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new MemoryAlarmSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerRuntimeSnapshot snapshot = null;
+            MemorySnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             

@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using Snapshotting.Model;
 
     [TestFixture]
-    public class MemoryThrottlingSensorTests
+    public class RuntimeProcessLimitSensorTests
     {
         IContainer _container;
 
@@ -42,14 +42,28 @@ namespace HareDu.Diagnostics.Tests.Sensors
             _container = builder.Build();
         }
 
-        [Test]
-        public void Verify_sensor_red_condition()
+        [Test(Description = "")]
+        public void Verify_sensor_red_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new MemoryThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
+
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3, 3.2M);
+
+            var result = sensor.Execute(snapshot);
             
-            MemorySnapshot snapshot = new FakeMemorySnapshot1(103283, 823983, true);
+            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
+        }
+
+        [Test(Description = "")]
+        public void Verify_sensor_red_condition_2()
+        {
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
+
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 4, 3.2M);
 
             var result = sensor.Execute(snapshot);
             
@@ -61,9 +75,9 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new MemoryThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
             
-            MemorySnapshot snapshot = new FakeMemorySnapshot1(103283, 823983, false);
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 4, 3, 3.2M);
 
             var result = sensor.Execute(snapshot);
             
@@ -71,13 +85,13 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_sensor_inconclusive_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new MemoryThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
             
-            MemorySnapshot snapshot = null;
+            BrokerRuntimeSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             

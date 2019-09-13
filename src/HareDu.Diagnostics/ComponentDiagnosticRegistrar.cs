@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics
         readonly IDictionary<string, object> _cache;
 
         public IReadOnlyList<Type> Types => _types;
-        public IDictionary<string, object> DiagnosticCache => _cache;
+        public IDictionary<string, object> Cache => _cache;
 
         public ComponentDiagnosticRegistrar()
         {
@@ -36,9 +36,11 @@ namespace HareDu.Diagnostics
 
         public void Register<T>(IReadOnlyList<IDiagnosticSensor> sensors)
         {
-            _types.Add(typeof(T));
+            Type type = typeof(T);
             
-            Register(typeof(T), sensors);
+            _types.Add(type);
+            
+            Register(type, sensors);
         }
 
         public void RegisterAll(IReadOnlyList<IDiagnosticSensor> sensors)

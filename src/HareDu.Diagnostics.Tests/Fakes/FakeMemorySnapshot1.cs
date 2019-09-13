@@ -18,15 +18,15 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeMemorySnapshot1 :
         MemorySnapshot
     {
-        public FakeMemorySnapshot1(long used, long limit, bool alarmInEffect)
+        public FakeMemorySnapshot1(ulong used, ulong limit, bool alarmInEffect)
         {
             Used = used;
             Limit = limit;
             AlarmInEffect = alarmInEffect;
         }
 
-        public long Used { get; }
-        public long Limit { get; }
+        public ulong Used { get; }
+        public ulong Limit { get; }
         public bool AlarmInEffect { get; }
     }
 }

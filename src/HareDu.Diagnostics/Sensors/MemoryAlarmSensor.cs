@@ -20,25 +20,24 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class RuntimeProcessLimitReachedSensor :
+    public class MemoryAlarmSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.GenerateIdentifier();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Runtime;
+        public ComponentType ComponentType => ComponentType.Memory;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public RuntimeProcessLimitReachedSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public MemoryAlarmSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
-            _canReadConfig = _configProvider.TryGet(out _config);
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
+            MemorySnapshot data = snapshot as MemorySnapshot;
             DiagnosticResult result;
-            BrokerRuntimeSnapshot data = snapshot as BrokerRuntimeSnapshot;
             
             if (data.IsNull())
             {
@@ -49,27 +48,28 @@ namespace HareDu.Diagnostics.Sensors
                 return result;
             }
 
-            var sensorData = new List<DiagnosticSensorData>
-            {
-                new DiagnosticSensorDataImpl("Processes.Limit", data.Processes.Limit.ToString()),
-                new DiagnosticSensorDataImpl("Processes.Used", data.Processes.Used.ToString())
-            };
-
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.Processes.Used < data.Processes.Limit)
+            var sensorData = new List<DiagnosticSensorData>
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
-            }
-            else
+                new DiagnosticSensorDataImpl("Memory.FreeAlarm", data.AlarmInEffect.ToString()),
+                new DiagnosticSensorDataImpl("Memory.Limit", data.Limit.ToString()),
+                new DiagnosticSensorDataImpl("Memory.Used", data.Used.ToString())
+            };
+
+            if (data.AlarmInEffect)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
+            else
+            {
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(null, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+            }
 
             NotifyObservers(result);
-
+                
             return result;
         }
     }

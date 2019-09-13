@@ -37,7 +37,7 @@ namespace HareDu.Core.Model
         bool MemoryAlarm { get; }
 
         [JsonProperty("disk_free_limit")]
-        string FreeDiskLimit { get; }
+        ulong FreeDiskLimit { get; }
 
         [JsonProperty("disk_free_alarm")]
         bool FreeDiskAlarm { get; }
@@ -127,7 +127,7 @@ namespace HareDu.Core.Model
         ProcessUsageDetails ProcessUsageDetails { get; }
 
         [JsonProperty("disk_free")]
-        long FreeDiskSpace { get; }
+        ulong FreeDiskSpace { get; }
 
         [JsonProperty("disk_free_details")]
         FreeDiskSpaceDetails FreeDiskSpaceDetails { get; }

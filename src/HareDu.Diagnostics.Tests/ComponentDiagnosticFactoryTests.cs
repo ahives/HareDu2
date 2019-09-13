@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Tests
         {
             var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
             diagnosticsRegistrar.RegisterAll(_sensors);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, _sensors);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
             Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests
         {
             var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
             diagnosticsRegistrar.RegisterAll(_sensors);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, _sensors);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
             Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
@@ -88,19 +88,21 @@ namespace HareDu.Diagnostics.Tests
         {
             var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
             diagnosticsRegistrar.RegisterAll(_sensors);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.DiagnosticCache, diagnosticsRegistrar.Types, _sensors);
+            diagnosticsRegistrar.Register<FakeDiagnostic>(_sensors);
+            
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsFalse(factory.TryGet<FakeSnapshot>(out var diagnostic));
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
+    }
 
-        class FakeDiagnostic :
-            IComponentDiagnostic<FakeSnapshot>
-        {
-            public string Identifier => GetType().FullName.GenerateIdentifier();
-            
-            public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) => throw new System.NotImplementedException();
-        }
+    class FakeDiagnostic :
+        IComponentDiagnostic<FakeSnapshot>
+    {
+        public string Identifier => GetType().FullName.GenerateIdentifier();
+        
+        public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) => throw new System.NotImplementedException();
     }
 
     interface FakeSnapshot :

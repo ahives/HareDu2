@@ -20,23 +20,23 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class MemoryThrottlingSensor :
+    public class DiskAlarmSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
         public string Identifier => GetType().FullName.GenerateIdentifier();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Memory;
+        public ComponentType ComponentType => ComponentType.Disk;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public MemoryThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public DiskAlarmSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
-            MemorySnapshot data = snapshot as MemorySnapshot;
+            DiskSnapshot data = snapshot as DiskSnapshot;
             DiagnosticResult result;
             
             if (data.IsNull())
@@ -52,7 +52,9 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("Memory.FreeAlarm", data.AlarmInEffect.ToString())
+                new DiagnosticSensorDataImpl("Disk.FreeAlarm", data.AlarmInEffect.ToString()),
+                new DiagnosticSensorDataImpl("Disk.FreeAlarm", data.Limit.ToString()),
+                new DiagnosticSensorDataImpl("Disk.FreeAlarm", data.AlarmInEffect.ToString())
             };
 
             if (data.AlarmInEffect)

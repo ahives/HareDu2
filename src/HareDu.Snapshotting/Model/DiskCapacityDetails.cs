@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Model
 {
     public interface DiskCapacityDetails
     {
-        long Available { get; }
+        ulong Available { get; }
         
         decimal Rate { get; }
     }

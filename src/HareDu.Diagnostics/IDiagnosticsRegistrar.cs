@@ -21,7 +21,7 @@ namespace HareDu.Diagnostics
     {
         IReadOnlyList<Type> Types { get; }
         
-        IDictionary<string, object> DiagnosticCache { get; }
+        IDictionary<string, object> Cache { get; }
 
         void Register<T>(IReadOnlyList<IDiagnosticSensor> sensors);
 

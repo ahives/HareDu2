@@ -40,18 +40,18 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 "Network partitions detected between one or more nodes.",
                 "Please consult the RabbitMQ documentation (https://www.rabbitmq.com/partitions.html) on which strategy best fits your scenario."));
             _articles.Add(new KnowledgeBaseArticleImpl<NetworkPartitionSensor>(DiagnosticStatus.Green, "No network partitions were detected between nodes."));
-            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitReachedSensor>(DiagnosticStatus.Red,
+            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitSensor>(DiagnosticStatus.Red,
                 "The number of Erlang runtime processes in use is greater than or equal to the max number available.",
                 ""));
-            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitReachedSensor>(DiagnosticStatus.Green, "The number of Erlang runtime processes in use is less than the max number available."));
-            _articles.Add(new KnowledgeBaseArticleImpl<MemoryThrottlingSensor>(DiagnosticStatus.Red,
+            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitSensor>(DiagnosticStatus.Green, "The number of Erlang runtime processes in use is less than the max number available."));
+            _articles.Add(new KnowledgeBaseArticleImpl<MemoryAlarmSensor>(DiagnosticStatus.Red,
                 "The threshold was reached for how much RAM can be used by the RabbitMQ Broker.",
                 "Do one or a combination of the following:\n1) Increase the threshold of available RAM by changing either the vm_memory_high_watermark.absolute or vm_memory_high_watermark.relative broker configuration values.\n2) Spawn more consumers so that messages are not held in RAM for long periods.\n3) Increase the cluster hardware specification by adding more RAM."));
-            _articles.Add(new KnowledgeBaseArticleImpl<MemoryThrottlingSensor>(DiagnosticStatus.Green, "The amount of RAM used is less than the current threshold (i.e. vm_memory_high_watermark.absolute or vm_memory_high_watermark.relative)."));
-            _articles.Add(new KnowledgeBaseArticleImpl<DiskThrottlingSensor>(DiagnosticStatus.Red,
+            _articles.Add(new KnowledgeBaseArticleImpl<MemoryAlarmSensor>(DiagnosticStatus.Green, "The amount of RAM used is less than the current threshold (i.e. vm_memory_high_watermark.absolute or vm_memory_high_watermark.relative)."));
+            _articles.Add(new KnowledgeBaseArticleImpl<DiskAlarmSensor>(DiagnosticStatus.Red,
                 "The node has reached the threshold for usable disk space.",
                 "Increase message consumption throughput by spawning more consumers and/or increase disk size to keep up with incoming demand."));
-            _articles.Add(new KnowledgeBaseArticleImpl<DiskThrottlingSensor>(DiagnosticStatus.Green, "The node is under the allowable threshold for usable disk space."));
+            _articles.Add(new KnowledgeBaseArticleImpl<DiskAlarmSensor>(DiagnosticStatus.Green, "The node is under the allowable threshold for usable disk space."));
             _articles.Add(new KnowledgeBaseArticleImpl<NetworkThrottlingSensor>(DiagnosticStatus.Yellow,
                 "The number of network sockets being used is greater than the calculated high watermark but less than max number available.",
                 ""));

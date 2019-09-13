@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using Snapshotting.Model;
 
     [TestFixture]
-    public class DiskThrottlingSensorTests
+    public class DiskAlarmSensorTests
     {
         IContainer _container;
 
@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new DiskThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new DiskAlarmSensor(configProvider, knowledgeBaseProvider);
             
             DiskSnapshot snapshot = new FakeDiskSnapshot1(10283, true, 83.9M);
 
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new DiskThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new DiskAlarmSensor(configProvider, knowledgeBaseProvider);
             
             DiskSnapshot snapshot = new FakeDiskSnapshot1(10283, false, 74.3M);
 
@@ -75,7 +75,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new DiskThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new DiskAlarmSensor(configProvider, knowledgeBaseProvider);
             
             DiskSnapshot snapshot = null;
 
