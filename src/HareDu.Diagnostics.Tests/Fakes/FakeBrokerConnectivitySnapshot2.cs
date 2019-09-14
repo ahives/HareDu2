@@ -42,13 +42,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class ChurnMetricsImpl :
             ChurnMetrics
         {
-            public ChurnMetricsImpl(int total, decimal rate)
+            public ChurnMetricsImpl(ulong total, decimal rate)
             {
                 Total = total;
                 Rate = rate;
             }
 
-            public long Total { get; }
+            public ulong Total { get; }
             public decimal Rate { get; }
         }
 
@@ -56,7 +56,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FakeConnectionSnapshot :
             ConnectionSnapshot
         {
-            public FakeConnectionSnapshot(string identifier, long channelLimit)
+            public FakeConnectionSnapshot(string identifier, ulong channelLimit)
             {
                 Identifier = identifier;
                 ChannelLimit = channelLimit;
@@ -77,8 +77,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
             class FakeChannelSnapshot :
                 ChannelSnapshot
             {
-                public FakeChannelSnapshot(string name, long prefetchCount, long uncommittedAcknowledgements,
-                    long uncommittedMessages, long unconfirmedMessages, long unacknowledgedMessages, long consumers)
+                public FakeChannelSnapshot(string name, uint prefetchCount, ulong uncommittedAcknowledgements,
+                    ulong uncommittedMessages, ulong unconfirmedMessages, ulong unacknowledgedMessages, ulong consumers)
                 {
                     PrefetchCount = prefetchCount;
                     UncommittedAcknowledgements = uncommittedAcknowledgements;
@@ -89,19 +89,19 @@ namespace HareDu.Diagnostics.Tests.Fakes
                     Name = name;
                 }
 
-                public long PrefetchCount { get; }
-                public long UncommittedAcknowledgements { get; }
-                public long UncommittedMessages { get; }
-                public long UnconfirmedMessages { get; }
-                public long UnacknowledgedMessages { get; }
-                public long Consumers { get; }
+                public uint PrefetchCount { get; }
+                public ulong UncommittedAcknowledgements { get; }
+                public ulong UncommittedMessages { get; }
+                public ulong UnconfirmedMessages { get; }
+                public ulong UnacknowledgedMessages { get; }
+                public ulong Consumers { get; }
                 public string Name { get; }
                 public string Node { get; }
             }
 
             public string Identifier { get; }
             public NetworkTrafficSnapshot NetworkTraffic { get; }
-            public long ChannelLimit { get; }
+            public ulong ChannelLimit { get; }
             public string Node { get; }
             public string VirtualHost { get; }
             public ConnectionState State { get; }

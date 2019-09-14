@@ -16,17 +16,17 @@ namespace HareDu.Snapshotting.Model
     public interface ChannelSnapshot :
         Snapshot
     {
-        long PrefetchCount { get; }
+        uint PrefetchCount { get; }
 
-        long UncommittedAcknowledgements { get; }
+        ulong UncommittedAcknowledgements { get; }
 
-        long UncommittedMessages { get; }
+        ulong UncommittedMessages { get; }
 
-        long UnconfirmedMessages { get; }
+        ulong UnconfirmedMessages { get; }
 
-        long UnacknowledgedMessages { get; }
+        ulong UnacknowledgedMessages { get; }
 
-        long Consumers { get; }
+        ulong Consumers { get; }
 
         string Name { get; }
         

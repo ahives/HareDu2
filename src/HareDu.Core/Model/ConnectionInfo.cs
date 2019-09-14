@@ -21,10 +21,10 @@ namespace HareDu.Core.Model
         Rate RateOfReduction { get; }
 
         [JsonProperty("reductions")]
-        long TotalReductions { get; }
+        ulong TotalReductions { get; }
 
         [JsonProperty("recv_oct")]
-        long PacketBytesReceived { get; }
+        ulong PacketBytesReceived { get; }
 
         [JsonProperty("recv_oct_details")]
         Rate RateOfPacketBytesReceived { get; }
@@ -36,10 +36,10 @@ namespace HareDu.Core.Model
         long ConnectedAt { get; }
 
         [JsonProperty("channel_max")]
-        long MaxChannels { get; }
+        ulong MaxChannels { get; }
 
         [JsonProperty("frame_max")]
-        long MaxFrameSizeInBytes { get; }
+        ulong MaxFrameSizeInBytes { get; }
 
         [JsonProperty("timeout")]
         long ConnectionTimeout { get; }
@@ -57,13 +57,13 @@ namespace HareDu.Core.Model
         long SendPending { get; }
 
         [JsonProperty("send_cnt")]
-        long PacketsSent { get; }
+        ulong PacketsSent { get; }
 
         [JsonProperty("send_oct")]
-        long PacketBytesSent { get; }
+        ulong PacketBytesSent { get; }
 
         [JsonProperty("recv_cnt")]
-        long PacketsReceived { get; }
+        ulong PacketsReceived { get; }
 
         [JsonProperty("type")]
         string Type { get; }

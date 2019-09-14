@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Model
 {
     public interface ChurnMetrics
     {
-        long Total { get; }
+        ulong Total { get; }
         
         decimal Rate { get; }
     }

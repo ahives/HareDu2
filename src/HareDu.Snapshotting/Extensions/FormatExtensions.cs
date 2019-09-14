@@ -17,7 +17,7 @@ namespace HareDu.Snapshotting.Extensions
 
     public static class FormatExtensions
     {
-        public static string Format(this long bytes)
+        public static string Format(this ulong bytes)
         {
             if (bytes < 1000f)
                 return $"{bytes}";

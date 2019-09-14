@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeConnectionSnapshot1 :
         ConnectionSnapshot
     {
-        public FakeConnectionSnapshot1(int numOfChannels, long channelLimit)
+        public FakeConnectionSnapshot1(int numOfChannels, ulong channelLimit)
         {
             Identifier = "Connection1";
             ChannelLimit = channelLimit;
@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public string Identifier { get; }
         public NetworkTrafficSnapshot NetworkTraffic { get; }
-        public long ChannelLimit { get; }
+        public ulong ChannelLimit { get; }
         public string Node { get; }
         public string VirtualHost { get; }
         public ConnectionState State { get; }
@@ -47,8 +47,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FakeChannelSnapshot :
             ChannelSnapshot
         {
-            public FakeChannelSnapshot(string name, long prefetchCount, long uncommittedAcknowledgements,
-                long uncommittedMessages, long unconfirmedMessages, long unacknowledgedMessages, long consumers)
+            public FakeChannelSnapshot(string name, uint prefetchCount, ulong uncommittedAcknowledgements,
+                ulong uncommittedMessages, ulong unconfirmedMessages, ulong unacknowledgedMessages, ulong consumers)
             {
                 PrefetchCount = prefetchCount;
                 UncommittedAcknowledgements = uncommittedAcknowledgements;
@@ -59,12 +59,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Name = name;
             }
 
-            public long PrefetchCount { get; }
-            public long UncommittedAcknowledgements { get; }
-            public long UncommittedMessages { get; }
-            public long UnconfirmedMessages { get; }
-            public long UnacknowledgedMessages { get; }
-            public long Consumers { get; }
+            public uint PrefetchCount { get; }
+            public ulong UncommittedAcknowledgements { get; }
+            public ulong UncommittedMessages { get; }
+            public ulong UnconfirmedMessages { get; }
+            public ulong UnacknowledgedMessages { get; }
+            public ulong Consumers { get; }
             public string Name { get; }
             public string Node { get; }
         }

@@ -22,7 +22,7 @@ namespace HareDu.Core.Model
         ReductionDetails ReductionDetails { get; }
 
         [JsonProperty("reductions")]
-        long TotalReductions { get; }
+        ulong TotalReductions { get; }
 
         [JsonProperty("vhost")]
         string VirtualHost { get; }
@@ -37,10 +37,10 @@ namespace HareDu.Core.Model
         long ConnectedAt { get; }
 
         [JsonProperty("channel_max")]
-        long MaxOpenedChannels { get; }
+        ulong MaxOpenedChannels { get; }
 
         [JsonProperty("frame_max")]
-        long FrameMax { get; }
+        ulong FrameMax { get; }
 
         [JsonProperty("timeout")]
         long Timeout { get; }
@@ -115,22 +115,22 @@ namespace HareDu.Core.Model
         long GlobalPrefetchCount { get; }
 
         [JsonProperty("prefetch_count")]
-        long PrefetchCount { get; }
+        uint PrefetchCount { get; }
 
         [JsonProperty("acks_uncommitted")]
-        long UncommittedAcknowledgements { get; }
+        ulong UncommittedAcknowledgements { get; }
 
         [JsonProperty("messages_uncommitted")]
-        long UncommittedMessages { get; }
+        ulong UncommittedMessages { get; }
 
         [JsonProperty("messages_unconfirmed")]
-        long UnconfirmedMessages { get; }
+        ulong UnconfirmedMessages { get; }
 
         [JsonProperty("messages_unacknowledged")]
-        long UnacknowledgedMessages { get; }
+        ulong UnacknowledgedMessages { get; }
 
         [JsonProperty("consumer_count")]
-        long TotalConsumers { get; }
+        ulong TotalConsumers { get; }
 
         [JsonProperty("confirm")]
         bool Confirm { get; }

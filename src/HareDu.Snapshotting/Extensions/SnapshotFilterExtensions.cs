@@ -68,12 +68,12 @@ namespace HareDu.Snapshotting.Extensions
                 UnacknowledgedMessages = channel.UnacknowledgedMessages;
             }
 
-            public long PrefetchCount { get; }
-            public long UncommittedAcknowledgements { get; }
-            public long UncommittedMessages { get; }
-            public long UnconfirmedMessages { get; }
-            public long UnacknowledgedMessages { get; }
-            public long Consumers { get; }
+            public uint PrefetchCount { get; }
+            public ulong UncommittedAcknowledgements { get; }
+            public ulong UncommittedMessages { get; }
+            public ulong UnconfirmedMessages { get; }
+            public ulong UnacknowledgedMessages { get; }
+            public ulong Consumers { get; }
             public string Name { get; }
             public string Node { get; }
         }

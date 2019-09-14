@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Sensors
 {
+    using System;
     using System.Collections.Generic;
     using Configuration;
     using Core.Extensions;
@@ -55,7 +56,8 @@ namespace HareDu.Diagnostics.Sensors
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
-            if (data.Channels.Count >= data.ChannelLimit)
+            
+            if (Convert.ToUInt64(data.Channels.Count) >= data.ChannelLimit)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(data.Identifier, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

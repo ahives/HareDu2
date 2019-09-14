@@ -119,13 +119,13 @@ namespace HareDu.Snapshotting.Internal
             class ChurnMetricsImpl :
                 ChurnMetrics
             {
-                public ChurnMetricsImpl(int total, decimal rate)
+                public ChurnMetricsImpl(ulong total, decimal rate)
                 {
                     Total = total;
                     Rate = rate;
                 }
 
-                public long Total { get; }
+                public ulong Total { get; }
                 public decimal Rate { get; }
             }
 
@@ -146,7 +146,7 @@ namespace HareDu.Snapshotting.Internal
 
                 public string Identifier { get; }
                 public NetworkTrafficSnapshot NetworkTraffic { get; }
-                public long ChannelLimit { get; }
+                public ulong ChannelLimit { get; }
                 public string Node { get; }
                 public string VirtualHost { get; }
                 public ConnectionState State { get; }
@@ -169,19 +169,19 @@ namespace HareDu.Snapshotting.Internal
                     class PacketsImpl :
                         Packets
                     {
-                        public PacketsImpl(long total, long bytes, decimal rate)
+                        public PacketsImpl(ulong total, ulong bytes, decimal rate)
                         {
                             Total = total;
                             Bytes = bytes;
                             Rate = rate;
                         }
 
-                        public long Total { get; }
-                        public long Bytes { get; }
+                        public ulong Total { get; }
+                        public ulong Bytes { get; }
                         public decimal Rate { get; }
                     }
 
-                    public long MaxFrameSize { get; }
+                    public ulong MaxFrameSize { get; }
                     public Packets Sent { get; }
                     public Packets Received { get; }
                 }

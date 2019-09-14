@@ -18,43 +18,43 @@ namespace HareDu.Core.Model
     public interface ChurnRates
     {
         [JsonProperty("channel_closed")]
-        int TotalChannelsClosed { get; }
+        uint TotalChannelsClosed { get; }
         
         [JsonProperty("channel_closed_details")]
         ClosedChannelDetails ClosedChannelDetails { get; }
 
         [JsonProperty("channel_created")]
-        int TotalChannelsCreated { get; }
+        uint TotalChannelsCreated { get; }
         
         [JsonProperty("channel_created_details")]
         CreatedChannelDetails CreatedChannelDetails { get; }
 
         [JsonProperty("connection_closed")]
-        int TotalConnectionsClosed { get; }
+        uint TotalConnectionsClosed { get; }
         
         [JsonProperty("connection_closed_details")]
         ClosedConnectionDetails ClosedConnectionDetails { get; }
 
         [JsonProperty("connection_created")]
-        int TotalConnectionsCreated { get; }
+        uint TotalConnectionsCreated { get; }
         
         [JsonProperty("connection_created_details")]
         CreatedConnectionDetails CreatedConnectionDetails { get; }
 
         [JsonProperty("queue_created")]
-        int TotalQueuesCreated { get; }
+        uint TotalQueuesCreated { get; }
         
         [JsonProperty("queue_created_details")]
         CreatedQueueDetails CreatedQueueDetails { get; }
 
         [JsonProperty("queue_declared")]
-        int TotalQueuesDeclared { get; }
+        uint TotalQueuesDeclared { get; }
         
         [JsonProperty("queue_declared_details")]
         DeclaredQueueDetails DeclaredQueueDetails { get; }
 
         [JsonProperty("queue_deleted")]
-        int TotalQueuesDeleted { get; }
+        uint TotalQueuesDeleted { get; }
         
         [JsonProperty("queue_deleted_details")]
         DeletedQueueDetails DeletedQueueDetails { get; }

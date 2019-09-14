@@ -18,8 +18,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeChannelSnapshot1 :
         ChannelSnapshot
     {
-        public FakeChannelSnapshot1(string name, long prefetchCount, long uncommittedAcknowledgements,
-            long uncommittedMessages, long unconfirmedMessages, long unacknowledgedMessages, long consumers)
+        public FakeChannelSnapshot1(string name, uint prefetchCount, ulong uncommittedAcknowledgements,
+            ulong uncommittedMessages, ulong unconfirmedMessages, ulong unacknowledgedMessages, ulong consumers)
         {
             PrefetchCount = prefetchCount;
             UncommittedAcknowledgements = uncommittedAcknowledgements;
@@ -30,12 +30,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Name = name;
         }
 
-        public long PrefetchCount { get; }
-        public long UncommittedAcknowledgements { get; }
-        public long UncommittedMessages { get; }
-        public long UnconfirmedMessages { get; }
-        public long UnacknowledgedMessages { get; }
-        public long Consumers { get; }
+        public uint PrefetchCount { get; }
+        public ulong UncommittedAcknowledgements { get; }
+        public ulong UncommittedMessages { get; }
+        public ulong UnconfirmedMessages { get; }
+        public ulong UnacknowledgedMessages { get; }
+        public ulong Consumers { get; }
         public string Name { get; }
         public string Node { get; }
     }

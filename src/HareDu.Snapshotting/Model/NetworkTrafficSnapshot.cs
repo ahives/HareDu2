@@ -16,7 +16,7 @@ namespace HareDu.Snapshotting.Model
     public interface NetworkTrafficSnapshot :
         Snapshot
     {
-        long MaxFrameSize { get; }
+        ulong MaxFrameSize { get; }
 
         Packets Sent { get; }
         

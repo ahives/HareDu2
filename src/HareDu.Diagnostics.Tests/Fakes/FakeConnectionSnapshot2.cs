@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public string Identifier { get; }
         public NetworkTrafficSnapshot NetworkTraffic { get; }
-        public long ChannelLimit { get; }
+        public ulong ChannelLimit { get; }
         public string Node { get; }
         public string VirtualHost { get; }
         public ConnectionState State { get; }

@@ -15,9 +15,9 @@ namespace HareDu.Snapshotting.Model
 {
     public interface Packets
     {
-        long Total { get; }
+        ulong Total { get; }
         
-        long Bytes { get; }
+        ulong Bytes { get; }
         
         decimal Rate { get; }
     }
