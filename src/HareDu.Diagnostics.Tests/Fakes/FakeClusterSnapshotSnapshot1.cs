@@ -122,28 +122,27 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class FakeBrokerRuntimeSnapshot :
             BrokerRuntimeSnapshot
         {
-            public FakeBrokerRuntimeSnapshot(long limit, long used, decimal usageRate)
+            public FakeBrokerRuntimeSnapshot(ulong limit, ulong used, decimal usageRate)
             {
                 Processes = new RuntimeProcessChurnMetricsImpl(limit, used, usageRate);
             }
 
             public string Version { get; }
-            public long AvailableCores { get; }
             public RuntimeProcessChurnMetrics Processes { get; }
 
         
             class RuntimeProcessChurnMetricsImpl :
                 RuntimeProcessChurnMetrics
             {
-                public RuntimeProcessChurnMetricsImpl(long limit, long used, decimal usageRate)
+                public RuntimeProcessChurnMetricsImpl(ulong limit, ulong used, decimal usageRate)
                 {
                     Limit = limit;
                     Used = used;
                     UsageRate = usageRate;
                 }
 
-                public long Limit { get; }
-                public long Used { get; }
+                public ulong Limit { get; }
+                public ulong Used { get; }
                 public decimal UsageRate { get; }
             }
         }

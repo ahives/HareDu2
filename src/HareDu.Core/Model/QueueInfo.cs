@@ -23,19 +23,19 @@ namespace HareDu.Core.Model
         Rate RateOfMessages { get; }
         
         [JsonProperty("messages")]
-        long TotalMessages { get; }
+        ulong TotalMessages { get; }
         
         [JsonProperty("messages_unacknowledged_details")]
         Rate RateOfUnacknowledgedMessages { get; }
         
         [JsonProperty("messages_unacknowledged")]
-        long UnacknowledgedMessages { get; }
+        ulong UnacknowledgedMessages { get; }
         
         [JsonProperty("messages_ready_details")]
         Rate RateOfReadyMessages { get; }
         
         [JsonProperty("messages_ready")]
-        long ReadyMessages { get; }
+        ulong ReadyMessages { get; }
         
         [JsonProperty("reductions_details")]
         Rate RateOfReductions { get; }
@@ -65,10 +65,10 @@ namespace HareDu.Core.Model
         string Node { get; }
         
         [JsonProperty("message_bytes_paged_out")]
-        long TotalMessageBytesPagedOut { get; }
+        ulong TotalMessageBytesPagedOut { get; }
         
         [JsonProperty("messages_paged_out")]
-        long TotalMessagesPagedOut { get; }
+        ulong TotalMessagesPagedOut { get; }
         
         [JsonProperty("backing_queue_status")]
         BackingQueueStatus BackingQueueStatus { get; }
@@ -77,31 +77,31 @@ namespace HareDu.Core.Model
         DateTimeOffset HeadMessageTimestamp { get; }
         
         [JsonProperty("message_bytes_persistent")]
-        long MessageBytesPersisted { get; }
+        ulong MessageBytesPersisted { get; }
         
         [JsonProperty("message_bytes_ram")]
-        long MessageBytesInRam { get; }
+        ulong MessageBytesInRam { get; }
         
         [JsonProperty("message_bytes_unacknowledged")]
-        long TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
+        ulong TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
         
         [JsonProperty("message_bytes_ready")]
-        long TotalBytesOfMessagesReadyForDelivery { get; }
+        ulong TotalBytesOfMessagesReadyForDelivery { get; }
         
         [JsonProperty("message_bytes")]
-        long TotalBytesOfAllMessages { get; }
+        ulong TotalBytesOfAllMessages { get; }
         
         [JsonProperty("messages_persistent")]
-        long MessagesPersisted { get; }
+        ulong MessagesPersisted { get; }
         
         [JsonProperty("messages_unacknowledged_ram")]
-        long UnacknowledgedMessagesInRam { get; }
+        ulong UnacknowledgedMessagesInRam { get; }
         
         [JsonProperty("messages_ready_ram")]
-        long MessagesReadyForDeliveryInRam { get; }
+        ulong MessagesReadyForDeliveryInRam { get; }
         
         [JsonProperty("messages_ram")]
-        long MessagesInRam { get; }
+        ulong MessagesInRam { get; }
         
         [JsonProperty("garbage_collection")]
         GarbageCollectionDetails GC { get; }
@@ -113,7 +113,7 @@ namespace HareDu.Core.Model
         long RecoverableSlaves { get; }
         
         [JsonProperty("consumers")]
-        long Consumers { get; }
+        ulong Consumers { get; }
         
         [JsonProperty("exclusive_consumer_tag")]
         string ExclusiveConsumerTag { get; }

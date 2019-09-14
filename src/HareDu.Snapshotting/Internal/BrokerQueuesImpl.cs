@@ -124,7 +124,7 @@ namespace HareDu.Snapshotting.Internal
                 public QueueChurnMetrics Messages { get; }
                 public QueueMemoryDetails Memory { get; }
                 public QueueInternals Internals { get; }
-                public long Consumers { get; }
+                public ulong Consumers { get; }
                 public decimal ConsumerUtilization { get; }
                 public DateTimeOffset IdleSince { get; }
 
@@ -155,10 +155,10 @@ namespace HareDu.Snapshotting.Internal
                         }
 
                         public long Target { get; }
-                        public long Total { get; }
-                        public long Bytes { get; }
-                        public long Unacknowledged { get; }
-                        public long Ready { get; }
+                        public ulong Total { get; }
+                        public ulong Bytes { get; }
+                        public ulong Unacknowledged { get; }
+                        public ulong Ready { get; }
                     }
                 }
 
@@ -234,13 +234,13 @@ namespace HareDu.Snapshotting.Internal
             class QueueDepthImpl :
                 QueueDepth
             {
-                public QueueDepthImpl(long total, decimal rate)
+                public QueueDepthImpl(ulong total, decimal rate)
                 {
                     Total = total;
                     Rate = rate;
                 }
 
-                public long Total { get; }
+                public ulong Total { get; }
                 public decimal Rate { get; }
             }
         }

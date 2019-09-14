@@ -19,7 +19,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeQueueSnapshot2 :
         QueueSnapshot
     {
-        public FakeQueueSnapshot2(long incomingTotal, decimal incomingRate, long redeliveredTotal, decimal redeliveredRate)
+        public FakeQueueSnapshot2(ulong incomingTotal, decimal incomingRate, ulong redeliveredTotal, decimal redeliveredRate)
         {
             Messages = new QueueChurnMetricsImpl(incomingTotal, incomingRate, redeliveredTotal, redeliveredRate);
         }
@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public QueueChurnMetrics Messages { get; }
         public QueueMemoryDetails Memory { get; }
         public QueueInternals Internals { get; }
-        public long Consumers { get; }
+        public ulong Consumers { get; }
         public decimal ConsumerUtilization { get; }
         public DateTimeOffset IdleSince { get; }
 
@@ -38,7 +38,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class QueueChurnMetricsImpl :
             QueueChurnMetrics
         {
-            public QueueChurnMetricsImpl(long incomingTotal, decimal incomingRate, long redeliveredTotal, decimal redeliveredRate)
+            public QueueChurnMetricsImpl(ulong incomingTotal, decimal incomingRate, ulong redeliveredTotal, decimal redeliveredRate)
             {
                 Incoming = new QueueDepthImpl(incomingTotal, incomingRate);
                 Redelivered = new QueueDepthImpl(redeliveredTotal, redeliveredRate);
@@ -60,13 +60,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
             class QueueDepthImpl :
                 QueueDepth
             {
-                public QueueDepthImpl(long total, decimal rate)
+                public QueueDepthImpl(ulong total, decimal rate)
                 {
                     Total = total;
                     Rate = rate;
                 }
 
-                public long Total { get; }
+                public ulong Total { get; }
                 public decimal Rate { get; }
             }
         }

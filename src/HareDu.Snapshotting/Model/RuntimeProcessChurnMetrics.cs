@@ -15,9 +15,9 @@ namespace HareDu.Snapshotting.Model
 {
     public interface RuntimeProcessChurnMetrics
     {
-        long Limit { get; }
+        ulong Limit { get; }
         
-        long Used { get; }
+        ulong Used { get; }
 
         decimal UsageRate { get; }
     }

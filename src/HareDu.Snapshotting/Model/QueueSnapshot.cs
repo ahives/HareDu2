@@ -44,7 +44,7 @@ namespace HareDu.Snapshotting.Model
         
         QueueInternals Internals { get; }
         
-        long Consumers { get; }
+        ulong Consumers { get; }
         
         decimal ConsumerUtilization { get; }
         

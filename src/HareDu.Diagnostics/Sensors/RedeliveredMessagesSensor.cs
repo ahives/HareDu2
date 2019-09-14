@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Sensors
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
-            long warningThreshold = ComputeWarningThreshold(data.Messages.Incoming.Total);
+            ulong warningThreshold = ComputeWarningThreshold(data.Messages.Incoming.Total);
             
             if (data.Messages.Redelivered.Total >= warningThreshold && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && warningThreshold < data.Messages.Incoming.Total)
             {
@@ -92,9 +92,9 @@ namespace HareDu.Diagnostics.Sensors
             return result;
         }
 
-        long ComputeWarningThreshold(long total)
+        ulong ComputeWarningThreshold(ulong total)
             => _config.Sensor.MessageRedeliveryCoefficient >= 1
                 ? total
-                : Convert.ToInt64(Math.Ceiling(total * _config.Sensor.MessageRedeliveryCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(total * _config.Sensor.MessageRedeliveryCoefficient));
     }
 }

@@ -18,19 +18,19 @@ namespace HareDu.Core.Model
     public interface QueueStats
     {
         [JsonProperty("messages_ready")]
-        long MessagesReadyForDelivery { get; }
+        ulong MessagesReadyForDelivery { get; }
 
         [JsonProperty("messages_ready_details")]
         Rate RateOfMessagesReadyForDelivery { get; }
         
         [JsonProperty("messages_unacknowledged")]
-        long UnacknowledgedDeliveredMessages { get; }
+        ulong UnacknowledgedDeliveredMessages { get; }
 
         [JsonProperty("messages_unacknowledged_details")]
         Rate RateOfUnacknowledgedDeliveredMessages { get; }
         
         [JsonProperty("messages")]
-        long TotalMessages { get; }
+        ulong TotalMessages { get; }
 
         [JsonProperty("messages_details")]
         Rate RateOfMessages { get; }

@@ -194,29 +194,25 @@ namespace HareDu.Snapshotting.Internal
                     public BrokerRuntimeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                     {
                         Version = cluster.ErlangVerion;
-                        MemoryUsed = node.MemoryUsed;
-                        AvailableCores = node.AvailableCoresDetected;
                         Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
                     }
 
                     public string Version { get; }
-                    public long MemoryUsed { get; }
-                    public long AvailableCores { get; }
                     public RuntimeProcessChurnMetrics Processes { get; }
 
 
                     class RuntimeProcessChurnMetricsImpl :
                         RuntimeProcessChurnMetrics
                     {
-                        public RuntimeProcessChurnMetricsImpl(long limit, long used, decimal usageRate)
+                        public RuntimeProcessChurnMetricsImpl(ulong limit, ulong used, decimal usageRate)
                         {
                             Limit = limit;
                             Used = used;
                             UsageRate = usageRate;
                         }
 
-                        public long Limit { get; }
-                        public long Used { get; }
+                        public ulong Limit { get; }
+                        public ulong Used { get; }
                         public decimal UsageRate { get; }
                     }
                 }
@@ -320,7 +316,7 @@ namespace HareDu.Snapshotting.Internal
                         Rate = node.RateOfIOReopened?.Rate ?? 0;
                     }
 
-                    public long Recycled { get; }
+                    public ulong Recycled { get; }
                     public decimal Rate { get; }
                 }
 
@@ -328,8 +324,8 @@ namespace HareDu.Snapshotting.Internal
                 class DiskUsageDetailsImpl :
                     DiskUsageDetails
                 {
-                    public DiskUsageDetailsImpl(long total, decimal rate, long totalBytes, decimal bytesRate,
-                        long avgWallTime, decimal avgWallTimeRate)
+                    public DiskUsageDetailsImpl(ulong total, decimal rate, ulong totalBytes, decimal bytesRate,
+                        ulong avgWallTime, decimal avgWallTimeRate)
                     {
                         Total = total;
                         Rate = rate;
@@ -337,7 +333,7 @@ namespace HareDu.Snapshotting.Internal
                         WallTime = new DiskOperationWallTimeImpl(avgWallTime, avgWallTimeRate);
                     }
 
-                    public long Total { get; }
+                    public ulong Total { get; }
                     public decimal Rate { get; }
                     public Bytes Bytes { get; }
                     public DiskOperationWallTime WallTime { get; }
@@ -346,13 +342,13 @@ namespace HareDu.Snapshotting.Internal
                     class DiskOperationWallTimeImpl :
                         DiskOperationWallTime
                     {
-                        public DiskOperationWallTimeImpl(long avg, decimal rate)
+                        public DiskOperationWallTimeImpl(ulong avg, decimal rate)
                         {
                             Average = avg;
                             Rate = rate;
                         }
 
-                        public long Average { get; }
+                        public ulong Average { get; }
                         public decimal Rate { get; }
                     }
 
@@ -360,13 +356,13 @@ namespace HareDu.Snapshotting.Internal
                     class BytesImpl :
                         Bytes
                     {
-                        public BytesImpl(long total, decimal rate)
+                        public BytesImpl(ulong total, decimal rate)
                         {
                             Total = total;
                             Rate = rate;
                         }
 
-                        public long Total { get; }
+                        public ulong Total { get; }
                         public decimal Rate { get; }
                     }
                 }

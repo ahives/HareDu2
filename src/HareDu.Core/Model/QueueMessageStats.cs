@@ -18,49 +18,49 @@ namespace HareDu.Core.Model
     public interface QueueMessageStats
     {
         [JsonProperty("publish")]
-        long TotalMessagesPublished { get; }
+        ulong TotalMessagesPublished { get; }
 
         [JsonProperty("publish_details")]
         MessagesPublishedDetails MessagesPublishedDetails { get; }
         
         [JsonProperty("get")]
-        long TotalMessageGets { get; }
+        ulong TotalMessageGets { get; }
 
         [JsonProperty("get_details")]
         MessageGetDetails MessageGetDetails { get; }
         
         [JsonProperty("get_no_ack")]
-        long TotalMessageGetsWithoutAck { get; }
+        ulong TotalMessageGetsWithoutAck { get; }
 
         [JsonProperty("get_no_ack_details")]
         MessageGetsWithoutAckDetails MessageGetsWithoutAckDetails { get; }
         
         [JsonProperty("deliver")]
-        long TotalMessagesDelivered { get; }
+        ulong TotalMessagesDelivered { get; }
 
         [JsonProperty("deliver_details")]
         MessageDeliveryDetails MessageDeliveryDetails { get; }
         
         [JsonProperty("deliver_no_ack")]
-        long TotalMessageDeliveredWithoutAck { get; }
+        ulong TotalMessageDeliveredWithoutAck { get; }
 
         [JsonProperty("deliver_no_ack_details")]
         MessagesDeliveredWithoutAckDetails MessagesDeliveredWithoutAckDetails { get; }
         
         [JsonProperty("deliver_get")]
-        long TotalMessageDeliveryGets { get; }
+        ulong TotalMessageDeliveryGets { get; }
 
         [JsonProperty("deliver_get_details")]
         MessageDeliveryGetDetails MessageDeliveryGetDetails { get; }
         
         [JsonProperty("redeliver")]
-        long TotalMessagesRedelivered { get; }
+        ulong TotalMessagesRedelivered { get; }
 
         [JsonProperty("redeliver_details")]
         MessagesRedeliveredDetails MessagesRedeliveredDetails { get; }
         
         [JsonProperty("ack")]
-        long TotalMessagesAcknowledged { get; }
+        ulong TotalMessagesAcknowledged { get; }
 
         [JsonProperty("ack_details")]
         MessagesAcknowledgedDetails MessagesAcknowledgedDetails { get; }

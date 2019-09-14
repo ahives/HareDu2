@@ -49,7 +49,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
 
-            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3, 3.2M);
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 3, 3.2M);
 
             var result = sensor.Execute(snapshot);
             
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
 
-            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 4, 3.2M);
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 4, 3.2M);
 
             var result = sensor.Execute(snapshot);
             
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 4, 3, 3.2M);
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3.2M);
 
             var result = sensor.Execute(snapshot);
             

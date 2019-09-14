@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Model
 {
     public interface DiskOperationWallTime
     {
-        long Average { get; }
+        ulong Average { get; }
         
         decimal Rate { get; }
     }

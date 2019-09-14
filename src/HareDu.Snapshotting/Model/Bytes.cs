@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Model
 {
     public interface Bytes
     {
-        long Total { get; }
+        ulong Total { get; }
         
         decimal Rate { get; }
     }

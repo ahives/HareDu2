@@ -51,11 +51,11 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 string virtualHost,
                 string node,
                 long target,
-                long total,
-                long bytes,
-                long unacknowledged,
-                long ready,
-                long consumers,
+                ulong total,
+                ulong bytes,
+                ulong unacknowledged,
+                ulong ready,
+                ulong consumers,
                 decimal consumerUtilization,
                 DateTimeOffset idleSince)
             {
@@ -92,13 +92,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 class QueueDepthImpl :
                     QueueDepth
                 {
-                    public QueueDepthImpl(int total, decimal rate)
+                    public QueueDepthImpl(ulong total, decimal rate)
                     {
                         Total = total;
                         Rate = rate;
                     }
 
-                    public long Total { get; }
+                    public ulong Total { get; }
                     public decimal Rate { get; }
                 }
 
@@ -121,7 +121,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public QueueChurnMetrics Messages { get; }
             public QueueMemoryDetails Memory { get; }
             public QueueInternals Internals { get; }
-            public long Consumers { get; }
+            public ulong Consumers { get; }
             public decimal ConsumerUtilization { get; }
             public DateTimeOffset IdleSince { get; }
 
@@ -129,7 +129,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             class FakeQueueMemory :
                 QueueMemoryDetails
             {
-                public FakeQueueMemory(long target, long total, long bytes, long unacknowledged, long ready)
+                public FakeQueueMemory(long target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
                 {
                     RAM = new FakeRAM(target, total, bytes, unacknowledged, ready);
                 }
@@ -141,7 +141,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 class FakeRAM :
                     RAM
                 {
-                    public FakeRAM(long target, long total, long bytes, long unacknowledged, long ready)
+                    public FakeRAM(long target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
                     {
                         Target = target;
                         Total = total;
@@ -151,10 +151,10 @@ namespace HareDu.Diagnostics.Tests.Fakes
                     }
 
                     public long Target { get; }
-                    public long Total { get; }
-                    public long Bytes { get; }
-                    public long Unacknowledged { get; }
-                    public long Ready { get; }
+                    public ulong Total { get; }
+                    public ulong Bytes { get; }
+                    public ulong Unacknowledged { get; }
+                    public ulong Ready { get; }
                 }
             }
         }

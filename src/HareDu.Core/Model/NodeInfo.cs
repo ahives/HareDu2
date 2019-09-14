@@ -43,7 +43,7 @@ namespace HareDu.Core.Model
         bool FreeDiskAlarm { get; }
 
         [JsonProperty("proc_total")]
-        long TotalProcesses { get; }
+        ulong TotalProcesses { get; }
 
         [JsonProperty("rates_mode")]
         string RatesMode { get; }
@@ -55,7 +55,7 @@ namespace HareDu.Core.Model
         int RunQueue { get; }
 
         [JsonProperty("processors")]
-        int AvailableCoresDetected { get; }
+        uint AvailableCoresDetected { get; }
 
         [JsonProperty("exchange_types")]
         IList<ExchangeType> ExchangeTypes { get; }
@@ -103,7 +103,7 @@ namespace HareDu.Core.Model
         bool IsRunning { get; }
 
         [JsonProperty("mem_used")]
-        long MemoryUsed { get; }
+        ulong MemoryUsed { get; }
 
         [JsonProperty("mem_used_details")]
         MemoryUsageDetails MemoryUsageDetails { get; }
@@ -121,7 +121,7 @@ namespace HareDu.Core.Model
         SocketsUsedDetails SocketsUsedDetails { get; }
 
         [JsonProperty("proc_used")]
-        long ProcessesUsed { get; }
+        ulong ProcessesUsed { get; }
 
         [JsonProperty("proc_used_details")]
         ProcessUsageDetails ProcessUsageDetails { get; }
@@ -133,13 +133,13 @@ namespace HareDu.Core.Model
         FreeDiskSpaceDetails FreeDiskSpaceDetails { get; }
 
         [JsonProperty("gc_num")]
-        long NumberOfGarbageCollected { get; }
+        ulong NumberOfGarbageCollected { get; }
 
         [JsonProperty("gc_num_details")]
         GCDetails GcDetails { get; }
 
         [JsonProperty("gc_bytes_reclaimed")]
-        long ReclaimedBytesFromGC { get; }
+        ulong ReclaimedBytesFromGC { get; }
 
         [JsonProperty("gc_bytes_reclaimed_details")]
         ReclaimedBytesFromGCDetails ReclaimedBytesFromGCDetails { get; }
@@ -151,43 +151,43 @@ namespace HareDu.Core.Model
         ContextSwitchDetails ContextSwitchDetails { get; }
 
         [JsonProperty("io_read_count")]
-        long TotalIOReads { get; }
+        ulong TotalIOReads { get; }
 
         [JsonProperty("io_read_count_details")]
         IOReadCountDetails IOReadCountDetails { get; }
 
         [JsonProperty("io_read_bytes")]
-        long TotalIOBytesRead { get; }
+        ulong TotalIOBytesRead { get; }
 
         [JsonProperty("io_read_bytes_details")]
         IOBytesReadDetails IOReadBytesDetails { get; }
 
         [JsonProperty("io_read_avg_time")]
-        long AvgIOReadTime { get; }
+        ulong AvgIOReadTime { get; }
 
         [JsonProperty("io_read_avg_time_details")]
         AvgIOReadTimeDetails AvgIOReadTimeDetails { get; }
 
         [JsonProperty("io_write_count")]
-        long TotalIOWrites { get; }
+        ulong TotalIOWrites { get; }
 
         [JsonProperty("io_write_count_details")]
         IOWriteDetails IOWriteDetails { get; }
 
         [JsonProperty("io_write_bytes")]
-        long TotalIOWriteBytes { get; }
+        ulong TotalIOWriteBytes { get; }
 
         [JsonProperty("io_write_bytes_details")]
         IOWriteBytesDetail IOWriteBytesDetail { get; }
 
         [JsonProperty("io_write_avg_time")]
-        long AvgTimePerIOWrite { get; }
+        ulong AvgTimePerIOWrite { get; }
 
         [JsonProperty("io_write_avg_time_details")]
         AvgTimePerIOWriteDetails AvgTimePerIOWriteDetails { get; }
 
         [JsonProperty("io_sync_count")]
-        long IOSyncCount { get; }
+        ulong IOSyncCount { get; }
 
         [JsonProperty("io_sync_count_details")]
         IOSyncCountDetails RateOfIOSyncs { get; }
@@ -199,61 +199,61 @@ namespace HareDu.Core.Model
         AvgIOSyncTimeDetails AvgIOSyncTimeDetails { get; }
 
         [JsonProperty("io_seek_count")]
-        long IOSeekCount { get; }
+        ulong IOSeekCount { get; }
 
         [JsonProperty("io_seek_count_details")]
         IOSeekCountDetails RateOfIOSeeks { get; }
 
         [JsonProperty("io_seek_avg_time")]
-        long AverageIOSeekTime { get; }
+        ulong AverageIOSeekTime { get; }
 
         [JsonProperty("io_seek_avg_time_details")]
         AvgIOSeekTimeDetails AvgIOSeekTimeDetails { get; }
 
         [JsonProperty("io_reopen_count")]
-        long IOReopenCount { get; }
+        ulong IOReopenCount { get; }
 
         [JsonProperty("io_reopen_count_details")]
         IOReopenCountDetails RateOfIOReopened { get; }
 
         [JsonProperty("mnesia_ram_tx_count")]
-        long MnesiaRamTransactions { get; }
+        ulong MnesiaRamTransactions { get; }
 
         [JsonProperty("mnesia_ram_tx_count_details")]
         MnesiaRAMTransactionCountDetails MnesiaRAMTransactionCountDetails { get; }
 
         [JsonProperty("mnesia_disk_tx_count")]
-        long TotalMnesiaDiskTransactions { get; }
+        ulong TotalMnesiaDiskTransactions { get; }
 
         [JsonProperty("mnesia_disk_tx_count_details")]
         MnesiaDiskTransactionCountDetails MnesiaDiskTransactionCountDetails { get; }
 
         [JsonProperty("msg_store_read_count")]
-        long TotalMessageStoreReads { get; }
+        ulong TotalMessageStoreReads { get; }
 
         [JsonProperty("msg_store_read_count_details")]
         MessageStoreReadCountDetails MessageStoreReadCountDetails { get; }
 
         [JsonProperty("msg_store_write_count")]
-        long TotalMessageStoreWrites { get; }
+        ulong TotalMessageStoreWrites { get; }
 
         [JsonProperty("msg_store_write_count_details")]
         MessageStoreWriteCountDetails MessageStoreWriteCountDetails { get; }
 
         [JsonProperty("queue_index_journal_write_count")]
-        long TotalQueueIndexJournalWrites { get; }
+        ulong TotalQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_journal_write_count_details")]
         QueueIndexJournalWriteCountDetails RateOfQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_write_count")]
-        long TotalQueueIndexWrites { get; }
+        ulong TotalQueueIndexWrites { get; }
 
         [JsonProperty("queue_index_write_count_details")]
         QueueIndexWriteCountDetails QueueIndexWriteCountDetails { get; }
 
         [JsonProperty("queue_index_read_count")]
-        long TotalQueueIndexReads { get; }
+        ulong TotalQueueIndexReads { get; }
 
         [JsonProperty("queue_index_read_count_details")]
         QueueIndexReadCountDetails RateOfQueueIndexReads { get; }

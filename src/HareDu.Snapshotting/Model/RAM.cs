@@ -20,15 +20,15 @@ namespace HareDu.Snapshotting.Model
         /// <summary>
         /// Total messages in RAM that are written (i.e. paged out) to disk.
         /// </summary>
-        long Total { get; }
+        ulong Total { get; }
         
         /// <summary>
         /// Total size in bytes of the messages that were written to disk from RAM.
         /// </summary>
-        long Bytes { get; }
+        ulong Bytes { get; }
         
-        long Unacknowledged { get; }
+        ulong Unacknowledged { get; }
         
-        long Ready { get; }
+        ulong Ready { get; }
     }
 }

@@ -18,7 +18,7 @@ namespace HareDu.Core.Model
     public interface MessageStats
     {
         [JsonProperty("publish")]
-        long TotalMessagesPublished { get; }
+        ulong TotalMessagesPublished { get; }
 
         [JsonProperty("publish_details")]
         MessagesPublishedDetails MessagesPublishedDetails { get; }
@@ -30,61 +30,61 @@ namespace HareDu.Core.Model
         MessagesConfirmedDetails MessagesConfirmedDetails { get; }
         
         [JsonProperty("return_unroutable")]
-        long TotalUnroutableMessages { get; }
+        ulong TotalUnroutableMessages { get; }
 
         [JsonProperty("return_unroutable_details")]
         UnroutableMessagesDetails UnroutableMessagesDetails { get; }
         
         [JsonProperty("disk_reads")]
-        long TotalDiskReads { get; }
+        ulong TotalDiskReads { get; }
 
         [JsonProperty("disk_reads_details")]
         DiskReadDetails DiskReadDetails { get; }
         
         [JsonProperty("disk_writes")]
-        long TotalDiskWrites { get; }
+        ulong TotalDiskWrites { get; }
 
         [JsonProperty("disk_writes_details")]
         DiskWriteDetails DiskWriteDetails { get; }
         
         [JsonProperty("get")]
-        long TotalMessageGets { get; }
+        ulong TotalMessageGets { get; }
 
         [JsonProperty("get_details")]
         MessageGetDetails MessageGetDetails { get; }
         
         [JsonProperty("get_no_ack")]
-        long TotalMessageGetsWithoutAck { get; }
+        ulong TotalMessageGetsWithoutAck { get; }
 
         [JsonProperty("get_no_ack_details")]
         MessageGetsWithoutAckDetails MessageGetsWithoutAckDetails { get; }
         
         [JsonProperty("deliver")]
-        long TotalMessagesDelivered { get; }
+        ulong TotalMessagesDelivered { get; }
 
         [JsonProperty("deliver_details")]
         MessageDeliveryDetails MessageDeliveryDetails { get; }
         
         [JsonProperty("deliver_no_ack")]
-        long TotalMessageDeliveredWithoutAck { get; }
+        ulong TotalMessageDeliveredWithoutAck { get; }
 
         [JsonProperty("deliver_no_ack_details")]
         MessagesDeliveredWithoutAckDetails MessagesDeliveredWithoutAckDetails { get; }
         
         [JsonProperty("redeliver")]
-        long TotalMessagesRedelivered { get; }
+        ulong TotalMessagesRedelivered { get; }
 
         [JsonProperty("redeliver_details")]
         MessagesRedeliveredDetails MessagesRedeliveredDetails { get; }
         
         [JsonProperty("ack")]
-        long TotalMessagesAcknowledged { get; }
+        ulong TotalMessagesAcknowledged { get; }
 
         [JsonProperty("ack_details")]
         MessagesAcknowledgedDetails MessagesAcknowledgedDetails { get; }
         
         [JsonProperty("deliver_get")]
-        long TotalMessageDeliveryGets { get; }
+        ulong TotalMessageDeliveryGets { get; }
 
         [JsonProperty("deliver_get_details")]
         MessageDeliveryGetDetails MessageDeliveryGetDetails { get; }

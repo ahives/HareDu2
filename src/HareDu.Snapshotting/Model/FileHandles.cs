@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Model
 {
     public interface FileHandles
     {
-        long Recycled { get; }
+        ulong Recycled { get; }
         
         decimal Rate { get; }
     }

@@ -19,7 +19,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeQueueSnapshot1 :
         QueueSnapshot
     {
-        public FakeQueueSnapshot1(long incomingTotal, decimal incomingRate, long acknowledgedTotal, decimal acknowledgedRate)
+        public FakeQueueSnapshot1(ulong incomingTotal, decimal incomingRate, ulong acknowledgedTotal, decimal acknowledgedRate)
         {
             Messages = new QueueChurnMetricsImpl(incomingTotal, incomingRate, acknowledgedTotal, acknowledgedRate);
         }
@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public QueueChurnMetrics Messages { get; }
         public QueueMemoryDetails Memory { get; }
         public QueueInternals Internals { get; }
-        public long Consumers { get; }
+        public ulong Consumers { get; }
         public decimal ConsumerUtilization { get; }
         public DateTimeOffset IdleSince { get; }
 
@@ -38,7 +38,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         class QueueChurnMetricsImpl :
             QueueChurnMetrics
         {
-            public QueueChurnMetricsImpl(long incomingTotal, decimal incomingRate, long acknowledgedTotal, decimal acknowledgedRate)
+            public QueueChurnMetricsImpl(ulong incomingTotal, decimal incomingRate, ulong acknowledgedTotal, decimal acknowledgedRate)
             {
                 Incoming = new QueueDepthImpl(incomingTotal, incomingRate);
                 Acknowledged = new QueueDepthImpl(acknowledgedTotal, acknowledgedRate);
@@ -60,13 +60,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
             class QueueDepthImpl :
                 QueueDepth
             {
-                public QueueDepthImpl(long total, decimal rate)
+                public QueueDepthImpl(ulong total, decimal rate)
                 {
                     Total = total;
                     Rate = rate;
                 }
 
-                public long Total { get; }
+                public ulong Total { get; }
                 public decimal Rate { get; }
             }
         }
