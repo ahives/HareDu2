@@ -19,14 +19,14 @@ namespace HareDu.Diagnostics.Tests.Configuration
     [TestFixture]
     public class DiagnosticScannerConfigProviderTests
     {
-        [Test, Explicit]
-        public void Test()
-        {
-            var provider = new DiagnosticScannerConfigProvider();
-
-            Assert.IsTrue(provider.TryGet(out var config));
-            Assert.IsTrue(config.OverrideSensorConfig);
+//        [Test, Explicit]
+//        public void Test()
+//        {
+//            var provider = new DiagnosticScannerConfigProvider();
+//
+//            Assert.IsTrue(provider.TryGet(out var config));
+//            Assert.IsTrue(config.OverrideSensorConfig);
 //            Assert.AreEqual(90, config.Sensor.HighClosureRateWarningThreshold);
-        }
+//        }
     }
 }

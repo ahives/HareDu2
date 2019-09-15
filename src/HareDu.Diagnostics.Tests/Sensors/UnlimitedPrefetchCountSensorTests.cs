@@ -54,6 +54,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
+            Assert.AreEqual(typeof(UnlimitedPrefetchCountSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -68,6 +69,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
+            Assert.AreEqual(typeof(UnlimitedPrefetchCountSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]

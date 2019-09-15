@@ -39,6 +39,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 new QueueGrowthSensor(configProvider, knowledgeBaseProvider),
                 new QueueMessagePagingSensor(configProvider, knowledgeBaseProvider),
                 new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider),
+                new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider)
             };
         }
 
@@ -50,10 +51,11 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new BrokerQueuesDiagnostic(_sensors)
                 .Scan(snapshot);
 
-            Assert.AreEqual(3, report.Count);
+            Assert.AreEqual(4, report.Count);
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ConsumerUtilizationSensor).FullName.GenerateIdentifier()));
         }
 
         [Test]

@@ -19,6 +19,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Autofac;
     using AutofacIntegration;
     using HareDu.Diagnostics;
+    using HareDu.Diagnostics.Formatting;
     using HareDu.Diagnostics.Scanning;
     using NUnit.Framework;
     using Snapshotting;
@@ -48,25 +49,30 @@ namespace HareDu.IntegrationTesting.Diagnostics
         {
             var resource = Client
                 .Resource<BrokerConnection>()
+//                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .TakeSnapshot();
-
-            resource.RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger());
             
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
             var snapshot = resource.Snapshots.First();
             var report = scanner.Scan(snapshot.Select(x => x.Data));
+
+            var formatter = _container.Resolve<IDiagnosticReportFormatter>();
+
+            string formattedReport = formatter.Format(report);
             
-            for (int i = 0; i < report.Results.Count; i++)
-            {
-                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", report.Results[i].ComponentIdentifier, report.Results[i].Status);
-                
-                if (report.Results[i].Status == DiagnosticStatus.Red)
-                {
-                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Reason);
-                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Remediation);
-                }
-            }
+            Console.WriteLine(formattedReport);
+            
+//            for (int i = 0; i < report.Results.Count; i++)
+//            {
+//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", report.Results[i].ComponentIdentifier, report.Results[i].Status);
+//                
+//                if (report.Results[i].Status == DiagnosticStatus.Red)
+//                {
+//                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Reason);
+//                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Remediation);
+//                }
+//            }
         }
     }
 }

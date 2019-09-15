@@ -149,6 +149,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
                     public decimal SocketUsageCoefficient { get; }
                     public decimal RuntimeProcessUsageCoefficient { get; }
                     public decimal FileDescriptorUsageWarningCoefficient { get; }
+                    public decimal ConsumerUtilizationWarningCoefficient { get; }
                 }
             }
         }

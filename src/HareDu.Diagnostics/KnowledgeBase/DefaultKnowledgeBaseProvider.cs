@@ -22,6 +22,13 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<ConsumerUtilizationSensor>(DiagnosticStatus.Yellow,
+                "The queue is not able to push messages to consumers efficiently due to network congestion and/or the prefetch limit on the consumer being set too low.",
+                "Check your network connection between the consumer and RabbitMQ node and/or readjust the prefetch limit."));
+            _articles.Add(new KnowledgeBaseArticleImpl<ConsumerUtilizationSensor>(DiagnosticStatus.Red,
+                "The queue is not able to push messages to consumers efficiently due to network congestion and/or the prefetch limit on the consumer being set too low.",
+                "Check your network connection between the consumer and RabbitMQ node and/or readjust the prefetch limit."));
+            _articles.Add(new KnowledgeBaseArticleImpl<ConsumerUtilizationSensor>(DiagnosticStatus.Green, "The queue is able to efficiently push messages to consumers as fast as possible without delay."));
             _articles.Add(new KnowledgeBaseArticleImpl<BlockedConnectionSensor>(DiagnosticStatus.Red,
                 "The connection is blocked meaning that an application has published but is now prevented from consuming. This is not the case with consume only connections.",
                 ""));

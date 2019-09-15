@@ -14,15 +14,15 @@
 namespace HareDu.Diagnostics.Tests.Sensors
 {
     using Autofac;
-    using NUnit.Framework;
     using Diagnostics.Configuration;
     using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
+    using NUnit.Framework;
     using Snapshotting.Model;
 
     [TestFixture]
-    public class AvailableCoresSensorTests
+    public class ConsumerUtilizationSensorTests
     {
         IContainer _container;
 
@@ -43,18 +43,33 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test(Description = "")]
+        public void Verify_sensor_yellow_condition()
+        {
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var sensor = new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider);
+
+            QueueSnapshot snapshot = new FakeQueueSnapshot3(0.5M);
+
+            var result = sensor.Execute(snapshot);
+            
+            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
+            Assert.AreEqual(typeof(ConsumerUtilizationSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+        }
+
+        [Test(Description = "")]
         public void Verify_sensor_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider);
 
-            NodeSnapshot snapshot = new FakeNodeSnapshot3(0);
+            QueueSnapshot snapshot = new FakeQueueSnapshot3(0.4M);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(AvailableCpuCoresSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(ConsumerUtilizationSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -62,14 +77,14 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider);
             
-            NodeSnapshot snapshot = new FakeNodeSnapshot3(5);
+            QueueSnapshot snapshot = new FakeQueueSnapshot3(1.0M);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(AvailableCpuCoresSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(ConsumerUtilizationSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -77,9 +92,9 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider);
             
-            NodeSnapshot snapshot = null;
+            QueueSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             

@@ -54,6 +54,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
+            Assert.AreEqual(typeof(RuntimeProcessLimitSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test(Description = "")]
@@ -68,6 +69,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
+            Assert.AreEqual(typeof(RuntimeProcessLimitSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -82,10 +84,11 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
+            Assert.AreEqual(typeof(RuntimeProcessLimitSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_1()
+        public void Verify_sensor_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();

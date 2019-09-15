@@ -26,5 +26,7 @@ namespace HareDu.Diagnostics.Configuration
         decimal RuntimeProcessUsageCoefficient { get; }
         
         decimal FileDescriptorUsageWarningCoefficient { get; }
+        
+        decimal ConsumerUtilizationWarningCoefficient { get; }
     }
 }
