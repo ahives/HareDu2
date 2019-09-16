@@ -39,23 +39,25 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 new QueueGrowthSensor(configProvider, knowledgeBaseProvider),
                 new QueueMessagePagingSensor(configProvider, knowledgeBaseProvider),
                 new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider),
-                new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider)
+                new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider),
+                new UnroutableMessageSensor(configProvider, knowledgeBaseProvider)
             };
         }
 
         [Test]
         public void Verify_sensors_fired()
         {
-            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1();
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
 
             var report = new BrokerQueuesDiagnostic(_sensors)
                 .Scan(snapshot);
 
-            Assert.AreEqual(4, report.Count);
+            Assert.AreEqual(5, report.Count);
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ConsumerUtilizationSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnroutableMessageSensor).FullName.GenerateIdentifier()));
         }
 
         [Test]

@@ -15,9 +15,10 @@ namespace HareDu.Diagnostics
 {
     using System.Collections.Generic;
 
-    static class DiagnosticCache
+    public static class DiagnosticCache
     {
         public static readonly IReadOnlyList<DiagnosticResult> EmptyDiagnosticResults = new List<DiagnosticResult>();
         public static readonly DiagnosticReport EmptyDiagnosticReport = new EmptyDiagnosticReport();
+        public static readonly IReadOnlyList<DiagnosticSensorData> EmptySensorData = new List<DiagnosticSensorData>();
     }
 }

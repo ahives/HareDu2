@@ -13,11 +13,14 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Scanners
 {
+    using System;
+    using System.Collections.Generic;
     using Autofac;
     using AutofacIntegration;
     using Fakes;
     using NUnit.Framework;
     using Scanning;
+    using Snapshotting;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -58,11 +61,46 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_BrokerQueuesDiagnostic()
         {
-            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1();
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
             Assert.AreEqual(typeof(BrokerQueuesDiagnostic).FullName.GenerateIdentifier(), scanner.ScannerIdentifier);
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_scanner_not_found()
+        {
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
+            IComponentDiagnosticFactory factory = new FakeDiagnosticFactory();
+            IDiagnosticScanner scanner = new DiagnosticScanner(factory);
+
+            var report = scanner.Scan(snapshot);
+            
+            Assert.AreEqual(DiagnosticCache.EmptyDiagnosticReport, report);
+            Assert.AreEqual(typeof(DoNothingDiagnostic<EmptySnapshot>).FullName.GenerateIdentifier(), report.ScannerIdentifier);
+        }
+
+        
+        class FakeDiagnosticFactory :
+            IComponentDiagnosticFactory
+        {
+            public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
+                where T : Snapshot
+            {
+                diagnostic = new DoNothingDiagnostic<T>();
+                return false;
+            }
+
+            public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void RegisterObserver(IObserver<DiagnosticContext> observer)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

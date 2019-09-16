@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface SocketChurnMetrics
+    public interface SocketDescriptorChurnMetrics
     {
         ulong Available { get; }
 

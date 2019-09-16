@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public string ProcessId { get; }
         public FileDescriptorChurnMetrics FileDescriptors { get; }
-        public SocketChurnMetrics Sockets { get; }
+        public SocketDescriptorChurnMetrics SocketDescriptors { get; }
 
         
         class FileDescriptorChurnMetricsImpl :

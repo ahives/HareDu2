@@ -21,8 +21,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeBrokerQueuesSnapshot1 :
         BrokerQueuesSnapshot
     {
-        public FakeBrokerQueuesSnapshot1()
+        public FakeBrokerQueuesSnapshot1(ulong total)
         {
+            Churn = new BrokerQueueChurnMetricsImpl(total);
             Queues = GetQueues().ToList();
         }
 
@@ -44,6 +45,44 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 new DateTimeOffset(2019, 8, 20, 8, 0, 55, TimeSpan.Zero));
         }
 
+        
+        class BrokerQueueChurnMetricsImpl :
+            BrokerQueueChurnMetrics
+        {
+            public BrokerQueueChurnMetricsImpl(ulong total)
+            {
+                NotRouted = new QueueDepthImpl(total);
+            }
+
+            
+            class QueueDepthImpl :
+                QueueDepth
+            {
+                public QueueDepthImpl(ulong total)
+                {
+                    Total = total;
+                }
+
+                public ulong Total { get; }
+                public decimal Rate { get; }
+            }
+
+            public long Persisted { get; }
+            public QueueDepth Incoming { get; }
+            public QueueDepth Unacknowledged { get; }
+            public QueueDepth Ready { get; }
+            public QueueDepth Gets { get; }
+            public QueueDepth GetsWithoutAck { get; }
+            public QueueDepth Delivered { get; }
+            public QueueDepth DeliveredWithoutAck { get; }
+            public QueueDepth DeliveredGets { get; }
+            public QueueDepth Redelivered { get; }
+            public QueueDepth Acknowledged { get; }
+            public QueueDepth NotRouted { get; }
+            public QueueDepth Broker { get; }
+        }
+
+        
         class FakeQueueSnapshot :
             QueueSnapshot
         {

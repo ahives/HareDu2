@@ -25,10 +25,12 @@ namespace HareDu.Diagnostics.Scanning
         public string Identifier => GetType().FullName.GenerateIdentifier();
 
         readonly IReadOnlyList<IDiagnosticSensor> _queueSensors;
+        readonly List<IDiagnosticSensor> _exchangeSensors;
 
         public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
         {
             _queueSensors = sensors.Where(IsQueueSensor).ToList();
+            _exchangeSensors = sensors.Where(IsExchangeSensor).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(BrokerQueuesSnapshot snapshot)
@@ -38,6 +40,8 @@ namespace HareDu.Diagnostics.Scanning
             
             var results = new List<DiagnosticResult>();
 
+            results.AddRange(_exchangeSensors.Select(x => x.Execute(snapshot)));
+            
             for (int i = 0; i < snapshot.Queues.Count; i++)
             {
                 results.AddRange(_queueSensors.Select(x => x.Execute(snapshot.Queues[i])));
@@ -45,6 +49,8 @@ namespace HareDu.Diagnostics.Scanning
 
             return results;
         }
+
+        bool IsExchangeSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Exchange;
 
         bool IsQueueSensor(IDiagnosticSensor sensor) =>
             !sensor.IsNull() && sensor.ComponentType == ComponentType.Queue;

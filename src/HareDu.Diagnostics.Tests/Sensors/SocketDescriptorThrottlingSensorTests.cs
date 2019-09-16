@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
     using Snapshotting.Model;
 
     [TestFixture]
-    public class NetworkThrottlingSensorTests
+    public class SocketDescriptorThrottlingSensorTests
     {
         IContainer _container;
 
@@ -47,13 +47,14 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 9, 4.2M);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
+            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
@@ -61,13 +62,14 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = new DefaultConfigProvider1();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 10, 4.2M);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
+            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -75,13 +77,14 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
 
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
+            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -89,7 +92,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = null;
 
@@ -103,7 +106,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         {
             var configProvider = new DefaultConfigProvider2();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider);
+            var sensor = new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
 

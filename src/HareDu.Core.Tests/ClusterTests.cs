@@ -24,8 +24,8 @@ namespace HareDu.Tests
                 Console.WriteLine("Node: {0}", info.Node);
                 Console.WriteLine("ManagementVersion: {0}", info.ManagementVersion);
                 Console.WriteLine("ClusterName: {0}", info.ClusterName);
-                Console.WriteLine("Erlang Verion: {0}", info.ErlangVerion);
-                Console.WriteLine("Erlang Verion (Full): {0}", info.ErlangFullVerion);
+                Console.WriteLine("Erlang Verion: {0}", info.ErlangVersion);
+                Console.WriteLine("Erlang Verion (Full): {0}", info.ErlangFullVersion);
                 Console.WriteLine("RMQ Version: {0}", info.RabbitMqVersion);
                 Console.WriteLine("Rates Mode: {0}", info.RatesMode);
                 Console.WriteLine("Total Disk Reads: {0}", info.MessageStats.TotalDiskReads);

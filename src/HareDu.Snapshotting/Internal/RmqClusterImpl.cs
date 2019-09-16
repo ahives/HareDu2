@@ -193,7 +193,7 @@ namespace HareDu.Snapshotting.Internal
                 {
                     public BrokerRuntimeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                     {
-                        Version = cluster.ErlangVerion;
+                        Version = cluster.ErlangVersion;
                         Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
                     }
 
@@ -225,18 +225,18 @@ namespace HareDu.Snapshotting.Internal
                     {
                         ProcessId = node.OperatingSystemProcessId;
                         FileDescriptors = new FileDescriptorChurnMetricsImpl(node);
-                        Sockets = new SocketChurnMetricsImpl(node);
+                        SocketDescriptors = new SocketDescriptorChurnMetricsImpl(node);
                     }
 
                     public string ProcessId { get; }
                     public FileDescriptorChurnMetrics FileDescriptors { get; }
-                    public SocketChurnMetrics Sockets { get; }
+                    public SocketDescriptorChurnMetrics SocketDescriptors { get; }
 
 
-                    class SocketChurnMetricsImpl :
-                        SocketChurnMetrics
+                    class SocketDescriptorChurnMetricsImpl :
+                        SocketDescriptorChurnMetrics
                     {
-                        public SocketChurnMetricsImpl(NodeInfo node)
+                        public SocketDescriptorChurnMetricsImpl(NodeInfo node)
                         {
                             Available = node.TotalSocketsAvailable;
                             Used = node.SocketsUsed;

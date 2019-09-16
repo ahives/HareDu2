@@ -34,10 +34,10 @@ namespace HareDu.Core.Model
         string ClusterName { get; }
 
         [JsonProperty("erlang_version")]
-        string ErlangVerion { get; }
+        string ErlangVersion { get; }
 
         [JsonProperty("erlang_full_version")]
-        string ErlangFullVerion { get; }
+        string ErlangFullVersion { get; }
 
         [JsonProperty("message_stats")]
         MessageStats MessageStats { get; }

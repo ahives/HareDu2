@@ -78,18 +78,18 @@ namespace HareDu.Diagnostics.Tests.Fakes
         {
             public OperatingSystemSnapshotImpl(ulong available, ulong used, decimal usageRate)
             {
-                Sockets = new SocketChurnMetricsImpl(available, used, usageRate);
+                SocketDescriptors = new SocketDescriptorChurnMetricsImpl(available, used, usageRate);
             }
 
             public string ProcessId { get; }
             public FileDescriptorChurnMetrics FileDescriptors { get; }
-            public SocketChurnMetrics Sockets { get; }
+            public SocketDescriptorChurnMetrics SocketDescriptors { get; }
 
             
-            class SocketChurnMetricsImpl :
-                SocketChurnMetrics
+            class SocketDescriptorChurnMetricsImpl :
+                SocketDescriptorChurnMetrics
             {
-                public SocketChurnMetricsImpl(ulong available, ulong used, decimal usageRate)
+                public SocketDescriptorChurnMetricsImpl(ulong available, ulong used, decimal usageRate)
                 {
                     Available = available;
                     Used = used;

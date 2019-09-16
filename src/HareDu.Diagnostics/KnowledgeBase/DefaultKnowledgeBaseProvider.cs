@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<UnroutableMessageSensor>(DiagnosticStatus.Red,
+                "Some messages were published to an exchange but there is no queue bound to the exchange.",
+                "Bind an appropriate queue to the exchange or stop publishing to the exchange."));
+            _articles.Add(new KnowledgeBaseArticleImpl<UnroutableMessageSensor>(DiagnosticStatus.Green, "No exchanges were published to that is not bound to a corresponding queue."));
             _articles.Add(new KnowledgeBaseArticleImpl<ConsumerUtilizationSensor>(DiagnosticStatus.Yellow,
                 "The queue is not able to push messages to consumers efficiently due to network congestion and/or the prefetch limit on the consumer being set too low.",
                 "Check your network connection between the consumer and RabbitMQ node and/or readjust the prefetch limit."));
@@ -59,16 +63,16 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 "The node has reached the threshold for usable disk space.",
                 "Increase message consumption throughput by spawning more consumers and/or increase disk size to keep up with incoming demand."));
             _articles.Add(new KnowledgeBaseArticleImpl<DiskAlarmSensor>(DiagnosticStatus.Green, "The node is under the allowable threshold for usable disk space."));
-            _articles.Add(new KnowledgeBaseArticleImpl<NetworkThrottlingSensor>(DiagnosticStatus.Yellow,
+            _articles.Add(new KnowledgeBaseArticleImpl<SocketDescriptorThrottlingSensor>(DiagnosticStatus.Yellow,
                 "The number of network sockets being used is greater than the calculated high watermark but less than max number available.",
                 ""));
-            _articles.Add(new KnowledgeBaseArticleImpl<NetworkThrottlingSensor>(DiagnosticStatus.Red,
+            _articles.Add(new KnowledgeBaseArticleImpl<SocketDescriptorThrottlingSensor>(DiagnosticStatus.Red,
                 "The number of network sockets being used is equal to the max number available.",
                 ""));
-            _articles.Add(new KnowledgeBaseArticleImpl<NetworkThrottlingSensor>(DiagnosticStatus.Inconclusive,
+            _articles.Add(new KnowledgeBaseArticleImpl<SocketDescriptorThrottlingSensor>(DiagnosticStatus.Inconclusive,
                 "Either the sensor was not configured correctly or there was no data captured to analyze.",
                 "Check the sensor configuration and the resultant snapshot data."));
-            _articles.Add(new KnowledgeBaseArticleImpl<NetworkThrottlingSensor>(DiagnosticStatus.Green, "The number of network sockets used is less than the calculated high watermark."));
+            _articles.Add(new KnowledgeBaseArticleImpl<SocketDescriptorThrottlingSensor>(DiagnosticStatus.Green, "The number of network sockets used is less than the calculated high watermark."));
             _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesSensor>(DiagnosticStatus.Yellow,
                 "The number of redelivered messages is less than or equal to the number of incoming messages and greater than or equal to the number of incoming messages multiplied a configurable coefficient.",
                 ""));

@@ -37,7 +37,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             _sensors = new List<IDiagnosticSensor>
             {
                 new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider),
-                new NetworkThrottlingSensor(configProvider, knowledgeBaseProvider),
+                new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider),
                 new NetworkPartitionSensor(configProvider, knowledgeBaseProvider),
                 new MemoryAlarmSensor(configProvider, knowledgeBaseProvider),
                 new DiskAlarmSensor(configProvider, knowledgeBaseProvider),
@@ -56,7 +56,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
 
             Assert.AreEqual(7, report.Count);
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkThrottlingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MemoryAlarmSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(DiskAlarmSensor).FullName.GenerateIdentifier()));

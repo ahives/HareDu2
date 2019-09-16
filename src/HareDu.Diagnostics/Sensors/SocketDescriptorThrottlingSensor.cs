@@ -21,7 +21,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class NetworkThrottlingSensor :
+    public class SocketDescriptorThrottlingSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
 
-        public NetworkThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public SocketDescriptorThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _canReadConfig = _configProvider.TryGet(out _config);
@@ -62,21 +62,21 @@ namespace HareDu.Diagnostics.Sensors
             }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
-            ulong warningThreshold = ComputeWarningThreshold(data.OS.Sockets.Available);
+            ulong warningThreshold = ComputeWarningThreshold(data.OS.SocketDescriptors.Available);
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("OS.Sockets.Available", data.OS.Sockets.Available.ToString()),
-                new DiagnosticSensorDataImpl("OS.Sockets.Used", data.OS.Sockets.Used.ToString()),
+                new DiagnosticSensorDataImpl("OS.Sockets.Available", data.OS.SocketDescriptors.Available.ToString()),
+                new DiagnosticSensorDataImpl("OS.Sockets.Used", data.OS.SocketDescriptors.Used.ToString()),
                 new DiagnosticSensorDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
             };
 
-            if (data.OS.Sockets.Used < warningThreshold && warningThreshold < data.OS.Sockets.Available)
+            if (data.OS.SocketDescriptors.Used < warningThreshold && warningThreshold < data.OS.SocketDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
-            else if (data.OS.Sockets.Used == data.OS.Sockets.Available)
+            else if (data.OS.SocketDescriptors.Used == data.OS.SocketDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);

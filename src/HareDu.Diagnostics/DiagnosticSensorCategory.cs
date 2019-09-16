@@ -18,6 +18,7 @@ namespace HareDu.Diagnostics
         Throughput,
         Connectivity,
         Memory,
-        FaultTolerance
+        FaultTolerance,
+        Efficiency
     }
 }

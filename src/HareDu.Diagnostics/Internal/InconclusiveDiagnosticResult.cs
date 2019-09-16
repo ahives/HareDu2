@@ -39,6 +39,7 @@ namespace HareDu.Diagnostics.Internal
             SensorIdentifier = sensorIdentifier;
             ComponentType = componentType;
             Status = DiagnosticStatus.Inconclusive;
+            SensorData = DiagnosticCache.EmptySensorData;
         }
 
         public string ComponentIdentifier { get; }

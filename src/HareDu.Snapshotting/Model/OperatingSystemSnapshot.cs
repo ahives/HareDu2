@@ -20,6 +20,6 @@ namespace HareDu.Snapshotting.Model
 
         FileDescriptorChurnMetrics FileDescriptors { get; }
         
-        SocketChurnMetrics Sockets { get; }
+        SocketDescriptorChurnMetrics SocketDescriptors { get; }
     }
 }
