@@ -15,12 +15,12 @@ namespace HareDu.Core
 {
     public static class TypeConverterExtensions
     {
-        public static long ToLong(this string value)
+        public static ulong ToLong(this string value)
         {
             if (value.Equals("infinity"))
-                return long.MaxValue;
+                return ulong.MaxValue;
 
-            return long.TryParse(value, out long result) ? result : long.MaxValue;
+            return ulong.TryParse(value, out ulong result) ? result : ulong.MaxValue;
         }
     }
 }

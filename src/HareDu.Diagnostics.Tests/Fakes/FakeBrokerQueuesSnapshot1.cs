@@ -89,7 +89,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public FakeQueueSnapshot(string name,
                 string virtualHost,
                 string node,
-                long target,
+                ulong target,
                 ulong total,
                 ulong bytes,
                 ulong unacknowledged,
@@ -168,19 +168,20 @@ namespace HareDu.Diagnostics.Tests.Fakes
             class FakeQueueMemory :
                 QueueMemoryDetails
             {
-                public FakeQueueMemory(long target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
+                public FakeQueueMemory(ulong target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
                 {
                     RAM = new FakeRAM(target, total, bytes, unacknowledged, ready);
                 }
 
                 public long Total { get; }
+                public PagedOut PagedOut { get; }
                 public RAM RAM { get; }
                 
 
                 class FakeRAM :
                     RAM
                 {
-                    public FakeRAM(long target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
+                    public FakeRAM(ulong target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
                     {
                         Target = target;
                         Total = total;
@@ -189,7 +190,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                         Ready = ready;
                     }
 
-                    public long Target { get; }
+                    public ulong Target { get; }
                     public ulong Total { get; }
                     public ulong Bytes { get; }
                     public ulong Unacknowledged { get; }

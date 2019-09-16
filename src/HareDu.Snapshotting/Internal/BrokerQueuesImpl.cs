@@ -136,10 +136,26 @@ namespace HareDu.Snapshotting.Internal
                     {
                         Total = queue.Memory;
                         RAM = new RAMImpl(queue);
+                        PagedOut = new PagedOutImpl(queue.TotalMessagesPagedOut, queue.TotalMessageBytesPagedOut);
                     }
 
                     public long Total { get; }
+                    public PagedOut PagedOut { get; }
                     public RAM RAM { get; }
+
+                    
+                    class PagedOutImpl :
+                        PagedOut
+                    {
+                        public PagedOutImpl(ulong total, ulong bytes)
+                        {
+                            Total = total;
+                            Bytes = bytes;
+                        }
+
+                        public ulong Total { get; }
+                        public ulong Bytes { get; }
+                    }
 
                     
                     class RAMImpl :
@@ -154,7 +170,7 @@ namespace HareDu.Snapshotting.Internal
                             Ready = queue.MessagesReadyForDeliveryInRam;
                         }
 
-                        public long Target { get; }
+                        public ulong Target { get; }
                         public ulong Total { get; }
                         public ulong Bytes { get; }
                         public ulong Unacknowledged { get; }

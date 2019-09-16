@@ -50,14 +50,14 @@ namespace HareDu.Diagnostics.Sensors
             
             var sensorData = new List<DiagnosticSensorData>
             {
-                new DiagnosticSensorDataImpl("Memory.RAM.Total", data.Memory.RAM.Total.ToString())
+                new DiagnosticSensorDataImpl("Memory.PagedOut.Total", data.Memory.PagedOut.Total.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.Memory.RAM.Total > 0)
+            if (data.Memory.PagedOut.Total > 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
             else

@@ -15,10 +15,10 @@ namespace HareDu.Snapshotting.Model
 {
     public interface RAM
     {
-        long Target { get; }
+        ulong Target { get; }
         
         /// <summary>
-        /// Total messages in RAM that are written (i.e. paged out) to disk.
+        /// Total messages in RAM that are written to disk.
         /// </summary>
         ulong Total { get; }
         
