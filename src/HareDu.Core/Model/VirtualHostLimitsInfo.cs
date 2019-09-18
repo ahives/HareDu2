@@ -22,6 +22,6 @@ namespace HareDu.Core.Model
         string VirtualHostName { get; }
         
         [JsonProperty("value")]
-        IDictionary<string, string> Limits { get; }
+        IDictionary<string, ulong> Limits { get; }
     }
 }

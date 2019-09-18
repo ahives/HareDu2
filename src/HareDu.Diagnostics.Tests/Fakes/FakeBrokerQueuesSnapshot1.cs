@@ -171,11 +171,25 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 public FakeQueueMemory(ulong target, ulong total, ulong bytes, ulong unacknowledged, ulong ready)
                 {
                     RAM = new FakeRAM(target, total, bytes, unacknowledged, ready);
+                    PagedOut = new FakePagedOut(3);
                 }
 
                 public long Total { get; }
                 public PagedOut PagedOut { get; }
                 public RAM RAM { get; }
+
+                
+                class FakePagedOut :
+                    PagedOut
+                {
+                    public FakePagedOut(ulong total)
+                    {
+                        Total = total;
+                    }
+
+                    public ulong Total { get; }
+                    public ulong Bytes { get; }
+                }
                 
 
                 class FakeRAM :

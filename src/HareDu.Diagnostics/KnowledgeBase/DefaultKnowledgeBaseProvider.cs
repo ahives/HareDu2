@@ -20,8 +20,8 @@ namespace HareDu.Diagnostics.KnowledgeBase
     {
         protected override void Load()
         {
-            _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Yellow, "", ""));
-            _articles.Add(new KnowledgeBaseArticleImpl<QueueMessagePagingSensor>(DiagnosticStatus.Green, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<MessagePagingSensor>(DiagnosticStatus.Red, "", ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<MessagePagingSensor>(DiagnosticStatus.Green, ""));
             _articles.Add(new KnowledgeBaseArticleImpl<UnroutableMessageSensor>(DiagnosticStatus.Red,
                 "Some messages were published to an exchange but there is no queue bound to the exchange.",
                 "Bind an appropriate queue to the exchange or stop publishing to the exchange."));

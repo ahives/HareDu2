@@ -37,7 +37,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             _sensors = new List<IDiagnosticSensor>
             {
                 new QueueGrowthSensor(configProvider, knowledgeBaseProvider),
-                new QueueMessagePagingSensor(configProvider, knowledgeBaseProvider),
+                new MessagePagingSensor(configProvider, knowledgeBaseProvider),
                 new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider),
                 new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider),
                 new UnroutableMessageSensor(configProvider, knowledgeBaseProvider)
@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
 
             Assert.AreEqual(5, report.Count);
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).FullName.GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueMessagePagingSensor).FullName.GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MessagePagingSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ConsumerUtilizationSensor).FullName.GenerateIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnroutableMessageSensor).FullName.GenerateIdentifier()));

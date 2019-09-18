@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class QueueMessagePagingSensor :
+    public class MessagePagingSensor :
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Sensors
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Memory;
 
-        public QueueMessagePagingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public MessagePagingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
         }
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Sensors
             if (data.Memory.PagedOut.Total > 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, sensorData, knowledgeBaseArticle);
             }
             else
             {
