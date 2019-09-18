@@ -19,35 +19,68 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticSensor :
-        IObservable<DiagnosticContext>
+        IObservable<DiagnosticContext>,
+        IObservable<DiagnosticSensorContext>
     {
-        protected bool _canReadConfig;
         protected readonly IDiagnosticScannerConfigProvider _configProvider;
         protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         protected DiagnosticScannerConfig _config;
-        readonly List<IObserver<DiagnosticContext>> _observers;
+        protected DiagnosticSensorStatus _sensorStatus;
+        readonly List<IObserver<DiagnosticContext>> _diagnosticObservers;
+        readonly List<IObserver<DiagnosticSensorContext>> _sensorObservers;
 
         protected BaseDiagnosticSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _configProvider = configProvider;
             _knowledgeBaseProvider = knowledgeBaseProvider;
-            _observers = new List<IObserver<DiagnosticContext>>();
+            _diagnosticObservers = new List<IObserver<DiagnosticContext>>();
+            _sensorObservers = new List<IObserver<DiagnosticSensorContext>>();
         }
 
         protected virtual void NotifyObservers(DiagnosticResult result)
         {
-            foreach (var observer in _observers)
+            foreach (var observer in _diagnosticObservers)
             {
                 observer.OnNext(new DiagnosticContextImpl(result));
             }
         }
 
+        protected virtual void NotifyObservers(DiagnosticSensorResult result)
+        {
+            foreach (var observer in _sensorObservers)
+            {
+                observer.OnNext(new DiagnosticSensorContextImpl(result));
+            }
+        }
+
         public IDisposable Subscribe(IObserver<DiagnosticContext> observer)
         {
-            if (!_observers.Contains(observer))
-                _observers.Add(observer);
+            if (!_diagnosticObservers.Contains(observer))
+                _diagnosticObservers.Add(observer);
 
-            return new UnsubscribeObserver(_observers, observer);
+            return new UnsubscribeObserver<DiagnosticContext>(_diagnosticObservers, observer);
+        }
+
+        public IDisposable Subscribe(IObserver<DiagnosticSensorContext> observer)
+        {
+            if (!_sensorObservers.Contains(observer))
+                _sensorObservers.Add(observer);
+
+            return new UnsubscribeObserver<DiagnosticSensorContext>(_sensorObservers, observer);
+        }
+
+        
+        class DiagnosticSensorContextImpl :
+            DiagnosticSensorContext
+        {
+            public DiagnosticSensorContextImpl(DiagnosticSensorResult result)
+            {
+                Result = result;
+                Timestamp = DateTimeOffset.UtcNow;
+            }
+
+            public DiagnosticSensorResult Result { get; }
+            public DateTimeOffset Timestamp { get; }
         }
 
         
@@ -57,7 +90,7 @@ namespace HareDu.Diagnostics.Sensors
             public DiagnosticContextImpl(DiagnosticResult result)
             {
                 Result = result;
-                Timestamp = DateTimeOffset.Now;
+                Timestamp = DateTimeOffset.UtcNow;
             }
 
             public DiagnosticResult Result { get; }
@@ -65,13 +98,13 @@ namespace HareDu.Diagnostics.Sensors
         }
         
         
-        class UnsubscribeObserver :
+        class UnsubscribeObserver<T> :
             IDisposable
         {
-            readonly List<IObserver<DiagnosticContext>> _observers;
-            readonly IObserver<DiagnosticContext> _observer;
+            readonly List<IObserver<T>> _observers;
+            readonly IObserver<T> _observer;
 
-            public UnsubscribeObserver(List<IObserver<DiagnosticContext>> observers, IObserver<DiagnosticContext> observer)
+            public UnsubscribeObserver(List<IObserver<T>> observers, IObserver<T> observer)
             {
                 _observers = observers;
                 _observer = observer;

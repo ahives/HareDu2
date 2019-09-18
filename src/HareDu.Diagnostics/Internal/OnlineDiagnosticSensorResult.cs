@@ -11,23 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Diagnostics.Internal
 {
-    using System;
-    using System.Collections.Generic;
-    using Snapshotting;
-
-    public interface IComponentDiagnosticFactory
+    class OnlineDiagnosticSensorResult :
+        DiagnosticSensorResult
     {
-        bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
-            where T : Snapshot;
+        public OnlineDiagnosticSensorResult(string sensorIdentifier, ComponentType componentType)
+        {
+            ComponentType = componentType;
+            SensorIdentifier = sensorIdentifier;
+            Status = DiagnosticSensorStatus.Online;
+        }
 
-        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers);
-        
-        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticSensorContext>> observers);
-
-        void RegisterObserver(IObserver<DiagnosticContext> observer);
-        
-        void RegisterObserver(IObserver<DiagnosticSensorContext> observer);
+        public ComponentType ComponentType { get; }
+        public string SensorIdentifier { get; }
+        public DiagnosticSensorStatus Status { get; }
     }
 }

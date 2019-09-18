@@ -102,17 +102,17 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_2()
+        public void Verify_sensor_offline()
         {
             var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider);
             
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
+            BrokerConnectivitySnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
+            Assert.AreEqual(DiagnosticSensorStatus.Offline,sensor.Status);
         }
 
         

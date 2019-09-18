@@ -29,10 +29,16 @@ namespace HareDu.Diagnostics.Sensors
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
+        public DiagnosticSensorStatus Status => _sensorStatus;
 
         public NetworkPartitionSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
+            DiagnosticSensorResult result = new OnlineDiagnosticSensorResult(Identifier, ComponentType);
+
+            NotifyObservers(result);
+
+            _sensorStatus = result.Status;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

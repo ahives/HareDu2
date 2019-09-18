@@ -50,9 +50,14 @@ namespace HareDu.Diagnostics.Scanning
             return results;
         }
 
-        bool IsExchangeSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Exchange;
+        bool IsExchangeSensor(IDiagnosticSensor sensor) =>
+            !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
+            && sensor.ComponentType == ComponentType.Exchange;
 
         bool IsQueueSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull() && sensor.ComponentType == ComponentType.Queue;
+            !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
+            && sensor.ComponentType == ComponentType.Queue;
     }
 }

@@ -51,5 +51,19 @@ namespace HareDu.Diagnostics.Scanning
 
             return this;
         }
+
+        public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticSensorContext>> observers)
+        {
+            _factory.RegisterObservers(observers);
+
+            return this;
+        }
+
+        public IDiagnosticScanner RegisterObserver(IObserver<DiagnosticSensorContext> observer)
+        {
+            _factory.RegisterObserver(observer);
+
+            return this;
+        }
     }
 }

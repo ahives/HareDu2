@@ -29,10 +29,16 @@ namespace HareDu.Diagnostics.Sensors
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
+        public DiagnosticSensorStatus Status => _sensorStatus;
 
         public ChannelLimitReachedSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
+            DiagnosticSensorResult result = new OnlineDiagnosticSensorResult(Identifier, ComponentType);
+
+            NotifyObservers(result);
+
+            _sensorStatus = result.Status;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

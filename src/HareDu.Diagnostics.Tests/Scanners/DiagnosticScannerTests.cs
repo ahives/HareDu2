@@ -97,7 +97,17 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 throw new NotImplementedException();
             }
 
+            public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticSensorContext>> observers)
+            {
+                throw new NotImplementedException();
+            }
+
             public void RegisterObserver(IObserver<DiagnosticContext> observer)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void RegisterObserver(IObserver<DiagnosticSensorContext> observer)
             {
                 throw new NotImplementedException();
             }

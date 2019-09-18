@@ -28,10 +28,16 @@ namespace HareDu.Diagnostics.Sensors
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Memory;
+        public DiagnosticSensorStatus Status => _sensorStatus;
 
         public MessagePagingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
+            DiagnosticSensorResult result = new OnlineDiagnosticSensorResult(Identifier, ComponentType);
+
+            NotifyObservers(result);
+
+            _sensorStatus = result.Status;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

@@ -55,12 +55,24 @@ namespace HareDu.Diagnostics.Scanning
             return results;
         }
 
-        bool IsRuntimeSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Runtime;
+        bool IsRuntimeSensor(IDiagnosticSensor sensor) =>
+            !sensor.IsNull() &&
+            sensor.Status == DiagnosticSensorStatus.Online
+            && sensor.ComponentType == ComponentType.Runtime;
 
-        bool IsMemorySensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Memory;
+        bool IsMemorySensor(IDiagnosticSensor sensor) =>
+            !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
+            && sensor.ComponentType == ComponentType.Memory;
 
-        bool IsDiskSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Disk;
+        bool IsDiskSensor(IDiagnosticSensor sensor) =>
+            !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
+            && sensor.ComponentType == ComponentType.Disk;
 
-        bool IsNodeSensor(IDiagnosticSensor sensor) => !sensor.IsNull() && sensor.ComponentType == ComponentType.Node;
+        bool IsNodeSensor(IDiagnosticSensor sensor) =>
+            !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
+            && sensor.ComponentType == ComponentType.Node;
     }
 }

@@ -16,7 +16,8 @@ namespace HareDu.Diagnostics.Sensors
     using System;
 
     public interface IDiagnosticSensor :
-        IObservable<DiagnosticContext>
+        IObservable<DiagnosticContext>,
+        IObservable<DiagnosticSensorContext>
     {
         string Identifier { get; }
         
@@ -25,6 +26,8 @@ namespace HareDu.Diagnostics.Sensors
         ComponentType ComponentType { get; }
         
         DiagnosticSensorCategory SensorCategory { get; }
+        
+        DiagnosticSensorStatus Status { get; }
         
         DiagnosticResult Execute<T>(T snapshot);
     }

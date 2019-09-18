@@ -59,16 +59,19 @@ namespace HareDu.Diagnostics.Scanning
 
         bool IsChannelThroughputSensor(IDiagnosticSensor sensor) =>
             !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
             && sensor.ComponentType == ComponentType.Channel
             && sensor.SensorCategory != DiagnosticSensorCategory.Connectivity;
 
         bool IsConnectionThroughputSensor(IDiagnosticSensor sensor) =>
             !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
             && sensor.ComponentType == ComponentType.Connection
             && sensor.SensorCategory != DiagnosticSensorCategory.Connectivity;
 
         bool IsConnectivitySensor(IDiagnosticSensor sensor) =>
             !sensor.IsNull()
+            && sensor.Status == DiagnosticSensorStatus.Online
             && (sensor.ComponentType == ComponentType.Connection || sensor.ComponentType == ComponentType.Channel)
             && sensor.SensorCategory == DiagnosticSensorCategory.Connectivity;
     }

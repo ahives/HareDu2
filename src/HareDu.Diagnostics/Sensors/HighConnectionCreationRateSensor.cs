@@ -28,26 +28,23 @@ namespace HareDu.Diagnostics.Sensors
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Connectivity;
+        public DiagnosticSensorStatus Status => _sensorStatus;
 
         public HighConnectionCreationRateSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
-            _canReadConfig = _configProvider.TryGet(out _config);
+            DiagnosticSensorResult result = _configProvider.TryGet(out _config)
+                ? (DiagnosticSensorResult) new OnlineDiagnosticSensorResult(Identifier, ComponentType)
+                : new OfflineDiagnosticSensorResult(Identifier, ComponentType);
+
+            NotifyObservers(result);
+
+            _sensorStatus = result.Status;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
             DiagnosticResult result;
-            
-            if (!_canReadConfig)
-            {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
-
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
             
             if (data.IsNull())

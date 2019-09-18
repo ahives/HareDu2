@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_1()
+        public void Verify_sensor_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
@@ -102,17 +102,17 @@ namespace HareDu.Diagnostics.Tests.Sensors
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_2()
+        public void Verify_sensor_offline()
         {
             var configProvider = new DefaultConfigProvider2();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var sensor = new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider);
             
-            NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
+            NodeSnapshot snapshot = null;
 
             var result = sensor.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
+            Assert.AreEqual(DiagnosticSensorStatus.Offline,sensor.Status);
         }
 
         
