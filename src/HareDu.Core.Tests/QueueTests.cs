@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create_queue()
         {
             var result = await Client
-                .Resource<Queue>()
+                .Object<Queue>()
                 .Create(x =>
                 {
                     x.Queue("TestQueue31");
@@ -48,7 +48,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_queues()
         {
             var result = await Client
-                .Resource<Queue>()
+                .Object<Queue>()
                 .GetAll();
             
             foreach (var queue in result.Select(x => x.Data))
@@ -68,7 +68,7 @@ namespace HareDu.Tests
         public async Task Verify_can_get_all_json()
         {
             var result = await Client
-                .Resource<Queue>()
+                .Object<Queue>()
                 .GetAll();
             
             Assert.IsFalse(result.HasFaulted);
@@ -79,7 +79,7 @@ namespace HareDu.Tests
         public async Task Verify_can_delete_queue()
         {
             var result = await Client
-                .Resource<Queue>()
+                .Object<Queue>()
                 .Delete(x =>
                 {
                     x.Queue("TestQueue10");
@@ -99,7 +99,7 @@ namespace HareDu.Tests
         public async Task Verify_can_peek_messages()
         {
             var result = await Client
-                .Resource<Queue>()
+                .Object<Queue>()
                 .Peek(x =>
                 {
                     x.Queue("Queue1");
@@ -121,7 +121,7 @@ namespace HareDu.Tests
         public async Task Verify_can_empty_queue()
         {
             var result = await Client
-                .Resource<Queue>()
+                .Object<Queue>()
                 .Empty(x =>
                 {
                     x.Queue("");

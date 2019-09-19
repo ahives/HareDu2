@@ -43,17 +43,17 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<BrokerConnectivitySnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Resource<Cluster>()
+                .Object<Cluster>()
                 .GetDetails(cancellationToken)
                 .Select(x => x.Data);
             
             var connections = _factory
-                .Resource<Connection>()
+                .Object<Connection>()
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
 
             var channels = _factory
-                .Resource<Channel>()
+                .Object<Channel>()
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             

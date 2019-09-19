@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_user_permissions()
         {
             var result = await Client
-                .Resource<UserPermissions>()
+                .Object<UserPermissions>()
                 .GetAll();
             
             foreach (var access in result.Select(x => x.Data))
@@ -46,7 +46,7 @@ namespace HareDu.Tests
         public async Task TestVerify_can_delete_user_permissions()
         {
             var result = await Client
-                .Resource<UserPermissions>()
+                .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User("");
@@ -58,7 +58,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create_user_permissions()
         {
             var result = await Client
-                .Resource<UserPermissions>()
+                .Object<UserPermissions>()
                 .Create(x =>
                 {
                     x.User("");

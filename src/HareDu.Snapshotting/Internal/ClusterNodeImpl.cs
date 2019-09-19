@@ -26,12 +26,12 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<NodeSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Resource<Cluster>()
+                .Object<Cluster>()
                 .GetDetails(cancellationToken)
                 .Select(x => x.Data);
 
             var nodes = _factory
-                .Resource<Node>()
+                .Object<Node>()
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             

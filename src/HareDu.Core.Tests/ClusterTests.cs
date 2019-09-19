@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var result = await Client
-                .Resource<Cluster>()
+                .Object<Cluster>()
                 .GetDetails();
 
             if (result.HasData)

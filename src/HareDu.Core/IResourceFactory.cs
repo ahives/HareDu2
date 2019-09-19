@@ -23,7 +23,7 @@ namespace HareDu.Core
         /// </summary>
         /// <typeparam name="T">Interface that derives from base interface ResourceClient.</typeparam>
         /// <returns>An interface of resources available on a RabbitMQ server.</returns>
-        T Resource<T>()
+        T Object<T>()
             where T : Resource;
         
         /// <summary>

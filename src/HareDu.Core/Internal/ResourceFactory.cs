@@ -53,7 +53,7 @@ namespace HareDu.Core.Internal
             RegisterResources();
         }
 
-        public TResource Resource<TResource>()
+        public TResource Object<TResource>()
             where TResource : Resource
         {
             Type type = GetType()

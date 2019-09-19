@@ -29,7 +29,7 @@ namespace HareDu.Tests
         public void Verify_Where_works()
         {
             var vhosts = Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
 
@@ -46,7 +46,7 @@ namespace HareDu.Tests
         public void Verify_Unwrap_works()
         {
             var vhosts = Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Unfold();
 
@@ -63,7 +63,7 @@ namespace HareDu.Tests
         public void Verify_Unwravel_works()
         {
             var vhosts = Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);
 
@@ -80,7 +80,7 @@ namespace HareDu.Tests
         public void Verify_Any_works()
         {
             bool found = Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Any();
             
@@ -91,7 +91,7 @@ namespace HareDu.Tests
         public void Verify_Any_with_predicate_works()
         {
             bool found = Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Any(x => x.Name == "HareDu");
             
@@ -102,7 +102,7 @@ namespace HareDu.Tests
         public void Verify_FirstOrDefault_works()
         {
             ExchangeInfo exchange = Client
-                .Resource<Exchange>()
+                .Object<Exchange>()
                 .GetAll()
                 .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")
                 .FirstOrDefault();

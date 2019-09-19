@@ -28,12 +28,13 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_exchanges()
         {
             var result = await Client
-                .Resource<Exchange>()
+                .Object<Exchange>()
                 .GetAll();
 
             foreach (var exchange in result.Select(x => x.Data))
             {
                 Console.WriteLine("Name: {0}", exchange.Name);
+                Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
                 Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
                 Console.WriteLine("Internal: {0}", exchange.Internal);
                 Console.WriteLine("Durable: {0}", exchange.Durable);
@@ -50,7 +51,7 @@ namespace HareDu.Tests
         public async Task Verify_can_filter_exchanges()
         {
             var result = await Client
-                .Resource<Exchange>()
+                .Object<Exchange>()
                 .GetAll();
 
             foreach (var exchange in result.Where(x => x.Name == "amq.*"))
@@ -72,7 +73,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create_exchange()
         {
             var result = await Client
-                .Resource<Exchange>()
+                .Object<Exchange>()
                 .Create(x =>
                 {
                     x.Exchange("E5");
@@ -97,7 +98,7 @@ namespace HareDu.Tests
         public async Task Verify_can_delete_exchange()
         {
             var result = await Client
-                .Resource<Exchange>()
+                .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange("E3");

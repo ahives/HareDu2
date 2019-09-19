@@ -70,7 +70,7 @@ namespace HareDu.Tests
 
             var vhosts = ResourceClient
                 .Init(config)
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
             
@@ -92,7 +92,7 @@ namespace HareDu.Tests
                     x.ConnectTo("http://localhost:15672");
                     x.UsingCredentials("guest", "guest");
                 })
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
             
@@ -112,7 +112,7 @@ namespace HareDu.Tests
                 .Init(() => new HareDuClientSettingsImpl(
                     "http://localhost:15672",
                     new HareDuCredentialsImpl("guest", "guest")))
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
                         

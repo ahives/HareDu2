@@ -27,7 +27,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_bindings()
         {
             var result = await Client
-                .Resource<Binding>()
+                .Object<Binding>()
                 .GetAll();
             
             foreach (var binding in result.Select(x => x.Data))
@@ -49,7 +49,7 @@ namespace HareDu.Tests
         public async Task Verify_can_add_arguments()
         {
             var result = await Client
-                .Resource<Binding>()
+                .Object<Binding>()
                 .Create(x =>
                 {
                     x.Binding(b =>
@@ -77,7 +77,7 @@ namespace HareDu.Tests
         public async Task Verify_can_delete_binding()
         {
             var result = await Client
-                .Resource<Binding>()
+                .Object<Binding>()
                 .Delete(x =>
                 {
                     x.Binding(b =>

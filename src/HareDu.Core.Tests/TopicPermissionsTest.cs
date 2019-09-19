@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Verify_can_get_all_topic_permissions()
         {
             var result = await Client
-                .Resource<TopicPermissions>()
+                .Object<TopicPermissions>()
                 .GetAll();
             
             foreach (var permission in result.Select(x => x.Data))
@@ -48,7 +48,7 @@ namespace HareDu.Tests
         public void Verify_can_filter_topic_permissions()
         {
             var result = Client
-                .Resource<TopicPermissions>()
+                .Object<TopicPermissions>()
                 .GetAll()
                 .Where(x => x.VirtualHost == "HareDu");
             
@@ -67,7 +67,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create_user_permissions()
         {
             var result = await Client
-                .Resource<TopicPermissions>()
+                .Object<TopicPermissions>()
                 .Create(x =>
                 {
                     x.User("guest");
@@ -87,7 +87,7 @@ namespace HareDu.Tests
         public async Task TestVerify_can_delete_user_permissions()
         {
             var result = await Client
-                .Resource<TopicPermissions>()
+                .Object<TopicPermissions>()
                 .Delete(x =>
                 {
                     x.User("guest");

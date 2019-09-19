@@ -27,7 +27,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var result = await Client
-                .Resource<Channel>()
+                .Object<Channel>()
                 .GetAll();
             
             foreach (var node in result.Select(x => x.Data))
@@ -50,7 +50,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_channels()
         {
             var result = await Client
-                .Resource<Channel>()
+                .Object<Channel>()
                 .GetAll();
 
             if (result.HasData)

@@ -27,7 +27,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_connections()
         {
             var result = await Client
-                .Resource<Connection>()
+                .Object<Connection>()
                 .GetAll();
 
             foreach (var connection in result.Select(x => x.Data))

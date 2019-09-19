@@ -18,15 +18,27 @@ namespace HareDu.Core.Model
 
     public interface BindingInfo
     {
+        /// <summary>
+        /// Name of the source exchange.
+        /// </summary>
         [JsonProperty("source")]
         string Source { get; }
         
+        /// <summary>
+        /// Name of the RabbitMQ virtual host object.
+        /// </summary>
         [JsonProperty("vhost")]
         string VirtualHost { get; }
         
+        /// <summary>
+        /// Name of the destination exchange/queue object.
+        /// </summary>
         [JsonProperty("destination")]
         string Destination { get; }
         
+        /// <summary>
+        /// Qualifies the destination object by defining the type of object (e.g., queue, exchange, etc.).
+        /// </summary>
         [JsonProperty("destination_type")]
         string DestinationType { get; }
         

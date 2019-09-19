@@ -29,7 +29,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_nodes()
         {
             var result = await Client
-                .Resource<Node>()
+                .Object<Node>()
                 .GetAll();
             
             foreach (var node in result.Select(x => x.Data))

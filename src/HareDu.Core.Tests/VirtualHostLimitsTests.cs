@@ -27,7 +27,7 @@ namespace HareDu.Tests
         public async Task Verify_can_get_all_limits()
         {
             var result = await Client
-                .Resource<VirtualHostLimits>()
+                .Object<VirtualHostLimits>()
                 .GetAll();
             
             foreach (var item in result.Select(x => x.Data))
@@ -49,7 +49,7 @@ namespace HareDu.Tests
         public async Task Verify_can_get_limits_of_specified_vhost()
         {
             var result = Client
-                .Resource<VirtualHostLimits>()
+                .Object<VirtualHostLimits>()
                 .GetAll()
                 .Where(x => x.VirtualHostName == "HareDu");
 
@@ -72,7 +72,7 @@ namespace HareDu.Tests
         public async Task Verify_can_define_limits()
         {
             var result = await Client
-                .Resource<VirtualHostLimits>()
+                .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
                     x.VirtualHost("HareDu5");
@@ -90,7 +90,7 @@ namespace HareDu.Tests
         public async Task Verify_can_delete_limits()
         {
             var result = await Client
-                .Resource<VirtualHostLimits>()
+                .Object<VirtualHostLimits>()
                 .Delete(x => x.For("HareDu3"));
             
             Console.WriteLine(result.ToJsonString());

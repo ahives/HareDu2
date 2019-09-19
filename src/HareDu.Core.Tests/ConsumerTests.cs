@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_consumers()
         {
             var result = await Client
-                .Resource<Consumer>()
+                .Object<Consumer>()
                 .GetAll();
 
             if (result.HasData)

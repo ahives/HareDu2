@@ -27,7 +27,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_definitions()
         {
             Result<ServerDefinitionInfo> result = await Client
-                .Resource<Server>()
+                .Object<Server>()
                 .GetDefinition();
 
             if (result.HasData)

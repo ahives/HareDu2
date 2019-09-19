@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_policies()
         {
             var result = await Client
-                .Resource<Policy>()
+                .Object<Policy>()
                 .GetAll();
 
             foreach (var policy in result.Select(x => x.Data))
@@ -47,7 +47,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create_policy()
         {
             var result = await Client
-                .Resource<Policy>()
+                .Object<Policy>()
                 .Create(x =>
                 {
                     x.Policy("P5");
@@ -73,7 +73,7 @@ namespace HareDu.Tests
         public async Task Verify_cannot_create_policy()
         {
             var result = await Client
-                .Resource<Policy>()
+                .Object<Policy>()
                 .Create(x =>
                 {
                     x.Policy("P4");
@@ -100,7 +100,7 @@ namespace HareDu.Tests
         public async Task Verify_can_delete_policy()
         {
             var result = await Client
-                .Resource<Policy>()
+                .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Policy("P4");

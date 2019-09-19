@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_global_parameters()
         {
             var result = await Client
-                .Resource<GlobalParameter>()
+                .Object<GlobalParameter>()
                 .GetAll();
 
             foreach (var parameter in result.Select(x => x.Data))
@@ -46,7 +46,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create_parameter()
         {
             var result = await Client
-                .Resource<GlobalParameter>()
+                .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter("");
@@ -67,7 +67,7 @@ namespace HareDu.Tests
         public async Task Verify_can_delete_parameter()
         {
             var result = await Client
-                .Resource<GlobalParameter>()
+                .Object<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
             
             Assert.IsFalse(result.HasFaulted);

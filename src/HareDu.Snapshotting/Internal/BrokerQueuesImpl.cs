@@ -42,12 +42,12 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<BrokerQueuesSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Resource<Cluster>()
+                .Object<Cluster>()
                 .GetDetails(cancellationToken)
                 .Select(x => x.Data);
             
             var queues = _factory
-                .Resource<Queue>()
+                .Object<Queue>()
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             

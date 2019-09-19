@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Verify_can_check_if_named_node_healthy()
         {
             var result = await Client
-                .Resource<NodeHealth>()
+                .Object<NodeHealth>()
                 .GetDetails("rabbit@localhost");
 
             if (result.HasData)
@@ -47,7 +47,7 @@ namespace HareDu.Tests
         public async Task Verify_can_check_if_node_healthy()
         {
             Result<NodeHealthInfo> result = await Client
-                .Resource<NodeHealth>()
+                .Object<NodeHealth>()
                 .GetDetails();
             
             Console.WriteLine(result.DebugInfo.URL);

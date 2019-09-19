@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Verify_can_get_all_users()
         {
             var result = await Client
-                .Resource<User>()
+                .Object<User>()
                 .GetAll();
 
             foreach (var user in result.Select(x => x.Data))
@@ -46,7 +46,7 @@ namespace HareDu.Tests
         public async Task Verify_can_get_all_users_without_permissions()
         {
             var result = await Client
-                .Resource<User>()
+                .Object<User>()
                 .GetAllWithoutPermissions();
 
             foreach (var user in result.Select(x => x.Data))
@@ -64,7 +64,7 @@ namespace HareDu.Tests
         public async Task Test1()
         {
             var result = await Client
-                .Resource<User>()
+                .Object<User>()
                 .Create(x =>
                 {
                     x.Username("testuser3");
@@ -84,7 +84,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var result = await Client
-                .Resource<User>()
+                .Object<User>()
                 .Delete(x => x.User(""));
         }
     }

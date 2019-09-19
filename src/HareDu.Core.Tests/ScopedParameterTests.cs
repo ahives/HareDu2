@@ -27,7 +27,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_scoped_parameters()
         {
             var result = await Client
-                .Resource<ScopedParameter>()
+                .Object<ScopedParameter>()
                 .GetAll();
 
             foreach (var parameter in result.Select(x => x.Data))
@@ -45,7 +45,7 @@ namespace HareDu.Tests
         public async Task Verify_can_create()
         {
             var result = await Client
-                .Resource<ScopedParameter>()
+                .Object<ScopedParameter>()
                 .Create(x =>
                 {
                     x.Parameter("test", "me");
@@ -64,7 +64,7 @@ namespace HareDu.Tests
         public async Task Test()
         {
             var result = await Client
-                .Resource<ScopedParameter>()
+                .Object<ScopedParameter>()
                 .Delete(x =>
                 {
                     x.Parameter("");

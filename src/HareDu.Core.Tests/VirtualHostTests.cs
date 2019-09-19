@@ -28,7 +28,7 @@ namespace HareDu.Tests
         public async Task Should_be_able_to_get_all_vhosts()
         {
             var result = await Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll();
 
             foreach (var vhost in result.Select(x => x.Data))
@@ -44,7 +44,7 @@ namespace HareDu.Tests
         public async Task Verify_GetAll_HasResult_works()
         {
             var result = await Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll();
 
             Assert.IsTrue(result.HasData);
@@ -54,7 +54,7 @@ namespace HareDu.Tests
         public async Task Verify_filtered_GetAll_works()
         {
             var result = Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
 
@@ -71,7 +71,7 @@ namespace HareDu.Tests
         public async Task Verify_Create_works()
         {
             Result result = await Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .Create(x =>
                 {
                     x.VirtualHost("HareDu7");
@@ -88,7 +88,7 @@ namespace HareDu.Tests
         public async Task Verify_Delete_works()
         {
             Result result = await Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .Delete(x => x.VirtualHost("HareDu7"));
 
             Console.WriteLine(result.ToJsonString());
@@ -98,7 +98,7 @@ namespace HareDu.Tests
         public async Task Verify_can_start_vhost()
         {
             Result result = await Client
-                .Resource<VirtualHost>()
+                .Object<VirtualHost>()
                 .Startup("", x => x.On(""));
             
             Console.WriteLine(result.ToJsonString());
