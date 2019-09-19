@@ -28,18 +28,12 @@ namespace HareDu.Diagnostics.Sensors
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Runtime;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
-        public DiagnosticSensorStatus Status => _sensorStatus;
+        public DiagnosticSensorStatus Status => _status;
 
         public RuntimeProcessLimitSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
-            DiagnosticSensorResult result = _configProvider.TryGet(out _config)
-                ? (DiagnosticSensorResult) new OnlineDiagnosticSensorResult(Identifier, ComponentType)
-                : new OfflineDiagnosticSensorResult(Identifier, ComponentType);
-
-            NotifyObservers(result);
-
-            _sensorStatus = result.Status;
+            _status = _configProvider.TryGet(out _config) ? DiagnosticSensorStatus.Online : DiagnosticSensorStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

@@ -76,32 +76,7 @@ namespace HareDu.Diagnostics.Scanning
             }
         }
 
-        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticSensorContext>> observers)
-        {
-            for (int i = 0; i < observers.Count; i++)
-            {
-                if (observers[i] != null)
-                {
-                    for (int j = 0; j < _sensors.Count; j++)
-                    {
-                        _observers.Add(_sensors[j].Subscribe(observers[i]));
-                    }
-                }
-            }
-        }
-
         public void RegisterObserver(IObserver<DiagnosticContext> observer)
-        {
-            if (observer != null)
-            {
-                for (int j = 0; j < _sensors.Count; j++)
-                {
-                    _observers.Add(_sensors[j].Subscribe(observer));
-                }
-            }
-        }
-
-        public void RegisterObserver(IObserver<DiagnosticSensorContext> observer)
         {
             if (observer != null)
             {

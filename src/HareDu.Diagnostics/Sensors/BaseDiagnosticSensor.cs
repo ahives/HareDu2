@@ -19,71 +19,38 @@ namespace HareDu.Diagnostics.Sensors
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticSensor :
-        IObservable<DiagnosticContext>,
-        IObservable<DiagnosticSensorContext>
+        IObservable<DiagnosticContext>
     {
         protected readonly IDiagnosticScannerConfigProvider _configProvider;
         protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         protected DiagnosticScannerConfig _config;
-        protected DiagnosticSensorStatus _sensorStatus;
-        readonly List<IObserver<DiagnosticContext>> _diagnosticObservers;
-        readonly List<IObserver<DiagnosticSensorContext>> _sensorObservers;
+        protected DiagnosticSensorStatus _status;
+        readonly List<IObserver<DiagnosticContext>> _observers;
 
         protected BaseDiagnosticSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _configProvider = configProvider;
             _knowledgeBaseProvider = knowledgeBaseProvider;
-            _diagnosticObservers = new List<IObserver<DiagnosticContext>>();
-            _sensorObservers = new List<IObserver<DiagnosticSensorContext>>();
+            _observers = new List<IObserver<DiagnosticContext>>();
         }
 
         protected virtual void NotifyObservers(DiagnosticResult result)
         {
-            foreach (var observer in _diagnosticObservers)
+            foreach (var observer in _observers)
             {
                 observer.OnNext(new DiagnosticContextImpl(result));
             }
         }
 
-        protected virtual void NotifyObservers(DiagnosticSensorResult result)
-        {
-            foreach (var observer in _sensorObservers)
-            {
-                observer.OnNext(new DiagnosticSensorContextImpl(result));
-            }
-        }
-
         public IDisposable Subscribe(IObserver<DiagnosticContext> observer)
         {
-            if (!_diagnosticObservers.Contains(observer))
-                _diagnosticObservers.Add(observer);
+            if (!_observers.Contains(observer))
+                _observers.Add(observer);
 
-            return new UnsubscribeObserver<DiagnosticContext>(_diagnosticObservers, observer);
+            return new UnsubscribeObserver<DiagnosticContext>(_observers, observer);
         }
 
-        public IDisposable Subscribe(IObserver<DiagnosticSensorContext> observer)
-        {
-            if (!_sensorObservers.Contains(observer))
-                _sensorObservers.Add(observer);
 
-            return new UnsubscribeObserver<DiagnosticSensorContext>(_sensorObservers, observer);
-        }
-
-        
-        class DiagnosticSensorContextImpl :
-            DiagnosticSensorContext
-        {
-            public DiagnosticSensorContextImpl(DiagnosticSensorResult result)
-            {
-                Result = result;
-                Timestamp = DateTimeOffset.UtcNow;
-            }
-
-            public DiagnosticSensorResult Result { get; }
-            public DateTimeOffset Timestamp { get; }
-        }
-
-        
         class DiagnosticContextImpl :
             DiagnosticContext
         {
@@ -98,7 +65,7 @@ namespace HareDu.Diagnostics.Sensors
         }
         
         
-        class UnsubscribeObserver<T> :
+        protected class UnsubscribeObserver<T> :
             IDisposable
         {
             readonly List<IObserver<T>> _observers;

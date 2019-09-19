@@ -28,16 +28,12 @@ namespace HareDu.Diagnostics.Sensors
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
-        public DiagnosticSensorStatus Status => _sensorStatus;
+        public DiagnosticSensorStatus Status => _status;
 
         public ChannelThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
-            DiagnosticSensorResult result = new OnlineDiagnosticSensorResult(Identifier, ComponentType);
-
-            NotifyObservers(result);
-
-            _sensorStatus = result.Status;
+            _status = DiagnosticSensorStatus.Online;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

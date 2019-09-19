@@ -16,8 +16,7 @@ namespace HareDu.Diagnostics.Sensors
     using System;
 
     public interface IDiagnosticSensor :
-        IObservable<DiagnosticContext>,
-        IObservable<DiagnosticSensorContext>
+        IObservable<DiagnosticContext>
     {
         string Identifier { get; }
         

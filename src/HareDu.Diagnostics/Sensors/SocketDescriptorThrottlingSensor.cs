@@ -30,18 +30,12 @@ namespace HareDu.Diagnostics.Sensors
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;
-        public DiagnosticSensorStatus Status => _sensorStatus;
+        public DiagnosticSensorStatus Status => _status;
 
         public SocketDescriptorThrottlingSensor(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
-            DiagnosticSensorResult result = _configProvider.TryGet(out _config)
-                ? (DiagnosticSensorResult) new OnlineDiagnosticSensorResult(Identifier, ComponentType)
-                : new OfflineDiagnosticSensorResult(Identifier, ComponentType);
-
-            NotifyObservers(result);
-
-            _sensorStatus = result.Status;
+            _status = _configProvider.TryGet(out _config) ? DiagnosticSensorStatus.Online : DiagnosticSensorStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

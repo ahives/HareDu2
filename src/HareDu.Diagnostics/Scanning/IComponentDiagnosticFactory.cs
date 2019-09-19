@@ -23,11 +23,7 @@ namespace HareDu.Diagnostics.Scanning
             where T : Snapshot;
 
         void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers);
-        
-        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticSensorContext>> observers);
 
         void RegisterObserver(IObserver<DiagnosticContext> observer);
-        
-        void RegisterObserver(IObserver<DiagnosticSensorContext> observer);
     }
 }
