@@ -19,11 +19,16 @@ namespace HareDu.Diagnostics
 
     public static class DiagnosticIdentifierExtensions
     {
-        public static string GenerateIdentifier(this string value)
+        /// <summary>
+        /// Generates a unique guid identifier based on the type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GenerateIdentifier(this Type type)
         {
-            using (var hashingAlgorithm = MD5.Create())
+            using (var algorithm = MD5.Create())
             {
-                byte[] bytes = hashingAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(value));
+                byte[] bytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(type.FullName));
                 
                 return new Guid(bytes).ToString();
             }

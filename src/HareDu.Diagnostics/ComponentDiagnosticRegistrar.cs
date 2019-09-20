@@ -63,10 +63,8 @@ namespace HareDu.Diagnostics
             try
             {
                 var instance = Activator.CreateInstance(type, sensors);
-                
-                string identifier = type.FullName.GenerateIdentifier();
             
-                _cache.Add(identifier, instance);
+                _cache.Add(type.GenerateIdentifier(), instance);
             }
             catch { }
         }

@@ -50,7 +50,7 @@ namespace HareDu.Diagnostics.Scanning
                 return false;
             }
 
-            string identifier = type.FullName.GenerateIdentifier();
+            string identifier = type.GenerateIdentifier();
             
             if (_diagnosticCache.ContainsKey(identifier))
             {

@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Scanning
         IComponentDiagnostic<T>
         where T : Snapshot
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
+        public string Identifier => GetType().GenerateIdentifier();
 
         public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => DiagnosticCache.EmptyDiagnosticResults;
     }

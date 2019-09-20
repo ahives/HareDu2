@@ -23,7 +23,7 @@ namespace HareDu.Snapshotting
         ISnapshotFactory
     {
         readonly IResourceFactory _factory;
-        readonly IDictionary<string, object> _snapshotCache = new Dictionary<string, object>();
+        readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
 
         public SnapshotFactory(IResourceFactory factory)
         {
@@ -43,12 +43,12 @@ namespace HareDu.Snapshotting
             if (type == null)
                 throw new HareDuSnapshotInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_snapshotCache.ContainsKey(type.FullName))
-                return (T)_snapshotCache[type.FullName];
+            if (_cache.ContainsKey(type.FullName))
+                return (T)_cache[type.FullName];
 
             var instance = Activator.CreateInstance(type, _factory);
 
-            _snapshotCache.Add(type.FullName, instance);
+            _cache.Add(type.FullName, instance);
             
             return (T)instance;
         }
@@ -64,7 +64,7 @@ namespace HareDu.Snapshotting
             {
                 var instance = Activator.CreateInstance(type, _factory);
                 
-                _snapshotCache.Add(type.FullName, instance);
+                _cache.Add(type.FullName, instance);
             }
         }
     }

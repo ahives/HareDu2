@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Scanning
     public class BrokerQueuesDiagnostic :
         IComponentDiagnostic<BrokerQueuesSnapshot>
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
+        public string Identifier => GetType().GenerateIdentifier();
 
         readonly IReadOnlyList<IDiagnosticSensor> _queueSensors;
         readonly List<IDiagnosticSensor> _exchangeSensors;

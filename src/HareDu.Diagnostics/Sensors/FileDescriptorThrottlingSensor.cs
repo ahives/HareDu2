@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
+        public string Identifier => GetType().GenerateIdentifier();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;

@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace HareDu.Diagnostics.Tests.Sensors
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).FullName.GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(SocketDescriptorThrottlingSensor).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]

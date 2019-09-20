@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Sensors
         BaseDiagnosticSensor,
         IDiagnosticSensor
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
+        public string Identifier => GetType().GenerateIdentifier();
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticSensorCategory SensorCategory => DiagnosticSensorCategory.Throughput;

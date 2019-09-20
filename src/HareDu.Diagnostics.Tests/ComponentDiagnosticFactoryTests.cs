@@ -60,7 +60,7 @@ namespace HareDu.Diagnostics.Tests
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
-            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
+            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).GenerateIdentifier(), diagnostic.Identifier);
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace HareDu.Diagnostics.Tests
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
             
             Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
-            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
+            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).GenerateIdentifier(), diagnostic.Identifier);
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace HareDu.Diagnostics.Tests
     class FakeDiagnostic :
         IComponentDiagnostic<FakeSnapshot>
     {
-        public string Identifier => GetType().FullName.GenerateIdentifier();
+        public string Identifier => GetType().GenerateIdentifier();
         
         public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) => throw new System.NotImplementedException();
     }
