@@ -11,24 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel
 {
-    public interface DestinationShovel
+    public interface ShovelTarget
     {
-        void Protocol(string name);
-        
-        void Queue(string name);
-
-        void Exchange(string name);
-
-        void PrefetchCount(long prefetchCount);
-
-        void ExchangeKey(string exchange);
-
-        void DeleteAfter(string value);
-
-        void AddForwardHeaders();
-
-        void AddTimestampHeader();
+        void VirtualHost(string name);
     }
 }

@@ -11,18 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel
 {
-    using System;
-
-    public interface ShovelCreateAction<out TSource, out TDestination>
-        where TSource : AMQP091Source
-        where TDestination : AMQP091Destination
+    public interface ShovelConfiguration
     {
-        void Configure(Action<ShovelConfiguration> configuration);
+        void Name(string name);
+        
+        void VirtualHost(string vhost);
 
-        void Source(Action<TSource> configuration);
+        void ReconnectDelay(int seconds);
 
-        void Destination(Action<TDestination> configuration);
+        void AcknowledgementMode(string mode);
     }
 }

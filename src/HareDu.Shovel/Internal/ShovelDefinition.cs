@@ -11,23 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel.Internal
 {
-    public interface AMQP091ShovelUri :
-        ShovelUri
+    using Newtonsoft.Json;
+
+    internal interface ShovelDefinition<out T>
     {
-        void SetVirtualHost(string vhost);
-        
-        void SetIdleTimeout(int timeout);
-
-        void SetVerifyCertificate(string value);
-
-        void SetServerNameIndication(string server);
-
-        void SetConnectionTimeout(int timeout);
-
-        void SetChannelMax(int channelMax);
-        
-        void SetHeartbeat(int timeout);
+        [JsonProperty("value")]
+        T Definition { get; }
     }
 }

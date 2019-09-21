@@ -11,24 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel
 {
-    public interface ShovelUri
+    public interface AMQP091ShovelUri :
+        ShovelUri
     {
-        void SetUsername(string username);
+        void SetVirtualHost(string vhost);
+        
+        void SetIdleTimeout(int timeout);
 
-        void SetPassword(string password);
+        void SetVerifyCertificate(string value);
 
-        void SetHost(string host);
+        void SetServerNameIndication(string server);
 
-        void SetPort(int port);
+        void SetConnectionTimeout(int timeout);
 
-        void SetCertificateAuthority(string certificateAuthority);
-
-        void SetCertificateFile(string certificateFile);
-
-        void SetKeyFile(string keyFile);
-
-        void SetSaslAuthenticationMechanism(string saslAuthMechanism);
+        void SetChannelMax(int channelMax);
+        
+        void SetHeartbeat(int timeout);
     }
 }

@@ -11,13 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu.Shovel
 {
-    using Newtonsoft.Json;
+    using System;
 
-    internal interface ShovelDefinition<out T>
+    public interface ShovelUriBuilder<out T>
     {
-        [JsonProperty("value")]
-        T Definition { get; }
+        void Builder(Action<T> builder);
     }
 }

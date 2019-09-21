@@ -11,10 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel
 {
-    public interface ShovelTarget
+    public interface ShovelUri
     {
-        void VirtualHost(string name);
+        void SetUsername(string username);
+
+        void SetPassword(string password);
+
+        void SetHost(string host);
+
+        void SetPort(int port);
+
+        void SetCertificateAuthority(string certificateAuthority);
+
+        void SetCertificateFile(string certificateFile);
+
+        void SetKeyFile(string keyFile);
+
+        void SetSaslAuthenticationMechanism(string saslAuthMechanism);
     }
 }

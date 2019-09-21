@@ -11,12 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel
 {
-    using System;
-
-    public interface ShovelUriBuilder<out T>
+    public interface DestinationShovel
     {
-        void Builder(Action<T> builder);
+        void Protocol(string name);
+        
+        void Queue(string name);
+
+        void Exchange(string name);
+
+        void PrefetchCount(ulong prefetchCount);
+
+        void ExchangeKey(string exchange);
+
+        void DeleteAfter(string value);
+
+        void AddForwardHeaders();
+
+        void AddTimestampHeader();
     }
 }

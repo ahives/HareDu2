@@ -11,20 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Shovel
 {
     using System;
 
-    public interface AMQP091Source
+    public interface ShovelCreateAction<out TSource, out TDestination>
+        where TSource : AMQP091Source
+        where TDestination : AMQP091Destination
     {
-        void Uri(Action<ShovelUriBuilder<AMQP091ShovelUri>> builder);
-        
-        void Queue(string name);
+        void Configure(Action<ShovelConfiguration> configuration);
 
-        void Exchange(string name, string routingKey);
+        void Source(Action<TSource> configuration);
 
-        void PrefetchCount(int prefetchCount);
-
-        void DeleteAfter(string value);
+        void Destination(Action<TDestination> configuration);
     }
 }

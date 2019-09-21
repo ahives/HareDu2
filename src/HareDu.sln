@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Monitoring.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.IntegrationTesting.Diagnostics", "IntegrationTesting\HareDu.IntegrationTesting.Diagnostics\HareDu.IntegrationTesting.Diagnostics.csproj", "{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Shovel", "HareDu.Shovel\HareDu.Shovel.csproj", "{468BC7FF-CDC7-4BEB-B3D7-5EBAF6E81CC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Shovel.Tests", "HareDu.Shovel.Tests\HareDu.Shovel.Tests.csproj", "{D66E4163-37F3-4D7D-A5FA-A0AA30576173}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +107,14 @@ Global
 		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A33FA6A6-C1B0-4FA8-B24F-DDA9A03A830B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{468BC7FF-CDC7-4BEB-B3D7-5EBAF6E81CC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{468BC7FF-CDC7-4BEB-B3D7-5EBAF6E81CC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{468BC7FF-CDC7-4BEB-B3D7-5EBAF6E81CC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{468BC7FF-CDC7-4BEB-B3D7-5EBAF6E81CC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D66E4163-37F3-4D7D-A5FA-A0AA30576173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D66E4163-37F3-4D7D-A5FA-A0AA30576173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D66E4163-37F3-4D7D-A5FA-A0AA30576173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D66E4163-37F3-4D7D-A5FA-A0AA30576173}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
