@@ -8,7 +8,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj" />
       <ProjectReference Include="..\HareDu.Diagnostics\HareDu.Diagnostics.csproj" />
-      <ProjectReference Include="..\IntegrationTesting\HareDu.IntegrationTesting.Diagnostics\HareDu.IntegrationTesting.Diagnostics.csproj" />
     </ItemGroup>
 
     <ItemGroup>

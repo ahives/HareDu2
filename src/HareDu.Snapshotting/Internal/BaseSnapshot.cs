@@ -22,10 +22,10 @@ namespace HareDu.Snapshotting.Internal
         IObservable<SnapshotContext<T>>
         where T : Snapshot
     {
-        protected readonly IResourceFactory _factory;
+        protected readonly IRmqObjectFactory _factory;
         readonly List<IObserver<SnapshotContext<T>>> _observers;
 
-        protected BaseSnapshot(IResourceFactory factory)
+        protected BaseSnapshot(IRmqObjectFactory factory)
         {
             _factory = factory;
             _observers = new List<IObserver<SnapshotContext<T>>>();

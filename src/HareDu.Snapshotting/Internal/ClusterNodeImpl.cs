@@ -7,8 +7,8 @@ namespace HareDu.Snapshotting.Internal
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
-    using Core.Model;
     using Extensions;
+    using HareDu.Model;
     using Model;
 
     class ClusterNodeImpl :
@@ -17,13 +17,13 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
         
-        public ClusterNodeImpl(IResourceFactory factory)
+        public ClusterNodeImpl(IRmqObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
         }
 
-        public ResourceSnapshot<NodeSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
+        public ResourceSnapshot<NodeSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Object<Cluster>()

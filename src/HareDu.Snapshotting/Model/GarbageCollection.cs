@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    using Core.Model;
+    using HareDu.Model;
     using Newtonsoft.Json;
 
     public interface GarbageCollection

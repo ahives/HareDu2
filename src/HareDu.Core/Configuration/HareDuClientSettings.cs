@@ -19,7 +19,7 @@ namespace HareDu.Core.Configuration
     public interface HareDuClientSettings
     {
         [JsonProperty("rmqServerUrl")]
-        string RabbitMqServerUrl { get; }
+        string BrokerUrl { get; }
         
         [JsonProperty("timeout")]
         TimeSpan Timeout { get; }

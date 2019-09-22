@@ -22,17 +22,16 @@ namespace HareDu.Snapshotting
     public class SnapshotFactory :
         ISnapshotFactory
     {
-        readonly IResourceFactory _factory;
-        readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
+        readonly IRmqObjectFactory _factory;
+        readonly IDictionary<string, object> _cache;
 
-        public SnapshotFactory(IResourceFactory factory)
+        public SnapshotFactory(IRmqObjectFactory factory, IDictionary<string, object> cache)
         {
             _factory = factory;
-            
-            RegisterSnapshots();
+            _cache = cache;
         }
 
-        public T Resource<T>()
+        public T Snapshot<T>()
             where T : ResourceSnapshot<Snapshot>
         {
             Type type = GetType()
@@ -51,21 +50,6 @@ namespace HareDu.Snapshotting
             _cache.Add(type.FullName, instance);
             
             return (T)instance;
-        }
-
-        void RegisterSnapshots()
-        {
-            var types = GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(ResourceSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
-
-            foreach (var type in types)
-            {
-                var instance = Activator.CreateInstance(type, _factory);
-                
-                _cache.Add(type.FullName, instance);
-            }
         }
     }
 }

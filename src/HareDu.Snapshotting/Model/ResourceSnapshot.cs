@@ -21,7 +21,7 @@ namespace HareDu.Snapshotting.Model
     public interface ResourceSnapshot<out T>
         where T : Snapshot
     {
-        ResourceSnapshot<T> TakeSnapshot(CancellationToken cancellationToken = default);
+        ResourceSnapshot<T> Execute(CancellationToken cancellationToken = default);
 
         ResourceSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
         

@@ -17,8 +17,8 @@ namespace HareDu.Core.Extensions
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
-    using Internal.Serialization;
     using Newtonsoft.Json;
+    using Serialization;
 
     public static class JsonExtensions
     {

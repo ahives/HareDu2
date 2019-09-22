@@ -15,20 +15,33 @@ namespace HareDu.Snapshotting.Tests
 {
     using System;
     using System.Threading.Tasks;
+    using Autofac;
+    using AutofacIntegration;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ClusterSnapshotTests :
-        SnapshotTestBase
+    public class ClusterSnapshotTests
     {
+        IContainer _container;
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            var builder = new ContainerBuilder();
+            
+            builder.RegisterModule<HareDuSnapshottingModule>();
+
+            _container = builder.Build();
+        }
+
         [Test]
         public async Task Test()
         {
-            var resource = Client.Resource<RmqCluster>();
+            var resource = _container.Resolve<ISnapshotFactory>().Snapshot<RmqCluster>();
             
 //            resource.RegisterObserver(new DefaultClusterSnapshotConsoleLogger());
 
-            resource.TakeSnapshot();
+            resource.Execute();
 
             var snapshot = resource.Snapshots[0].Select(x => x.Data);
             

@@ -23,12 +23,10 @@ namespace HareDu.Shovel
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
-    using Core.Internal;
-    using Core.Internal.Resources;
     using Internal;
 
     class ShovelImpl :
-        ResourceBase,
+        HttpClientHelper,
         Shovel<AMQP091Source, AMQP091Destination>
     {
         public ShovelImpl(HttpClient client)

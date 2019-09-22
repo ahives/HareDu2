@@ -19,7 +19,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Threading;
     using Core;
     using Core.Extensions;
-    using Core.Model;
+    using HareDu.Model;
     using Model;
 
     class RmqClusterImpl :
@@ -31,14 +31,14 @@ namespace HareDu.Snapshotting.Internal
 
         public IReadOnlyList<Result<ClusterSnapshot>> Snapshots => _snapshots;
 
-        public RmqClusterImpl(IResourceFactory factory)
+        public RmqClusterImpl(IRmqObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
             _snapshots = new List<Result<ClusterSnapshot>>();
         }
 
-        public ResourceSnapshot<ClusterSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
+        public ResourceSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Object<Cluster>()

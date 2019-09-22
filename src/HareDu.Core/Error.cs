@@ -18,6 +18,7 @@ namespace HareDu.Core
     public interface Error
     {
         string Reason { get; }
+        
         DateTimeOffset Timestamp { get; }
     }
 }

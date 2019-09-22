@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Model;
+    using HareDu.Model;
     using Model;
 
     public static class SnapshotFilterExtensions

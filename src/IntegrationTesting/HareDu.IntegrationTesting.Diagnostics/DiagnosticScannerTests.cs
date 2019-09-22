@@ -26,8 +26,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Snapshotting.Observers;
 
     [TestFixture]
-    public class DiagnosticScannerTests :
-        DiagnosticsTestBase
+    public class DiagnosticScannerTests
     {
         IContainer _container;
 
@@ -35,10 +34,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public void Init()
         {
             var builder = new ContainerBuilder();
-
-            builder.Register(x => Client)
-                .As<ISnapshotFactory>();
             
+            builder.RegisterModule<HareDuSnapshottingModule>();
             builder.RegisterModule<HareDuDiagnosticsModule>();
 
             _container = builder.Build();
@@ -47,10 +44,10 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test()
         {
-            var resource = Client
-                .Resource<BrokerConnection>()
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<BrokerConnection>()
 //                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .TakeSnapshot();
+                .Execute();
             
             var scanner = _container.Resolve<IDiagnosticScanner>();
 

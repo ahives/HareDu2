@@ -14,12 +14,12 @@
 namespace HareDu.Snapshotting.Tests
 {
     using Autofac;
+    using AutofacIntegration;
     using NUnit.Framework;
     using Observers;
 
     [TestFixture]
-    public class QueueSnapshotTests :
-        SnapshotTestBase
+    public class QueueSnapshotTests
     {
         IContainer _container;
 
@@ -27,11 +27,8 @@ namespace HareDu.Snapshotting.Tests
         public void Init()
         {
             var builder = new ContainerBuilder();
-
-            builder.Register(x => Client)
-                .As<ISnapshotFactory>();
             
-//            builder.RegisterModule<MassTransitModule>();
+            builder.RegisterModule<HareDuSnapshottingModule>();
 
             _container = builder.Build();
         }
@@ -39,10 +36,10 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Test()
         {
-            var resource = Client
-                .Resource<BrokerQueues>()
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<BrokerQueues>()
                 .RegisterObserver(new DefaultQueueSnapshotConsoleLogger())
-                .TakeSnapshot();
+                .Execute();
         }
     }
 }

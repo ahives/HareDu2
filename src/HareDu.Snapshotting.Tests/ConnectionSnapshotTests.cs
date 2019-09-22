@@ -15,12 +15,12 @@ namespace HareDu.Snapshotting.Tests
 {
     using System.Threading.Tasks;
     using Autofac;
+    using AutofacIntegration;
     using NUnit.Framework;
     using Observers;
 
     [TestFixture]
-    public class ConnectionSnapshotTests :
-        SnapshotTestBase
+    public class ConnectionSnapshotTests
     {
         IContainer _container;
 
@@ -28,11 +28,8 @@ namespace HareDu.Snapshotting.Tests
         public void Init()
         {
             var builder = new ContainerBuilder();
-
-            builder.Register(x => Client)
-                .As<ISnapshotFactory>();
             
-//            builder.RegisterModule<MassTransitModule>();
+            builder.RegisterModule<HareDuSnapshottingModule>();
 
             _container = builder.Build();
         }
@@ -40,19 +37,19 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test()
         {
-            var resource = Client
-                .Resource<BrokerConnection>()
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<BrokerConnection>()
                 .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .TakeSnapshot();
+                .Execute();
         }
 
         [Test]
         public async Task Test2()
         {
-            var resource = Client
-                .Resource<BrokerConnection>()
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<BrokerConnection>()
                 .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .TakeSnapshot();
+                .Execute();
             
 //            Console.WriteLine(connection.ToJsonString());
         }
@@ -60,9 +57,9 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test4()
         {
-            var resource = Client
-                .Resource<BrokerConnection>()
-                .TakeSnapshot();
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<BrokerConnection>()
+                .Execute();
 
 //            var resource = Client.Snapshot<RmqConnection>();
 //            var snapshot = resource.Get();
@@ -78,9 +75,9 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test5()
         {
-            var resource = Client
-                .Resource<BrokerConnection>()
-                .TakeSnapshot();
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<BrokerConnection>()
+                .Execute();
 
 //            var snapshot = resource.Get();
 //            var data = snapshot.Select(x => x.Data);
