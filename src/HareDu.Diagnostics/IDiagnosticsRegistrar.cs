@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
-    using Sensors;
+    using Analyzers;
 
     public interface IDiagnosticsRegistrar
     {
@@ -23,8 +23,8 @@ namespace HareDu.Diagnostics
         
         IDictionary<string, object> Cache { get; }
 
-        void Register<T>(IReadOnlyList<IDiagnosticSensor> sensors);
+        void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> sensors);
 
-        void RegisterAll(IReadOnlyList<IDiagnosticSensor> sensors);
+        void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> sensors);
     }
 }

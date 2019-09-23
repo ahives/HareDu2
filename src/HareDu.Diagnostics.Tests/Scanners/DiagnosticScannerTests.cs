@@ -92,12 +92,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 return false;
             }
 
-            public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers)
+            public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticAnalyzerContext>> observers)
             {
                 throw new NotImplementedException();
             }
 
-            public void RegisterObserver(IObserver<DiagnosticContext> observer)
+            public void RegisterObserver(IObserver<DiagnosticAnalyzerContext> observer)
             {
                 throw new NotImplementedException();
             }

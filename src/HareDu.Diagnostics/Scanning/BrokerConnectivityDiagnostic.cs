@@ -15,8 +15,8 @@ namespace HareDu.Diagnostics.Scanning
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
     using Core.Extensions;
-    using Sensors;
     using Snapshotting.Model;
 
     public class BrokerConnectivityDiagnostic :
@@ -24,15 +24,15 @@ namespace HareDu.Diagnostics.Scanning
     {
         public string Identifier => GetType().GenerateIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticSensor> _channelSensors;
-        readonly IReadOnlyList<IDiagnosticSensor> _connectionSensors;
-        readonly IReadOnlyList<IDiagnosticSensor> _connectivitySensors;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _channelAnalyzers;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _connectionAnalyzers;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _connectivityAnalyzers;
 
-        public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
+        public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> sensors)
         {
-            _connectionSensors = sensors.Where(IsConnectionThroughputSensor).ToList();
-            _channelSensors = sensors.Where(IsChannelThroughputSensor).ToList();
-            _connectivitySensors = sensors.Where(IsConnectivitySensor).ToList();
+            _connectionAnalyzers = sensors.Where(IsConnectionThroughputAnalyzer).ToList();
+            _channelAnalyzers = sensors.Where(IsChannelThroughputAnalyzer).ToList();
+            _connectivityAnalyzers = sensors.Where(IsConnectivityAnalyzer).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(BrokerConnectivitySnapshot snapshot)
@@ -42,37 +42,37 @@ namespace HareDu.Diagnostics.Scanning
             
             var results = new List<DiagnosticResult>();
             
-            results.AddRange(_connectivitySensors.Select(x => x.Execute(snapshot)));
+            results.AddRange(_connectivityAnalyzers.Select(x => x.Execute(snapshot)));
             
             for (int i = 0; i < snapshot.Connections.Count; i++)
             {
-                results.AddRange(_connectionSensors.Select(x => x.Execute(snapshot.Connections[i])));
+                results.AddRange(_connectionAnalyzers.Select(x => x.Execute(snapshot.Connections[i])));
 
                 for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
                 {
-                    results.AddRange(_channelSensors.Select(x => x.Execute(snapshot.Connections[i].Channels[j])));
+                    results.AddRange(_channelAnalyzers.Select(x => x.Execute(snapshot.Connections[i].Channels[j])));
                 }
             }
 
             return results;
         }
 
-        bool IsChannelThroughputSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Channel
-            && sensor.SensorCategory != DiagnosticSensorCategory.Connectivity;
+        bool IsChannelThroughputAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Channel
+            && analyzer.Category != DiagnosticAnalyzerCategory.Connectivity;
 
-        bool IsConnectionThroughputSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Connection
-            && sensor.SensorCategory != DiagnosticSensorCategory.Connectivity;
+        bool IsConnectionThroughputAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Connection
+            && analyzer.Category != DiagnosticAnalyzerCategory.Connectivity;
 
-        bool IsConnectivitySensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && (sensor.ComponentType == ComponentType.Connection || sensor.ComponentType == ComponentType.Channel)
-            && sensor.SensorCategory == DiagnosticSensorCategory.Connectivity;
+        bool IsConnectivityAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && (analyzer.ComponentType == ComponentType.Connection || analyzer.ComponentType == ComponentType.Channel)
+            && analyzer.Category == DiagnosticAnalyzerCategory.Connectivity;
     }
 }

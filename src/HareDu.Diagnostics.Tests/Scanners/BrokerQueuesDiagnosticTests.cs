@@ -15,8 +15,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
+    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
-    using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerQueuesDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticSensor> _sensors;
+        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
 
         [OneTimeSetUp]
         public void Init()
@@ -34,13 +35,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var configProvider = new DiagnosticScannerConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            _sensors = new List<IDiagnosticSensor>
+            _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new QueueGrowthSensor(configProvider, knowledgeBaseProvider),
-                new MessagePagingSensor(configProvider, knowledgeBaseProvider),
-                new RedeliveredMessagesSensor(configProvider, knowledgeBaseProvider),
-                new ConsumerUtilizationSensor(configProvider, knowledgeBaseProvider),
-                new UnroutableMessageSensor(configProvider, knowledgeBaseProvider)
+                new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider),
+                new MessagePagingAnalyzer(configProvider, knowledgeBaseProvider),
+                new RedeliveredMessagesAnalyzer(configProvider, knowledgeBaseProvider),
+                new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider),
+                new UnroutableMessageAnalyzer(configProvider, knowledgeBaseProvider)
             };
         }
 
@@ -49,15 +50,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
 
-            var report = new BrokerQueuesDiagnostic(_sensors)
+            var report = new BrokerQueuesDiagnostic(_analyzers)
                 .Scan(snapshot);
 
             Assert.AreEqual(5, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(QueueGrowthSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MessagePagingSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RedeliveredMessagesSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ConsumerUtilizationSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnroutableMessageSensor).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GenerateIdentifier()));
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = null;
             
-            var report = new BrokerQueuesDiagnostic(_sensors)
+            var report = new BrokerQueuesDiagnostic(_analyzers)
                 .Scan(snapshot);
 
             Assert.IsEmpty(report);

@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics.Observers
     using Core.Extensions;
 
     public class DefaultDiagnosticConsoleLogger :
-        IObserver<DiagnosticContext>
+        IObserver<DiagnosticAnalyzerContext>
     {
         public void OnCompleted()
         {
@@ -29,14 +29,14 @@ namespace HareDu.Diagnostics.Observers
             throw new NotImplementedException();
         }
 
-        public void OnNext(DiagnosticContext value)
+        public void OnNext(DiagnosticAnalyzerContext value)
         {
             Console.WriteLine("Timestamp: {0}", value.Timestamp.ToString());
             Console.WriteLine("Component Identifier: {0}", value.Result.ComponentIdentifier);
             Console.WriteLine("Component Type: {0}", value.Result.ComponentType);
-            Console.WriteLine("Sensor: {0}", value.Result.SensorIdentifier);
+            Console.WriteLine("Sensor: {0}", value.Result.AnalyzerIdentifier);
             Console.WriteLine("Status: {0}", value.Result.Status);
-            Console.WriteLine("Data => {0}", value.Result.SensorData.ToJsonString());
+            Console.WriteLine("Data => {0}", value.Result.AnalyzerData.ToJsonString());
 
             if (value.Result.Status == DiagnosticStatus.Red)
             {

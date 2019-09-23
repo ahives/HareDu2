@@ -23,13 +23,13 @@ namespace HareDu.Diagnostics
         
         ComponentType ComponentType { get; }
         
-        string SensorIdentifier { get; }
+        string AnalyzerIdentifier { get; }
         
         DiagnosticStatus Status { get; }
         
         KnowledgeBaseArticle KnowledgeBaseArticle { get; }
         
-        IReadOnlyList<DiagnosticSensorData> SensorData { get; }
+        IReadOnlyList<DiagnosticAnalyzerData> AnalyzerData { get; }
         
         DateTimeOffset Timestamp { get; }
     }

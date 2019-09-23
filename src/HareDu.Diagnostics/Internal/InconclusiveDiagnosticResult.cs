@@ -21,13 +21,13 @@ namespace HareDu.Diagnostics.Internal
         DiagnosticResult
     {
         public InconclusiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData,
+            ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> sensorData,
             KnowledgeBaseArticle knowledgeBaseArticle)
         {
             ComponentIdentifier = componentIdentifier;
-            SensorIdentifier = sensorIdentifier;
+            AnalyzerIdentifier = sensorIdentifier;
             ComponentType = componentType;
-            SensorData = sensorData;
+            AnalyzerData = sensorData;
             KnowledgeBaseArticle = knowledgeBaseArticle;
             Status = DiagnosticStatus.Inconclusive;
         }
@@ -36,18 +36,18 @@ namespace HareDu.Diagnostics.Internal
             ComponentType componentType)
         {
             ComponentIdentifier = componentIdentifier;
-            SensorIdentifier = sensorIdentifier;
+            AnalyzerIdentifier = sensorIdentifier;
             ComponentType = componentType;
             Status = DiagnosticStatus.Inconclusive;
-            SensorData = DiagnosticCache.EmptySensorData;
+            AnalyzerData = DiagnosticCache.EmptySensorData;
         }
 
         public string ComponentIdentifier { get; }
         public ComponentType ComponentType { get; }
-        public string SensorIdentifier { get; }
+        public string AnalyzerIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-        public IReadOnlyList<DiagnosticSensorData> SensorData { get; }
+        public IReadOnlyList<DiagnosticAnalyzerData> AnalyzerData { get; }
         public DateTimeOffset Timestamp { get; }
     }
 }

@@ -14,10 +14,11 @@
 namespace HareDu.Diagnostics.Tests
 {
     using System.Collections.Generic;
+    using Analyzers;
     using Autofac;
     using AutofacIntegration;
+    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
-    using Diagnostics.Sensors;
     using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
@@ -27,7 +28,7 @@ namespace HareDu.Diagnostics.Tests
     [TestFixture]
     public class ComponentDiagnosticFactoryTests
     {
-        IReadOnlyList<IDiagnosticSensor> _sensors;
+        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
         IContainer _container;
 
         [OneTimeSetUp]
@@ -41,14 +42,14 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new DiagnosticScannerConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            _sensors = new List<IDiagnosticSensor>
+            _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider),
-                new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountSensor(configProvider, knowledgeBaseProvider),
-                new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider),
-                new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider),
-                new BlockedConnectionSensor(configProvider, knowledgeBaseProvider)
+                new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider),
+                new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider),
+                new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
+                new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider),
+                new BlockedConnectionAnalyzer(configProvider, knowledgeBaseProvider)
             };
         }
 
@@ -56,8 +57,8 @@ namespace HareDu.Diagnostics.Tests
         public void Verify_can_get_diagnostic()
         {
             var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
-            diagnosticsRegistrar.RegisterAll(_sensors);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
+            diagnosticsRegistrar.RegisterAll(_analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
             
             Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
             Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).GenerateIdentifier(), diagnostic.Identifier);
@@ -76,8 +77,8 @@ namespace HareDu.Diagnostics.Tests
         public void Verify_TryGet_does_not_throw()
         {
             var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
-            diagnosticsRegistrar.RegisterAll(_sensors);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
+            diagnosticsRegistrar.RegisterAll(_analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
             
             Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
             Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).GenerateIdentifier(), diagnostic.Identifier);
@@ -87,10 +88,10 @@ namespace HareDu.Diagnostics.Tests
         public void Verify_can_get_diagnostic_after_instantiation()
         {
             var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
-            diagnosticsRegistrar.RegisterAll(_sensors);
-            diagnosticsRegistrar.Register<FakeDiagnostic>(_sensors);
+            diagnosticsRegistrar.RegisterAll(_analyzers);
+            diagnosticsRegistrar.Register<FakeDiagnostic>(_analyzers);
             
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _sensors);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
             
             Assert.IsFalse(factory.TryGet<FakeSnapshot>(out var diagnostic));
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);

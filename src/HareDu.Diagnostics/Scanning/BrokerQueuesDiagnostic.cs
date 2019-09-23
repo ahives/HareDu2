@@ -15,8 +15,8 @@ namespace HareDu.Diagnostics.Scanning
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
     using Core.Extensions;
-    using Sensors;
     using Snapshotting.Model;
 
     public class BrokerQueuesDiagnostic :
@@ -24,13 +24,13 @@ namespace HareDu.Diagnostics.Scanning
     {
         public string Identifier => GetType().GenerateIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticSensor> _queueSensors;
-        readonly List<IDiagnosticSensor> _exchangeSensors;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _queueAnalyzers;
+        readonly List<IDiagnosticAnalyzer> _exchangeAnalyzers;
 
-        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
+        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> sensors)
         {
-            _queueSensors = sensors.Where(IsQueueSensor).ToList();
-            _exchangeSensors = sensors.Where(IsExchangeSensor).ToList();
+            _queueAnalyzers = sensors.Where(IsQueueAnalyzer).ToList();
+            _exchangeAnalyzers = sensors.Where(IsExchangeAnalyzer).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(BrokerQueuesSnapshot snapshot)
@@ -40,24 +40,24 @@ namespace HareDu.Diagnostics.Scanning
             
             var results = new List<DiagnosticResult>();
 
-            results.AddRange(_exchangeSensors.Select(x => x.Execute(snapshot)));
+            results.AddRange(_exchangeAnalyzers.Select(x => x.Execute(snapshot)));
             
             for (int i = 0; i < snapshot.Queues.Count; i++)
             {
-                results.AddRange(_queueSensors.Select(x => x.Execute(snapshot.Queues[i])));
+                results.AddRange(_queueAnalyzers.Select(x => x.Execute(snapshot.Queues[i])));
             }
 
             return results;
         }
 
-        bool IsExchangeSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Exchange;
+        bool IsExchangeAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Exchange;
 
-        bool IsQueueSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Queue;
+        bool IsQueueAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Queue;
     }
 }

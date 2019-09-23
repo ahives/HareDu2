@@ -16,8 +16,8 @@ namespace HareDu.Diagnostics
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
     using Scanning;
-    using Sensors;
 
     public class ComponentDiagnosticRegistrar :
         IDiagnosticsRegistrar
@@ -34,7 +34,7 @@ namespace HareDu.Diagnostics
             _types = GetTypes();
         }
 
-        public void Register<T>(IReadOnlyList<IDiagnosticSensor> sensors)
+        public void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> sensors)
         {
             Type type = typeof(T);
             
@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics
             Register(type, sensors);
         }
 
-        public void RegisterAll(IReadOnlyList<IDiagnosticSensor> sensors)
+        public void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> sensors)
         {
             foreach (var type in _types)
             {
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics
                 .Where(IsComponentDiagnostic)
                 .ToList();
 
-        void Register(Type type, IReadOnlyList<IDiagnosticSensor> sensors)
+        void Register(Type type, IReadOnlyList<IDiagnosticAnalyzer> sensors)
         {
             try
             {

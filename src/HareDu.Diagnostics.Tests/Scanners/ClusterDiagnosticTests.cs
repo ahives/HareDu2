@@ -15,8 +15,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
+    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
-    using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class ClusterDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticSensor> _sensors;
+        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
 
         [OneTimeSetUp]
         public void Init()
@@ -34,15 +35,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var configProvider = new DiagnosticScannerConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            _sensors = new List<IDiagnosticSensor>
+            _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new RuntimeProcessLimitSensor(configProvider, knowledgeBaseProvider),
-                new SocketDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider),
-                new NetworkPartitionSensor(configProvider, knowledgeBaseProvider),
-                new MemoryAlarmSensor(configProvider, knowledgeBaseProvider),
-                new DiskAlarmSensor(configProvider, knowledgeBaseProvider),
-                new AvailableCpuCoresSensor(configProvider, knowledgeBaseProvider),
-                new FileDescriptorThrottlingSensor(configProvider, knowledgeBaseProvider),
+                new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider),
+                new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
+                new NetworkPartitionAnalyzer(configProvider, knowledgeBaseProvider),
+                new MemoryAlarmAnalyzer(configProvider, knowledgeBaseProvider),
+                new DiskAlarmAnalyzer(configProvider, knowledgeBaseProvider),
+                new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider),
+                new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
             };
         }
 
@@ -51,17 +52,17 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshotSnapshot1();
             
-            var report = new ClusterDiagnostic(_sensors)
+            var report = new ClusterDiagnostic(_analyzers)
                 .Scan(snapshot);
 
             Assert.AreEqual(7, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(RuntimeProcessLimitSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(SocketDescriptorThrottlingSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(NetworkPartitionSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(MemoryAlarmSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(DiskAlarmSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(AvailableCpuCoresSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(FileDescriptorThrottlingSensor).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingAnalyzer).GenerateIdentifier()));
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = null;
             
-            var report = new ClusterDiagnostic(_sensors)
+            var report = new ClusterDiagnostic(_analyzers)
                 .Scan(snapshot);
 
             Assert.IsEmpty(report);

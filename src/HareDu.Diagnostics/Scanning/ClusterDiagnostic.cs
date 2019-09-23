@@ -15,8 +15,8 @@ namespace HareDu.Diagnostics.Scanning
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
     using Core.Extensions;
-    using Sensors;
     using Snapshotting.Model;
 
     public class ClusterDiagnostic :
@@ -24,17 +24,17 @@ namespace HareDu.Diagnostics.Scanning
     {
         public string Identifier => GetType().GenerateIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticSensor> _nodeSensors;
-        readonly IReadOnlyList<IDiagnosticSensor> _diskSensors;
-        readonly IReadOnlyList<IDiagnosticSensor> _memorySensors;
-        readonly IReadOnlyList<IDiagnosticSensor> _runtimeSensors;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _nodeAnalyzers;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _diskAnalyzers;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _memoryAnalyzers;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _runtimeAnalyzers;
 
-        public ClusterDiagnostic(IReadOnlyList<IDiagnosticSensor> sensors)
+        public ClusterDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
-            _nodeSensors = sensors.Where(IsNodeSensor).ToList();
-            _diskSensors = sensors.Where(IsDiskSensor).ToList();
-            _memorySensors = sensors.Where(IsMemorySensor).ToList();
-            _runtimeSensors = sensors.Where(IsRuntimeSensor).ToList();
+            _nodeAnalyzers = analyzers.Where(IsNodeAnalyzer).ToList();
+            _diskAnalyzers = analyzers.Where(IsDiskAnalyzer).ToList();
+            _memoryAnalyzers = analyzers.Where(IsMemoryAnalyzer).ToList();
+            _runtimeAnalyzers = analyzers.Where(IsRuntimeAnalyzer).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ClusterSnapshot snapshot)
@@ -46,33 +46,33 @@ namespace HareDu.Diagnostics.Scanning
 
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {
-                results.AddRange(_nodeSensors.Select(x => x.Execute(snapshot.Nodes[i])));
-                results.AddRange(_diskSensors.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
-                results.AddRange(_memorySensors.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
-                results.AddRange(_runtimeSensors.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
+                results.AddRange(_nodeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i])));
+                results.AddRange(_diskAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
+                results.AddRange(_memoryAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
+                results.AddRange(_runtimeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
             }
 
             return results;
         }
 
-        bool IsRuntimeSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull() &&
-            sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Runtime;
+        bool IsRuntimeAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull() &&
+            analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Runtime;
 
-        bool IsMemorySensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Memory;
+        bool IsMemoryAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Memory;
 
-        bool IsDiskSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Disk;
+        bool IsDiskAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Disk;
 
-        bool IsNodeSensor(IDiagnosticSensor sensor) =>
-            !sensor.IsNull()
-            && sensor.Status == DiagnosticSensorStatus.Online
-            && sensor.ComponentType == ComponentType.Node;
+        bool IsNodeAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.Node;
     }
 }

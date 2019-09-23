@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Scanning
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Sensors;
+    using Analyzers;
     using Snapshotting;
 
     /// <summary>
@@ -27,15 +27,15 @@ namespace HareDu.Diagnostics.Scanning
     {
         readonly IDiagnosticsRegistrar _diagnosticsRegistrar;
         readonly IDictionary<string, object> _diagnosticCache;
-        readonly IReadOnlyList<IDiagnosticSensor> _sensors;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
         readonly IList<IDisposable> _observers;
         readonly IEnumerable<Type> _types;
 
-        public ComponentDiagnosticFactory(IDictionary<string, object> diagnosticCache, IReadOnlyList<Type> types, IReadOnlyList<IDiagnosticSensor> sensors)
+        public ComponentDiagnosticFactory(IDictionary<string, object> diagnosticCache, IReadOnlyList<Type> types, IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
             _diagnosticCache = diagnosticCache;
             _types = types;
-            _sensors = sensors;
+            _analyzers = analyzers;
             _observers = new List<IDisposable>();
         }
 
@@ -62,27 +62,27 @@ namespace HareDu.Diagnostics.Scanning
             return false;
         }
 
-        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticContext>> observers)
+        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticAnalyzerContext>> observers)
         {
             for (int i = 0; i < observers.Count; i++)
             {
                 if (observers[i] != null)
                 {
-                    for (int j = 0; j < _sensors.Count; j++)
+                    for (int j = 0; j < _analyzers.Count; j++)
                     {
-                        _observers.Add(_sensors[j].Subscribe(observers[i]));
+                        _observers.Add(_analyzers[j].Subscribe(observers[i]));
                     }
                 }
             }
         }
 
-        public void RegisterObserver(IObserver<DiagnosticContext> observer)
+        public void RegisterObserver(IObserver<DiagnosticAnalyzerContext> observer)
         {
             if (observer != null)
             {
-                for (int j = 0; j < _sensors.Count; j++)
+                for (int j = 0; j < _analyzers.Count; j++)
                 {
-                    _observers.Add(_sensors[j].Subscribe(observer));
+                    _observers.Add(_analyzers[j].Subscribe(observer));
                 }
             }
         }

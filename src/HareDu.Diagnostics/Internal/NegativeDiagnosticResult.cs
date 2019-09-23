@@ -21,22 +21,22 @@ namespace HareDu.Diagnostics.Internal
         DiagnosticResult
     {
         public NegativeDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, IReadOnlyList<DiagnosticSensorData> sensorData, KnowledgeBaseArticle knowledgeBaseArticle)
+            ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> sensorData, KnowledgeBaseArticle knowledgeBaseArticle)
         {
             ComponentIdentifier = componentIdentifier;
-            SensorIdentifier = sensorIdentifier;
+            AnalyzerIdentifier = sensorIdentifier;
             ComponentType = componentType;
-            SensorData = sensorData;
+            AnalyzerData = sensorData;
             KnowledgeBaseArticle = knowledgeBaseArticle;
             Status = DiagnosticStatus.Red;
             Timestamp = DateTimeOffset.Now;
         }
 
         public string ComponentIdentifier { get; }
-        public string SensorIdentifier { get; }
+        public string AnalyzerIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-        public IReadOnlyList<DiagnosticSensorData> SensorData { get; }
+        public IReadOnlyList<DiagnosticAnalyzerData> AnalyzerData { get; }
         public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }

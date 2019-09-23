@@ -17,10 +17,10 @@ namespace HareDu.Diagnostics.Scanning
     using Snapshotting;
 
     public interface IComponentDiagnostic<in T>
-    where T : Snapshot
+        where T : Snapshot
     {
         string Identifier { get; }
-        
+
         IReadOnlyList<DiagnosticResult> Scan(T snapshot);
     }
 }

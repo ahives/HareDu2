@@ -15,8 +15,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
+    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
-    using Diagnostics.Sensors;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerConnectivityDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticSensor> _sensors;
+        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
 
         [OneTimeSetUp]
         public void Init()
@@ -34,14 +35,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var configProvider = new DiagnosticScannerConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
-            _sensors = new List<IDiagnosticSensor>
+            _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new HighConnectionCreationRateSensor(configProvider, knowledgeBaseProvider),
-                new HighConnectionClosureRateSensor(configProvider, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountSensor(configProvider, knowledgeBaseProvider),
-                new ChannelThrottlingSensor(configProvider, knowledgeBaseProvider),
-                new ChannelLimitReachedSensor(configProvider, knowledgeBaseProvider),
-                new BlockedConnectionSensor(configProvider, knowledgeBaseProvider)
+                new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider),
+                new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider),
+                new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
+                new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider),
+                new BlockedConnectionAnalyzer(configProvider, knowledgeBaseProvider)
             };
         }
 
@@ -50,16 +51,16 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             
-            var report = new BrokerConnectivityDiagnostic(_sensors)
+            var report = new BrokerConnectivityDiagnostic(_analyzers)
                 .Scan(snapshot);
 
             Assert.AreEqual(6, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionCreationRateSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(HighConnectionClosureRateSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(UnlimitedPrefetchCountSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelThrottlingSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(ChannelLimitReachedSensor).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.SensorIdentifier == typeof(BlockedConnectionSensor).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionAnalyzer).GenerateIdentifier()));
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = null;
             
-            var report = new BrokerConnectivityDiagnostic(_sensors)
+            var report = new BrokerConnectivityDiagnostic(_analyzers)
                 .Scan(snapshot);
 
             Assert.IsEmpty(report);
