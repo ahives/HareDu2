@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Analyzers
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -65,17 +65,32 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.OS.SocketDescriptors.Used < warningThreshold && warningThreshold < data.OS.SocketDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.ClusterIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else if (data.OS.SocketDescriptors.Used == data.OS.SocketDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.ClusterIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.ClusterIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
 
             NotifyObservers(result);
@@ -84,8 +99,8 @@ namespace HareDu.Diagnostics.Analyzers
         }
 
         ulong ComputeWarningThreshold(ulong socketsAvailable)
-            => _config.Sensor.SocketUsageCoefficient >= 1
+            => _config.Analyzer.SocketUsageCoefficient >= 1
                 ? socketsAvailable
-                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.Sensor.SocketUsageCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.Analyzer.SocketUsageCoefficient));
     }
 }

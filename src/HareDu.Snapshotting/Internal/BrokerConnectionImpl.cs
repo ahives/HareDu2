@@ -139,7 +139,7 @@ namespace HareDu.Snapshotting.Internal
                     NetworkTraffic = new NetworkTrafficSnapshotImpl(connection);
                     Channels = channels;
                     ChannelLimit = connection.MaxChannels;
-                    Node = connection.Node;
+                    NodeIdentifier = connection.Node;
                     VirtualHost = connection.VirtualHost;
                     State = connection.State.Convert();
                 }
@@ -147,7 +147,7 @@ namespace HareDu.Snapshotting.Internal
                 public string Identifier { get; }
                 public NetworkTrafficSnapshot NetworkTraffic { get; }
                 public ulong ChannelLimit { get; }
-                public string Node { get; }
+                public string NodeIdentifier { get; }
                 public string VirtualHost { get; }
                 public ConnectionState State { get; }
                 public IReadOnlyList<ChannelSnapshot> Channels { get; }

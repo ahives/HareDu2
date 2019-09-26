@@ -27,6 +27,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Queues = GetQueues().ToList();
         }
 
+        public string ClusterIdentifier { get; }
         public BrokerQueueChurnMetrics Churn { get; }
         public IReadOnlyList<QueueSnapshot> Queues { get; }
 
@@ -98,9 +99,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 decimal consumerUtilization,
                 DateTimeOffset idleSince)
             {
-                Name = name;
+                Identifier = name;
                 VirtualHost = virtualHost;
-                Node = node;
+                NodeIdentifier = node;
                 Consumers = consumers;
                 ConsumerUtilization = consumerUtilization;
                 IdleSince = idleSince;
@@ -154,9 +155,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 public QueueDepth Aggregate { get; }
             }
 
-            public string Name { get; }
+            public string Identifier { get; }
             public string VirtualHost { get; }
-            public string Node { get; }
+            public string NodeIdentifier { get; }
             public QueueChurnMetrics Messages { get; }
             public QueueMemoryDetails Memory { get; }
             public QueueInternals Internals { get; }

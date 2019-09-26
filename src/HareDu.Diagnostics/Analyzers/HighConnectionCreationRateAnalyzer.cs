@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Analyzers
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -53,20 +53,20 @@ namespace HareDu.Diagnostics.Analyzers
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
-                new DiagnosticAnalyzerDataImpl("HighCreationRateThreshold", _config.Sensor.HighCreationRateWarningThreshold.ToString())
+                new DiagnosticAnalyzerDataImpl("HighCreationRateThreshold", _config.Analyzer.HighCreationRateWarningThreshold.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsCreated.Rate >= _config.Sensor.HighCreationRateWarningThreshold)
+            if (data.ConnectionsCreated.Rate >= _config.Analyzer.HighCreationRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

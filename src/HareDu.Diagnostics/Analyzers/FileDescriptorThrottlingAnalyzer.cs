@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Analyzers
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -58,24 +58,39 @@ namespace HareDu.Diagnostics.Analyzers
             {
                 new DiagnosticAnalyzerDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
                 new DiagnosticAnalyzerDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
-                new DiagnosticAnalyzerDataImpl("FileDescriptorUsageWarningThreshold", _config.Sensor.FileDescriptorUsageWarningCoefficient.ToString()),
+                new DiagnosticAnalyzerDataImpl("FileDescriptorUsageWarningThreshold", _config.Analyzer.FileDescriptorUsageWarningCoefficient.ToString()),
                 new DiagnosticAnalyzerDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
             };
 
             if (data.FileDescriptors.Used < warningThreshold && warningThreshold < data.FileDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.ProcessId, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.NodeIdentifier,
+                    data.ProcessId,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else if (data.FileDescriptors.Used == data.FileDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.ProcessId, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.NodeIdentifier,
+                    data.ProcessId,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.ProcessId, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.NodeIdentifier,
+                    data.ProcessId,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
 
             NotifyObservers(result);
@@ -84,8 +99,8 @@ namespace HareDu.Diagnostics.Analyzers
         }
 
         ulong ComputeWarningThreshold(ulong fileDescriptorsAvailable)
-            => _config.Sensor.FileDescriptorUsageWarningCoefficient >= 1
+            => _config.Analyzer.FileDescriptorUsageWarningCoefficient >= 1
                 ? fileDescriptorsAvailable
-                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Sensor.FileDescriptorUsageWarningCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Analyzer.FileDescriptorUsageWarningCoefficient));
     }
 }

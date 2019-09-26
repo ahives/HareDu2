@@ -18,6 +18,8 @@ namespace HareDu.Snapshotting.Model
     public interface BrokerQueuesSnapshot :
         Snapshot
     {
+        string ClusterIdentifier { get; }
+        
         BrokerQueueChurnMetrics Churn { get; }
         
         IReadOnlyList<QueueSnapshot> Queues { get; }

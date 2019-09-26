@@ -20,18 +20,20 @@ namespace HareDu.Diagnostics.Internal
     class PositiveDiagnosticResult :
         DiagnosticResult
     {
-        public PositiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, List<DiagnosticAnalyzerData> sensorData, KnowledgeBaseArticle knowledgeBaseArticle)
+        public PositiveDiagnosticResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
+            ComponentType componentType, List<DiagnosticAnalyzerData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
         {
+            ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
-            AnalyzerIdentifier = sensorIdentifier;
+            AnalyzerIdentifier = analyzerIdentifier;
             ComponentType = componentType;
-            AnalyzerData = sensorData;
+            AnalyzerData = analyzerData;
             KnowledgeBaseArticle = knowledgeBaseArticle;
             Status = DiagnosticStatus.Green;
             Timestamp = DateTimeOffset.Now;
         }
 
+        public string ParentComponentIdentifier { get; }
         public string ComponentIdentifier { get; }
         public ComponentType ComponentType { get; }
         public string AnalyzerIdentifier { get; }

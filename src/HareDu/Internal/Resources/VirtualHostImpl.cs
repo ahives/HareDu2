@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
 
             VirtualHostDefinition definition = impl.Definition.Value;
 
-            string url = $"api/vhosts/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
+            string url = $"api/vhosts/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -69,14 +69,14 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostDeleteActionImpl();
             action(impl);
 
-            string sanitizedVHost = SanitizeVirtualHostName(impl.VirtualHostName.Value);
+            string vHost = impl.VirtualHostName.Value.SanitizeVirtualHostName();
 
-            string url = $"api/vhosts/{sanitizedVHost}";
+            string url = $"api/vhosts/{vHost}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
 
-            if (sanitizedVHost == "2%f")
+            if (vHost == "2%f")
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url, null));
 
             Result result = await Delete(url, cancellationToken);
@@ -91,7 +91,7 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostStartupActionImpl();
             action(impl);
 
-            string url = $"/api/vhosts/{SanitizeVirtualHostName(vhost)}/start/{impl.Node.Value}";
+            string url = $"/api/vhosts/{vhost.SanitizeVirtualHostName()}/start/{impl.Node.Value}";
 
             var errors = new List<Error>();
             errors.AddRange(impl.Errors.Value);

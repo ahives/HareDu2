@@ -20,17 +20,17 @@ namespace HareDu.Diagnostics.Internal
     {
         public DefaultDiagnosticScannerConfig()
         {
-            Sensor = new DiagnosticSensorConfigImpl();
+            Analyzer = new DiagnosticAnalyzerConfigImpl();
         }
 
-        public bool OverrideSensorConfig { get; }
-        public DiagnosticSensorConfig Sensor { get; }
+        public bool OverrideAnalyserConfig { get; }
+        public DiagnosticAnalyzerConfig Analyzer { get; }
 
         
-        class DiagnosticSensorConfigImpl :
-            DiagnosticSensorConfig
+        class DiagnosticAnalyzerConfigImpl :
+            DiagnosticAnalyzerConfig
         {
-            public DiagnosticSensorConfigImpl()
+            public DiagnosticAnalyzerConfigImpl()
             {
                 SocketUsageCoefficient = 0.50M;
                 MessageRedeliveryCoefficient = 0.50M;

@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Analyzers
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -55,23 +55,38 @@ namespace HareDu.Diagnostics.Analyzers
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("ConsumerUtilization", data.ConsumerUtilization.ToString()),
-                new DiagnosticAnalyzerDataImpl("Sensor.ConsumerUtilizationWarningCoefficient", _config.Sensor.ConsumerUtilizationWarningCoefficient.ToString())
+                new DiagnosticAnalyzerDataImpl("Analyzer.ConsumerUtilizationWarningCoefficient", _config.Analyzer.ConsumerUtilizationWarningCoefficient.ToString())
             };
 
-            if (data.ConsumerUtilization >= _config.Sensor.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
+            if (data.ConsumerUtilization >= _config.Analyzer.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.NodeIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
-            else if (data.ConsumerUtilization < _config.Sensor.ConsumerUtilizationWarningCoefficient)
+            else if (data.ConsumerUtilization < _config.Analyzer.ConsumerUtilizationWarningCoefficient)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.NodeIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.NodeIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

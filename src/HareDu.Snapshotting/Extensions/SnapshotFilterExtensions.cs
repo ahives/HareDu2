@@ -39,7 +39,7 @@ namespace HareDu.Snapshotting.Extensions
 
             return channels
                 .Where(x => x.ConnectionDetails?.Name == connection)
-                .Select(x => new ChannelSnapshotImpl(x))
+                .Select(x => new ChannelSnapshotImpl(x, connection))
                 .Cast<ChannelSnapshot>()
                 .ToList();
         }
@@ -56,9 +56,10 @@ namespace HareDu.Snapshotting.Extensions
         class ChannelSnapshotImpl :
             ChannelSnapshot
         {
-            public ChannelSnapshotImpl(ChannelInfo channel)
+            public ChannelSnapshotImpl(ChannelInfo channel, string connection)
             {
-                Name = channel.Name;
+                Identifier = channel.Name;
+                ConnectionIdentifier = connection;
                 Consumers = channel.TotalConsumers;
                 Node = channel.Node;
                 PrefetchCount = channel.PrefetchCount;
@@ -74,7 +75,8 @@ namespace HareDu.Snapshotting.Extensions
             public ulong UnconfirmedMessages { get; }
             public ulong UnacknowledgedMessages { get; }
             public ulong Consumers { get; }
-            public string Name { get; }
+            public string Identifier { get; }
+            public string ConnectionIdentifier { get; }
             public string Node { get; }
         }
     }

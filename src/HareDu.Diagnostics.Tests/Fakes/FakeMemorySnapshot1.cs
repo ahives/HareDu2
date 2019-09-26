@@ -25,7 +25,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
             AlarmInEffect = alarmInEffect;
         }
 
+        public string NodeIdentifier { get; }
         public ulong Used { get; }
+        public decimal UsageRate { get; }
         public ulong Limit { get; }
         public bool AlarmInEffect { get; }
     }

@@ -58,11 +58,11 @@ namespace HareDu.Internal.Resources
             string sourceBinding = impl.SourceBinding.Value;
             string destinationBinding = impl.DestinationBinding.Value;
             BindingType bindingType = impl.BindingType.Value;
-            string vhost = impl.VirtualHost.Value;
+            string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
 
             string url = bindingType == BindingType.Exchange
-                ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{sourceBinding}/e/{destinationBinding}"
-                : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{sourceBinding}/q/{destinationBinding}";
+                ? $"api/bindings/{vhost}/e/{sourceBinding}/e/{destinationBinding}"
+                : $"api/bindings/{vhost}/e/{sourceBinding}/q/{destinationBinding}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -80,14 +80,14 @@ namespace HareDu.Internal.Resources
             action(impl);
 
             string destination = impl.BindingDestination.Value;
-            string vhost = impl.VirtualHost.Value;
+            string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
             string bindingName = impl.BindingName.Value;
             string source = impl.BindingSource.Value;
             BindingType bindingType = impl.BindingType.Value;
 
             string url = bindingType == BindingType.Queue
-                ? $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/q/{destination}/{bindingName}"
-                : $"api/bindings/{SanitizeVirtualHostName(vhost)}/e/{source}/e/{destination}/{bindingName}";
+                ? $"api/bindings/{vhost}/e/{source}/q/{destination}/{bindingName}"
+                : $"api/bindings/{vhost}/e/{source}/e/{destination}/{bindingName}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));

@@ -55,7 +55,7 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}";
+            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -72,7 +72,7 @@ namespace HareDu.Internal.Resources
             var impl = new QueueDeleteActionImpl();
             action(impl);
 
-            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}";
+            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}";
             if (!string.IsNullOrWhiteSpace(impl.Query.Value))
                 url = $"{url}?{impl.Query.Value}";
             
@@ -91,7 +91,7 @@ namespace HareDu.Internal.Resources
             var impl = new QueueEmptyActionImpl();
             action(impl);
 
-            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}/contents";
+            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
@@ -112,7 +112,7 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string url = $"api/queues/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.QueueName.Value}/get";
+            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}/get";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -128,10 +128,10 @@ namespace HareDu.Internal.Resources
         {
             string _vhost;
             string _queue;
-            int _take;
+            uint _take;
             bool _putBackWhenFinished;
             string _encoding;
-            long _truncateIfAbove;
+            ulong _truncateIfAbove;
             readonly List<Error> _errors;
 
             public Lazy<QueuePeekDefinition> Definition { get; }
@@ -190,7 +190,7 @@ namespace HareDu.Internal.Resources
             class QueuePeekDefinitionImpl :
                 QueuePeekDefinition
             {
-                public QueuePeekDefinitionImpl(int take, bool putBackWhenFinished, string encoding, long truncateMessageThreshold)
+                public QueuePeekDefinitionImpl(uint take, bool putBackWhenFinished, string encoding, ulong truncateMessageThreshold)
                 {
                     Take = take;
                     PutBackWhenFinished = putBackWhenFinished;
@@ -198,22 +198,22 @@ namespace HareDu.Internal.Resources
                     TruncateMessageThreshold = truncateMessageThreshold;
                 }
 
-                public int Take { get; }
+                public uint Take { get; }
                 public bool PutBackWhenFinished { get; }
                 public string Encoding { get; }
-                public long TruncateMessageThreshold { get; }
+                public ulong TruncateMessageThreshold { get; }
             }
 
             
             class QueuePeekConfigurationImpl :
                 QueuePeekConfiguration
             {
-                public int TakeAmount { get; private set; }
+                public uint TakeAmount { get; private set; }
                 public bool PutBack { get; private set; }
                 public string MessageEncoding { get; private set; }
-                public long TruncateMessageThresholdInBytes { get; private set; }
+                public ulong TruncateMessageThresholdInBytes { get; private set; }
 
-                public void Take(int count) => TakeAmount = count;
+                public void Take(uint count) => TakeAmount = count;
 
                 public void PutBackWhenFinished() => PutBack = true;
 
@@ -234,7 +234,7 @@ namespace HareDu.Internal.Resources
                     }
                 }
 
-                public void TruncateIfAbove(int bytes) => TruncateMessageThresholdInBytes = bytes;
+                public void TruncateIfAbove(uint bytes) => TruncateMessageThresholdInBytes = bytes;
             }
 
             
@@ -301,9 +301,9 @@ namespace HareDu.Internal.Resources
         class QueueDeleteActionImpl :
             QueueDeleteAction
         {
-            static string _vhost;
-            static string _queue;
-            static string _query;
+            string _vhost;
+            string _queue;
+            string _query;
             readonly List<Error> _errors;
 
             public Lazy<string> Query { get; }

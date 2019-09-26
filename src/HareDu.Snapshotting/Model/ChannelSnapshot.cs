@@ -28,7 +28,9 @@ namespace HareDu.Snapshotting.Model
 
         ulong Consumers { get; }
 
-        string Name { get; }
+        string Identifier { get; }
+        
+        string ConnectionIdentifier { get; }
         
         string Node { get; }
     }

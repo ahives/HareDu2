@@ -19,6 +19,8 @@ namespace HareDu.Diagnostics
 
     public interface DiagnosticResult
     {
+        string ParentComponentIdentifier { get; }
+        
         string ComponentIdentifier { get; }
         
         ComponentType ComponentType { get; }

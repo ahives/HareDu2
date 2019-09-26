@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Analyzers
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -61,12 +61,22 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.NetworkPartitions.Any())
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.ClusterIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.ClusterIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

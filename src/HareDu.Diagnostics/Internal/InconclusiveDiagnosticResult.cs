@@ -20,28 +20,33 @@ namespace HareDu.Diagnostics.Internal
     class InconclusiveDiagnosticResult :
         DiagnosticResult
     {
-        public InconclusiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> sensorData,
+        public InconclusiveDiagnosticResult(string parentComponentIdentifier, string componentIdentifier,
+            string analyzerIdentifier, ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> analyzerData,
             KnowledgeBaseArticle knowledgeBaseArticle)
         {
+            ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
-            AnalyzerIdentifier = sensorIdentifier;
             ComponentType = componentType;
-            AnalyzerData = sensorData;
+            AnalyzerIdentifier = analyzerIdentifier;
             KnowledgeBaseArticle = knowledgeBaseArticle;
+            AnalyzerData = analyzerData;
             Status = DiagnosticStatus.Inconclusive;
+            Timestamp = DateTimeOffset.Now;
         }
 
-        public InconclusiveDiagnosticResult(string componentIdentifier, string sensorIdentifier,
-            ComponentType componentType)
+        public InconclusiveDiagnosticResult(string parentComponentIdentifier, string componentIdentifier,
+            string analyzerIdentifier, ComponentType componentType)
         {
+            ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
-            AnalyzerIdentifier = sensorIdentifier;
             ComponentType = componentType;
-            Status = DiagnosticStatus.Inconclusive;
+            AnalyzerIdentifier = analyzerIdentifier;
             AnalyzerData = DiagnosticCache.EmptySensorData;
+            Status = DiagnosticStatus.Inconclusive;
+            Timestamp = DateTimeOffset.Now;
         }
 
+        public string ParentComponentIdentifier { get; }
         public string ComponentIdentifier { get; }
         public ComponentType ComponentType { get; }
         public string AnalyzerIdentifier { get; }

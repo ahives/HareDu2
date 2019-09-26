@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public string Identifier { get; }
         public NetworkTrafficSnapshot NetworkTraffic { get; }
         public ulong ChannelLimit { get; }
-        public string Node { get; }
+        public string NodeIdentifier { get; }
         public string VirtualHost { get; }
         public ConnectionState State { get; }
         public IReadOnlyList<ChannelSnapshot> Channels { get; }
@@ -56,7 +56,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 UnconfirmedMessages = unconfirmedMessages;
                 UnacknowledgedMessages = unacknowledgedMessages;
                 Consumers = consumers;
-                Name = name;
+                Identifier = name;
             }
 
             public uint PrefetchCount { get; }
@@ -65,7 +65,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public ulong UnconfirmedMessages { get; }
             public ulong UnacknowledgedMessages { get; }
             public ulong Consumers { get; }
-            public string Name { get; }
+            public string Identifier { get; }
+            public string ConnectionIdentifier { get; }
             public string Node { get; }
         }
     }

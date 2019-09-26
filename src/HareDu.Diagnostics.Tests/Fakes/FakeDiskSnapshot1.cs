@@ -24,6 +24,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Capacity = new DiskCapacityDetailsImpl(available, rate);
         }
 
+        public string NodeIdentifier { get; }
         public DiskCapacityDetails Capacity { get; }
         public ulong Limit { get; }
         public bool AlarmInEffect { get; }

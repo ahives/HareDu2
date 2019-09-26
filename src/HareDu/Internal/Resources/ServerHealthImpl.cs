@@ -42,11 +42,11 @@ namespace HareDu.Internal.Resources
             switch (impl.CheckUpType)
             {
                 case HealthCheckType.VirtualHost:
-                    url = $"api/aliveness-test/{SanitizeVirtualHostName(impl.ResourceName)}";
+                    url = $"api/aliveness-test/{impl.RmqObjectName.SanitizeVirtualHostName()}";
                     break;
                     
                 case HealthCheckType.Node:
-                    url = $"api/healthchecks/node/{impl.ResourceName}";
+                    url = $"api/healthchecks/node/{impl.RmqObjectName}";
                     break;
                     
                 default:
@@ -62,19 +62,19 @@ namespace HareDu.Internal.Resources
         class HealthCheckActionImpl :
             HealthCheckAction
         {
-            public string ResourceName { get; private set; }
+            public string RmqObjectName { get; private set; }
             public HealthCheckType CheckUpType { get; private set; }
             
             public void VirtualHost(string name)
             {
                 CheckUpType = HealthCheckType.VirtualHost;
-                ResourceName = name;
+                RmqObjectName = name;
             }
 
             public void Node(string name)
             {
                 CheckUpType = HealthCheckType.Node;
-                ResourceName = name;
+                RmqObjectName = name;
             }
         }
     }

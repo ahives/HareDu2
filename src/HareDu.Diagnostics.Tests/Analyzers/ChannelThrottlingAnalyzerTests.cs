@@ -47,11 +47,11 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 4, 2, 5, 8, 6, 1);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(ChannelThrottlingAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
@@ -62,11 +62,11 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 6, 2, 5, 8, 4, 1);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(ChannelThrottlingAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
@@ -77,11 +77,11 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

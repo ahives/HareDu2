@@ -24,9 +24,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Memory = new QueueMemoryDetailsImpl(total);
         }
 
-        public string Name { get; }
+        public string Identifier { get; }
         public string VirtualHost { get; }
-        public string Node { get; }
+        public string NodeIdentifier { get; }
         public QueueChurnMetrics Messages { get; }
         public QueueMemoryDetails Memory { get; }
         public QueueInternals Internals { get; }

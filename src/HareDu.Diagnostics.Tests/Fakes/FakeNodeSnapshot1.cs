@@ -29,7 +29,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public long Uptime { get; }
         public int RunQueue { get; }
         public long InterNodeHeartbeat { get; }
-        public string Name { get; }
+        public string Identifier { get; }
+        public string ClusterIdentifier { get; }
         public string Type { get; }
         public bool IsRunning { get; }
         public long AvailableCoresDetected { get; }
@@ -51,6 +52,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 SocketDescriptors = new SocketDescriptorChurnMetricsImpl(available, used, usageRate);
             }
 
+            public string NodeIdentifier { get; }
             public string ProcessId { get; }
             public FileDescriptorChurnMetrics FileDescriptors { get; }
             public SocketDescriptorChurnMetrics SocketDescriptors { get; }

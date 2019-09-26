@@ -19,7 +19,7 @@ namespace HareDu
         /// Specify how many messages to take from the queue.
         /// </summary>
         /// <param name="count"></param>
-        void Take(int count);
+        void Take(uint count);
 
         /// <summary>
         /// Specify that after messages are popped from the queue to requeue them.
@@ -36,6 +36,6 @@ namespace HareDu
         /// Specify the size of messages in bytes that are acceptable before having to truncate.
         /// </summary>
         /// <param name="bytes"></param>
-        void TruncateIfAbove(int bytes);
+        void TruncateIfAbove(uint bytes);
     }
 }

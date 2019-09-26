@@ -55,7 +55,7 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string url = $"api/permissions/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.Username.Value}";
+            string url = $"api/permissions/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -72,7 +72,7 @@ namespace HareDu.Internal.Resources
             var impl = new UserPermissionsDeleteActionImpl();
             action(impl);
 
-            string url = $"api/permissions/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.Username.Value}";
+            string url = $"api/permissions/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));

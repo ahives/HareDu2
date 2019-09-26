@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Analyzers
             
             if (data.IsNull())
             {
-                result = new InconclusiveDiagnosticResult(null, Identifier, ComponentType);
+                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
                 NotifyObservers(result);
 
@@ -55,8 +55,8 @@ namespace HareDu.Diagnostics.Analyzers
             {
                 new DiagnosticAnalyzerDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
                 new DiagnosticAnalyzerDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
-                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.Sensor.MessageRedeliveryCoefficient.ToString()),
-                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.Sensor.MessageRedeliveryCoefficient.ToString())
+                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.Analyzer.MessageRedeliveryCoefficient.ToString()),
+                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.Analyzer.MessageRedeliveryCoefficient.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
@@ -65,17 +65,32 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.Messages.Redelivered.Total >= warningThreshold && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && warningThreshold < data.Messages.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticResult(data.NodeIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else if (data.Messages.Redelivered.Total >= data.Messages.Incoming.Total)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.NodeIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.Name, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.NodeIdentifier,
+                    data.Identifier,
+                    Identifier,
+                    ComponentType,
+                    analyzerData,
+                    knowledgeBaseArticle);
             }
 
             NotifyObservers(result);
@@ -84,8 +99,8 @@ namespace HareDu.Diagnostics.Analyzers
         }
 
         ulong ComputeWarningThreshold(ulong total)
-            => _config.Sensor.MessageRedeliveryCoefficient >= 1
+            => _config.Analyzer.MessageRedeliveryCoefficient >= 1
                 ? total
-                : Convert.ToUInt64(Math.Ceiling(total * _config.Sensor.MessageRedeliveryCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(total * _config.Analyzer.MessageRedeliveryCoefficient));
     }
 }

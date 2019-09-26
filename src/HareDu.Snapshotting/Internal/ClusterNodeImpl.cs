@@ -66,7 +66,8 @@ namespace HareDu.Snapshotting.Internal
             public long Uptime { get; }
             public int RunQueue { get; }
             public long InterNodeHeartbeat { get; }
-            public string Name { get; }
+            public string Identifier { get; }
+            public string ClusterIdentifier { get; }
             public string Type { get; }
             public bool IsRunning { get; }
             public long AvailableCoresDetected { get; }

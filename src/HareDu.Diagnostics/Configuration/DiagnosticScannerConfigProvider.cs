@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Configuration
         {
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(new HyphenatedNamingConvention())
-                .WithTagMapping("sensor", typeof(DiagnosticSensorConfig))
+                .WithTagMapping("sensor", typeof(DiagnosticAnalyzerConfig))
                 .Build();
 
             string path = "/Users/albert/Documents/Git/HareDu2/src/HareDu.Diagnostics.Tests/scanner.yaml";

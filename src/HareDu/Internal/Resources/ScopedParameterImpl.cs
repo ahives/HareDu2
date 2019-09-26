@@ -55,7 +55,7 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
                     
-            string url = $"api/parameters/{definition.Component}/{SanitizeVirtualHostName(definition.VirtualHost)}/{definition.ParameterName}";
+            string url = $"api/parameters/{definition.Component}/{definition.VirtualHost.SanitizeVirtualHostName()}/{definition.ParameterName}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));

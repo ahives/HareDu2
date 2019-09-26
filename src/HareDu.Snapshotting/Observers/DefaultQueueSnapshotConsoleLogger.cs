@@ -35,9 +35,9 @@ namespace HareDu.Snapshotting.Observers
 
             foreach (var queue in value.Snapshot.Queues)
             {
-                Console.WriteLine($"Queue: {queue.Name}");
+                Console.WriteLine($"Queue: {queue.Identifier}");
                 Console.WriteLine($"VHost: {queue.VirtualHost}");
-                Console.WriteLine($"Node: {queue.Node}");
+                Console.WriteLine($"Node: {queue.NodeIdentifier}");
                 Console.WriteLine("Churn Metrics");
                 Console.WriteLine($"\tReady: {queue.Messages?.Ready?.Total ?? 0} | {queue.Messages?.Ready?.Rate ?? 0} msg/s");
                 Console.WriteLine($"\tAcknowledged: {queue.Messages?.Acknowledged?.Total ?? 0} | {queue.Messages?.Acknowledged?.Rate ?? 0} msg/s");

@@ -24,7 +24,7 @@ namespace HareDu.Snapshotting.Model
         
         ulong ChannelLimit { get; }
         
-        string Node { get; }
+        string NodeIdentifier { get; }
         
         string VirtualHost { get; }
         

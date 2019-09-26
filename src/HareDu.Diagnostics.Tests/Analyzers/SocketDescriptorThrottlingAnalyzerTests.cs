@@ -131,17 +131,17 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             {
                 public FakeDiagnosticScannerConfig()
                 {
-                    Sensor = new FakeDiagnosticSensorConfig();
+                    Analyzer = new FakeDiagnosticAnalyzerConfig();
                 }
 
-                public bool OverrideSensorConfig { get; }
-                public DiagnosticSensorConfig Sensor { get; }
+                public bool OverrideAnalyserConfig { get; }
+                public DiagnosticAnalyzerConfig Analyzer { get; }
 
 
-                class FakeDiagnosticSensorConfig :
-                    DiagnosticSensorConfig
+                class FakeDiagnosticAnalyzerConfig :
+                    DiagnosticAnalyzerConfig
                 {
-                    public FakeDiagnosticSensorConfig()
+                    public FakeDiagnosticAnalyzerConfig()
                     {
                         SocketUsageCoefficient = 1.0M;
                     }

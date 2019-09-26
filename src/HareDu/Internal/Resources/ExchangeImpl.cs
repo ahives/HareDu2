@@ -55,7 +55,7 @@ namespace HareDu.Internal.Resources
 
             Debug.Assert(definition != null);
 
-            string url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}";
+            string url = $"api/exchanges/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.ExchangeName.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -72,9 +72,11 @@ namespace HareDu.Internal.Resources
             var impl = new ExchangeDeleteActionImpl();
             action(impl);
 
-            string url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}";
+            string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
+            
+            string url = $"api/exchanges/{vhost}/{impl.ExchangeName.Value}";
             if (!string.IsNullOrWhiteSpace(impl.Query.Value))
-                url = $"api/exchanges/{SanitizeVirtualHostName(impl.VirtualHost.Value)}/{impl.ExchangeName.Value}?{impl.Query.Value}";
+                url = $"api/exchanges/{vhost}/{impl.ExchangeName.Value}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult<ExchangeInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));

@@ -28,7 +28,9 @@ namespace HareDu.Snapshotting.Model
 
         long InterNodeHeartbeat { get; }
 
-        string Name { get; }
+        string Identifier { get; }
+        
+        string ClusterIdentifier { get; }
 
         string Type { get; }
 

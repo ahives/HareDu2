@@ -23,6 +23,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Processes = new RuntimeProcessChurnMetricsImpl(limit, used, usageRate);
         }
 
+        public string Identifier { get; }
+        public string ClusterIdentifier { get; }
         public string Version { get; }
         public RuntimeProcessChurnMetrics Processes { get; }
 

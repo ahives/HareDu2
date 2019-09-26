@@ -39,8 +39,9 @@ namespace HareDu.Diagnostics.Tests
             builder.RegisterModule<HareDuDiagnosticsModule>();
             
             _container = builder.Build();
-            var configProvider = new DiagnosticScannerConfigProvider();
-            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            
+            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             
             _analyzers = new List<IDiagnosticAnalyzer>
             {

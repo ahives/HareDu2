@@ -29,7 +29,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public ulong UnconfirmedMessages { get; }
         public ulong UnacknowledgedMessages { get; }
         public ulong Consumers { get; }
-        public string Name { get; }
+        public string Identifier { get; }
+        public string ConnectionIdentifier { get; }
         public string Node { get; }
     }
 }

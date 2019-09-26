@@ -23,6 +23,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             FileDescriptors = new FileDescriptorChurnMetricsImpl(available, used);
         }
 
+        public string NodeIdentifier { get; }
         public string ProcessId { get; }
         public FileDescriptorChurnMetrics FileDescriptors { get; }
         public SocketDescriptorChurnMetrics SocketDescriptors { get; }

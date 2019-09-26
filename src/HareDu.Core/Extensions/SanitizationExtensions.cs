@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,22 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Core.Extensions
 {
-    public interface DiagnosticSensorConfig
+    public static class SanitizationExtensions
     {
-        int HighClosureRateWarningThreshold { get; }
-        
-        int HighCreationRateWarningThreshold { get; }
-        
-        decimal MessageRedeliveryCoefficient { get; }
+        public static string SanitizePropertiesKey(this string value)
+            => value.Replace("%5F", "%255F");
 
-        decimal SocketUsageCoefficient { get; }
-        
-        decimal RuntimeProcessUsageCoefficient { get; }
-        
-        decimal FileDescriptorUsageWarningCoefficient { get; }
-        
-        decimal ConsumerUtilizationWarningCoefficient { get; }
+        public static string SanitizeVirtualHostName(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            return value == @"/" ? value.Replace("/", "%2f") : value;
+        }
     }
 }

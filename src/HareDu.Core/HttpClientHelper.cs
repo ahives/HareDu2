@@ -169,10 +169,10 @@ namespace HareDu.Core
             }
         }
 
-        protected string SanitizeVirtualHostName(string value)
-            => value == @"/"
-                ? value.Replace("/", "%2f")
-                : value;
+//        protected string SanitizeVirtualHostName(string value)
+//            => value == @"/"
+//                ? value.Replace("/", "%2f")
+//                : value;
 
         void HandleDotsAndSlashes()
         {

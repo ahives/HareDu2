@@ -31,13 +31,13 @@ namespace HareDu.AutofacIntegration
                     
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    var sensorRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
-                    sensorRegistrar.RegisterAll(configProvider, knowledgeBaseProvider);
+                    var analyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
+                    analyzerRegistrar.RegisterAll(configProvider, knowledgeBaseProvider);
 
                     var diagnosticsRegistrar = x.Resolve<IDiagnosticsRegistrar>();
-                    diagnosticsRegistrar.RegisterAll(sensorRegistrar.Analyzers);
+                    diagnosticsRegistrar.RegisterAll(analyzerRegistrar.Analyzers);
 
-                    return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, sensorRegistrar.Analyzers);
+                    return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, analyzerRegistrar.Analyzers);
                 })
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();

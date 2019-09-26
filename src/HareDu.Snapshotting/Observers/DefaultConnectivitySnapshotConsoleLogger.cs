@@ -58,7 +58,7 @@ namespace HareDu.Snapshotting.Observers
                 for (int j = 0; j < connections[i].Channels.Count; j++)
                 {
                     Console.WriteLine("\tChannel => {0}, Consumers => {1}",
-                        connections[i].Channels[j].Name,
+                        connections[i].Channels[j].Identifier,
                         connections[i].Channels[j].Consumers);
                 }
                 

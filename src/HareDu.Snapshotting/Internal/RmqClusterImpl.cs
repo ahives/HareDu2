@@ -116,6 +116,8 @@ namespace HareDu.Snapshotting.Internal
             {
                 public NodeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                 {
+                    Identifier = node.Name;
+                    ClusterIdentifier = cluster.ClusterName;
                     OS = new OperatingSystemSnapshotImpl(node);
                     Runtime = new BrokerRuntimeSnapshotImpl(cluster, node);
                     IO = new IOImpl(cluster.MessageStats, node);
@@ -123,6 +125,7 @@ namespace HareDu.Snapshotting.Internal
                     Disk = new DiskSnapshotImpl(node);
                     NetworkPartitions = node.Partitions;
                     AvailableCoresDetected = node.AvailableCoresDetected;
+                    Memory = new MemorySnapshotImpl(node);
                 }
 
                 public OperatingSystemSnapshot OS { get; }
@@ -130,7 +133,8 @@ namespace HareDu.Snapshotting.Internal
                 public long Uptime { get; }
                 public int RunQueue { get; }
                 public long InterNodeHeartbeat { get; }
-                public string Name { get; }
+                public string Identifier { get; }
+                public string ClusterIdentifier { get; }
                 public string Type { get; }
                 public bool IsRunning { get; }
                 public long AvailableCoresDetected { get; }
@@ -143,17 +147,39 @@ namespace HareDu.Snapshotting.Internal
                 public GarbageCollection GC { get; }
                 public ContextSwitchingDetails ContextSwitching { get; }
 
+                
+                class MemorySnapshotImpl :
+                    MemorySnapshot
+                {
+                    public MemorySnapshotImpl(NodeInfo node)
+                    {
+                        NodeIdentifier = node.Name;
+                        Used = node.MemoryUsed;
+                        UsageRate = node.MemoryUsageDetails?.Rate ?? 0;
+                        Limit = node.MemoryLimit;
+                        AlarmInEffect = node.MemoryAlarm;
+                    }
+
+                    public string NodeIdentifier { get; }
+                    public ulong Used { get; }
+                    public decimal UsageRate { get; }
+                    public ulong Limit { get; }
+                    public bool AlarmInEffect { get; }
+                }
+
 
                 class DiskSnapshotImpl :
                     DiskSnapshot
                 {
                     public DiskSnapshotImpl(NodeInfo node)
                     {
+                        NodeIdentifier = node.Name;
                         Capacity = new DiskCapacityDetailsImpl(node);
                         Limit = node.FreeDiskLimit;
                         AlarmInEffect = node.FreeDiskAlarm;
                     }
 
+                    public string NodeIdentifier { get; }
                     public DiskCapacityDetails Capacity { get; }
                     public ulong Limit { get; }
                     public bool AlarmInEffect { get; }
@@ -193,10 +219,14 @@ namespace HareDu.Snapshotting.Internal
                 {
                     public BrokerRuntimeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                     {
+                        ClusterIdentifier = cluster.ClusterName;
+                        Identifier = node.Name;
                         Version = cluster.ErlangVersion;
                         Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
                     }
 
+                    public string Identifier { get; }
+                    public string ClusterIdentifier { get; }
                     public string Version { get; }
                     public RuntimeProcessChurnMetrics Processes { get; }
 
@@ -223,11 +253,13 @@ namespace HareDu.Snapshotting.Internal
                 {
                     public OperatingSystemSnapshotImpl(NodeInfo node)
                     {
+                        NodeIdentifier = node.Name;
                         ProcessId = node.OperatingSystemProcessId;
                         FileDescriptors = new FileDescriptorChurnMetricsImpl(node);
                         SocketDescriptors = new SocketDescriptorChurnMetricsImpl(node);
                     }
 
+                    public string NodeIdentifier { get; }
                     public string ProcessId { get; }
                     public FileDescriptorChurnMetrics FileDescriptors { get; }
                     public SocketDescriptorChurnMetrics SocketDescriptors { get; }

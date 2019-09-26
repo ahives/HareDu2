@@ -20,7 +20,7 @@ namespace HareDu.Snapshotting.Model
         /// <summary>
         /// Name of the queue.
         /// </summary>
-        string Name { get; }
+        string Identifier { get; }
         
         /// <summary>
         /// Name of the virtual host that the queue belongs to.
@@ -30,7 +30,7 @@ namespace HareDu.Snapshotting.Model
         /// <summary>
         /// Name of the physical node the queue is on.
         /// </summary>
-        string Node { get; }
+        string NodeIdentifier { get; }
         
         /// <summary>
         /// 

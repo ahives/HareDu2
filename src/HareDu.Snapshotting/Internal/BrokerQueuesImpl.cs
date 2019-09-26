@@ -92,6 +92,7 @@ namespace HareDu.Snapshotting.Internal
         {
             public BrokerQueuesSnapshotImpl(ClusterInfo cluster, IReadOnlyList<QueueInfo> queues)
             {
+                ClusterIdentifier = cluster.ClusterName;
                 Churn = new BrokerQueueChurnMetricsImpl(cluster.MessageStats, cluster.QueueStats);
                 Queues = queues
                     .Select(x => new QueueSnapshotImpl(x))
@@ -99,6 +100,7 @@ namespace HareDu.Snapshotting.Internal
                     .ToList();
             }
 
+            public string ClusterIdentifier { get; }
             public BrokerQueueChurnMetrics Churn { get; }
             public IReadOnlyList<QueueSnapshot> Queues { get; }
 
@@ -108,9 +110,9 @@ namespace HareDu.Snapshotting.Internal
             {
                 public QueueSnapshotImpl(QueueInfo queue)
                 {
-                    Name = queue.Name;
+                    Identifier = queue.Name;
                     VirtualHost = queue.VirtualHost;
-                    Node = queue.Node;
+                    NodeIdentifier = queue.Node;
                     Messages = new QueueChurnMetricsImpl(queue);
                     Memory = new QueueMemoryDetailsImpl(queue);
                     Consumers = queue.Consumers;
@@ -118,9 +120,9 @@ namespace HareDu.Snapshotting.Internal
                     IdleSince = queue.IdleSince;
                 }
 
-                public string Name { get; }
+                public string Identifier { get; }
                 public string VirtualHost { get; }
-                public string Node { get; }
+                public string NodeIdentifier { get; }
                 public QueueChurnMetrics Messages { get; }
                 public QueueMemoryDetails Memory { get; }
                 public QueueInternals Internals { get; }

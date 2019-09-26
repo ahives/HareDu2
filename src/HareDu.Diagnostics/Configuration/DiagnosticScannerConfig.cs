@@ -15,8 +15,8 @@ namespace HareDu.Diagnostics.Configuration
 {
     public interface DiagnosticScannerConfig
     {
-        bool OverrideSensorConfig { get; }
+        bool OverrideAnalyserConfig { get; }
         
-        DiagnosticSensorConfig Sensor { get; }
+        DiagnosticAnalyzerConfig Analyzer { get; }
     }
 }

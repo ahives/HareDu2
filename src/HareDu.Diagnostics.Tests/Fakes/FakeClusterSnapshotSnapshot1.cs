@@ -58,7 +58,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public long Uptime { get; }
             public int RunQueue { get; }
             public long InterNodeHeartbeat { get; }
-            public string Name { get; }
+            public string Identifier { get; }
+            public string ClusterIdentifier { get; }
             public string Type { get; }
             public bool IsRunning { get; }
             public long AvailableCoresDetected { get; }
@@ -81,6 +82,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 SocketDescriptors = new SocketDescriptorChurnMetricsImpl(available, used, usageRate);
             }
 
+            public string NodeIdentifier { get; }
             public string ProcessId { get; }
             public FileDescriptorChurnMetrics FileDescriptors { get; }
             public SocketDescriptorChurnMetrics SocketDescriptors { get; }
@@ -113,7 +115,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 AlarmInEffect = alarmInEffect;
             }
 
+            public string NodeIdentifier { get; }
             public ulong Used { get; }
+            public decimal UsageRate { get; }
             public ulong Limit { get; }
             public bool AlarmInEffect { get; }
         }
@@ -127,6 +131,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Processes = new RuntimeProcessChurnMetricsImpl(limit, used, usageRate);
             }
 
+            public string Identifier { get; }
+            public string ClusterIdentifier { get; }
             public string Version { get; }
             public RuntimeProcessChurnMetrics Processes { get; }
 
@@ -157,6 +163,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Capacity = new DiskCapacityDetailsImpl(available, rate);
             }
 
+            public string NodeIdentifier { get; }
             public DiskCapacityDetails Capacity { get; }
             public ulong Limit { get; }
             public bool AlarmInEffect { get; }

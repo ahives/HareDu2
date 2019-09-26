@@ -52,7 +52,7 @@ namespace HareDu.Internal.Resources
 
             VirtualHostLimitsDefinition definition = impl.Definition.Value;
 
-            string url = $"api/vhost-limits/vhost/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
+            string url = $"api/vhost-limits/vhost/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -69,7 +69,7 @@ namespace HareDu.Internal.Resources
             var impl = new VirtualHostDeleteLimitsActionImpl();
             action(impl);
 
-            string url = $"api/vhost-limits/vhost/{SanitizeVirtualHostName(impl.VirtualHostName.Value)}";
+            string url = $"api/vhost-limits/vhost/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
