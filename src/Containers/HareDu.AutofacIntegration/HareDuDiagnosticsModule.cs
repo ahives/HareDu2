@@ -15,6 +15,7 @@ namespace HareDu.AutofacIntegration
 {
     using Autofac;
     using Diagnostics;
+    using Diagnostics.Analysis;
     using Diagnostics.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
@@ -64,6 +65,10 @@ namespace HareDu.AutofacIntegration
 
             builder.RegisterType<DefaultKnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<AnalyzeConnectionReport>()
+                .As<IAnalyzeDiagnosticReport>()
                 .SingleInstance();
 
             base.Load(builder);

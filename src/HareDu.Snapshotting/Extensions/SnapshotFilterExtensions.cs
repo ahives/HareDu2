@@ -20,18 +20,6 @@ namespace HareDu.Snapshotting.Extensions
 
     public static class SnapshotFilterExtensions
     {
-//        public static List<ChannelMetrics> FilterByConnection(this IEnumerable<ChannelInfo> channels, string connection)
-//        {
-//            if (channels == null || !channels.Any())
-//                return new List<ChannelMetrics>();
-//
-//            return channels
-//                .Where(x => x.ConnectionDetails?.Name == connection)
-//                .Select(x => new ChannelMetricsImpl(x))
-//                .Cast<ChannelMetrics>()
-//                .ToList();
-//        }
-
         public static IReadOnlyList<ChannelSnapshot> FilterByConnection(this IReadOnlyList<ChannelInfo> channels, string connection)
         {
             if (channels == null || !channels.Any())
