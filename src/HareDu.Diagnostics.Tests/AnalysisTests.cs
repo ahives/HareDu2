@@ -14,6 +14,7 @@
 namespace HareDu.Diagnostics.Tests
 {
     using System;
+    using System.Linq;
     using Analysis;
     using Autofac;
     using AutofacIntegration;
@@ -38,14 +39,34 @@ namespace HareDu.Diagnostics.Tests
         }
         
         [Test]
-        public void Test()
+        public void Test1()
+        {
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
+            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+
+            var summary = _container.Resolve<IDiagnosticScanner>()
+                .Scan(snapshot)
+                .Analyze(factory);
+            
+            for (int i = 0; i < summary.Count; i++)
+            {
+                Console.WriteLine(summary[i].Identifier);
+                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
+            }
+        }
+        
+        [Test]
+        public void Test2()
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
             
             var report = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
 
-            var summary = _container.Resolve<IAnalyzeDiagnosticReport>()
+            var summary = _container.Resolve<IDiagnosticReportAnalyzer>()
                 .Analyze(report);
 
             for (int i = 0; i < summary.Count; i++)

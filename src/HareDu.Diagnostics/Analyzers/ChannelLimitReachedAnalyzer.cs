@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
-        public string Identifier => GetType().GenerateIdentifier();
+        public string Identifier => GetType().GetIdentifier();
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Scanning
     public class ClusterDiagnostic :
         IComponentDiagnostic<ClusterSnapshot>
     {
-        public string Identifier => GetType().GenerateIdentifier();
+        public string Identifier => GetType().GetIdentifier();
 
         readonly IReadOnlyList<IDiagnosticAnalyzer> _nodeAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _diskAnalyzers;

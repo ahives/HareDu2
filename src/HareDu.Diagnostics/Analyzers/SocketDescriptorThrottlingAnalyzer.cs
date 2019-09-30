@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
-        public string Identifier => GetType().GenerateIdentifier();
+        public string Identifier => GetType().GetIdentifier();
         public string Description =>
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;

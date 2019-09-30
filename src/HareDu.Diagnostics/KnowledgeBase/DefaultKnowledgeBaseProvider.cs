@@ -131,14 +131,14 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 DiagnosticStatus = diagnosticStatus;
                 Reason = reason;
                 Remediation = remediation;
-                Identifier = typeof(T).GenerateIdentifier();
+                Identifier = typeof(T).GetIdentifier();
             }
 
             public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason)
             {
                 DiagnosticStatus = diagnosticStatus;
                 Reason = reason;
-                Identifier = typeof(T).GenerateIdentifier();
+                Identifier = typeof(T).GetIdentifier();
             }
 
             public string Identifier { get; }

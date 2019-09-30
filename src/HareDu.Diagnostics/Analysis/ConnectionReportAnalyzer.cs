@@ -14,9 +14,25 @@
 namespace HareDu.Diagnostics.Analysis
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using Analyzers;
 
-    public interface IAnalyzeDiagnosticReport
+    public class ConnectionReportAnalyzer :
+        BaseAnalyzeDiagnosticReport,
+        IDiagnosticReportAnalyzer
     {
-        IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report);
+        protected override IEnumerable<string> GetSupportedDiagnosticAnalyzers()
+        {
+            yield return typeof(ChannelThrottlingAnalyzer).GetIdentifier();
+        }
+
+        protected override IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results)
+        {
+            foreach (var result in results)
+            {
+                if (_supportedAnalyzers.Contains(result.AnalyzerIdentifier))
+                    yield return result;
+            }
+        }
     }
 }

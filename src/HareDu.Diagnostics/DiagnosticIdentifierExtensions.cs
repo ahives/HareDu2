@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string GenerateIdentifier(this Type type)
+        public static string GetIdentifier(this Type type)
         {
             using (var algorithm = MD5.Create())
             {

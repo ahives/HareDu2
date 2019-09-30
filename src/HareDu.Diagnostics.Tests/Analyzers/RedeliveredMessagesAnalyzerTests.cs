@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-            Assert.AreEqual(typeof(RedeliveredMessagesAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(RedeliveredMessagesAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(RedeliveredMessagesAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(RedeliveredMessagesAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]

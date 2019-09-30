@@ -25,15 +25,14 @@ namespace HareDu.Diagnostics.Scanning
     public class ComponentDiagnosticFactory :
         IComponentDiagnosticFactory
     {
-        readonly IDiagnosticsRegistrar _diagnosticsRegistrar;
-        readonly IDictionary<string, object> _diagnosticCache;
+        readonly IDictionary<string, object> _cache;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
         readonly IList<IDisposable> _observers;
         readonly IEnumerable<Type> _types;
 
-        public ComponentDiagnosticFactory(IDictionary<string, object> diagnosticCache, IReadOnlyList<Type> types, IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public ComponentDiagnosticFactory(IDictionary<string, object> cache, IReadOnlyList<Type> types, IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
-            _diagnosticCache = diagnosticCache;
+            _cache = cache;
             _types = types;
             _analyzers = analyzers;
             _observers = new List<IDisposable>();
@@ -50,11 +49,11 @@ namespace HareDu.Diagnostics.Scanning
                 return false;
             }
 
-            string identifier = type.GenerateIdentifier();
+            string identifier = type.GetIdentifier();
             
-            if (_diagnosticCache.ContainsKey(identifier))
+            if (_cache.ContainsKey(identifier))
             {
-                diagnostic = (IComponentDiagnostic<T>) _diagnosticCache[identifier];
+                diagnostic = (IComponentDiagnostic<T>) _cache[identifier];
                 return true;
             }
             

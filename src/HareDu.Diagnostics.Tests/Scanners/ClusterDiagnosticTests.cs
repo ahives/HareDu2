@@ -56,13 +56,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             Assert.AreEqual(7, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()));
         }
 
         [Test]

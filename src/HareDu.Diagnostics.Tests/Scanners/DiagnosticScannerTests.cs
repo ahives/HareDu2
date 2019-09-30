@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).GenerateIdentifier(), scanner.ScannerIdentifier);
+            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).GetIdentifier(), scanner.ScannerIdentifier);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            Assert.AreEqual(typeof(ClusterDiagnostic).GenerateIdentifier(), scanner.ScannerIdentifier);
+            Assert.AreEqual(typeof(ClusterDiagnostic).GetIdentifier(), scanner.ScannerIdentifier);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            Assert.AreEqual(typeof(BrokerQueuesDiagnostic).GenerateIdentifier(), scanner.ScannerIdentifier);
+            Assert.AreEqual(typeof(BrokerQueuesDiagnostic).GetIdentifier(), scanner.ScannerIdentifier);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = scanner.Scan(snapshot);
             
             Assert.AreEqual(DiagnosticCache.EmptyDiagnosticReport, report);
-            Assert.AreEqual(typeof(DoNothingDiagnostic<EmptySnapshot>).GenerateIdentifier(), report.ScannerIdentifier);
+            Assert.AreEqual(typeof(DoNothingDiagnostic<EmptySnapshot>).GetIdentifier(), report.ScannerIdentifier);
         }
 
         

@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Scanning
     public class BrokerConnectivityDiagnostic :
         IComponentDiagnostic<BrokerConnectivitySnapshot>
     {
-        public string Identifier => GetType().GenerateIdentifier();
+        public string Identifier => GetType().GetIdentifier();
 
         readonly IReadOnlyList<IDiagnosticAnalyzer> _channelAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _connectionAnalyzers;

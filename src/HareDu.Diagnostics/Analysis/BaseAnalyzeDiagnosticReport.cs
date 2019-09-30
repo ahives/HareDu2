@@ -19,6 +19,44 @@ namespace HareDu.Diagnostics.Analysis
 
     public abstract class BaseAnalyzeDiagnosticReport
     {
+        protected readonly IEnumerable<string> _supportedAnalyzers;
+
+        protected BaseAnalyzeDiagnosticReport()
+        {
+            _supportedAnalyzers = GetSupportedDiagnosticAnalyzers();
+        }
+
+        public virtual IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report)
+        {
+            var filtered = ApplyFilter(report.Results);
+            var rollup = GetRollup(filtered, x => x.ParentComponentIdentifier);
+            
+            var summary = (from result in rollup
+                    let green = new AnalyzerResultImpl(result.Value.Count(x => x == DiagnosticStatus.Green).ConvertTo(),
+                        CalcPercentage(result.Value, DiagnosticStatus.Green))
+                    let red = new AnalyzerResultImpl(result.Value.Count(x => x == DiagnosticStatus.Red).ConvertTo(),
+                        CalcPercentage(result.Value, DiagnosticStatus.Red))
+                    let yellow = new AnalyzerResultImpl(
+                        result.Value.Count(x => x == DiagnosticStatus.Yellow).ConvertTo(),
+                        CalcPercentage(result.Value, DiagnosticStatus.Yellow))
+                    let inconclusive = new AnalyzerResultImpl(
+                        result.Value.Count(x => x == DiagnosticStatus.Inconclusive).ConvertTo(),
+                        CalcPercentage(result.Value, DiagnosticStatus.Inconclusive))
+                    select new AnalyzerSummaryImpl(result.Key, green, red, yellow, inconclusive))
+                .Cast<AnalyzerSummary>()
+                .ToList();
+
+            return summary;
+        }
+
+        public virtual bool IsSupported(IEnumerable<string> identifiers) => identifiers.Any(x => _supportedAnalyzers.Contains(x));
+        
+        public virtual bool IsSupported(string identifier) => _supportedAnalyzers.Any(x => x == identifier);
+
+        protected abstract IEnumerable<string> GetSupportedDiagnosticAnalyzers();
+        
+        protected abstract IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results);
+        
         protected virtual decimal CalcPercentage(List<DiagnosticStatus> results, DiagnosticStatus status)
         {
             decimal totalCount = Convert.ToDecimal(results.Count);
@@ -42,6 +80,40 @@ namespace HareDu.Diagnostics.Analysis
             }
 
             return rollup;
+        }
+
+
+        class AnalyzerSummaryImpl :
+            AnalyzerSummary
+        {
+            public AnalyzerSummaryImpl(string identifier, AnalyzerResult green, AnalyzerResult red, AnalyzerResult yellow, AnalyzerResult inconclusive)
+            {
+                Identifier = identifier;
+                Green = green;
+                Red = red;
+                Yellow = yellow;
+                Inconclusive = inconclusive;
+            }
+
+            public string Identifier { get; }
+            public AnalyzerResult Green { get; }
+            public AnalyzerResult Red { get; }
+            public AnalyzerResult Yellow { get; }
+            public AnalyzerResult Inconclusive { get; }
+        }
+
+        
+        class AnalyzerResultImpl :
+            AnalyzerResult
+        {
+            public AnalyzerResultImpl(uint total, decimal percentage)
+            {
+                Total = total;
+                Percentage = percentage;
+            }
+
+            public uint Total { get; }
+            public decimal Percentage { get; }
         }
     }
 }

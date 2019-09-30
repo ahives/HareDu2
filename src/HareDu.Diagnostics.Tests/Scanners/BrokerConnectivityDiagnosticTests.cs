@@ -55,12 +55,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             Assert.AreEqual(6, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()));
         }
 
         [Test]

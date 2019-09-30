@@ -11,26 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
     using Configuration;
     using KnowledgeBase;
 
     public class DiagnosticAnalyzerRegistrar :
         IDiagnosticAnalyzerRegistrar
     {
-        readonly List<IDiagnosticAnalyzer> _sensors;
+        readonly List<IDiagnosticAnalyzer> _analyzers;
         readonly List<Type> _types;
 
-        public IReadOnlyList<IDiagnosticAnalyzer> Analyzers => _sensors;
+        public IReadOnlyList<IDiagnosticAnalyzer> Analyzers => _analyzers;
 
         public DiagnosticAnalyzerRegistrar()
         {
-            _sensors = new List<IDiagnosticAnalyzer>();
+            _analyzers = new List<IDiagnosticAnalyzer>();
             _types = GetTypes();
         }
         
@@ -38,7 +37,7 @@ namespace HareDu.Diagnostics
         {
             for (int i = 0; i < _types.Count; i++)
             {
-                _sensors.Add((IDiagnosticAnalyzer) Activator.CreateInstance(_types[i], configProvider, knowledgeBaseProvider));
+                _analyzers.Add((IDiagnosticAnalyzer) Activator.CreateInstance(_types[i], configProvider, knowledgeBaseProvider));
             }
         }
 

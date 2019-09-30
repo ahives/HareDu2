@@ -11,17 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Analysis
 {
     using System.Collections.Generic;
-    using Analyzers;
-    using Configuration;
-    using KnowledgeBase;
 
-    public interface IDiagnosticAnalyzerRegistrar
+    public interface IDiagnosticReportAnalyzer
     {
-        IReadOnlyList<IDiagnosticAnalyzer> Analyzers { get; }
+        bool IsSupported(IEnumerable<string> identifiers);
         
-        void RegisterAll(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider);
+        bool IsSupported(string identifier);
+
+        IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report);
     }
 }

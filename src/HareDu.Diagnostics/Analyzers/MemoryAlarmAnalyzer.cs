@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
-        public string Identifier => GetType().GenerateIdentifier();
+        public string Identifier => GetType().GetIdentifier();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Memory;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

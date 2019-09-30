@@ -53,7 +53,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var result = sensor.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GenerateIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]

@@ -54,11 +54,11 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             Assert.AreEqual(5, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GenerateIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GenerateIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()));
         }
 
         [Test]

@@ -16,6 +16,7 @@ namespace HareDu.AutofacIntegration
     using Autofac;
     using Diagnostics;
     using Diagnostics.Analysis;
+    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
@@ -35,7 +36,7 @@ namespace HareDu.AutofacIntegration
                     var analyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
                     analyzerRegistrar.RegisterAll(configProvider, knowledgeBaseProvider);
 
-                    var diagnosticsRegistrar = x.Resolve<IDiagnosticsRegistrar>();
+                    var diagnosticsRegistrar = x.Resolve<IComponentDiagnosticRegistrar>();
                     diagnosticsRegistrar.RegisterAll(analyzerRegistrar.Analyzers);
 
                     return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, analyzerRegistrar.Analyzers);
@@ -43,8 +44,23 @@ namespace HareDu.AutofacIntegration
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();
 
+            builder.Register(x =>
+                {
+                    var registrar = x.Resolve<IDiagnosticReportAnalyzerRegistrar>();
+                    
+                    registrar.RegisterAll();
+                    
+                    return new DiagnosticReportAnalyzerFactory(registrar.Analyzers);
+                })
+                .As<IDiagnosticReportAnalyzerFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticReportAnalyzerRegistrar>()
+                .As<IDiagnosticReportAnalyzerRegistrar>()
+                .SingleInstance();
+
             builder.RegisterType<ComponentDiagnosticRegistrar>()
-                .As<IDiagnosticsRegistrar>()
+                .As<IComponentDiagnosticRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticAnalyzerRegistrar>()
@@ -67,8 +83,8 @@ namespace HareDu.AutofacIntegration
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<AnalyzeConnectionReport>()
-                .As<IAnalyzeDiagnosticReport>()
+            builder.RegisterType<ConnectionReportAnalyzer>()
+                .As<IDiagnosticReportAnalyzer>()
                 .SingleInstance();
 
             base.Load(builder);

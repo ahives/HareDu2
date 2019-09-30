@@ -11,20 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Analysis
 {
     using System;
     using System.Collections.Generic;
-    using Analyzers;
 
-    public interface IDiagnosticsRegistrar
+    public class DoNothingDiagnosticReportAnalyzer :
+        IDiagnosticReportAnalyzer
     {
-        IReadOnlyList<Type> Types { get; }
+        public bool IsSupported(IEnumerable<string> identifiers) => false;
         
-        IDictionary<string, object> Cache { get; }
+        public bool IsSupported(string identifier) => false;
 
-        void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> sensors);
-
-        void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> sensors);
+        public IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report) => throw new NotImplementedException();
     }
 }

@@ -11,16 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Scanning
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
-    using Scanning;
 
     public class ComponentDiagnosticRegistrar :
-        IDiagnosticsRegistrar
+        IComponentDiagnosticRegistrar
     {
         readonly List<Type> _types;
         readonly IDictionary<string, object> _cache;
@@ -34,20 +33,20 @@ namespace HareDu.Diagnostics
             _types = GetTypes();
         }
 
-        public void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> sensors)
+        public void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
             Type type = typeof(T);
             
             _types.Add(type);
             
-            Register(type, sensors);
+            Register(type, analyzers);
         }
 
-        public void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> sensors)
+        public void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
             foreach (var type in _types)
             {
-                Register(type, sensors);
+                Register(type, analyzers);
             }
         }
 
@@ -58,13 +57,13 @@ namespace HareDu.Diagnostics
                 .Where(IsComponentDiagnostic)
                 .ToList();
 
-        void Register(Type type, IReadOnlyList<IDiagnosticAnalyzer> sensors)
+        void Register(Type type, IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
             try
             {
-                var instance = Activator.CreateInstance(type, sensors);
+                var instance = Activator.CreateInstance(type, analyzers);
             
-                _cache.Add(type.GenerateIdentifier(), instance);
+                _cache.Add(type.GetIdentifier(), instance);
             }
             catch { }
         }
