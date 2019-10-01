@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Internal
             Analyzer = new DiagnosticAnalyzerConfigImpl();
         }
 
-        public bool OverrideAnalyserConfig { get; }
+        public bool OverrideAnalyzerConfig { get; }
         public DiagnosticAnalyzerConfig Analyzer { get; }
 
         

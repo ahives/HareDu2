@@ -25,14 +25,15 @@ namespace HareDu.Diagnostics.Configuration
         {
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(new HyphenatedNamingConvention())
-                .WithTagMapping("sensor", typeof(DiagnosticAnalyzerConfig))
+                .WithTagMapping("analyzer", typeof(DiagnosticAnalyzerConfig))
                 .Build();
 
-            string path = "/Users/albert/Documents/Git/HareDu2/src/HareDu.Diagnostics.Tests/scanner.yaml";
+//            string path = "/Users/albert/Documents/Git/HareDu2/src/HareDu.Diagnostics.Tests/scanner.yaml";
+            string path = "../scanner.yaml";
 
             if (!File.Exists(path))
             {
-                config = DiagnosticSensorConfigCache.Default;
+                config = DiagnosticAnalyzerConfigCache.Default;
                 return true;
             }
 
@@ -47,10 +48,9 @@ namespace HareDu.Diagnostics.Configuration
             }
             catch (Exception e)
             {
-                config = DiagnosticSensorConfigCache.Default;
+                config = DiagnosticAnalyzerConfigCache.Default;
                 return true;
             }
-            // TODO: add code to pull from configuration file
         }
     }
 }

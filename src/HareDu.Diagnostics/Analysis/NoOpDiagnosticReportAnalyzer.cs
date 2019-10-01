@@ -11,12 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Diagnostics.Analysis
 {
-    using Internal;
+    using System;
+    using System.Collections.Generic;
 
-    public static class DiagnosticSensorConfigCache
+    public class NoOpDiagnosticReportAnalyzer :
+        IDiagnosticReportAnalyzer
     {
-        public static readonly DiagnosticScannerConfig Default = new DefaultDiagnosticScannerConfig();
+        public bool IsSupported(IEnumerable<string> identifiers) => false;
+        
+        public bool IsSupported(string identifier) => false;
+
+        public IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report) => throw new NotImplementedException();
     }
 }

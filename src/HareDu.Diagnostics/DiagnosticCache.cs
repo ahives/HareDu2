@@ -19,6 +19,6 @@ namespace HareDu.Diagnostics
     {
         public static readonly IReadOnlyList<DiagnosticResult> EmptyDiagnosticResults = new List<DiagnosticResult>();
         public static readonly DiagnosticReport EmptyDiagnosticReport = new EmptyDiagnosticReport();
-        public static readonly IReadOnlyList<DiagnosticAnalyzerData> EmptySensorData = new List<DiagnosticAnalyzerData>();
+        public static readonly IReadOnlyList<DiagnosticAnalyzerData> EmptyAnalyzerData = new List<DiagnosticAnalyzerData>();
     }
 }

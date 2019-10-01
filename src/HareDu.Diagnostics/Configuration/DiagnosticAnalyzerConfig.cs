@@ -13,20 +13,29 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Configuration
 {
+    using YamlDotNet.Serialization;
+
     public interface DiagnosticAnalyzerConfig
     {
+        [YamlMember(Alias = "high-closure-rate-warning-threshold")]
         int HighClosureRateWarningThreshold { get; }
         
+        [YamlMember(Alias = "high-creation-rate-warning-threshold")]
         int HighCreationRateWarningThreshold { get; }
         
+        [YamlMember(Alias = "message-redelivery-coefficient")]
         decimal MessageRedeliveryCoefficient { get; }
 
+        [YamlMember(Alias = "socket-usage-coefficient")]
         decimal SocketUsageCoefficient { get; }
         
+        [YamlMember(Alias = "runtime-process-usage-coefficient")]
         decimal RuntimeProcessUsageCoefficient { get; }
         
+        [YamlMember(Alias = "file-descriptor-usage-warning-coefficient")]
         decimal FileDescriptorUsageWarningCoefficient { get; }
         
+        [YamlMember(Alias = "consumer-utilization-warning-coefficient")]
         decimal ConsumerUtilizationWarningCoefficient { get; }
     }
 }

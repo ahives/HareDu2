@@ -134,7 +134,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                     Analyzer = new FakeDiagnosticAnalyzerConfig();
                 }
 
-                public bool OverrideAnalyserConfig { get; }
+                public bool OverrideAnalyzerConfig { get; }
                 public DiagnosticAnalyzerConfig Analyzer { get; }
 
 

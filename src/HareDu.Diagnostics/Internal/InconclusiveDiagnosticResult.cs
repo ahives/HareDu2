@@ -41,7 +41,7 @@ namespace HareDu.Diagnostics.Internal
             ComponentIdentifier = componentIdentifier;
             ComponentType = componentType;
             AnalyzerIdentifier = analyzerIdentifier;
-            AnalyzerData = DiagnosticCache.EmptySensorData;
+            AnalyzerData = DiagnosticCache.EmptyAnalyzerData;
             Status = DiagnosticStatus.Inconclusive;
             Timestamp = DateTimeOffset.Now;
         }

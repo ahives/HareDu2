@@ -11,22 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests.Configuration
+namespace HareDu.Diagnostics.Analysis
 {
-    using Diagnostics.Configuration;
-    using NUnit.Framework;
-
-    [TestFixture]
-    public class DiagnosticScannerConfigProviderTests
+    public static class DiagnosticReportAnalyzerCache
     {
-        [Test, Explicit]
-        public void Test()
-        {
-            var provider = new DiagnosticScannerConfigProvider();
-
-            Assert.IsTrue(provider.TryGet(out var config));
-//            Assert.IsTrue(config.OverrideAnalyzerConfig);
-            Assert.AreEqual(90, config.Analyzer.HighClosureRateWarningThreshold);
-        }
+        public static readonly IDiagnosticReportAnalyzer NoOpAnalyzer = new NoOpDiagnosticReportAnalyzer();
     }
 }

@@ -13,9 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Configuration
 {
+    using YamlDotNet.Serialization;
+
     public interface DiagnosticScannerConfig
     {
-        bool OverrideAnalyserConfig { get; }
+        [YamlMember(Alias = "override-analyzer-config")]
+        bool OverrideAnalyzerConfig { get; }
         
         DiagnosticAnalyzerConfig Analyzer { get; }
     }

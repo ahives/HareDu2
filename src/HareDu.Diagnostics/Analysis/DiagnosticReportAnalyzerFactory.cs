@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Analysis
         {
             if (string.IsNullOrWhiteSpace(identifier))
             {
-                analyzer = new DoNothingDiagnosticReportAnalyzer();
+                analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
                 return false;
             }
 
@@ -38,7 +38,7 @@ namespace HareDu.Diagnostics.Analysis
             if (analyzer != null)
                 return true;
             
-            analyzer = new DoNothingDiagnosticReportAnalyzer();
+            analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
             return false;
         }
     }
