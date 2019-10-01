@@ -18,13 +18,6 @@ namespace HareDu.Diagnostics.Analysis
 
     public static class DiagnosticReportExtensions
     {
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report)
-        {
-            IDiagnosticReportAnalyzer analyzer = new ConnectionReportAnalyzer();
-
-            return analyzer.Analyze(report);
-        }
-
         public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report,
             IDiagnosticReportAnalyzerFactory factory)
         {
@@ -33,14 +26,15 @@ namespace HareDu.Diagnostics.Analysis
                 .Distinct(new IdentifierComparer())
                 .ToList();
 
-            var summaries = new List<AnalyzerSummary>();
+            var summary = new List<AnalyzerSummary>();
+            
             for (int i = 0; i < results.Count; i++)
             {
                 if (factory.TryGet(results[i], out var analyzer))
-                    summaries.AddRange(analyzer.Analyze(report));
+                    summary.AddRange(analyzer.Analyze(report));
             }
 
-            return summaries;
+            return summary;
         }
 
 

@@ -54,8 +54,15 @@ namespace HareDu.Diagnostics.Analysis
         public virtual bool IsSupported(string identifier) => _supportedAnalyzers.Any(x => x == identifier);
 
         protected abstract IEnumerable<string> GetSupportedDiagnosticAnalyzers();
-        
-        protected abstract IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results);
+
+        protected virtual IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results)
+        {
+            foreach (var result in results)
+            {
+                if (_supportedAnalyzers.Contains(result.AnalyzerIdentifier))
+                    yield return result;
+            }
+        }
         
         protected virtual decimal CalcPercentage(List<DiagnosticStatus> results, DiagnosticStatus status)
         {

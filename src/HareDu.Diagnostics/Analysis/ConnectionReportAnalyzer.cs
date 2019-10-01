@@ -14,7 +14,6 @@
 namespace HareDu.Diagnostics.Analysis
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Analyzers;
 
     public class ConnectionReportAnalyzer :
@@ -24,15 +23,6 @@ namespace HareDu.Diagnostics.Analysis
         protected override IEnumerable<string> GetSupportedDiagnosticAnalyzers()
         {
             yield return typeof(ChannelThrottlingAnalyzer).GetIdentifier();
-        }
-
-        protected override IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results)
-        {
-            foreach (var result in results)
-            {
-                if (_supportedAnalyzers.Contains(result.AnalyzerIdentifier))
-                    yield return result;
-            }
         }
     }
 }
