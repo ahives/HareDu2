@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_get_all_topic_permissions()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<TopicPermissions>()
                 .GetAll();
             
@@ -58,7 +58,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_can_filter_topic_permissions()
         {
-            var result = _container.Resolve<IRmqObjectFactory>()
+            var result = _container.Resolve<IBrokerObjectFactory>()
                 .Object<TopicPermissions>()
                 .GetAll()
                 .Where(x => x.VirtualHost == "HareDu");
@@ -77,7 +77,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_user_permissions()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<TopicPermissions>()
                 .Create(x =>
                 {
@@ -97,7 +97,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task TestVerify_can_delete_user_permissions()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<TopicPermissions>()
                 .Delete(x =>
                 {

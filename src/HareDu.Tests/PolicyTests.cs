@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_policies()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .GetAll();
 
@@ -57,7 +57,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_policy()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -83,7 +83,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_cannot_create_policy()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -110,7 +110,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_delete_policy()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {

@@ -17,7 +17,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
         
-        public ClusterNodeImpl(IRmqObjectFactory factory)
+        public ClusterNodeImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();

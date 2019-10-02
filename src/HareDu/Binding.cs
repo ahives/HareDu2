@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface Binding :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all bindgins on the current RabbitMQ node.

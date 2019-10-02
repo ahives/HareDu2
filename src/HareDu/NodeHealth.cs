@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface NodeHealth :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Runs a test to check if the current RabbitMQ node is healthy.

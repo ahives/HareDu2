@@ -36,7 +36,7 @@ namespace HareDu.Tests
         [Test]
         public async Task QueueResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<Queue>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<Queue>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Queue).IsInstanceOfType(impl));
@@ -45,7 +45,7 @@ namespace HareDu.Tests
         [Test]
         public async Task ExchangeResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<Exchange>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<Exchange>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Exchange).IsInstanceOfType(impl));
@@ -54,7 +54,7 @@ namespace HareDu.Tests
         [Test]
         public async Task NodeResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<Node>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<Node>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Node).IsInstanceOfType(impl));
@@ -63,7 +63,7 @@ namespace HareDu.Tests
         [Test]
         public async Task UserResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<User>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<User>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(User).IsInstanceOfType(impl));
@@ -72,7 +72,7 @@ namespace HareDu.Tests
         [Test]
         public async Task GlobalParameterResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<GlobalParameter>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<GlobalParameter>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(GlobalParameter).IsInstanceOfType(impl));
@@ -81,7 +81,7 @@ namespace HareDu.Tests
         [Test]
         public async Task UserPermissionsResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<UserPermissions>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<UserPermissions>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(UserPermissions).IsInstanceOfType(impl));
@@ -90,7 +90,7 @@ namespace HareDu.Tests
         [Test]
         public async Task PolicyResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<Policy>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<Policy>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Policy).IsInstanceOfType(impl));
@@ -99,7 +99,7 @@ namespace HareDu.Tests
         [Test]
         public async Task BindingResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<Binding>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<Binding>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(Binding).IsInstanceOfType(impl));
@@ -108,7 +108,7 @@ namespace HareDu.Tests
         [Test]
         public async Task ScopedParameterResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<ScopedParameter>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<ScopedParameter>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(ScopedParameter).IsInstanceOfType(impl));
@@ -117,7 +117,7 @@ namespace HareDu.Tests
         [Test]
         public async Task VirtualHostResourceTest()
         {
-            var impl = _container.Resolve<IRmqObjectFactory>().Object<VirtualHost>();
+            var impl = _container.Resolve<IBrokerObjectFactory>().Object<VirtualHost>();
 
             Assert.IsNotNull(impl);
             Assert.IsTrue(typeof(VirtualHost).IsInstanceOfType(impl));

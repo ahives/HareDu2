@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_queue()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -58,7 +58,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_queues()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .GetAll();
             
@@ -78,7 +78,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_get_all_json()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .GetAll();
             
@@ -89,7 +89,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_delete_queue()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -109,7 +109,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_peek_messages()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -131,7 +131,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_empty_queue()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {

@@ -40,7 +40,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_check_if_named_node_healthy()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<NodeHealth>()
                 .GetDetails("rabbit@localhost");
 
@@ -59,7 +59,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_check_if_node_healthy()
         {
-            Result<NodeHealthInfo> result = await _container.Resolve<IRmqObjectFactory>()
+            Result<NodeHealthInfo> result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<NodeHealth>()
                 .GetDetails();
             

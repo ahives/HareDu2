@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface Queue :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all queues on the current RabbitMQ node.

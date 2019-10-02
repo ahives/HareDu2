@@ -31,7 +31,7 @@ namespace HareDu.Snapshotting.Internal
 
         public IReadOnlyList<Result<ClusterSnapshot>> Snapshots => _snapshots;
 
-        public RmqClusterImpl(IRmqObjectFactory factory)
+        public RmqClusterImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();

@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_scoped_parameters()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .GetAll();
 
@@ -56,7 +56,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create(x =>
                 {
@@ -75,7 +75,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Test()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {

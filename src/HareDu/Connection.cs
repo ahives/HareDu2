@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Connection :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all connections on the current RabbitMQ node.

@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_exchanges()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .GetAll();
 
@@ -61,7 +61,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_filter_exchanges()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .GetAll();
 
@@ -83,7 +83,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_exchange()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -108,7 +108,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_delete_exchange()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {

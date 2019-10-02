@@ -19,7 +19,7 @@ namespace HareDu.Shovel
     using Core;
 
     public interface Shovel<out TSource, out TDestination> :
-        Resource
+        BrokerObject
         where TSource : AMQP091Source
         where TDestination : AMQP091Destination
     {

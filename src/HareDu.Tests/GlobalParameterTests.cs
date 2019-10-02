@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_global_parameters()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .GetAll();
 
@@ -56,7 +56,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_parameter()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -77,7 +77,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_delete_parameter()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
             

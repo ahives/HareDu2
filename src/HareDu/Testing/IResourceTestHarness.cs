@@ -15,6 +15,6 @@ namespace HareDu.Testing
 {
     public interface IResourceTestHarness
     {
-        IRmqObjectFactory Client { get; }
+        IBrokerObjectFactory Client { get; }
     }
 }

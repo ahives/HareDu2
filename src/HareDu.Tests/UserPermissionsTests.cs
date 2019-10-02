@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_user_permissions()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .GetAll();
             
@@ -56,7 +56,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task TestVerify_can_delete_user_permissions()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -68,7 +68,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_create_user_permissions()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {

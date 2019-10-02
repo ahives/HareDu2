@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface GlobalParameter :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all global parameters on the current RabbitMQ node.

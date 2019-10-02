@@ -39,7 +39,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_definitions()
         {
-            Result<ServerDefinitionInfo> result = await _container.Resolve<IRmqObjectFactory>()
+            Result<ServerDefinitionInfo> result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Server>()
                 .GetDefinition();
 

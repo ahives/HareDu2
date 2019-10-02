@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface VirtualHostLimits :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns limit information about each virtual host on the current RabbitMQ server.

@@ -16,10 +16,10 @@ namespace HareDu.Configuration
     using System;
     using Core.Configuration;
 
-    public class DefaultRmqObjectConfig :
+    public class DefaultBrokerObjectConfig :
         HareDuClientSettings
     {
-        public DefaultRmqObjectConfig()
+        public DefaultBrokerObjectConfig()
         {
             BrokerUrl = "http://localhost:15672";
             Credentials = new HareDuCredentialsImpl("guest", "guest");

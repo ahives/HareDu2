@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Channel :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all channels on the current RabbitMQ node.

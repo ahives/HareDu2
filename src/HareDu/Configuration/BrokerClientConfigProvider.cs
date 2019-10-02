@@ -24,8 +24,7 @@ namespace HareDu.Configuration
         public HareDuClientSettings Init(Action<ClientConfigProvider> configuration)
         {
             if (configuration == null)
-                throw new HareDuClientConfigurationException(
-                    "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
             var init = new ClientConfigProviderImpl();
             configuration(init);
@@ -38,7 +37,7 @@ namespace HareDu.Configuration
                 string.IsNullOrWhiteSpace(settings.Credentials.Password) ||
                 string.IsNullOrWhiteSpace(settings.BrokerUrl))
             {
-                return null;
+                return BrokerObjectConfigCache.Default;
             }
 
             return settings;
@@ -46,7 +45,7 @@ namespace HareDu.Configuration
 
         public bool TryGet(out HareDuClientSettings settings)
         {
-            settings = RmqObjectConfigCache.Default;
+            settings = BrokerObjectConfigCache.Default;
             return true;
         }
 

@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Node :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// 

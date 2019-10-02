@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Memory :
-        Resource
+        BrokerObject
     {
         Task<Result<NodeMemoryUsageInfo>> GetDetails(string node, CancellationToken cancellationToken = default);
     }

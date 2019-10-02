@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface Exchange :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all exchanges on the current RabbitMQ node.

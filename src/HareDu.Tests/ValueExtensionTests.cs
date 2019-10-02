@@ -39,7 +39,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_Where_works()
         {
-            var vhosts = _container.Resolve<IRmqObjectFactory>()
+            var vhosts = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
@@ -56,7 +56,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_Unwrap_works()
         {
-            var vhosts = _container.Resolve<IRmqObjectFactory>()
+            var vhosts = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Unfold();
@@ -73,7 +73,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_Unwravel_works()
         {
-            var vhosts = _container.Resolve<IRmqObjectFactory>()
+            var vhosts = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);
@@ -90,7 +90,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_Any_works()
         {
-            bool found = _container.Resolve<IRmqObjectFactory>()
+            bool found = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Any();
@@ -101,7 +101,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_Any_with_predicate_works()
         {
-            bool found = _container.Resolve<IRmqObjectFactory>()
+            bool found = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Any(x => x.Name == "HareDu");
@@ -112,7 +112,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public void Verify_FirstOrDefault_works()
         {
-            ExchangeInfo exchange = _container.Resolve<IRmqObjectFactory>()
+            ExchangeInfo exchange = _container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .GetAll()
                 .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")

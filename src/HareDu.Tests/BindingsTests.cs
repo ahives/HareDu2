@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_bindings()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .GetAll();
             
@@ -60,7 +60,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_add_arguments()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -88,7 +88,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_delete_binding()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {

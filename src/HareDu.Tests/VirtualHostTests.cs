@@ -39,7 +39,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_vhosts()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll();
 
@@ -55,7 +55,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_GetAll_HasResult_works()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll();
 
@@ -65,7 +65,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_filtered_GetAll_works()
         {
-            var result = _container.Resolve<IRmqObjectFactory>()
+            var result = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "HareDu");
@@ -82,7 +82,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_Create_works()
         {
-            Result result = await _container.Resolve<IRmqObjectFactory>()
+            Result result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Create(x =>
                 {
@@ -99,7 +99,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_Delete_works()
         {
-            Result result = await _container.Resolve<IRmqObjectFactory>()
+            Result result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Delete(x => x.VirtualHost("HareDu7"));
 
@@ -109,7 +109,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_start_vhost()
         {
-            Result result = await _container.Resolve<IRmqObjectFactory>()
+            Result result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Startup("", x => x.On(""));
             

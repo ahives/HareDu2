@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface TopicPermissions :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// 

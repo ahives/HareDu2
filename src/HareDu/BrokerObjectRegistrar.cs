@@ -19,14 +19,14 @@ namespace HareDu
     using System.Net.Http;
     using Core;
 
-    public class RmqObjectRegistrar :
-        IRmqObjectRegistrar
+    public class BrokerObjectRegistrar :
+        IBrokerObjectRegistrar
     {
         readonly IDictionary<string, object> _cache;
 
         public IDictionary<string, object> Cache => _cache;
 
-        public RmqObjectRegistrar()
+        public BrokerObjectRegistrar()
         {
             _cache = new Dictionary<string, object>();
         }
@@ -36,7 +36,7 @@ namespace HareDu
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(Resource).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {

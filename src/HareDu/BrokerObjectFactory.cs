@@ -19,33 +19,33 @@ namespace HareDu
     using System.Net.Http;
     using Core;
 
-    public class RmqObjectFactory :
-        IRmqObjectFactory
+    public class BrokerObjectFactory :
+        IBrokerObjectFactory
     {
         readonly HttpClient _client;
         readonly IDictionary<string, object> _cache;
 
-        public RmqObjectFactory(IDictionary<string, object> cache, HttpClient client)
+        public BrokerObjectFactory(IDictionary<string, object> cache, HttpClient client)
         {
             _cache = cache;
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public TResource Object<TResource>()
-            where TResource : Resource
+        public T Object<T>()
+            where T : BrokerObject
         {
             Type type = GetType()
                 .Assembly
                 .GetTypes()
-                .FirstOrDefault(x => typeof(TResource).IsAssignableFrom(x) && !x.IsInterface);
+                .FirstOrDefault(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface);
 
             if (type == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(TResource)}");
+                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
 
             if (_cache.ContainsKey(type.FullName))
-                return (TResource)_cache[type.FullName];
+                return (T)_cache[type.FullName];
             
-            var instance = (TResource)Activator.CreateInstance(type, _client);
+            var instance = (T)Activator.CreateInstance(type, _client);
 
             _cache.Add(type.FullName, instance);
             

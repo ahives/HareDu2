@@ -9,7 +9,7 @@ namespace HareDu.Snapshotting
     {
         IDictionary<string, object> Cache { get; }
 
-        void RegisterAll(IRmqObjectFactory factory);
+        void RegisterAll(IBrokerObjectFactory factory);
     }
 
     public class SnapshotRegistrar : ISnapshotRegistrar
@@ -23,7 +23,7 @@ namespace HareDu.Snapshotting
             _cache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(IRmqObjectFactory factory)
+        public void RegisterAll(IBrokerObjectFactory factory)
         {
             var types = GetType()
                 .Assembly

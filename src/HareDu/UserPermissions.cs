@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface UserPermissions :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns information about all user permissions on the current RabbitMQ server.

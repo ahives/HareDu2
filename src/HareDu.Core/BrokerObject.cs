@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Core
 {
-    public interface Resource
+    public interface BrokerObject
     {
         
     }

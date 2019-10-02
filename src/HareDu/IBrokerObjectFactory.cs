@@ -15,7 +15,7 @@ namespace HareDu
 {
     using Core;
 
-    public interface IRmqObjectFactory
+    public interface IBrokerObjectFactory
     {
         /// <summary>
         /// Creates a new instance of object implemented by T, which encapsulates a group of resources (e.g. Virtual Host, Exchange, Queue, User, etc.)
@@ -24,7 +24,7 @@ namespace HareDu
         /// <typeparam name="T">Interface that derives from base interface ResourceClient.</typeparam>
         /// <returns>An interface of resources available on a RabbitMQ server.</returns>
         T Object<T>()
-            where T : Resource;
+            where T : BrokerObject;
         
         /// <summary>
         /// Cancel pending running thread.

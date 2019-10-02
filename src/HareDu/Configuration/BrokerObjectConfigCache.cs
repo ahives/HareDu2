@@ -11,15 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Configuration
 {
-    using System.Collections.Generic;
-    using System.Net.Http;
+    using Core.Configuration;
 
-    public interface IRmqObjectRegistrar
+    public static class BrokerObjectConfigCache
     {
-        IDictionary<string, object> Cache { get; }
-
-        void RegisterAll(HttpClient client);
+        public static readonly HareDuClientSettings Default = new DefaultBrokerObjectConfig();
     }
 }

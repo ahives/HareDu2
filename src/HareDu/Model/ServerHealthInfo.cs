@@ -17,7 +17,7 @@ namespace HareDu.Model
     using Newtonsoft.Json;
 
     public interface ServerHealthInfo :
-        Resource
+        BrokerObject
     {
         [JsonProperty("status")]
         string Status { get; }

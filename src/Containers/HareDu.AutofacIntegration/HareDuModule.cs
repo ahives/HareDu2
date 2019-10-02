@@ -25,28 +25,28 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IRmqObjectRegistrar>();
+                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
                     var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
-                    var brokerConnection = x.Resolve<IBrokerConnectionClient>();
+                    var connection = x.Resolve<IBrokerConnectionClient>();
 
                     if (!settingsProvider.TryGet(out HareDuClientSettings settings))
                         throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
                     
-                    var client = brokerConnection.Create(settings);
+                    var client = connection.Create(settings);
 
                     registrar.RegisterAll(client);
 
-                    return new RmqObjectFactory(registrar.Cache, client);
+                    return new BrokerObjectFactory(registrar.Cache, client);
                 })
-                .As<IRmqObjectFactory>()
+                .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConnectionClient>()
                 .As<IBrokerConnectionClient>()
                 .SingleInstance();
 
-            builder.RegisterType<RmqObjectRegistrar>()
-                .As<IRmqObjectRegistrar>()
+            builder.RegisterType<BrokerObjectRegistrar>()
+                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerClientConfigProvider>()

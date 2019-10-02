@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Consumer :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all consumers on the current RabbitMQ node.

@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Server :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all object definitions on the current RabbitMQ node.

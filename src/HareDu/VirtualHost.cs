@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface VirtualHost :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns information about each virtual host on the current RabbitMQ server.

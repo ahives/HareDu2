@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface ScopedParameter :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all scoped parameters on the current RabbitMQ server.

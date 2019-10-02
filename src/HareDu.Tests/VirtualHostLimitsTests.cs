@@ -38,7 +38,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_get_all_limits()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .GetAll();
             
@@ -60,7 +60,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_get_limits_of_specified_vhost()
         {
-            var result = _container.Resolve<IRmqObjectFactory>()
+            var result = _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .GetAll()
                 .Where(x => x.VirtualHostName == "HareDu");
@@ -83,7 +83,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_define_limits()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -101,7 +101,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Verify_can_delete_limits()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Delete(x => x.For("HareDu3"));
             

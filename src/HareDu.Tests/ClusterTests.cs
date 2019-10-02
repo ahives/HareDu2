@@ -39,7 +39,7 @@ namespace HareDu.Tests
         [Test, Explicit]
         public async Task Test()
         {
-            var result = await _container.Resolve<IRmqObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Cluster>()
                 .GetDetails();
 

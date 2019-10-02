@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface Policy :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns all policies on the current RabbitMQ node.

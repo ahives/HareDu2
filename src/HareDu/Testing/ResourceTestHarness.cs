@@ -18,15 +18,15 @@ namespace HareDu.Testing
     public abstract class ResourceTestHarness :
         IResourceTestHarness
     {
-        readonly Lazy<IRmqObjectFactory> _client;
+        readonly Lazy<IBrokerObjectFactory> _client;
 
         public ResourceTestHarness()
         {
-            _client = new Lazy<IRmqObjectFactory>(InitializeClient);
+            _client = new Lazy<IBrokerObjectFactory>(InitializeClient);
         }
 
-        protected abstract IRmqObjectFactory InitializeClient();
+        protected abstract IBrokerObjectFactory InitializeClient();
 
-        public IRmqObjectFactory Client => _client.Value;
+        public IBrokerObjectFactory Client => _client.Value;
     }
 }

@@ -19,7 +19,7 @@ namespace HareDu
     using Model;
 
     public interface Cluster :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// 

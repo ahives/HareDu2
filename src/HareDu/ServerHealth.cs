@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface ServerHealth :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Perform a health check on a virtual host or node.

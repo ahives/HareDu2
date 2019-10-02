@@ -20,7 +20,7 @@ namespace HareDu
     using Model;
 
     public interface User :
-        Resource
+        BrokerObject
     {
         /// <summary>
         /// Returns information about all users on the current RabbitMQ server.

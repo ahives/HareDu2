@@ -22,10 +22,10 @@ namespace HareDu.Snapshotting
     public class SnapshotFactory :
         ISnapshotFactory
     {
-        readonly IRmqObjectFactory _factory;
+        readonly IBrokerObjectFactory _factory;
         readonly IDictionary<string, object> _cache;
 
-        public SnapshotFactory(IRmqObjectFactory factory, IDictionary<string, object> cache)
+        public SnapshotFactory(IBrokerObjectFactory factory, IDictionary<string, object> cache)
         {
             _factory = factory;
             _cache = cache;
