@@ -18,6 +18,7 @@ namespace HareDu.Snapshotting.Tests
     using Autofac;
     using AutofacIntegration;
     using NUnit.Framework;
+    using Observers;
 
     [TestFixture]
     public class ClusterSnapshotTests
@@ -37,21 +38,13 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test()
         {
-            var resource = _container.Resolve<ISnapshotFactory>().Snapshot<RmqCluster>();
-            
-//            resource.RegisterObserver(new DefaultClusterSnapshotConsoleLogger());
+            var resource = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<RmqCluster>()
+                .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
+                .Execute();
 
-            resource.Execute();
-
-            var snapshot = resource.Snapshots[0].Select(x => x.Data);
-            
-            Console.WriteLine($"Cluster: {snapshot.ClusterName}");
-
-//            var snapshot = Client
-//                .Snapshot<RmqCluster>()
-//                .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
-//                .Take()
-//                .Select(x => x.Data);
+//            var snapshot = resource.Snapshots[0].Select(x => x.Data);
+//            Console.WriteLine($"Cluster: {snapshot.ClusterName}");
         }
     }
 }
