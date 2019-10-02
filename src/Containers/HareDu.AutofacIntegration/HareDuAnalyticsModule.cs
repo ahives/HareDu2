@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.AutofacIntegration
 {
+    using Analytics;
     using Autofac;
     using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
@@ -20,7 +21,7 @@ namespace HareDu.AutofacIntegration
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Scanning;
 
-    public class HareDuDiagnosticsModule :
+    public class HareDuAnalyticsModule :
         Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -40,6 +41,21 @@ namespace HareDu.AutofacIntegration
                     return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, analyzerRegistrar.Analyzers);
                 })
                 .As<IComponentDiagnosticFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var registrar = x.Resolve<IDiagnosticReportAnalyzerRegistrar>();
+                    
+                    registrar.RegisterAll();
+                    
+                    return new DiagnosticReportAnalyzerFactory(registrar.Analyzers);
+                })
+                .As<IDiagnosticReportAnalyzerFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticReportAnalyzerRegistrar>()
+                .As<IDiagnosticReportAnalyzerRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<ComponentDiagnosticRegistrar>()

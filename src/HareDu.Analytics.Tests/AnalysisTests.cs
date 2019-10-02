@@ -11,17 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Analytics.Tests
 {
     using System;
-    using System.Linq;
-    using Analysis;
     using Autofac;
     using AutofacIntegration;
+    using Diagnostics.Scanning;
     using Fakes;
-    using NUnit.Framework;
-    using Scanning;
     using Snapshotting.Model;
+    using NUnit.Framework;
 
     [TestFixture]
     public class AnalysisTests
@@ -33,7 +31,7 @@ namespace HareDu.Diagnostics.Tests
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<HareDuDiagnosticsModule>();
+            builder.RegisterModule<HareDuAnalyticsModule>();
             
             _container = builder.Build();
         }
@@ -41,7 +39,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Test1()
         {
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
 
             var summary = _container.Resolve<IDiagnosticScanner>()
@@ -61,7 +59,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Test2()
         {
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             
             var report = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);

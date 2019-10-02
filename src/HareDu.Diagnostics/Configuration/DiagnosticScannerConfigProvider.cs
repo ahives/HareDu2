@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Configuration
                 .Build();
 
 //            string path = "/Users/albert/Documents/Git/HareDu2/src/HareDu.Diagnostics.Tests/scanner.yaml";
-            string path = "../scanner.yaml";
+            string path = $"{Directory.GetCurrentDirectory()}/scanner.yaml";
 
             if (!File.Exists(path))
             {

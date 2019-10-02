@@ -18,7 +18,8 @@ namespace HareDu.Configuration
     using Core.Configuration;
     using Core.Extensions;
 
-    public class BrokerClientConfigProvider : IBrokerClientConfigProvider
+    public class BrokerClientConfigProvider :
+        IBrokerClientConfigProvider
     {
         public HareDuClientSettings Init(Action<ClientConfigProvider> configuration)
         {

@@ -11,16 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests.Fakes
+namespace HareDu.Analytics.Tests.Fakes
 {
     using System.Collections.Generic;
     using System.Linq;
     using Snapshotting.Model;
 
-    public class FakeBrokerConnectivitySnapshot3 :
+    public class FakeBrokerConnectivitySnapshot1 :
         BrokerConnectivitySnapshot
     {
-        public FakeBrokerConnectivitySnapshot3()
+        public FakeBrokerConnectivitySnapshot1()
         {
             Connections = GetConnections().ToList();
             ChannelsClosed = new ChurnMetricsImpl(79, 5.5M);
