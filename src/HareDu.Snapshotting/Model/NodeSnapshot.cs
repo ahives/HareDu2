@@ -46,7 +46,7 @@ namespace HareDu.Snapshotting.Model
         
         BrokerRuntimeSnapshot Runtime { get; }
         
-        Mnesia Mnesia { get; }
+        RuntimeDatabase RuntimeDatabase { get; }
         
         MemorySnapshot Memory { get; }
 

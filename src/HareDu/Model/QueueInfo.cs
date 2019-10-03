@@ -128,7 +128,7 @@ namespace HareDu.Model
         DateTimeOffset IdleSince { get; }
         
         [JsonProperty("memory")]
-        long Memory { get; }
+        ulong Memory { get; }
         
         [JsonProperty("message_stats")]
         QueueMessageStats MessageStats { get; }

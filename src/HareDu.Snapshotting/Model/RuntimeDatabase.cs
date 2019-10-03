@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface Mnesia
+    public interface RuntimeDatabase
     {
         TransactionDetails Transactions { get; }
         

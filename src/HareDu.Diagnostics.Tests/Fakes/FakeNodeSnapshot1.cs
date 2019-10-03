@@ -38,7 +38,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public DiskSnapshot Disk { get; }
         public IO IO { get; }
         public BrokerRuntimeSnapshot Runtime { get; }
-        public Mnesia Mnesia { get; }
+        public RuntimeDatabase RuntimeDatabase { get; }
         public MemorySnapshot Memory { get; }
         public GarbageCollection GC { get; }
         public ContextSwitchingDetails ContextSwitching { get; }

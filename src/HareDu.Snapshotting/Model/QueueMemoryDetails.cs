@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting.Model
         /// <summary>
         /// 
         /// </summary>
-        long Total { get; }
+        ulong Total { get; }
         
         PagedOut PagedOut { get; }
         
@@ -26,12 +26,5 @@ namespace HareDu.Snapshotting.Model
         /// 
         /// </summary>
         RAM RAM { get; }
-    }
-
-    public interface PagedOut
-    {
-        ulong Total { get; }
-        
-        ulong Bytes { get; }
     }
 }

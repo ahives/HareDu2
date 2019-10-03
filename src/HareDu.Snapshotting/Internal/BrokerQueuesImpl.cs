@@ -141,7 +141,7 @@ namespace HareDu.Snapshotting.Internal
                         PagedOut = new PagedOutImpl(queue.TotalMessagesPagedOut, queue.TotalMessageBytesPagedOut);
                     }
 
-                    public long Total { get; }
+                    public ulong Total { get; }
                     public PagedOut PagedOut { get; }
                     public RAM RAM { get; }
 

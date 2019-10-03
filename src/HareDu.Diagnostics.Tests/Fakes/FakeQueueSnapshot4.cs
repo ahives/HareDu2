@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 PagedOut = new PagedOutImpl(total);
             }
 
-            public long Total { get; }
+            public ulong Total { get; }
             public PagedOut PagedOut { get; }
             public RAM RAM { get; }
 

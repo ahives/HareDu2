@@ -126,6 +126,7 @@ namespace HareDu.Snapshotting.Internal
                     NetworkPartitions = node.Partitions;
                     AvailableCoresDetected = node.AvailableCoresDetected;
                     Memory = new MemorySnapshotImpl(node);
+                    RuntimeDatabase = new RuntimeDatabaseImpl(node);
                 }
 
                 public OperatingSystemSnapshot OS { get; }
@@ -142,10 +143,95 @@ namespace HareDu.Snapshotting.Internal
                 public DiskSnapshot Disk { get; }
                 public IO IO { get; }
                 public BrokerRuntimeSnapshot Runtime { get; }
-                public Mnesia Mnesia { get; }
+                public RuntimeDatabase RuntimeDatabase { get; }
                 public MemorySnapshot Memory { get; }
                 public GarbageCollection GC { get; }
                 public ContextSwitchingDetails ContextSwitching { get; }
+
+                
+                class RuntimeDatabaseImpl :
+                    RuntimeDatabase
+                {
+                    public RuntimeDatabaseImpl(NodeInfo node)
+                    {
+                        Transactions = new TransactionDetailsImpl(node);
+                        Index = new IndexDetailsImpl(node);
+                    }
+
+                    public TransactionDetails Transactions { get; }
+                    public IndexDetails Index { get; }
+                    public StorageDetails Storage { get; }
+
+                    
+                    class IndexDetailsImpl :
+                        IndexDetails
+                    {
+                        public IndexDetailsImpl(NodeInfo node)
+                        {
+                            Reads = new IndexUsageDetailsImpl(node.TotalQueueIndexReads, node.QueueIndexReadCountDetails?.Rate ?? 0);
+                            Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexWrites, node.QueueIndexWriteCountDetails?.Rate ?? 0);
+                            Journal = new JournalDetailsImpl(node);
+                        }
+
+                        public IndexUsageDetails Reads { get; }
+                        public IndexUsageDetails Writes { get; }
+                        public JournalDetails Journal { get; }
+
+                        
+                        class JournalDetailsImpl :
+                            JournalDetails
+                        {
+                            public JournalDetailsImpl(NodeInfo node)
+                            {
+                                Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexJournalWrites, node.QueueIndexJournalWriteCountDetails?.Rate ?? 0);
+                            }
+
+                            public IndexUsageDetails Writes { get; }
+                        }
+
+                        
+                        class IndexUsageDetailsImpl :
+                            IndexUsageDetails
+                        {
+                            public IndexUsageDetailsImpl(ulong total, decimal rate)
+                            {
+                                Total = total;
+                                Rate = rate;
+                            }
+
+                            public ulong Total { get; }
+                            public decimal Rate { get; }
+                        }
+                    }
+
+                    
+                    class TransactionDetailsImpl :
+                        TransactionDetails
+                    {
+                        public TransactionDetailsImpl(NodeInfo node)
+                        {
+                            RAM = new PersistenceDetailsImpl(node.TotalMnesiaRamTransactions, node.MnesiaRAMTransactionCountDetails?.Rate ?? 0);
+                            Disk = new PersistenceDetailsImpl(node.TotalMnesiaDiskTransactions, node.MnesiaDiskTransactionCountDetails?.Rate ?? 0);
+                        }
+
+                        public PersistenceDetails RAM { get; }
+                        public PersistenceDetails Disk { get; }
+
+                        
+                        class PersistenceDetailsImpl :
+                            PersistenceDetails
+                        {
+                            public PersistenceDetailsImpl(ulong total, decimal rate)
+                            {
+                                Total = total;
+                                Rate = rate;
+                            }
+
+                            public ulong Total { get; }
+                            public decimal Rate { get; }
+                        }
+                    }
+                }
 
                 
                 class MemorySnapshotImpl :

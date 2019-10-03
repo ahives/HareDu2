@@ -217,7 +217,7 @@ namespace HareDu.Model
         IOReopenCountDetails RateOfIOReopened { get; }
 
         [JsonProperty("mnesia_ram_tx_count")]
-        ulong MnesiaRamTransactions { get; }
+        ulong TotalMnesiaRamTransactions { get; }
 
         [JsonProperty("mnesia_ram_tx_count_details")]
         MnesiaRAMTransactionCountDetails MnesiaRAMTransactionCountDetails { get; }
@@ -244,7 +244,7 @@ namespace HareDu.Model
         ulong TotalQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_journal_write_count_details")]
-        QueueIndexJournalWriteCountDetails RateOfQueueIndexJournalWrites { get; }
+        QueueIndexJournalWriteCountDetails QueueIndexJournalWriteCountDetails { get; }
 
         [JsonProperty("queue_index_write_count")]
         ulong TotalQueueIndexWrites { get; }
@@ -256,7 +256,7 @@ namespace HareDu.Model
         ulong TotalQueueIndexReads { get; }
 
         [JsonProperty("queue_index_read_count_details")]
-        QueueIndexReadCountDetails RateOfQueueIndexReads { get; }
+        QueueIndexReadCountDetails QueueIndexReadCountDetails { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count")]
         ulong TotalOpenFileHandleAttempts { get; }

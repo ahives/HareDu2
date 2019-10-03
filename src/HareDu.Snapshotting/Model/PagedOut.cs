@@ -13,10 +13,10 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface IndexUsageDetails
+    public interface PagedOut
     {
         ulong Total { get; }
-
-        decimal Rate { get; }
+        
+        ulong Bytes { get; }
     }
 }
