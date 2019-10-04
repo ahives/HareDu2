@@ -13,17 +13,12 @@
 // limitations under the License.
 namespace HareDu.Analytics.Analyzers
 {
-    using System;
     using System.Collections.Generic;
     using Diagnostics;
 
     public class NoOpDiagnosticReportAnalyzer :
         IDiagnosticReportAnalyzer
     {
-        public bool IsSupported(IEnumerable<string> identifiers) => false;
-        
-        public bool IsSupported(string identifier) => false;
-
-        public IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report) => throw new NotImplementedException();
+        public IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report) => AnalyticsCache.EmptyAnalyzerSummary;
     }
 }

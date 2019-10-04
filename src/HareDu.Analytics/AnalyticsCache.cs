@@ -10,18 +10,12 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Analytics
 {
     using System.Collections.Generic;
-    using Snapshotting;
 
-    public class DoNothingDiagnostic<T> :
-        IComponentDiagnostic<T>
-        where T : Snapshot
+    public static class AnalyticsCache
     {
-        public string Identifier => GetType().GetIdentifier();
-
-        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => DiagnosticCache.EmptyDiagnosticResults;
+        public static readonly IReadOnlyList<AnalyzerSummary> EmptyAnalyzerSummary = new List<AnalyzerSummary>();
     }
 }

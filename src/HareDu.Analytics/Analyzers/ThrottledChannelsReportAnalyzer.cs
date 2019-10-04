@@ -17,7 +17,7 @@ namespace HareDu.Analytics.Analyzers
     using Diagnostics;
     using Diagnostics.Analyzers;
 
-    public class ConnectionReportAnalyzer :
+    public class ThrottledChannelsReportAnalyzer :
         BaseAnalyzeDiagnosticReport,
         IDiagnosticReportAnalyzer
     {

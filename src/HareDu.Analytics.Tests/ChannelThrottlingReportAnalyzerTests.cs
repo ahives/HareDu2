@@ -14,8 +14,10 @@
 namespace HareDu.Analytics.Tests
 {
     using System;
+    using Analyzers;
     using Autofac;
     using AutofacIntegration;
+    using Diagnostics;
     using Diagnostics.Scanning;
     using Fakes;
     using Snapshotting.Model;
@@ -44,15 +46,19 @@ namespace HareDu.Analytics.Tests
 
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
-                .Analyze(factory);
+                .Analyze(factory, typeof(ThrottledChannelsReportAnalyzer).GetIdentifier());
             
             for (int i = 0; i < summary.Count; i++)
             {
-                Console.WriteLine(summary[i].Identifier);
-                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
-                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
-                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
-                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
+                Assert.AreEqual(30.0, summary[i].Green.Percentage);
+                Assert.AreEqual(70.0, summary[i].Red.Percentage);
+                Assert.AreEqual(0.0, summary[i].Yellow.Percentage);
+                Assert.AreEqual(0.0, summary[i].Inconclusive.Percentage);
+//                Console.WriteLine(summary[i].Identifier);
+//                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
+//                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
+//                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+//                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
             }
         }
         

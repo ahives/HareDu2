@@ -11,19 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Diagnostics.Scanning
 {
-    using System;
     using System.Collections.Generic;
+    using Snapshotting;
 
-    public interface IDiagnosticReportAnalyzerRegistrar
+    public class NoOpDiagnostic<T> :
+        IComponentDiagnostic<T>
+        where T : Snapshot
     {
-//        IReadOnlyList<IDiagnosticReportAnalyzer> Analyzers { get; }
-        
-        IDictionary<string, IDiagnosticReportAnalyzer> Cache { get; }
-        
-        void RegisterAll();
+        public string Identifier => GetType().GetIdentifier();
 
-        void Register(Type type);
+        public IReadOnlyList<DiagnosticResult> Scan(T snapshot) => DiagnosticCache.EmptyDiagnosticResults;
     }
 }

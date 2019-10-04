@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Scanning
 
             if (type == null)
             {
-                diagnostic = new DoNothingDiagnostic<T>();
+                diagnostic = new NoOpDiagnostic<T>();
                 return false;
             }
 
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Scanning
                 return true;
             }
             
-            diagnostic = new DoNothingDiagnostic<T>();
+            diagnostic = new NoOpDiagnostic<T>();
             return false;
         }
 

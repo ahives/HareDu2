@@ -14,8 +14,11 @@
 namespace HareDu.Analytics.Tests
 {
     using System;
+    using Analyzers;
     using Autofac;
     using AutofacIntegration;
+    using Diagnostics;
+    using Diagnostics.Analyzers;
     using Diagnostics.Scanning;
     using Fakes;
     using NUnit.Framework;
@@ -44,7 +47,7 @@ namespace HareDu.Analytics.Tests
 
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
-                .Analyze(factory);
+                .Analyze(factory, typeof(QueueNoFlowReportAnalyzer).GetIdentifier());
             
             for (int i = 0; i < summary.Count; i++)
             {

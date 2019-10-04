@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = scanner.Scan(snapshot);
             
             Assert.AreEqual(DiagnosticCache.EmptyDiagnosticReport, report);
-            Assert.AreEqual(typeof(DoNothingDiagnostic<EmptySnapshot>).GetIdentifier(), report.ScannerIdentifier);
+            Assert.AreEqual(typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier(), report.ScannerIdentifier);
         }
 
         
@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
                 where T : Snapshot
             {
-                diagnostic = new DoNothingDiagnostic<T>();
+                diagnostic = new NoOpDiagnostic<T>();
                 return false;
             }
 

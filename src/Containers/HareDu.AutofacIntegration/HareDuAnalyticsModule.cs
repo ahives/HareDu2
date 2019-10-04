@@ -49,7 +49,7 @@ namespace HareDu.AutofacIntegration
                     
                     registrar.RegisterAll();
                     
-                    return new DiagnosticReportAnalyzerFactory(registrar.Analyzers);
+                    return new DiagnosticReportAnalyzerFactory(registrar.Cache);
                 })
                 .As<IDiagnosticReportAnalyzerFactory>()
                 .SingleInstance();

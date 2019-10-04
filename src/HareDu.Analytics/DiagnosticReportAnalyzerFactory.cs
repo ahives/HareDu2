@@ -14,17 +14,16 @@
 namespace HareDu.Analytics
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Analyzers;
 
     public class DiagnosticReportAnalyzerFactory :
         IDiagnosticReportAnalyzerFactory
     {
-        readonly IReadOnlyList<IDiagnosticReportAnalyzer> _analyzers;
+        readonly IDictionary<string, IDiagnosticReportAnalyzer> _cache;
 
-        public DiagnosticReportAnalyzerFactory(IReadOnlyList<IDiagnosticReportAnalyzer> analyzers)
+        public DiagnosticReportAnalyzerFactory(IDictionary<string, IDiagnosticReportAnalyzer> cache)
         {
-            _analyzers = analyzers;
+            _cache = cache;
         }
 
         public bool TryGet(string identifier, out IDiagnosticReportAnalyzer analyzer)
@@ -35,9 +34,11 @@ namespace HareDu.Analytics
                 return false;
             }
 
-            analyzer = _analyzers.FirstOrDefault(x => x.IsSupported(identifier));
-            if (analyzer != null)
+            if (_cache.ContainsKey(identifier))
+            {
+                analyzer = _cache[identifier];
                 return true;
+            }
             
             analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
             return false;

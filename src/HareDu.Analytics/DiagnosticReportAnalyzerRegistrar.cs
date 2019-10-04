@@ -16,18 +16,19 @@ namespace HareDu.Analytics
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Diagnostics;
 
     public class DiagnosticReportAnalyzerRegistrar :
         IDiagnosticReportAnalyzerRegistrar
     {
         readonly List<Type> _types;
-        readonly List<IDiagnosticReportAnalyzer> _analyzers;
+        readonly IDictionary<string, IDiagnosticReportAnalyzer> _cache;
 
-        public IReadOnlyList<IDiagnosticReportAnalyzer> Analyzers => _analyzers;
-        
+        public IDictionary<string, IDiagnosticReportAnalyzer> Cache => _cache;
+
         public DiagnosticReportAnalyzerRegistrar()
         {
-            _analyzers = new List<IDiagnosticReportAnalyzer>();
+            _cache = new Dictionary<string, IDiagnosticReportAnalyzer>();
             _types = GetTypes();
         }
 
@@ -52,7 +53,7 @@ namespace HareDu.Analytics
             {
                 var instance = (IDiagnosticReportAnalyzer)Activator.CreateInstance(type);
             
-                _analyzers.Add(instance);
+                _cache.Add(type.GetIdentifier(), instance);
             }
             catch { }
         }

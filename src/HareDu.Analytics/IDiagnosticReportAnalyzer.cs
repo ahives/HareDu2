@@ -18,9 +18,9 @@ namespace HareDu.Analytics
 
     public interface IDiagnosticReportAnalyzer
     {
-        bool IsSupported(IEnumerable<string> identifiers);
-        
-        bool IsSupported(string identifier);
+//        bool IsSupported(IEnumerable<string> identifiers);
+//        
+//        bool IsSupported(string identifier);
 
         IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report);
     }

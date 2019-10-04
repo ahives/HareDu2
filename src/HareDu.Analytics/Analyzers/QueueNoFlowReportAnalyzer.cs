@@ -24,6 +24,7 @@ namespace HareDu.Analytics.Analyzers
         protected override IEnumerable<string> GetSupportedDiagnosticAnalyzers()
         {
             yield return typeof(QueueNoFlowAnalyzer).GetIdentifier();
+//            yield return typeof(QueueLowFlowAnalyzer).GetIdentifier();
         }
     }
 }

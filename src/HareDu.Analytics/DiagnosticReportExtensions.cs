@@ -14,38 +14,27 @@
 namespace HareDu.Analytics
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Diagnostics;
 
     public static class DiagnosticReportExtensions
     {
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report,
-            IDiagnosticReportAnalyzerFactory factory)
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory, string identifier)
         {
-            var results = report.Results
-                .Select(x => x.AnalyzerIdentifier)
-                .Distinct(new IdentifierComparer())
-                .ToList();
-
             var summary = new List<AnalyzerSummary>();
             
-            for (int i = 0; i < results.Count; i++)
-            {
-                if (factory.TryGet(results[i], out var analyzer))
-                    summary.AddRange(analyzer.Analyze(report));
-            }
+            if (factory.TryGet(identifier, out var analyzer))
+                summary.AddRange(analyzer.Analyze(report));
 
             return summary;
         }
 
-
-        class IdentifierComparer :
-            IEqualityComparer<string>
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzer analyzer)
         {
-            public bool Equals(string x, string y)
-                => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrWhiteSpace(y) && x == y;
+            var summary = new List<AnalyzerSummary>();
+            
+            summary.AddRange(analyzer.Analyze(report));
 
-            public int GetHashCode(string obj) => obj.GetHashCode();
+            return summary;
         }
     }
 }

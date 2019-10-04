@@ -50,10 +50,6 @@ namespace HareDu.Analytics.Analyzers
             return summary;
         }
 
-        public virtual bool IsSupported(IEnumerable<string> identifiers) => identifiers.Any(x => _supportedAnalyzers.Contains(x));
-        
-        public virtual bool IsSupported(string identifier) => _supportedAnalyzers.Any(x => x == identifier);
-
         protected abstract IEnumerable<string> GetSupportedDiagnosticAnalyzers();
 
         protected virtual IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results)
@@ -73,7 +69,8 @@ namespace HareDu.Analytics.Analyzers
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 
-        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticResult> results, Func<DiagnosticResult, string> rollupKey)
+        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticResult> results,
+            Func<DiagnosticResult, string> rollupKey)
         {
             var rollup = new Dictionary<string, List<DiagnosticStatus>>();
             

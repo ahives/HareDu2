@@ -82,7 +82,7 @@ namespace HareDu.Diagnostics.Tests
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
             
             Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
-            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).GetIdentifier(), diagnostic.Identifier);
+            Assert.AreEqual(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier(), diagnostic.Identifier);
         }
 
         [Test]
