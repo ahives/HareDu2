@@ -43,60 +43,60 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_sensor_red_condition_1()
+        public void Verify_analyzer_red_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(3, 2);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(ChannelLimitReachedAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_red_condition_2()
+        public void Verify_analyzer_red_condition_2()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(3, 3);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(ChannelLimitReachedAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(2, 3);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(ChannelLimitReachedAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

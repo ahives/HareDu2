@@ -22,7 +22,7 @@ namespace HareDu.Analytics.Tests
     using NUnit.Framework;
 
     [TestFixture]
-    public class AnalysisTests
+    public class ChannelThrottlingReportAnalyzerTests
     {
         IContainer _container;
 

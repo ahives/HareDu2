@@ -42,61 +42,61 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             _container = builder.Build();
         }
 
-        [Test(Description = "")]
-        public void Verify_sensor_yellow_condition()
+        [Test]
+        public void Verify_analyzer_yellow_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot3(0.5M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(ConsumerUtilizationAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
-        [Test(Description = "")]
-        public void Verify_sensor_red_condition()
+        [Test]
+        public void Verify_analyzer_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot3(0.4M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(ConsumerUtilizationAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot3(1.0M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(ConsumerUtilizationAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

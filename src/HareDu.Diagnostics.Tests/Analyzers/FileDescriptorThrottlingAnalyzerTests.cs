@@ -42,76 +42,76 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_sensor_yellow_condition()
+        public void Verify_analyzer_yellow_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 90);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_red_condition()
+        public void Verify_analyzer_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 100);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 60);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }
 
         [Test]
-        public void Verify_sensor_offline()
+        public void Verify_analyzer_offline()
         {
             var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,sensor.Status);
+            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
         }
 
         

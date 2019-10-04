@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Snapshotting.Model;
 
     [TestFixture]
-    public class MessagePagingAnalyzerTests
+    public class QueueNoFlowAnalyzerTests
     {
         IContainer _container;
 
@@ -47,14 +47,14 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueNoFlowAnalyzer(configProvider, knowledgeBaseProvider);
 
-            QueueSnapshot snapshot = new FakeQueueSnapshot4(3);
+            QueueSnapshot snapshot = new FakeQueueSnapshot5(0);
 
             var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(MessagePagingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(QueueNoFlowAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -62,14 +62,14 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueNoFlowAnalyzer(configProvider, knowledgeBaseProvider);
             
-            QueueSnapshot snapshot = new FakeQueueSnapshot4(0);
+            QueueSnapshot snapshot = new FakeQueueSnapshot5(1);
 
             var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(MessagePagingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            Assert.AreEqual(typeof(QueueNoFlowAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueNoFlowAnalyzer(configProvider, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = null;
 

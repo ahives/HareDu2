@@ -20,17 +20,17 @@ namespace HareDu.Diagnostics.Analyzers
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class AvailableCpuCoresAnalyzer :
+    public class QueueNoFlowAnalyzer :
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Node;
+        public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public AvailableCpuCoresAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public QueueNoFlowAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
             _status = DiagnosticAnalyzerStatus.Online;
@@ -38,8 +38,8 @@ namespace HareDu.Diagnostics.Analyzers
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
+            QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticResult result;
-            NodeSnapshot data = snapshot as NodeSnapshot;
             
             if (data.IsNull())
             {
@@ -49,37 +49,27 @@ namespace HareDu.Diagnostics.Analyzers
 
                 return result;
             }
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
-                new DiagnosticAnalyzerDataImpl("AvailableCoresDetected", data.AvailableCoresDetected.ToString())
+                new DiagnosticAnalyzerDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString())
             };
-
-            if (data.AvailableCoresDetected <= 0)
+            
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
+            if (data.Messages.Incoming.Total == 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.ClusterIdentifier,
-                    data.Identifier,
-                    Identifier,
-                    ComponentType,
-                    analyzerData,
-                    knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.NodeIdentifier, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.ClusterIdentifier,
-                    data.Identifier,
-                    Identifier,
-                    ComponentType,
-                    analyzerData,
-                    knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.NodeIdentifier, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);
-                
+
             return result;
         }
     }

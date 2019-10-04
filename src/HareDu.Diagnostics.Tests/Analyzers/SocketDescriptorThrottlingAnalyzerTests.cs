@@ -43,76 +43,76 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_sensor_yellow_condition()
+        public void Verify_analyzer_yellow_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 9, 4.2M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
-        public void Verify_sensor_red_condition()
+        public void Verify_analyzer_red_condition()
         {
             var configProvider = new DefaultConfigProvider1();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 10, 4.2M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }
 
         [Test]
-        public void Verify_sensor_offline()
+        public void Verify_analyzer_offline()
         {
             var configProvider = new DefaultConfigProvider2();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,sensor.Status);
+            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
         }
 
         
@@ -146,8 +146,10 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                         SocketUsageCoefficient = 1.0M;
                     }
 
-                    public int HighClosureRateWarningThreshold { get; }
-                    public int HighCreationRateWarningThreshold { get; }
+                    public uint HighClosureRateWarningThreshold { get; }
+                    public uint HighCreationRateWarningThreshold { get; }
+                    public uint QueueHighFlowThreshold { get; }
+                    public uint QueueLowFlowThreshold { get; }
                     public decimal MessageRedeliveryCoefficient { get; }
                     public decimal SocketUsageCoefficient { get; }
                     public decimal RuntimeProcessUsageCoefficient { get; }

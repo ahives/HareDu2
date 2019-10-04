@@ -41,7 +41,10 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 new MessagePagingAnalyzer(configProvider, knowledgeBaseProvider),
                 new RedeliveredMessagesAnalyzer(configProvider, knowledgeBaseProvider),
                 new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider),
-                new UnroutableMessageAnalyzer(configProvider, knowledgeBaseProvider)
+                new UnroutableMessageAnalyzer(configProvider, knowledgeBaseProvider),
+                new QueueLowFlowAnalyzer(configProvider, knowledgeBaseProvider),
+                new QueueNoFlowAnalyzer(configProvider, knowledgeBaseProvider),
+                new QueueHighFlowAnalyzer(configProvider, knowledgeBaseProvider)
             };
         }
 
@@ -53,12 +56,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new BrokerQueuesDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.AreEqual(5, report.Count);
+            Assert.AreEqual(8, report.Count);
             Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GetIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GetIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()));
             Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()));
+            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()));
         }
 
         [Test]

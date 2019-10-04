@@ -43,45 +43,45 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_sensor_yellow_condition()
+        public void Verify_analyzer_yellow_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot1(103283, 8734.5M, 823983, 8423.5M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(QueueGrowthAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot1(103283, 8423.5M, 823983, 8734.5M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(QueueGrowthAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

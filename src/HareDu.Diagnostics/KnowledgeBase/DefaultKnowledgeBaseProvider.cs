@@ -22,6 +22,16 @@ namespace HareDu.Diagnostics.KnowledgeBase
         {
             _articles.Add(new KnowledgeBaseArticleImpl<MessagePagingAnalyzer>(DiagnosticStatus.Red, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<MessagePagingAnalyzer>(DiagnosticStatus.Green, ""));
+
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueNoFlowAnalyzer>(DiagnosticStatus.Red,
+                "There are no messages being published to the queue", ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueNoFlowAnalyzer>(DiagnosticStatus.Green, ""));
+            
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueHighFlowAnalyzer>(DiagnosticStatus.Red, "", ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueHighFlowAnalyzer>(DiagnosticStatus.Green, ""));
+            
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueLowFlowAnalyzer>(DiagnosticStatus.Red, "", ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueLowFlowAnalyzer>(DiagnosticStatus.Green, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<UnroutableMessageAnalyzer>(DiagnosticStatus.Red,
                 "Some messages were published to an exchange but there is no queue bound to the exchange.",

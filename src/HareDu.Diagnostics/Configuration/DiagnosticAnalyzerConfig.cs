@@ -18,10 +18,16 @@ namespace HareDu.Diagnostics.Configuration
     public interface DiagnosticAnalyzerConfig
     {
         [YamlMember(Alias = "high-closure-rate-warning-threshold")]
-        int HighClosureRateWarningThreshold { get; }
+        uint HighClosureRateWarningThreshold { get; }
         
         [YamlMember(Alias = "high-creation-rate-warning-threshold")]
-        int HighCreationRateWarningThreshold { get; }
+        uint HighCreationRateWarningThreshold { get; }
+        
+        [YamlMember(Alias = "queue-high-flow-threshold")]
+        uint QueueHighFlowThreshold { get; }
+        
+        [YamlMember(Alias = "queue-low-flow-threshold")]
+        uint QueueLowFlowThreshold { get; }
         
         [YamlMember(Alias = "message-redelivery-coefficient")]
         decimal MessageRedeliveryCoefficient { get; }

@@ -43,76 +43,76 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_sensor_yellow_condition_1()
+        public void Verify_analyzer_yellow_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(102, 100);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(HighConnectionCreationRateAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_yellow_condition_2()
+        public void Verify_analyzer_yellow_condition_2()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(100, 100);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(HighConnectionCreationRateAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(HighConnectionCreationRateAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_1()
+        public void Verify_analyzer_inconclusive_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }
 
         [Test]
-        public void Verify_sensor_offline()
+        public void Verify_analyzer_offline()
         {
             var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,sensor.Status);
+            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
         }
 
         

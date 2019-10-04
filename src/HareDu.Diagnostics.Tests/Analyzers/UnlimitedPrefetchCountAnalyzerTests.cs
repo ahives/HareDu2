@@ -43,45 +43,45 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test(Description = "")]
-        public void Verify_sensor_yellow_condition()
+        public void Verify_analyzer_yellow_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(0);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
             Assert.AreEqual(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_1()
+        public void Verify_analyzer_inconclusive_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(5);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
             Assert.AreEqual(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition_2()
+        public void Verify_analyzer_inconclusive_condition_2()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

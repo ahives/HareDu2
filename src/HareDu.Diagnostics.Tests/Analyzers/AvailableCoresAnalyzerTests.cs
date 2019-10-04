@@ -43,45 +43,45 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_sensor_red_condition()
+        public void Verify_analyzer_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot3(0);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(AvailableCpuCoresAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot3(5);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(AvailableCpuCoresAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

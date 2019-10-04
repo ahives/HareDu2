@@ -69,7 +69,7 @@ namespace HareDu.Analytics.Analyzers
         {
             decimal totalCount = Convert.ToDecimal(results.Count);
             decimal statusCount = Convert.ToDecimal(results.Count(x => x == status));
-
+            
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 

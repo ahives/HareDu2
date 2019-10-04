@@ -43,60 +43,60 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test(Description = "")]
-        public void Verify_sensor_red_condition_1()
+        public void Verify_analyzer_red_condition_1()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
 
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 3, 3.2M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test(Description = "")]
-        public void Verify_sensor_red_condition_2()
+        public void Verify_analyzer_red_condition_2()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
 
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 4, 3.2M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Red,result.Status);
             Assert.AreEqual(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_analyzer_green_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3.2M);
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
 
         [Test]
-        public void Verify_sensor_inconclusive_condition()
+        public void Verify_analyzer_inconclusive_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
             
             BrokerRuntimeSnapshot snapshot = null;
 
-            var result = sensor.Execute(snapshot);
+            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
         }

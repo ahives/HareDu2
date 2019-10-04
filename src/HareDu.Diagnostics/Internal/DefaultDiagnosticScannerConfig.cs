@@ -39,10 +39,14 @@ namespace HareDu.Diagnostics.Internal
                 RuntimeProcessUsageCoefficient = 0.7M;
                 FileDescriptorUsageWarningCoefficient = 0.7M;
                 ConsumerUtilizationWarningCoefficient = 0.5M;
+                QueueLowFlowThreshold = 20;
+                QueueHighFlowThreshold = 100;
             }
 
-            public int HighClosureRateWarningThreshold { get; }
-            public int HighCreationRateWarningThreshold { get; }
+            public uint HighClosureRateWarningThreshold { get; }
+            public uint HighCreationRateWarningThreshold { get; }
+            public uint QueueHighFlowThreshold { get; }
+            public uint QueueLowFlowThreshold { get; }
             public decimal MessageRedeliveryCoefficient { get; }
             public decimal SocketUsageCoefficient { get; }
             public decimal RuntimeProcessUsageCoefficient { get; }

@@ -20,26 +20,26 @@ namespace HareDu.Diagnostics.Analyzers
     using KnowledgeBase;
     using Snapshotting.Model;
 
-    public class AvailableCpuCoresAnalyzer :
+    public class QueueLowFlowAnalyzer :
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Node;
+        public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public AvailableCpuCoresAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public QueueLowFlowAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(configProvider, knowledgeBaseProvider)
         {
-            _status = DiagnosticAnalyzerStatus.Online;
+            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
         {
+            QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticResult result;
-            NodeSnapshot data = snapshot as NodeSnapshot;
             
             if (data.IsNull())
             {
@@ -49,37 +49,28 @@ namespace HareDu.Diagnostics.Analyzers
 
                 return result;
             }
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
-                new DiagnosticAnalyzerDataImpl("AvailableCoresDetected", data.AvailableCoresDetected.ToString())
+                new DiagnosticAnalyzerDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
+                new DiagnosticAnalyzerDataImpl("QueueLowFlowThreshold", _config.Analyzer.QueueLowFlowThreshold.ToString())
             };
-
-            if (data.AvailableCoresDetected <= 0)
+            
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
+            if (data.Messages.Incoming.Total <= _config.Analyzer.QueueLowFlowThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.ClusterIdentifier,
-                    data.Identifier,
-                    Identifier,
-                    ComponentType,
-                    analyzerData,
-                    knowledgeBaseArticle);
+                result = new NegativeDiagnosticResult(data.NodeIdentifier, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.ClusterIdentifier,
-                    data.Identifier,
-                    Identifier,
-                    ComponentType,
-                    analyzerData,
-                    knowledgeBaseArticle);
+                result = new PositiveDiagnosticResult(data.NodeIdentifier, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);
-                
+
             return result;
         }
     }

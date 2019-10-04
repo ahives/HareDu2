@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             _container = builder.Build();
         }
 
-        [Test(Description = "")]
+        [Test]
         public void Verify_sensor_red_condition()
         {
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
