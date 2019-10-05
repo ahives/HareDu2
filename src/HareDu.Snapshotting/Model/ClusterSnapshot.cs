@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting.Model
     public interface ClusterSnapshot :
         Snapshot
     {
-        string RabbitMqVersion { get; }
+        string BrokerVersion { get; }
         
         string ClusterName { get; }
         

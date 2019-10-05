@@ -13,9 +13,9 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Fakes
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Snapshotting;
     using Snapshotting.Model;
 
     public class FakeBrokerConnectivitySnapshot1 :
@@ -28,6 +28,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
             ConnectionsClosed = new ChurnMetricsImpl(174000, 100);
         }
 
+        public Guid SnapshotIdentifier { get; }
+        public DateTimeOffset Timestamp { get; }
         public ChurnMetrics ChannelsClosed { get; }
         public ChurnMetrics ChannelsCreated { get; }
         public ChurnMetrics ConnectionsClosed { get; }

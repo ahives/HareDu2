@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             yield return new FakeNodeSnapshot();
         }
 
-        public string RabbitMqVersion { get; }
+        public string BrokerVersion { get; }
         public string ClusterName { get; }
         public IReadOnlyList<NodeSnapshot> Nodes { get; }
 

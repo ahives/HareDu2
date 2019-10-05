@@ -63,6 +63,8 @@ namespace HareDu.Analytics.Tests.Fakes
             yield return new FakeQueueSnapshot1(0, 5);
         }
 
+        public Guid SnapshotIdentifier { get; }
+        public DateTimeOffset Timestamp { get; }
         public string ClusterIdentifier { get; }
         public BrokerQueueChurnMetrics Churn { get; }
         public IReadOnlyList<QueueSnapshot> Queues { get; }
@@ -74,7 +76,7 @@ namespace HareDu.Analytics.Tests.Fakes
             public FakeQueueSnapshot1(ulong total, int number)
             {
                 Identifier = $"Queue{number}";
-                NodeIdentifier = "Node0";
+                Node = "Node0";
                 Messages = new QueueChurnMetricsImpl(total);
                 Memory = new QueueMemoryDetailsImpl(total);
             }
@@ -105,7 +107,7 @@ namespace HareDu.Analytics.Tests.Fakes
 
             public string Identifier { get; }
             public string VirtualHost { get; }
-            public string NodeIdentifier { get; }
+            public string Node { get; }
             public QueueChurnMetrics Messages { get; }
             public QueueMemoryDetails Memory { get; }
             public QueueInternals Internals { get; }

@@ -16,7 +16,6 @@ namespace HareDu.Snapshotting
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
     using Model;
 
     public class SnapshotFactory :

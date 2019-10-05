@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public string Identifier { get; }
         public string VirtualHost { get; }
-        public string NodeIdentifier { get; }
+        public string Node { get; }
         public QueueChurnMetrics Messages { get; }
         public QueueMemoryDetails Memory { get; }
         public QueueInternals Internals { get; }

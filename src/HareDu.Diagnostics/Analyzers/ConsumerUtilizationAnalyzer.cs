@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.ConsumerUtilization >= _config.Analyzer.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.NodeIdentifier,
+                result = new WarningDiagnosticResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -71,7 +71,7 @@ namespace HareDu.Diagnostics.Analyzers
             else if (data.ConsumerUtilization < _config.Analyzer.ConsumerUtilizationWarningCoefficient)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.NodeIdentifier,
+                result = new NegativeDiagnosticResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -81,7 +81,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.NodeIdentifier,
+                result = new PositiveDiagnosticResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,

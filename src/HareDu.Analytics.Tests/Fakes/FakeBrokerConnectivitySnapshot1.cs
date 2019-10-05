@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Analytics.Tests.Fakes
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Snapshotting.Model;
@@ -36,6 +37,8 @@ namespace HareDu.Analytics.Tests.Fakes
             yield return new ConnectionSnapshotImpl("Connection (3)");
         }
 
+        public Guid SnapshotIdentifier { get; }
+        public DateTimeOffset Timestamp { get; }
         public ChurnMetrics ChannelsClosed { get; }
         public ChurnMetrics ChannelsCreated { get; }
         public ChurnMetrics ConnectionsClosed { get; }

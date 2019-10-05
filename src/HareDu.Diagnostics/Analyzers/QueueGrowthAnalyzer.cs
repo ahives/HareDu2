@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.Messages.Incoming.Rate > data.Messages.Acknowledged.Rate)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.NodeIdentifier,
+                result = new WarningDiagnosticResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -71,7 +71,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.NodeIdentifier,
+                result = new PositiveDiagnosticResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,

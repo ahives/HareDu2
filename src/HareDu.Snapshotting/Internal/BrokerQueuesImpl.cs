@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using HareDu.Model;
@@ -112,7 +111,7 @@ namespace HareDu.Snapshotting.Internal
                 {
                     Identifier = queue.Name;
                     VirtualHost = queue.VirtualHost;
-                    NodeIdentifier = queue.Node;
+                    Node = queue.Node;
                     Messages = new QueueChurnMetricsImpl(queue);
                     Memory = new QueueMemoryDetailsImpl(queue);
                     Consumers = queue.Consumers;
@@ -122,7 +121,7 @@ namespace HareDu.Snapshotting.Internal
 
                 public string Identifier { get; }
                 public string VirtualHost { get; }
-                public string NodeIdentifier { get; }
+                public string Node { get; }
                 public QueueChurnMetrics Messages { get; }
                 public QueueMemoryDetails Memory { get; }
                 public QueueInternals Internals { get; }

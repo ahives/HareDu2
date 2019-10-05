@@ -92,9 +92,8 @@ namespace HareDu.Snapshotting.Internal
             public ClusterSnapshotImpl(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes)
             {
                 ClusterName = cluster.ClusterName;
-                RabbitMqVersion = cluster.RabbitMqVersion;
+                BrokerVersion = cluster.RabbitMqVersion;
                 Nodes = GetNodes(cluster, nodes);
-                Timestamp = DateTimeOffset.Now;
             }
 
             IReadOnlyList<NodeSnapshot> GetNodes(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes)
@@ -105,10 +104,9 @@ namespace HareDu.Snapshotting.Internal
                     .ToList();
             }
 
-            public string RabbitMqVersion { get; }
+            public string BrokerVersion { get; }
             public string ClusterName { get; }
             public IReadOnlyList<NodeSnapshot> Nodes { get; }
-            public DateTimeOffset Timestamp { get; }
 
 
             class NodeSnapshotImpl :

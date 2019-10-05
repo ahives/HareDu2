@@ -30,7 +30,7 @@ namespace HareDu.Snapshotting.Model
         /// <summary>
         /// Name of the physical node the queue is on.
         /// </summary>
-        string NodeIdentifier { get; }
+        string Node { get; }
         
         /// <summary>
         /// 
