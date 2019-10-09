@@ -15,27 +15,33 @@ namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
-    using Core;
-    using Model;
+    using MassTransit;
 
     abstract class BaseSnapshot<T> :
         IObservable<SnapshotContext<T>>
         where T : Snapshot
     {
         protected readonly IBrokerObjectFactory _factory;
+        protected readonly List<SnapshotContext<T>> _snapshots;
+        
         readonly List<IObserver<SnapshotContext<T>>> _observers;
 
         protected BaseSnapshot(IBrokerObjectFactory factory)
         {
             _factory = factory;
             _observers = new List<IObserver<SnapshotContext<T>>>();
+            _snapshots = new List<SnapshotContext<T>>();
         }
 
         protected virtual void NotifyObservers(T snapshot)
         {
+            var context = new SnapshotContextImpl(snapshot);
+            
+            _snapshots.Add(context);
+            
             foreach (var observer in _observers)
             {
-                observer.OnNext(new SnapshotContextImpl(snapshot));
+                observer.OnNext(context);
             }
         }
 
@@ -53,6 +59,7 @@ namespace HareDu.Snapshotting.Internal
         {
             public SnapshotContextImpl(T snapshot)
             {
+                Identifier = NewId.NextGuid().ToString();
                 Snapshot = snapshot;
                 Timestamp = DateTimeOffset.Now;
             }

@@ -87,29 +87,11 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_analyzer_inconclusive_condition()
-        {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
-            
-            OperatingSystemSnapshot snapshot = null;
-
-            var result = analyzer.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-        }
-
-        [Test]
         public void Verify_analyzer_offline()
         {
             var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
-            
-            OperatingSystemSnapshot snapshot = null;
-
-            var result = analyzer.Execute(snapshot);
             
             Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
         }

@@ -86,19 +86,5 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(ConsumerUtilizationAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
-
-        [Test]
-        public void Verify_analyzer_inconclusive_condition()
-        {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider);
-            
-            QueueSnapshot snapshot = null;
-
-            var result = analyzer.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-        }
     }
 }

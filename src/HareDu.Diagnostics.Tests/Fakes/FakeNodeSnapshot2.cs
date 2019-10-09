@@ -33,7 +33,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public string ClusterIdentifier { get; }
         public string Type { get; }
         public bool IsRunning { get; }
-        public long AvailableCoresDetected { get; }
+        public ulong AvailableCoresDetected { get; }
         public IList<string> NetworkPartitions { get; }
         public DiskSnapshot Disk { get; }
         public IO IO { get; }

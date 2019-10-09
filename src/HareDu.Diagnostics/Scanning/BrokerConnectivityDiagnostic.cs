@@ -43,13 +43,25 @@ namespace HareDu.Diagnostics.Scanning
             var results = new List<DiagnosticResult>();
             
             results.AddRange(_connectivityAnalyzers.Select(x => x.Execute(snapshot)));
+
+            if (snapshot.Connections.IsNull())
+                return results;
             
             for (int i = 0; i < snapshot.Connections.Count; i++)
             {
+                if (snapshot.Connections[i].IsNull())
+                    continue;
+                
                 results.AddRange(_connectionAnalyzers.Select(x => x.Execute(snapshot.Connections[i])));
 
+                if (snapshot.Connections[i].Channels.IsNull())
+                    continue;
+                
                 for (int j = 0; j < snapshot.Connections[i].Channels.Count; j++)
                 {
+                    if (snapshot.Connections[i].Channels[j].IsNull())
+                        continue;
+                    
                     results.AddRange(_channelAnalyzers.Select(x => x.Execute(snapshot.Connections[i].Channels[j])));
                 }
             }

@@ -51,8 +51,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
             
             var scanner = _container.Resolve<IDiagnosticScanner>();
 
-            var snapshot = resource.Snapshots.First();
-            var report = scanner.Scan(snapshot.Select(x => x.Data));
+            var snapshot = resource.Snapshots.MostRecent().Snapshot;
+            var report = scanner.Scan(snapshot);
 
             var formatter = _container.Resolve<IDiagnosticReportFormatter>();
 

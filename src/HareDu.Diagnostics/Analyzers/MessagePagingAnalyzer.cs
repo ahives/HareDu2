@@ -41,15 +41,6 @@ namespace HareDu.Diagnostics.Analyzers
             QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticResult result;
             
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
-            
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("Memory.PagedOut.Total", data.Memory.PagedOut.Total.ToString())

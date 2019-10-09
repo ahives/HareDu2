@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Core;
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
@@ -28,15 +27,12 @@ namespace HareDu.Snapshotting.Internal
         BrokerConnection
     {
         readonly List<IDisposable> _observers;
-        readonly List<Result<BrokerConnectivitySnapshot>> _snapshots;
-
-        public IReadOnlyList<Result<BrokerConnectivitySnapshot>> Snapshots => _snapshots;
+        public IReadOnlyList<SnapshotContext<BrokerConnectivitySnapshot>> Snapshots => _snapshots;
 
         public BrokerConnectionImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
-            _snapshots = new List<Result<BrokerConnectivitySnapshot>>();
         }
 
         public ResourceSnapshot<BrokerConnectivitySnapshot> Execute(CancellationToken cancellationToken = default)
@@ -59,10 +55,6 @@ namespace HareDu.Snapshotting.Internal
             BrokerConnectivitySnapshot data = new BrokerConnectivitySnapshotImpl(cluster, connections, channels);
 
             NotifyObservers(data);
-            
-            var snapshot = new SuccessfulResult<BrokerConnectivitySnapshot>(data, null);
-
-            _snapshots.Add(snapshot);
 
             return this;
         }

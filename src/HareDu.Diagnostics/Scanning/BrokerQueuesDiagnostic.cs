@@ -44,7 +44,8 @@ namespace HareDu.Diagnostics.Scanning
             
             for (int i = 0; i < snapshot.Queues.Count; i++)
             {
-                results.AddRange(_queueAnalyzers.Select(x => x.Execute(snapshot.Queues[i])));
+                if (!snapshot.Queues[i].IsNull())
+                    results.AddRange(_queueAnalyzers.Select(x => x.Execute(snapshot.Queues[i])));
             }
 
             return results;

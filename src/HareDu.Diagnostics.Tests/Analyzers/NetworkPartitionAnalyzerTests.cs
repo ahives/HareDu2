@@ -77,19 +77,5 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             Assert.AreEqual(DiagnosticStatus.Green,result.Status);
             Assert.AreEqual(typeof(NetworkPartitionAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
-
-        [Test]
-        public void Verify_sensor_inconclusive_condition()
-        {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionAnalyzer(configProvider, knowledgeBaseProvider);
-            
-            NodeSnapshot snapshot = null;
-
-            var result = sensor.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-        }
     }
 }

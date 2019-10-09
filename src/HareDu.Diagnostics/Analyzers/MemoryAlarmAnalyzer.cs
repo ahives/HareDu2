@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -40,15 +39,6 @@ namespace HareDu.Diagnostics.Analyzers
         {
             MemorySnapshot data = snapshot as MemorySnapshot;
             DiagnosticResult result;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             

@@ -42,15 +42,6 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             NodeSnapshot data = snapshot as NodeSnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.OS.SocketDescriptors.Available);

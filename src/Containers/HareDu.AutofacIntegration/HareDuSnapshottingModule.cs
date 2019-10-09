@@ -17,7 +17,6 @@ namespace HareDu.AutofacIntegration
     using Configuration;
     using Core;
     using Core.Configuration;
-    using Internal;
     using Snapshotting;
 
     public class HareDuSnapshottingModule :

@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Analyzers
     using System.Collections.Generic;
     using System.Linq;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -41,23 +40,14 @@ namespace HareDu.Diagnostics.Analyzers
         {
             NodeSnapshot data = snapshot as NodeSnapshot;
             DiagnosticResult result;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
-                NotifyObservers(result);
-
-                return result;
-            }
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
-            
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("NetworkPartitions", data.NetworkPartitions.ToString())
             };
 
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.NetworkPartitions.Any())
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);

@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         }
 
         [Test]
-        public void Verify_sensors_fired()
+        public void Verify_analyzers_fired()
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             

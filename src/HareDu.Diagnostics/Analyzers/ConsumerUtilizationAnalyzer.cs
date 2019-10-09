@@ -40,24 +40,15 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
-                NotifyObservers(result);
-
-                return result;
-            }
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
-            
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("ConsumerUtilization", data.ConsumerUtilization.ToString()),
                 new DiagnosticAnalyzerDataImpl("Analyzer.ConsumerUtilizationWarningCoefficient", _config.Analyzer.ConsumerUtilizationWarningCoefficient.ToString())
             };
 
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.ConsumerUtilization >= _config.Analyzer.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);

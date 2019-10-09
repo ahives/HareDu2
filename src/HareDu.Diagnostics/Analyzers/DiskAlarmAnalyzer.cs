@@ -40,18 +40,7 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiskSnapshot data = snapshot as DiskSnapshot;
             DiagnosticResult result;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
-                NotifyObservers(result);
-
-                return result;
-            }
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
-            
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("Disk.FreeAlarm", data.AlarmInEffect.ToString()),
@@ -59,6 +48,8 @@ namespace HareDu.Diagnostics.Analyzers
                 new DiagnosticAnalyzerDataImpl("Disk.Capacity.Available", data.Capacity.Available.ToString())
             };
 
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.AlarmInEffect)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);

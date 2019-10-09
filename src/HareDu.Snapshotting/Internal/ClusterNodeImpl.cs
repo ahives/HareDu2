@@ -1,13 +1,23 @@
+// Copyright 2013-2019 Albert L. Hives
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
-    using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
-    using Extensions;
     using HareDu.Model;
     using Model;
 
@@ -16,7 +26,9 @@ namespace HareDu.Snapshotting.Internal
         ClusterNode
     {
         readonly List<IDisposable> _observers;
-        
+
+        public IReadOnlyList<SnapshotContext<NodeSnapshot>> Snapshots { get; }
+
         public ClusterNodeImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
@@ -38,8 +50,6 @@ namespace HareDu.Snapshotting.Internal
             NodeSnapshot data = new NodeSnapshotImpl(cluster, nodes);
 
             NotifyObservers(data);
-            
-            var snapshot = new SuccessfulResult<NodeSnapshot>(data, null);
 
             return this;
         }
@@ -47,7 +57,6 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<NodeSnapshot> RegisterObserver(IObserver<SnapshotContext<NodeSnapshot>> observer) => throw new NotImplementedException();
 
         public ResourceSnapshot<NodeSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<NodeSnapshot>>> observers) => throw new NotImplementedException();
-        public IReadOnlyList<Result<NodeSnapshot>> Snapshots { get; }
 
 
         class NodeSnapshotImpl :
@@ -70,7 +79,7 @@ namespace HareDu.Snapshotting.Internal
             public string ClusterIdentifier { get; }
             public string Type { get; }
             public bool IsRunning { get; }
-            public long AvailableCoresDetected { get; }
+            public ulong AvailableCoresDetected { get; }
             public IList<string> NetworkPartitions { get; }
             public DiskSnapshot Disk { get; }
             public IO IO { get; }

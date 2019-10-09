@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Core;
     using Core.Extensions;
     using HareDu.Model;
     using Model;
@@ -27,15 +26,13 @@ namespace HareDu.Snapshotting.Internal
         RmqCluster
     {
         readonly List<IDisposable> _observers;
-        readonly List<Result<ClusterSnapshot>> _snapshots;
 
-        public IReadOnlyList<Result<ClusterSnapshot>> Snapshots => _snapshots;
+        public IReadOnlyList<SnapshotContext<ClusterSnapshot>> Snapshots => _snapshots;
 
         public RmqClusterImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
-            _snapshots = new List<Result<ClusterSnapshot>>();
         }
 
         public ResourceSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
@@ -53,10 +50,6 @@ namespace HareDu.Snapshotting.Internal
             ClusterSnapshot data = new ClusterSnapshotImpl(cluster, nodes);
 
             NotifyObservers(data);
-            
-            var snapshot = new SuccessfulResult<ClusterSnapshot>(data, null);
-
-            _snapshots.Add(snapshot);
 
             return this;
         }
@@ -136,7 +129,7 @@ namespace HareDu.Snapshotting.Internal
                 public string ClusterIdentifier { get; }
                 public string Type { get; }
                 public bool IsRunning { get; }
-                public long AvailableCoresDetected { get; }
+                public ulong AvailableCoresDetected { get; }
                 public IList<string> NetworkPartitions { get; }
                 public DiskSnapshot Disk { get; }
                 public IO IO { get; }

@@ -40,15 +40,6 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             BrokerQueuesSnapshot data = snapshot as BrokerQueuesSnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             

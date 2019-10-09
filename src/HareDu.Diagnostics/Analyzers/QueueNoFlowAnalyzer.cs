@@ -41,15 +41,6 @@ namespace HareDu.Diagnostics.Analyzers
             QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticResult result;
             
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
-            
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString())

@@ -40,20 +40,12 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
 
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("ConnectionsClosed.Rate", data.ConnectionsClosed.Rate.ToString()),
-                new DiagnosticAnalyzerDataImpl("HighClosureRateThreshold", _config.Analyzer.HighClosureRateWarningThreshold.ToString())
+                new DiagnosticAnalyzerDataImpl("HighClosureRateThreshold",
+                    _config.Analyzer.HighClosureRateWarningThreshold.ToString())
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;

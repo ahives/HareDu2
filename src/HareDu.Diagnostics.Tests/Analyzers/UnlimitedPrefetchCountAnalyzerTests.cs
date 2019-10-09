@@ -71,19 +71,5 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
             Assert.AreEqual(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
         }
-
-        [Test]
-        public void Verify_analyzer_inconclusive_condition_2()
-        {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
-            
-            ChannelSnapshot snapshot = null;
-
-            var result = analyzer.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-        }
     }
 }

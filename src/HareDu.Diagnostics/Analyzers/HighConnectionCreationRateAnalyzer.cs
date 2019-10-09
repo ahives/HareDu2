@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -40,15 +39,6 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
             
             var analyzerData = new List<DiagnosticAnalyzerData>
             {

@@ -40,23 +40,14 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             NodeSnapshot data = snapshot as NodeSnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
 
-                NotifyObservers(result);
-
-                return result;
-            }
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
-            
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("AvailableCoresDetected", data.AvailableCoresDetected.ToString())
             };
 
+            KnowledgeBaseArticle knowledgeBaseArticle;
+            
             if (data.AvailableCoresDetected <= 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);

@@ -22,6 +22,7 @@ namespace HareDu.Diagnostics
         Disk,
         Memory,
         Runtime,
+        OperatingSystem,
         Exchange,
         NA
     }

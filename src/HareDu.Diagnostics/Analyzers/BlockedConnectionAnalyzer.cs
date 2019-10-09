@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -27,7 +26,7 @@ namespace HareDu.Diagnostics.Analyzers
         public string Identifier => GetType().GetIdentifier();
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
-        public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Connectivity;
+        public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
         public BlockedConnectionAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
@@ -40,15 +39,6 @@ namespace HareDu.Diagnostics.Analyzers
         {
             DiagnosticResult result;
             ConnectionSnapshot data = snapshot as ConnectionSnapshot;
-            
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
 
             var analyzerData = new List<DiagnosticAnalyzerData>
             {

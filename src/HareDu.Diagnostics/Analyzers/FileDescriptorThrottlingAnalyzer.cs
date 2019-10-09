@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Analyzers
     using System;
     using System.Collections.Generic;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -27,7 +26,7 @@ namespace HareDu.Diagnostics.Analyzers
     {
         public string Identifier => GetType().GetIdentifier();
         public string Description { get; }
-        public ComponentType ComponentType => ComponentType.Node;
+        public ComponentType ComponentType => ComponentType.OperatingSystem;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
@@ -42,15 +41,6 @@ namespace HareDu.Diagnostics.Analyzers
             DiagnosticResult result;
             OperatingSystemSnapshot data = snapshot as OperatingSystemSnapshot;
             
-            if (data.IsNull())
-            {
-                result = new InconclusiveDiagnosticResult(null, null, Identifier, ComponentType);
-
-                NotifyObservers(result);
-
-                return result;
-            }
-
             KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.FileDescriptors.Available);
 

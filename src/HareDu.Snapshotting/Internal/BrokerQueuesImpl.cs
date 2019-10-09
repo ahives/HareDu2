@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Core;
     using Core.Extensions;
     using HareDu.Model;
     using Model;
@@ -27,15 +26,13 @@ namespace HareDu.Snapshotting.Internal
         BrokerQueues
     {
         readonly List<IDisposable> _observers;
-        readonly List<Result<BrokerQueuesSnapshot>> _snapshots;
 
-        public IReadOnlyList<Result<BrokerQueuesSnapshot>> Snapshots => _snapshots;
+        public IReadOnlyList<SnapshotContext<BrokerQueuesSnapshot>> Snapshots => _snapshots;
 
         public BrokerQueuesImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
-            _snapshots = new List<Result<BrokerQueuesSnapshot>>();
         }
 
         public ResourceSnapshot<BrokerQueuesSnapshot> Execute(CancellationToken cancellationToken = default)
@@ -53,10 +50,6 @@ namespace HareDu.Snapshotting.Internal
             BrokerQueuesSnapshot data = new BrokerQueuesSnapshotImpl(cluster, queues);
 
             NotifyObservers(data);
-            
-            var snapshot = new SuccessfulResult<BrokerQueuesSnapshot>(data, null);
-
-            _snapshots.Add(snapshot);
 
             return this;
         }

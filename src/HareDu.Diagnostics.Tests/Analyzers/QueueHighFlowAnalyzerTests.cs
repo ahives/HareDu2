@@ -73,17 +73,24 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         }
 
         [Test]
-        public void Verify_analyzer_inconclusive_condition()
+        public void Verify_analyzer_offline()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var analyzer = new QueueHighFlowAnalyzer(configProvider, knowledgeBaseProvider);
             
-            QueueSnapshot snapshot = null;
+            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
+        }
 
-            var result = analyzer.Execute(snapshot);
-            
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
+        
+        class DefaultConfigProvider :
+            IDiagnosticScannerConfigProvider
+        {
+            public bool TryGet(out DiagnosticScannerConfig config)
+            {
+                config = null;
+                return false;
+            }
         }
     }
 }

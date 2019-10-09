@@ -64,6 +64,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Identifier = identifier;
                 ChannelLimit = channelLimit;
                 Channels = GetChannels().ToList();
+                State = ConnectionState.Blocked;
             }
 
             IEnumerable<ChannelSnapshot> GetChannels()

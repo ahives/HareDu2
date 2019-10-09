@@ -10,4 +10,8 @@
       <ProjectReference Include="..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="NewId" Version="3.0.2" />
+    </ItemGroup>
+
 </Project>

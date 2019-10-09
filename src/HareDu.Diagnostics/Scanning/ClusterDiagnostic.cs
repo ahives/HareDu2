@@ -28,6 +28,7 @@ namespace HareDu.Diagnostics.Scanning
         readonly IReadOnlyList<IDiagnosticAnalyzer> _diskAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _memoryAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _runtimeAnalyzers;
+        IReadOnlyList<IDiagnosticAnalyzer> _osAnalyzers;
 
         public ClusterDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
@@ -35,6 +36,7 @@ namespace HareDu.Diagnostics.Scanning
             _diskAnalyzers = analyzers.Where(IsDiskAnalyzer).ToList();
             _memoryAnalyzers = analyzers.Where(IsMemoryAnalyzer).ToList();
             _runtimeAnalyzers = analyzers.Where(IsRuntimeAnalyzer).ToList();
+            _osAnalyzers = analyzers.Where(IsOperatingSystemAnalyzer).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(ClusterSnapshot snapshot)
@@ -46,18 +48,35 @@ namespace HareDu.Diagnostics.Scanning
 
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {
+                if (snapshot.Nodes[i].IsNull())
+                    continue;
+                
                 results.AddRange(_nodeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i])));
-                results.AddRange(_diskAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
-                results.AddRange(_memoryAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
-                results.AddRange(_runtimeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
+
+                if (!snapshot.Nodes[i].Disk.IsNull())
+                    results.AddRange(_diskAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
+
+                if (!snapshot.Nodes[i].Memory.IsNull())
+                    results.AddRange(_memoryAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
+
+                if (!snapshot.Nodes[i].Runtime.IsNull())
+                    results.AddRange(_runtimeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
+
+                if (!snapshot.Nodes[i].OS.IsNull())
+                    results.AddRange(_osAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].OS)));
             }
 
             return results;
         }
 
+        bool IsOperatingSystemAnalyzer(IDiagnosticAnalyzer analyzer) =>
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
+            && analyzer.ComponentType == ComponentType.OperatingSystem;
+
         bool IsRuntimeAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull() &&
-            analyzer.Status == DiagnosticAnalyzerStatus.Online
+            !analyzer.IsNull()
+            && analyzer.Status == DiagnosticAnalyzerStatus.Online
             && analyzer.ComponentType == ComponentType.Runtime;
 
         bool IsMemoryAnalyzer(IDiagnosticAnalyzer analyzer) =>

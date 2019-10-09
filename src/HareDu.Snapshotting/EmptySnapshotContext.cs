@@ -11,21 +11,28 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Model
+namespace HareDu.Snapshotting
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
+    using Model;
 
-    public interface ResourceSnapshot<out T>
+    public class EmptySnapshotContext<T> :
+        SnapshotContext<T>
         where T : Snapshot
     {
-        IReadOnlyList<SnapshotContext<T>> Snapshots { get; }
-        
-        ResourceSnapshot<T> Execute(CancellationToken cancellationToken = default);
+        public EmptySnapshotContext()
+        {
+            Timestamp = DateTimeOffset.Now;
+//            Snapshot = new MyEmptySnapshot<T>();
+        }
 
-        ResourceSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
-        
-        ResourceSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
+        public string Identifier { get; }
+        public T Snapshot { get; }
+        public DateTimeOffset Timestamp { get; }
+    }
+
+    public class MyEmptySnapshot<T> :
+        Snapshot
+    {
     }
 }

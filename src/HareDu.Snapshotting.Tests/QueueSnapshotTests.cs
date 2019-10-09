@@ -15,6 +15,7 @@ namespace HareDu.Snapshotting.Tests
 {
     using Autofac;
     using AutofacIntegration;
+    using Exporters;
     using NUnit.Framework;
     using Observers;
 
@@ -39,7 +40,10 @@ namespace HareDu.Snapshotting.Tests
             var resource = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerQueues>()
                 .RegisterObserver(new DefaultQueueSnapshotConsoleLogger())
+                .RegisterObserver(new BrokerQueuesJsonExporter())
                 .Execute();
+            
+//            resource.Snapshots.Export();
         }
     }
 }
