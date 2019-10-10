@@ -18,22 +18,24 @@ namespace HareDu.Examples
     using Quartz.Simpl;
     using Quartz.Spi;
     using Snapshotting;
+    using Snapshotting.Model;
 
-    public class CustomJobFactory :
+    public class CustomJobFactory<T> :
         SimpleJobFactory
+        where T : ResourceSnapshot<Snapshot>
     {
-        readonly ISnapshotFactory _factory;
+        readonly T _resource;
 
-        public CustomJobFactory(ISnapshotFactory factory)
+        public CustomJobFactory(T resource)
         {
-            _factory = factory;
+            _resource = resource;
         }
 
         public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             try
             {
-                return new CustomSnapshotJob(_factory);
+                return new CustomSnapshotJob<T>(_resource);
             }
             catch (Exception e)
             {

@@ -14,6 +14,7 @@
 namespace HareDu.Examples
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
@@ -21,26 +22,26 @@ namespace HareDu.Examples
     using Quartz.Impl;
     using Quartz.Logging;
     using Snapshotting;
+    using Snapshotting.Model;
 
     class Program
     {
         static async Task Main(string[] args)
         {
-            var container = GetContainer();
+            var container = GetContainer<BrokerQueues>();
             
-//            IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             IScheduler scheduler = container.Resolve<IScheduler>();
             
-            IJobDetail job = JobBuilder.Create<CustomSnapshotJob>()
+            IJobDetail job = JobBuilder.Create<CustomSnapshotJob<BrokerQueues>>()
                 .WithIdentity("myJob", "group1")
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("myTrigger", "group1")
                 .WithSimpleSchedule(x => x
-                    .WithRepeatCount(2)
-                    .WithIntervalInSeconds(10))
-                .StartNow()
+                    .WithIntervalInSeconds(5)
+                    .RepeatForever()
+                    .WithMisfireHandlingInstructionFireNow())
                 .Build();
 	  
             await scheduler.ScheduleJob(job, trigger);
@@ -49,12 +50,15 @@ namespace HareDu.Examples
 
             await scheduler.Start();
 
+            Thread.Sleep(60000);
+            
             await scheduler.Shutdown(true);
             
             Console.WriteLine("Stopped");
         }
 
-        static IContainer GetContainer()
+        static IContainer GetContainer<T>()
+            where T : ResourceSnapshot<Snapshot>
         {
             var builder = new ContainerBuilder();
 
@@ -65,7 +69,10 @@ namespace HareDu.Examples
                     var factory = new StdSchedulerFactory();
                     var scheduler = factory.GetScheduler().Result;
 
-                    scheduler.JobFactory = new CustomJobFactory(x.Resolve<ISnapshotFactory>());
+                    var resource = x.Resolve<ISnapshotFactory>()
+                        .Snapshot<T>();
+
+                    scheduler.JobFactory = new CustomJobFactory<T>(resource);
 
                     return scheduler;
                 })

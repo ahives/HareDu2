@@ -21,23 +21,23 @@ namespace HareDu.Examples
     using Snapshotting;
     using Snapshotting.Model;
 
-    public class CustomSnapshotJob :
+    public class CustomSnapshotJob<T> :
         IJob
+        where T : ResourceSnapshot<Snapshot>
     {
-        readonly ResourceSnapshot<BrokerQueuesSnapshot> _resource;
+        readonly T _resource;
 
-        public CustomSnapshotJob(ISnapshotFactory factory)
+        public CustomSnapshotJob(T resource)
         {
-            _resource = factory.Snapshot<BrokerQueues>();//.RegisterObserver(new BrokerQueuesJsonExporter());
+            _resource = resource;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            Console.WriteLine("Trigger Fired");
             _resource.Execute();
+            Console.WriteLine("Snapshot Taken");
 
             var snapshot = _resource.Snapshots.MostRecent();
-//            Console.WriteLine(_resource.Context.Snapshot.ToJsonString());
             File.WriteAllText($"/Users/albert/Documents/snapshots/snapshot_{snapshot.Identifier}.json", snapshot.ToJsonString());
         }
     }
