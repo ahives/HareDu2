@@ -132,6 +132,7 @@ namespace HareDu.Snapshotting.Internal
                     AvailableCoresDetected = node.AvailableCoresDetected;
                     Memory = new MemorySnapshotImpl(node);
                     RuntimeDatabase = new RuntimeDatabaseImpl(node);
+                    IsRunning = node.IsRunning;
                 }
 
                 public OperatingSystemSnapshot OS { get; }
