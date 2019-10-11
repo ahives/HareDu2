@@ -40,7 +40,7 @@ namespace HareDu.Analytics.Tests
         }
         
         [Test]
-        public void Test()
+        public void Test1()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
             IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
@@ -48,6 +48,66 @@ namespace HareDu.Analytics.Tests
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
                 .Analyze(factory, typeof(QueueNoFlowReportAnalyzer).GetIdentifier());
+            
+            for (int i = 0; i < summary.Count; i++)
+            {
+                Console.WriteLine(summary[i].Identifier);
+                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
+            }
+        }
+        
+        [Test]
+        public void Test2()
+        {
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
+            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+
+            var summary = _container.Resolve<IDiagnosticScanner>()
+                .Scan(snapshot)
+                .Analyze(factory, typeof(QueueNoFlowReportAnalyzer));
+            
+            for (int i = 0; i < summary.Count; i++)
+            {
+                Console.WriteLine(summary[i].Identifier);
+                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
+            }
+        }
+        
+        [Test]
+        public void Test3()
+        {
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
+            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+
+            var summary = _container.Resolve<IDiagnosticScanner>()
+                .Scan(snapshot)
+                .Analyze<QueueNoFlowReportAnalyzer>(factory);
+            
+            for (int i = 0; i < summary.Count; i++)
+            {
+                Console.WriteLine(summary[i].Identifier);
+                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
+            }
+        }
+        
+        [Test]
+        public void Test4()
+        {
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
+            IDiagnosticReportAnalyzer analyzer = new QueueNoFlowReportAnalyzer();
+            
+            var summary = _container.Resolve<IDiagnosticScanner>()
+                .Scan(snapshot)
+                .Analyze(analyzer);
             
             for (int i = 0; i < summary.Count; i++)
             {

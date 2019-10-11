@@ -13,8 +13,10 @@
 // limitations under the License.
 namespace HareDu.Analytics
 {
+    using System;
     using System.Collections.Generic;
     using Analyzers;
+    using Diagnostics;
 
     public class DiagnosticReportAnalyzerFactory :
         IDiagnosticReportAnalyzerFactory
@@ -28,6 +30,47 @@ namespace HareDu.Analytics
 
         public bool TryGet(string identifier, out IDiagnosticReportAnalyzer analyzer)
         {
+            if (string.IsNullOrWhiteSpace(identifier))
+            {
+                analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
+                return false;
+            }
+
+            if (_cache.ContainsKey(identifier))
+            {
+                analyzer = _cache[identifier];
+                return true;
+            }
+            
+            analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
+            return false;
+        }
+
+        public bool TryGet(Type type, out IDiagnosticReportAnalyzer analyzer)
+        {
+            string identifier = type.GetIdentifier();
+            
+            if (string.IsNullOrWhiteSpace(identifier))
+            {
+                analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
+                return false;
+            }
+
+            if (_cache.ContainsKey(identifier))
+            {
+                analyzer = _cache[identifier];
+                return true;
+            }
+            
+            analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;
+            return false;
+        }
+
+        public bool TryGet<T>(out IDiagnosticReportAnalyzer analyzer)
+            where T : IDiagnosticReportAnalyzer
+        {
+            string identifier = typeof(T).GetIdentifier();
+            
             if (string.IsNullOrWhiteSpace(identifier))
             {
                 analyzer = DiagnosticReportAnalyzerCache.NoOpAnalyzer;

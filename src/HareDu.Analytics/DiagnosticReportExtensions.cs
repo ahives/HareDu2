@@ -13,20 +13,16 @@
 // limitations under the License.
 namespace HareDu.Analytics
 {
+    using System;
     using System.Collections.Generic;
     using Diagnostics;
 
     public static class DiagnosticReportExtensions
     {
         public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory, string identifier)
-        {
-            var summary = new List<AnalyzerSummary>();
-            
-            if (factory.TryGet(identifier, out var analyzer))
-                summary.AddRange(analyzer.Analyze(report));
-
-            return summary;
-        }
+            => factory.TryGet(identifier, out var analyzer)
+                ? analyzer.Analyze(report)
+                : AnalyticsCache.EmptyAnalyzerSummary;
 
         public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzer analyzer)
         {
@@ -36,5 +32,16 @@ namespace HareDu.Analytics
 
             return summary;
         }
+
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory, Type type)
+            => factory.TryGet(type, out var analyzer)
+                ? analyzer.Analyze(report)
+                : AnalyticsCache.EmptyAnalyzerSummary;
+
+        public static IReadOnlyList<AnalyzerSummary> Analyze<T>(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory)
+            where T : IDiagnosticReportAnalyzer
+            => factory.TryGet<T>(out var analyzer)
+                ? analyzer.Analyze(report)
+                : AnalyticsCache.EmptyAnalyzerSummary;
     }
 }

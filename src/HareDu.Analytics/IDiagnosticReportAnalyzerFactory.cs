@@ -13,8 +13,15 @@
 // limitations under the License.
 namespace HareDu.Analytics
 {
+    using System;
+
     public interface IDiagnosticReportAnalyzerFactory
     {
         bool TryGet(string identifier, out IDiagnosticReportAnalyzer analyzer);
+        
+        bool TryGet(Type type, out IDiagnosticReportAnalyzer analyzer);
+
+        bool TryGet<T>(out IDiagnosticReportAnalyzer analyzer)
+            where T : IDiagnosticReportAnalyzer;
     }
 }
