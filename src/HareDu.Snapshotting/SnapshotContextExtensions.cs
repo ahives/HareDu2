@@ -15,11 +15,12 @@ namespace HareDu.Snapshotting
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Extensions;
 
     public static class SnapshotContextExtensions
     {
         public static SnapshotContext<T> MostRecent<T>(this IReadOnlyList<SnapshotContext<T>> snapshots)
             where T : Snapshot
-            => !snapshots.Any() ? new EmptySnapshotContext<T>() : snapshots.Last();
+            => snapshots.IsNull() || !snapshots.Any() ? new EmptySnapshotContext<T>() : snapshots.Last();
     }
 }
