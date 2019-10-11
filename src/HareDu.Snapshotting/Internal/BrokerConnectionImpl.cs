@@ -40,21 +40,42 @@ namespace HareDu.Snapshotting.Internal
             var cluster = _factory
                 .Object<Cluster>()
                 .GetDetails(cancellationToken)
-                .Select(x => x.Data);
-            
+                .Unfold();
+
+            if (cluster.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
+                return this;
+            }
+
             var connections = _factory
                 .Object<Connection>()
                 .GetAll(cancellationToken)
-                .Select(x => x.Data);
+                .Unfold();
+
+            if (connections.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve connection information."));
+                return this;
+            }
 
             var channels = _factory
                 .Object<Channel>()
                 .GetAll(cancellationToken)
-                .Select(x => x.Data);
-            
-            BrokerConnectivitySnapshot data = new BrokerConnectivitySnapshotImpl(cluster, connections, channels);
+                .Unfold();
 
-            NotifyObservers(data);
+            if (channels.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve channel information."));
+                return this;
+            }
+            
+            BrokerConnectivitySnapshot snapshot = new BrokerConnectivitySnapshotImpl(
+                cluster.Select(x => x.Data), connections.Select(x => x.Data), channels.Select(x => x.Data));
+            SnapshotContext<BrokerConnectivitySnapshot> context = new SnapshotContextImpl(snapshot);
+
+            SaveSnapshot(context);
+            NotifyObservers(context);
 
             return this;
         }

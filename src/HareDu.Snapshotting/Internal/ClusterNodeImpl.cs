@@ -47,9 +47,11 @@ namespace HareDu.Snapshotting.Internal
                 .GetAll(cancellationToken)
                 .Select(x => x.Data);
             
-            NodeSnapshot data = new NodeSnapshotImpl(cluster, nodes);
+            NodeSnapshot snapshot = new NodeSnapshotImpl(cluster, nodes);
+            SnapshotContext<NodeSnapshot> context = new SnapshotContextImpl(snapshot);
 
-            NotifyObservers(data);
+            SaveSnapshot(context);
+            NotifyObservers(context);
 
             return this;
         }

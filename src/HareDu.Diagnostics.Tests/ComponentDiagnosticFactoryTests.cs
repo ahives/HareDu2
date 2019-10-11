@@ -21,6 +21,7 @@ namespace HareDu.Diagnostics.Tests
     using Diagnostics.Configuration;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Registration;
     using Scanning;
     using Snapshotting;
     using Snapshotting.Model;
@@ -57,7 +58,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
             
@@ -77,7 +78,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_TryGet_does_not_throw()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
             
@@ -88,7 +89,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic_after_instantiation()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistrar();
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             diagnosticsRegistrar.Register<FakeDiagnostic>(_analyzers);
             

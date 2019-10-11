@@ -18,6 +18,7 @@ namespace HareDu.AutofacIntegration
     using Core;
     using Core.Configuration;
     using Snapshotting;
+    using Snapshotting.Registration;
 
     public class HareDuSnapshottingModule :
         Module
@@ -44,7 +45,7 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<ISnapshotRegistrar>();
+                    var registrar = x.Resolve<ISnapshotRegistration>();
                     var factory = x.Resolve<IBrokerObjectFactory>();
 
                     registrar.RegisterAll(factory);
@@ -54,8 +55,8 @@ namespace HareDu.AutofacIntegration
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<SnapshotRegistrar>()
-                .As<ISnapshotRegistrar>()
+            builder.RegisterType<SnapshotRegistration>()
+                .As<ISnapshotRegistration>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerObjectRegistrar>()

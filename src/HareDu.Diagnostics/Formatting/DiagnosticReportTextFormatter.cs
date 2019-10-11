@@ -44,9 +44,9 @@ namespace HareDu.Diagnostics.Formatting
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
             builder.AppendLine($"\tComponent Identifier: {result.ComponentIdentifier}");
             builder.AppendLine($"\tComponent Type: {result.ComponentType.ToString()}");
-            builder.AppendLine($"\tSensor: {result.AnalyzerIdentifier}");
+            builder.AppendLine($"\tAnalyzer: {result.AnalyzerIdentifier}");
             builder.AppendLine($"\tStatus: {result.Status.ToString()}");
-            builder.AppendLine("\tSensor Data");
+            builder.AppendLine("\tAnalyzer Data");
             
             foreach (var data in result.AnalyzerData)
             {

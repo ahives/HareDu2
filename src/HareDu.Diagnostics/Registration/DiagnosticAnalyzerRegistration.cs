@@ -11,23 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Analyzers
+namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Analyzers;
     using Configuration;
     using KnowledgeBase;
 
-    public class DiagnosticAnalyzerRegistrar :
-        IDiagnosticAnalyzerRegistrar
+    public class DiagnosticAnalyzerRegistration :
+        IDiagnosticAnalyzerRegistration
     {
         readonly List<IDiagnosticAnalyzer> _analyzers;
         readonly List<Type> _types;
 
         public IReadOnlyList<IDiagnosticAnalyzer> Analyzers => _analyzers;
 
-        public DiagnosticAnalyzerRegistrar()
+        public DiagnosticAnalyzerRegistration()
         {
             _analyzers = new List<IDiagnosticAnalyzer>();
             _types = GetTypes();

@@ -15,6 +15,7 @@ namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
+    using Core.Extensions;
     using MassTransit;
 
     abstract class BaseSnapshot<T> :
@@ -33,16 +34,26 @@ namespace HareDu.Snapshotting.Internal
             _snapshots = new List<SnapshotContext<T>>();
         }
 
-        protected virtual void NotifyObservers(T snapshot)
+        protected virtual void NotifyObservers(SnapshotContext<T> context)
         {
-            var context = new SnapshotContextImpl(snapshot);
-            
-            _snapshots.Add(context);
-            
             foreach (var observer in _observers)
             {
                 observer.OnNext(context);
             }
+        }
+
+        protected virtual void NotifyObserversOfError(HareDuSnapshotException e)
+        {
+            foreach (var observer in _observers)
+            {
+                observer.OnError(e);
+            }
+        }
+
+        protected virtual void SaveSnapshot(SnapshotContext<T> context)
+        {
+            if (!context.IsNull())
+                _snapshots.Add(context);
         }
 
         public IDisposable Subscribe(IObserver<SnapshotContext<T>> observer)
@@ -51,22 +62,6 @@ namespace HareDu.Snapshotting.Internal
                 _observers.Add(observer);
 
             return new UnsubscribeObserver(_observers, observer);
-        }
-
-        
-        class SnapshotContextImpl :
-            SnapshotContext<T>
-        {
-            public SnapshotContextImpl(T snapshot)
-            {
-                Identifier = NewId.NextGuid().ToString();
-                Snapshot = snapshot;
-                Timestamp = DateTimeOffset.Now;
-            }
-
-            public string Identifier { get; }
-            public T Snapshot { get; }
-            public DateTimeOffset Timestamp { get; }
         }
 
 
@@ -87,6 +82,22 @@ namespace HareDu.Snapshotting.Internal
                 if (_observer != null && _observers.Contains(_observer))
                     _observers.Remove(_observer);
             }
+        }
+
+
+        protected class SnapshotContextImpl :
+            SnapshotContext<T>
+        {
+            public SnapshotContextImpl(T snapshot)
+            {
+                Identifier = NewId.NextGuid().ToString();
+                Snapshot = snapshot;
+                Timestamp = DateTimeOffset.Now;
+            }
+
+            public string Identifier { get; }
+            public T Snapshot { get; }
+            public DateTimeOffset Timestamp { get; }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,15 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Extensions
+namespace HareDu.Diagnostics.Registration
 {
-    using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using Analyzers;
+    using Configuration;
+    using KnowledgeBase;
 
-    public static class TaskExtensions
+    public interface IDiagnosticAnalyzerRegistration
     {
-        public static T Unfold<T>(this Task<T> result)
-            => !result.IsCanceled && !result.IsFaulted
-                ? result.Result
-                : default;
+        IReadOnlyList<IDiagnosticAnalyzer> Analyzers { get; }
+        
+        void RegisterAll(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider);
     }
 }

@@ -11,19 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
+    using Analyzers;
 
-    public interface IDiagnosticReportAnalyzerRegistrar
+    public interface IComponentDiagnosticRegistration
     {
-//        IReadOnlyList<IDiagnosticReportAnalyzer> Analyzers { get; }
+        IReadOnlyList<Type> Types { get; }
         
-        IDictionary<string, IDiagnosticReportAnalyzer> Cache { get; }
-        
-        void RegisterAll();
+        IDictionary<string, object> Cache { get; }
 
-        void Register(Type type);
+        void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
+
+        void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
     }
 }

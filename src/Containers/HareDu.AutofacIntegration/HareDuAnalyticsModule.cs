@@ -14,11 +14,12 @@
 namespace HareDu.AutofacIntegration
 {
     using Analytics;
+    using Analytics.Registration;
     using Autofac;
-    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
+    using Diagnostics.Registration;
     using Diagnostics.Scanning;
 
     public class HareDuAnalyticsModule :
@@ -32,10 +33,10 @@ namespace HareDu.AutofacIntegration
                     
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    var analyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
+                    var analyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistration>();
                     analyzerRegistrar.RegisterAll(configProvider, knowledgeBaseProvider);
 
-                    var diagnosticsRegistrar = x.Resolve<IComponentDiagnosticRegistrar>();
+                    var diagnosticsRegistrar = x.Resolve<IComponentDiagnosticRegistration>();
                     diagnosticsRegistrar.RegisterAll(analyzerRegistrar.Analyzers);
 
                     return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, analyzerRegistrar.Analyzers);
@@ -45,7 +46,7 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IDiagnosticReportAnalyzerRegistrar>();
+                    var registrar = x.Resolve<IAnalyticsRegistration>();
                     
                     registrar.RegisterAll();
                     
@@ -54,16 +55,16 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticReportAnalyzerFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticReportAnalyzerRegistrar>()
-                .As<IDiagnosticReportAnalyzerRegistrar>()
+            builder.RegisterType<AnalyticsRegistration>()
+                .As<IAnalyticsRegistration>()
                 .SingleInstance();
 
-            builder.RegisterType<ComponentDiagnosticRegistrar>()
-                .As<IComponentDiagnosticRegistrar>()
+            builder.RegisterType<ComponentDiagnosticRegistration>()
+                .As<IComponentDiagnosticRegistration>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticAnalyzerRegistrar>()
-                .As<IDiagnosticAnalyzerRegistrar>()
+            builder.RegisterType<DiagnosticAnalyzerRegistration>()
+                .As<IDiagnosticAnalyzerRegistration>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()

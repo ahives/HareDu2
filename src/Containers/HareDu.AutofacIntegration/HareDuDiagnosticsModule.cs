@@ -14,10 +14,10 @@
 namespace HareDu.AutofacIntegration
 {
     using Autofac;
-    using Diagnostics.Analyzers;
     using Diagnostics.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
+    using Diagnostics.Registration;
     using Diagnostics.Scanning;
 
     public class HareDuDiagnosticsModule :
@@ -31,10 +31,10 @@ namespace HareDu.AutofacIntegration
                     
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    var analyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
+                    var analyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistration>();
                     analyzerRegistrar.RegisterAll(configProvider, knowledgeBaseProvider);
 
-                    var diagnosticsRegistrar = x.Resolve<IComponentDiagnosticRegistrar>();
+                    var diagnosticsRegistrar = x.Resolve<IComponentDiagnosticRegistration>();
                     diagnosticsRegistrar.RegisterAll(analyzerRegistrar.Analyzers);
 
                     return new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, analyzerRegistrar.Analyzers);
@@ -42,12 +42,12 @@ namespace HareDu.AutofacIntegration
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<ComponentDiagnosticRegistrar>()
-                .As<IComponentDiagnosticRegistrar>()
+            builder.RegisterType<ComponentDiagnosticRegistration>()
+                .As<IComponentDiagnosticRegistration>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticAnalyzerRegistrar>()
-                .As<IDiagnosticAnalyzerRegistrar>()
+            builder.RegisterType<DiagnosticAnalyzerRegistration>()
+                .As<IDiagnosticAnalyzerRegistration>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()

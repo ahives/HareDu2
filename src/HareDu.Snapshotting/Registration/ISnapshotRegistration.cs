@@ -11,19 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Analyzers
+namespace HareDu.Snapshotting.Registration
 {
-    using System;
     using System.Collections.Generic;
 
-    public interface IComponentDiagnosticRegistrar
+    public interface ISnapshotRegistration
     {
-        IReadOnlyList<Type> Types { get; }
-        
         IDictionary<string, object> Cache { get; }
 
-        void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
-
-        void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
+        void RegisterAll(IBrokerObjectFactory factory);
     }
 }

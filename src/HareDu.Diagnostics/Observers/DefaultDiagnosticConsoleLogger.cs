@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Observers
 
         public void OnError(Exception error)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(error.Message);
         }
 
         public void OnNext(DiagnosticAnalyzerContext value)

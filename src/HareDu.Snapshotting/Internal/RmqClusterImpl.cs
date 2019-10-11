@@ -40,16 +40,30 @@ namespace HareDu.Snapshotting.Internal
             var cluster = _factory
                 .Object<Cluster>()
                 .GetDetails(cancellationToken)
-                .Select(x => x.Data);
+                .Unfold();
+
+            if (cluster.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
+                return this;
+            }
 
             var nodes = _factory
                 .Object<Node>()
                 .GetAll(cancellationToken)
-                .Select(x => x.Data);
-            
-            ClusterSnapshot data = new ClusterSnapshotImpl(cluster, nodes);
+                .Unfold();
 
-            NotifyObservers(data);
+            if (nodes.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve node information."));
+                return this;
+            }
+            
+            ClusterSnapshot snapshot = new ClusterSnapshotImpl(cluster.Select(x => x.Data), nodes.Select(x => x.Data));
+            SnapshotContext<ClusterSnapshot> context = new SnapshotContextImpl(snapshot);
+
+            SaveSnapshot(context);
+            NotifyObservers(context);
 
             return this;
         }

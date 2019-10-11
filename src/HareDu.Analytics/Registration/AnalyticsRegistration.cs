@@ -11,22 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Analytics.Registration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Diagnostics;
 
-    public class DiagnosticReportAnalyzerRegistrar :
-        IDiagnosticReportAnalyzerRegistrar
+    public class AnalyticsRegistration :
+        IAnalyticsRegistration
     {
         readonly List<Type> _types;
         readonly IDictionary<string, IDiagnosticReportAnalyzer> _cache;
 
         public IDictionary<string, IDiagnosticReportAnalyzer> Cache => _cache;
 
-        public DiagnosticReportAnalyzerRegistrar()
+        public AnalyticsRegistration()
         {
             _cache = new Dictionary<string, IDiagnosticReportAnalyzer>();
             _types = GetTypes();

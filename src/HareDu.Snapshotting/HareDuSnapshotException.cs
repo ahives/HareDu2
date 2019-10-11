@@ -11,16 +11,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Analyzers
+namespace HareDu.Snapshotting
 {
-    using System.Collections.Generic;
-    using Configuration;
-    using KnowledgeBase;
+    using System;
+    using System.Runtime.Serialization;
 
-    public interface IDiagnosticAnalyzerRegistrar
+    public class HareDuSnapshotException :
+        Exception
     {
-        IReadOnlyList<IDiagnosticAnalyzer> Analyzers { get; }
-        
-        void RegisterAll(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider);
+        public HareDuSnapshotException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public HareDuSnapshotException(string message)
+            : base(message)
+        {
+        }
+
+        public HareDuSnapshotException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

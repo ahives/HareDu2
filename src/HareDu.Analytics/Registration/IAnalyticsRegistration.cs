@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,15 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Extensions
+namespace HareDu.Analytics.Registration
 {
-    using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
 
-    public static class TaskExtensions
+    public interface IAnalyticsRegistration
     {
-        public static T Unfold<T>(this Task<T> result)
-            => !result.IsCanceled && !result.IsFaulted
-                ? result.Result
-                : default;
+        IDictionary<string, IDiagnosticReportAnalyzer> Cache { get; }
+        
+        void RegisterAll();
+
+        void Register(Type type);
     }
 }
