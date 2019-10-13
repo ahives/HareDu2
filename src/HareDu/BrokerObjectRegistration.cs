@@ -19,14 +19,14 @@ namespace HareDu
     using System.Net.Http;
     using Core;
 
-    public class BrokerObjectRegistrar :
-        IBrokerObjectRegistrar
+    public class BrokerObjectRegistration :
+        IBrokerObjectRegistration
     {
         readonly IDictionary<string, object> _cache;
 
         public IDictionary<string, object> Cache => _cache;
 
-        public BrokerObjectRegistrar()
+        public BrokerObjectRegistration()
         {
             _cache = new Dictionary<string, object>();
         }

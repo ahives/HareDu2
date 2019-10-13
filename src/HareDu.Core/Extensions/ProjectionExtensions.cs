@@ -75,30 +75,30 @@ namespace HareDu.Core.Extensions
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="projection"></param>
+        /// <param name="projector"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source, Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projection)
+        public static IReadOnlyList<T> Select<T>(this Result<IReadOnlyList<T>> source, Func<Result<IReadOnlyList<T>>, IReadOnlyList<T>> projector)
         {
-            if (source.IsNull() || !source.HasData || projection.IsNull())
+            if (source.IsNull() || !source.HasData || projector.IsNull())
                 return Array.Empty<T>();
 
-            return source.HasData ? projection(source) : new List<T>();
+            return source.HasData ? projector(source) : new List<T>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="projection"></param>
+        /// <param name="projector"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IReadOnlyList<T> Select<T>(this ResultList<T> source, Func<ResultList<T>, IReadOnlyList<T>> projection)
+        public static IReadOnlyList<T> Select<T>(this ResultList<T> source, Func<ResultList<T>, IReadOnlyList<T>> projector)
         {
-            if (source.IsNull() || !source.HasData || projection.IsNull())
+            if (source.IsNull() || !source.HasData || projector.IsNull())
                 return Array.Empty<T>();
 
-            return source.HasData ? projection(source) : new List<T>();
+            return source.HasData ? projector(source) : new List<T>();
         }
     }
 }

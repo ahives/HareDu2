@@ -122,122 +122,33 @@ namespace HareDu.Snapshotting.Internal
                 public NodeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
                 {
                     Identifier = node.Name;
+                    Uptime = node.Uptime;
                     ClusterIdentifier = cluster.ClusterName;
                     OS = new OperatingSystemSnapshotImpl(node);
                     Runtime = new BrokerRuntimeSnapshotImpl(cluster, node);
                     IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
                     Disk = new DiskSnapshotImpl(node);
-                    NetworkPartitions = node.Partitions;
+                    NetworkPartitions = node.Partitions.ToList();
                     AvailableCoresDetected = node.AvailableCoresDetected;
                     Memory = new MemorySnapshotImpl(node);
-                    RuntimeDatabase = new RuntimeDatabaseImpl(node);
                     IsRunning = node.IsRunning;
                 }
 
                 public OperatingSystemSnapshot OS { get; }
                 public string RatesMode { get; }
                 public long Uptime { get; }
-                public int RunQueue { get; }
-                public long InterNodeHeartbeat { get; }
                 public string Identifier { get; }
                 public string ClusterIdentifier { get; }
                 public string Type { get; }
                 public bool IsRunning { get; }
                 public ulong AvailableCoresDetected { get; }
-                public IList<string> NetworkPartitions { get; }
+                public IReadOnlyList<string> NetworkPartitions { get; }
                 public DiskSnapshot Disk { get; }
                 public IO IO { get; }
                 public BrokerRuntimeSnapshot Runtime { get; }
-                public RuntimeDatabase RuntimeDatabase { get; }
                 public MemorySnapshot Memory { get; }
-                public GarbageCollection GC { get; }
                 public ContextSwitchingDetails ContextSwitching { get; }
-
-                
-                class RuntimeDatabaseImpl :
-                    RuntimeDatabase
-                {
-                    public RuntimeDatabaseImpl(NodeInfo node)
-                    {
-                        Transactions = new TransactionDetailsImpl(node);
-                        Index = new IndexDetailsImpl(node);
-                    }
-
-                    public TransactionDetails Transactions { get; }
-                    public IndexDetails Index { get; }
-                    public StorageDetails Storage { get; }
-
-                    
-                    class IndexDetailsImpl :
-                        IndexDetails
-                    {
-                        public IndexDetailsImpl(NodeInfo node)
-                        {
-                            Reads = new IndexUsageDetailsImpl(node.TotalQueueIndexReads, node.QueueIndexReadCountDetails?.Rate ?? 0);
-                            Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexWrites, node.QueueIndexWriteCountDetails?.Rate ?? 0);
-                            Journal = new JournalDetailsImpl(node);
-                        }
-
-                        public IndexUsageDetails Reads { get; }
-                        public IndexUsageDetails Writes { get; }
-                        public JournalDetails Journal { get; }
-
-                        
-                        class JournalDetailsImpl :
-                            JournalDetails
-                        {
-                            public JournalDetailsImpl(NodeInfo node)
-                            {
-                                Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexJournalWrites, node.QueueIndexJournalWriteCountDetails?.Rate ?? 0);
-                            }
-
-                            public IndexUsageDetails Writes { get; }
-                        }
-
-                        
-                        class IndexUsageDetailsImpl :
-                            IndexUsageDetails
-                        {
-                            public IndexUsageDetailsImpl(ulong total, decimal rate)
-                            {
-                                Total = total;
-                                Rate = rate;
-                            }
-
-                            public ulong Total { get; }
-                            public decimal Rate { get; }
-                        }
-                    }
-
-                    
-                    class TransactionDetailsImpl :
-                        TransactionDetails
-                    {
-                        public TransactionDetailsImpl(NodeInfo node)
-                        {
-                            RAM = new PersistenceDetailsImpl(node.TotalMnesiaRamTransactions, node.MnesiaRAMTransactionCountDetails?.Rate ?? 0);
-                            Disk = new PersistenceDetailsImpl(node.TotalMnesiaDiskTransactions, node.MnesiaDiskTransactionCountDetails?.Rate ?? 0);
-                        }
-
-                        public PersistenceDetails RAM { get; }
-                        public PersistenceDetails Disk { get; }
-
-                        
-                        class PersistenceDetailsImpl :
-                            PersistenceDetails
-                        {
-                            public PersistenceDetailsImpl(ulong total, decimal rate)
-                            {
-                                Total = total;
-                                Rate = rate;
-                            }
-
-                            public ulong Total { get; }
-                            public decimal Rate { get; }
-                        }
-                    }
-                }
 
                 
                 class MemorySnapshotImpl :
@@ -315,12 +226,135 @@ namespace HareDu.Snapshotting.Internal
                         Identifier = node.Name;
                         Version = cluster.ErlangVersion;
                         Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
+                        Database = new RuntimeDatabaseImpl(node);
                     }
 
                     public string Identifier { get; }
                     public string ClusterIdentifier { get; }
                     public string Version { get; }
                     public RuntimeProcessChurnMetrics Processes { get; }
+                    public RuntimeDatabase Database { get; }
+
+
+                    class RuntimeDatabaseImpl :
+                        RuntimeDatabase
+                    {
+                        public RuntimeDatabaseImpl(NodeInfo node)
+                        {
+                            Transactions = new TransactionDetailsImpl(node);
+                            Index = new IndexDetailsImpl(node);
+                            Storage = new StorageDetailsImpl(node);
+                        }
+
+                        public TransactionDetails Transactions { get; }
+                        public IndexDetails Index { get; }
+                        public StorageDetails Storage { get; }
+
+
+                        class StorageDetailsImpl :
+                            StorageDetails
+                        {
+                            public StorageDetailsImpl(NodeInfo node)
+                            {
+                                Reads = new MessageStoreDetailsImpl(node.TotalMessageStoreReads,
+                                    node.MessageStoreReadCountDetails?.Rate ?? 0);
+                                Writes = new MessageStoreDetailsImpl(node.TotalMessageStoreWrites,
+                                    node.MessageStoreWriteCountDetails?.Rate ?? 0);
+                            }
+
+                            public MessageStoreDetails Reads { get; }
+                            public MessageStoreDetails Writes { get; }
+
+
+                            class MessageStoreDetailsImpl :
+                                MessageStoreDetails
+                            {
+                                public MessageStoreDetailsImpl(ulong total, decimal rate)
+                                {
+                                    Total = total;
+                                    Rate = rate;
+                                }
+
+                                public ulong Total { get; }
+                                public decimal Rate { get; }
+                            }
+                        }
+
+
+                        class IndexDetailsImpl :
+                            IndexDetails
+                        {
+                            public IndexDetailsImpl(NodeInfo node)
+                            {
+                                Reads = new IndexUsageDetailsImpl(node.TotalQueueIndexReads,
+                                    node.QueueIndexReadCountDetails?.Rate ?? 0);
+                                Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexWrites,
+                                    node.QueueIndexWriteCountDetails?.Rate ?? 0);
+                                Journal = new JournalDetailsImpl(node);
+                            }
+
+                            public IndexUsageDetails Reads { get; }
+                            public IndexUsageDetails Writes { get; }
+                            public JournalDetails Journal { get; }
+
+
+                            class JournalDetailsImpl :
+                                JournalDetails
+                            {
+                                public JournalDetailsImpl(NodeInfo node)
+                                {
+                                    Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexJournalWrites,
+                                        node.QueueIndexJournalWriteCountDetails?.Rate ?? 0);
+                                }
+
+                                public IndexUsageDetails Writes { get; }
+                            }
+
+
+                            class IndexUsageDetailsImpl :
+                                IndexUsageDetails
+                            {
+                                public IndexUsageDetailsImpl(ulong total, decimal rate)
+                                {
+                                    Total = total;
+                                    Rate = rate;
+                                }
+
+                                public ulong Total { get; }
+                                public decimal Rate { get; }
+                            }
+                        }
+
+
+                        class TransactionDetailsImpl :
+                            TransactionDetails
+                        {
+                            public TransactionDetailsImpl(NodeInfo node)
+                            {
+                                RAM = new PersistenceDetailsImpl(node.TotalMnesiaRamTransactions,
+                                    node.MnesiaRAMTransactionCountDetails?.Rate ?? 0);
+                                Disk = new PersistenceDetailsImpl(node.TotalMnesiaDiskTransactions,
+                                    node.MnesiaDiskTransactionCountDetails?.Rate ?? 0);
+                            }
+
+                            public PersistenceDetails RAM { get; }
+                            public PersistenceDetails Disk { get; }
+
+
+                            class PersistenceDetailsImpl :
+                                PersistenceDetails
+                            {
+                                public PersistenceDetailsImpl(ulong total, decimal rate)
+                                {
+                                    Total = total;
+                                    Rate = rate;
+                                }
+
+                                public ulong Total { get; }
+                                public decimal Rate { get; }
+                            }
+                        }
+                    }
 
 
                     class RuntimeProcessChurnMetricsImpl :

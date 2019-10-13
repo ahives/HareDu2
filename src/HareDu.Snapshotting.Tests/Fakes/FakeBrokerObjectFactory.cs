@@ -11,19 +11,24 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Model
+namespace HareDu.Snapshotting.Tests.Fakes
 {
-    public interface BrokerRuntimeSnapshot :
-        Snapshot
-    {
-        string Identifier { get; }
-        
-        string ClusterIdentifier { get; }
-        
-        string Version { get; }
+    using Core;
 
-        RuntimeProcessChurnMetrics Processes { get; }
-        
-        RuntimeDatabase Database { get; }
+    public class FakeBrokerObjectFactory :
+        IBrokerObjectFactory
+    {
+        public T Object<T>()
+            where T : BrokerObject
+        {
+            Cluster obj = new FakeClusterObject();
+            
+            return (T)obj;
+        }
+
+        public void CancelPendingRequest()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

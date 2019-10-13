@@ -50,7 +50,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_analyzers_fired()
         {
-            ClusterSnapshot snapshot = new FakeClusterSnapshotSnapshot1();
+            ClusterSnapshot snapshot = new FakeClusterSnapshot1();
             
             var report = new ClusterDiagnostic(_analyzers)
                 .Scan(snapshot);

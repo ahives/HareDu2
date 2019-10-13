@@ -24,10 +24,6 @@ namespace HareDu.Snapshotting.Model
 
         long Uptime { get; }
 
-        int RunQueue { get; }
-
-        long InterNodeHeartbeat { get; }
-
         string Identifier { get; }
         
         string ClusterIdentifier { get; }
@@ -38,7 +34,7 @@ namespace HareDu.Snapshotting.Model
         
         ulong AvailableCoresDetected { get; }
 
-        IList<string> NetworkPartitions { get; }
+        IReadOnlyList<string> NetworkPartitions { get; }
         
         DiskSnapshot Disk { get; }
         
@@ -46,11 +42,7 @@ namespace HareDu.Snapshotting.Model
         
         BrokerRuntimeSnapshot Runtime { get; }
         
-        RuntimeDatabase RuntimeDatabase { get; }
-        
         MemorySnapshot Memory { get; }
-
-        GarbageCollection GC { get; }
 
         ContextSwitchingDetails ContextSwitching { get; }
     }

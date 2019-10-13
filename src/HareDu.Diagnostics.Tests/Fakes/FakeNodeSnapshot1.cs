@@ -34,7 +34,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public string Type { get; }
         public bool IsRunning { get; }
         public ulong AvailableCoresDetected { get; }
-        public IList<string> NetworkPartitions { get; }
+        public IReadOnlyList<string> NetworkPartitions { get; }
         public DiskSnapshot Disk { get; }
         public IO IO { get; }
         public BrokerRuntimeSnapshot Runtime { get; }

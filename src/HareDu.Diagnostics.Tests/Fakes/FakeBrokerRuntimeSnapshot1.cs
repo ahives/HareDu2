@@ -27,8 +27,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public string ClusterIdentifier { get; }
         public string Version { get; }
         public RuntimeProcessChurnMetrics Processes { get; }
+        public RuntimeDatabase Database { get; }
 
-        
+
         class RuntimeProcessChurnMetricsImpl :
             RuntimeProcessChurnMetrics
         {

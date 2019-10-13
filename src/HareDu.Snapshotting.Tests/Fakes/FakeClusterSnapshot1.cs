@@ -11,16 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests.Fakes
+namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Snapshotting.Model;
+    using Model;
 
-    public class FakeClusterSnapshotSnapshot1 :
+    public class FakeClusterSnapshot1 :
         ClusterSnapshot
     {
-        public FakeClusterSnapshotSnapshot1()
+        public FakeClusterSnapshot1()
         {
             Nodes = GetNodes().ToList();
         }
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public string Type { get; }
             public bool IsRunning { get; }
             public ulong AvailableCoresDetected { get; }
-            public IList<string> NetworkPartitions { get; }
+            public IReadOnlyList<string> NetworkPartitions { get; }
             public DiskSnapshot Disk { get; }
             public IO IO { get; }
             public BrokerRuntimeSnapshot Runtime { get; }
@@ -156,8 +156,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public string ClusterIdentifier { get; }
             public string Version { get; }
             public RuntimeProcessChurnMetrics Processes { get; }
+            public RuntimeDatabase Database { get; }
 
-        
+
             class RuntimeProcessChurnMetricsImpl :
                 RuntimeProcessChurnMetrics
             {

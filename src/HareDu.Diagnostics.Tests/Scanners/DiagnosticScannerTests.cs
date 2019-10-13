@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_ClusterDiagnostic()
         {
-            ClusterSnapshot snapshot = new FakeClusterSnapshotSnapshot1();
+            ClusterSnapshot snapshot = new FakeClusterSnapshot1();
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             

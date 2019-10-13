@@ -27,7 +27,7 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
+                    var registration = x.Resolve<IBrokerObjectRegistration>();
                     var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
                     var brokerConnection = x.Resolve<IBrokerConnectionClient>();
 
@@ -36,21 +36,21 @@ namespace HareDu.AutofacIntegration
                     
                     var client = brokerConnection.Create(settings);
 
-                    registrar.RegisterAll(client);
+                    registration.RegisterAll(client);
 
-                    return new BrokerObjectFactory(registrar.Cache, client);
+                    return new BrokerObjectFactory(registration.Cache, client);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<ISnapshotRegistration>();
+                    var registration = x.Resolve<ISnapshotRegistration>();
                     var factory = x.Resolve<IBrokerObjectFactory>();
 
-                    registrar.RegisterAll(factory);
+                    registration.RegisterAll(factory);
 
-                    return new SnapshotFactory(factory, registrar.Cache);
+                    return new SnapshotFactory(factory, registration.Cache);
                 })
                 .As<ISnapshotFactory>()
                 .SingleInstance();
@@ -59,8 +59,8 @@ namespace HareDu.AutofacIntegration
                 .As<ISnapshotRegistration>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerObjectRegistrar>()
-                .As<IBrokerObjectRegistrar>()
+            builder.RegisterType<BrokerObjectRegistration>()
+                .As<IBrokerObjectRegistration>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConnectionClient>()

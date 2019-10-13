@@ -11,19 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Model
+namespace HareDu
 {
-    public interface BrokerRuntimeSnapshot :
-        Snapshot
-    {
-        string Identifier { get; }
-        
-        string ClusterIdentifier { get; }
-        
-        string Version { get; }
+    using System.Collections.Generic;
+    using System.Net.Http;
 
-        RuntimeProcessChurnMetrics Processes { get; }
-        
-        RuntimeDatabase Database { get; }
+    public interface IBrokerObjectRegistration
+    {
+        IDictionary<string, object> Cache { get; }
+
+        void RegisterAll(HttpClient client);
     }
 }

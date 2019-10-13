@@ -14,9 +14,11 @@
 namespace HareDu.Snapshotting.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using Model;
     using NUnit.Framework;
     using Observers;
 
@@ -38,6 +40,13 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test()
         {
+//            IDictionary<string, object> cache = new Dictionary<string, object>();
+//            cache[typeof(ResourceSnapshot<ClusterSnapshot>).FullName] =
+//            var factory = new FakeBrokerObjectFactory();
+//            var resource = new SnapshotFactory(factory, cache)
+//                .Snapshot<RmqCluster>()
+//                .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
+//                .Execute();
             var resource = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<RmqCluster>()
                 .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())

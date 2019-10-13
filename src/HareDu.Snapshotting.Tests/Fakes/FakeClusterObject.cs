@@ -11,15 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Snapshotting.Tests.Fakes
 {
-    using System.Collections.Generic;
-    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Core;
+    using HareDu.Model;
 
-    public interface IBrokerObjectRegistrar
+    public class FakeClusterObject :
+        Cluster
     {
-        IDictionary<string, object> Cache { get; }
-
-        void RegisterAll(HttpClient client);
+        public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
+        {
+            ClusterInfo data = new FakeClusterInfoImpl();
+            
+            return new SuccessfulResult<ClusterInfo>(data, null);
+        }
     }
 }
