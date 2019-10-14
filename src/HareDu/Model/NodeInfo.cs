@@ -175,7 +175,7 @@ namespace HareDu.Model
         IOWriteDetails IOWriteDetails { get; }
 
         [JsonProperty("io_write_bytes")]
-        ulong TotalIOWriteBytes { get; }
+        ulong TotalIOBytesWritten { get; }
 
         [JsonProperty("io_write_bytes_details")]
         IOWriteBytesDetail IOWriteBytesDetail { get; }

@@ -13,14 +13,13 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests
 {
-    using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
-    using Model;
+    using Fakes;
+    using HareDu.Registration;
     using NUnit.Framework;
     using Observers;
+    using Registration;
 
     [TestFixture]
     public class ClusterSnapshotTests
@@ -31,8 +30,33 @@ namespace HareDu.Snapshotting.Tests
         public void Init()
         {
             var builder = new ContainerBuilder();
+
+            builder.RegisterType<FakeSnapshotRegistration>()
+                .As<ISnapshotRegistration>()
+                .SingleInstance();
+
+            builder.RegisterType<FakeBrokerObjectRegistration>()
+                .As<IBrokerObjectRegistration>()
+                .SingleInstance();
             
-            builder.RegisterModule<HareDuSnapshottingModule>();
+            builder.Register(x =>
+                {
+                    return new FakeBrokerObjectFactory();
+                })
+                .As<IBrokerObjectFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var registration = x.Resolve<ISnapshotRegistration>();
+                    var factory = x.Resolve<IBrokerObjectFactory>();
+
+                    registration.RegisterAll(factory);
+
+                    return new SnapshotFactory(factory, registration.Cache);
+                })
+                .As<ISnapshotFactory>()
+                .SingleInstance();
 
             _container = builder.Build();
         }
@@ -40,20 +64,10 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test()
         {
-//            IDictionary<string, object> cache = new Dictionary<string, object>();
-//            cache[typeof(ResourceSnapshot<ClusterSnapshot>).FullName] =
-//            var factory = new FakeBrokerObjectFactory();
-//            var resource = new SnapshotFactory(factory, cache)
-//                .Snapshot<RmqCluster>()
-//                .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
-//                .Execute();
             var resource = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<RmqCluster>()
                 .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
                 .Execute();
-
-//            var snapshot = resource.Snapshots[0].Select(x => x.Data);
-//            Console.WriteLine($"Cluster: {snapshot.ClusterName}");
         }
     }
 }

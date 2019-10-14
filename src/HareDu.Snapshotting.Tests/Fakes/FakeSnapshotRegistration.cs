@@ -11,15 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System.Collections.Generic;
-    using System.Net.Http;
+    using Registration;
 
-    public interface IBrokerObjectRegistration
+    public class FakeSnapshotRegistration :
+        ISnapshotRegistration
     {
-        IDictionary<string, object> Cache { get; }
+        readonly IDictionary<string, object> _cache;
+        
+        public IDictionary<string, object> Cache => _cache;
+        
+        public FakeSnapshotRegistration()
+        {
+            _cache = new Dictionary<string, object>();
+        }
 
-        void RegisterAll(HttpClient client);
+        public void RegisterAll(IBrokerObjectFactory factory)
+        {
+            _cache.Add(typeof(FakeRmqCluster).FullName, new FakeRmqCluster());
+        }
     }
 }

@@ -13,34 +13,23 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Core;
+    using HareDu.Model;
 
-    public class FakeBrokerObjectFactory :
-        IBrokerObjectFactory
+    public class FakeNodeObject :
+        Node
     {
-        public T Object<T>()
-            where T : BrokerObject
+        public async Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
         {
-            if (typeof(T) == typeof(Cluster))
-            {
-                Cluster obj = new FakeClusterObject();
+            NodeInfo node1 = new FakeNodeInfo();
+            NodeInfo node2 = new FakeNodeInfo();
 
-                return (T) obj;
-            }
+            List<NodeInfo> data = new List<NodeInfo> {node1, node2};
 
-            if (typeof(T) == typeof(Node))
-            {
-                Node obj = new FakeNodeObject();
-
-                return (T) obj;
-            }
-
-            return default;
-        }
-
-        public void CancelPendingRequest()
-        {
-            throw new System.NotImplementedException();
+            return new SuccessfulResultList<NodeInfo>(data, null);
         }
     }
 }

@@ -133,11 +133,13 @@ namespace HareDu.Snapshotting.Internal
                     AvailableCoresDetected = node.AvailableCoresDetected;
                     Memory = new MemorySnapshotImpl(node);
                     IsRunning = node.IsRunning;
+                    InterNodeHeartbeat = node.NetworkTickTime;
                 }
 
                 public OperatingSystemSnapshot OS { get; }
                 public string RatesMode { get; }
                 public long Uptime { get; }
+                public long InterNodeHeartbeat { get; }
                 public string Identifier { get; }
                 public string ClusterIdentifier { get; }
                 public string Type { get; }
@@ -446,7 +448,7 @@ namespace HareDu.Snapshotting.Internal
                         node.AvgIOReadTimeDetails?.Rate ?? 0);
                     Writes = new DiskUsageDetailsImpl(stats.TotalDiskWrites,
                         stats.DiskWriteDetails?.Rate ?? 0,
-                        node.TotalIOWriteBytes,
+                        node.TotalIOBytesWritten,
                         node.IOWriteBytesDetail?.Rate ?? 0,
                         node.AvgTimePerIOWrite,
                         node.AvgTimePerIOWriteDetails?.Rate ?? 0);

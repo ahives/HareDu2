@@ -23,6 +23,8 @@ namespace HareDu.Snapshotting.Model
         string RatesMode { get; }
 
         long Uptime { get; }
+        
+        long InterNodeHeartbeat { get; }
 
         string Identifier { get; }
         

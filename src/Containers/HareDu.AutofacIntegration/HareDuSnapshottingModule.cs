@@ -17,6 +17,7 @@ namespace HareDu.AutofacIntegration
     using Configuration;
     using Core;
     using Core.Configuration;
+    using Registration;
     using Snapshotting;
     using Snapshotting.Registration;
 
