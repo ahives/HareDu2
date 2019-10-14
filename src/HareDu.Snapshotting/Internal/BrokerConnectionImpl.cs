@@ -71,7 +71,10 @@ namespace HareDu.Snapshotting.Internal
             }
             
             BrokerConnectivitySnapshot snapshot = new BrokerConnectivitySnapshotImpl(
-                cluster.Select(x => x.Data), connections.Select(x => x.Data), channels.Select(x => x.Data));
+                cluster.Select(x => x.Data),
+                connections.Select(x => x.Data),
+                channels.Select(x => x.Data));
+            
             SnapshotContext<BrokerConnectivitySnapshot> context = new SnapshotContextImpl(snapshot);
 
             SaveSnapshot(context);

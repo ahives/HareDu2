@@ -39,10 +39,7 @@ namespace HareDu.Snapshotting.Tests
                 .As<IBrokerObjectRegistration>()
                 .SingleInstance();
             
-            builder.Register(x =>
-                {
-                    return new FakeBrokerObjectFactory();
-                })
+            builder.Register(x => new FakeBrokerObjectFactory())
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 

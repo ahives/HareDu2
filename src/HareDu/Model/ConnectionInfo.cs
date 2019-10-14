@@ -51,10 +51,10 @@ namespace HareDu.Model
         string Name { get; }
 
         [JsonProperty("channels")]
-        long Channels { get; }
+        ulong Channels { get; }
 
         [JsonProperty("send_pend")]
-        long SendPending { get; }
+        ulong SendPending { get; }
 
         [JsonProperty("send_cnt")]
         ulong PacketsSent { get; }

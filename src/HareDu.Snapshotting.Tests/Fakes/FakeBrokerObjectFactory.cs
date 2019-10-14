@@ -35,6 +35,20 @@ namespace HareDu.Snapshotting.Tests.Fakes
                 return (T) obj;
             }
 
+            if (typeof(T) == typeof(Connection))
+            {
+                Connection obj = new FakeConnectionObject();
+
+                return (T) obj;
+            }
+
+            if (typeof(T) == typeof(Channel))
+            {
+                Channel obj = new FakeChannelObject();
+
+                return (T) obj;
+            }
+
             return default;
         }
 

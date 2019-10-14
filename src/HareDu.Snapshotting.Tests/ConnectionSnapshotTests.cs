@@ -15,9 +15,11 @@ namespace HareDu.Snapshotting.Tests
 {
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
+    using Fakes;
+    using HareDu.Registration;
     using NUnit.Framework;
     using Observers;
+    using Registration;
 
     [TestFixture]
     public class ConnectionSnapshotTests
@@ -29,7 +31,29 @@ namespace HareDu.Snapshotting.Tests
         {
             var builder = new ContainerBuilder();
             
-            builder.RegisterModule<HareDuSnapshottingModule>();
+            builder.RegisterType<FakeSnapshotRegistration>()
+                .As<ISnapshotRegistration>()
+                .SingleInstance();
+
+            builder.RegisterType<FakeBrokerObjectRegistration>()
+                .As<IBrokerObjectRegistration>()
+                .SingleInstance();
+            
+            builder.Register(x => new FakeBrokerObjectFactory())
+                .As<IBrokerObjectFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var registration = x.Resolve<ISnapshotRegistration>();
+                    var factory = x.Resolve<IBrokerObjectFactory>();
+
+                    registration.RegisterAll(factory);
+
+                    return new SnapshotFactory(factory, registration.Cache);
+                })
+                .As<ISnapshotFactory>()
+                .SingleInstance();
 
             _container = builder.Build();
         }
@@ -41,52 +65,6 @@ namespace HareDu.Snapshotting.Tests
                 .Snapshot<BrokerConnection>()
                 .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Execute();
-        }
-
-        [Test]
-        public async Task Test2()
-        {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
-                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .Execute();
-            
-//            Console.WriteLine(connection.ToJsonString());
-        }
-
-        [Test]
-        public async Task Test4()
-        {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
-                .Execute();
-
-//            var resource = Client.Snapshot<RmqConnection>();
-//            var snapshot = resource.Get();
-//            var data = snapshot.Select(x => x.Data);
-//            var diagnosticResults = resource.RunDiagnostics(data).ToList();
-
-//            for (int i = 0; i < diagnosticResults.Count; i++)
-//            {
-//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", diagnosticResults[i].Identifier, diagnosticResults[i].Status);
-//            }
-        }
-
-        [Test]
-        public async Task Test5()
-        {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
-                .Execute();
-
-//            var snapshot = resource.Get();
-//            var data = snapshot.Select(x => x.Data);
-//            var diagnosticResults = resource.RunDiagnostics(data).ToList();
-
-//            for (int i = 0; i < diagnosticResults.Count; i++)
-//            {
-//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", diagnosticResults[i].Identifier, diagnosticResults[i].Status);
-//            }
         }
     }
 }
