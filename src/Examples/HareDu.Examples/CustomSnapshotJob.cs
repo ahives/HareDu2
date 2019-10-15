@@ -17,6 +17,7 @@ namespace HareDu.Examples
     using System.IO;
     using System.Threading.Tasks;
     using Core.Extensions;
+    using Diagnostics;
     using Quartz;
     using Snapshotting;
     using Snapshotting.Model;
@@ -37,8 +38,9 @@ namespace HareDu.Examples
             _resource.Execute();
             Console.WriteLine("Snapshot Taken");
 
-            var snapshot = _resource.Snapshots.MostRecent();
-            File.WriteAllText($"/Users/albert/Documents/snapshots/snapshot_{snapshot.Identifier}.json", snapshot.ToJsonString());
+            bool persisted = _resource.Snapshots
+                .MostRecent()
+                .PersistJson("/Users/albert/Documents/snapshots");
         }
     }
 }

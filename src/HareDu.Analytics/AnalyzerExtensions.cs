@@ -17,7 +17,7 @@ namespace HareDu.Analytics
     using System.Collections.Generic;
     using Diagnostics;
 
-    public static class DiagnosticReportExtensions
+    public static class AnalyzerExtensions
     {
         public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory, string identifier)
             => factory.TryGet(identifier, out var analyzer)
