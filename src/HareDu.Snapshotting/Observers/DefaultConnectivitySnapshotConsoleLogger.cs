@@ -47,11 +47,11 @@ namespace HareDu.Snapshotting.Observers
                 Console.WriteLine("Network Traffic");
                 Console.WriteLine("\tSent: {0} packets | {1} | {2} msg/s",
                     connections[i].NetworkTraffic.Sent.Total,
-                    $"{connections[i].NetworkTraffic.Sent.Bytes} bytes ({connections[i].NetworkTraffic.Sent.Bytes.Format()})",
+                    $"{connections[i].NetworkTraffic.Sent.Bytes} bytes ({connections[i].NetworkTraffic.Sent.Bytes.ToByteString()})",
                     connections[i].NetworkTraffic.Sent.Rate);
                 Console.WriteLine("\tReceived: {0} packets | {1} | {2} msg/s",
                     connections[i].NetworkTraffic.Received.Total,
-                    $"{connections[i].NetworkTraffic.Received.Bytes} bytes ({connections[i].NetworkTraffic.Received.Bytes.Format()})",
+                    $"{connections[i].NetworkTraffic.Received.Bytes} bytes ({connections[i].NetworkTraffic.Received.Bytes.ToByteString()})",
                     connections[i].NetworkTraffic.Received.Rate);
 
                 Console.WriteLine("Channels");

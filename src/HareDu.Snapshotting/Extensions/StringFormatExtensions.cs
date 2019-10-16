@@ -15,9 +15,9 @@ namespace HareDu.Snapshotting.Extensions
 {
     using System.Globalization;
 
-    public static class FormatExtensions
+    public static class StringFormatExtensions
     {
-        public static string Format(this ulong bytes)
+        public static string ToByteString(this ulong bytes)
         {
             if (bytes < 1000f)
                 return $"{bytes}";

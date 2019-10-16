@@ -14,6 +14,7 @@
 namespace HareDu.Snapshotting.Observers
 {
     using System;
+    using Extensions;
     using Model;
 
     public class DefaultClusterSnapshotConsoleLogger :
@@ -52,7 +53,7 @@ namespace HareDu.Snapshotting.Observers
                 Console.WriteLine();
                 Console.WriteLine("*************IO*************");
                 Console.WriteLine($"Disk Reads: {value.Snapshot.Nodes[i].IO.Reads.Total}");
-                Console.WriteLine($"Bytes Read: {value.Snapshot.Nodes[i].IO.Reads.Bytes.Total}");
+                Console.WriteLine($"Bytes Read: {value.Snapshot.Nodes[i].IO.Reads.Bytes.Total.ToByteString()}");
                 Console.WriteLine($"Disk Read Rate: {value.Snapshot.Nodes[i].IO.Reads.Rate}");
                 Console.WriteLine();
                 Console.WriteLine("*************OS*************");
