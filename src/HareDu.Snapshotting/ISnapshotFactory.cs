@@ -13,8 +13,6 @@
 // limitations under the License.
 namespace HareDu.Snapshotting
 {
-    using Model;
-
     public interface ISnapshotFactory
     {
         T Snapshot<T>()

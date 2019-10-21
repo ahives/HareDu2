@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Runtime Process Limit Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Runtime;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

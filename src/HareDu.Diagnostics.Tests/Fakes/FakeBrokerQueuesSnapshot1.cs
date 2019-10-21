@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             Queues = GetQueues().ToList();
         }
 
-        public string ClusterIdentifier { get; }
+        public string ClusterName { get; }
         public BrokerQueueChurnMetrics Churn { get; }
         public IReadOnlyList<QueueSnapshot> Queues { get; }
 

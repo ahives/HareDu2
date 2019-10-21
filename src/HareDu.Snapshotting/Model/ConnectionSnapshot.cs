@@ -22,7 +22,7 @@ namespace HareDu.Snapshotting.Model
         
         NetworkTrafficSnapshot NetworkTraffic { get; }
         
-        ulong ChannelLimit { get; }
+        ulong OpenChannelsLimit { get; }
         
         string NodeIdentifier { get; }
         

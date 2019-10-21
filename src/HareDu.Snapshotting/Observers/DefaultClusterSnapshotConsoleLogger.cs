@@ -52,9 +52,9 @@ namespace HareDu.Snapshotting.Observers
                 Console.WriteLine($"AlarmInEffect: {value.Snapshot.Nodes[i].Disk.AlarmInEffect}");
                 Console.WriteLine();
                 Console.WriteLine("*************IO*************");
-                Console.WriteLine($"Disk Reads: {value.Snapshot.Nodes[i].IO.Reads.Total}");
-                Console.WriteLine($"Bytes Read: {value.Snapshot.Nodes[i].IO.Reads.Bytes.Total.ToByteString()}");
-                Console.WriteLine($"Disk Read Rate: {value.Snapshot.Nodes[i].IO.Reads.Rate}");
+                Console.WriteLine($"Disk Reads: {value.Snapshot.Nodes[i].Disk.IO.Reads.Total}");
+                Console.WriteLine($"Bytes Read: {value.Snapshot.Nodes[i].Disk.IO.Reads.Bytes.Total.ToByteString()}");
+                Console.WriteLine($"Disk Read Rate: {value.Snapshot.Nodes[i].Disk.IO.Reads.Rate}");
                 Console.WriteLine();
                 Console.WriteLine("*************OS*************");
                 Console.WriteLine($"ProcessId: {value.Snapshot.Nodes[i].OS.ProcessId}");

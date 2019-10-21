@@ -23,13 +23,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public FakeConnectionSnapshot1(int numOfChannels, ulong channelLimit)
         {
             Identifier = "Connection1";
-            ChannelLimit = channelLimit;
+            OpenChannelsLimit = channelLimit;
             Channels = GetChannels(numOfChannels).ToList();
         }
 
         public string Identifier { get; }
         public NetworkTrafficSnapshot NetworkTraffic { get; }
-        public ulong ChannelLimit { get; }
+        public ulong OpenChannelsLimit { get; }
         public string NodeIdentifier { get; }
         public string VirtualHost { get; }
         public ConnectionState State { get; }

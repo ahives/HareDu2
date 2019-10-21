@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "High Connection Closure Rate Analyzer";
         public string Description => "";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Connectivity;

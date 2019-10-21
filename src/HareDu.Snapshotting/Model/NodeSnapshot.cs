@@ -40,8 +40,6 @@ namespace HareDu.Snapshotting.Model
         
         DiskSnapshot Disk { get; }
         
-        IO IO { get; }
-        
         BrokerRuntimeSnapshot Runtime { get; }
         
         MemorySnapshot Memory { get; }

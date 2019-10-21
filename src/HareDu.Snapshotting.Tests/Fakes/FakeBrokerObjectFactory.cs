@@ -49,6 +49,13 @@ namespace HareDu.Snapshotting.Tests.Fakes
                 return (T) obj;
             }
 
+            if (typeof(T) == typeof(Queue))
+            {
+                Queue obj = new FakeQueueObject();
+
+                return (T) obj;
+            }
+
             return default;
         }
 

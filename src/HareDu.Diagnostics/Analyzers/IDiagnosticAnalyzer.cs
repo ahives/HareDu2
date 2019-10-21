@@ -20,6 +20,8 @@ namespace HareDu.Diagnostics.Analyzers
     {
         string Identifier { get; }
         
+        string Name { get; }
+        
         string Description { get; }
         
         ComponentType ComponentType { get; }

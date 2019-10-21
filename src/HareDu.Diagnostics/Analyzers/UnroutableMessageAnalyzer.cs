@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -25,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Unroutable Message Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Exchange;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Efficiency;
@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.Churn.NotRouted.Total > 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.ClusterIdentifier,
+                result = new NegativeDiagnosticResult(data.ClusterName,
                     null,
                     Identifier,
                     ComponentType,
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.ClusterIdentifier,
+                result = new PositiveDiagnosticResult(data.ClusterName,
                     null,
                     Identifier,
                     ComponentType,

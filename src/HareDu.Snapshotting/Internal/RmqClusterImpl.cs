@@ -126,7 +126,6 @@ namespace HareDu.Snapshotting.Internal
                     ClusterIdentifier = cluster.ClusterName;
                     OS = new OperatingSystemSnapshotImpl(node);
                     Runtime = new BrokerRuntimeSnapshotImpl(cluster, node);
-                    IO = new IOImpl(cluster.MessageStats, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
                     Disk = new DiskSnapshotImpl(node);
                     NetworkPartitions = node.Partitions.ToList();
@@ -147,7 +146,6 @@ namespace HareDu.Snapshotting.Internal
                 public ulong AvailableCoresDetected { get; }
                 public IReadOnlyList<string> NetworkPartitions { get; }
                 public DiskSnapshot Disk { get; }
-                public IO IO { get; }
                 public BrokerRuntimeSnapshot Runtime { get; }
                 public MemorySnapshot Memory { get; }
                 public ContextSwitchingDetails ContextSwitching { get; }
@@ -182,12 +180,108 @@ namespace HareDu.Snapshotting.Internal
                         Capacity = new DiskCapacityDetailsImpl(node);
                         Limit = node.FreeDiskLimit;
                         AlarmInEffect = node.FreeDiskAlarm;
+                        IO = new IOImpl(node);
                     }
 
                     public string NodeIdentifier { get; }
                     public DiskCapacityDetails Capacity { get; }
                     public ulong Limit { get; }
                     public bool AlarmInEffect { get; }
+                    public IO IO { get; }
+
+
+                    class IOImpl :
+                        IO
+                    {
+                        public IOImpl(NodeInfo node)
+                        {
+                            Reads = new DiskUsageDetailsImpl(node.TotalIOReads,
+                                node.IOReadCountDetails?.Rate ?? 0,
+                                node.TotalIOBytesRead,
+                                node.IOReadBytesDetails?.Rate ?? 0,
+                                node.AvgIOReadTime,
+                                node.AvgIOReadTimeDetails?.Rate ?? 0);
+                            Writes = new DiskUsageDetailsImpl(node.TotalIOWrites,
+                                node.IOWriteDetails?.Rate ?? 0,
+                                node.TotalIOBytesWritten,
+                                node.IOWriteBytesDetail?.Rate ?? 0,
+                                node.AvgTimePerIOWrite,
+                                node.AvgTimePerIOWriteDetails?.Rate ?? 0);
+                            Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
+                                node.RateOfIOSeeks?.Rate ?? 0,
+                                0,
+                                0,
+                                node.AverageIOSeekTime,
+                                node.AvgIOSeekTimeDetails?.Rate ?? 0);
+                            FileHandles = new FileHandlesImpl(node);
+                        }
+
+                        public DiskUsageDetails Reads { get; }
+                        public DiskUsageDetails Writes { get; }
+                        public DiskUsageDetails Seeks { get; }
+                        public FileHandles FileHandles { get; }
+
+
+                        class FileHandlesImpl :
+                            FileHandles
+                        {
+                            public FileHandlesImpl(NodeInfo node)
+                            {
+                                Recycled = node.IOReopenCount;
+                                Rate = node.RateOfIOReopened?.Rate ?? 0;
+                            }
+
+                            public ulong Recycled { get; }
+                            public decimal Rate { get; }
+                        }
+
+
+                        class DiskUsageDetailsImpl :
+                            DiskUsageDetails
+                        {
+                            public DiskUsageDetailsImpl(ulong total, decimal rate, ulong totalBytes, decimal bytesRate,
+                                ulong avgWallTime, decimal avgWallTimeRate)
+                            {
+                                Total = total;
+                                Rate = rate;
+                                Bytes = new BytesImpl(totalBytes, bytesRate);
+                                WallTime = new DiskOperationWallTimeImpl(avgWallTime, avgWallTimeRate);
+                            }
+
+                            public ulong Total { get; }
+                            public decimal Rate { get; }
+                            public Bytes Bytes { get; }
+                            public DiskOperationWallTime WallTime { get; }
+
+
+                            class DiskOperationWallTimeImpl :
+                                DiskOperationWallTime
+                            {
+                                public DiskOperationWallTimeImpl(ulong avg, decimal rate)
+                                {
+                                    Average = avg;
+                                    Rate = rate;
+                                }
+
+                                public ulong Average { get; }
+                                public decimal Rate { get; }
+                            }
+
+
+                            class BytesImpl :
+                                Bytes
+                            {
+                                public BytesImpl(ulong total, decimal rate)
+                                {
+                                    Total = total;
+                                    Rate = rate;
+                                }
+
+                                public ulong Total { get; }
+                                public decimal Rate { get; }
+                            }
+                        }
+                    }
 
 
                     class DiskCapacityDetailsImpl :
@@ -430,100 +524,6 @@ namespace HareDu.Snapshotting.Internal
                         public decimal OpenAttemptRate { get; }
                         public decimal AvgTimePerOpenAttempt { get; }
                         public decimal AvgTimeRatePerOpenAttempt { get; }
-                    }
-                }
-            }
-
-
-            class IOImpl :
-                IO
-            {
-                public IOImpl(MessageStats stats, NodeInfo node)
-                {
-                    Reads = new DiskUsageDetailsImpl(stats.TotalDiskReads,
-                        stats.DiskReadDetails?.Rate ?? 0,
-                        node.TotalIOBytesRead,
-                        node.IOReadBytesDetails?.Rate ?? 0,
-                        node.AvgIOReadTime,
-                        node.AvgIOReadTimeDetails?.Rate ?? 0);
-                    Writes = new DiskUsageDetailsImpl(stats.TotalDiskWrites,
-                        stats.DiskWriteDetails?.Rate ?? 0,
-                        node.TotalIOBytesWritten,
-                        node.IOWriteBytesDetail?.Rate ?? 0,
-                        node.AvgTimePerIOWrite,
-                        node.AvgTimePerIOWriteDetails?.Rate ?? 0);
-                    Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
-                        node.RateOfIOSeeks?.Rate ?? 0,
-                        0,
-                        0,
-                        node.AverageIOSeekTime,
-                        node.AvgIOSeekTimeDetails?.Rate ?? 0);
-                    FileHandles = new FileHandlesImpl(node);
-                }
-
-                public DiskUsageDetails Reads { get; }
-                public DiskUsageDetails Writes { get; }
-                public DiskUsageDetails Seeks { get; }
-                public FileHandles FileHandles { get; }
-
-
-                class FileHandlesImpl :
-                    FileHandles
-                {
-                    public FileHandlesImpl(NodeInfo node)
-                    {
-                        Recycled = node.IOReopenCount;
-                        Rate = node.RateOfIOReopened?.Rate ?? 0;
-                    }
-
-                    public ulong Recycled { get; }
-                    public decimal Rate { get; }
-                }
-
-
-                class DiskUsageDetailsImpl :
-                    DiskUsageDetails
-                {
-                    public DiskUsageDetailsImpl(ulong total, decimal rate, ulong totalBytes, decimal bytesRate,
-                        ulong avgWallTime, decimal avgWallTimeRate)
-                    {
-                        Total = total;
-                        Rate = rate;
-                        Bytes = new BytesImpl(totalBytes, bytesRate);
-                        WallTime = new DiskOperationWallTimeImpl(avgWallTime, avgWallTimeRate);
-                    }
-
-                    public ulong Total { get; }
-                    public decimal Rate { get; }
-                    public Bytes Bytes { get; }
-                    public DiskOperationWallTime WallTime { get; }
-
-
-                    class DiskOperationWallTimeImpl :
-                        DiskOperationWallTime
-                    {
-                        public DiskOperationWallTimeImpl(ulong avg, decimal rate)
-                        {
-                            Average = avg;
-                            Rate = rate;
-                        }
-
-                        public ulong Average { get; }
-                        public decimal Rate { get; }
-                    }
-
-
-                    class BytesImpl :
-                        Bytes
-                    {
-                        public BytesImpl(ulong total, decimal rate)
-                        {
-                            Total = total;
-                            Rate = rate;
-                        }
-
-                        public ulong Total { get; }
-                        public decimal Rate { get; }
                     }
                 }
             }

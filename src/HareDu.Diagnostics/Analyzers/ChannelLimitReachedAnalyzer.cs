@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Channel Limit Reached Analyzer";
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
@@ -44,12 +45,12 @@ namespace HareDu.Diagnostics.Analyzers
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("Channels.Count", data.Channels.Count.ToString()),
-                new DiagnosticAnalyzerDataImpl("ChannelLimit", data.ChannelLimit.ToString())
+                new DiagnosticAnalyzerDataImpl("ChannelLimit", data.OpenChannelsLimit.ToString())
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (Convert.ToUInt64(data.Channels.Count) >= data.ChannelLimit)
+            if (Convert.ToUInt64(data.Channels.Count) >= data.OpenChannelsLimit)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(data.NodeIdentifier,

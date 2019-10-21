@@ -17,6 +17,9 @@ namespace HareDu
     {
         public static ulong ToLong(this string value)
         {
+            if (string.IsNullOrWhiteSpace(value))
+                return ulong.MaxValue;
+            
             if (value.Equals("infinity"))
                 return ulong.MaxValue;
 

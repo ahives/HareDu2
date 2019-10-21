@@ -36,7 +36,7 @@ namespace HareDu.Model
         long ConnectedAt { get; }
 
         [JsonProperty("channel_max")]
-        ulong MaxChannels { get; }
+        ulong OpenChannelsLimit { get; }
 
         [JsonProperty("frame_max")]
         ulong MaxFrameSizeInBytes { get; }

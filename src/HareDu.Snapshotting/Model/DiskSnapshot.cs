@@ -23,5 +23,7 @@ namespace HareDu.Snapshotting.Model
         ulong Limit { get; }
 
         bool AlarmInEffect { get; }
+        
+        IO IO { get; }
     }
 }

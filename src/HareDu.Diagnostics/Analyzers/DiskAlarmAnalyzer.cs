@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Disk Alarm Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Disk;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

@@ -33,15 +33,25 @@ namespace HareDu.Analytics.Analyzers
             var rollup = GetRollup(filtered, x => x.ParentComponentIdentifier);
             
             var summary = (from result in rollup
-                    let green = new AnalyzerResultImpl(result.Value.Count(x => x == DiagnosticStatus.Green).ConvertTo(),
+                    let green = new AnalyzerResultImpl(
+                        result.Value
+                            .Count(x => x == DiagnosticStatus.Green)
+                            .ConvertTo(),
                         CalcPercentage(result.Value, DiagnosticStatus.Green))
-                    let red = new AnalyzerResultImpl(result.Value.Count(x => x == DiagnosticStatus.Red).ConvertTo(),
+                    let red = new AnalyzerResultImpl(
+                        result.Value
+                            .Count(x => x == DiagnosticStatus.Red)
+                            .ConvertTo(),
                         CalcPercentage(result.Value, DiagnosticStatus.Red))
                     let yellow = new AnalyzerResultImpl(
-                        result.Value.Count(x => x == DiagnosticStatus.Yellow).ConvertTo(),
+                        result.Value
+                            .Count(x => x == DiagnosticStatus.Yellow)
+                            .ConvertTo(),
                         CalcPercentage(result.Value, DiagnosticStatus.Yellow))
                     let inconclusive = new AnalyzerResultImpl(
-                        result.Value.Count(x => x == DiagnosticStatus.Inconclusive).ConvertTo(),
+                        result.Value
+                            .Count(x => x == DiagnosticStatus.Inconclusive)
+                            .ConvertTo(),
                         CalcPercentage(result.Value, DiagnosticStatus.Inconclusive))
                     select new AnalyzerSummaryImpl(result.Key, green, red, yellow, inconclusive))
                 .Cast<AnalyzerSummary>()

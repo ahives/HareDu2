@@ -56,7 +56,7 @@ namespace HareDu.Tests
                 Console.WriteLine("MinorGarbageCollection: {0}", connection.GarbageCollectionDetails.MinorGarbageCollection);
                 Console.WriteLine("Host: {0}", connection.Host);
                 Console.WriteLine("IsSecure: {0}", connection.IsSecure);
-                Console.WriteLine("MaxChannels: {0}", connection.MaxChannels);
+                Console.WriteLine("MaxChannels: {0}", connection.OpenChannelsLimit);
                 Console.WriteLine("MaxFrameSizeInBytes: {0}", connection.MaxFrameSizeInBytes);
                 Console.WriteLine("BytessReceived: {0}", connection.PacketBytesReceived);
                 Console.WriteLine("PacketsReceived: {0}", connection.PacketsReceived);

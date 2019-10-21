@@ -114,6 +114,8 @@ namespace HareDu.Snapshotting.Internal
             public BrokerConnectivitySnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
                 IReadOnlyList<ChannelInfo> channels)
             {
+                ClusterName = cluster.ClusterName;
+                BrokerVersion = cluster.RabbitMqVersion;
                 ChannelsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsClosed ?? 0, cluster.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);
                 ChannelsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsCreated ?? 0, cluster.ChurnRates?.CreatedChannelDetails?.Rate ?? 0);
                 ConnectionsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsCreated ?? 0, cluster.ChurnRates?.CreatedConnectionDetails?.Rate ?? 0);
@@ -124,6 +126,8 @@ namespace HareDu.Snapshotting.Internal
                     .ToList();
             }
 
+            public string BrokerVersion { get; }
+            public string ClusterName { get; }
             public ChurnMetrics ChannelsClosed { get; }
             public ChurnMetrics ChannelsCreated { get; }
             public ChurnMetrics ConnectionsClosed { get; }
@@ -153,7 +157,7 @@ namespace HareDu.Snapshotting.Internal
                     Identifier = connection.Name;
                     NetworkTraffic = new NetworkTrafficSnapshotImpl(connection);
                     Channels = channels;
-                    ChannelLimit = connection.MaxChannels;
+                    OpenChannelsLimit = connection.OpenChannelsLimit;
                     NodeIdentifier = connection.Node;
                     VirtualHost = connection.VirtualHost;
                     State = connection.State.Convert();
@@ -161,7 +165,7 @@ namespace HareDu.Snapshotting.Internal
 
                 public string Identifier { get; }
                 public NetworkTrafficSnapshot NetworkTraffic { get; }
-                public ulong ChannelLimit { get; }
+                public ulong OpenChannelsLimit { get; }
                 public string NodeIdentifier { get; }
                 public string VirtualHost { get; }
                 public ConnectionState State { get; }

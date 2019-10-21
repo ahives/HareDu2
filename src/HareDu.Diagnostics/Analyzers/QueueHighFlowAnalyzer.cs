@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Queue High Flow Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

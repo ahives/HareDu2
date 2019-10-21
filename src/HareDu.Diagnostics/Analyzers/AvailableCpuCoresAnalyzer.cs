@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
     using Configuration;
-    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -25,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Available CPU Cores Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

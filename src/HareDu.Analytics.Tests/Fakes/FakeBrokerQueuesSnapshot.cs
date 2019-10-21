@@ -23,7 +23,7 @@ namespace HareDu.Analytics.Tests.Fakes
     {
         public FakeBrokerQueuesSnapshot()
         {
-            ClusterIdentifier = "Cluster 1";
+            ClusterName = "Cluster 1";
             Churn = new BrokerQueueChurnMetricsImpl();
             Queues = GetQueues().ToList();
         }
@@ -65,7 +65,7 @@ namespace HareDu.Analytics.Tests.Fakes
 
         public Guid SnapshotIdentifier { get; }
         public DateTimeOffset Timestamp { get; }
-        public string ClusterIdentifier { get; }
+        public string ClusterName { get; }
         public BrokerQueueChurnMetrics Churn { get; }
         public IReadOnlyList<QueueSnapshot> Queues { get; }
 

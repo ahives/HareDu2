@@ -26,6 +26,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             MessageStats = new MessageStatsImpl();
             ClusterName = "fake_cluster";
             MessageStats = new MessageStatsImpl();
+            QueueStats = new QueueStatsImpl();
         }
 
         public string ManagementVersion { get; }
@@ -44,12 +45,48 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public IList<Listener> Listeners { get; }
         public IList<NodeContext> Contexts { get; }
 
+        
+        class QueueStatsImpl :
+            QueueStats
+        {
+            public QueueStatsImpl()
+            {
+                MessagesReadyForDelivery = 82937489379;
+                RateOfMessagesReadyForDelivery = new RateImpl(34.4M);
+                UnacknowledgedDeliveredMessages = 892387397238;
+                RateOfUnacknowledgedDeliveredMessages = new RateImpl(73.3M);
+                TotalMessages = 9230748297;
+                RateOfMessages = new RateImpl(80.3M);
+            }
+
+            public ulong MessagesReadyForDelivery { get; }
+            public Rate RateOfMessagesReadyForDelivery { get; }
+            public ulong UnacknowledgedDeliveredMessages { get; }
+            public Rate RateOfUnacknowledgedDeliveredMessages { get; }
+            public ulong TotalMessages { get; }
+            public Rate RateOfMessages { get; }
+
+            
+            class RateImpl :
+                Rate
+            {
+                public RateImpl(decimal rate)
+                {
+                    Rate = rate;
+                }
+
+                public decimal Rate { get; }
+            }
+        }
+
 
         class MessageStatsImpl :
             MessageStats
         {
             public MessageStatsImpl()
             {
+                TotalMessagesAcknowledged = 7287736;
+                TotalMessageDeliveryGets = 78263767;
                 TotalMessagesPublished = 1234;
                 TotalMessagesConfirmed = 83;
                 TotalUnroutableMessages = 737;

@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "File Descriptor Throttling Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.OperatingSystem;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

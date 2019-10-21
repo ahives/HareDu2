@@ -24,11 +24,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
     {
         public async Task<ResultList<ChannelInfo>> GetAll(CancellationToken cancellationToken = default)
         {
-            ChannelInfo connection1 = new FakeChannelInfo(1, 1);
-            ChannelInfo connection2 = new FakeChannelInfo(2, 1);
-            ChannelInfo connection3 = new FakeChannelInfo(3, 1);
+            ChannelInfo channel = new FakeChannelInfo(1, 1);
 
-            List<ChannelInfo> data = new List<ChannelInfo> {connection1, connection2, connection3};
+            List<ChannelInfo> data = new List<ChannelInfo> {channel};
 
             return new SuccessfulResultList<ChannelInfo>(data, null);
         }

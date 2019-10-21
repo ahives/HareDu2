@@ -39,6 +39,8 @@ namespace HareDu.Analytics.Tests.Fakes
 
         public Guid SnapshotIdentifier { get; }
         public DateTimeOffset Timestamp { get; }
+        public string BrokerVersion { get; }
+        public string ClusterName { get; }
         public ChurnMetrics ChannelsClosed { get; }
         public ChurnMetrics ChannelsCreated { get; }
         public ChurnMetrics ConnectionsClosed { get; }
@@ -85,7 +87,7 @@ namespace HareDu.Analytics.Tests.Fakes
 
             public string Identifier { get; }
             public NetworkTrafficSnapshot NetworkTraffic { get; }
-            public ulong ChannelLimit { get; }
+            public ulong OpenChannelsLimit { get; }
             public string NodeIdentifier { get; }
             public string VirtualHost { get; }
             public ConnectionState State { get; }

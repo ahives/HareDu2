@@ -18,18 +18,20 @@ namespace HareDu.Snapshotting.Tests.Fakes
     public class FakeConnectionInfo :
         ConnectionInfo
     {
-        public FakeConnectionInfo(int number)
+        public FakeConnectionInfo(int number, int node)
         {
             TotalReductions = 897274932;
-            MaxChannels = 79243773;
+            OpenChannelsLimit = 982738;
             MaxFrameSizeInBytes = 627378937423;
             VirtualHost = "TestVirtualHost";
             Name = $"Connection {number}";
+            Node = $"Node {node}";
             Channels = 7687264882;
             SendPending = 686219897;
             PacketsSent = 871998847;
             PacketBytesSent = 83008482374;
             PacketsReceived = 68721979894793;
+            State = "blocked";
         }
 
         public Rate RateOfReduction { get; }
@@ -38,7 +40,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public Rate RateOfPacketBytesReceived { get; }
         public Rate RateOfPacketBytesSent { get; }
         public long ConnectedAt { get; }
-        public ulong MaxChannels { get; }
+        public ulong OpenChannelsLimit { get; }
         public ulong MaxFrameSizeInBytes { get; }
         public long ConnectionTimeout { get; }
         public string VirtualHost { get; }

@@ -24,7 +24,6 @@ namespace HareDu.Snapshotting.Tests.Fakes
             TotalReductions = 872634826473;
             VirtualHost = "TestVirtualHost";
             Node = $"Node {node}";
-            MaxOpenedChannels = 982738;
             FrameMax = 728349837;
             Name = $"Channel {channel}";
             TotalChannels = 87;
@@ -35,6 +34,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             UnconfirmedMessages = 82930;
             UnacknowledgedMessages = 7882003;
             TotalConsumers = 90;
+            ConnectionDetails = new ConnectionDetailsImpl();
         }
 
         public ReductionDetails ReductionDetails { get; }
@@ -43,7 +43,6 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public string Node { get; }
         public string User { get; }
         public long ConnectedAt { get; }
-        public ulong MaxOpenedChannels { get; }
         public ulong FrameMax { get; }
         public long Timeout { get; }
         public long Number { get; }
@@ -78,5 +77,19 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public bool Confirm { get; }
         public bool Transactional { get; }
         public DateTimeOffset IdleSince { get; }
+
+        
+        class ConnectionDetailsImpl :
+            ConnectionDetails
+        {
+            public ConnectionDetailsImpl()
+            {
+                Name = "Connection 1";
+            }
+
+            public string PeerHost { get; }
+            public long PeerPort { get; }
+            public string Name { get; }
+        }
     }
 }

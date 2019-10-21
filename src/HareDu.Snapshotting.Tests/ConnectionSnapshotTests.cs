@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
     using Fakes;
     using HareDu.Registration;
+    using Model;
     using NUnit.Framework;
     using Observers;
     using Registration;
@@ -63,8 +65,36 @@ namespace HareDu.Snapshotting.Tests
         {
             var resource = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerConnection>()
-                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Execute();
+
+            BrokerConnectivitySnapshot snapshot = resource.Snapshots.MostRecent().Snapshot;
+            
+            Assert.AreEqual("3.7.18", snapshot.BrokerVersion);
+            Assert.AreEqual("fake_cluster", snapshot.ClusterName);
+            Assert.IsNotNull(snapshot.Connections);
+            Assert.AreEqual("Connection 1", snapshot.Connections[0].Identifier);
+            Assert.AreEqual(ConnectionState.Blocked, snapshot.Connections[0].State);
+            Assert.AreEqual(982738, snapshot.Connections[0].OpenChannelsLimit);
+            Assert.AreEqual("TestVirtualHost", snapshot.Connections[0].VirtualHost);
+            Assert.AreEqual("Node 1", snapshot.Connections[0].NodeIdentifier);
+            Assert.IsNotNull(snapshot.Connections[0].NetworkTraffic);
+            Assert.IsNotNull(snapshot.Connections[0].NetworkTraffic.Received);
+            Assert.AreEqual(68721979894793, snapshot.Connections[0].NetworkTraffic.Received.Total);
+            Assert.IsNotNull(snapshot.Connections[0].NetworkTraffic.Sent);
+            Assert.AreEqual(871998847, snapshot.Connections[0].NetworkTraffic.Sent.Total);
+            Assert.AreEqual(627378937423, snapshot.Connections[0].NetworkTraffic.MaxFrameSize);
+            Assert.IsNotNull(snapshot.Connections[0].Channels);
+            Assert.IsTrue(snapshot.Connections[0].Channels.Any());
+            Assert.AreEqual("Channel 1", snapshot.Connections[0].Channels[0].Identifier);
+            Assert.AreEqual(90, snapshot.Connections[0].Channels[0].Consumers);
+            Assert.AreEqual(78, snapshot.Connections[0].Channels[0].PrefetchCount);
+            Assert.AreEqual(7882003, snapshot.Connections[0].Channels[0].UnacknowledgedMessages);
+            Assert.AreEqual(98237843, snapshot.Connections[0].Channels[0].UncommittedAcknowledgements);
+            Assert.AreEqual(82930, snapshot.Connections[0].Channels[0].UnconfirmedMessages);
+            Assert.AreEqual(383902, snapshot.Connections[0].Channels[0].UncommittedMessages);
+//            Assert.AreEqual(, snapshot.Connections[0].Channels[0]);
+//            Assert.AreEqual(, snapshot.Connections[0].Channels);
+//            Assert.AreEqual(, snapshot.Connections);
         }
     }
 }

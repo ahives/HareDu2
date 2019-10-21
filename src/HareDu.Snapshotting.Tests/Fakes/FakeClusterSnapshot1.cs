@@ -189,8 +189,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
             public DiskCapacityDetails Capacity { get; }
             public ulong Limit { get; }
             public bool AlarmInEffect { get; }
+            public IO IO { get; }
 
-        
+
             class DiskCapacityDetailsImpl :
                 DiskCapacityDetails
             {

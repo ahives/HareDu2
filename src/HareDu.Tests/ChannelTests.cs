@@ -72,7 +72,6 @@ namespace HareDu.Tests
                     Console.WriteLine("Name: {0}", channel.Name);
                     Console.WriteLine("PrefetchCount: {0}", channel.PrefetchCount);
                     Console.WriteLine("AuthenticationMechanism: {0}", channel.AuthenticationMechanism);
-                    Console.WriteLine("ChannelMax: {0}", channel.MaxOpenedChannels);
                     Console.WriteLine("Confirm: {0}", channel.Confirm);
                     Console.WriteLine("ConnectedAt: {0}", channel.ConnectedAt);
                     Console.WriteLine("ConnectionDetailsName: {0}", channel.ConnectionDetails.Name);

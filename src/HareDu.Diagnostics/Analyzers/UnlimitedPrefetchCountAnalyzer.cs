@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         IDiagnosticAnalyzer
     {
         public string Identifier => GetType().GetIdentifier();
+        public string Name => "Unlimited Prefetch Count Analyzer";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;

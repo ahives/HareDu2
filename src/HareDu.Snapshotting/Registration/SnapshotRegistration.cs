@@ -16,7 +16,6 @@ namespace HareDu.Snapshotting.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Model;
 
     public class SnapshotRegistration :
         ISnapshotRegistration

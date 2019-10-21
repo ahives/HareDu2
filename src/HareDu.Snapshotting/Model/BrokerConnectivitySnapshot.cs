@@ -18,6 +18,10 @@ namespace HareDu.Snapshotting.Model
     public interface BrokerConnectivitySnapshot :
         Snapshot
     {
+        string BrokerVersion { get; }
+        
+        string ClusterName { get; }
+        
         ChurnMetrics ChannelsClosed { get; }
 
         ChurnMetrics ChannelsCreated { get; }

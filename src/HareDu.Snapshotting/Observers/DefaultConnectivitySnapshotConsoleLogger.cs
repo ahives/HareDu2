@@ -37,7 +37,7 @@ namespace HareDu.Snapshotting.Observers
             for (int i = 0; i < connections.Count; i++)
             {
                 Console.WriteLine("Connection => {0}", connections[0].Select(x => x.Identifier));
-                Console.WriteLine("Channel Limit => {0}", connections[i].ChannelLimit);
+                Console.WriteLine("Channel Limit => {0}", connections[i].OpenChannelsLimit);
                 Console.WriteLine("Channels => {0}", connections[i].Channels.Count);
                 Console.WriteLine("Connections => {0} created | {1:0.0}/s, {2} closed | {3:0.0}/s",
                     value.Snapshot.Select(x => x.ConnectionsCreated).Select(x => x.Total),
