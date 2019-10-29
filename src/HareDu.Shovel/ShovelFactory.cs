@@ -25,7 +25,7 @@ namespace HareDu.Shovel
     using Internal;
 
     public class ShovelFactory :
-        HttpClientHelper,
+        RmqBrokerClient,
         IShovelFactory
     {
         public ShovelFactory(HttpClient client)

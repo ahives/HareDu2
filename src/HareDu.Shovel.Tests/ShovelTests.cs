@@ -48,7 +48,7 @@ namespace HareDu.Shovel.Tests
                         c.Name("my-shovel");
 //                        c.AcknowledgementMode("");
 //                        c.ReconnectDelay(100);
-                        c.VirtualHost("%2f");
+                        c.VirtualHost("test-vhost");
                     });
                     x.Source(c =>
                     {

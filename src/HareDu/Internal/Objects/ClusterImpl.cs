@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal.Resources
+namespace HareDu.Internal.Objects
 {
     using System.Net.Http;
     using System.Threading;
@@ -20,22 +20,22 @@ namespace HareDu.Internal.Resources
     using Core.Extensions;
     using Model;
 
-    public class MemoryImpl :
-        HttpClientHelper,
-        Memory
+    class ClusterImpl :
+        RmqBrokerClient,
+        Cluster
     {
-        public MemoryImpl(HttpClient client)
+        public ClusterImpl(HttpClient client)
             : base(client)
         {
         }
-        
-        public async Task<Result<NodeMemoryUsageInfo>> GetDetails(string node, CancellationToken cancellationToken = default)
+
+        public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            string url = $"api/nodes/{node}/memory";
+            string url = "api/overview";
             
-            Result<NodeMemoryUsageInfo> result = await Get<NodeMemoryUsageInfo>(url, cancellationToken);
+            Result<ClusterInfo> result = await Get<ClusterInfo>(url, cancellationToken);
 
             return result;
         }

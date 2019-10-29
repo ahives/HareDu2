@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal.Resources
+namespace HareDu.Internal.Objects
 {
     using System.Net.Http;
     using System.Threading;
@@ -20,22 +20,22 @@ namespace HareDu.Internal.Resources
     using Core.Extensions;
     using Model;
 
-    class ConnectionImpl :
-        HttpClientHelper,
-        Connection
+    class NodeHealthImpl :
+        RmqBrokerClient,
+        NodeHealth
     {
-        public ConnectionImpl(HttpClient client)
+        public NodeHealthImpl(HttpClient client)
             : base(client)
         {
         }
 
-        public async Task<ResultList<ConnectionInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<Result<NodeHealthInfo>> GetDetails(string node = null, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            string url = "api/connections";
-            
-            ResultList<ConnectionInfo> result = await GetAll<ConnectionInfo>(url, cancellationToken);
+            string url = string.IsNullOrWhiteSpace(node) ? "api/healthchecks/node" : $"/api/healthchecks/node/{node}";
+
+            Result<NodeHealthInfo> result = await Get<NodeHealthInfo>(url, cancellationToken);
 
             return result;
         }

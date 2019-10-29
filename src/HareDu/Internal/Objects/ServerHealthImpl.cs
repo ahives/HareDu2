@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal.Resources
+namespace HareDu.Internal.Objects
 {
     using System;
     using System.Net.Http;
@@ -22,7 +22,7 @@ namespace HareDu.Internal.Resources
     using Model;
 
     class ServerHealthImpl :
-        HttpClientHelper,
+        RmqBrokerClient,
         ServerHealth
     {
         public ServerHealthImpl(HttpClient client)

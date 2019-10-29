@@ -24,11 +24,11 @@ namespace HareDu.Core
     using System.Threading.Tasks;
     using Extensions;
 
-    public class HttpClientHelper
+    public class RmqBrokerClient
     {
         readonly HttpClient _client;
 
-        protected HttpClientHelper(HttpClient client)
+        protected RmqBrokerClient(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
@@ -192,11 +192,6 @@ namespace HareDu.Core
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
         }
-
-//        protected string SanitizeVirtualHostName(string value)
-//            => value == @"/"
-//                ? value.Replace("/", "%2f")
-//                : value;
 
         void HandleDotsAndSlashes()
         {

@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal.Resources
+namespace HareDu.Internal.Objects
 {
     using System.Net.Http;
     using System.Threading;
@@ -20,22 +20,22 @@ namespace HareDu.Internal.Resources
     using Core.Extensions;
     using Model;
 
-    class ConsumerImpl :
-        HttpClientHelper,
-        Consumer
+    class ChannelImpl :
+        RmqBrokerClient,
+        Channel
     {
-        public ConsumerImpl(HttpClient client)
-            : base(client)
+        public ChannelImpl(HttpClient client) :
+            base(client)
         {
         }
 
-        public async Task<ResultList<ConsumerInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<ChannelInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            string url = "api/consumers";
+            string url = "api/channels";
             
-            ResultList<ConsumerInfo> result = await GetAll<ConsumerInfo>(url, cancellationToken);
+            ResultList<ChannelInfo> result = await GetAll<ChannelInfo>(url, cancellationToken);
 
             return result;
         }
