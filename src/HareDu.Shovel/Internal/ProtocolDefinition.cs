@@ -15,7 +15,7 @@ namespace HareDu.Shovel.Internal
 {
     using Newtonsoft.Json;
 
-    internal interface AMQP091ShovelDefinition
+    public interface ProtocolDefinition
     {
         [JsonProperty("src-protocol")]
         string SourceProtocol { get; }
@@ -32,32 +32,14 @@ namespace HareDu.Shovel.Internal
         [JsonProperty("src-prefetch-count")]
         int SourcePrefetchCount { get; }
         
-        [JsonProperty("src-queue")]
-        string SourceQueue { get; }
-        
-        [JsonProperty("dest-queue")]
-        string DestinationQueue { get; }
-        
-        [JsonProperty("src-exchange")]
-        string SourceExchange { get; }
-        
-        [JsonProperty("dest-exchange")]
-        string DestinationExchange { get; }
-        
-        [JsonProperty("src-exchange-key")]
-        string SourceExchangeRoutingKey { get; }
-        
-        [JsonProperty("dest-exchange-key")]
-        string DestinationExchangeRoutingKey { get; }
-        
-        [JsonProperty("src-delete-after")]
-        string DeleteShovelAfter { get; }
-        
         [JsonProperty("src-uri")]
         string SourceUri { get; }
         
         [JsonProperty("dest-uri")]
         string DestinationUri { get; }
+        
+        [JsonProperty("src-delete-after")]
+        string DeleteShovelAfter { get; }
         
         [JsonProperty("dest-add-forward-headers")]
         bool DestinationAddForwardHeaders { get; }

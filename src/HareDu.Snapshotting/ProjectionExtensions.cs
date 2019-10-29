@@ -17,12 +17,6 @@ namespace HareDu.Snapshotting
 
     public static class ProjectionExtensions
     {
-        public static T Select<T, U>(this U obj, Func<U, T> projection)
-        {
-            if (obj == null)
-                return default;
-
-            return projection(obj);
-        }
+        public static T Select<T, U>(this U obj, Func<U, T> projection) => obj == null ? default : projection(obj);
     }
 }

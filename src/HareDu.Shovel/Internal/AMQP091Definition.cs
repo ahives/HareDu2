@@ -15,9 +15,25 @@ namespace HareDu.Shovel.Internal
 {
     using Newtonsoft.Json;
 
-    interface ShovelDefinition<out T>
+    public interface AMQP091Definition :
+        ProtocolDefinition
     {
-        [JsonProperty("value")]
-        T Definition { get; }
+        [JsonProperty("src-queue")]
+        string SourceQueue { get; }
+        
+        [JsonProperty("dest-queue")]
+        string DestinationQueue { get; }
+        
+        [JsonProperty("src-exchange")]
+        string SourceExchange { get; }
+        
+        [JsonProperty("dest-exchange")]
+        string DestinationExchange { get; }
+        
+        [JsonProperty("src-exchange-key")]
+        string SourceExchangeRoutingKey { get; }
+        
+        [JsonProperty("dest-exchange-key")]
+        string DestinationExchangeRoutingKey { get; }
     }
 }

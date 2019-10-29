@@ -14,17 +14,22 @@
 namespace HareDu.Shovel
 {
     using System;
+    using System.Collections.Generic;
 
-    public interface AMQP091Source
+    public interface ShovelDestination
     {
-        void Uri(Action<ShovelUriBuilder<AMQP091ShovelUri>> builder);
+        void AddForwardHeaders();
+
+        void AddTimestampHeader();
+        
+        void Uri(Action<ShovelUriBuilder> builder);
         
         void Queue(string name);
 
         void Exchange(string name, string routingKey);
 
-        void PrefetchCount(int prefetchCount);
+        void SetPublishProperties(IDictionary<string, string> properties);
 
-        void DeleteAfter(string value);
+        void Protocol(ShovelProtocol protocol);
     }
 }

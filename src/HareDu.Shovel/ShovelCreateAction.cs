@@ -15,14 +15,12 @@ namespace HareDu.Shovel
 {
     using System;
 
-    public interface ShovelCreateAction<out TSource, out TDestination>
-        where TSource : AMQP091Source
-        where TDestination : AMQP091Destination
+    public interface ShovelCreateAction
     {
         void Configure(Action<ShovelConfiguration> configuration);
 
-        void Source(Action<TSource> configuration);
+        void Source(Action<ShovelSource> configuration);
 
-        void Destination(Action<TDestination> configuration);
+        void Destination(Action<ShovelDestination> configuration);
     }
 }

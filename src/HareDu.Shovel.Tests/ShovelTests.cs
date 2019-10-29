@@ -13,18 +13,34 @@
 // limitations under the License.
 namespace HareDu.Shovel.Tests
 {
+    using System;
     using System.Threading.Tasks;
+    using Autofac;
+    using AutofacIntegration;
+    using Core;
+    using Core.Extensions;
+    using Internal;
     using NUnit.Framework;
 
     [TestFixture]
     public class ShovelTests
     {
+        IContainer _container;
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            var builder = new ContainerBuilder();
+            
+            builder.RegisterModule<HareDuShovelModule>();
+
+            _container = builder.Build();
+        }
+
         [Test]
         public async Task Test()
         {
-            /*
-            Result result = await Client
-                .Object<Shovel<AMQP091Source, AMQP091Destination>>()
+            Result result = await _container.Resolve<IShovelFactory>()
                 .Shovel(x =>
                 {
                     x.Configure(c =>
@@ -34,18 +50,21 @@ namespace HareDu.Shovel.Tests
 //                        c.ReconnectDelay(100);
                         c.VirtualHost("%2f");
                     });
-                    x.Source(s =>
+                    x.Source(c =>
                     {
-                        s.Uri(u => { u.Builder(b => { b.SetHeartbeat(1); }); });
-                        s.PrefetchCount(2);
-                        s.Queue("my-queue");
+                        c.Protocol(ShovelProtocol.AMQP_091);
+                        c.Uri(u => { u.Build(b => { b.SetHeartbeat(1); }); });
+                        c.PrefetchCount(2);
+                        c.Exchange("TestExchange", "cool-exchange");
+                        c.Queue("my-queue");
                     });
-                    x.Destination(d =>
+                    x.Destination(c =>
                     {
-                        d.Queue("another-queue");
-                        d.Uri(u =>
+                        c.Protocol(ShovelProtocol.AMQP_091);
+                        c.Queue("another-queue");
+                        c.Uri(u =>
                         {
-                            u.Builder(b =>
+                            u.Build(b =>
                             {
                                 b.SetHost("remote-server");
 //                                b.SetHeartbeat(1);
@@ -54,7 +73,7 @@ namespace HareDu.Shovel.Tests
                     });
                 });
             
-            Console.WriteLine(result.ToJsonString());*/
+            Console.WriteLine(result.ToJsonString());
         }
     }
 }

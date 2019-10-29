@@ -15,8 +15,8 @@ namespace HareDu.Shovel
 {
     using System;
 
-    public interface ShovelUriBuilder<out T>
+    public interface ShovelUriBuilder
     {
-        void Builder(Action<T> builder);
+        void Build(Action<ShovelUri> builder);
     }
 }

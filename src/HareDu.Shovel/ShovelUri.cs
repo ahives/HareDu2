@@ -30,5 +30,19 @@ namespace HareDu.Shovel
         void SetKeyFile(string keyFile);
 
         void SetSaslAuthenticationMechanism(string saslAuthMechanism);
+        
+        void SetVirtualHost(string vhost);
+        
+        void SetIdleTimeout(int timeout);
+
+        void SetVerifyCertificate(string value);
+
+        void SetServerNameIndication(string server);
+
+        void SetConnectionTimeout(int timeout);
+
+        void SetChannelMax(int channelMax);
+        
+        void SetHeartbeat(int timeout);
     }
 }
