@@ -11,10 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Shovel
+namespace HareDu.Testing.Fakes
 {
-    public interface ShovelTarget
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Core;
+    using Model;
+
+    public class FakeNodeObject :
+        Node
     {
-        void VirtualHost(string name);
+        public async Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
+        {
+            NodeInfo node1 = new FakeNodeInfo();
+            NodeInfo node2 = new FakeNodeInfo();
+
+            List<NodeInfo> data = new List<NodeInfo> {node1, node2};
+
+            return new SuccessfulResultList<NodeInfo>(data, null);
+        }
     }
 }

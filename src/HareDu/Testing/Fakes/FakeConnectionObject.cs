@@ -11,25 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Tests.Fakes
+namespace HareDu.Testing.Fakes
 {
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
-    using HareDu.Model;
+    using Model;
 
-    public class FakeNodeObject :
-        Node
+    public class FakeConnectionObject :
+        Connection
     {
-        public async Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<ConnectionInfo>> GetAll(CancellationToken cancellationToken = default)
         {
-            NodeInfo node1 = new FakeNodeInfo();
-            NodeInfo node2 = new FakeNodeInfo();
+            ConnectionInfo connection1 = new FakeConnectionInfo(1, 1);
+            ConnectionInfo connection2 = new FakeConnectionInfo(2, 1);
+            ConnectionInfo connection3 = new FakeConnectionInfo(3, 1);
 
-            List<NodeInfo> data = new List<NodeInfo> {node1, node2};
+            List<ConnectionInfo> data = new List<ConnectionInfo> {connection1, connection2, connection3};
 
-            return new SuccessfulResultList<NodeInfo>(data, null);
+            return new SuccessfulResultList<ConnectionInfo>(data, null);
         }
     }
 }

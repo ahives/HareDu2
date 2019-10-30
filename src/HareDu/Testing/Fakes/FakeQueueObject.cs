@@ -11,14 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Tests.Fakes
+namespace HareDu.Testing.Fakes
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
-    using HareDu.Model;
+    using Model;
 
     public class FakeQueueObject :
         Queue

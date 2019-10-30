@@ -198,7 +198,7 @@ namespace HareDu.Shovel
                 }
                 else
                 {
-                    AMQP091Definition @params = new Amqp091DefinitionImpl(
+                    Amqp091Definition @params = new Amqp091DefinitionImpl(
                         _sourceProtocol,
                         _destinationProtocol,
                         _acknowledgementMode,
@@ -216,8 +216,8 @@ namespace HareDu.Shovel
                         _destinationAddForwardMessageHeaders,
                         _destinationAddTimestampMessageHeader);
 
-                    ShovelDefinition<AMQP091Definition> definition =
-                        new ShovelDefinitionImpl<AMQP091Definition>(@params);
+                    ShovelDefinition<Amqp091Definition> definition =
+                        new ShovelDefinitionImpl<Amqp091Definition>(@params);
 
                     return definition.ToJsonString();
                 }
@@ -265,7 +265,7 @@ namespace HareDu.Shovel
 
             
             class Amqp091DefinitionImpl :
-                AMQP091Definition
+                Amqp091Definition
             {
                 public Amqp091DefinitionImpl(
                     ShovelProtocol sourceProtocol,

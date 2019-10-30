@@ -11,19 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Tests.Fakes
+namespace HareDu.Testing.Fakes
 {
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
-    using HareDu.Model;
+    using Model;
 
     public class FakeClusterObject :
         Cluster
     {
         public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
         {
-            ClusterInfo data = new FakeClusterInfoImpl();
+            ClusterInfo data = new FakeClusterInfo();
             
             return new SuccessfulResult<ClusterInfo>(data, null);
         }

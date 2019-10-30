@@ -19,7 +19,6 @@ namespace HareDu.Shovel.Tests
     using AutofacIntegration;
     using Core;
     using Core.Extensions;
-    using Internal;
     using NUnit.Framework;
 
     [TestFixture]

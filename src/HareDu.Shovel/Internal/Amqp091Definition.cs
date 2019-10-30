@@ -15,7 +15,7 @@ namespace HareDu.Shovel.Internal
 {
     using Newtonsoft.Json;
 
-    public interface AMQP091Definition :
+    public interface Amqp091Definition :
         ProtocolDefinition
     {
         [JsonProperty("src-queue")]

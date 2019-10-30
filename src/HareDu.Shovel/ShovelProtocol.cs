@@ -11,24 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Tests.Fakes
+namespace HareDu.Shovel
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Core;
-    using HareDu.Model;
-
-    public class FakeChannelObject :
-        Channel
+    public enum ShovelProtocol
     {
-        public async Task<ResultList<ChannelInfo>> GetAll(CancellationToken cancellationToken = default)
-        {
-            ChannelInfo channel = new FakeChannelInfo(1, 1);
-
-            List<ChannelInfo> data = new List<ChannelInfo> {channel};
-
-            return new SuccessfulResultList<ChannelInfo>(data, null);
-        }
+        AMQP_091,
+        AMQP_10
     }
 }

@@ -16,6 +16,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using System.Collections.Generic;
     using System.Net.Http;
     using HareDu.Registration;
+    using HareDu.Testing.Fakes;
 
     public class FakeBrokerObjectRegistration :
         IBrokerObjectRegistration
