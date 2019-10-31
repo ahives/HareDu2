@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,81 +11,34 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Tests
+namespace HareDu.IntegrationTesting.BrokerObjects
 {
     using System;
     using System.Threading.Tasks;
     using Autofac;
-    using Configuration;
-    using Core;
-    using Core.Configuration;
+    using AutofacIntegration;
     using Core.Extensions;
-    using Core.Testing;
-    using Fakes;
     using NUnit.Framework;
-    using Registration;
-    using Testing.Fakes;
 
     [TestFixture]
-    public class QueueTests :
-        HareDuTesting
+    public class QueueTests
     {
-        [Test]
-        public async Task Should_be_able_to_get_all_queues()
+        IContainer _container;
+
+        [OneTimeSetUp]
+        public void Init()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo1.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .GetAll();
+            var builder = new ContainerBuilder();
             
-            foreach (var queue in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", queue.Name);
-                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
-                Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            builder.RegisterModule<HareDuModule>();
 
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
-        }
-
-        [Test]
-        public async Task Verify_can_peek_messages()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo1.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Target(t => t.VirtualHost("HareDu"));
-                });
-
-//            foreach (var message in result.Select(x => x.Data))
-//            {
-//                Console.WriteLine(message.PayloadBytes);
-//                Console.WriteLine(message.MessageCount);
-//                Console.WriteLine(message.Properties);
-//                Console.WriteLine(message.Payload);
-//            }
-//            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            _container = builder.Build();
         }
 
         [Test]
         public async Task Verify_can_create_queue()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo1.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -103,10 +56,40 @@ namespace HareDu.Tests
         }
 
         [Test]
+        public async Task Should_be_able_to_get_all_queues()
+        {
+            var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Queue>()
+                .GetAll();
+            
+            foreach (var queue in result.Select(x => x.Data))
+            {
+                Console.WriteLine("Name: {0}", queue.Name);
+                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
+                Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
+        public async Task Verify_can_get_all_json()
+        {
+            var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Queue>()
+                .GetAll();
+            
+            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
         public async Task Verify_can_delete_queue()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo1.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -124,10 +107,31 @@ namespace HareDu.Tests
         }
 
         [Test]
+        public async Task Verify_can_peek_messages()
+        {
+            var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Queue>()
+                .Peek(x =>
+                {
+                    x.Queue("Queue1");
+                    x.Configure(c =>
+                    {
+                        c.Take(5);
+                        c.AckMode(RequeueMode.AckRequeue);
+                        c.TruncateIfAbove(5000);
+                        c.Encoding(MessageEncoding.Auto);
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+//            Assert.IsFalse(result.HasFaulted);
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
         public async Task Verify_can_empty_queue()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo1.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {

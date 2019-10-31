@@ -101,7 +101,7 @@ namespace HareDu.Internal.Objects
             return result;
         }
 
-        public async Task<Result<QueueInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
+        public async Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -115,9 +115,9 @@ namespace HareDu.Internal.Objects
             string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}/get";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return new FaultedResultList<PeekedMessageInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
-            Result<QueueInfo> result = await Post<QueueInfo, QueuePeekDefinition>(url, definition, cancellationToken);
+            ResultList<PeekedMessageInfo> result = await PostList<PeekedMessageInfo, QueuePeekDefinition>(url, definition, cancellationToken);
 
             return result;
         }
@@ -129,9 +129,9 @@ namespace HareDu.Internal.Objects
             string _vhost;
             string _queue;
             uint _take;
-            bool _putBackWhenFinished;
             string _encoding;
             ulong _truncateIfAbove;
+            string _requeueMode;
             readonly List<Error> _errors;
 
             public Lazy<QueuePeekDefinition> Definition { get; }
@@ -145,7 +145,7 @@ namespace HareDu.Internal.Objects
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<QueuePeekDefinition>(
-                    () => new QueuePeekDefinitionImpl(_take, _putBackWhenFinished, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
+                    () => new QueuePeekDefinitionImpl(_take, _requeueMode, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -164,7 +164,7 @@ namespace HareDu.Internal.Objects
                 configuration(impl);
 
                 _take = impl.TakeAmount;
-                _putBackWhenFinished = impl.PutBack;
+                _requeueMode = impl.RequeueMode;
                 _encoding = impl.MessageEncoding;
                 _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
             
@@ -190,18 +190,18 @@ namespace HareDu.Internal.Objects
             class QueuePeekDefinitionImpl :
                 QueuePeekDefinition
             {
-                public QueuePeekDefinitionImpl(uint take, bool putBackWhenFinished, string encoding, ulong truncateMessageThreshold)
+                public QueuePeekDefinitionImpl(uint take, string requeueMode, string encoding, ulong truncateMessageThreshold)
                 {
                     Take = take;
-                    PutBackWhenFinished = putBackWhenFinished;
                     Encoding = encoding;
+                    RequeueMode = requeueMode;
                     TruncateMessageThreshold = truncateMessageThreshold;
                 }
 
                 public uint Take { get; }
-                public bool PutBackWhenFinished { get; }
                 public string Encoding { get; }
                 public ulong TruncateMessageThreshold { get; }
+                public string RequeueMode { get; }
             }
 
             
@@ -209,13 +209,11 @@ namespace HareDu.Internal.Objects
                 QueuePeekConfiguration
             {
                 public uint TakeAmount { get; private set; }
-                public bool PutBack { get; private set; }
+                public string RequeueMode { get; private set; }
                 public string MessageEncoding { get; private set; }
                 public ulong TruncateMessageThresholdInBytes { get; private set; }
 
                 public void Take(uint count) => TakeAmount = count;
-
-                public void PutBackWhenFinished() => PutBack = true;
 
                 public void Encoding(MessageEncoding encoding)
                 {
@@ -235,6 +233,28 @@ namespace HareDu.Internal.Objects
                 }
 
                 public void TruncateIfAbove(uint bytes) => TruncateMessageThresholdInBytes = bytes;
+                
+                public void AckMode(RequeueMode mode)
+                {
+                    switch (mode)
+                    {
+                        case HareDu.RequeueMode.DoNotAckRequeue:
+                            RequeueMode = "ack_requeue_false";
+                            break;
+                
+                        case HareDu.RequeueMode.RejectRequeue:
+                            RequeueMode = "reject_requeue_true";
+                            break;
+                
+                        case HareDu.RequeueMode.DoNotRejectRequeue:
+                            RequeueMode = "reject_requeue_false";
+                            break;
+
+                        default:
+                            RequeueMode = "ack_requeue_true";
+                            break;
+                    }
+                }
             }
 
             

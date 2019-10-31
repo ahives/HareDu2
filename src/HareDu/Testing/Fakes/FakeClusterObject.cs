@@ -16,10 +16,12 @@ namespace HareDu.Testing.Fakes
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
+    using Core.Testing;
     using Model;
 
     public class FakeClusterObject :
-        Cluster
+        Cluster,
+        HareDuTestingFake
     {
         public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
         {

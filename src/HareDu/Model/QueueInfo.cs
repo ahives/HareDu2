@@ -110,7 +110,7 @@ namespace HareDu.Model
         string State { get; }
         
         [JsonProperty("recoverable_slaves")]
-        long RecoverableSlaves { get; }
+        IList<string> RecoverableSlaves { get; }
         
         [JsonProperty("consumers")]
         ulong Consumers { get; }

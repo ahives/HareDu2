@@ -17,10 +17,12 @@ namespace HareDu.Testing.Fakes
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
+    using Core.Testing;
     using Model;
 
     public class FakeChannelObject :
-        Channel
+        Channel,
+        HareDuTestingFake
     {
         public async Task<ResultList<ChannelInfo>> GetAll(CancellationToken cancellationToken = default)
         {

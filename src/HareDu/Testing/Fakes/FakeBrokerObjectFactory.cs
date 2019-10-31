@@ -14,9 +14,11 @@
 namespace HareDu.Testing.Fakes
 {
     using Core;
+    using Core.Testing;
 
     public class FakeBrokerObjectFactory :
-        IBrokerObjectFactory
+        IBrokerObjectFactory,
+        HareDuTestingFake
     {
         public T Object<T>()
             where T : BrokerObject

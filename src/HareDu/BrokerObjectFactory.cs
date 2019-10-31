@@ -18,6 +18,7 @@ namespace HareDu
     using System.Linq;
     using System.Net.Http;
     using Core;
+    using Core.Testing;
 
     public class BrokerObjectFactory :
         IBrokerObjectFactory
@@ -37,7 +38,7 @@ namespace HareDu
             Type type = GetType()
                 .Assembly
                 .GetTypes()
-                .FirstOrDefault(x => typeof(T).IsAssignableFrom(x) && !x.IsInterface);
+                .FirstOrDefault(IsNotFakeType<T>);
 
             if (type == null)
                 throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
@@ -56,5 +57,11 @@ namespace HareDu
         {
             _client.CancelPendingRequests();
         }
+
+        bool IsNotFakeType<T>(Type x)
+            where T : BrokerObject
+            => typeof(T).IsAssignableFrom(x)
+               && !x.IsInterface
+               && x.GetInterface(typeof(HareDuTestingFake).FullName) == null;
     }
 }

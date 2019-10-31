@@ -1,0 +1,40 @@
+[
+  {
+    "payload_bytes": 1020,
+    "redelivered": false,
+    "exchange": "HareDu.IntegrationTesting.Core:FakeMessage",
+    "routing_key": "",
+    "message_count": 1058,
+    "properties": {
+      "message_id": "11220000-4800-acde-cfc0-08d75db8e020",
+      "correlation_id": "11220000-4800-acde-cbf4-08d75db8d299",
+      "delivery_mode": 2,
+      "headers": {
+        "Content-Type": "application/vnd.masstransit+json",
+        "publishId": "3233"
+      },
+      "content_type": "application/vnd.masstransit+json"
+    },
+    "payload": "{\n  \"messageId\": \"11220000-4800-acde-cfc0-08d75db8e020\",\n  \"correlationId\": \"11220000-4800-acde-cbf4-08d75db8d299\",\n  \"conversationId\": \"11220000-4800-acde-d09c-08d75db8e020\",\n  \"sourceAddress\": \"rabbitmq://localhost/TestVirtualHost/AlbertsMBP_dotnet_bus_nrtyyyneynsphyjabdmi5qg1bi?durable=false&autodelete=true\",\n  \"destinationAddress\": \"rabbitmq://localhost/TestVirtualHost/HareDu.IntegrationTesting.Core:FakeMessage\",\n  \"messageType\": [\n    \"urn:message:HareDu.IntegrationTesting.Core:FakeMessage\"\n  ],\n  \"message\": {\n    \"correlationId\": \"11220000-4800-acde-cbf4-08d75db8d299\",\n    \"timestamp\": \"2019-10-30T21:14:28.487474-07:00\"\n  },\n  \"sentTime\": \"2019-10-31T04:14:51.182715Z\",\n  \"headers\": {},\n  \"host\": {\n    \"machineName\": \"Alberts-MBP\",\n    \"processName\": \"dotnet\",\n    \"processId\": 48785,\n    \"assembly\": \"HareDu.IntegrationTesting.Publisher\",\n    \"assemblyVersion\": \"2.0.0.0\",\n    \"frameworkVersion\": \"4.0.30319.42000\",\n    \"massTransitVersion\": \"5.5.4.0\",\n    \"operatingSystemVersion\": \"Unix 19.0.0.0\"\n  }\n}",
+    "payload_encoding": "string"
+  },
+  {
+    "payload_bytes": 1020,
+    "redelivered": false,
+    "exchange": "HareDu.IntegrationTesting.Core:FakeMessage",
+    "routing_key": "",
+    "message_count": 1529,
+    "properties": {
+      "message_id": "11220000-4800-acde-c26a-08d75db8dcaf",
+      "correlation_id": "11220000-4800-acde-deb4-08d75db8d2a8",
+      "delivery_mode": 2,
+      "headers": {
+        "Content-Type": "application/vnd.masstransit+json",
+        "publishId": "182"
+      },
+      "content_type": "application/vnd.masstransit+json"
+    },
+    "payload": "{\n  \"messageId\": \"11220000-4800-acde-c26a-08d75db8dcaf\",\n  \"correlationId\": \"11220000-4800-acde-deb4-08d75db8d2a8\",\n  \"conversationId\": \"11220000-4800-acde-c3f0-08d75db8dcaf\",\n  \"sourceAddress\": \"rabbitmq://localhost/TestVirtualHost/AlbertsMBP_dotnet_bus_nrtyyyneynsphyjabdmi5qg1bi?durable=false&autodelete=true\",\n  \"destinationAddress\": \"rabbitmq://localhost/TestVirtualHost/HareDu.IntegrationTesting.Core:FakeMessage\",\n  \"messageType\": [\n    \"urn:message:HareDu.IntegrationTesting.Core:FakeMessage\"\n  ],\n  \"message\": {\n    \"correlationId\": \"11220000-4800-acde-deb4-08d75db8d2a8\",\n    \"timestamp\": \"2019-10-30T21:14:28.586258-07:00\"\n  },\n  \"sentTime\": \"2019-10-31T04:14:45.408672Z\",\n  \"headers\": {},\n  \"host\": {\n    \"machineName\": \"Alberts-MBP\",\n    \"processName\": \"dotnet\",\n    \"processId\": 48785,\n    \"assembly\": \"HareDu.IntegrationTesting.Publisher\",\n    \"assemblyVersion\": \"2.0.0.0\",\n    \"frameworkVersion\": \"4.0.30319.42000\",\n    \"massTransitVersion\": \"5.5.4.0\",\n    \"operatingSystemVersion\": \"Unix 19.0.0.0\"\n  }\n}",
+    "payload_encoding": "string"
+  }
+]

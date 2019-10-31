@@ -173,6 +173,33 @@ namespace HareDu.Core
             }
         }
 
+        protected async Task<ResultList<T>> PostList<T, TValue>(string url, TValue value, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (url.Contains("/%2f"))
+                    HandleDotsAndSlashes();
+
+                string request = value.ToJsonString();
+                byte[] requestBytes = Encoding.UTF8.GetBytes(request);
+                var content = new ByteArrayContent(requestBytes);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var responseMessage = await _client.PostAsync(url, content, cancellationToken);
+                
+                if (!responseMessage.IsSuccessStatusCode)
+                    return new FaultedResultList<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
+
+                var data = await responseMessage.DeserializeResponse<List<T>>();
+
+                return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, request));
+            }
+            catch (MissingMethodException e)
+            {
+                return new FaultedResultList<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
+            }
+        }
+
         protected async Task<Result> PostEmpty(string url, CancellationToken cancellationToken = default)
         {
             try

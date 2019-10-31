@@ -17,10 +17,12 @@ namespace HareDu.Testing.Fakes
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
+    using Core.Testing;
     using Model;
 
     public class FakeConnectionObject :
-        Connection
+        Connection,
+        HareDuTestingFake
     {
         public async Task<ResultList<ConnectionInfo>> GetAll(CancellationToken cancellationToken = default)
         {

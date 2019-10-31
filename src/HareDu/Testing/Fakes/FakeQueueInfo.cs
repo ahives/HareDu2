@@ -72,7 +72,7 @@ namespace HareDu.Testing.Fakes
         public ulong MessagesInRam { get; }
         public GarbageCollectionDetails GC { get; }
         public string State { get; }
-        public long RecoverableSlaves { get; }
+        public IList<string> RecoverableSlaves { get; }
         public ulong Consumers { get; }
         public string ExclusiveConsumerTag { get; }
         public string Policy { get; }

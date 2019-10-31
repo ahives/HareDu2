@@ -18,6 +18,7 @@ namespace HareDu.Registration
     using System.Linq;
     using System.Net.Http;
     using Core;
+    using Core.Testing;
 
     public class BrokerObjectRegistration :
         IBrokerObjectRegistration
@@ -40,6 +41,9 @@ namespace HareDu.Registration
 
             foreach (var type in types)
             {
+                if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null)
+                    continue;
+                
                 var resource = Activator.CreateInstance(type, client);
                 
                 _cache.Add(type.FullName, resource);

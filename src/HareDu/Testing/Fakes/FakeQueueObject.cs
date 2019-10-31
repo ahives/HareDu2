@@ -18,10 +18,12 @@ namespace HareDu.Testing.Fakes
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
+    using Core.Testing;
     using Model;
 
     public class FakeQueueObject :
-        Queue
+        Queue,
+        HareDuTestingFake
     {
         public async Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
         {
@@ -38,6 +40,6 @@ namespace HareDu.Testing.Fakes
 
         public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
-        public async Task<Result<QueueInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public async Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default) => throw new NotImplementedException();
     }
 }

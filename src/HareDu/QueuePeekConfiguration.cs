@@ -22,11 +22,6 @@ namespace HareDu
         void Take(uint count);
 
         /// <summary>
-        /// Specify that after messages are popped from the queue to requeue them.
-        /// </summary>
-        void PutBackWhenFinished();
-
-        /// <summary>
         /// Specify how to encode messages when requeued. 
         /// </summary>
         /// <param name="encoding"></param>
@@ -37,5 +32,11 @@ namespace HareDu
         /// </summary>
         /// <param name="bytes"></param>
         void TruncateIfAbove(uint bytes);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mode"></param>
+        void AckMode(RequeueMode mode);
     }
 }

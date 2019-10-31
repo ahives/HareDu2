@@ -11,27 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Testing.Fakes
+namespace HareDu
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Core;
-    using Core.Testing;
-    using Model;
-
-    public class FakeNodeObject :
-        Node,
-        HareDuTestingFake
+    public static class TypeConversionExtensions
     {
-        public async Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
+        public static string ToRequeueModeString(this RequeueMode mode)
         {
-            NodeInfo node1 = new FakeNodeInfo();
-            NodeInfo node2 = new FakeNodeInfo();
+            switch (mode)
+            {
+                case RequeueMode.DoNotAckRequeue:
+                    return "ack_requeue_false";
+                
+                case RequeueMode.RejectRequeue:
+                    return "reject_requeue_true";
+                
+                case RequeueMode.DoNotRejectRequeue:
+                    return "reject_requeue_false";
 
-            List<NodeInfo> data = new List<NodeInfo> {node1, node2};
-
-            return new SuccessfulResultList<NodeInfo>(data, null);
+                default:
+                    return "ack_requeue_true";
+            }
         }
     }
 }

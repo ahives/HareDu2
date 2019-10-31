@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,22 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu.Model
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    interface QueuePeekDefinition
+    public interface PeekedMessageProperties
     {
-        [JsonProperty("count")]
-        uint Take { get; }
+        [JsonProperty("message_id")]
+        string MessageId { get; }
         
-        [JsonProperty("encoding")]
-        string Encoding { get; }
+        [JsonProperty("correlation_id")]
+        string CorrelationId { get; }
         
-        [JsonProperty("truncate")]
-        ulong TruncateMessageThreshold { get; }
+        [JsonProperty("delivery_mode")]
+        uint DeliveryMode { get; }
         
-        [JsonProperty("ackmode")]
-        string RequeueMode { get; }
+        [JsonProperty("headers")]
+        IDictionary<string, object> Headers { get; }
+        
+        [JsonProperty("content_type")]
+        string ContentType { get; }
     }
 }
