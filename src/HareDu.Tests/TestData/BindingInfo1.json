@@ -1,0 +1,113 @@
+[
+  {
+    "source": "",
+    "vhost": "/",
+    "destination": "Queue1",
+    "destination_type": "queue",
+    "routing_key": "Key1",
+    "arguments": {},
+    "properties_key": "Key1"
+  },
+  {
+    "source": "",
+    "vhost": "/",
+    "destination": "Queue1_error",
+    "destination_type": "queue",
+    "routing_key": "Queue1_error",
+    "arguments": {},
+    "properties_key": "Queue1_error"
+  },
+  {
+    "source": "",
+    "vhost": "/",
+    "destination": "input_queue",
+    "destination_type": "queue",
+    "routing_key": "input_queue",
+    "arguments": {},
+    "properties_key": "input_queue"
+  },
+  {
+    "source": "Queue1:SomeMessage",
+    "vhost": "/",
+    "destination": "Queue1",
+    "destination_type": "exchange",
+    "routing_key": "",
+    "arguments": {},
+    "properties_key": "~"
+  },
+  {
+    "source": "input_queue",
+    "vhost": "/",
+    "destination": "input_queue",
+    "destination_type": "queue",
+    "routing_key": "",
+    "arguments": {},
+    "properties_key": "~"
+  },
+  {
+    "source": "",
+    "vhost": "HareDu",
+    "destination": "Queue1",
+    "destination_type": "queue",
+    "routing_key": "Queue1",
+    "arguments": {},
+    "properties_key": "Queue1"
+  },
+  {
+    "source": "",
+    "vhost": "HareDu",
+    "destination": "Queue2",
+    "destination_type": "queue",
+    "routing_key": "Queue2",
+    "arguments": {},
+    "properties_key": "Queue2"
+  },
+  {
+    "source": "Test1",
+    "vhost": "HareDu",
+    "destination": "Queue1",
+    "destination_type": "queue",
+    "routing_key": "",
+    "arguments": {},
+    "properties_key": "~"
+  },
+  {
+    "source": "Test1",
+    "vhost": "HareDu",
+    "destination": "Queue1",
+    "destination_type": "queue",
+    "routing_key": "x=y",
+    "arguments": {
+      "A": "B",
+      "X": "Y"
+    },
+    "properties_key": "x%3Dy~eZp7ow"
+  },
+  {
+    "source": "",
+    "vhost": "TestVirtualHost",
+    "destination": "TestQueue",
+    "destination_type": "queue",
+    "routing_key": "TestQueue",
+    "arguments": {},
+    "properties_key": "TestQueue"
+  },
+  {
+    "source": "HareDu.IntegrationTesting.Core:FakeMessage",
+    "vhost": "TestVirtualHost",
+    "destination": "TestQueue",
+    "destination_type": "exchange",
+    "routing_key": "",
+    "arguments": {},
+    "properties_key": "~"
+  },
+  {
+    "source": "TestQueue",
+    "vhost": "TestVirtualHost",
+    "destination": "TestQueue",
+    "destination_type": "queue",
+    "routing_key": "",
+    "arguments": {},
+    "properties_key": "~"
+  }
+]

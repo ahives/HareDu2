@@ -45,7 +45,7 @@ namespace HareDu.Core
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResultList<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
                 
-                var data = await responseMessage.DeserializeResponse<List<T>>();
+                var data = await responseMessage.ToObject<List<T>>();
                 
                 return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, null));
             }
@@ -67,7 +67,7 @@ namespace HareDu.Core
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
 
-                var data = await responseMessage.DeserializeResponse<T>();
+                var data = await responseMessage.ToObject<T>();
                 
                 return new SuccessfulResult<T>(data, new DebugInfoImpl(url, null));
             }
@@ -163,7 +163,7 @@ namespace HareDu.Core
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
-                var data = await responseMessage.DeserializeResponse<T>();
+                var data = await responseMessage.ToObject<T>();
 
                 return new SuccessfulResult<T>(data, new DebugInfoImpl(url, request));
             }
@@ -190,7 +190,7 @@ namespace HareDu.Core
                 if (!responseMessage.IsSuccessStatusCode)
                     return new FaultedResultList<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
 
-                var data = await responseMessage.DeserializeResponse<List<T>>();
+                var data = await responseMessage.ToObject<List<T>>();
 
                 return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, request));
             }

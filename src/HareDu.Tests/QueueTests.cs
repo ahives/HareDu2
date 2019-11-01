@@ -16,15 +16,9 @@ namespace HareDu.Tests
     using System;
     using System.Threading.Tasks;
     using Autofac;
-    using Configuration;
-    using Core;
-    using Core.Configuration;
     using Core.Extensions;
-    using Core.Testing;
-    using Fakes;
+    using Model;
     using NUnit.Framework;
-    using Registration;
-    using Testing.Fakes;
 
     [TestFixture]
     public class QueueTests :
@@ -84,7 +78,7 @@ namespace HareDu.Tests
         [Test]
         public async Task Verify_can_create_queue()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo1.json").Build();
+            var container = GetContainerBuilder().Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
@@ -93,19 +87,36 @@ namespace HareDu.Tests
                     x.Configure(c =>
                     {
                         c.IsDurable();
-                        c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
+                        c.AutoDeleteWhenNotInUse();
+                        c.HasArguments(arg =>
+                        {
+                            arg.SetQueueExpiration(1000);
+                            arg.SetPerQueuedMessageExpiration(2000);
+                        });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Target(t =>
+                    {
+                        t.VirtualHost("HareDu");
+                        t.Node("Node1");
+                    });
                 });
             
             Assert.IsFalse(result.HasFaulted);
+
+            QueueDefinition request = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            
+            Assert.IsTrue(request.AutoDelete);
+            Assert.AreEqual("Node1", request.Node);
+            Assert.IsTrue(request.Durable);
+            Assert.AreEqual(1000, request.Arguments["x-expires"]);
+            Assert.AreEqual(2000,request.Arguments["x-message-ttl"]);
             Console.WriteLine(result.ToJsonString());
         }
 
         [Test]
         public async Task Verify_can_delete_queue()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo1.json").Build();
+            var container = GetContainerBuilder().Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
@@ -114,28 +125,30 @@ namespace HareDu.Tests
                     x.Target(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
-//                        c.HasNoConsumers();
+                        c.HasNoConsumers();
 //                        c.IsEmpty();
                     });
                 });
-
-//            Assert.IsFalse(result.HasFaulted);
+            
+            Assert.IsFalse(result.HasFaulted);
+            Assert.AreEqual("api/queues/HareDu/TestQueue10?if-unused=true", result.DebugInfo.URL);
             Console.WriteLine(result.ToJsonString());
         }
 
         [Test]
         public async Task Verify_can_empty_queue()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo1.json").Build();
+            var container = GetContainerBuilder().Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
-                    x.Queue("");
+                    x.Queue("Node1");
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
+            Assert.AreEqual("api/queues/HareDu/Node1/contents", result.DebugInfo.URL);
             Console.WriteLine(result.ToJsonString());
         }
     }

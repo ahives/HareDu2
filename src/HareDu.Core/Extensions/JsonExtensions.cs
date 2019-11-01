@@ -49,8 +49,8 @@ namespace HareDu.Core.Extensions
                 return encoding.GetString(stream.ToArray());
             }
         }
-        
-        internal static async Task<T> DeserializeResponse<T>(this HttpResponseMessage responseMessage)
+
+        public static async Task<T> ToObject<T>(this HttpResponseMessage responseMessage)
         {
             string rawResponse = await responseMessage.Content.ReadAsStringAsync();
 
@@ -63,6 +63,20 @@ namespace HareDu.Core.Extensions
                 T response = SerializerCache.Deserializer.Deserialize<T>(jsonReader);
                 
                 return response;
+            }
+        }
+
+        public static T ToObject<T>(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return default;
+            
+            using (var reader = new StringReader(value))
+            using (var jsonReader = new JsonTextReader(reader))
+            {
+                T obj = SerializerCache.Deserializer.Deserialize<T>(jsonReader);
+                
+                return obj;
             }
         }
     }

@@ -55,5 +55,9 @@
     <Content Include="TestData\PeekedMessageInfo1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\BindingInfo1.json" />
+    <Content Include="TestData\BindingInfo1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

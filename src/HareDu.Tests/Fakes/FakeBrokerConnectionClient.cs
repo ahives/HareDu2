@@ -36,6 +36,11 @@ namespace HareDu.Tests.Fakes
             _payload = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{file}");
         }
 
+        public FakeBrokerConnectionClient()
+        {
+            _payload = string.Empty;
+        }
+
         public HttpClient Create(HareDuClientSettings settings)
         {
             var mock = new Mock<HttpMessageHandler>();

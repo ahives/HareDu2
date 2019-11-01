@@ -59,5 +59,43 @@ namespace HareDu.Tests
 
             return builder;
         }
+
+        protected ContainerBuilder GetContainerBuilder()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.Register(x =>
+                {
+                    var registration = x.Resolve<IBrokerObjectRegistration>();
+                    var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
+                    var connection = x.Resolve<IBrokerConnectionClient>();
+
+                    if (!settingsProvider.TryGet(out HareDuClientSettings settings))
+                        throw new HareDuClientConfigurationException(
+                            "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                    var client = connection.Create(settings);
+
+                    registration.RegisterAll(client);
+
+                    return new BrokerObjectFactory(registration.Cache, client);
+                })
+                .As<IBrokerObjectFactory>()
+                .SingleInstance();
+
+            builder.Register(x => new FakeBrokerConnectionClient())
+                .As<IBrokerConnectionClient>()
+                .SingleInstance();
+
+            builder.RegisterType<BrokerObjectRegistration>()
+                .As<IBrokerObjectRegistration>()
+                .SingleInstance();
+
+            builder.RegisterType<BrokerClientConfigProvider>()
+                .As<IBrokerClientConfigProvider>()
+                .SingleInstance();
+
+            return builder;
+        }
     }
 }
