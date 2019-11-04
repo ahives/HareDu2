@@ -55,6 +55,7 @@ namespace HareDu.Snapshotting.Extensions
                 UncommittedMessages = channel.UncommittedMessages;
                 UnconfirmedMessages = channel.UnconfirmedMessages;
                 UnacknowledgedMessages = channel.UnacknowledgedMessages;
+                QueueOperations = new QueueOperationMetricsImpl(channel);
             }
 
             public uint PrefetchCount { get; }
@@ -66,6 +67,67 @@ namespace HareDu.Snapshotting.Extensions
             public string Identifier { get; }
             public string ConnectionIdentifier { get; }
             public string Node { get; }
+            public QueueOperationMetrics QueueOperations { get; }
+
+            
+            class QueueOperationMetricsImpl :
+                QueueOperationMetrics
+            {
+                public QueueOperationMetricsImpl(ChannelInfo channel)
+                {
+                    Incoming = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessagesPublished ?? 0,
+                        channel.OperationStats?.MessagesPublishedDetails?.Rate ?? 0.0M);
+                    Gets = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessageGets ?? 0,
+                        channel.OperationStats?.MessageGetDetails?.Rate ?? 0.0M);
+                    GetsWithoutAck = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessageGetsWithoutAck ?? 0,
+                        channel.OperationStats?.MessageGetsWithoutAckDetails?.Rate ?? 0.0M);
+                    Delivered = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessagesDelivered ?? 0,
+                        channel.OperationStats?.MessageDeliveryDetails?.Rate ?? 0.0M);
+                    DeliveredWithoutAck = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessageDeliveredWithoutAck ?? 0,
+                        channel.OperationStats?.MessagesDeliveredWithoutAckDetails?.Rate ?? 0.0M);
+                    DeliveredGets = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessageDeliveryGets ?? 0,
+                        channel.OperationStats?.MessageDeliveryGetDetails?.Rate ?? 0.0M);
+                    Redelivered = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessagesRedelivered ?? 0,
+                        channel.OperationStats?.MessagesRedeliveredDetails?.Rate ?? 0.0M);
+                    Acknowledged = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessagesAcknowledged ?? 0,
+                        channel.OperationStats?.MessagesAcknowledgedDetails?.Rate ?? 0.0M);
+                    NotRouted = new QueueOperationImpl(
+                        channel.OperationStats?.TotalMessagesNotRouted ?? 0,
+                        channel.OperationStats?.MessagesNotRoutedDetails?.Rate ?? 0.0M);
+                }
+
+                public QueueOperation Incoming { get; }
+                public QueueOperation Gets { get; }
+                public QueueOperation GetsWithoutAck { get; }
+                public QueueOperation Delivered { get; }
+                public QueueOperation DeliveredWithoutAck { get; }
+                public QueueOperation DeliveredGets { get; }
+                public QueueOperation Redelivered { get; }
+                public QueueOperation Acknowledged { get; }
+                public QueueOperation NotRouted { get; }
+
+                
+                class QueueOperationImpl :
+                    QueueOperation
+                {
+                    public QueueOperationImpl(ulong total, decimal rate)
+                    {
+                        Total = total;
+                        Rate = rate;
+                    }
+
+                    public ulong Total { get; }
+                    public decimal Rate { get; }
+                }
+            }
         }
     }
 }

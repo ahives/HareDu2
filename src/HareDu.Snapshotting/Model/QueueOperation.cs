@@ -13,27 +13,10 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    public interface ChannelSnapshot :
-        Snapshot
+    public interface QueueOperation
     {
-        uint PrefetchCount { get; }
-
-        ulong UncommittedAcknowledgements { get; }
-
-        ulong UncommittedMessages { get; }
-
-        ulong UnconfirmedMessages { get; }
-
-        ulong UnacknowledgedMessages { get; }
-
-        ulong Consumers { get; }
-
-        string Identifier { get; }
+        ulong Total { get; }
         
-        string ConnectionIdentifier { get; }
-        
-        string Node { get; }
-        
-        QueueOperationMetrics QueueOperations { get; }
+        decimal Rate { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ namespace HareDu.Model
 {
     using Newtonsoft.Json;
 
-    public interface MessageStats
+    public interface ChannelOperationStats
     {
         [JsonProperty("publish")]
         ulong TotalMessagesPublished { get; }
@@ -30,22 +30,10 @@ namespace HareDu.Model
         MessagesConfirmedDetails MessagesConfirmedDetails { get; }
         
         [JsonProperty("return_unroutable")]
-        ulong TotalUnroutableMessages { get; }
+        ulong TotalMessagesNotRouted { get; }
 
         [JsonProperty("return_unroutable_details")]
-        UnroutableMessagesDetails UnroutableMessagesDetails { get; }
-        
-        [JsonProperty("disk_reads")]
-        ulong TotalDiskReads { get; }
-
-        [JsonProperty("disk_reads_details")]
-        DiskReadDetails DiskReadDetails { get; }
-        
-        [JsonProperty("disk_writes")]
-        ulong TotalDiskWrites { get; }
-
-        [JsonProperty("disk_writes_details")]
-        DiskWriteDetails DiskWriteDetails { get; }
+        MessagesNotRoutedDetails MessagesNotRoutedDetails { get; }
         
         [JsonProperty("get")]
         ulong TotalMessageGets { get; }
@@ -71,6 +59,12 @@ namespace HareDu.Model
         [JsonProperty("deliver_no_ack_details")]
         MessagesDeliveredWithoutAckDetails MessagesDeliveredWithoutAckDetails { get; }
         
+        [JsonProperty("deliver_get")]
+        ulong TotalMessageDeliveryGets { get; }
+
+        [JsonProperty("deliver_get_details")]
+        MessageDeliveryGetDetails MessageDeliveryGetDetails { get; }
+        
         [JsonProperty("redeliver")]
         ulong TotalMessagesRedelivered { get; }
 
@@ -82,11 +76,5 @@ namespace HareDu.Model
 
         [JsonProperty("ack_details")]
         MessagesAcknowledgedDetails MessagesAcknowledgedDetails { get; }
-        
-        [JsonProperty("deliver_get")]
-        ulong TotalMessageDeliveryGets { get; }
-
-        [JsonProperty("deliver_get_details")]
-        MessageDeliveryGetDetails MessageDeliveryGetDetails { get; }
     }
 }

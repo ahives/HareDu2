@@ -1,0 +1,152 @@
+[
+  {
+    "auth_mechanism": "PLAIN",
+    "channel_max": 2047,
+    "channels": 0,
+    "client_properties": {
+      "assembly": "HareDu.IntegrationTesting.Publisher",
+      "assembly_version": "2.0.0.0",
+      "capabilities": {
+        "authentication_failure_close": true,
+        "basic.nack": true,
+        "connection.blocked": true,
+        "consumer_cancel_notify": true,
+        "exchange_exchange_bindings": true,
+        "publisher_confirms": true
+      },
+      "client_api": "MassTransit",
+      "connected": "Sun, 03 Nov 2019 02:57:19 GMT",
+      "connection_name": "undefined",
+      "copyright": "Copyright (c) 2007-2016 Pivotal Software, Inc.",
+      "hostname": "HareDu",
+      "information": "Licensed under the MPL.  See http://www.rabbitmq.com/",
+      "masstransit_version": "5.5.4.0",
+      "net_version": "4.0.30319.42000",
+      "platform": ".NET",
+      "process_id": "74446",
+      "process_name": "dotnet",
+      "product": "RabbitMQ",
+      "version": "5.1.0"
+    },
+    "connected_at": 1572749839566,
+    "frame_max": 131072,
+    "garbage_collection": {
+      "fullsweep_after": 65535,
+      "max_heap_size": 0,
+      "min_bin_vheap_size": 46422,
+      "min_heap_size": 233,
+      "minor_gcs": 8
+    },
+    "host": "127.0.0.0",
+    "name": "127.0.0.0:79863 -> 127.0.0.0:5672",
+    "node": "rabbit@localhost",
+    "peer_cert_issuer": null,
+    "peer_cert_subject": null,
+    "peer_cert_validity": null,
+    "peer_host": "127.0.0.0",
+    "peer_port": 58675,
+    "port": 5672,
+    "protocol": "AMQP 0-9-1",
+    "recv_cnt": 4,
+    "recv_oct": 748,
+    "recv_oct_details": {
+      "rate": 0.0
+    },
+    "reductions": 5956,
+    "reductions_details": {
+      "rate": 0.0
+    },
+    "send_cnt": 3,
+    "send_oct": 542,
+    "send_oct_details": {
+      "rate": 0.0
+    },
+    "send_pend": 0,
+    "ssl": false,
+    "ssl_cipher": null,
+    "ssl_hash": null,
+    "ssl_key_exchange": null,
+    "ssl_protocol": null,
+    "state": "running",
+    "timeout": 60,
+    "type": "network",
+    "user": "guest",
+    "user_who_performed_action": "guest",
+    "vhost": "TestVirtualHost"
+  },
+  {
+    "auth_mechanism": "PLAIN",
+    "channel_max": 2047,
+    "channels": 2,
+    "client_properties": {
+      "assembly": "HareDu.IntegrationTesting.Consumer",
+      "assembly_version": "2.0.0.0",
+      "capabilities": {
+        "authentication_failure_close": true,
+        "basic.nack": true,
+        "connection.blocked": true,
+        "consumer_cancel_notify": true,
+        "exchange_exchange_bindings": true,
+        "publisher_confirms": true
+      },
+      "client_api": "MassTransit",
+      "connected": "Thu, 31 Oct 2019 03:43:34 GMT",
+      "connection_name": "undefined",
+      "copyright": "Copyright (c) 2007-2016 Pivotal Software, Inc.",
+      "hostname": "Alberts-MBP",
+      "information": "Licensed under the MPL.  See http://www.rabbitmq.com/",
+      "masstransit_version": "5.5.4.0",
+      "net_version": "4.0.30319.42000",
+      "platform": ".NET",
+      "process_id": "43716",
+      "process_name": "dotnet",
+      "product": "RabbitMQ",
+      "version": "5.1.0"
+    },
+    "connected_at": 1572493414819,
+    "frame_max": 131072,
+    "garbage_collection": {
+      "fullsweep_after": 65535,
+      "max_heap_size": 0,
+      "min_bin_vheap_size": 46422,
+      "min_heap_size": 233,
+      "minor_gcs": 475
+    },
+    "host": "127.0.0.1",
+    "name": "127.0.0.1:61113 -> 127.0.0.1:5672",
+    "node": "rabbit@localhost",
+    "peer_cert_issuer": null,
+    "peer_cert_subject": null,
+    "peer_cert_validity": null,
+    "peer_host": "127.0.0.1",
+    "peer_port": 61113,
+    "port": 5672,
+    "protocol": "AMQP 0-9-1",
+    "recv_cnt": 46906,
+    "recv_oct": 4288199,
+    "recv_oct_details": {
+      "rate": 0.0
+    },
+    "reductions": 38322519,
+    "reductions_details": {
+      "rate": 178.0
+    },
+    "send_cnt": 131229,
+    "send_oct": 265586482,
+    "send_oct_details": {
+      "rate": 0.0
+    },
+    "send_pend": 0,
+    "ssl": false,
+    "ssl_cipher": null,
+    "ssl_hash": null,
+    "ssl_key_exchange": null,
+    "ssl_protocol": null,
+    "state": "running",
+    "timeout": 60,
+    "type": "network",
+    "user": "guest",
+    "user_who_performed_action": "guest",
+    "vhost": "TestVirtualHost"
+  }
+]

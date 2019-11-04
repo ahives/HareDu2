@@ -51,17 +51,17 @@ namespace HareDu.Testing.Fakes
         {
             public QueueStatsImpl()
             {
-                MessagesReadyForDelivery = 82937489379;
+                TotalMessagesReadyForDelivery = 82937489379;
                 RateOfMessagesReadyForDelivery = new RateImpl(34.4M);
-                UnacknowledgedDeliveredMessages = 892387397238;
+                TotalUnacknowledgedDeliveredMessages = 892387397238;
                 RateOfUnacknowledgedDeliveredMessages = new RateImpl(73.3M);
                 TotalMessages = 9230748297;
                 RateOfMessages = new RateImpl(80.3M);
             }
 
-            public ulong MessagesReadyForDelivery { get; }
+            public ulong TotalMessagesReadyForDelivery { get; }
             public Rate RateOfMessagesReadyForDelivery { get; }
-            public ulong UnacknowledgedDeliveredMessages { get; }
+            public ulong TotalUnacknowledgedDeliveredMessages { get; }
             public Rate RateOfUnacknowledgedDeliveredMessages { get; }
             public ulong TotalMessages { get; }
             public Rate RateOfMessages { get; }
@@ -111,7 +111,7 @@ namespace HareDu.Testing.Fakes
 
             public ulong TotalMessagesPublished { get; }
             public MessagesPublishedDetails MessagesPublishedDetails { get; }
-            public long TotalMessagesConfirmed { get; }
+            public ulong TotalMessagesConfirmed { get; }
             public MessagesConfirmedDetails MessagesConfirmedDetails { get; }
             public ulong TotalUnroutableMessages { get; }
             public UnroutableMessagesDetails UnroutableMessagesDetails { get; }

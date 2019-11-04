@@ -11,29 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Model
+namespace HareDu.Model
 {
-    public interface ChannelSnapshot :
-        Snapshot
+    using Newtonsoft.Json;
+
+    public interface MessagesNotRoutedDetails
     {
-        uint PrefetchCount { get; }
-
-        ulong UncommittedAcknowledgements { get; }
-
-        ulong UncommittedMessages { get; }
-
-        ulong UnconfirmedMessages { get; }
-
-        ulong UnacknowledgedMessages { get; }
-
-        ulong Consumers { get; }
-
-        string Identifier { get; }
-        
-        string ConnectionIdentifier { get; }
-        
-        string Node { get; }
-        
-        QueueOperationMetrics QueueOperations { get; }
+        [JsonProperty("rate")]
+        decimal Rate { get; }
     }
 }

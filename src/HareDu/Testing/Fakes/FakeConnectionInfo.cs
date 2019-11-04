@@ -35,6 +35,7 @@ namespace HareDu.Testing.Fakes
         }
 
         public Rate RateOfReduction { get; }
+        public string Protocol { get; }
         public ulong TotalReductions { get; }
         public ulong PacketBytesReceived { get; }
         public Rate RateOfPacketBytesReceived { get; }
@@ -61,11 +62,14 @@ namespace HareDu.Testing.Fakes
         public string TimePeriodPeerCertificateValid { get; }
         public string PeerCertificateIssuer { get; }
         public string PeerCertificateSubject { get; }
-        public bool IsSecure { get; }
+        public bool IsSsl { get; }
         public string PeerHost { get; }
         public string Host { get; }
         public long PeerPort { get; }
         public long Port { get; }
         public string Node { get; }
+        public string User { get; }
+        public string UserWhoPerformedAction { get; }
+        public ClientProperties ClientProperties { get; }
     }
 }

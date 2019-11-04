@@ -48,15 +48,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Remove="TestData\QueueInfo1.json" />
+    <Content Include="TestData\ClusterInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\QueueInfo1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Remove="TestData\PeekedMessageInfo1.json" />
-    <Content Include="TestData\PeekedMessageInfo1.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Remove="TestData\BindingInfo1.json" />
-    <Content Include="TestData\BindingInfo1.json">
+    <None Remove="TestData\ChannelInfo1.json" />
+    <None Remove="TestData\ConnectionInfo.json" />
+    <Content Include="TestData\ConnectionInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

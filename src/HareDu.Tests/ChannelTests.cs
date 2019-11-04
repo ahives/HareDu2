@@ -13,115 +13,102 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
-    using Core.Extensions;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ChannelTests
+    public class ChannelTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Test()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ChannelInfo1.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Channel>()
                 .GetAll();
             
-            foreach (var node in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", node.Name);
-                Console.WriteLine("VirtualHost: {0}", node.VirtualHost);
-                Console.WriteLine("Host: {0}", node.Host);
-                Console.WriteLine("TotalChannels: {0}", node.TotalChannels);
-                Console.WriteLine("TotalConsumers: {0}", node.TotalConsumers);
-//                Console.WriteLine("Host: {0}", node);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-            
+            Assert.IsTrue(result.HasData);
+            Assert.AreEqual(2, result.Data.Count);
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
-        }
-        
-        [Test, Explicit]
-        public async Task Should_be_able_to_get_all_channels()
-        {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Channel>()
-                .GetAll();
-
-            if (result.HasData)
-            {
-                foreach (var channel in result.Select(x => x.Data))
-                {
-                    Console.WriteLine("Name: {0}", channel.Name);
-                    Console.WriteLine("PrefetchCount: {0}", channel.PrefetchCount);
-                    Console.WriteLine("AuthenticationMechanism: {0}", channel.AuthenticationMechanism);
-                    Console.WriteLine("Confirm: {0}", channel.Confirm);
-                    Console.WriteLine("ConnectedAt: {0}", channel.ConnectedAt);
-                    Console.WriteLine("ConnectionDetailsName: {0}", channel.ConnectionDetails.Name);
-                    Console.WriteLine("PeerHost: {0}", channel.ConnectionDetails.PeerHost);
-                    Console.WriteLine("PeerPort: {0}", channel.ConnectionDetails.PeerPort);
-                    Console.WriteLine("FrameMax: {0}", channel.FrameMax);
-                    Console.WriteLine("FullSweepAfter: {0}", channel.GarbageCollectionDetails.FullSweepAfter);
-                    Console.WriteLine("MaximumHeapSize: {0}", channel.GarbageCollectionDetails.MaximumHeapSize);
-                    Console.WriteLine("MinimumBinaryVirtualHeapSize: {0}",
-                        channel.GarbageCollectionDetails.MinimumBinaryVirtualHeapSize);
-                    Console.WriteLine("MinimumHeapSize: {0}", channel.GarbageCollectionDetails.MinimumHeapSize);
-                    Console.WriteLine("MinorGarbageCollection: {0}",
-                        channel.GarbageCollectionDetails.MinorGarbageCollection);
-                    Console.WriteLine("GlobalPrefetchCount: {0}", channel.GlobalPrefetchCount);
-                    Console.WriteLine("Host: {0}", channel.Host);
-                    Console.WriteLine("IdleSince: {0}", channel.IdleSince.ToString());
-                    Console.WriteLine("Node: {0}", channel.Node);
-                    Console.WriteLine("Number: {0}", channel.Number);
-                    Console.WriteLine("PeerCertificateIssuer: {0}", channel.PeerCertificateIssuer);
-                    Console.WriteLine("PeerCertificateSubject: {0}", channel.PeerCertificateSubject);
-                    Console.WriteLine("PeerCertificateValidity: {0}", channel.PeerCertificateValidity);
-                    Console.WriteLine("PeerHost: {0}", channel.PeerHost);
-                    Console.WriteLine("PeerPort: {0}", channel.PeerPort);
-                    Console.WriteLine("Port: {0}", channel.Port);
-                    Console.WriteLine("PrefetchCount: {0}", channel.PrefetchCount);
-                    Console.WriteLine("Protocol: {0}", channel.Protocol);
-                    Console.WriteLine("RateOfReduction: {0}", channel.ReductionDetails.Rate);
-                    Console.WriteLine("SentPending: {0}", channel.SentPending);
-                    Console.WriteLine("Ssl: {0}", channel.Ssl);
-                    Console.WriteLine("SslCipher: {0}", channel.SslCipher);
-                    Console.WriteLine("SslHash: {0}", channel.SslHash);
-                    Console.WriteLine("SslKeyExchange: {0}", channel.SslKeyExchange);
-                    Console.WriteLine("SslProtocol: {0}", channel.SslProtocol);
-                    Console.WriteLine("State: {0}", channel.State);
-                    Console.WriteLine("Timeout: {0}", channel.Timeout);
-                    Console.WriteLine("TotalChannels: {0}", channel.TotalChannels);
-                    Console.WriteLine("TotalConsumers: {0}", channel.TotalConsumers);
-                    Console.WriteLine("TotalReductions: {0}", channel.TotalReductions);
-                    Console.WriteLine("Transactional: {0}", channel.Transactional);
-                    Console.WriteLine("Type: {0}", channel.Type);
-                    Console.WriteLine("UnacknowledgedMessages: {0}", channel.UnacknowledgedMessages);
-                    Console.WriteLine("UncommittedAcknowledgements: {0}", channel.UncommittedAcknowledgements);
-                    Console.WriteLine("UncommittedMessages: {0}", channel.UncommittedMessages);
-                    Console.WriteLine("UnconfirmedMessages: {0}", channel.UnconfirmedMessages);
-                    Console.WriteLine("User: {0}", channel.User);
-                    Console.WriteLine("VirtualHost: {0}", channel.VirtualHost);
-                    Console.WriteLine("****************************************************");
-                    Console.WriteLine();
-                }
-            }
+            Assert.IsTrue(result.Data[0].Confirm);
+            Assert.AreEqual(0, result.Data[0].UncommittedAcknowledgements);
+            Assert.AreEqual(8, result.Data[0].GlobalPrefetchCount);
+            Assert.AreEqual(0, result.Data[0].UnacknowledgedMessages);
+            Assert.AreEqual(0, result.Data[0].UncommittedMessages);
+            Assert.AreEqual(0, result.Data[0].UnconfirmedMessages);
+            Assert.AreEqual(0, result.Data[0].PrefetchCount);
+            Assert.AreEqual(1, result.Data[0].Number);
+            Assert.AreEqual(6149, result.Data[0].TotalReductions);
+            Assert.IsNotNull(result.Data[0].ReductionDetails);
+            Assert.AreEqual(0.0, result.Data[0].ReductionDetails?.Rate);
+            Assert.AreEqual("127.0.0.0:72368 -> 127.0.0.0:5672 (1)", result.Data[0].Name);
+            Assert.AreEqual("rabbit@localhost", result.Data[0].Node);
+            Assert.AreEqual("guest", result.Data[0].User);
+            Assert.AreEqual("guest", result.Data[0].UserWhoPerformedAction);
+            Assert.AreEqual("TestVirtualHost", result.Data[0].VirtualHost);
+            Assert.AreEqual("running", result.Data[0].State);
+            Assert.IsNotNull(result.Data[0].ConnectionDetails);
+            Assert.AreEqual("127.0.0.0:72368 -> 127.0.0.0:5672", result.Data[0].ConnectionDetails?.Name);
+            Assert.AreEqual("127.0.0.0", result.Data[0].ConnectionDetails?.PeerHost);
+            Assert.AreEqual(98343, result.Data[0].ConnectionDetails?.PeerPort);
+            Assert.IsFalse(result.Data[0].Transactional);
+            Assert.IsNull(result.Data[0].OperationStats);
+            Assert.IsNotNull(result.Data[1].OperationStats);
+            Assert.IsTrue(result.Data[1].Confirm);
+            Assert.AreEqual(0, result.Data[1].UncommittedAcknowledgements);
+            Assert.AreEqual(64, result.Data[1].GlobalPrefetchCount);
+            Assert.AreEqual(0, result.Data[1].UnacknowledgedMessages);
+            Assert.AreEqual(0, result.Data[1].UncommittedMessages);
+            Assert.AreEqual(0, result.Data[1].UnconfirmedMessages);
+            Assert.AreEqual(0, result.Data[1].PrefetchCount);
+            Assert.AreEqual(2, result.Data[1].Number);
+            Assert.AreEqual(19755338, result.Data[1].TotalReductions);
+            Assert.IsNotNull(result.Data[1].ReductionDetails);
+            Assert.IsFalse(result.Data[1].Transactional);
+            Assert.AreEqual(0.0, result.Data[1].ReductionDetails?.Rate);
+            Assert.AreEqual("127.0.0.0:72368 -> 127.0.0.0:5672 (2)", result.Data[1].Name);
+            Assert.AreEqual("rabbit@localhost", result.Data[1].Node);
+            Assert.AreEqual("guest", result.Data[1].User);
+            Assert.AreEqual("guest", result.Data[1].UserWhoPerformedAction);
+            Assert.AreEqual("TestVirtualHost", result.Data[1].VirtualHost);
+            Assert.AreEqual("running", result.Data[1].State);
+            Assert.IsNotNull(result.Data[1].ConnectionDetails);
+            Assert.AreEqual("127.0.0.0:72368 -> 127.0.0.0:5672", result.Data[1].ConnectionDetails?.Name);
+            Assert.AreEqual("127.0.0.0", result.Data[1].ConnectionDetails?.PeerHost);
+            Assert.AreEqual(98343, result.Data[1].ConnectionDetails?.PeerPort);
+            Assert.IsNotNull(result.Data[1].OperationStats);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessagesConfirmedDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessagesPublishedDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessagesNotRoutedDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessagesAcknowledgedDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessageDeliveryDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessageDeliveryGetDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessagesDeliveredWithoutAckDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessageGetDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessageGetsWithoutAckDetails);
+            Assert.IsNotNull(result.Data[1].OperationStats?.MessagesRedeliveredDetails);
+            Assert.AreEqual(3150, result.Data[1].OperationStats?.TotalMessagesConfirmed);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessagesConfirmedDetails?.Rate);
+            Assert.AreEqual(3150, result.Data[1].OperationStats?.TotalMessagesPublished);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessagesPublishedDetails?.Rate);
+            Assert.AreEqual(0, result.Data[1].OperationStats?.TotalMessagesNotRouted);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessagesNotRoutedDetails?.Rate);
+            Assert.AreEqual(107974, result.Data[1].OperationStats?.TotalMessagesAcknowledged);
+            Assert.AreEqual(1473.0, result.Data[1].OperationStats?.MessagesAcknowledgedDetails?.Rate);
+            Assert.AreEqual(107974, result.Data[1].OperationStats?.TotalMessagesDelivered);
+            Assert.AreEqual(1463.8, result.Data[1].OperationStats?.MessageDeliveryDetails?.Rate);
+            Assert.AreEqual(107974, result.Data[1].OperationStats?.TotalMessageDeliveryGets);
+            Assert.AreEqual(1463.8, result.Data[1].OperationStats?.MessageDeliveryGetDetails?.Rate);
+            Assert.AreEqual(0, result.Data[1].OperationStats?.TotalMessageDeliveredWithoutAck);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessagesDeliveredWithoutAckDetails?.Rate);
+            Assert.AreEqual(0, result.Data[1].OperationStats?.TotalMessageGets);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessageGetDetails?.Rate);
+            Assert.AreEqual(0, result.Data[1].OperationStats?.TotalMessageGetsWithoutAck);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessageGetsWithoutAckDetails?.Rate);
+            Assert.AreEqual(3, result.Data[1].OperationStats?.TotalMessagesRedelivered);
+            Assert.AreEqual(0.0, result.Data[1].OperationStats?.MessagesRedeliveredDetails?.Rate);
         }
     }
 }

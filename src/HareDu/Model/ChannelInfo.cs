@@ -33,6 +33,9 @@ namespace HareDu.Model
         [JsonProperty("user")]
         string User { get; }
 
+        [JsonProperty("user_who_performed_action")]
+        string UserWhoPerformedAction { get; }
+
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }
 
@@ -137,5 +140,8 @@ namespace HareDu.Model
 
         [JsonProperty("idle_since")]
         DateTimeOffset IdleSince { get; }
+        
+        [JsonProperty("message_stats")]
+        ChannelOperationStats OperationStats { get; }
     }
 }

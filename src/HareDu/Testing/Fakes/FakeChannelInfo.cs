@@ -42,6 +42,7 @@ namespace HareDu.Testing.Fakes
         public string VirtualHost { get; }
         public string Node { get; }
         public string User { get; }
+        public string UserWhoPerformedAction { get; }
         public long ConnectedAt { get; }
         public ulong FrameMax { get; }
         public long Timeout { get; }
@@ -77,8 +78,9 @@ namespace HareDu.Testing.Fakes
         public bool Confirm { get; }
         public bool Transactional { get; }
         public DateTimeOffset IdleSince { get; }
+        public ChannelOperationStats OperationStats { get; }
 
-        
+
         class ConnectionDetailsImpl :
             ConnectionDetails
         {

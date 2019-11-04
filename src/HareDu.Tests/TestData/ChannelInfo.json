@@ -1,0 +1,114 @@
+[
+  {
+    "acks_uncommitted": 0,
+    "confirm": true,
+    "connection_details": {
+      "name": "127.0.0.0:72368 -> 127.0.0.0:5672",
+      "peer_host": "127.0.0.0",
+      "peer_port": 98343
+    },
+    "consumer_count": 1,
+    "garbage_collection": {
+      "fullsweep_after": 65535,
+      "max_heap_size": 0,
+      "min_bin_vheap_size": 46422,
+      "min_heap_size": 233,
+      "minor_gcs": 3
+    },
+    "global_prefetch_count": 8,
+    "idle_since": "2019-10-31 3:43:36",
+    "messages_unacknowledged": 0,
+    "messages_uncommitted": 0,
+    "messages_unconfirmed": 0,
+    "name": "127.0.0.0:72368 -> 127.0.0.0:5672 (1)",
+    "node": "rabbit@localhost",
+    "number": 1,
+    "prefetch_count": 0,
+    "reductions": 6149,
+    "reductions_details": {
+      "rate": 0.0
+    },
+    "state": "running",
+    "transactional": false,
+    "user": "guest",
+    "user_who_performed_action": "guest",
+    "vhost": "TestVirtualHost"
+  },
+  {
+    "acks_uncommitted": 0,
+    "confirm": true,
+    "connection_details": {
+      "name": "127.0.0.0:72368 -> 127.0.0.0:5672",
+      "peer_host": "127.0.0.0",
+      "peer_port": 98343
+    },
+    "consumer_count": 1,
+    "garbage_collection": {
+      "fullsweep_after": 65535,
+      "max_heap_size": 0,
+      "min_bin_vheap_size": 46422,
+      "min_heap_size": 233,
+      "minor_gcs": 21
+    },
+    "global_prefetch_count": 64,
+    "idle_since": "2019-10-31 4:15:11",
+    "message_stats": {
+      "confirm": 3150,
+      "confirm_details": {
+        "rate": 0.0
+      },
+      "publish": 3150,
+      "publish_details": {
+        "rate": 0.0
+      },
+      "return_unroutable": 0,
+      "return_unroutable_details": {
+        "rate": 0.0
+      },
+      "ack": 107974,
+      "ack_details": {
+        "rate": 1473.0
+      },
+      "deliver": 107974,
+      "deliver_details": {
+        "rate": 1463.8
+      },
+      "deliver_get": 107974,
+      "deliver_get_details": {
+        "rate": 1463.8
+      },
+      "deliver_no_ack": 0,
+      "deliver_no_ack_details": {
+        "rate": 0.0
+      },
+      "get": 0,
+      "get_details": {
+        "rate": 0.0
+      },
+      "get_no_ack": 0,
+      "get_no_ack_details": {
+        "rate": 0.0
+      },
+      "redeliver": 3,
+      "redeliver_details": {
+        "rate": 0.0
+      }
+    },
+    "messages_unacknowledged": 0,
+    "messages_uncommitted": 0,
+    "messages_unconfirmed": 0,
+    "name": "127.0.0.0:72368 -> 127.0.0.0:5672 (2)",
+    "node": "rabbit@localhost",
+    "number": 2,
+    "prefetch_count": 0,
+    "reductions": 19755338,
+    "reductions_details": {
+      "rate": 0.0
+    },
+    "state": "running",
+    "transactional": false,
+    "user": "guest",
+    "user_who_performed_action": "guest",
+    "vhost": "TestVirtualHost"
+  }
+]

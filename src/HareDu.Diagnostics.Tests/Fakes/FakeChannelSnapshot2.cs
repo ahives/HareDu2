@@ -32,5 +32,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public string Identifier { get; }
         public string ConnectionIdentifier { get; }
         public string Node { get; }
+        public QueueOperationMetrics QueueOperations { get; }
     }
 }

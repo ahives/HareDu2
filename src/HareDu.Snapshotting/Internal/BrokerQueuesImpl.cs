@@ -235,8 +235,8 @@ namespace HareDu.Snapshotting.Internal
                     Redelivered = new QueueDepthImpl(messageStats.TotalMessagesRedelivered, messageStats.MessagesRedeliveredDetails?.Rate ?? 0);
                     Acknowledged = new QueueDepthImpl(messageStats.TotalMessagesAcknowledged, messageStats.MessagesAcknowledgedDetails?.Rate ?? 0);
                     Broker = new QueueDepthImpl(queueStats.TotalMessages, queueStats.RateOfMessages?.Rate ?? 0);
-                    Ready = new QueueDepthImpl(queueStats.MessagesReadyForDelivery, queueStats.RateOfMessagesReadyForDelivery?.Rate ?? 0);
-                    Unacknowledged = new QueueDepthImpl(queueStats.UnacknowledgedDeliveredMessages, queueStats.RateOfUnacknowledgedDeliveredMessages?.Rate ?? 0);
+                    Ready = new QueueDepthImpl(queueStats.TotalMessagesReadyForDelivery, queueStats.RateOfMessagesReadyForDelivery?.Rate ?? 0);
+                    Unacknowledged = new QueueDepthImpl(queueStats.TotalUnacknowledgedDeliveredMessages, queueStats.RateOfUnacknowledgedDeliveredMessages?.Rate ?? 0);
                 }
 
                 public long Persisted { get; }

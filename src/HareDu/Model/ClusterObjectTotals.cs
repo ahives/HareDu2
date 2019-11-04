@@ -18,18 +18,18 @@ namespace HareDu.Model
     public interface ClusterObjectTotals
     {
         [JsonProperty("consumers")]
-        long TotalConsumers { get; }
+        ulong TotalConsumers { get; }
         
         [JsonProperty("queues")]
-        long TotalQueues { get; }
+        ulong TotalQueues { get; }
         
         [JsonProperty("exchanges")]
-        long TotalExchanges { get; }
+        ulong TotalExchanges { get; }
         
         [JsonProperty("connections")]
-        long TotalConnections { get; }
+        ulong TotalConnections { get; }
         
         [JsonProperty("channels")]
-        long TotalChannels { get; }
+        ulong TotalChannels { get; }
     }
 }
