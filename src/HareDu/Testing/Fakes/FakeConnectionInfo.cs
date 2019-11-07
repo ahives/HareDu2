@@ -70,6 +70,6 @@ namespace HareDu.Testing.Fakes
         public string Node { get; }
         public string User { get; }
         public string UserWhoPerformedAction { get; }
-        public ClientProperties ClientProperties { get; }
+        public ConnectionClientProperties ConnectionClientProperties { get; }
     }
 }

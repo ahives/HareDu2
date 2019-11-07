@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,99 +16,77 @@ namespace HareDu.Tests
     using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
     using Core.Extensions;
+    using Model;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ExchangeTests
+    public class ExchangeTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Should_be_able_to_get_all_exchanges()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .GetAll();
-
-            foreach (var exchange in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", exchange.Name);
-                Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
-                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-                Console.WriteLine("Internal: {0}", exchange.Internal);
-                Console.WriteLine("Durable: {0}", exchange.Durable);
-                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Assert.IsTrue(result.HasData);
+            Assert.IsNotNull(result.Data);
+            Assert.AreEqual(9, result.Data.Count);
+            Assert.IsTrue(result.Data[1].Durable);
+            Assert.IsFalse(result.Data[1].Internal);
+            Assert.IsFalse(result.Data[1].AutoDelete);
+            Assert.AreEqual("E2", result.Data[1].Name);
+            Assert.AreEqual("direct", result.Data[1].RoutingType);
+            Assert.AreEqual("HareDu", result.Data[1].VirtualHost);
+            Assert.IsNotNull(result.Data[1].Arguments);
+            Assert.AreEqual(1, result.Data[1].Arguments.Count);
+            Assert.AreEqual("exchange", result.Data[1].Arguments["alternate-exchange"]);
         }
 
-        [Test, Explicit]
-        public async Task Verify_can_filter_exchanges()
-        {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Exchange>()
-                .GetAll();
-
-            foreach (var exchange in result.Where(x => x.Name == "amq.*"))
-            {
-                Console.WriteLine("Name: {0}", exchange.Name);
-                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-                Console.WriteLine("Internal: {0}", exchange.Internal);
-                Console.WriteLine("Durable: {0}", exchange.Durable);
-                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-            
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_create_exchange()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
-                    x.Exchange("E5");
+                    x.Exchange("fake_exchange");
                     x.Configure(c =>
                     {
                         c.IsDurable();
                         c.IsForInternalUse();
                         c.HasRoutingType(ExchangeRoutingType.Fanout);
-//                        c.HasArguments(arg =>
-//                        {
-//                            arg.Set("", "");
-//                        });
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("fake_arg", "8238b");
+                        });
                     });
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            
+            ExchangeDefinition definition = result.DebugInfo.Request.ToObject<ExchangeDefinition>();
+
+            Assert.AreEqual("api/exchanges/HareDu/fake_exchange", result.DebugInfo.URL);
+            Assert.AreEqual("fanout", definition.RoutingType);
+            Assert.IsTrue(definition.Durable);
+            Assert.IsTrue(definition.Internal);
+            Assert.IsFalse(definition.AutoDelete);
+            Assert.AreEqual(1, definition.Arguments.Count);
+            Assert.AreEqual("8238b", definition.Arguments["fake_arg"]);
         }
 
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_delete_exchange()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {

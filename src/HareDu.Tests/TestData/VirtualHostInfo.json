@@ -1,0 +1,169 @@
+[
+  {
+    "cluster_state": {
+      "rabbit@localhost": "running"
+    },
+    "message_stats": {
+      "ack": 0,
+      "ack_details": {
+        "rate": 0.0
+      },
+      "deliver": 0,
+      "deliver_details": {
+        "rate": 0.0
+      },
+      "deliver_get": 3,
+      "deliver_get_details": {
+        "rate": 0.0
+      },
+      "deliver_no_ack": 0,
+      "deliver_no_ack_details": {
+        "rate": 0.0
+      },
+      "get": 3,
+      "get_details": {
+        "rate": 0.0
+      },
+      "get_no_ack": 0,
+      "get_no_ack_details": {
+        "rate": 0.0
+      },
+      "redeliver": 3,
+      "redeliver_details": {
+        "rate": 0.0
+      }
+    },
+    "messages": 3,
+    "messages_details": {
+      "rate": 0.0
+    },
+    "messages_ready": 3,
+    "messages_ready_details": {
+      "rate": 0.0
+    },
+    "messages_unacknowledged": 0,
+    "messages_unacknowledged_details": {
+      "rate": 0.0
+    },
+    "name": "/",
+    "tracing": false
+  },
+  {
+    "cluster_state": {
+      "rabbit@localhost": "running"
+    },
+    "message_stats": {
+      "ack": 0,
+      "ack_details": {
+        "rate": 0.0
+      },
+      "deliver": 0,
+      "deliver_details": {
+        "rate": 0.0
+      },
+      "deliver_get": 1,
+      "deliver_get_details": {
+        "rate": 0.0
+      },
+      "deliver_no_ack": 0,
+      "deliver_no_ack_details": {
+        "rate": 0.0
+      },
+      "get": 1,
+      "get_details": {
+        "rate": 0.0
+      },
+      "get_no_ack": 0,
+      "get_no_ack_details": {
+        "rate": 0.0
+      },
+      "redeliver": 1,
+      "redeliver_details": {
+        "rate": 0.0
+      }
+    },
+    "messages": 0,
+    "messages_details": {
+      "rate": 0.0
+    },
+    "messages_ready": 0,
+    "messages_ready_details": {
+      "rate": 0.0
+    },
+    "messages_unacknowledged": 0,
+    "messages_unacknowledged_details": {
+      "rate": 0.0
+    },
+    "name": "HareDu",
+    "tracing": false
+  },
+  {
+    "cluster_state": {
+      "rabbit@localhost": "running"
+    },
+    "message_stats": {
+      "ack": 300000,
+      "ack_details": {
+        "rate": 0.0
+      },
+      "confirm": 300000,
+      "confirm_details": {
+        "rate": 0.0
+      },
+      "deliver": 300000,
+      "deliver_details": {
+        "rate": 0.0
+      },
+      "deliver_get": 300003,
+      "deliver_get_details": {
+        "rate": 0.0
+      },
+      "deliver_no_ack": 0,
+      "deliver_no_ack_details": {
+        "rate": 0.0
+      },
+      "get": 3,
+      "get_details": {
+        "rate": 0.0
+      },
+      "get_no_ack": 0,
+      "get_no_ack_details": {
+        "rate": 0.0
+      },
+      "publish": 300000,
+      "publish_details": {
+        "rate": 0.0
+      },
+      "redeliver": 3,
+      "redeliver_details": {
+        "rate": 0.0
+      },
+      "return_unroutable": 0,
+      "return_unroutable_details": {
+        "rate": 0.0
+      }
+    },
+    "messages": 0,
+    "messages_details": {
+      "rate": 0.0
+    },
+    "messages_ready": 0,
+    "messages_ready_details": {
+      "rate": 0.0
+    },
+    "messages_unacknowledged": 0,
+    "messages_unacknowledged_details": {
+      "rate": 0.0
+    },
+    "name": "TestVirtualHost",
+    "recv_oct": 301363575,
+    "recv_oct_details": {
+      "rate": 0.0
+    },
+    "send_oct": 368933935,
+    "send_oct_details": {
+      "rate": 0.0
+    },
+    "tracing": false
+  }
+]

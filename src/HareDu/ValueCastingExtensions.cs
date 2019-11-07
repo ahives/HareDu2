@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
 // limitations under the License.
 namespace HareDu
 {
-    using System;
-
-    public interface GlobalParameterConfiguration
+    public static class ValueCastingExtensions
     {
-        /// <summary>
-        /// Specify global parameter arguments.
-        /// </summary>
-        /// <param name="arguments"></param>
-        void HasArguments(Action<GlobalParameterArguments> arguments);
+        public static T Cast<T>(this object value)
+        {
+            if (value is T dictionary)
+                return dictionary;
+
+            return default;
+        }
     }
 }

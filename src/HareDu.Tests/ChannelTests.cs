@@ -24,7 +24,7 @@ namespace HareDu.Tests
         [Test]
         public async Task Test()
         {
-            var container = GetContainerBuilder("TestData/ChannelInfo1.json").Build();
+            var container = GetContainerBuilder("TestData/ChannelInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Channel>()
                 .GetAll();

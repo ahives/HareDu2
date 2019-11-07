@@ -1,0 +1,10 @@
+[
+    {
+        "name": "cluster_name",
+        "value": "rabbit@haredu"
+    },
+    {
+        "name": "fake_param",
+        "value": "fake_value"
+    }
+]

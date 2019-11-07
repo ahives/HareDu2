@@ -66,27 +66,27 @@ namespace HareDu.Tests
             Assert.AreEqual("guest", result.Data[0].User);
             Assert.AreEqual("guest", result.Data[0].UserWhoPerformedAction);
             Assert.AreEqual(60, result.Data[0].ConnectionTimeout);
-            Assert.IsNotNull(result.Data[0].ClientProperties);
-            Assert.AreEqual("MassTransit", result.Data[0].ClientProperties?.ClientApi);
-            Assert.AreEqual("undefined", result.Data[0].ClientProperties?.ConnectionName);
-            Assert.AreEqual("HareDu.IntegrationTesting.Publisher", result.Data[0].ClientProperties?.Assembly);
-            Assert.AreEqual("2.0.0.0", result.Data[0].ClientProperties?.AssemblyVersion);
-            Assert.AreEqual("Copyright (c) 2007-2016 Pivotal Software, Inc.", result.Data[0].ClientProperties?.Copyright);
-            Assert.AreEqual("HareDu", result.Data[0].ClientProperties?.Host);
-            Assert.AreEqual("Licensed under the MPL.  See http://www.rabbitmq.com/", result.Data[0].ClientProperties?.Information);
-            Assert.AreEqual(".NET", result.Data[0].ClientProperties?.Platform);
-            Assert.AreEqual("74446", result.Data[0].ClientProperties?.ProcessId);
-            Assert.AreEqual("dotnet", result.Data[0].ClientProperties?.ProcessName);
-            Assert.AreEqual("RabbitMQ", result.Data[0].ClientProperties?.Product);
-            Assert.AreEqual("5.1.0", result.Data[0].ClientProperties?.Version);
-            Assert.AreEqual(DateTimeOffset.Parse("Sun, 03 Nov 2019 02:57:19 GMT"), result.Data[0].ClientProperties?.Connected);
-            Assert.IsNotNull(result.Data[0].ClientProperties?.Capabilities);
-            Assert.IsTrue(result.Data[0].ClientProperties?.Capabilities?.ExchangeBindingEnabled);
-            Assert.IsTrue(result.Data[0].ClientProperties?.Capabilities?.PublisherConfirmsEnabled);
-            Assert.IsTrue(result.Data[0].ClientProperties?.Capabilities?.AuthenticationFailureNotificationEnabled);
-            Assert.IsTrue(result.Data[0].ClientProperties?.Capabilities?.ConnectionBlockedNotificationsEnabled);
-            Assert.IsTrue(result.Data[0].ClientProperties?.Capabilities?.ConsumerCancellationNotificationsEnabled);
-            Assert.IsTrue(result.Data[0].ClientProperties?.Capabilities?.NegativeAcknowledgmentNotificationsEnabled);
+            Assert.IsNotNull(result.Data[0].ConnectionClientProperties);
+            Assert.AreEqual("MassTransit", result.Data[0].ConnectionClientProperties?.ClientApi);
+            Assert.AreEqual("undefined", result.Data[0].ConnectionClientProperties?.ConnectionName);
+            Assert.AreEqual("HareDu.IntegrationTesting.Publisher", result.Data[0].ConnectionClientProperties?.Assembly);
+            Assert.AreEqual("2.0.0.0", result.Data[0].ConnectionClientProperties?.AssemblyVersion);
+            Assert.AreEqual("Copyright (c) 2007-2016 Pivotal Software, Inc.", result.Data[0].ConnectionClientProperties?.Copyright);
+            Assert.AreEqual("HareDu", result.Data[0].ConnectionClientProperties?.Host);
+            Assert.AreEqual("Licensed under the MPL.  See http://www.rabbitmq.com/", result.Data[0].ConnectionClientProperties?.Information);
+            Assert.AreEqual(".NET", result.Data[0].ConnectionClientProperties?.Platform);
+            Assert.AreEqual("74446", result.Data[0].ConnectionClientProperties?.ProcessId);
+            Assert.AreEqual("dotnet", result.Data[0].ConnectionClientProperties?.ProcessName);
+            Assert.AreEqual("RabbitMQ", result.Data[0].ConnectionClientProperties?.Product);
+            Assert.AreEqual("5.1.0", result.Data[0].ConnectionClientProperties?.Version);
+            Assert.AreEqual(DateTimeOffset.Parse("Sun, 03 Nov 2019 02:57:19 GMT"), result.Data[0].ConnectionClientProperties?.Connected);
+            Assert.IsNotNull(result.Data[0].ConnectionClientProperties?.Capabilities);
+            Assert.IsTrue(result.Data[0].ConnectionClientProperties?.Capabilities?.ExchangeBindingEnabled);
+            Assert.IsTrue(result.Data[0].ConnectionClientProperties?.Capabilities?.PublisherConfirmsEnabled);
+            Assert.IsTrue(result.Data[0].ConnectionClientProperties?.Capabilities?.AuthenticationFailureNotificationEnabled);
+            Assert.IsTrue(result.Data[0].ConnectionClientProperties?.Capabilities?.ConnectionBlockedNotificationsEnabled);
+            Assert.IsTrue(result.Data[0].ConnectionClientProperties?.Capabilities?.ConsumerCancellationNotificationsEnabled);
+            Assert.IsTrue(result.Data[0].ConnectionClientProperties?.Capabilities?.NegativeAcknowledgmentNotificationsEnabled);
         }
     }
 }

@@ -1,0 +1,100 @@
+[
+   {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "haredu2",
+    "type": "direct",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {
+      "alternate-exchange": "exchange"
+    },
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "E2",
+    "type": "direct",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "Test1",
+    "type": "fanout",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "amq.direct",
+    "policy": "P2",
+    "type": "direct",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "amq.fanout",
+    "policy": "P2",
+    "type": "fanout",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "amq.headers",
+    "policy": "P2",
+    "type": "headers",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "amq.match",
+    "policy": "P2",
+    "type": "headers",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": true,
+    "name": "amq.rabbitmq.trace",
+    "policy": "P2",
+    "type": "topic",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+  {
+    "arguments": {},
+    "auto_delete": false,
+    "durable": true,
+    "internal": false,
+    "name": "amq.topic",
+    "policy": "P2",
+    "type": "topic",
+    "user_who_performed_action": "unknown",
+    "vhost": "HareDu"
+  },
+]

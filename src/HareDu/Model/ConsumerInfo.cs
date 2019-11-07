@@ -19,7 +19,7 @@ namespace HareDu.Model
     public interface ConsumerInfo
     {
         [JsonProperty("prefetch_count")]
-        long PreFetchCount { get; }
+        ulong PreFetchCount { get; }
         
         [JsonProperty("arguments")]
         IDictionary<string, object> Arguments { get; }

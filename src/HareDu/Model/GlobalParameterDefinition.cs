@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public interface GlobalParameterDefinition
@@ -22,6 +21,6 @@ namespace HareDu.Model
         string Name { get; }
             
         [JsonProperty("value")]
-        IDictionary<string, object> Value { get; }
+        object Value { get; }
     }
 }

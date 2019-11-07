@@ -51,14 +51,27 @@
     <Content Include="TestData\ClusterInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\QueueInfo1.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Remove="TestData\PeekedMessageInfo1.json" />
     <None Remove="TestData\BindingInfo1.json" />
     <None Remove="TestData\ChannelInfo1.json" />
     <None Remove="TestData\ConnectionInfo.json" />
     <Content Include="TestData\ConnectionInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\ConsumerInfo.json" />
+    <Content Include="TestData\ConsumerInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\ExchangeInfo.json" />
+    <Content Include="TestData\ExchangeInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\VirtualHostInfo.json" />
+    <Content Include="TestData\VirtualHostInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\GlobalParameterInfo.json" />
+    <Content Include="TestData\GlobalParameterInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

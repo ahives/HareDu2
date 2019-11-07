@@ -16,32 +16,23 @@ namespace HareDu.Tests
     using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
-    using Core;
-    using Model;
     using NUnit.Framework;
 
     [TestFixture]
-    public class ServerTests
+    public class ServerTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Should_be_able_to_get_all_definitions()
         {
-            Result<ServerDefinitionInfo> result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ServerDefinitionInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Server>()
                 .GetDefinition();
+            
+            Assert.IsFalse(result.HasFaulted);
+            Assert.IsTrue(result.HasData);
+            Assert.IsNotNull(result.Data);
 
             if (result.HasData)
             {
@@ -134,6 +125,5 @@ namespace HareDu.Tests
                 Console.WriteLine();
             }
         }
-        
     }
 }

@@ -27,7 +27,7 @@ namespace HareDu.Tests
         [Test]
         public async Task Should_be_able_to_get_all_queues()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo1.json").Build();
+            var container = GetContainerBuilder("TestData/QueueInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .GetAll();
@@ -48,7 +48,7 @@ namespace HareDu.Tests
         [Test]
         public async Task Verify_can_peek_messages()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo1.json").Build();
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>

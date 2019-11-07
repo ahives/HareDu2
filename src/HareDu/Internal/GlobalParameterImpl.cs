@@ -98,6 +98,7 @@ namespace HareDu.Internal
         {
             IDictionary<string, ArgumentValue<object>> _arguments;
             string _name;
+            object _argument;
             readonly List<Error> _errors;
 
             public Lazy<GlobalParameterDefinition> Definition { get; }
@@ -109,7 +110,7 @@ namespace HareDu.Internal
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<GlobalParameterDefinition>(
-                    () => new GlobalParameterDefinitionImpl(_name, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                    () => new GlobalParameterDefinitionImpl(_name, _arguments, _argument), LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Parameter(string name)
@@ -119,45 +120,36 @@ namespace HareDu.Internal
                 if (string.IsNullOrWhiteSpace(_name))
                     _errors.Add(new ErrorImpl("The name of the parameter is missing."));
             }
-            
-            public void Configure(Action<GlobalParameterConfiguration> configuration)
+
+            public void Arguments(Action<GlobalParameterArguments> arguments)
             {
-                var impl = new GlobalParameterConfigurationImpl();
-                configuration(impl);
-                
+                var impl = new GlobalParameterArgumentsImpl();
+                arguments(impl);
+
                 _arguments = impl.Arguments;
 
                 if (_arguments != null)
                     _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
-            
-            class GlobalParameterConfigurationImpl :
-                GlobalParameterConfiguration
+            public void Argument<T>(T argument)
             {
-                public IDictionary<string, ArgumentValue<object>> Arguments { get; private set; }
-                
-                public void HasArguments(Action<GlobalParameterArguments> arguments)
+                _argument = argument;
+            }
+
+
+            class GlobalParameterArgumentsImpl :
+                GlobalParameterArguments
+            {
+                public IDictionary<string, ArgumentValue<object>> Arguments { get; } =
+                    new Dictionary<string, ArgumentValue<object>>();
+
+                public void Set<T>(string arg, T value)
                 {
-                    var impl = new GlobalParameterArgumentsImpl();
-                    arguments(impl);
-
-                    Arguments = impl.Arguments;
-                }
-
-
-                class GlobalParameterArgumentsImpl :
-                    GlobalParameterArguments
-                {
-                    public IDictionary<string, ArgumentValue<object>> Arguments { get; } = new Dictionary<string, ArgumentValue<object>>();
-
-                    public void Set<T>(string arg, T value)
-                    {
-                        Arguments.Add(arg.Trim(),
-                            Arguments.ContainsKey(arg)
-                                ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
-                                : new ArgumentValue<object>(value));
-                    }
+                    Arguments.Add(arg.Trim(),
+                        Arguments.ContainsKey(arg)
+                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                            : new ArgumentValue<object>(value));
                 }
             }
 
@@ -165,10 +157,17 @@ namespace HareDu.Internal
             class GlobalParameterDefinitionImpl :
                 GlobalParameterDefinition
             {
-                public GlobalParameterDefinitionImpl(string name, IDictionary<string, ArgumentValue<object>> arguments)
+                public GlobalParameterDefinitionImpl(string name, IDictionary<string, ArgumentValue<object>> arguments,
+                    object argument)
                 {
                     Name = name;
 
+                    if (!argument.IsNull())
+                    {
+                        Value = argument;
+                        return;
+                    }
+                    
                     if (arguments.IsNull())
                         return;
                     
@@ -176,7 +175,7 @@ namespace HareDu.Internal
                 }
 
                 public string Name { get; }
-                public IDictionary<string, object> Value { get; }
+                public object Value { get; }
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,75 +14,91 @@
 namespace HareDu.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
     using Core.Extensions;
+    using Model;
     using NUnit.Framework;
 
     [TestFixture]
-    public class GlobalParameterTests
+    public class GlobalParameterTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Should_be_able_to_get_all_global_parameters()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/GlobalParameterInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .GetAll();
 
-            foreach (var parameter in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Component: {0}", parameter.Component);
-                Console.WriteLine("Name: {0}", parameter.Name);
-                Console.WriteLine("Value: {0}", parameter.Value);
-                Console.WriteLine("VirtualHost: {0}", parameter.VirtualHost);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            Assert.IsTrue(result.HasData);
+            Assert.AreEqual(2, result.Data.Count);
+            Assert.IsFalse(result.HasFaulted);
+            Assert.AreEqual("cluster_name", result.Data[0].Name);
+            Assert.AreEqual("rabbit@haredu", result.Data[0].Value);
         }
         
-        [Test, Explicit]
-        public async Task Verify_can_create_parameter()
+        [Test]
+        public async Task Verify_can_create_parameter1()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
-                    x.Parameter("");
-                    x.Configure(c =>
+                    x.Parameter("fake_param");
+                    x.Argument("fake_value");
+                });
+             
+            Assert.IsFalse(result.HasFaulted);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            Assert.AreEqual("fake_param", definition.Name);
+            Assert.AreEqual("fake_value", definition.Value);
+        }
+        
+        [Test]
+        public async Task Verify_can_create_parameter2()
+        {
+            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Parameter("fake_param");
+                    x.Arguments(arg =>
                     {
-                        c.HasArguments(arg =>
-                        {
-                            arg.Set("arg1", "value1");
-                        });
+                        arg.Set("arg1", "value1");
+                        arg.Set("arg2", 5);
                     });
                 });
              
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            Assert.AreEqual("fake_param", definition.Name);
+
+//            var value = definition.Value.Cast<Dictionary<string, object>>();
+//            Console.WriteLine(value);
+//            Assert.IsNotEmpty(value);
+//            Assert.AreEqual("value1", value["arg1"]);
+//            Assert.AreEqual(5, value["arg2"]);
         }
         
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_delete_parameter()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Delete(x => x.Parameter("Fred"));
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine((string) result.ToJsonString());
         }
     }
 }

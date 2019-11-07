@@ -1,0 +1,42 @@
+[
+  {
+    "arguments": {},
+    "ack_required": true,
+    "channel_details": {
+      "connection_name": "127.0.0.0:61113 -> 127.0.0.0:5672",
+      "name": "127.0.0.0:61113 -> 127.0.0.0:5672 (1)",
+      "node": "rabbit@localhost",
+      "number": 1,
+      "peer_host": "127.0.0.0",
+      "peer_port": 99883,
+      "user": "guest"
+    },
+    "consumer_tag": "amq.ctag-fOtZo9ajuHDYQQ5hzrgasA",
+    "exclusive": false,
+    "prefetch_count": 0,
+    "queue": {
+      "name": "fake_queue",
+      "vhost": "TestVirtualHost"
+    }
+  },
+  {
+    "arguments": {},
+    "ack_required": true,
+    "channel_details": {
+      "connection_name": "127.0.0.0:61113 -> 127.0.0.0:5672",
+      "name": "127.0.0.0:61113 -> 127.0.0.0:5672 (2)",
+      "node": "rabbit@localhost",
+      "number": 2,
+      "peer_host": "127.0.0.1",
+      "peer_port": 61113,
+      "user": "guest"
+    },
+    "consumer_tag": "amq.ctag-SMYKXd_K2IUuQanChy_pPA",
+    "exclusive": false,
+    "prefetch_count": 0,
+    "queue": {
+      "name": "TestQueue",
+      "vhost": "TestVirtualHost"
+    }
+  }
+]

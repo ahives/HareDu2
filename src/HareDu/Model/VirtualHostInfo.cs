@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public interface VirtualHostInfo :
@@ -23,5 +25,41 @@ namespace HareDu.Model
         
         [JsonProperty("tracing")]
         string Tracing { get; }
+        
+        [JsonProperty("cluster_state")]
+        IDictionary<string, string> ClusterState { get; }
+
+        [JsonProperty("message_stats")]
+        VirtualHostMessageStats MessageStats { get; }
+
+        [JsonProperty("recv_oct")]
+        ulong PacketBytesReceived { get; }
+
+        [JsonProperty("recv_oct_details")]
+        Rate RateOfPacketBytesReceived { get; }
+
+        [JsonProperty("send_oct")]
+        ulong PacketBytesSent { get; }
+
+        [JsonProperty("send_oct_details")]
+        Rate RateOfPacketBytesSent { get; }
+        
+        [JsonProperty("messages_details")]
+        Rate RateOfMessages { get; }
+        
+        [JsonProperty("messages")]
+        ulong TotalMessages { get; }
+        
+        [JsonProperty("messages_unacknowledged_details")]
+        Rate RateOfUnacknowledgedMessages { get; }
+        
+        [JsonProperty("messages_unacknowledged")]
+        ulong UnacknowledgedMessages { get; }
+        
+        [JsonProperty("messages_ready_details")]
+        Rate RateOfReadyMessages { get; }
+        
+        [JsonProperty("messages_ready")]
+        ulong ReadyMessages { get; }
     }
 }

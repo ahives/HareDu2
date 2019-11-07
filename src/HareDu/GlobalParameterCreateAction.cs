@@ -22,11 +22,17 @@ namespace HareDu
         /// </summary>
         /// <param name="name"></param>
         void Parameter(string name);
-
+        
         /// <summary>
-        /// Specify how the global parameter should be configured.
+        /// Specify global parameter arguments.
         /// </summary>
-        /// <param name="configuration"></param>
-        void Configure(Action<GlobalParameterConfiguration> configuration);
+        /// <param name="arguments"></param>
+        void Arguments(Action<GlobalParameterArguments> arguments);
+        
+        /// <summary>
+        /// Specify global parameter argument.
+        /// </summary>
+        /// <param name="arguments"></param>
+        void Argument<T>(T argument);
     }
 }

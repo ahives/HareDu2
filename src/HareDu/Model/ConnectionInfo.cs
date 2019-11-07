@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    using System;
     using Newtonsoft.Json;
 
     public interface ConnectionInfo
@@ -27,11 +26,20 @@ namespace HareDu.Model
         [JsonProperty("reductions")]
         ulong TotalReductions { get; }
 
+        [JsonProperty("recv_cnt")]
+        ulong PacketsReceived { get; }
+
         [JsonProperty("recv_oct")]
         ulong PacketBytesReceived { get; }
 
         [JsonProperty("recv_oct_details")]
         Rate RateOfPacketBytesReceived { get; }
+
+        [JsonProperty("send_cnt")]
+        ulong PacketsSent { get; }
+
+        [JsonProperty("send_oct")]
+        ulong PacketBytesSent { get; }
 
         [JsonProperty("send_oct_details")]
         Rate RateOfPacketBytesSent { get; }
@@ -59,15 +67,6 @@ namespace HareDu.Model
 
         [JsonProperty("send_pend")]
         ulong SendPending { get; }
-
-        [JsonProperty("send_cnt")]
-        ulong PacketsSent { get; }
-
-        [JsonProperty("send_oct")]
-        ulong PacketBytesSent { get; }
-
-        [JsonProperty("recv_cnt")]
-        ulong PacketsReceived { get; }
 
         [JsonProperty("type")]
         string Type { get; }
@@ -127,72 +126,6 @@ namespace HareDu.Model
         string UserWhoPerformedAction { get; }
 
         [JsonProperty("client_properties")]
-        ClientProperties ClientProperties { get; }
-    }
-
-    public interface ClientProperties
-    {
-        [JsonProperty("assembly")]
-        string Assembly { get; }
-
-        [JsonProperty("assembly_version")]
-        string AssemblyVersion { get; }
-
-        [JsonProperty("capabilities")]
-        Capabilities Capabilities { get; }
-
-        [JsonProperty("client_api")]
-        string ClientApi { get; }
-
-        [JsonProperty("connected")]
-        DateTimeOffset Connected { get; }
-
-        [JsonProperty("connection_name")]
-        string ConnectionName { get; }
-
-        [JsonProperty("copyright")]
-        string Copyright { get; }
-
-        [JsonProperty("hostname")]
-        string Host { get; }
-
-        [JsonProperty("information")]
-        string Information { get; }
-
-        [JsonProperty("platform")]
-        string Platform { get; }
-
-        [JsonProperty("process_id")]
-        string ProcessId { get; }
-
-        [JsonProperty("process_name")]
-        string ProcessName { get; }
-
-        [JsonProperty("product")]
-        string Product { get; }
-
-        [JsonProperty("version")]
-        string Version { get; }
-    }
-
-    public interface Capabilities
-    {
-        [JsonProperty("authentication_failure_close")]
-        bool AuthenticationFailureNotificationEnabled { get; }
-
-        [JsonProperty("basic.nack")]
-        bool NegativeAcknowledgmentNotificationsEnabled { get; }
-
-        [JsonProperty("connection.blocked")]
-        bool ConnectionBlockedNotificationsEnabled { get; }
-
-        [JsonProperty("consumer_cancel_notify")]
-        bool ConsumerCancellationNotificationsEnabled { get; }
-
-        [JsonProperty("exchange_exchange_bindings")]
-        bool ExchangeBindingEnabled { get; }
-
-        [JsonProperty("publisher_confirms")]
-        bool PublisherConfirmsEnabled { get; }
+        ConnectionClientProperties ConnectionClientProperties { get; }
     }
 }
