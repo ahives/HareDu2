@@ -54,6 +54,9 @@ namespace HareDu.Model
         [JsonProperty("run_queue")]
         int RunQueue { get; }
 
+        [JsonProperty("type")]
+        string Type { get; }
+        
         [JsonProperty("processors")]
         uint AvailableCoresDetected { get; }
 
@@ -96,9 +99,6 @@ namespace HareDu.Model
         [JsonProperty("name")]
         string Name { get; }
 
-        [JsonProperty("type")]
-        string Type { get; }
-
         [JsonProperty("running")]
         bool IsRunning { get; }
 
@@ -106,7 +106,7 @@ namespace HareDu.Model
         ulong MemoryUsed { get; }
 
         [JsonProperty("mem_used_details")]
-        MemoryUsageDetails MemoryUsageDetails { get; }
+        Rate MemoryUsageDetails { get; }
 
         [JsonProperty("fd_used")]
         ulong FileDescriptorUsed { get; }
@@ -118,7 +118,7 @@ namespace HareDu.Model
         ulong SocketsUsed { get; }
 
         [JsonProperty("sockets_used_details")]
-        SocketsUsedDetails SocketsUsedDetails { get; }
+        Rate SocketsUsedDetails { get; }
 
         [JsonProperty("proc_used")]
         ulong ProcessesUsed { get; }
@@ -130,7 +130,7 @@ namespace HareDu.Model
         ulong FreeDiskSpace { get; }
 
         [JsonProperty("disk_free_details")]
-        FreeDiskSpaceDetails FreeDiskSpaceDetails { get; }
+        Rate FreeDiskSpaceDetails { get; }
 
         [JsonProperty("gc_num")]
         ulong NumberOfGarbageCollected { get; }
@@ -142,135 +142,177 @@ namespace HareDu.Model
         ulong ReclaimedBytesFromGC { get; }
 
         [JsonProperty("gc_bytes_reclaimed_details")]
-        ReclaimedBytesFromGCDetails ReclaimedBytesFromGCDetails { get; }
+        Rate ReclaimedBytesFromGCDetails { get; }
 
         [JsonProperty("context_switches")]
-        long ContextSwitches { get; }
+        ulong ContextSwitches { get; }
 
         [JsonProperty("context_switches_details")]
-        ContextSwitchDetails ContextSwitchDetails { get; }
+        Rate ContextSwitchDetails { get; }
 
         [JsonProperty("io_read_count")]
         ulong TotalIOReads { get; }
 
         [JsonProperty("io_read_count_details")]
-        IOReadCountDetails IOReadCountDetails { get; }
+        Rate IOReadCountDetails { get; }
 
         [JsonProperty("io_read_bytes")]
         ulong TotalIOBytesRead { get; }
 
         [JsonProperty("io_read_bytes_details")]
-        IOBytesReadDetails IOReadBytesDetails { get; }
+        Rate IOReadBytesDetails { get; }
 
         [JsonProperty("io_read_avg_time")]
         ulong AvgIOReadTime { get; }
 
         [JsonProperty("io_read_avg_time_details")]
-        AvgIOReadTimeDetails AvgIOReadTimeDetails { get; }
+        Rate AvgIOReadTimeDetails { get; }
 
         [JsonProperty("io_write_count")]
         ulong TotalIOWrites { get; }
 
         [JsonProperty("io_write_count_details")]
-        IOWriteDetails IOWriteDetails { get; }
+        Rate IOWriteDetails { get; }
 
         [JsonProperty("io_write_bytes")]
         ulong TotalIOBytesWritten { get; }
 
         [JsonProperty("io_write_bytes_details")]
-        IOWriteBytesDetail IOWriteBytesDetail { get; }
+        Rate IOWriteBytesDetail { get; }
 
         [JsonProperty("io_write_avg_time")]
         ulong AvgTimePerIOWrite { get; }
 
         [JsonProperty("io_write_avg_time_details")]
-        AvgTimePerIOWriteDetails AvgTimePerIOWriteDetails { get; }
+        Rate AvgTimePerIOWriteDetails { get; }
 
         [JsonProperty("io_sync_count")]
         ulong IOSyncCount { get; }
 
         [JsonProperty("io_sync_count_details")]
-        IOSyncCountDetails RateOfIOSyncs { get; }
+        Rate RateOfIOSyncs { get; }
 
         [JsonProperty("io_sync_avg_time")]
         decimal AverageIOSyncTime { get; }
 
         [JsonProperty("io_sync_avg_time_details")]
-        AvgIOSyncTimeDetails AvgIOSyncTimeDetails { get; }
+        Rate AvgIOSyncTimeDetails { get; }
 
         [JsonProperty("io_seek_count")]
         ulong IOSeekCount { get; }
 
         [JsonProperty("io_seek_count_details")]
-        IOSeekCountDetails RateOfIOSeeks { get; }
+        Rate RateOfIOSeeks { get; }
 
         [JsonProperty("io_seek_avg_time")]
         ulong AverageIOSeekTime { get; }
 
         [JsonProperty("io_seek_avg_time_details")]
-        AvgIOSeekTimeDetails AvgIOSeekTimeDetails { get; }
+        Rate AvgIOSeekTimeDetails { get; }
 
         [JsonProperty("io_reopen_count")]
         ulong IOReopenCount { get; }
 
         [JsonProperty("io_reopen_count_details")]
-        IOReopenCountDetails RateOfIOReopened { get; }
+        Rate RateOfIOReopened { get; }
 
         [JsonProperty("mnesia_ram_tx_count")]
         ulong TotalMnesiaRamTransactions { get; }
 
         [JsonProperty("mnesia_ram_tx_count_details")]
-        MnesiaRAMTransactionCountDetails MnesiaRAMTransactionCountDetails { get; }
+        Rate MnesiaRAMTransactionCountDetails { get; }
 
         [JsonProperty("mnesia_disk_tx_count")]
         ulong TotalMnesiaDiskTransactions { get; }
 
         [JsonProperty("mnesia_disk_tx_count_details")]
-        MnesiaDiskTransactionCountDetails MnesiaDiskTransactionCountDetails { get; }
+        Rate MnesiaDiskTransactionCountDetails { get; }
 
         [JsonProperty("msg_store_read_count")]
         ulong TotalMessageStoreReads { get; }
 
         [JsonProperty("msg_store_read_count_details")]
-        MessageStoreReadCountDetails MessageStoreReadCountDetails { get; }
+        Rate MessageStoreReadCountDetails { get; }
 
         [JsonProperty("msg_store_write_count")]
         ulong TotalMessageStoreWrites { get; }
 
         [JsonProperty("msg_store_write_count_details")]
-        MessageStoreWriteCountDetails MessageStoreWriteCountDetails { get; }
+        Rate MessageStoreWriteCountDetails { get; }
 
         [JsonProperty("queue_index_journal_write_count")]
         ulong TotalQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_journal_write_count_details")]
-        QueueIndexJournalWriteCountDetails QueueIndexJournalWriteCountDetails { get; }
+        Rate QueueIndexJournalWriteCountDetails { get; }
 
         [JsonProperty("queue_index_write_count")]
         ulong TotalQueueIndexWrites { get; }
 
         [JsonProperty("queue_index_write_count_details")]
-        QueueIndexWriteCountDetails QueueIndexWriteCountDetails { get; }
+        Rate QueueIndexWriteCountDetails { get; }
 
         [JsonProperty("queue_index_read_count")]
         ulong TotalQueueIndexReads { get; }
 
         [JsonProperty("queue_index_read_count_details")]
-        QueueIndexReadCountDetails QueueIndexReadCountDetails { get; }
+        Rate QueueIndexReadCountDetails { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count")]
         ulong TotalOpenFileHandleAttempts { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count_details")]
-        FileHandleOpenAttemptCountDetails FileHandleOpenAttemptCountDetails { get; }
+        Rate FileHandleOpenAttemptCountDetails { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time")]
         decimal OpenFileHandleAttemptsAvgTime { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time_details")]
-        FileHandleOpenAttemptAvgTimeDetails FileHandleOpenAttemptAvgTimeDetails { get; }
+        Rate FileHandleOpenAttemptAvgTimeDetails { get; }
 
         [JsonProperty("metrics_gc_queue_length")]
         GarbageCollectionMetrics GarbageCollectionMetrics { get; }
+        
+        [JsonProperty("channel_closed")]
+        ulong TotalChannelsClosed { get; }
+        
+        [JsonProperty("channel_closed_details")]
+        Rate ClosedChannelDetails { get; }
+
+        [JsonProperty("channel_created")]
+        ulong TotalChannelsCreated { get; }
+        
+        [JsonProperty("channel_created_details")]
+        Rate CreatedChannelDetails { get; }
+
+        [JsonProperty("connection_closed")]
+        ulong TotalConnectionsClosed { get; }
+        
+        [JsonProperty("connection_closed_details")]
+        Rate ClosedConnectionDetails { get; }
+
+        [JsonProperty("connection_created")]
+        ulong TotalConnectionsCreated { get; }
+        
+        [JsonProperty("connection_created_details")]
+        Rate CreatedConnectionDetails { get; }
+
+        [JsonProperty("queue_created")]
+        ulong TotalQueuesCreated { get; }
+        
+        [JsonProperty("queue_created_details")]
+        Rate CreatedQueueDetails { get; }
+
+        [JsonProperty("queue_declared")]
+        ulong TotalQueuesDeclared { get; }
+        
+        [JsonProperty("queue_declared_details")]
+        Rate DeclaredQueueDetails { get; }
+
+        [JsonProperty("queue_deleted")]
+        ulong TotalQueuesDeleted { get; }
+        
+        [JsonProperty("queue_deleted_details")]
+        Rate DeletedQueueDetails { get; }
     }
 }

@@ -97,156 +97,48 @@ namespace HareDu.Testing.Fakes
                 TotalMessagesRedelivered = 7237;
                 TotalMessageDeliveredWithoutAck = 8723;
                 TotalMessagesRedelivered = 838;
-                MessagesPublishedDetails = new MessagesPublishedDetailsImpl(7);
-                UnroutableMessagesDetails = new UnroutableMessagesDetailsImpl(48);
-                MessageGetDetails = new MessageGetDetailsImpl(324);
-                MessageGetsWithoutAckDetails = new MessageGetsWithoutAckDetailsImpl(84);
-                MessageDeliveryDetails = new MessageDeliveryDetailsImpl(84);
-                MessagesDeliveredWithoutAckDetails = new MessagesDeliveredWithoutAckDetailsImpl(56);
-                MessagesRedeliveredDetails = new MessagesRedeliveredDetailsImpl(89);
-                MessagesAcknowledgedDetails = new MessagesAcknowledgedDetailsImpl(723);
-                MessageDeliveryGetDetails = new MessageDeliveryGetDetailsImpl(738);
-                MessagesConfirmedDetails = new MessagesConfirmedDetailsImpl(7293);
+                MessagesPublishedDetails = new RateImpl(7);
+                UnroutableMessagesDetails = new RateImpl(48);
+                MessageGetDetails = new RateImpl(324);
+                MessageGetsWithoutAckDetails = new RateImpl(84);
+                MessageDeliveryDetails = new RateImpl(84);
+                MessagesDeliveredWithoutAckDetails = new RateImpl(56);
+                MessagesRedeliveredDetails = new RateImpl(89);
+                MessagesAcknowledgedDetails = new RateImpl(723);
+                MessageDeliveryGetDetails = new RateImpl(738);
+                MessagesConfirmedDetails = new RateImpl(7293);
             }
 
             public ulong TotalMessagesPublished { get; }
-            public MessagesPublishedDetails MessagesPublishedDetails { get; }
+            public Rate MessagesPublishedDetails { get; }
             public ulong TotalMessagesConfirmed { get; }
-            public MessagesConfirmedDetails MessagesConfirmedDetails { get; }
+            public Rate MessagesConfirmedDetails { get; }
             public ulong TotalUnroutableMessages { get; }
-            public UnroutableMessagesDetails UnroutableMessagesDetails { get; }
+            public Rate UnroutableMessagesDetails { get; }
             public ulong TotalDiskReads { get; }
-            public DiskReadDetails DiskReadDetails { get; }
+            public Rate DiskReadDetails { get; }
             public ulong TotalDiskWrites { get; }
-            public DiskWriteDetails DiskWriteDetails { get; }
+            public Rate DiskWriteDetails { get; }
             public ulong TotalMessageGets { get; }
-            public MessageGetDetails MessageGetDetails { get; }
+            public Rate MessageGetDetails { get; }
             public ulong TotalMessageGetsWithoutAck { get; }
-            public MessageGetsWithoutAckDetails MessageGetsWithoutAckDetails { get; }
+            public Rate MessageGetsWithoutAckDetails { get; }
             public ulong TotalMessagesDelivered { get; }
-            public MessageDeliveryDetails MessageDeliveryDetails { get; }
+            public Rate MessageDeliveryDetails { get; }
             public ulong TotalMessageDeliveredWithoutAck { get; }
-            public MessagesDeliveredWithoutAckDetails MessagesDeliveredWithoutAckDetails { get; }
+            public Rate MessagesDeliveredWithoutAckDetails { get; }
             public ulong TotalMessagesRedelivered { get; }
-            public MessagesRedeliveredDetails MessagesRedeliveredDetails { get; }
+            public Rate MessagesRedeliveredDetails { get; }
             public ulong TotalMessagesAcknowledged { get; }
-            public MessagesAcknowledgedDetails MessagesAcknowledgedDetails { get; }
+            public Rate MessagesAcknowledgedDetails { get; }
             public ulong TotalMessageDeliveryGets { get; }
-            public MessageDeliveryGetDetails MessageDeliveryGetDetails { get; }
+            public Rate MessageDeliveryGetDetails { get; }
 
-                
-            class MessageGetDetailsImpl :
-                MessageGetDetails
+
+            class RateImpl :
+                Rate
             {
-                public MessageGetDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-
-                
-            class MessagesConfirmedDetailsImpl :
-                MessagesConfirmedDetails
-            {
-                public MessagesConfirmedDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-
-                
-            class UnroutableMessagesDetailsImpl :
-                UnroutableMessagesDetails
-            {
-                public UnroutableMessagesDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-
-                
-            class MessagesPublishedDetailsImpl :
-                MessagesPublishedDetails
-            {
-                public MessagesPublishedDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-                
-                
-            class MessageDeliveryGetDetailsImpl :
-                MessageDeliveryGetDetails
-            {
-                public MessageDeliveryGetDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-                
-                
-            class MessagesAcknowledgedDetailsImpl :
-                MessagesAcknowledgedDetails
-            {
-                public MessagesAcknowledgedDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-                
-                
-            class MessagesRedeliveredDetailsImpl :
-                MessagesRedeliveredDetails
-            {
-                public MessagesRedeliveredDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-                
-                
-            class MessagesDeliveredWithoutAckDetailsImpl :
-                MessagesDeliveredWithoutAckDetails
-            {
-                public MessagesDeliveredWithoutAckDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-                
-                
-            class MessageDeliveryDetailsImpl :
-                MessageDeliveryDetails
-            {
-                public MessageDeliveryDetailsImpl(decimal rate)
-                {
-                    Rate = rate;
-                }
-
-                public decimal Rate { get; }
-            }
-                
-                
-            class MessageGetsWithoutAckDetailsImpl :
-                MessageGetsWithoutAckDetails
-            {
-                public MessageGetsWithoutAckDetailsImpl(decimal rate)
+                public RateImpl(decimal rate)
                 {
                     Rate = rate;
                 }

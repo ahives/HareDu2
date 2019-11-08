@@ -19,7 +19,7 @@ namespace HareDu.Model
     public interface ChannelInfo
     {
         [JsonProperty("reductions_details")]
-        ReductionDetails ReductionDetails { get; }
+        Rate ReductionDetails { get; }
 
         [JsonProperty("reductions")]
         ulong TotalReductions { get; }

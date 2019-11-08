@@ -18,27 +18,27 @@ namespace HareDu.Model
     public interface GarbageCollectionMetrics
     {
         [JsonProperty("connection_closed")]
-        long ConnectionsClosed { get; }
+        ulong ConnectionsClosed { get; }
 
         [JsonProperty("channel_closed")]
-        long ChannelsClosed { get; }
+        ulong ChannelsClosed { get; }
 
         [JsonProperty("consumer_deleted")]
-        long ConsumersDeleted { get; }
+        ulong ConsumersDeleted { get; }
         
         [JsonProperty("exchange_deleted")]
-        long ExchangesDeleted { get; }
+        ulong ExchangesDeleted { get; }
 
         [JsonProperty("queue_deleted")]
-        long QueuesDeleted { get; }
+        ulong QueuesDeleted { get; }
 
         [JsonProperty("vhost_deleted")]
-        long VirtualHostsDeleted { get; }
+        ulong VirtualHostsDeleted { get; }
 
         [JsonProperty("node_node_deleted")]
-        long NodesDeleted { get; }
+        ulong NodesDeleted { get; }
 
         [JsonProperty("channel_consumer_deleted")]
-        long ChannelConsumersDeleted { get; }
+        ulong ChannelConsumersDeleted { get; }
     }
 }

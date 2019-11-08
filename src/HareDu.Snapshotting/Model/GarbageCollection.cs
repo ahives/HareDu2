@@ -28,7 +28,7 @@ namespace HareDu.Snapshotting.Model
         long ReclaimedBytesFromGC { get; }
 
         [JsonProperty("gc_bytes_reclaimed_details")]
-        ReclaimedBytesFromGCDetails ReclaimedBytesFromGCDetails { get; }
+        Rate ReclaimedBytesFromGCDetails { get; }
 
         [JsonProperty("metrics_gc_queue_length")]
         GarbageCollectionMetrics GarbageCollectionMetrics { get; }

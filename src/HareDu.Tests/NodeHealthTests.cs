@@ -13,57 +13,38 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
-    using Core;
-    using Core.Extensions;
-    using Model;
     using NUnit.Framework;
 
     [TestFixture]
-    public class NodeHealthTests
+    public class NodeHealthTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_check_if_named_node_healthy()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<NodeHealth>()
                 .GetDetails("rabbit@localhost");
 
-            if (result.HasData)
-            {
-                var info = result.Select(x => x.Data);
-                
-                Console.WriteLine("Reason: {0}", info.Reason);
-                Console.WriteLine("Status: {0}", info.Status);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-//            Console.WriteLine(result.DebugInfo.URL);
+            Assert.IsTrue(result.HasData);
+            Assert.IsFalse(result.HasFaulted);
+            Assert.AreEqual("ok", result.Data.Status);
         }
 
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_check_if_node_healthy()
         {
-            Result<NodeHealthInfo> result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<NodeHealth>()
                 .GetDetails();
             
-            Console.WriteLine(result.DebugInfo.URL);
+            Assert.IsTrue(result.HasData);
+            Assert.IsFalse(result.HasFaulted);
+            Assert.AreEqual("ok", result.Data.Status);
         }
     }
 }

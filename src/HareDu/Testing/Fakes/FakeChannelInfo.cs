@@ -37,7 +37,7 @@ namespace HareDu.Testing.Fakes
             ConnectionDetails = new ConnectionDetailsImpl();
         }
 
-        public ReductionDetails ReductionDetails { get; }
+        public Rate ReductionDetails { get; }
         public ulong TotalReductions { get; }
         public string VirtualHost { get; }
         public string Node { get; }

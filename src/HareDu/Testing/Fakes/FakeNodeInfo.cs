@@ -68,6 +68,7 @@ namespace HareDu.Testing.Fakes
         public string RatesMode { get; }
         public long Uptime { get; }
         public int RunQueue { get; }
+        public string Type { get; }
         public uint AvailableCoresDetected { get; }
         public IList<ExchangeType> ExchangeTypes { get; }
         public IList<AuthenticationMechanism> AuthenticationMechanisms { get; }
@@ -82,64 +83,77 @@ namespace HareDu.Testing.Fakes
         public IList<string> EnabledPlugins { get; }
         public string MemoryCalculationStrategy { get; }
         public string Name { get; }
-        public string Type { get; }
         public bool IsRunning { get; }
         public ulong MemoryUsed { get; }
-        public MemoryUsageDetails MemoryUsageDetails { get; }
+        public Rate MemoryUsageDetails { get; }
         public ulong FileDescriptorUsed { get; }
         public FileDescriptorUsedDetails FileDescriptorUsedDetails { get; }
         public ulong SocketsUsed { get; }
-        public SocketsUsedDetails SocketsUsedDetails { get; }
+        public Rate SocketsUsedDetails { get; }
         public ulong ProcessesUsed { get; }
         public ProcessUsageDetails ProcessUsageDetails { get; }
         public ulong FreeDiskSpace { get; }
-        public FreeDiskSpaceDetails FreeDiskSpaceDetails { get; }
+        public Rate FreeDiskSpaceDetails { get; }
         public ulong NumberOfGarbageCollected { get; }
         public GCDetails GcDetails { get; }
         public ulong ReclaimedBytesFromGC { get; }
-        public ReclaimedBytesFromGCDetails ReclaimedBytesFromGCDetails { get; }
-        public long ContextSwitches { get; }
-        public ContextSwitchDetails ContextSwitchDetails { get; }
+        public Rate ReclaimedBytesFromGCDetails { get; }
+        public ulong ContextSwitches { get; }
+        public Rate ContextSwitchDetails { get; }
         public ulong TotalIOReads { get; }
-        public IOReadCountDetails IOReadCountDetails { get; }
+        public Rate IOReadCountDetails { get; }
         public ulong TotalIOBytesRead { get; }
-        public IOBytesReadDetails IOReadBytesDetails { get; }
+        public Rate IOReadBytesDetails { get; }
         public ulong AvgIOReadTime { get; }
-        public AvgIOReadTimeDetails AvgIOReadTimeDetails { get; }
+        public Rate AvgIOReadTimeDetails { get; }
         public ulong TotalIOWrites { get; }
-        public IOWriteDetails IOWriteDetails { get; }
+        public Rate IOWriteDetails { get; }
         public ulong TotalIOBytesWritten { get; }
-        public IOWriteBytesDetail IOWriteBytesDetail { get; }
+        public Rate IOWriteBytesDetail { get; }
         public ulong AvgTimePerIOWrite { get; }
-        public AvgTimePerIOWriteDetails AvgTimePerIOWriteDetails { get; }
+        public Rate AvgTimePerIOWriteDetails { get; }
         public ulong IOSyncCount { get; }
-        public IOSyncCountDetails RateOfIOSyncs { get; }
+        public Rate RateOfIOSyncs { get; }
         public decimal AverageIOSyncTime { get; }
-        public AvgIOSyncTimeDetails AvgIOSyncTimeDetails { get; }
+        public Rate AvgIOSyncTimeDetails { get; }
         public ulong IOSeekCount { get; }
-        public IOSeekCountDetails RateOfIOSeeks { get; }
+        public Rate RateOfIOSeeks { get; }
         public ulong AverageIOSeekTime { get; }
-        public AvgIOSeekTimeDetails AvgIOSeekTimeDetails { get; }
+        public Rate AvgIOSeekTimeDetails { get; }
         public ulong IOReopenCount { get; }
-        public IOReopenCountDetails RateOfIOReopened { get; }
+        public Rate RateOfIOReopened { get; }
         public ulong TotalMnesiaRamTransactions { get; }
-        public MnesiaRAMTransactionCountDetails MnesiaRAMTransactionCountDetails { get; }
+        public Rate MnesiaRAMTransactionCountDetails { get; }
         public ulong TotalMnesiaDiskTransactions { get; }
-        public MnesiaDiskTransactionCountDetails MnesiaDiskTransactionCountDetails { get; }
+        public Rate MnesiaDiskTransactionCountDetails { get; }
         public ulong TotalMessageStoreReads { get; }
-        public MessageStoreReadCountDetails MessageStoreReadCountDetails { get; }
+        public Rate MessageStoreReadCountDetails { get; }
         public ulong TotalMessageStoreWrites { get; }
-        public MessageStoreWriteCountDetails MessageStoreWriteCountDetails { get; }
+        public Rate MessageStoreWriteCountDetails { get; }
         public ulong TotalQueueIndexJournalWrites { get; }
-        public QueueIndexJournalWriteCountDetails QueueIndexJournalWriteCountDetails { get; }
+        public Rate QueueIndexJournalWriteCountDetails { get; }
         public ulong TotalQueueIndexWrites { get; }
-        public QueueIndexWriteCountDetails QueueIndexWriteCountDetails { get; }
+        public Rate QueueIndexWriteCountDetails { get; }
         public ulong TotalQueueIndexReads { get; }
-        public QueueIndexReadCountDetails QueueIndexReadCountDetails { get; }
+        public Rate QueueIndexReadCountDetails { get; }
         public ulong TotalOpenFileHandleAttempts { get; }
-        public FileHandleOpenAttemptCountDetails FileHandleOpenAttemptCountDetails { get; }
+        public Rate FileHandleOpenAttemptCountDetails { get; }
         public decimal OpenFileHandleAttemptsAvgTime { get; }
-        public FileHandleOpenAttemptAvgTimeDetails FileHandleOpenAttemptAvgTimeDetails { get; }
+        public Rate FileHandleOpenAttemptAvgTimeDetails { get; }
         public GarbageCollectionMetrics GarbageCollectionMetrics { get; }
+        public ulong TotalChannelsClosed { get; }
+        public Rate ClosedChannelDetails { get; }
+        public ulong TotalChannelsCreated { get; }
+        public Rate CreatedChannelDetails { get; }
+        public ulong TotalConnectionsClosed { get; }
+        public Rate ClosedConnectionDetails { get; }
+        public ulong TotalConnectionsCreated { get; }
+        public Rate CreatedConnectionDetails { get; }
+        public ulong TotalQueuesCreated { get; }
+        public Rate CreatedQueueDetails { get; }
+        public ulong TotalQueuesDeclared { get; }
+        public Rate DeclaredQueueDetails { get; }
+        public ulong TotalQueuesDeleted { get; }
+        public Rate DeletedQueueDetails { get; }
     }
 }

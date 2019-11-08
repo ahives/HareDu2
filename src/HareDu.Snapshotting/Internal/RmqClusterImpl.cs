@@ -308,7 +308,7 @@ namespace HareDu.Snapshotting.Internal
                         Rate = node.ContextSwitchDetails?.Rate ?? 0;
                     }
 
-                    public long Total { get; }
+                    public ulong Total { get; }
                     public decimal Rate { get; }
                 }
 

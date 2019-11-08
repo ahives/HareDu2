@@ -74,5 +74,13 @@
     <Content Include="TestData\GlobalParameterInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\NodeHealthInfo.json" />
+    <Content Include="TestData\NodeHealthInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\NodeInfo.json" />
+    <Content Include="TestData\NodeInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

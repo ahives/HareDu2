@@ -21,42 +21,42 @@ namespace HareDu.Model
         ulong TotalChannelsClosed { get; }
         
         [JsonProperty("channel_closed_details")]
-        ClosedChannelDetails ClosedChannelDetails { get; }
+        Rate ClosedChannelDetails { get; }
 
         [JsonProperty("channel_created")]
         ulong TotalChannelsCreated { get; }
         
         [JsonProperty("channel_created_details")]
-        CreatedChannelDetails CreatedChannelDetails { get; }
+        Rate CreatedChannelDetails { get; }
 
         [JsonProperty("connection_closed")]
         ulong TotalConnectionsClosed { get; }
         
         [JsonProperty("connection_closed_details")]
-        ClosedConnectionDetails ClosedConnectionDetails { get; }
+        Rate ClosedConnectionDetails { get; }
 
         [JsonProperty("connection_created")]
         ulong TotalConnectionsCreated { get; }
         
         [JsonProperty("connection_created_details")]
-        CreatedConnectionDetails CreatedConnectionDetails { get; }
+        Rate CreatedConnectionDetails { get; }
 
         [JsonProperty("queue_created")]
         ulong TotalQueuesCreated { get; }
         
         [JsonProperty("queue_created_details")]
-        CreatedQueueDetails CreatedQueueDetails { get; }
+        Rate CreatedQueueDetails { get; }
 
         [JsonProperty("queue_declared")]
         ulong TotalQueuesDeclared { get; }
         
         [JsonProperty("queue_declared_details")]
-        DeclaredQueueDetails DeclaredQueueDetails { get; }
+        Rate DeclaredQueueDetails { get; }
 
         [JsonProperty("queue_deleted")]
         ulong TotalQueuesDeleted { get; }
         
         [JsonProperty("queue_deleted_details")]
-        DeletedQueueDetails DeletedQueueDetails { get; }
+        Rate DeletedQueueDetails { get; }
     }
 }

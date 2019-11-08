@@ -98,21 +98,21 @@ namespace HareDu.Testing.Fakes
             }
 
             public ulong TotalMessagesPublished { get; }
-            public MessagesPublishedDetails MessagesPublishedDetails { get; }
+            public Rate MessagesPublishedDetails { get; }
             public ulong TotalMessageGets { get; }
-            public MessageGetDetails MessageGetDetails { get; }
+            public Rate MessageGetDetails { get; }
             public ulong TotalMessageGetsWithoutAck { get; }
-            public MessageGetsWithoutAckDetails MessageGetsWithoutAckDetails { get; }
+            public Rate MessageGetsWithoutAckDetails { get; }
             public ulong TotalMessagesDelivered { get; }
-            public MessageDeliveryDetails MessageDeliveryDetails { get; }
+            public Rate MessageDeliveryDetails { get; }
             public ulong TotalMessageDeliveredWithoutAck { get; }
-            public MessagesDeliveredWithoutAckDetails MessagesDeliveredWithoutAckDetails { get; }
+            public Rate MessagesDeliveredWithoutAckDetails { get; }
             public ulong TotalMessageDeliveryGets { get; }
-            public MessageDeliveryGetDetails MessageDeliveryGetDetails { get; }
+            public Rate MessageDeliveryGetDetails { get; }
             public ulong TotalMessagesRedelivered { get; }
-            public MessagesRedeliveredDetails MessagesRedeliveredDetails { get; }
+            public Rate MessagesRedeliveredDetails { get; }
             public ulong TotalMessagesAcknowledged { get; }
-            public MessagesAcknowledgedDetails MessagesAcknowledgedDetails { get; }
+            public Rate MessagesAcknowledgedDetails { get; }
         }
     }
 }
