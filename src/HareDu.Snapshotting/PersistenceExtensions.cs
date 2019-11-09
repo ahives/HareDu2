@@ -11,21 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Snapshotting
 {
     using System.IO;
     using Core.Extensions;
-    using Snapshotting;
 
     public static class PersistenceExtensions
     {
-        public static bool PersistJson(this DiagnosticReport report, string path)
+        public static bool PersistJson<T>(this SnapshotContext<T> context, string path)
+            where T : Snapshot
         {
-            string file = $"{path}/report_{report.Identifier.ToString()}.json";
+            string file = $"{path}/snapshot_{context.Identifier}.json";
             if (File.Exists(file))
                 return false;
-            
-            File.WriteAllText(file, report.ToJsonString());
+
+            File.WriteAllText(file, context.ToJsonString());
             return true;
         }
     }

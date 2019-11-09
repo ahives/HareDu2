@@ -31,18 +31,65 @@ namespace HareDu.Tests
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .GetAll();
-            
-            foreach (var queue in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", queue.Name);
-                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
-                Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
 
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Assert.IsTrue(result.HasData);
+            Assert.IsNotNull(result.Data);
+//            Assert.AreEqual(, result.Data[5].MessageStats);
+            Assert.IsNotNull(result.Data[5].MessageStats);
+            Assert.AreEqual(0, result.Data[5].MessageStats?.TotalMessageGets);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessageGetDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessageGetDetails?.Rate);
+            Assert.AreEqual(50000, result.Data[5].MessageStats?.TotalMessagesAcknowledged);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessagesAcknowledgedDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessagesAcknowledgedDetails?.Rate);
+            Assert.AreEqual(50000, result.Data[5].MessageStats?.TotalMessagesDelivered);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessageDeliveryDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessageDeliveryDetails?.Rate);
+            Assert.AreEqual(50000, result.Data[5].MessageStats?.TotalMessagesPublished);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessagesPublishedDetails);
+            Assert.AreEqual(1000.0, result.Data[5].MessageStats?.MessagesPublishedDetails?.Rate);
+            Assert.AreEqual(0, result.Data[5].MessageStats?.TotalMessagesRedelivered);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessagesRedeliveredDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessagesRedeliveredDetails?.Rate);
+            Assert.AreEqual(50000, result.Data[5].MessageStats?.TotalMessageDeliveryGets);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessageDeliveryGetDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessageDeliveryGetDetails?.Rate);
+            Assert.AreEqual(0, result.Data[5].MessageStats?.TotalMessageDeliveredWithoutAck);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessagesDeliveredWithoutAckDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessagesDeliveredWithoutAckDetails?.Rate);
+            Assert.AreEqual(0, result.Data[5].MessageStats?.TotalMessageGetsWithoutAck);
+            Assert.IsNotNull(result.Data[5].MessageStats?.MessageGetsWithoutAckDetails);
+            Assert.AreEqual(0.0, result.Data[5].MessageStats?.MessageGetsWithoutAckDetails?.Rate);
+            Assert.AreEqual(1, result.Data[5].Consumers);
+            Assert.IsTrue(result.Data[5].Durable);
+            Assert.IsFalse(result.Data[5].Exclusive);
+            Assert.IsFalse(result.Data[5].AutoDelete);
+            Assert.AreEqual(17628, result.Data[5].Memory);
+            Assert.AreEqual(0, result.Data[5].MessageBytesPersisted);
+            Assert.AreEqual(100, result.Data[5].MessageBytesInRam);
+            Assert.AreEqual(10, result.Data[5].MessageBytesPagedOut);
+            Assert.AreEqual(10000, result.Data[5].TotalBytesOfAllMessages);
+            Assert.AreEqual(30, result.Data[5].UnacknowledgedMessages);
+            Assert.AreEqual(50, result.Data[5].ReadyMessages);
+            Assert.AreEqual(50, result.Data[5].MessagesInRam);
+            Assert.AreEqual(6700, result.Data[5].TotalMessages);
+            Assert.AreEqual(30000, result.Data[5].UnacknowledgedMessagesInRam);
+            Assert.AreEqual(77349645, result.Data[5].TotalReductions);
+            Assert.IsNotNull(result.Data[5].ReductionRate);
+            Assert.AreEqual(0.0, result.Data[5].ReductionRate?.Rate);
+            Assert.AreEqual(0.0, result.Data[5].UnackedMessageRate?.Rate);
+            Assert.AreEqual(0.0, result.Data[5].ReadyMessageRate?.Rate);
+            Assert.AreEqual(0.0, result.Data[5].MessageRate?.Rate);
+//            Assert.AreEqual(, result.Data[5]);
+//            Assert.AreEqual(, result.Data[5]);
+//            Assert.AreEqual(, result.Data[5]);
+            Assert.AreEqual("consumer_queue", result.Data[5].Name);
+            Assert.AreEqual("rabbit@localhost", result.Data[5].Node);
+            Assert.AreEqual(DateTimeOffset.Parse("2019-11-09 11:57:45"), result.Data[5].IdleSince);
+            Assert.AreEqual("running", result.Data[5].State);
+            Assert.AreEqual("HareDu", result.Data[5].VirtualHost);
+//            Assert.AreEqual("", result.Data[5]);
         }
 
         [Test]

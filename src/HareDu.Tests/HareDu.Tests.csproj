@@ -82,5 +82,9 @@
     <Content Include="TestData\NodeInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\QueueInfo.json" />
+    <Content Include="TestData\QueueInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

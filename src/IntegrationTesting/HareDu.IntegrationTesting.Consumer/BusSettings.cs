@@ -11,22 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.IntegrationTesting.Consumer
 {
-    using System.IO;
-    using Core.Extensions;
-    using Snapshotting;
+    using System;
 
-    public static class PersistenceExtensions
+    public interface BusSettings
     {
-        public static bool PersistJson(this DiagnosticReport report, string path)
-        {
-            string file = $"{path}/report_{report.Identifier.ToString()}.json";
-            if (File.Exists(file))
-                return false;
-            
-            File.WriteAllText(file, report.ToJsonString());
-            return true;
-        }
+        string Username { get; }
+        
+        string Password { get; }
+        
+        string QueueName { get; }
+        
+        Uri HostAddress { get; }
     }
 }

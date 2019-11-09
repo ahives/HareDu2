@@ -27,7 +27,7 @@ namespace HareDu.Testing.Fakes
             ReadyMessages = 9293093;
             TotalReductions = 992039;
             Name = "Queue 1";
-            TotalMessageBytesPagedOut = 239939803;
+            MessageBytesPagedOut = 239939803;
             TotalMessagesPagedOut = 90290398;
             MessageBytesInRam = 992390933;
             TotalBytesOfMessagesDeliveredButUnacknowledged = 82830892;
@@ -42,13 +42,13 @@ namespace HareDu.Testing.Fakes
             MessageStats = new QueueMessageStatsImpl();
         }
 
-        public Rate RateOfMessages { get; }
+        public Rate MessageRate { get; }
         public ulong TotalMessages { get; }
-        public Rate RateOfUnacknowledgedMessages { get; }
+        public Rate UnackedMessageRate { get; }
         public ulong UnacknowledgedMessages { get; }
-        public Rate RateOfReadyMessages { get; }
+        public Rate ReadyMessageRate { get; }
         public ulong ReadyMessages { get; }
-        public Rate RateOfReductions { get; }
+        public Rate ReductionRate { get; }
         public long TotalReductions { get; }
         public IDictionary<string, object> Arguments { get; }
         public bool Exclusive { get; }
@@ -57,7 +57,7 @@ namespace HareDu.Testing.Fakes
         public string VirtualHost { get; }
         public string Name { get; }
         public string Node { get; }
-        public ulong TotalMessageBytesPagedOut { get; }
+        public ulong MessageBytesPagedOut { get; }
         public ulong TotalMessagesPagedOut { get; }
         public BackingQueueStatus BackingQueueStatus { get; }
         public DateTimeOffset HeadMessageTimestamp { get; }

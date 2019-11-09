@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.IntegrationTesting.Consumer
 {
-    using System;
     using Autofac;
     using MassTransit;
     using MassTransit.Log4NetIntegration;
@@ -23,7 +22,7 @@ namespace HareDu.IntegrationTesting.Consumer
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(x => new MyBusSettings("guest", "guest", "TestQueue"))
+            builder.Register(x => new MyBusSettings("guest", "guest", "consumer_queue"))
                 .As<BusSettings>();
             
             builder.Register(context =>
@@ -56,33 +55,5 @@ namespace HareDu.IntegrationTesting.Consumer
             builder.RegisterType<FakeConsumer>()
                 .AsSelf();
         }
-    }
-
-    public class MyBusSettings :
-        BusSettings
-    {
-        public MyBusSettings(string username, string password, string queueName)
-        {
-            Username = username;
-            Password = password;
-            QueueName = queueName;
-            HostAddress = new Uri("rabbitmq://localhost/TestVirtualHost/");
-        }
-
-        public string Username { get; }
-        public string Password { get; }
-        public string QueueName { get; }
-        public Uri HostAddress { get; }
-    }
-
-    public interface BusSettings
-    {
-        string Username { get; }
-        
-        string Password { get; }
-        
-        string QueueName { get; }
-        
-        Uri HostAddress { get; }
     }
 }

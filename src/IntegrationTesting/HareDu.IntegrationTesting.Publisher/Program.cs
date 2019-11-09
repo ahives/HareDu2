@@ -26,7 +26,7 @@ namespace HareDu.IntegrationTesting.Publisher
             Console.WriteLine("Starting Publisher");
             var bus = Bus.Factory.CreateUsingRabbitMq(config =>
             {
-                var host = config.Host(new Uri("rabbitmq://localhost/TestVirtualHost"), x =>
+                var host = config.Host(new Uri("rabbitmq://localhost/HareDu"), x =>
                 {
                     x.Username("guest");
                     x.Password("guest");

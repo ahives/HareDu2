@@ -144,7 +144,7 @@ namespace HareDu.Snapshotting.Internal
                     {
                         Total = queue.Memory;
                         RAM = new RAMImpl(queue);
-                        PagedOut = new PagedOutImpl(queue.TotalMessagesPagedOut, queue.TotalMessageBytesPagedOut);
+                        PagedOut = new PagedOutImpl(queue.TotalMessagesPagedOut, queue.MessageBytesPagedOut);
                     }
 
                     public ulong Total { get; }
@@ -200,9 +200,9 @@ namespace HareDu.Snapshotting.Internal
                         DeliveredWithoutAck = new QueueDepthImpl(queue.MessageStats?.TotalMessageDeliveredWithoutAck ?? 0, queue.MessageStats?.MessagesDeliveredWithoutAckDetails?.Rate ?? 0);
                         Redelivered = new QueueDepthImpl(queue.MessageStats?.TotalMessagesRedelivered ?? 0, queue.MessageStats?.MessagesRedeliveredDetails?.Rate ?? 0);
                         Acknowledged = new QueueDepthImpl(queue.MessageStats?.TotalMessagesAcknowledged ?? 0, queue.MessageStats?.MessagesAcknowledgedDetails?.Rate ?? 0);
-                        Aggregate = new QueueDepthImpl(queue.TotalMessages, queue.RateOfMessages?.Rate ?? 0);
-                        Ready = new QueueDepthImpl(queue.ReadyMessages, queue.RateOfReadyMessages?.Rate ?? 0);
-                        Unacknowledged = new QueueDepthImpl(queue.UnacknowledgedMessages, queue.RateOfUnacknowledgedMessages?.Rate ?? 0);
+                        Aggregate = new QueueDepthImpl(queue.TotalMessages, queue.MessageRate?.Rate ?? 0);
+                        Ready = new QueueDepthImpl(queue.ReadyMessages, queue.ReadyMessageRate?.Rate ?? 0);
+                        Unacknowledged = new QueueDepthImpl(queue.UnacknowledgedMessages, queue.UnackedMessageRate?.Rate ?? 0);
                     }
 
                     public QueueDepth Incoming { get; }
