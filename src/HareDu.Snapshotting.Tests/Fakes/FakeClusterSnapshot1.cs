@@ -56,7 +56,6 @@ namespace HareDu.Snapshotting.Tests.Fakes
             public OperatingSystemSnapshot OS { get; }
             public string RatesMode { get; }
             public long Uptime { get; }
-            public int RunQueue { get; }
             public long InterNodeHeartbeat { get; }
             public string Identifier { get; }
             public string ClusterIdentifier { get; }
@@ -65,11 +64,8 @@ namespace HareDu.Snapshotting.Tests.Fakes
             public ulong AvailableCoresDetected { get; }
             public IReadOnlyList<string> NetworkPartitions { get; }
             public DiskSnapshot Disk { get; }
-            public IO IO { get; }
             public BrokerRuntimeSnapshot Runtime { get; }
-            public RuntimeDatabase RuntimeDatabase { get; }
             public MemorySnapshot Memory { get; }
-            public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
         }
 
@@ -157,6 +153,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             public string Version { get; }
             public RuntimeProcessChurnMetrics Processes { get; }
             public RuntimeDatabase Database { get; }
+            public GarbageCollection GC { get; }
 
 
             class RuntimeProcessChurnMetricsImpl :

@@ -323,6 +323,7 @@ namespace HareDu.Snapshotting.Internal
                         Version = cluster.ErlangVersion;
                         Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
                         Database = new RuntimeDatabaseImpl(node);
+                        GC = new GarbageCollectionImpl(node);
                     }
 
                     public string Identifier { get; }
@@ -330,6 +331,38 @@ namespace HareDu.Snapshotting.Internal
                     public string Version { get; }
                     public RuntimeProcessChurnMetrics Processes { get; }
                     public RuntimeDatabase Database { get; }
+                    public GarbageCollection GC { get; }
+
+                    
+                    class GarbageCollectionImpl :
+                        GarbageCollection
+                    {
+                        public GarbageCollectionImpl(NodeInfo node)
+                        {
+                            ChannelsClosed = new CollectedGarbageImpl(node.TotalChannelsClosed, node.ClosedChannelDetails?.Rate ?? 0);
+                            ConnectionsClosed = new CollectedGarbageImpl(node.TotalConnectionsClosed, node.ClosedConnectionDetails?.Rate ?? 0);
+                            QueuesDeleted = new CollectedGarbageImpl(node.TotalQueuesDeleted, node.DeletedQueueDetails?.Rate ?? 0);
+                            ReclaimedBytes = new CollectedGarbageImpl(node.BytesReclaimedByGarbageCollector, node.ReclaimedBytesFromGCDetails?.Rate ?? 0);
+                        }
+
+                        class CollectedGarbageImpl :
+                            CollectedGarbage
+                        {
+                            public CollectedGarbageImpl(ulong total, decimal rate)
+                            {
+                                Total = total;
+                                Rate = rate;
+                            }
+
+                            public ulong Total { get; }
+                            public decimal Rate { get; }
+                        }
+
+                        public CollectedGarbage ChannelsClosed { get; }
+                        public CollectedGarbage ConnectionsClosed { get; }
+                        public CollectedGarbage QueuesDeleted { get; }
+                        public CollectedGarbage ReclaimedBytes { get; }
+                    }
 
 
                     class RuntimeDatabaseImpl :

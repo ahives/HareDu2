@@ -159,7 +159,7 @@ namespace HareDu.Tests
             Assert.AreEqual(932, result.Data[0].IOSyncCount);
             Assert.IsNotNull(result.Data[0].RateOfIOSyncs);
             Assert.AreEqual(0.0, result.Data[0].RateOfIOSyncs?.Rate);
-            Assert.AreEqual(114844443912, result.Data[0].ReclaimedBytesFromGC);
+            Assert.AreEqual(114844443912, result.Data[0].BytesReclaimedByGarbageCollector);
             Assert.IsNotNull(result.Data[0].ReclaimedBytesFromGCDetails);
             Assert.AreEqual(147054.4, result.Data[0].ReclaimedBytesFromGCDetails?.Rate);
             Assert.AreEqual("disc", result.Data[0].Type);

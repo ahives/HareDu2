@@ -112,7 +112,7 @@ namespace HareDu.Model
         ulong FileDescriptorUsed { get; }
 
         [JsonProperty("fd_used_details")]
-        FileDescriptorUsedDetails FileDescriptorUsedDetails { get; }
+        Rate FileDescriptorUsedDetails { get; }
 
         [JsonProperty("sockets_used")]
         ulong SocketsUsed { get; }
@@ -136,10 +136,10 @@ namespace HareDu.Model
         ulong NumberOfGarbageCollected { get; }
 
         [JsonProperty("gc_num_details")]
-        GCDetails GcDetails { get; }
+        Rate GcDetails { get; }
 
         [JsonProperty("gc_bytes_reclaimed")]
-        ulong ReclaimedBytesFromGC { get; }
+        ulong BytesReclaimedByGarbageCollector { get; }
 
         [JsonProperty("gc_bytes_reclaimed_details")]
         Rate ReclaimedBytesFromGCDetails { get; }

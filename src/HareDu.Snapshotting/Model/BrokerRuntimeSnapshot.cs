@@ -25,5 +25,7 @@ namespace HareDu.Snapshotting.Model
         RuntimeProcessChurnMetrics Processes { get; }
         
         RuntimeDatabase Database { get; }
+        
+        GarbageCollection GC { get; }
     }
 }

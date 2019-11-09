@@ -87,7 +87,7 @@ namespace HareDu.Testing.Fakes
         public ulong MemoryUsed { get; }
         public Rate MemoryUsageDetails { get; }
         public ulong FileDescriptorUsed { get; }
-        public FileDescriptorUsedDetails FileDescriptorUsedDetails { get; }
+        public Rate FileDescriptorUsedDetails { get; }
         public ulong SocketsUsed { get; }
         public Rate SocketsUsedDetails { get; }
         public ulong ProcessesUsed { get; }
@@ -95,8 +95,8 @@ namespace HareDu.Testing.Fakes
         public ulong FreeDiskSpace { get; }
         public Rate FreeDiskSpaceDetails { get; }
         public ulong NumberOfGarbageCollected { get; }
-        public GCDetails GcDetails { get; }
-        public ulong ReclaimedBytesFromGC { get; }
+        public Rate GcDetails { get; }
+        public ulong BytesReclaimedByGarbageCollector { get; }
         public Rate ReclaimedBytesFromGCDetails { get; }
         public ulong ContextSwitches { get; }
         public Rate ContextSwitchDetails { get; }

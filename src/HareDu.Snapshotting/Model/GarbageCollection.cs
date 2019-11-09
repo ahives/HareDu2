@@ -18,19 +18,20 @@ namespace HareDu.Snapshotting.Model
 
     public interface GarbageCollection
     {
-        [JsonProperty("gc_num")]
-        long NumberOfGarbageCollected { get; }
+        CollectedGarbage ChannelsClosed { get; }
+        
+        CollectedGarbage ConnectionsClosed { get; }
 
-        [JsonProperty("gc_num_details")]
-        GCDetails GcDetails { get; }
+        CollectedGarbage QueuesDeleted { get; }
 
         [JsonProperty("gc_bytes_reclaimed")]
-        long ReclaimedBytesFromGC { get; }
+        CollectedGarbage ReclaimedBytes { get; }
+    }
 
-        [JsonProperty("gc_bytes_reclaimed_details")]
-        Rate ReclaimedBytesFromGCDetails { get; }
-
-        [JsonProperty("metrics_gc_queue_length")]
-        GarbageCollectionMetrics GarbageCollectionMetrics { get; }
+    public interface CollectedGarbage
+    {
+        ulong Total { get; }
+        
+        decimal Rate { get; }
     }
 }

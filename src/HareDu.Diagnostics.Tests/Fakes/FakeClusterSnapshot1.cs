@@ -157,6 +157,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
             public string Version { get; }
             public RuntimeProcessChurnMetrics Processes { get; }
             public RuntimeDatabase Database { get; }
+            public GarbageCollection GC { get; }
 
 
             class RuntimeProcessChurnMetricsImpl :

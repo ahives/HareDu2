@@ -87,7 +87,7 @@ namespace HareDu.Snapshotting.Internal
             public BrokerRuntimeSnapshot Runtime { get; }
             public RuntimeDatabase RuntimeDatabase { get; }
             public MemorySnapshot Memory { get; }
-            public GarbageCollection GC { get; }
+//            public GarbageCollection GC { get; }
             public ContextSwitchingDetails ContextSwitching { get; }
             public IReadOnlyList<ConnectionSnapshot> Connections { get; }
         }
