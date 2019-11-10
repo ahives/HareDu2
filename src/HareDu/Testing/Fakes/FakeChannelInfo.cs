@@ -46,7 +46,7 @@ namespace HareDu.Testing.Fakes
         public long ConnectedAt { get; }
         public ulong FrameMax { get; }
         public long Timeout { get; }
-        public long Number { get; }
+        public ulong Number { get; }
         public string Name { get; }
         public string Protocol { get; }
         public string SslHash { get; }
@@ -68,7 +68,7 @@ namespace HareDu.Testing.Fakes
         public string State { get; }
         public long TotalChannels { get; }
         public long SentPending { get; }
-        public long GlobalPrefetchCount { get; }
+        public uint GlobalPrefetchCount { get; }
         public uint PrefetchCount { get; }
         public ulong UncommittedAcknowledgements { get; }
         public ulong UncommittedMessages { get; }

@@ -18,6 +18,7 @@ namespace HareDu.Tests
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
     public class BindingsTests :
@@ -26,15 +27,15 @@ namespace HareDu.Tests
         [Test]
         public async Task Should_be_able_to_get_all_bindings()
         {
-            var container = GetContainerBuilder("TestData/BindingInfo1.json").Build();
+            var container = GetContainerBuilder("TestData/BindingInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .GetAll();
             
-            Assert.IsTrue(result.HasData);
-            Assert.IsNotNull(result.Data);
-            Assert.AreEqual(12, result.Data.Count);
-            Assert.IsFalse(result.HasFaulted);
+            result.HasData.ShouldBeTrue();
+            result.Data.Count.ShouldBe(12);
+            result.HasFaulted.ShouldBeFalse();
+            result.Data.ShouldNotBeNull();
         }
 
         [Test]
@@ -62,11 +63,12 @@ namespace HareDu.Tests
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
 
+            result.HasFaulted.ShouldBeFalse();
+
             BindingDefinition definition = result.DebugInfo.Request.ToObject<BindingDefinition>();
             
-            Assert.AreEqual("*.", definition.RoutingKey);
-            Assert.AreEqual("value1", definition.Arguments["arg1"]);
-            Assert.IsFalse(result.HasFaulted);
+            definition.RoutingKey.ShouldBe("*.");
+            definition.Arguments["arg1"].ShouldBe("value1");
         }
 
         [Test]
@@ -87,8 +89,8 @@ namespace HareDu.Tests
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
-            Assert.IsFalse(result.HasFaulted);
-            Assert.AreEqual("api/bindings/HareDu/e/E2/q/Q4/Binding1", result.DebugInfo.URL);
+            result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.URL.ShouldBe("api/bindings/HareDu/e/E2/q/Q4/Binding1");
         }
     }
 }

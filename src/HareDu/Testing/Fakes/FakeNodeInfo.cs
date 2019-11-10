@@ -104,13 +104,13 @@ namespace HareDu.Testing.Fakes
         public Rate IOReadCountDetails { get; }
         public ulong TotalIOBytesRead { get; }
         public Rate IOReadBytesDetails { get; }
-        public ulong AvgIOReadTime { get; }
+        public decimal AvgIOReadTime { get; }
         public Rate AvgIOReadTimeDetails { get; }
         public ulong TotalIOWrites { get; }
         public Rate IOWriteDetails { get; }
         public ulong TotalIOBytesWritten { get; }
         public Rate IOWriteBytesDetail { get; }
-        public ulong AvgTimePerIOWrite { get; }
+        public decimal AvgTimePerIOWrite { get; }
         public Rate AvgTimePerIOWriteDetails { get; }
         public ulong IOSyncCount { get; }
         public Rate RateOfIOSyncs { get; }
@@ -118,7 +118,7 @@ namespace HareDu.Testing.Fakes
         public Rate AvgIOSyncTimeDetails { get; }
         public ulong IOSeekCount { get; }
         public Rate RateOfIOSeeks { get; }
-        public ulong AverageIOSeekTime { get; }
+        public decimal AverageIOSeekTime { get; }
         public Rate AvgIOSeekTimeDetails { get; }
         public ulong IOReopenCount { get; }
         public Rate RateOfIOReopened { get; }

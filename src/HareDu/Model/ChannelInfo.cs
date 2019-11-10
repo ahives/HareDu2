@@ -46,7 +46,7 @@ namespace HareDu.Model
         long Timeout { get; }
 
         [JsonProperty("number")]
-        long Number { get; }
+        ulong Number { get; }
 
         [JsonProperty("name")]
         string Name { get; }
@@ -112,7 +112,7 @@ namespace HareDu.Model
         long SentPending { get; }
 
         [JsonProperty("global_prefetch_count")]
-        long GlobalPrefetchCount { get; }
+        uint GlobalPrefetchCount { get; }
 
         [JsonProperty("prefetch_count")]
         uint PrefetchCount { get; }

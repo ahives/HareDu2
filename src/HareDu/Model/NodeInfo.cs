@@ -163,7 +163,7 @@ namespace HareDu.Model
         Rate IOReadBytesDetails { get; }
 
         [JsonProperty("io_read_avg_time")]
-        ulong AvgIOReadTime { get; }
+        decimal AvgIOReadTime { get; }
 
         [JsonProperty("io_read_avg_time_details")]
         Rate AvgIOReadTimeDetails { get; }
@@ -181,7 +181,7 @@ namespace HareDu.Model
         Rate IOWriteBytesDetail { get; }
 
         [JsonProperty("io_write_avg_time")]
-        ulong AvgTimePerIOWrite { get; }
+        decimal AvgTimePerIOWrite { get; }
 
         [JsonProperty("io_write_avg_time_details")]
         Rate AvgTimePerIOWriteDetails { get; }
@@ -205,7 +205,7 @@ namespace HareDu.Model
         Rate RateOfIOSeeks { get; }
 
         [JsonProperty("io_seek_avg_time")]
-        ulong AverageIOSeekTime { get; }
+        decimal AverageIOSeekTime { get; }
 
         [JsonProperty("io_seek_avg_time_details")]
         Rate AvgIOSeekTimeDetails { get; }

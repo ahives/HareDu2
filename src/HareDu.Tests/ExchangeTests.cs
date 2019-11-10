@@ -19,6 +19,7 @@ namespace HareDu.Tests
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
     public class ExchangeTests :
@@ -32,19 +33,19 @@ namespace HareDu.Tests
                 .Object<Exchange>()
                 .GetAll();
             
-            Assert.IsFalse(result.HasFaulted);
-            Assert.IsTrue(result.HasData);
-            Assert.IsNotNull(result.Data);
-            Assert.AreEqual(9, result.Data.Count);
-            Assert.IsTrue(result.Data[1].Durable);
-            Assert.IsFalse(result.Data[1].Internal);
-            Assert.IsFalse(result.Data[1].AutoDelete);
-            Assert.AreEqual("E2", result.Data[1].Name);
-            Assert.AreEqual("direct", result.Data[1].RoutingType);
-            Assert.AreEqual("HareDu", result.Data[1].VirtualHost);
-            Assert.IsNotNull(result.Data[1].Arguments);
-            Assert.AreEqual(1, result.Data[1].Arguments.Count);
-            Assert.AreEqual("exchange", result.Data[1].Arguments["alternate-exchange"]);
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
+            result.Data.Count.ShouldBe(9);
+            result.Data[1].Durable.ShouldBeTrue();
+            result.Data[1].Internal.ShouldBeFalse();
+            result.Data[1].AutoDelete.ShouldBeFalse();
+            result.Data[1].Name.ShouldBe("E2");
+            result.Data[1].RoutingType.ShouldBe("direct");
+            result.Data[1].VirtualHost.ShouldBe("HareDu");
+            result.Data[1].Arguments.ShouldNotBeNull();
+            result.Data[1].Arguments.Count.ShouldBe(1);
+            result.Data[1].Arguments["alternate-exchange"].ShouldBe("exchange");
         }
 
         [Test]
@@ -69,17 +70,17 @@ namespace HareDu.Tests
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
-            Assert.IsFalse(result.HasFaulted);
+            result.HasFaulted.ShouldBeFalse();
             
             ExchangeDefinition definition = result.DebugInfo.Request.ToObject<ExchangeDefinition>();
 
-            Assert.AreEqual("api/exchanges/HareDu/fake_exchange", result.DebugInfo.URL);
-            Assert.AreEqual("fanout", definition.RoutingType);
-            Assert.IsTrue(definition.Durable);
-            Assert.IsTrue(definition.Internal);
-            Assert.IsFalse(definition.AutoDelete);
-            Assert.AreEqual(1, definition.Arguments.Count);
-            Assert.AreEqual("8238b", definition.Arguments["fake_arg"]);
+            result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/fake_exchange");
+            definition.RoutingType.ShouldBe("fanout");
+            definition.Durable.ShouldBeTrue();
+            definition.Internal.ShouldBeTrue();
+            definition.AutoDelete.ShouldBeFalse();
+            definition.Arguments.Count.ShouldBe(1);
+            definition.Arguments["fake_arg"].ShouldBe("8238b");
         }
 
         [Test]

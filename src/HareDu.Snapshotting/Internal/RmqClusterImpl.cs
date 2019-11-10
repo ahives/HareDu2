@@ -240,7 +240,7 @@ namespace HareDu.Snapshotting.Internal
                             DiskUsageDetails
                         {
                             public DiskUsageDetailsImpl(ulong total, decimal rate, ulong totalBytes, decimal bytesRate,
-                                ulong avgWallTime, decimal avgWallTimeRate)
+                                decimal avgWallTime, decimal avgWallTimeRate)
                             {
                                 Total = total;
                                 Rate = rate;
@@ -257,13 +257,13 @@ namespace HareDu.Snapshotting.Internal
                             class DiskOperationWallTimeImpl :
                                 DiskOperationWallTime
                             {
-                                public DiskOperationWallTimeImpl(ulong avg, decimal rate)
+                                public DiskOperationWallTimeImpl(decimal avg, decimal rate)
                                 {
                                     Average = avg;
                                     Rate = rate;
                                 }
 
-                                public ulong Average { get; }
+                                public decimal Average { get; }
                                 public decimal Rate { get; }
                             }
 
