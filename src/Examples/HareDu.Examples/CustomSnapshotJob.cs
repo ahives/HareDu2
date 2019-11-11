@@ -18,29 +18,38 @@ namespace HareDu.Examples
     using System.Threading.Tasks;
     using Core.Extensions;
     using Diagnostics;
+    using Nest;
     using Quartz;
     using Snapshotting;
     using Snapshotting.Model;
+    using Snapshot = Snapshotting.Snapshot;
 
     public class CustomSnapshotJob<T> :
         IJob
         where T : ResourceSnapshot<Snapshot>
     {
         readonly T _resource;
+        readonly ElasticClient _client;
 
-        public CustomSnapshotJob(T resource)
+        public CustomSnapshotJob(T resource, ElasticClient client)
         {
             _resource = resource;
+            _client = client;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             _resource.Execute();
-            Console.WriteLine("Snapshot Taken");
 
-            bool persisted = _resource.Snapshots
+            var snapshot = _resource.Snapshots
                 .MostRecent()
-                .PersistJson("/Users/albert/Documents/snapshots");
+                .Cast<SnapshotContext<BrokerQueuesSnapshot>>();
+            
+//            bool persisted = snapshot.PersistJson("/Users/albert/Documents/snapshots");
+
+            var response = _client.Index(snapshot, x => x.Index("haredu_snapshots"));
+            if (response.Result == Result.Created)
+                Console.WriteLine("Snapshot Recorded");
         }
     }
 }

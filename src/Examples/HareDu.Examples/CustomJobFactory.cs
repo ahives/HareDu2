@@ -14,28 +14,32 @@
 namespace HareDu.Examples
 {
     using System;
+    using Nest;
     using Quartz;
     using Quartz.Simpl;
     using Quartz.Spi;
     using Snapshotting;
     using Snapshotting.Model;
+    using Snapshot = Snapshotting.Snapshot;
 
     public class CustomJobFactory<T> :
         SimpleJobFactory
         where T : ResourceSnapshot<Snapshot>
     {
         readonly T _resource;
+        readonly ElasticClient _client;
 
-        public CustomJobFactory(T resource)
+        public CustomJobFactory(T resource, ElasticClient client)
         {
             _resource = resource;
+            _client = client;
         }
 
         public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             try
             {
-                return new CustomSnapshotJob<T>(_resource);
+                return new CustomSnapshotJob<T>(_resource, _client);
             }
             catch (Exception e)
             {

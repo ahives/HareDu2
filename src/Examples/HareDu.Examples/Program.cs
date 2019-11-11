@@ -18,11 +18,16 @@ namespace HareDu.Examples
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using Elasticsearch.Net;
+    using Nest;
     using Quartz;
     using Quartz.Impl;
     using Quartz.Logging;
     using Snapshotting;
     using Snapshotting.Model;
+    using ITrigger = Quartz.ITrigger;
+    using LogLevel = Quartz.Logging.LogLevel;
+    using Snapshot = Snapshotting.Snapshot;
 
     class Program
     {
@@ -71,8 +76,16 @@ namespace HareDu.Examples
 
                     var resource = x.Resolve<ISnapshotFactory>()
                         .Snapshot<T>();
+                    
+                    var nodes = new[]
+                    {
+                        new Uri("http://localhost:9200")
+                    };
+            
+                    var pool = new StickyConnectionPool(nodes);
+                    var client = new ElasticClient(new ConnectionSettings(pool));
 
-                    scheduler.JobFactory = new CustomJobFactory<T>(resource);
+                    scheduler.JobFactory = new CustomJobFactory<T>(resource, client);
 
                     return scheduler;
                 })
