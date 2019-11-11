@@ -52,10 +52,12 @@ namespace HareDu.Internal
             var impl = new PolicyCreateActionImpl();
             action(impl);
 
+            impl.Verify();
+
             PolicyDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
-
+            
             string url = $"api/policies/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.PolicyName.Value}";
             
             if (impl.Errors.Value.Any())
@@ -73,6 +75,8 @@ namespace HareDu.Internal
             var impl = new PolicyDeleteActionImpl();
             action(impl);
 
+            impl.Verify();
+            
             string url = $"api/policies/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.PolicyName.Value}";
             
             if (impl.Errors.Value.Any())
@@ -90,6 +94,8 @@ namespace HareDu.Internal
             string _vhost;
             string _policy;
             readonly List<Error> _errors;
+            bool _policyCalled;
+            bool _targetCalled;
 
             public Lazy<string> PolicyName { get; }
             public Lazy<string> VirtualHost { get; }
@@ -106,6 +112,7 @@ namespace HareDu.Internal
 
             public void Policy(string name)
             {
+                _policyCalled = true;
                 _policy = name;
             
                 if (string.IsNullOrWhiteSpace(_policy))
@@ -114,12 +121,22 @@ namespace HareDu.Internal
             
             public void Target(Action<PolicyTarget> target)
             {
+                _targetCalled = true;
                 var impl = new PolicyTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
 
                 if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
+
+            public void Verify()
+            {
+                if (!_policyCalled)
+                    _errors.Add(new ErrorImpl("The name of the policy is missing."));
+                
+                if (!_targetCalled)
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
@@ -144,7 +161,9 @@ namespace HareDu.Internal
             string _policy;
             string _vhost;
             readonly List<Error> _errors;
-            
+            bool _targetCalled;
+            bool _policyCalled;
+
             public Lazy<PolicyDefinition> Definition { get; }
             public Lazy<string> VirtualHost { get; }
             public Lazy<string> PolicyName { get; }
@@ -163,6 +182,7 @@ namespace HareDu.Internal
 
             public void Policy(string name)
             {
+                _policyCalled = true;
                 _policy = name;
                 
                 if (string.IsNullOrWhiteSpace(_policy))
@@ -195,12 +215,22 @@ namespace HareDu.Internal
 
             public void Target(Action<PolicyTarget> target)
             {
+                _targetCalled = true;
                 var impl = new PolicyTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
 
                 if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
+
+            public void Verify()
+            {
+                if (!_policyCalled)
+                    _errors.Add(new ErrorImpl("The name of the policy is missing."));
+                
+                if (!_targetCalled)
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
@@ -372,11 +402,11 @@ namespace HareDu.Internal
                     if (arguments.IsNull())
                         return;
                     
-                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
+                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value.ToString());
                 }
 
                 public string Pattern { get; }
-                public IDictionary<string, object> Arguments { get; }
+                public IDictionary<string, string> Arguments { get; }
                 public int Priority { get; }
                 public string ApplyTo { get; }
             }

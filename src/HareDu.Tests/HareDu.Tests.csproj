@@ -95,5 +95,9 @@
     <Content Include="TestData\BindingInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\PolicyInfo.json" />
+    <Content Include="TestData\PolicyInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

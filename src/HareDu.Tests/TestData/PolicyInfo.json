@@ -1,0 +1,24 @@
+[
+    {
+        "vhost": "HareDu",
+        "name": "P1",
+        "pattern": "!@#@",
+        "apply-to": "all",
+        "definition": {
+            "ha-mode": "exactly",
+            "ha-params": 2,
+            "ha-sync-mode": "automatic"
+        },
+        "priority": 0
+    },
+    {
+        "vhost": "HareDu",
+        "name": "P2",
+        "pattern": "^amq.",
+        "apply-to": "all",
+        "definition": {
+            "ha-mode": "all"
+        },
+        "priority": 0
+    }
+]

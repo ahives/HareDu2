@@ -72,6 +72,317 @@ namespace HareDu.Tests
         }
 
         [Test]
+        public async Task Verify_cannot_add_arguments_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source(string.Empty);
+                        b.Destination("Q1");
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source("E2");
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source(string.Empty);
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source("E2");
+                        b.Destination("Q1");
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source(string.Empty);
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(3);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Destination("Q1");
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_7()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source("E2");
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_8()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_9()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source("E2");
+                        b.Destination("Q1");
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_add_arguments_10()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Create(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Type(BindingType.Exchange);
+                    });
+                    x.Configure(c =>
+                    {
+                        c.HasRoutingKey("*.");
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "value1");
+                        });
+                    });
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(3);
+        }
+
+//        [Test]
+//        public async Task Verify_cannot_add_arguments_()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<Binding>()
+//                .Create(x =>
+//                {
+//                    x.Binding(b =>
+//                    {
+//                        b.Source("E2");
+//                        b.Destination("Q1");
+//                        b.Type(BindingType.Exchange);
+//                    });
+//                    x.Configure(c =>
+//                    {
+//                        c.HasRoutingKey("*.");
+//                        c.HasArguments(arg =>
+//                        {
+//                            arg.Set("arg1", "value1");
+//                        });
+//                    });
+//                    x.Target(t => t.VirtualHost("HareDu"));
+//                });
+//
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//        }
+
+        [Test]
         public async Task Verify_can_delete_binding()
         {
             var container = GetContainerBuilder().Build();
@@ -92,5 +403,209 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.URL.ShouldBe("api/bindings/HareDu/e/E2/q/Q4/Binding1");
         }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name(string.Empty);
+                        b.Source("E2");
+                        b.Destination("Q4");
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name("Binding1");
+                        b.Source("E2");
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name(string.Empty);
+                        b.Source("E2");
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name(string.Empty);
+                        b.Source("E2");
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(3);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name(string.Empty);
+                        b.Source("E2");
+                        b.Destination("Q4");
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Name("Binding1");
+                        b.Source("E2");
+                        b.Destination(string.Empty);
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_7()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Binding(b =>
+                    {
+                        b.Source("E2");
+                        b.Destination("Q4");
+                        b.Type(BindingType.Queue);
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_8()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_binding_9()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Binding>()
+                .Delete(x =>
+                {
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(3);
+        }
+
+//        [Test]
+//        public async Task Verify_cannot_delete_binding_()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<Binding>()
+//                .Delete(x =>
+//                {
+//                    x.Binding(b =>
+//                    {
+//                        b.Name("Binding1");
+//                        b.Source("E2");
+//                        b.Destination("Q4");
+//                        b.Type(BindingType.Queue);
+//                    });
+//                    x.Target(t => t.VirtualHost("HareDu"));
+//                });
+//            
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//        }
     }
 }

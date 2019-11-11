@@ -22,7 +22,7 @@ namespace HareDu.Model
         string Pattern { get; }
 
         [JsonProperty("definition")]
-        IDictionary<string, object> Arguments { get; }
+        IDictionary<string, string> Arguments { get; }
 
         [JsonProperty("priority")]
         int Priority { get; }

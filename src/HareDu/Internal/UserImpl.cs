@@ -119,6 +119,11 @@ namespace HareDu.Internal
                 if (string.IsNullOrWhiteSpace(_user))
                     _errors.Add(new ErrorImpl("The username is missing."));
             }
+
+            public void Verify()
+            {
+                
+            }
         }
 
 
@@ -175,6 +180,11 @@ namespace HareDu.Internal
                 tags(impl);
 
                 _tags = impl.ToString();
+            }
+
+            public void Verify()
+            {
+                
             }
 
             

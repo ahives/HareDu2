@@ -137,6 +137,11 @@ namespace HareDu.Internal
                 _argument = argument;
             }
 
+            public void Verify()
+            {
+                
+            }
+
 
             class GlobalParameterArgumentsImpl :
                 GlobalParameterArguments

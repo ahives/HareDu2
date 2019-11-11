@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,51 +13,45 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
     using Core.Extensions;
+    using Model;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
-    public class PolicyTests
+    public class PolicyTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Should_be_able_to_get_all_policies()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PolicyInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .GetAll();
 
-            foreach (var policy in result.Select(x => x.Data))
-            {
-                Console.WriteLine("AppliedTo: {0}", policy.AppliedTo);
-                Console.WriteLine("Name: {0}", policy.Name);
-                Console.WriteLine("Pattern: {0}", policy.Pattern);
-                Console.WriteLine("Priority: {0}", policy.Priority);
-                Console.WriteLine("VirtualHost: {0}", policy.VirtualHost);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            result.HasData.ShouldBeTrue();
+            result.HasFaulted.ShouldBeFalse();
+            result.Data.ShouldNotBeNull();
+            result.Data.Count.ShouldBe(2);
+            result.Data[0].Name.ShouldBe("P1");
+            result.Data[0].VirtualHost.ShouldBe("HareDu");
+            result.Data[0].Pattern.ShouldBe("!@#@");
+            result.Data[0].AppliedTo.ShouldBe("all");
+            result.Data[0].Definition.ShouldNotBeNull();
+            result.Data[0].Definition["ha-mode"].ShouldBe("exactly");
+            result.Data[0].Definition["ha-sync-mode"].ShouldBe("automatic");
+            result.Data[0].Definition["ha-params"].ShouldBe("2");
+            result.Data[0].Priority.ShouldBe(0);
         }
         
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_create_policy()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -76,18 +70,26 @@ namespace HareDu.Tests
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
-//            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            result.HasFaulted.ShouldBeFalse();
+
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
+            
+            definition.Pattern.ShouldBe("^amq.");
+            definition.Priority.ShouldBe(0);
+            definition.Arguments["ha-mode"].ShouldBe("all");
+            definition.Arguments["expires"].ShouldBe("1000");
+            definition.ApplyTo.ShouldBe("all");
          }
 
-        [Test, Explicit]
-        public async Task Verify_cannot_create_policy()
+        [Test]
+        public async Task Verify_cannot_create_policy_1()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
-                    x.Policy("P4");
+                    x.Policy(string.Empty);
                     x.Configure(p =>
                     {
                         p.UsingPattern("^amq.");
@@ -100,17 +102,134 @@ namespace HareDu.Tests
                         });
                         p.ApplyTo("all");
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Target(t => t.VirtualHost(string.Empty));
                 });
             
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            result.HasFaulted.ShouldBeTrue();
+
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
+            
+            definition.Pattern.ShouldBe("^amq.");
+            definition.Priority.ShouldBe(0);
+            definition.Arguments["ha-mode"].ShouldBe("all");
+            definition.Arguments["expires"].ShouldBe("1000");
+            definition.ApplyTo.ShouldBe("all");
+            
+            result.Errors.Count.ShouldBe(2);
         }
 
-        [Test, Explicit]
+        [Test]
+        public async Task Verify_cannot_create_policy_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Create(x =>
+                {
+                    x.Configure(p =>
+                    {
+                        p.UsingPattern("^amq.");
+                        p.HasPriority(0);
+                        p.HasArguments(d =>
+                        {
+                            d.SetHighAvailabilityMode(HighAvailabilityModes.All);
+                            d.SetFederationUpstreamSet("all");
+                            d.SetExpiry(1000);
+                        });
+                        p.ApplyTo("all");
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
+            
+            definition.Pattern.ShouldBe("^amq.");
+            definition.Priority.ShouldBe(0);
+            definition.Arguments["ha-mode"].ShouldBe("all");
+            definition.Arguments["expires"].ShouldBe("1000");
+            definition.ApplyTo.ShouldBe("all");
+            
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_policy_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Create(x =>
+                {
+                    x.Policy(string.Empty);
+                    x.Configure(p =>
+                    {
+                        p.UsingPattern("^amq.");
+                        p.HasPriority(0);
+                        p.HasArguments(d =>
+                        {
+                            d.SetHighAvailabilityMode(HighAvailabilityModes.All);
+                            d.SetFederationUpstreamSet("all");
+                            d.SetExpiry(1000);
+                        });
+                        p.ApplyTo("all");
+                    });
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
+            
+            definition.Pattern.ShouldBe("^amq.");
+            definition.Priority.ShouldBe(0);
+            definition.Arguments["ha-mode"].ShouldBe("all");
+            definition.Arguments["expires"].ShouldBe("1000");
+            definition.ApplyTo.ShouldBe("all");
+            
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_policy_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Create(x =>
+                {
+                    x.Configure(p =>
+                    {
+                        p.UsingPattern("^amq.");
+                        p.HasPriority(0);
+                        p.HasArguments(d =>
+                        {
+                            d.SetHighAvailabilityMode(HighAvailabilityModes.All);
+                            d.SetFederationUpstreamSet("all");
+                            d.SetExpiry(1000);
+                        });
+                        p.ApplyTo("all");
+                    });
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
+            
+            definition.Pattern.ShouldBe("^amq.");
+            definition.Priority.ShouldBe(0);
+            definition.Arguments["ha-mode"].ShouldBe("all");
+            definition.Arguments["expires"].ShouldBe("1000");
+            definition.ApplyTo.ShouldBe("all");
+            
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
         public async Task Verify_can_delete_policy()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
@@ -118,8 +237,99 @@ namespace HareDu.Tests
                     x.Target(t => t.VirtualHost("HareDu"));
                 });
             
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            result.HasFaulted.ShouldBeFalse();
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_policy_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Delete(x =>
+                {
+                    x.Policy(string.Empty);
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_policy_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Delete(x =>
+                {
+                    x.Policy("P4");
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_policy_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Delete(x =>
+                {
+                    x.Policy(string.Empty);
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_policy_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Delete(x =>
+                {
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_policy_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Delete(x =>
+                {
+                    x.Policy("P4");
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_policy_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Policy>()
+                .Delete(x =>
+                {
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
         }
     }
 }

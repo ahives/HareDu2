@@ -118,6 +118,11 @@ namespace HareDu.Internal
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
+
+            public void Verify()
+            {
+                
+            }
         }
 
 
@@ -180,6 +185,11 @@ namespace HareDu.Internal
 
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
+
+            public void Verify()
+            {
+                
             }
 
             

@@ -123,6 +123,11 @@ namespace HareDu.Internal
                 _component = impl.ComponentName;
             }
 
+            public void Verify()
+            {
+                
+            }
+
             
             class ScopedParameterTargetImpl :
                 ScopedParameterTarget
@@ -180,6 +185,11 @@ namespace HareDu.Internal
 
                 if (string.IsNullOrWhiteSpace(_component))
                     _errors.Add(new ErrorImpl("The component name is missing."));
+            }
+
+            public void Verify()
+            {
+                
             }
 
             

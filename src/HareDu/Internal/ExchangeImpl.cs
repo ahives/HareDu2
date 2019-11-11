@@ -141,6 +141,11 @@ namespace HareDu.Internal
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
+            public void Verify()
+            {
+                
+            }
+
             
             class ExchangeTargetImpl :
                 ExchangeTarget
@@ -224,6 +229,11 @@ namespace HareDu.Internal
 
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
+
+            public void Verify()
+            {
+                
             }
 
             
