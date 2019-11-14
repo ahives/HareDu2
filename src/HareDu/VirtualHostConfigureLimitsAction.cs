@@ -23,6 +23,10 @@ namespace HareDu
         /// <param name="name">RabbitMQ virtual host name</param>
         void VirtualHost(string name);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
         void Configure(Action<VirtualHostLimitsConfiguration> configuration);
     }
 }

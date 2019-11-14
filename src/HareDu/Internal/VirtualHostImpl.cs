@@ -50,6 +50,8 @@ namespace HareDu.Internal
             var impl = new VirtualHostCreateActionImpl();
             action(impl);
 
+            impl.Verify();
+
             VirtualHostDefinition definition = impl.Definition.Value;
 
             string url = $"api/vhosts/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}";
@@ -68,6 +70,8 @@ namespace HareDu.Internal
 
             var impl = new VirtualHostDeleteActionImpl();
             action(impl);
+
+            impl.Verify();
 
             string vHost = impl.VirtualHostName.Value.SanitizeVirtualHostName();
 
@@ -91,6 +95,8 @@ namespace HareDu.Internal
             var impl = new VirtualHostStartupActionImpl();
             action(impl);
 
+            impl.Verify();
+
             string url = $"/api/vhosts/{vhost.SanitizeVirtualHostName()}/start/{impl.Node.Value}";
 
             var errors = new List<Error>();
@@ -113,6 +119,7 @@ namespace HareDu.Internal
         {
             string _node;
             readonly List<Error> _errors;
+            bool _nodeCalled;
 
             public Lazy<List<Error>> Errors { get; }
             public Lazy<string> Node { get; }
@@ -127,9 +134,17 @@ namespace HareDu.Internal
 
             public void On(string node)
             {
+                _nodeCalled = true;
+                
                 _node = node;
                 
                 if (string.IsNullOrWhiteSpace(_node))
+                    _errors.Add(new ErrorImpl("RabbitMQ node is missing."));
+            }
+
+            public void Verify()
+            {
+                if (!_nodeCalled)
                     _errors.Add(new ErrorImpl("RabbitMQ node is missing."));
             }
         }
@@ -140,6 +155,7 @@ namespace HareDu.Internal
         {
             string _vhost;
             readonly List<Error> _errors;
+            bool _virtualHostCalled;
 
             public Lazy<string> VirtualHostName { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -154,6 +170,8 @@ namespace HareDu.Internal
 
             public void VirtualHost(string name)
             {
+                _virtualHostCalled = true;
+                
                 _vhost = name;
 
                 if (string.IsNullOrWhiteSpace(_vhost))
@@ -162,7 +180,8 @@ namespace HareDu.Internal
 
             public void Verify()
             {
-                
+                if (!_virtualHostCalled)
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
         }
 
@@ -173,6 +192,7 @@ namespace HareDu.Internal
             bool _tracing;
             string _vhost;
             readonly List<Error> _errors;
+            bool _virtualHostCalled;
 
             public Lazy<VirtualHostDefinition> Definition { get; }
             public Lazy<string> VirtualHostName { get; }
@@ -190,6 +210,8 @@ namespace HareDu.Internal
 
             public void VirtualHost(string name)
             {
+                _virtualHostCalled = true;
+                
                 _vhost = name;
 
                 if (string.IsNullOrWhiteSpace(_vhost))
@@ -206,7 +228,8 @@ namespace HareDu.Internal
 
             public void Verify()
             {
-                
+                if (!_virtualHostCalled)
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             

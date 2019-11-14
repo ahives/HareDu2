@@ -25,7 +25,7 @@ namespace HareDu.Extensions
         /// </summary>
         /// <param name="password"></param>
         /// <returns></returns>
-        internal static string ComputePasswordHash(this string password)
+        public static string ComputePasswordHash(this string password)
         {
             byte[] salt = GetRandom32BitSalt();
             byte[] passwordBytes = Encoding.UTF8.GetBytes(password);

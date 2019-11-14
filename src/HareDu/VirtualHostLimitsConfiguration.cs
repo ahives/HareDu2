@@ -15,8 +15,8 @@ namespace HareDu
 {
     public interface VirtualHostLimitsConfiguration
     {
-        void SetMaxConnectionLimit(int value);
+        void SetMaxConnectionLimit(ulong value);
 
-        void SetMaxQueueLimit(int value);
+        void SetMaxQueueLimit(ulong value);
     }
 }

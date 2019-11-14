@@ -63,6 +63,8 @@ namespace HareDu.Internal
             var impl = new UserCreateActionImpl();
             action(impl);
 
+            impl.Verify();
+
             UserDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -84,6 +86,8 @@ namespace HareDu.Internal
             var impl = new UserDeleteActionImpl();
             action(impl);
 
+            impl.Verify();
+
             string url = $"api/users/{impl.Username}";
 
             if (impl.Errors.Value.Any())
@@ -100,7 +104,8 @@ namespace HareDu.Internal
         {
             string _user;
             readonly List<Error> _errors;
-            
+            bool _userCalled;
+
             public Lazy<string> Username { get; }
             public Lazy<List<Error>> Errors { get; }
 
@@ -114,6 +119,8 @@ namespace HareDu.Internal
 
             public void User(string name)
             {
+                _userCalled = true;
+                
                 _user = name;
 
                 if (string.IsNullOrWhiteSpace(_user))
@@ -122,7 +129,8 @@ namespace HareDu.Internal
 
             public void Verify()
             {
-                
+                if (!_userCalled)
+                    _errors.Add(new ErrorImpl("The username is missing."));
             }
         }
 
@@ -134,6 +142,9 @@ namespace HareDu.Internal
             string _passwordHash;
             string _tags;
             string _user;
+            bool _withPasswordHashCalled;
+            bool _passwordCalled;
+            bool _usernameCalled;
             readonly List<Error> _errors;
 
             public Lazy<UserDefinition> Definition { get; }
@@ -152,6 +163,8 @@ namespace HareDu.Internal
 
             public void Username(string username)
             {
+                _usernameCalled = true;
+                
                 _user = username;
             
                 if (string.IsNullOrWhiteSpace(_user))
@@ -160,18 +173,22 @@ namespace HareDu.Internal
 
             public void Password(string password)
             {
+                _passwordCalled = true;
+                
                 _password = password;
-            
-                if (string.IsNullOrWhiteSpace(_password))
-                    _errors.Add(new ErrorImpl("The password is missing."));
             }
 
-            public void WithPasswordHash(string password)
+            public void PasswordHash(string passwordHash)
             {
-                _passwordHash = password.ComputePasswordHash();
-            
-                if (string.IsNullOrWhiteSpace(_passwordHash))
-                    _errors.Add(new ErrorImpl("The password hash is missing."));
+                _withPasswordHashCalled = true;
+                
+                _passwordHash = passwordHash;
+
+                if (string.IsNullOrWhiteSpace(_password))
+                {
+                    if (string.IsNullOrWhiteSpace(_passwordHash))
+                        _errors.Add(new ErrorImpl("The password/hash is missing."));
+                }
             }
 
             public void WithTags(Action<UserAccessOptions> tags)
@@ -184,7 +201,19 @@ namespace HareDu.Internal
 
             public void Verify()
             {
+                if (!_passwordCalled)
+                {
+                    if (!_withPasswordHashCalled)
+                        _errors.Add(new ErrorImpl("The password/hash is missing."));
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(_password) && !_withPasswordHashCalled)
+                        _errors.Add(new ErrorImpl("The password/hash is missing."));
+                }
                 
+                if (!_usernameCalled)
+                    _errors.Add(new ErrorImpl("The username is missing."));
             }
 
             

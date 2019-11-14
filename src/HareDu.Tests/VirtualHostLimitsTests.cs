@@ -13,77 +13,39 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
     using Core.Extensions;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
-    public class VirtualHostLimitsTests
+    public class VirtualHostLimitsTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_get_all_limits()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostLimitsInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .GetAll();
             
-            foreach (var item in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", item.VirtualHostName);
-
-                if (item.Limits.TryGetValue("max-connections", out ulong maxConnections))
-                    Console.WriteLine("max-connections: {0}", maxConnections);
-
-                if (item.Limits.TryGetValue("max-queues", out ulong maxQueues))
-                    Console.WriteLine("max-queues: {0}", maxQueues);
-                
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
+            result.Data.Count.ShouldBe(3);
+            result.Data[0].VirtualHostName.ShouldBe("HareDu1");
+            result.Data[0].Limits.Count.ShouldBe(2);
+            result.Data[0].Limits["max-connections"].ShouldBe<ulong>(10);
+            result.Data[0].Limits["max-queues"].ShouldBe<ulong>(10);
         }
 
-        [Test, Explicit]
-        public async Task Verify_can_get_limits_of_specified_vhost()
-        {
-            var result = _container.Resolve<IBrokerObjectFactory>()
-                .Object<VirtualHostLimits>()
-                .GetAll()
-                .Where(x => x.VirtualHostName == "HareDu");
-
-            foreach (var item in result)
-            {
-                Console.WriteLine("Name: {0}", item.VirtualHostName);
-
-                if (item.Limits.TryGetValue("max-connections", out ulong maxConnections))
-                    Console.WriteLine("max-connections: {0}", maxConnections);
-
-                if (item.Limits.TryGetValue("max-queues", out ulong maxQueues))
-                    Console.WriteLine("max-queues: {0}", maxQueues);
-                
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Verify_can_define_limits()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -95,17 +57,165 @@ namespace HareDu.Tests
                     });
                 });
             
-            Console.WriteLine(result.ToJsonString());
+            result.HasFaulted.ShouldBeFalse();
+
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            
+            definition.MaxConnectionLimit.ShouldBe<ulong>(1000);
+            definition.MaxQueueLimit.ShouldBe<ulong>(100);
         }
 
-        [Test, Explicit]
+        [Test]
+        public async Task Verify_cannot_define_limits_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Define(x =>
+                {
+                    x.VirtualHost(string.Empty);
+                    x.Configure(c =>
+                    {
+                        c.SetMaxQueueLimit(100);
+                        c.SetMaxConnectionLimit(1000);
+                    });
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            
+            definition.MaxConnectionLimit.ShouldBe<ulong>(1000);
+            definition.MaxQueueLimit.ShouldBe<ulong>(100);
+        }
+
+        [Test]
+        public async Task Verify_cannot_define_limits_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Define(x =>
+                {
+                    x.VirtualHost("FakeVirtualHost");
+                    x.Configure(c =>
+                    {
+                        c.SetMaxConnectionLimit(1000);
+                    });
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            
+            definition.MaxConnectionLimit.ShouldBe<ulong>(1000);
+        }
+
+        [Test]
+        public async Task Verify_cannot_define_limits_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Define(x =>
+                {
+                    x.VirtualHost("FakeVirtualHost");
+                    x.Configure(c =>
+                    {
+                        c.SetMaxQueueLimit(100);
+                    });
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            
+            definition.MaxQueueLimit.ShouldBe<ulong>(100);
+        }
+
+        [Test]
+        public async Task Verify_cannot_define_limits_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Define(x =>
+                {
+                    x.VirtualHost("FakeVirtualHost");
+                    x.Configure(c =>
+                    {
+                    });
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_define_limits_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Define(x =>
+                {
+                    x.VirtualHost("FakeVirtualHost");
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_define_limits_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Define(x =>
+                {
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(3);
+        }
+
+        [Test]
         public async Task Verify_can_delete_limits()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Delete(x => x.For("HareDu3"));
             
-            Console.WriteLine(result.ToJsonString());
+            result.HasFaulted.ShouldBeFalse();
+        }
+
+        [Test]
+        public async Task Verify_can_delete_limits_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Delete(x => x.For(string.Empty));
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_can_delete_limits_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<VirtualHostLimits>()
+                .Delete(x => {});
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
         }
     }
 }

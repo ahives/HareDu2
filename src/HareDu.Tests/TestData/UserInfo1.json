@@ -1,0 +1,14 @@
+[
+    {
+        "name": "testuser1",
+        "password_hash": "EeJtW+FJi3yTLMxKFAfXEiNDJB97tHbplPlYM7v4T0pNqMlx",
+        "hashing_algorithm": "rabbit_password_hashing_sha256",
+        "tags": "administrator"
+    },
+    {
+        "name": "testuser2",
+        "password_hash": "OasGMUAvOCqt8tFnTAZfvxiVsPAaSCMGHFThOvDXjc/exlxB",
+        "hashing_algorithm": "rabbit_password_hashing_sha256",
+        "tags": "administrator"
+    }
+]

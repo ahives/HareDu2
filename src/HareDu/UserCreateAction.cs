@@ -32,8 +32,8 @@ namespace HareDu
         /// <summary>
         /// Specify the password for which a hash will eventually be computed.
         /// </summary>
-        /// <param name="password"></param>
-        void WithPasswordHash(string password);
+        /// <param name="passwordHash"></param>
+        void PasswordHash(string passwordHash);
         
         /// <summary>
         /// Specify the type of access the corresponding user has.

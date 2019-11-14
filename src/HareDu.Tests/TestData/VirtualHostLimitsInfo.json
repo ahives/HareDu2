@@ -1,0 +1,21 @@
+[
+    {
+        "vhost": "HareDu1",
+        "value": {
+            "max-connections": 10,
+            "max-queues": 10
+        }
+    },
+    {
+        "vhost": "HareDu2",
+        "value": {
+            "max-connections": 13
+        }
+    },
+    {
+        "vhost": "HareDu3",
+        "value": {
+            "max-queues": 87
+        }
+    }
+]

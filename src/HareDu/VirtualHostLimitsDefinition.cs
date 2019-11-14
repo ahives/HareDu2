@@ -18,9 +18,9 @@ namespace HareDu
     public interface VirtualHostLimitsDefinition
     {
         [JsonProperty("max-connections")]
-        int MaxConnectionLimit { get; }
+        ulong MaxConnectionLimit { get; }
         
         [JsonProperty("max-queues")]
-        int MaxQueueLimit { get; }
+        ulong MaxQueueLimit { get; }
     }
 }
