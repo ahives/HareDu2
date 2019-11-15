@@ -51,6 +51,8 @@ namespace HareDu.Internal
             var impl = new TopicPermissionsCreateActionImpl();
             action(impl);
 
+            impl.Verify();
+
             TopicPermissionsDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -71,6 +73,8 @@ namespace HareDu.Internal
 
             var impl = new TopicPermissionsDeleteActionImpl();
             action(impl);
+            
+            impl.Verify();
 
             string url = $"api/topic-permissions/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}/{impl.Username.Value}";
             
@@ -88,6 +92,8 @@ namespace HareDu.Internal
         {
             string _vhost;
             string _user;
+            bool _userCalled;
+            bool _virtualHostCalled;
             readonly List<Error> _errors;
 
             public Lazy<string> Username { get; }
@@ -105,6 +111,8 @@ namespace HareDu.Internal
 
             public void User(string username)
             {
+                _userCalled = true;
+                
                 _user = username;
             
                 if (string.IsNullOrWhiteSpace(_user))
@@ -113,6 +121,8 @@ namespace HareDu.Internal
 
             public void VirtualHost(string name)
             {
+                _virtualHostCalled = true;
+                
                 _vhost = name;
             
                 if (string.IsNullOrWhiteSpace(_vhost))
@@ -121,7 +131,11 @@ namespace HareDu.Internal
 
             public void Verify()
             {
+                if (!_userCalled)
+                    _errors.Add(new ErrorImpl("The username and/or password is missing."));
                 
+                if (!_virtualHostCalled)
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
         }
 
@@ -134,6 +148,9 @@ namespace HareDu.Internal
             string _readPattern;
             string _vhost;
             string _user;
+            bool _userCalled;
+            bool _configureCalled;
+            bool _virtualHostCalled;
             readonly List<Error> _errors;
 
             public Lazy<TopicPermissionsDefinition> Definition { get; }
@@ -147,13 +164,15 @@ namespace HareDu.Internal
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<TopicPermissionsDefinition>(
-                    () => new TopicPermissionsDefinitionImpl(_exchange, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
+                    () => new TopicPermissionsDefinitionImpl(_exchange, _readPattern, _writePattern), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void User(string username)
             {
+                _userCalled = true;
+                
                 _user = username;
             
                 if (string.IsNullOrWhiteSpace(_user))
@@ -162,6 +181,8 @@ namespace HareDu.Internal
 
             public void Configure(Action<TopicPermissionsConfiguration> configure)
             {
+                _configureCalled = true;
+                
                 var impl = new TopicPermissionsConfigurationImpl();
                 configure(impl);
 
@@ -181,6 +202,8 @@ namespace HareDu.Internal
 
             public void VirtualHost(string name)
             {
+                _virtualHostCalled = true;
+                
                 _vhost = name;
 
                 if (string.IsNullOrWhiteSpace(_vhost))
@@ -189,7 +212,18 @@ namespace HareDu.Internal
 
             public void Verify()
             {
+                if (!_userCalled)
+                    _errors.Add(new ErrorImpl("The username and/or password is missing."));
                 
+                if (!_virtualHostCalled)
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+                if (!_configureCalled)
+                {
+                    _errors.Add(new ErrorImpl("Then name of the exchange is missing."));
+                    _errors.Add(new ErrorImpl("The write pattern is missing."));
+                    _errors.Add(new ErrorImpl("The read pattern is missing."));
+                }
             }
 
             

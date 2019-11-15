@@ -1,0 +1,58 @@
+[
+    {
+        "user": "guest",
+        "vhost": "/",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu2",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu3",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu4",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu6",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu7",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "TestVirtualHost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+    }
+]

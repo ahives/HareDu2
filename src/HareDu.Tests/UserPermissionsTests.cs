@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,74 +13,416 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
-    using AutofacIntegration;
     using Core.Extensions;
+    using Model;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
-    public class UserPermissionsTests
+    public class UserPermissionsTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public async Task Should_be_able_to_get_all_user_permissions()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/UserPermissionsInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .GetAll();
             
-            foreach (var access in result.Select(x => x.Data))
-            {
-                Console.WriteLine("VirtualHost: {0}", access.VirtualHost);
-                Console.WriteLine("Configure: {0}", access.Configure);
-                Console.WriteLine("Read: {0}", access.Read);
-                Console.WriteLine("Write: {0}", access.Write);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
+            result.Data.Count.ShouldBe(8);
+            result.Data[0].ShouldNotBeNull();
+            result.Data[0].User.ShouldBe("guest");
+            result.Data[0].VirtualHost.ShouldBe("/");
+            result.Data[0].Configure.ShouldBe(".*");
+            result.Data[0].Write.ShouldBe(".*");
+            result.Data[0].Read.ShouldBe(".*");
         }
 
-        [Test, Explicit]
-        public async Task TestVerify_can_delete_user_permissions()
+        [Test]
+        public async Task Verify_can_delete_user_permissions()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
-                    x.User("");
+                    x.User("haredu_user");
                     x.Targeting(t => t.VirtualHost("HareDu5"));
                 });
+
+            result.HasFaulted.ShouldBeFalse();
         }
 
-        [Test, Explicit]
+        [Test]
+        public async Task Verify_cannot_delete_user_permissions_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Delete(x =>
+                {
+                    x.User(string.Empty);
+                    x.Targeting(t => t.VirtualHost("HareDu5"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_user_permissions_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Delete(x =>
+                {
+                    x.Targeting(t => t.VirtualHost("HareDu5"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_user_permissions_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Delete(x =>
+                {
+                    x.User("haredu_user");
+                    x.Targeting(t => t.VirtualHost(string.Empty));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_user_permissions_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Delete(x =>
+                {
+                    x.User("haredu_user");
+                    x.Targeting(t => {});
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_user_permissions_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Delete(x =>
+                {
+                    x.Targeting(t => {});
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_user_permissions_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Delete(x =>
+                {
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
         public async Task Verify_can_create_user_permissions()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
-                    x.User("");
+                    x.User("haredu_user");
                     x.Configure(c =>
                     {
-                        c.UsingConfigurePattern("");
-                        c.UsingReadPattern("");
-                        c.UsingWritePattern("");
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => t.VirtualHost("HareDu5"));
                 });
+
+            result.HasFaulted.ShouldBeFalse();
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User(string.Empty);
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                    x.Targeting(t => t.VirtualHost("HareDu5"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                    x.Targeting(t => t.VirtualHost("HareDu5"));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User("haredu_user");
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                    x.Targeting(t => t.VirtualHost(string.Empty));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User("haredu_user");
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                    x.Targeting(t => {});
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User("haredu_user");
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User(string.Empty);
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                    x.Targeting(t => t.VirtualHost(string.Empty));
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_7()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User(string.Empty);
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                    x.Targeting(t => {});
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_8()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.User(string.Empty);
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_user_permissions_9()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<UserPermissions>()
+                .Create(x =>
+                {
+                    x.Configure(c =>
+                    {
+                        c.UsingConfigurePattern(".*");
+                        c.UsingReadPattern(".*");
+                        c.UsingWritePattern(".*");
+                    });
+                });
+
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
+            
+            definition.Configure.ShouldBe(".*");
+            definition.Write.ShouldBe(".*");
+            definition.Read.ShouldBe(".*");
         }
     }
 }

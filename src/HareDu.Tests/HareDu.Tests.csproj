@@ -111,5 +111,13 @@
     <Content Include="TestData\UserInfo2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\UserPermissionsInfo.json" />
+    <Content Include="TestData\UserPermissionsInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\TopicPermissionsInfo.json" />
+    <Content Include="TestData\TopicPermissionsInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

@@ -1,0 +1,23 @@
+[
+    {
+        "user": "guest",
+        "vhost": "HareDu",
+        "exchange": "E4",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu",
+        "exchange": "E5",
+        "write": ".*",
+        "read": ".*"
+    },
+    {
+        "user": "guest",
+        "vhost": "HareDu7",
+        "exchange": "",
+        "write": ".*",
+        "read": ".*"
+    }
+]
