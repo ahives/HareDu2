@@ -15,14 +15,14 @@ namespace HareDu
 {
     using System;
 
-    public interface ScopedParameterCreateAction
+    public interface ScopedParameterCreateAction<T>
     {
         /// <summary>
         /// Specify the name of the scoped parameter.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        void Parameter(string name, string value);
+        void Parameter(string name, T value);
 
         /// <summary>
         /// Specify the targeted component and virtual host.

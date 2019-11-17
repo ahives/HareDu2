@@ -50,7 +50,7 @@ namespace HareDu.Internal
             var impl = new VirtualHostCreateActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             VirtualHostDefinition definition = impl.Definition.Value;
 
@@ -71,7 +71,7 @@ namespace HareDu.Internal
             var impl = new VirtualHostDeleteActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             string vHost = impl.VirtualHostName.Value.SanitizeVirtualHostName();
 
@@ -95,7 +95,7 @@ namespace HareDu.Internal
             var impl = new VirtualHostStartupActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             string url = $"/api/vhosts/{vhost.SanitizeVirtualHostName()}/start/{impl.Node.Value}";
 
@@ -119,7 +119,6 @@ namespace HareDu.Internal
         {
             string _node;
             readonly List<Error> _errors;
-            bool _nodeCalled;
 
             public Lazy<List<Error>> Errors { get; }
             public Lazy<string> Node { get; }
@@ -132,19 +131,11 @@ namespace HareDu.Internal
                 Node = new Lazy<string>(() => _node, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void On(string node)
-            {
-                _nodeCalled = true;
-                
-                _node = node;
-                
-                if (string.IsNullOrWhiteSpace(_node))
-                    _errors.Add(new ErrorImpl("RabbitMQ node is missing."));
-            }
+            public void On(string node) => _node = node;
 
-            public void Verify()
+            public void Validate()
             {
-                if (!_nodeCalled)
+                if (string.IsNullOrWhiteSpace(_node))
                     _errors.Add(new ErrorImpl("RabbitMQ node is missing."));
             }
         }
@@ -155,7 +146,6 @@ namespace HareDu.Internal
         {
             string _vhost;
             readonly List<Error> _errors;
-            bool _virtualHostCalled;
 
             public Lazy<string> VirtualHostName { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -168,19 +158,11 @@ namespace HareDu.Internal
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void VirtualHost(string name)
-            {
-                _virtualHostCalled = true;
-                
-                _vhost = name;
+            public void VirtualHost(string name) => _vhost = name;
 
+            public void Validate()
+            {
                 if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-
-            public void Verify()
-            {
-                if (!_virtualHostCalled)
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
         }
@@ -192,7 +174,6 @@ namespace HareDu.Internal
             bool _tracing;
             string _vhost;
             readonly List<Error> _errors;
-            bool _virtualHostCalled;
 
             public Lazy<VirtualHostDefinition> Definition { get; }
             public Lazy<string> VirtualHostName { get; }
@@ -208,15 +189,7 @@ namespace HareDu.Internal
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void VirtualHost(string name)
-            {
-                _virtualHostCalled = true;
-                
-                _vhost = name;
-
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
+            public void VirtualHost(string name) => _vhost = name;
 
             public void Configure(Action<VirtualHostConfiguration> configuration)
             {
@@ -226,9 +199,9 @@ namespace HareDu.Internal
                 _tracing = impl.Tracing;
             }
 
-            public void Verify()
+            public void Validate()
             {
-                if (!_virtualHostCalled)
+                if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 

@@ -47,5 +47,8 @@ namespace HareDu.Model
         
         [JsonProperty("bindings")]
         IList<BindingInfo> Bindings { get; }
+        
+        [JsonProperty("topic_permissions")]
+        IList<TopicPermissionsInfo> TopicPermissions { get; }
     }
 }

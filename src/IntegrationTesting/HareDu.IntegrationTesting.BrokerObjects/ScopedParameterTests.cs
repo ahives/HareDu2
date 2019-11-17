@@ -17,13 +17,11 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
-    using Core;
     using Core.Extensions;
-    using Model;
     using NUnit.Framework;
 
     [TestFixture]
-    public class GlobalParameterTests
+    public class ScopedParameterTests
     {
         IContainer _container;
 
@@ -38,50 +36,56 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         }
 
         [Test]
-        public async Task Should_be_able_to_get_all_global_parameters()
+        public async Task Should_be_able_to_get_all_scoped_parameters()
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<GlobalParameter>()
+                .Object<ScopedParameter>()
                 .GetAll();
 
             foreach (var parameter in result.Select(x => x.Data))
             {
-                Console.WriteLine((string) "Name: {0}", (object) parameter.Name);
-                Console.WriteLine((string) "Value: {0}", (object) parameter.Value);
+                Console.WriteLine("Component: {0}", parameter.Component);
+                Console.WriteLine("Name: {0}", parameter.Name);
+                Console.WriteLine("Value: {0}", parameter.Value);
+                Console.WriteLine("VirtualHost: {0}", parameter.VirtualHost);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
         }
         
         [Test]
-        public async Task Verify_can_create_parameter()
+        public async Task Verify_can_create()
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<GlobalParameter>()
-                .Create(x =>
+                .Object<ScopedParameter>()
+                .Create<string>(x =>
                 {
-                    x.Parameter("fake_param2");
-                    x.Value("fake_value");
-//                    x.Arguments(arg =>
-//                    {
-//                        arg.Set("arg1", "value1");
-//                        arg.Set("arg2", "value2");
-//                    });
+                    x.Parameter("test", "me");
+                    x.Targeting(t =>
+                    {
+                        t.Component("federation");
+                        t.VirtualHost("HareDu");
+                    });
                 });
-             
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine((string) result.ToJsonString());
+            
+            Console.WriteLine("****************************************************");
+            Console.WriteLine();
         }
-        
+
         [Test]
-        public async Task Verify_can_delete_parameter()
+        public async Task Verify_can_delete()
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<GlobalParameter>()
-                .Delete(x => x.Parameter("Fred"));
-            
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine((string) result.ToJsonString());
+                .Object<ScopedParameter>()
+                .Delete(x =>
+                {
+                    x.Parameter("");
+                    x.Targeting(t =>
+                    {
+                        t.Component("federation");
+                        t.VirtualHost("HareDu");
+                    });
+                });
         }
     }
 }

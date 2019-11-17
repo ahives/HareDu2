@@ -1,10 +1,28 @@
 [
     {
         "name": "cluster_name",
-        "value": "rabbit@haredu"
+        "value": "rabbit@Alberts-MacBook-Pro"
+    },
+    {
+        "name": "fake",
+        "value": "cool"
     },
     {
         "name": "fake_param",
+        "value": {
+            "arg1": "value1",
+            "arg2": "value2"
+        }
+    },
+    {
+        "name": "fake_param1",
+        "value": {
+            "arg1": "value1",
+            "arg2": "value2"
+        }
+    },
+    {
+        "name": "fake_param2",
         "value": "fake_value"
     }
 ]

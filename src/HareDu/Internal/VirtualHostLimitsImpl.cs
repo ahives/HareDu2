@@ -50,7 +50,7 @@ namespace HareDu.Internal
             var impl = new VirtualHostConfigureLimitsActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             VirtualHostLimitsDefinition definition = impl.Definition.Value;
 
@@ -71,7 +71,7 @@ namespace HareDu.Internal
             var impl = new VirtualHostDeleteLimitsActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             string url = $"api/vhost-limits/vhost/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}";
 
@@ -91,8 +91,6 @@ namespace HareDu.Internal
             ulong _maxConnectionLimits;
             ulong _maxQueueLimits;
             readonly List<Error> _errors;
-            bool _configureCalled;
-            bool _virtualHostCalled;
 
             public Lazy<string> VirtualHostName { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -108,43 +106,27 @@ namespace HareDu.Internal
                     () => new VirtualHostLimitsDefinitionImpl(_maxConnectionLimits, _maxQueueLimits), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void VirtualHost(string name)
-            {
-                _virtualHostCalled = true;
-                
-                _vhost = name;
-
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
+            public void VirtualHost(string name) => _vhost = name;
 
             public void Configure(Action<VirtualHostLimitsConfiguration> configuration)
             {
-                _configureCalled = true;
-                
                 var impl = new VirtualHostLimitsConfigurationImpl();
                 configuration(impl);
 
                 _maxConnectionLimits = impl.MaxConnectionLimit.Value;
                 _maxQueueLimits = impl.MaxQueueLimit.Value;
+            }
+
+            public void Validate()
+            {
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
                 
                 if (_maxConnectionLimits < 1)
                     _errors.Add(new ErrorImpl("Max connection limit value is missing."));
                 
                 if (_maxQueueLimits < 1)
                     _errors.Add(new ErrorImpl("Max queue limit value is missing."));
-            }
-
-            public void Verify()
-            {
-                if (!_virtualHostCalled)
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-                
-                if (!_configureCalled)
-                {
-                    _errors.Add(new ErrorImpl("Max connection limit value is missing."));
-                    _errors.Add(new ErrorImpl("Max queue limit value is missing."));
-                }
             }
 
             
@@ -189,7 +171,6 @@ namespace HareDu.Internal
         {
             string _vhost;
             readonly List<Error> _errors;
-            bool _virtualHostCalled;
 
             public Lazy<string> VirtualHostName { get; }
             public Lazy<List<Error>> Errors { get; }
@@ -202,19 +183,11 @@ namespace HareDu.Internal
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void For(string vhost)
-            {
-                _virtualHostCalled = true;
-                
-                _vhost = vhost;
+            public void For(string vhost) => _vhost = vhost;
 
+            public void Validate()
+            {
                 if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-
-            public void Verify()
-            {
-                if (!_virtualHostCalled)
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
         }

@@ -27,12 +27,12 @@ namespace HareDu
         /// Specify global parameter arguments.
         /// </summary>
         /// <param name="arguments"></param>
-        void Arguments(Action<GlobalParameterArguments> arguments);
+        void Value(Action<GlobalParameterArguments> arguments);
         
         /// <summary>
         /// Specify global parameter argument.
         /// </summary>
         /// <param name="arguments"></param>
-        void Argument<T>(T argument);
+        void Value<T>(T argument);
     }
 }

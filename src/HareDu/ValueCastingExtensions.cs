@@ -17,8 +17,8 @@ namespace HareDu
     {
         public static T Cast<T>(this object value)
         {
-            if (value is T dictionary)
-                return dictionary;
+            if (value is T obj)
+                return obj;
 
             return default;
         }

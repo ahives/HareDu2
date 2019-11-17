@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public interface ScopedParameterInfo
@@ -27,6 +28,6 @@ namespace HareDu.Model
         string Name { get; }
 
         [JsonProperty("value")]
-        string Value { get; }
+        IDictionary<string, object> Value { get; }
     }
 }

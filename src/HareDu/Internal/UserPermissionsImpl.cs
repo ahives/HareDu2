@@ -51,7 +51,7 @@ namespace HareDu.Internal
             var impl = new UserPermissionsCreateActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             UserPermissionsDefinition definition = impl.Definition.Value;
 
@@ -74,7 +74,7 @@ namespace HareDu.Internal
             var impl = new UserPermissionsDeleteActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             string url = $"api/permissions/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.Username.Value}";
             
@@ -92,8 +92,6 @@ namespace HareDu.Internal
         {
             string _vhost;
             string _user;
-            bool _userCalled;
-            bool _targetingCalled;
             readonly List<Error> _errors;
 
             public Lazy<string> Username { get; }
@@ -111,33 +109,20 @@ namespace HareDu.Internal
 
             public void Targeting(Action<UserPermissionsTarget> target)
             {
-                _targetingCalled = true;
-                
                 var impl = new UserPermissionsTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            }
 
+            public void User(string name) => _user = name;
+
+            public void Validate()
+            {
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-
-            public void User(string name)
-            {
-                _userCalled = true;
-                
-                _user = name;
             
                 if (string.IsNullOrWhiteSpace(_user))
-                    _errors.Add(new ErrorImpl("The username and/or password is missing."));
-            }
-
-            public void Verify()
-            {
-                if (!_targetingCalled)
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-                
-                if (!_userCalled)
                     _errors.Add(new ErrorImpl("The username and/or password is missing."));
             }
 
@@ -213,7 +198,7 @@ namespace HareDu.Internal
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
                 if (!_targetingCalled)
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));

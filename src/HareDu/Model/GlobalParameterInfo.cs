@@ -21,6 +21,6 @@ namespace HareDu.Model
         string Name { get; }
 
         [JsonProperty("value")]
-        string Value { get; }
+        object Value { get; }
     }
 }

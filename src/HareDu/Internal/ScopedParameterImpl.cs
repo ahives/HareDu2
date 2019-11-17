@@ -44,14 +44,17 @@ namespace HareDu.Internal
             return result;
         }
 
-        public async Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create<T>(Action<ScopedParameterCreateAction<T>> action,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
             
-            var impl = new ScopedParameterCreateActionImpl();
+            var impl = new ScopedParameterCreateActionImpl<T>();
             action(impl);
+            
+            impl.Validate();
 
-            ScopedParameterDefinition definition = impl.Definition.Value;
+            ScopedParameterDefinition<T> definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
                     
@@ -71,6 +74,8 @@ namespace HareDu.Internal
 
             var impl = new ScopedParameterDeleteActionImpl();
             action(impl);
+            
+            impl.Validate();
 
             string url = $"api/parameters/{impl.Component.Value}/{impl.VirtualHost.Value}/{impl.ScopedParameter.Value}";
             
@@ -88,7 +93,7 @@ namespace HareDu.Internal
         {
             string _vhost;
             string _component;
-            string _scopedParameter;
+            string _scopedParamName;
             readonly List<Error> _errors;
 
             public Lazy<string> ScopedParameter { get; }
@@ -101,19 +106,13 @@ namespace HareDu.Internal
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                ScopedParameter = new Lazy<string>(() => _scopedParameter, LazyThreadSafetyMode.PublicationOnly);
+                ScopedParameter = new Lazy<string>(() => _scopedParamName, LazyThreadSafetyMode.PublicationOnly);
                 Component = new Lazy<string>(() => _component, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Parameter(string name)
-            {
-                _scopedParameter = name;
-            
-                if (string.IsNullOrWhiteSpace(_scopedParameter))
-                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
-            }
-            
+            public void Parameter(string name) => _scopedParamName = name;
+
             public void Targeting(Action<ScopedParameterTarget> target)
             {
                 var impl = new ScopedParameterTargetImpl();
@@ -123,9 +122,16 @@ namespace HareDu.Internal
                 _component = impl.ComponentName;
             }
 
-            public void Verify()
+            public void Validate()
             {
-                
+                if (string.IsNullOrWhiteSpace(_scopedParamName))
+                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
+
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+                if (string.IsNullOrWhiteSpace(_component))
+                    _errors.Add(new ErrorImpl("The component name is missing."));
             }
 
             
@@ -142,16 +148,16 @@ namespace HareDu.Internal
         }
 
         
-        class ScopedParameterCreateActionImpl :
-            ScopedParameterCreateAction
+        class ScopedParameterCreateActionImpl<T> :
+            ScopedParameterCreateAction<T>
         {
             string _component;
             string _vhost;
-            string _value;
-            string _name;
+            T _scopedParamValue;
+            string _scopedParamName;
             readonly List<Error> _errors;
 
-            public Lazy<ScopedParameterDefinition> Definition { get; }
+            public Lazy<ScopedParameterDefinition<T>> Definition { get; }
             public Lazy<List<Error>> Errors { get; }
 
             public ScopedParameterCreateActionImpl()
@@ -159,19 +165,16 @@ namespace HareDu.Internal
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<ScopedParameterDefinition>(
-                    () => new ScopedParameterDefinitionImpl(_vhost, _component, _name, _value), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<ScopedParameterDefinition<T>>(
+                    () => new ScopedParameterDefinitionImpl<T>(_vhost, _component, _scopedParamName, _scopedParamValue), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Parameter(string name, string value)
+            public void Parameter(string name, T value)
             {
-                _name = name;
-                _value = value;
-
-                if (string.IsNullOrWhiteSpace(_name))
-                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
+                _scopedParamName = name;
+                _scopedParamValue = value;
             }
-            
+
             public void Targeting(Action<ScopedParameterTarget> target)
             {
                 var impl = new ScopedParameterTargetImpl();
@@ -179,17 +182,18 @@ namespace HareDu.Internal
 
                 _vhost = impl.VirtualHostName;
                 _component = impl.ComponentName;
+            }
+
+            public void Validate()
+            {
+                if (string.IsNullOrWhiteSpace(_scopedParamName))
+                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
 
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
 
                 if (string.IsNullOrWhiteSpace(_component))
                     _errors.Add(new ErrorImpl("The component name is missing."));
-            }
-
-            public void Verify()
-            {
-                
             }
 
             
@@ -205,10 +209,10 @@ namespace HareDu.Internal
             }
 
             
-            class ScopedParameterDefinitionImpl :
-                ScopedParameterDefinition
+            class ScopedParameterDefinitionImpl<T> :
+                ScopedParameterDefinition<T>
             {
-                public ScopedParameterDefinitionImpl(string virtualHost, string component, string name, string value)
+                public ScopedParameterDefinitionImpl(string virtualHost, string component, string name, T value)
                 {
                     VirtualHost = virtualHost;
                     Component = component;
@@ -219,7 +223,7 @@ namespace HareDu.Internal
                 public string VirtualHost { get; }
                 public string Component { get; }
                 public string ParameterName { get; }
-                public string ParameterValue { get; }
+                public T ParameterValue { get; }
             }
         }
     }

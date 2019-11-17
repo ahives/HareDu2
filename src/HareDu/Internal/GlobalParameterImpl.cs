@@ -51,6 +51,8 @@ namespace HareDu.Internal
             var impl = new GlobalParameterCreateActionImpl();
             action(impl);
             
+            impl.Validate();
+            
             GlobalParameterDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -113,33 +115,39 @@ namespace HareDu.Internal
                     () => new GlobalParameterDefinitionImpl(_name, _arguments, _argument), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Parameter(string name)
-            {
-                _name = name;
+            public void Parameter(string name) => _name = name;
 
-                if (string.IsNullOrWhiteSpace(_name))
-                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
-            }
-
-            public void Arguments(Action<GlobalParameterArguments> arguments)
+            public void Value(Action<GlobalParameterArguments> arguments)
             {
                 var impl = new GlobalParameterArgumentsImpl();
                 arguments(impl);
 
                 _arguments = impl.Arguments;
-
-                if (_arguments != null)
-                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
-            public void Argument<T>(T argument)
-            {
-                _argument = argument;
-            }
+            public void Value<T>(T argument) => _argument = argument;
 
-            public void Verify()
+            public void Validate()
             {
+                if (string.IsNullOrWhiteSpace(_name))
+                    _errors.Add(new ErrorImpl("The name of the parameter is missing."));
+
+                if (_argument != null && _argument.GetType() == typeof(string))
+                {
+                    if (string.IsNullOrWhiteSpace(_argument.ToString()))
+                        _errors.Add(new ErrorImpl("Parameter value is missing."));
+
+                    return;
+                }
                 
+                if (_argument == null && _arguments == null)
+                    _errors.Add(new ErrorImpl("Parameter value is missing."));
+                
+                if (_arguments != null)
+                    _errors.AddRange(_arguments
+                        .Select(x => x.Value?.Error)
+                        .Where(error => !error.IsNull())
+                        .ToList());
             }
 
 

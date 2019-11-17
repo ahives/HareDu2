@@ -20,6 +20,7 @@ namespace HareDu.Tests
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
     public class GlobalParameterTests :
@@ -33,15 +34,20 @@ namespace HareDu.Tests
                 .Object<GlobalParameter>()
                 .GetAll();
 
-            Assert.IsTrue(result.HasData);
-            Assert.AreEqual(2, result.Data.Count);
-            Assert.IsFalse(result.HasFaulted);
-            Assert.AreEqual("cluster_name", result.Data[0].Name);
-            Assert.AreEqual("rabbit@haredu", result.Data[0].Value);
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.Count.ShouldBe(5);
+            result.Data[3].Name.ShouldBe("fake_param1");
+            
+            var value = result.Data[3].Value.ToString().ToObject<IDictionary<string, object>>();
+            
+            value.Count.ShouldBe(2);
+            value["arg1"].ShouldBe("value1");
+            value["arg2"].ShouldBe("value2");
         }
         
         [Test]
-        public async Task Verify_can_create_parameter1()
+        public async Task Verify_can_create_parameter_1()
         {
             var container = GetContainerBuilder().Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
@@ -49,19 +55,19 @@ namespace HareDu.Tests
                 .Create(x =>
                 {
                     x.Parameter("fake_param");
-                    x.Argument("fake_value");
+                    x.Value("fake_value");
                 });
              
-            Assert.IsFalse(result.HasFaulted);
+            result.HasFaulted.ShouldBeFalse();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
-            Assert.AreEqual("fake_param", definition.Name);
-            Assert.AreEqual("fake_value", definition.Value);
+            definition.Name.ShouldBe("fake_param");
+            definition.Value.ShouldBe("fake_value");
         }
         
         [Test]
-        public async Task Verify_can_create_parameter2()
+        public async Task Verify_can_create_parameter_2()
         {
             var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
@@ -69,36 +75,227 @@ namespace HareDu.Tests
                 .Create(x =>
                 {
                     x.Parameter("fake_param");
-                    x.Arguments(arg =>
+                    x.Value(arg =>
                     {
                         arg.Set("arg1", "value1");
                         arg.Set("arg2", 5);
                     });
                 });
              
-            Assert.IsFalse(result.HasFaulted);
+            result.HasFaulted.ShouldBeFalse();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
-            Assert.AreEqual("fake_param", definition.Name);
-
-//            var value = definition.Value.Cast<Dictionary<string, object>>();
-//            Console.WriteLine(value);
-//            Assert.IsNotEmpty(value);
-//            Assert.AreEqual("value1", value["arg1"]);
-//            Assert.AreEqual(5, value["arg2"]);
+            definition.Name.ShouldBe("fake_param");
+            definition.Value
+                .ToString()
+                .ToObject<IDictionary<string, object>>()["arg1"]
+                .Cast<string>()
+                .ShouldBe("value1");
+            definition.Value
+                .ToString()
+                .ToObject<IDictionary<string, object>>()["arg2"]
+//                .Cast<int>()
+                .ShouldBe(5);
         }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Parameter(string.Empty);
+                    x.Value("fake_value");
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBeNullOrEmpty();
+            definition.Value.ShouldBe("fake_value");
+        }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Value("fake_value");
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBeNullOrEmpty();
+            definition.Value.ShouldBe("fake_value");
+        }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Parameter("fake_param");
+                    x.Value(string.Empty);
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBe("fake_param");
+            definition.Value.Cast<string>().ShouldBeNullOrEmpty();
+        }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Parameter(string.Empty);
+                    x.Value(string.Empty);
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBeNullOrEmpty();
+            definition.Value.Cast<string>().ShouldBeNullOrEmpty();
+        }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Parameter(string.Empty);
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBeNullOrEmpty();
+            definition.Value.ShouldBeNull();
+        }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                    x.Value(string.Empty);
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBeNullOrEmpty();
+            definition.Value.Cast<string>().ShouldBeNullOrEmpty();
+        }
+        
+        [Test]
+        public async Task Verify_cannot_create_parameter_7()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Create(x =>
+                {
+                });
+             
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+            
+            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+            
+            definition.Name.ShouldBeNullOrEmpty();
+            definition.Value.ShouldBeNull();
+        }
+        
+//        [Test]
+//        public async Task Verify_cannot_create_parameter_()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<GlobalParameter>()
+//                .Create(x =>
+//                {
+//                    x.Parameter("fake_param");
+//                    x.Value("fake_value");
+//                });
+//             
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//            
+//            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
+//            
+//            definition.Name.ShouldBeNullOrEmpty("fake_param");
+//            definition.Name.ShouldBe("fake_param");
+//            definition.Value.ShouldBe("fake_value");
+//        }
         
         [Test]
         public async Task Verify_can_delete_parameter()
         {
-            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
+            var container = GetContainerBuilder().Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
-                .Delete(x => x.Parameter("Fred"));
+                .Delete(x => x.Parameter("fake_param"));
             
-            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine((string) result.ToJsonString());
+            result.HasFaulted.ShouldBeFalse();
+        }
+        
+        [Test]
+        public async Task Verify_cannot_delete_parameter_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Delete(x => x.Parameter(string.Empty));
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+        
+        [Test]
+        public async Task Verify_cannot_delete_parameter_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<GlobalParameter>()
+                .Delete(x => {});
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
         }
     }
 }

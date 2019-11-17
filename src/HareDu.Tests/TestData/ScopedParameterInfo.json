@@ -1,0 +1,27 @@
+[
+    {
+        "value": {
+            "max-connections": 10,
+            "max-queues": "value"
+        },
+        "vhost": "HareDu",
+        "component": "vhost-limits",
+        "name": "limits"
+    },
+    {
+        "value": {
+            "max-connections": 13
+        },
+        "vhost": "HareDu3",
+        "component": "vhost-limits",
+        "name": "limits"
+    },
+    {
+        "value": {
+            "max-queues": 87
+        },
+        "vhost": "HareDu6",
+        "component": "vhost-limits",
+        "name": "limits"
+    }
+]

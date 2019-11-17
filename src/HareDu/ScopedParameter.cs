@@ -35,7 +35,7 @@ namespace HareDu
         /// <param name="action">Describes how the scoped parameter will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="HareDu.Core.Result{TResult}"/></returns>
-        Task<Result> Create(Action<ScopedParameterCreateAction> action, CancellationToken cancellationToken = default);
+        Task<Result> Create<T>(Action<ScopedParameterCreateAction<T>> action, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Delete the specified scoped parameter for a particular component and virtual host on the current RabbitMQ server.
