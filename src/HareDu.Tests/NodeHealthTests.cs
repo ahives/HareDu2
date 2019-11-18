@@ -16,6 +16,7 @@ namespace HareDu.Tests
     using System.Threading.Tasks;
     using Autofac;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
     public class NodeHealthTests :
@@ -29,9 +30,9 @@ namespace HareDu.Tests
                 .Object<NodeHealth>()
                 .GetDetails("rabbit@localhost");
 
-            Assert.IsTrue(result.HasData);
-            Assert.IsFalse(result.HasFaulted);
-            Assert.AreEqual("ok", result.Data.Status);
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.Status.ShouldBe("ok");
         }
 
         [Test]
@@ -42,9 +43,9 @@ namespace HareDu.Tests
                 .Object<NodeHealth>()
                 .GetDetails();
             
-            Assert.IsTrue(result.HasData);
-            Assert.IsFalse(result.HasFaulted);
-            Assert.AreEqual("ok", result.Data.Status);
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.Status.ShouldBe("ok");
         }
     }
 }

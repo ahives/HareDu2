@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
@@ -84,6 +83,128 @@ namespace HareDu.Tests
         }
 
         [Test]
+        public async Task Verify_cannot_create_exchange_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Create(x =>
+                {
+                    x.Exchange(string.Empty);
+                    x.Configure(c =>
+                    {
+                        c.IsDurable();
+                        c.IsForInternalUse();
+                        c.HasRoutingType(ExchangeRoutingType.Fanout);
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("fake_arg", "8238b");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_exchange_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Create(x =>
+                {
+                    x.Configure(c =>
+                    {
+                        c.IsDurable();
+                        c.IsForInternalUse();
+                        c.HasRoutingType(ExchangeRoutingType.Fanout);
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("fake_arg", "8238b");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_exchange_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Create(x =>
+                {
+                    x.Exchange("fake_exchange");
+                    x.Configure(c =>
+                    {
+                        c.IsDurable();
+                        c.IsForInternalUse();
+                        c.HasRoutingType(ExchangeRoutingType.Fanout);
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("fake_arg", "8238b");
+                        });
+                    });
+                    x.Target(t => t.VirtualHost(string.Empty));
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.URL.ShouldBe("api/exchanges//fake_exchange");
+        }
+
+        [Test]
+        public async Task Verify_cannot_create_exchange_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Create(x =>
+                {
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.URL.ShouldBe("api/exchanges//");
+        }
+
+//        [Test]
+//        public async Task Verify_cannot_create_exchange_5()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<Exchange>()
+//                .Create(x =>
+//                {
+//                    x.Exchange("fake_exchange");
+//                    x.Configure(c =>
+//                    {
+//                        c.IsDurable();
+//                        c.IsForInternalUse();
+//                        c.HasRoutingType(ExchangeRoutingType.Fanout);
+//                        c.HasArguments(arg =>
+//                        {
+//                            arg.Set("fake_arg", "8238b");
+//                        });
+//                    });
+//                    x.Target(t => t.VirtualHost("HareDu"));
+//                });
+//            
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//            result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/fake_exchange");
+//        }
+
+        [Test]
         public async Task Verify_can_delete_exchange()
         {
             var container = GetContainerBuilder().Build();
@@ -96,8 +217,164 @@ namespace HareDu.Tests
                     x.WithConditions(c => c.IfUnused());
                 });
             
-//            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            result.HasFaulted.ShouldBeFalse();
         }
+
+        [Test]
+        public async Task Verify_cannot_delete_exchange_1()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Delete(x =>
+                {
+                    x.Exchange(string.Empty);
+                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.WithConditions(c => c.IfUnused());
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_exchange_2()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Delete(x =>
+                {
+                    x.Exchange("E3");
+                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.WithConditions(c => c.IfUnused());
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_exchange_3()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Delete(x =>
+                {
+                    x.Exchange("E3");
+                    x.Target(t => {});
+                    x.WithConditions(c => c.IfUnused());
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(1);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_exchange_4()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Delete(x =>
+                {
+                    x.Exchange(string.Empty);
+                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.WithConditions(c => c.IfUnused());
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_exchange_5()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Delete(x =>
+                {
+                    x.Exchange(string.Empty);
+                    x.Target(t => {});
+                    x.WithConditions(c => c.IfUnused());
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+        [Test]
+        public async Task Verify_cannot_delete_exchange_6()
+        {
+            var container = GetContainerBuilder().Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .Delete(x =>
+                {
+                    x.WithConditions(c => c.IfUnused());
+                });
+            
+            result.HasFaulted.ShouldBeTrue();
+            result.Errors.Count.ShouldBe(2);
+        }
+
+//        [Test]
+//        public async Task Verify_cannot_delete_exchange_()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<Exchange>()
+//                .Delete(x =>
+//                {
+//                    x.Exchange("E3");
+//                    x.Exchange(string.Empty);
+//                    x.Target(t => t.VirtualHost("HareDu"));
+//                    x.Target(t => t.VirtualHost(string.Empty));
+//                    x.WithConditions(c => c.IfUnused());
+//                });
+//            
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//        }
+//
+//        [Test]
+//        public async Task Verify_cannot_delete_exchange_()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<Exchange>()
+//                .Delete(x =>
+//                {
+//                    x.Exchange("E3");
+//                    x.Exchange(string.Empty);
+//                    x.Target(t => t.VirtualHost("HareDu"));
+//                    x.Target(t => t.VirtualHost(string.Empty));
+//                    x.WithConditions(c => c.IfUnused());
+//                });
+//            
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//        }
+//
+//        [Test]
+//        public async Task Verify_cannot_delete_exchange_()
+//        {
+//            var container = GetContainerBuilder().Build();
+//            var result = await container.Resolve<IBrokerObjectFactory>()
+//                .Object<Exchange>()
+//                .Delete(x =>
+//                {
+//                    x.Exchange("E3");
+//                    x.Exchange(string.Empty);
+//                    x.Target(t => t.VirtualHost("HareDu"));
+//                    x.Target(t => t.VirtualHost(string.Empty));
+//                    x.WithConditions(c => c.IfUnused());
+//                });
+//            
+//            result.HasFaulted.ShouldBeTrue();
+//            result.Errors.Count.ShouldBe(1);
+//        }
     }
 }

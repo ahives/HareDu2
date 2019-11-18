@@ -51,6 +51,8 @@ namespace HareDu.Internal
             var impl = new ExchangeCreateActionImpl();
             action(impl);
             
+            impl.Validate();
+            
             ExchangeDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -71,6 +73,8 @@ namespace HareDu.Internal
 
             var impl = new ExchangeDeleteActionImpl();
             action(impl);
+            
+            impl.Validate();
 
             string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
             
@@ -110,13 +114,7 @@ namespace HareDu.Internal
                 ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Exchange(string name)
-            {
-                _exchange = name;
-             
-                if (string.IsNullOrWhiteSpace(_exchange))
-                    _errors.Add(new ErrorImpl("The name of the exchange is missing."));
-            }
+            public void Exchange(string name) => _exchange = name;
 
             public void WithConditions(Action<ExchangeDeleteCondition> condition)
             {
@@ -136,14 +134,15 @@ namespace HareDu.Internal
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
-                
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+             
+                if (string.IsNullOrWhiteSpace(_exchange))
+                    _errors.Add(new ErrorImpl("The name of the exchange is missing."));
             }
 
             
@@ -194,13 +193,7 @@ namespace HareDu.Internal
                 ExchangeName = new Lazy<string>(() => _exchange, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Exchange(string name)
-            {
-                _exchange = name;
-
-                if (string.IsNullOrWhiteSpace(_exchange))
-                    _errors.Add(new ErrorImpl("The name of the exchange is missing."));
-            }
+            public void Exchange(string name) => _exchange = name;
 
             public void Configure(Action<ExchangeConfiguration> configuration)
             {
@@ -212,12 +205,6 @@ namespace HareDu.Internal
                 _autoDelete = impl.AutoDelete;
                 _internal = impl.InternalUse;
                 _arguments = impl.Arguments;
-
-                if (string.IsNullOrWhiteSpace(_routingType))
-                    _errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
-
-                if (!_arguments.IsNull())
-                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
             public void Target(Action<ExchangeTarget> target)
@@ -226,14 +213,21 @@ namespace HareDu.Internal
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
-                
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+                if (string.IsNullOrWhiteSpace(_routingType))
+                    _errors.Add(new ErrorImpl("The routing type of the exchange is missing."));
+
+                if (!_arguments.IsNull())
+                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
+
+                if (string.IsNullOrWhiteSpace(_exchange))
+                    _errors.Add(new ErrorImpl("The name of the exchange is missing."));
             }
 
             
