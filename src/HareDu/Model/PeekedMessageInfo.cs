@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Model
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public interface PeekedMessageInfo
@@ -36,7 +37,7 @@ namespace HareDu.Model
         PeekedMessageProperties Properties { get; }
         
         [JsonProperty("payload")]
-        string Payload { get; }
+        IDictionary<string, object> Payload { get; }
         
         [JsonProperty("payload_encoding")]
         string PayloadEncoding { get; }

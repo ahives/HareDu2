@@ -51,6 +51,8 @@ namespace HareDu.Internal
             var impl = new QueueCreateActionImpl();
             action(impl);
             
+            impl.Validate();
+            
             QueueDefinition definition = impl.Definition.Value;
 
             Debug.Assert(definition != null);
@@ -72,6 +74,8 @@ namespace HareDu.Internal
             var impl = new QueueDeleteActionImpl();
             action(impl);
 
+            impl.Validate();
+            
             string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}";
             if (!string.IsNullOrWhiteSpace(impl.Query.Value))
                 url = $"{url}?{impl.Query.Value}";
@@ -91,6 +95,8 @@ namespace HareDu.Internal
             var impl = new QueueEmptyActionImpl();
             action(impl);
 
+            impl.Validate();
+
             string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
@@ -107,6 +113,8 @@ namespace HareDu.Internal
 
             var impl = new QueuePeekActionImpl();
             action(impl);
+
+            impl.Validate();
 
             QueuePeekDefinition definition = impl.Definition.Value;
 
@@ -150,14 +158,8 @@ namespace HareDu.Internal
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name)
-            {
-                _queue = name;
+            public void Queue(string name) => _queue = name;
 
-                if (string.IsNullOrWhiteSpace(_queue))
-                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
-            }
-            
             public void Configure(Action<QueuePeekConfiguration> configuration)
             {
                 var impl = new QueuePeekConfigurationImpl();
@@ -167,12 +169,6 @@ namespace HareDu.Internal
                 _requeueMode = impl.RequeueMode;
                 _encoding = impl.MessageEncoding;
                 _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
-            
-                if (_take < 1)
-                    _errors.Add(new ErrorImpl("Must be set a value greater than 1."));
-
-                if (string.IsNullOrWhiteSpace(_encoding))
-                    _errors.Add(new ErrorImpl("Encoding must be set to auto or base64."));
             }
 
             public void Target(Action<QueuePeekTarget> target)
@@ -181,6 +177,18 @@ namespace HareDu.Internal
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
+            }
+
+            public void Validate()
+            {
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
+            
+                if (_take < 1)
+                    _errors.Add(new ErrorImpl("Must be set a value greater than 1."));
+
+                if (string.IsNullOrWhiteSpace(_encoding))
+                    _errors.Add(new ErrorImpl("Encoding must be set to auto or base64."));
             
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
@@ -288,23 +296,23 @@ namespace HareDu.Internal
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name)
-            {
-                _queue = name;
+            public void Queue(string name) => _queue = name;
 
-                if (string.IsNullOrWhiteSpace(_queue))
-                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
-            }
-            
             public void Target(Action<QueueTarget> target)
             {
                 var impl = new QueueTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-            
+            }
+
+            public void Validate()
+            {
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
             }
 
             
@@ -341,23 +349,14 @@ namespace HareDu.Internal
                 Query = new Lazy<string>(() => _query, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name)
-            {
-                _queue = name;
+            public void Queue(string name) => _queue = name;
 
-                if (string.IsNullOrWhiteSpace(_queue))
-                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
-            }
-            
             public void Target(Action<QueueTarget> target)
             {
                 var impl = new QueueTargetImpl();
                 target(impl);
 
                 _vhost = impl.VirtualHostName;
-            
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
             public void When(Action<QueueDeleteCondition> condition)
@@ -376,9 +375,13 @@ namespace HareDu.Internal
                 _query = query;
             }
 
-            public void Verify()
+            public void Validate()
             {
-                
+                if (string.IsNullOrWhiteSpace(_vhost))
+                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
             }
 
             
@@ -431,13 +434,7 @@ namespace HareDu.Internal
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void Queue(string name)
-            {
-                _queue = name;
-
-                if (string.IsNullOrWhiteSpace(_queue))
-                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
-            }
+            public void Queue(string name) => _queue = name;
 
             public void Configure(Action<QueueConfiguration> configuration)
             {
@@ -447,9 +444,6 @@ namespace HareDu.Internal
                 _durable = impl.Durable;
                 _autoDelete = impl.AutoDelete;
                 _arguments = impl.Arguments;
-
-                if (!_arguments.IsNull())
-                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
             }
 
             public void Target(Action<QueueCreateTarget> target)
@@ -459,14 +453,18 @@ namespace HareDu.Internal
 
                 _node = impl.NodeName;
                 _vhost = impl.VirtualHostName;
+            }
+
+            public void Validate()
+            {
+                if (!_arguments.IsNull())
+                    _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => !error.IsNull()).ToList());
 
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
 
-            public void Verify()
-            {
-                
+                if (string.IsNullOrWhiteSpace(_queue))
+                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
             }
 
             

@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Autofac;
@@ -95,7 +94,6 @@ namespace HareDu.Tests
             definition.Value
                 .ToString()
                 .ToObject<IDictionary<string, object>>()["arg2"]
-//                .Cast<int>()
                 .ShouldBe(5);
         }
         
@@ -240,28 +238,6 @@ namespace HareDu.Tests
             definition.Name.ShouldBeNullOrEmpty();
             definition.Value.ShouldBeNull();
         }
-        
-//        [Test]
-//        public async Task Verify_cannot_create_parameter_()
-//        {
-//            var container = GetContainerBuilder().Build();
-//            var result = await container.Resolve<IBrokerObjectFactory>()
-//                .Object<GlobalParameter>()
-//                .Create(x =>
-//                {
-//                    x.Parameter("fake_param");
-//                    x.Value("fake_value");
-//                });
-//             
-//            result.HasFaulted.ShouldBeTrue();
-//            result.Errors.Count.ShouldBe(1);
-//            
-//            GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
-//            
-//            definition.Name.ShouldBeNullOrEmpty("fake_param");
-//            definition.Name.ShouldBe("fake_param");
-//            definition.Value.ShouldBe("fake_value");
-//        }
         
         [Test]
         public async Task Verify_can_delete_parameter()

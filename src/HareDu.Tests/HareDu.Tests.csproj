@@ -127,5 +127,9 @@
     <Content Include="TestData\ScopedParameterInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\PeekedMessageInfo.json" />
+    <Content Include="TestData\PeekedMessageInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
