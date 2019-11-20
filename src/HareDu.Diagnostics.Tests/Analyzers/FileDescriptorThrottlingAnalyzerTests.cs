@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Shouldly;
     using Snapshotting.Model;
 
     public class FileDescriptorThrottlingAnalyzerTests
@@ -52,8 +53,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Yellow);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -67,8 +68,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Red);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -82,8 +83,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Green);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -93,7 +94,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var analyzer = new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
-            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
+            analyzer.Status.ShouldBe(DiagnosticAnalyzerStatus.Offline);
         }
 
         

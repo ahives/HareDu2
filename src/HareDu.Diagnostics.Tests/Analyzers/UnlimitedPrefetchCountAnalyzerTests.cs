@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -53,8 +54,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-            Assert.AreEqual(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Yellow);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -68,8 +69,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Inconclusive,result.Status);
-            Assert.AreEqual(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Inconclusive);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier());
         }
     }
 }

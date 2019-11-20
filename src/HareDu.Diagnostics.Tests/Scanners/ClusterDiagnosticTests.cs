@@ -22,6 +22,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -55,14 +56,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new ClusterDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.AreEqual(7, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()));
+            report.Count.ShouldBe(7);
+            report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -73,7 +74,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new ClusterDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.IsEmpty(report);
+            report.ShouldBeEmpty();
         }
     }
 }

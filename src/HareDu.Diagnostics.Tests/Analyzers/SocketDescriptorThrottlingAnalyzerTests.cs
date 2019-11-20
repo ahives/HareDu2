@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -53,8 +54,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Yellow,result.Status);
-            Assert.AreEqual(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Yellow);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier());
         }
 
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
@@ -68,8 +69,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Red);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -83,8 +84,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Green);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var analyzer = new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider);
             
-            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
+            analyzer.Status.ShouldBe(DiagnosticAnalyzerStatus.Offline);
         }
 
         

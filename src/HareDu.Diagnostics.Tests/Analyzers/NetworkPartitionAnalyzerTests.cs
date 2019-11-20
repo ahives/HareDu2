@@ -20,6 +20,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -59,8 +60,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = sensor.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(NetworkPartitionAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Red);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(NetworkPartitionAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -74,8 +75,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = sensor.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(NetworkPartitionAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Green);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(NetworkPartitionAnalyzer).GetIdentifier());
         }
     }
 }

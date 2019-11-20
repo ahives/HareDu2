@@ -21,8 +21,8 @@ namespace HareDu.Snapshotting.Tests
     using HareDu.Testing.Fakes;
     using Model;
     using NUnit.Framework;
-    using Observers;
     using Registration;
+    using Shouldly;
 
     [TestFixture]
     public class ConnectionSnapshotTests
@@ -70,32 +70,29 @@ namespace HareDu.Snapshotting.Tests
 
             BrokerConnectivitySnapshot snapshot = resource.Snapshots.MostRecent().Snapshot;
             
-            Assert.AreEqual("3.7.18", snapshot.BrokerVersion);
-            Assert.AreEqual("fake_cluster", snapshot.ClusterName);
-            Assert.IsNotNull(snapshot.Connections);
-            Assert.AreEqual("Connection 1", snapshot.Connections[0].Identifier);
-            Assert.AreEqual(ConnectionState.Blocked, snapshot.Connections[0].State);
-            Assert.AreEqual(982738, snapshot.Connections[0].OpenChannelsLimit);
-            Assert.AreEqual("TestVirtualHost", snapshot.Connections[0].VirtualHost);
-            Assert.AreEqual("Node 1", snapshot.Connections[0].NodeIdentifier);
-            Assert.IsNotNull(snapshot.Connections[0].NetworkTraffic);
-            Assert.IsNotNull(snapshot.Connections[0].NetworkTraffic.Received);
-            Assert.AreEqual(68721979894793, snapshot.Connections[0].NetworkTraffic.Received.Total);
-            Assert.IsNotNull(snapshot.Connections[0].NetworkTraffic.Sent);
-            Assert.AreEqual(871998847, snapshot.Connections[0].NetworkTraffic.Sent.Total);
-            Assert.AreEqual(627378937423, snapshot.Connections[0].NetworkTraffic.MaxFrameSize);
-            Assert.IsNotNull(snapshot.Connections[0].Channels);
-            Assert.IsTrue(snapshot.Connections[0].Channels.Any());
-            Assert.AreEqual("Channel 1", snapshot.Connections[0].Channels[0].Identifier);
-            Assert.AreEqual(90, snapshot.Connections[0].Channels[0].Consumers);
-            Assert.AreEqual(78, snapshot.Connections[0].Channels[0].PrefetchCount);
-            Assert.AreEqual(7882003, snapshot.Connections[0].Channels[0].UnacknowledgedMessages);
-            Assert.AreEqual(98237843, snapshot.Connections[0].Channels[0].UncommittedAcknowledgements);
-            Assert.AreEqual(82930, snapshot.Connections[0].Channels[0].UnconfirmedMessages);
-            Assert.AreEqual(383902, snapshot.Connections[0].Channels[0].UncommittedMessages);
-//            Assert.AreEqual(, snapshot.Connections[0].Channels[0]);
-//            Assert.AreEqual(, snapshot.Connections[0].Channels);
-//            Assert.AreEqual(, snapshot.Connections);
+            snapshot.BrokerVersion.ShouldBe("3.7.18");
+            snapshot.ClusterName.ShouldBe("fake_cluster");
+            snapshot.Connections.ShouldNotBeNull();
+            snapshot.Connections[0]?.Identifier.ShouldBe("Connection 1");
+            snapshot.Connections[0]?.State.ShouldBe(ConnectionState.Blocked);
+            snapshot.Connections[0]?.OpenChannelsLimit.ShouldBe<ulong>(982738);
+            snapshot.Connections[0]?.VirtualHost.ShouldBe("TestVirtualHost");
+            snapshot.Connections[0]?.NodeIdentifier.ShouldBe("Node 1");
+            snapshot.Connections[0]?.NetworkTraffic.ShouldNotBeNull();
+            snapshot.Connections[0]?.NetworkTraffic?.Received.ShouldNotBeNull();
+            snapshot.Connections[0]?.NetworkTraffic?.Received?.Total.ShouldBe<ulong>(68721979894793);
+            snapshot.Connections[0]?.NetworkTraffic?.Sent.ShouldNotBeNull();
+            snapshot.Connections[0]?.NetworkTraffic?.Sent?.Total.ShouldBe<ulong>(871998847);
+            snapshot.Connections[0]?.NetworkTraffic?.MaxFrameSize.ShouldBe<ulong>(627378937423);
+            snapshot.Connections[0]?.Channels.ShouldNotBeNull();
+            snapshot.Connections[0]?.Channels.Any().ShouldBeTrue();
+            snapshot.Connections[0]?.Channels[0]?.Identifier.ShouldBe("Channel 1");
+            snapshot.Connections[0]?.Channels[0]?.Consumers.ShouldBe<ulong>(90);
+            snapshot.Connections[0]?.Channels[0]?.PrefetchCount.ShouldBe<uint>(78);
+            snapshot.Connections[0]?.Channels[0]?.UnacknowledgedMessages.ShouldBe<ulong>(7882003);
+            snapshot.Connections[0]?.Channels[0]?.UncommittedAcknowledgements.ShouldBe<ulong>(98237843);
+            snapshot.Connections[0]?.Channels[0]?.UnconfirmedMessages.ShouldBe<ulong>(82930);
+            snapshot.Connections[0]?.Channels[0]?.UncommittedMessages.ShouldBe<ulong>(383902);
         }
     }
 }

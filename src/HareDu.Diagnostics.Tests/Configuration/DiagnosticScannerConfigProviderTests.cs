@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Tests.Configuration
 {
     using Diagnostics.Configuration;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
     public class DiagnosticScannerConfigProviderTests
@@ -24,9 +25,9 @@ namespace HareDu.Diagnostics.Tests.Configuration
         {
             var provider = new DiagnosticScannerConfigProvider();
 
-            Assert.IsTrue(provider.TryGet(out var config));
+            provider.TryGet(out var config).ShouldBeTrue();
 //            Assert.IsTrue(config.OverrideAnalyzerConfig);
-            Assert.AreEqual(90, config.Analyzer.HighClosureRateWarningThreshold);
+            config.Analyzer.HighClosureRateWarningThreshold.ShouldBe<uint>(90);
         }
     }
 }

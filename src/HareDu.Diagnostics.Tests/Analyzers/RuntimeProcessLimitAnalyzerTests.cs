@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -53,8 +54,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Red);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier());
         }
 
         [Test(Description = "")]
@@ -68,8 +69,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Red,result.Status);
-            Assert.AreEqual(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Red);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -83,8 +84,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 
             var result = analyzer.Execute(snapshot);
             
-            Assert.AreEqual(DiagnosticStatus.Green,result.Status);
-            Assert.AreEqual(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier(), result.KnowledgeBaseArticle.Identifier);
+            result.Status.ShouldBe(DiagnosticStatus.Green);
+            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitAnalyzer).GetIdentifier());
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var analyzer = new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider);
             
-            Assert.AreEqual(DiagnosticAnalyzerStatus.Offline,analyzer.Status);
+            analyzer.Status.ShouldBe(DiagnosticAnalyzerStatus.Offline);
         }
 
         

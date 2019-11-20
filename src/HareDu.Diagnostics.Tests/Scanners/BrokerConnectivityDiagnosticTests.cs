@@ -22,6 +22,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -54,13 +55,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new BrokerConnectivityDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.AreEqual(6, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()));
+            report.Count.ShouldBe(6);
+            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -71,7 +72,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new BrokerConnectivityDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.IsEmpty(report);
+            report.ShouldBeEmpty();
         }
     }
 }

@@ -23,6 +23,7 @@ namespace HareDu.Diagnostics.Tests
     using NUnit.Framework;
     using Registration;
     using Scanning;
+    using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
 
@@ -38,12 +39,12 @@ namespace HareDu.Diagnostics.Tests
             var builder = new ContainerBuilder();
 
             builder.RegisterModule<HareDuDiagnosticsModule>();
-            
+
             _container = builder.Build();
-            
+
             var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            
+
             _analyzers = new List<IDiagnosticAnalyzer>
             {
                 new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider),
@@ -61,17 +62,17 @@ namespace HareDu.Diagnostics.Tests
             var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
-            
-            Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
-            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).GetIdentifier(), diagnostic.Identifier);
+
+            factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
+            diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
         }
 
         [Test]
         public void Test()
         {
             var factory = _container.Resolve<IComponentDiagnosticFactory>();
-            
-            Assert.IsTrue(factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic));
+
+            factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
 //            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
@@ -81,9 +82,9 @@ namespace HareDu.Diagnostics.Tests
             var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
-            
-            Assert.IsFalse(factory.TryGet<ConnectionSnapshot>(out var diagnostic));
-            Assert.AreEqual(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier(), diagnostic.Identifier);
+
+            factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
+            diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier());
         }
 
         [Test]
@@ -92,24 +93,25 @@ namespace HareDu.Diagnostics.Tests
             var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             diagnosticsRegistrar.Register<FakeDiagnostic>(_analyzers);
-            
+
             var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
-            
-            Assert.IsFalse(factory.TryGet<FakeSnapshot>(out var diagnostic));
+
+            factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
-    }
 
-    class FakeDiagnostic :
-        IComponentDiagnostic<FakeSnapshot>
-    {
-        public string Identifier => GetType().GetIdentifier();
-        
-        public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) => throw new System.NotImplementedException();
-    }
+        class FakeDiagnostic :
+            IComponentDiagnostic<FakeSnapshot>
+        {
+            public string Identifier => GetType().GetIdentifier();
 
-    interface FakeSnapshot :
-        Snapshot
-    {
+            public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) =>
+                throw new System.NotImplementedException();
+        }
+
+        interface FakeSnapshot :
+            Snapshot
+        {
+        }
     }
 }

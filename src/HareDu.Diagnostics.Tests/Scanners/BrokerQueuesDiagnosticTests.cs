@@ -22,6 +22,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using KnowledgeBase;
     using NUnit.Framework;
     using Scanning;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -56,15 +57,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new BrokerQueuesDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.AreEqual(8, report.Count);
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()));
-            Assert.AreEqual(1, report.Count(x => x.AnalyzerIdentifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()));
+            report.Count.ShouldBe(8);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -75,7 +76,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var report = new BrokerQueuesDiagnostic(_analyzers)
                 .Scan(snapshot);
 
-            Assert.IsEmpty(report);
+            report.ShouldBeEmpty();
         }
     }
 }

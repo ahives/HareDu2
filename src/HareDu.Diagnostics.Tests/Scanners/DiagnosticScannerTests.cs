@@ -20,6 +20,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Fakes;
     using NUnit.Framework;
     using Scanning;
+    using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
 
@@ -45,7 +46,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).GetIdentifier(), scanner.ScannerIdentifier);
+            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
         }
 
         [Test]
@@ -55,7 +56,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            Assert.AreEqual(typeof(ClusterDiagnostic).GetIdentifier(), scanner.ScannerIdentifier);
+            scanner.ScannerIdentifier.ShouldBe(typeof(ClusterDiagnostic).GetIdentifier());
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            Assert.AreEqual(typeof(BrokerQueuesDiagnostic).GetIdentifier(), scanner.ScannerIdentifier);
+            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesDiagnostic).GetIdentifier());
         }
 
         [Test]
@@ -77,8 +78,8 @@ namespace HareDu.Diagnostics.Tests.Scanners
 
             var report = scanner.Scan(snapshot);
             
-            Assert.AreEqual(DiagnosticCache.EmptyDiagnosticReport, report);
-            Assert.AreEqual(typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier(), report.ScannerIdentifier);
+            report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier());
+            report.ShouldBe(DiagnosticCache.EmptyDiagnosticReport);
         }
 
         
