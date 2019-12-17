@@ -13,10 +13,14 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
     using NUnit.Framework;
     using Shouldly;
+    using Snapshotting;
 
     [TestFixture]
     public class ServerTests :
@@ -45,5 +49,61 @@ namespace HareDu.Tests
             result.Data.TopicPermissions.Count.ShouldBe(3);
             result.Data.RabbitMqVersion.ShouldBe("3.7.15");
         }
+        
+        // [Test]
+        // public async Task Test()
+        // {
+        //     var container = GetContainerBuilder("TestData/Test.json").Build();
+        //     var result = await container.Resolve<IBrokerObjectFactory>()
+        //         .Object<Server>()
+        //         .GetDefinition();
+        //     
+        //     var bindings = result
+        //         .Select(x => x.Data)
+        //         .Select(x => x.Bindings)
+        //         .Where(x => x.DestinationType == "queue")
+        //         .Select(x => new
+        //         {
+        //             x.VirtualHost, x.Source, x.Destination
+        //         });
+        //
+        //     var t = new Dictionary<string, List<Binding>>();
+        //     foreach (var binding in bindings)
+        //     {
+        //         if (t.ContainsKey(binding.VirtualHost))
+        //             t[binding.VirtualHost].Add(new BindingImpl(binding.Source, binding.Destination));
+        //         else
+        //             t[binding.VirtualHost] = new List<Binding>(){new BindingImpl(binding.Source, binding.Destination)};
+        //     }
+        //
+        //     foreach (var binding in t)
+        //     {
+        //         Console.WriteLine($"Virtual Host: {binding.Key}");
+        //         foreach (var b in binding.Value)
+        //         {
+        //             Console.WriteLine($"Exchange: {b.Source} => Queue: {b.Destination}");
+        //         }
+        //         Console.WriteLine();
+        //         // Console.WriteLine($"Exchange: {binding.Key} => Queue: {binding.Value}");
+        //     }
+        // }
+        //
+        // class BindingImpl : Binding
+        // {
+        //     public BindingImpl(string source, string destination)
+        //     {
+        //         Source = source;
+        //         Destination = destination;
+        //     }
+        //
+        //     public string Source { get; }
+        //     public string Destination { get; }
+        // }
+        //
+        // interface Binding
+        // {
+        //     string Source { get; }
+        //     string Destination { get; }
+        // }
     }
 }
