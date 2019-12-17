@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting
 {
     using Model;
 
-    public interface RmqCluster :
+    public interface Cluster :
         ResourceSnapshot<ClusterSnapshot>
     {
     }

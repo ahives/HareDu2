@@ -30,7 +30,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
 
         public void RegisterAll(IBrokerObjectFactory factory)
         {
-            _cache.Add(typeof(FakeRmqCluster).FullName, new FakeRmqCluster());
+            _cache.Add(typeof(FakeCluster).FullName, new FakeCluster());
         }
     }
 }

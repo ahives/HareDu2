@@ -49,7 +49,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Remove="TestData\QueueInfo1.json" />
-    <Content Include="TestData\ClusterInfo.json">
+    <Content Include="TestData\SystemOverviewInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Remove="TestData\PeekedMessageInfo1.json" />

@@ -19,13 +19,13 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using MassTransit;
     using Model;
 
-    public class FakeRmqCluster :
-        RmqCluster
+    public class FakeCluster :
+        Cluster
     {
         readonly List<SnapshotContext<ClusterSnapshot>> _snapshots;
         public IReadOnlyList<SnapshotContext<ClusterSnapshot>> Snapshots => _snapshots;
 
-        public FakeRmqCluster()
+        public FakeCluster()
         {
             _snapshots = new List<SnapshotContext<ClusterSnapshot>>();
         }

@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,23 +11,33 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Testing.Fakes
+namespace HareDu.Internal
 {
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
-    using Core.Testing;
+    using Core.Extensions;
     using Model;
 
-    public class FakeClusterObject :
-        Cluster,
-        HareDuTestingFake
+    class SystemOverviewImpl :
+        RmqBrokerClient,
+        SystemOverview
     {
-        public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
+        public SystemOverviewImpl(HttpClient client)
+            : base(client)
         {
-            ClusterInfo data = new FakeClusterInfo();
+        }
+
+        public async Task<Result<SystemOverviewInfo>> Get(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = "api/overview";
             
-            return new SuccessfulResult<ClusterInfo>(data, null);
+            Result<SystemOverviewInfo> result = await Get<SystemOverviewInfo>(url, cancellationToken);
+
+            return result;
         }
     }
 }

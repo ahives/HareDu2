@@ -66,7 +66,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Verify_can_return_snapshot()
         {
             var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<RmqCluster>()
+                .Snapshot<Cluster>()
                 .Execute();
 
             ClusterSnapshot snapshot = resource.Snapshots.MostRecent().Snapshot;

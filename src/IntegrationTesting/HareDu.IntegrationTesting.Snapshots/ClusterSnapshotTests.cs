@@ -39,7 +39,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public async Task Test()
         {
             var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<RmqCluster>()
+                .Snapshot<Cluster>()
                 .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
                 .Execute();
 

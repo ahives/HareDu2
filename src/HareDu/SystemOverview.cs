@@ -11,33 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Internal
+namespace HareDu
 {
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
-    using Core.Extensions;
     using Model;
 
-    class ClusterImpl :
-        RmqBrokerClient,
-        Cluster
+    public interface SystemOverview :
+        BrokerObject
     {
-        public ClusterImpl(HttpClient client)
-            : base(client)
-        {
-        }
-
-        public async Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            string url = "api/overview";
-            
-            Result<ClusterInfo> result = await Get<ClusterInfo>(url, cancellationToken);
-
-            return result;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cancellationToken">Token used to cancel the current thread</param>
+        /// <returns></returns>
+        Task<Result<SystemOverviewInfo>> Get(CancellationToken cancellationToken = default);
     }
 }

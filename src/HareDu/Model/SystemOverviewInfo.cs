@@ -16,7 +16,7 @@ namespace HareDu.Model
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface ClusterInfo
+    public interface SystemOverviewInfo
     {
         [JsonProperty("management_version")]
         string ManagementVersion { get; }

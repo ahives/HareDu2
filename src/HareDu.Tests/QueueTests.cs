@@ -888,7 +888,7 @@ namespace HareDu.Tests
         }
 
         [Test]
-        public async Task Verify_cannot_create_queue_7()
+        public async Task Verify_can_override_arguments()
         {
             var container = GetContainerBuilder().Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
@@ -913,8 +913,14 @@ namespace HareDu.Tests
                     });
                 });
 
-            result.HasFaulted.ShouldBeTrue();
-            result.Errors.Count.ShouldBe(1);
+            result.HasFaulted.ShouldBeFalse();
+            
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            
+            definition.Arguments["x-expires"].Cast<long>().ShouldBe(980);
+            definition.Durable.ShouldBeTrue();
+            definition.AutoDelete.ShouldBeTrue();
+            definition.Node.ShouldBe("Node1");
         }
 
         [Test]

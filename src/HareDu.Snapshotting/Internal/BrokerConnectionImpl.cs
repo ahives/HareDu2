@@ -38,8 +38,8 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<BrokerConnectivitySnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Object<Cluster>()
-                .GetDetails(cancellationToken)
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
                 .Unfold();
 
             if (cluster.HasFaulted)
@@ -111,15 +111,15 @@ namespace HareDu.Snapshotting.Internal
         class BrokerConnectivitySnapshotImpl :
             BrokerConnectivitySnapshot
         {
-            public BrokerConnectivitySnapshotImpl(ClusterInfo cluster, IReadOnlyList<ConnectionInfo> connections,
+            public BrokerConnectivitySnapshotImpl(SystemOverviewInfo systemOverview, IReadOnlyList<ConnectionInfo> connections,
                 IReadOnlyList<ChannelInfo> channels)
             {
-                ClusterName = cluster.ClusterName;
-                BrokerVersion = cluster.RabbitMqVersion;
-                ChannelsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsClosed ?? 0, cluster.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);
-                ChannelsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalChannelsCreated ?? 0, cluster.ChurnRates?.CreatedChannelDetails?.Rate ?? 0);
-                ConnectionsCreated = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsCreated ?? 0, cluster.ChurnRates?.CreatedConnectionDetails?.Rate ?? 0);
-                ConnectionsClosed = new ChurnMetricsImpl(cluster.ChurnRates?.TotalConnectionsClosed ?? 0, cluster.ChurnRates?.ClosedConnectionDetails?.Rate ?? 0);
+                ClusterName = systemOverview.ClusterName;
+                BrokerVersion = systemOverview.RabbitMqVersion;
+                ChannelsClosed = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalChannelsClosed ?? 0, systemOverview.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);
+                ChannelsCreated = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalChannelsCreated ?? 0, systemOverview.ChurnRates?.CreatedChannelDetails?.Rate ?? 0);
+                ConnectionsCreated = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalConnectionsCreated ?? 0, systemOverview.ChurnRates?.CreatedConnectionDetails?.Rate ?? 0);
+                ConnectionsClosed = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalConnectionsClosed ?? 0, systemOverview.ChurnRates?.ClosedConnectionDetails?.Rate ?? 0);
                 Connections = connections
                     .Select(x => new ConnectionSnapshotImpl(x, channels.FilterByConnection(x.Name)))
                     .Cast<ConnectionSnapshot>()

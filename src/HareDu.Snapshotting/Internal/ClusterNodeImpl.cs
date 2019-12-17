@@ -37,8 +37,8 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<NodeSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Object<Cluster>()
-                .GetDetails(cancellationToken)
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
                 .Select(x => x.Data);
 
             var nodes = _factory
@@ -63,7 +63,7 @@ namespace HareDu.Snapshotting.Internal
         class NodeSnapshotImpl :
             NodeSnapshot
         {
-            public NodeSnapshotImpl(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes)
+            public NodeSnapshotImpl(SystemOverviewInfo systemOverview, IReadOnlyList<NodeInfo> nodes)
             {
 //                OS = new OperatingSystemMetricsImpl(node);
 //                Erlang = new ErlangMetricsImpl(cluster, node);

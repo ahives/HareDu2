@@ -33,7 +33,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public void RegisterAll(HttpClient client)
         {
             _cache.Add(typeof(FakeNodeObject).FullName, new FakeNodeObject());
-            _cache.Add(typeof(FakeClusterObject).FullName, new FakeClusterObject());
+            _cache.Add(typeof(FakeSystemOverviewObject).FullName, new FakeSystemOverviewObject());
         }
     }
 }

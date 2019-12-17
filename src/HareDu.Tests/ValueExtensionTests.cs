@@ -20,6 +20,7 @@ namespace HareDu.Tests
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
+    using Shouldly;
 
     [TestFixture]
     public class ValueExtensionTests
@@ -95,7 +96,7 @@ namespace HareDu.Tests
                 .GetAll()
                 .Any();
             
-            Assert.IsTrue(found);
+            found.ShouldBeTrue();
         }
 
         [Test, Explicit]
@@ -106,7 +107,7 @@ namespace HareDu.Tests
                 .GetAll()
                 .Any(x => x.Name == "HareDu");
             
-            Assert.IsTrue(found);
+            found.ShouldBeTrue();
         }
         
         [Test, Explicit]
@@ -118,6 +119,8 @@ namespace HareDu.Tests
                 .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")
                 .FirstOrDefault();
  
+            exchange.Name.ShouldBe("");
+            exchange.AutoDelete.ShouldBeFalse();
             Console.WriteLine("Name: {0}", exchange.Name);
             Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
             Console.WriteLine("Internal: {0}", exchange.Internal);

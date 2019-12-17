@@ -16,10 +16,10 @@ namespace HareDu.Testing.Fakes
     using System.Collections.Generic;
     using Model;
 
-    public class FakeClusterInfo :
-        ClusterInfo
+    public class FakeSystemOverviewInfo :
+        SystemOverviewInfo
     {
-        public FakeClusterInfo()
+        public FakeSystemOverviewInfo()
         {
             RabbitMqVersion = "3.7.18";
             ErlangVersion = "22.1";

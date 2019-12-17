@@ -40,12 +40,12 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         public async Task Test()
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Cluster>()
-                .GetDetails();
+                .Object<SystemOverview>()
+                .Get();
 
             if (result.HasData)
             {
-                ClusterInfo info = result.Select(x => x.Data);
+                SystemOverviewInfo info = result.Select(x => x.Data);
                 Console.WriteLine("Node: {0}", info.Node);
                 Console.WriteLine("ManagementVersion: {0}", info.ManagementVersion);
                 Console.WriteLine("ClusterName: {0}", info.ClusterName);

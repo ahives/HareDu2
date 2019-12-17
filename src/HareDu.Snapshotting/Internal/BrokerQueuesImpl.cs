@@ -38,8 +38,8 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<BrokerQueuesSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Object<Cluster>()
-                .GetDetails(cancellationToken)
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
                 .Unfold();
 
             if (cluster.HasFaulted)
@@ -96,10 +96,10 @@ namespace HareDu.Snapshotting.Internal
         class BrokerQueuesSnapshotImpl :
             BrokerQueuesSnapshot
         {
-            public BrokerQueuesSnapshotImpl(ClusterInfo cluster, IReadOnlyList<QueueInfo> queues)
+            public BrokerQueuesSnapshotImpl(SystemOverviewInfo systemOverview, IReadOnlyList<QueueInfo> queues)
             {
-                ClusterName = cluster.ClusterName;
-                Churn = new BrokerQueueChurnMetricsImpl(cluster.MessageStats, cluster.QueueStats);
+                ClusterName = systemOverview.ClusterName;
+                Churn = new BrokerQueueChurnMetricsImpl(systemOverview.MessageStats, systemOverview.QueueStats);
                 Queues = queues
                     .Select(x => new QueueSnapshotImpl(x))
                     .Cast<QueueSnapshot>()

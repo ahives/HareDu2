@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,21 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Testing.Fakes
 {
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
+    using Core.Testing;
     using Model;
 
-    public interface Cluster :
-        BrokerObject
+    public class FakeSystemOverviewObject :
+        SystemOverview,
+        HareDuTestingFake
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cancellationToken">Token used to cancel the current thread</param>
-        /// <returns></returns>
-        Task<Result<ClusterInfo>> GetDetails(CancellationToken cancellationToken = default);
+        public async Task<Result<SystemOverviewInfo>> Get(CancellationToken cancellationToken = default)
+        {
+            SystemOverviewInfo data = new FakeSystemOverviewInfo();
+            
+            return new SuccessfulResult<SystemOverviewInfo>(data, null);
+        }
     }
 }

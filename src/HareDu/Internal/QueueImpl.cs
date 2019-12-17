@@ -513,11 +513,7 @@ namespace HareDu.Internal
 
                 public void Set<T>(string arg, T value)
                 {
-                    SetArg(arg, "x-expires", value);
-                    SetArg(arg, "x-message-ttl", value);
-                    SetArg(arg, "x-dead-letter-exchange", value);
-                    SetArg(arg, "x-dead-letter-routing-key", value);
-                    SetArg(arg, "alternate-exchange", value);
+                    SetArg(arg, value);
                 }
 
                 public void SetQueueExpiration(long milliseconds)
@@ -545,20 +541,13 @@ namespace HareDu.Internal
                     SetArg("alternate-exchange", exchange);
                 }
 
-                void SetArg(string arg, string targetArg, object value)
-                {
-                    Arguments.Add(arg.Trim(),
-                        arg == targetArg && Arguments.ContainsKey(targetArg)
-                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
-                            : new ArgumentValue<object>(value));
-                }
-
                 void SetArg(string arg, object value)
                 {
-                    Arguments.Add(arg.Trim(),
-                        Arguments.ContainsKey(arg)
-                            ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
-                            : new ArgumentValue<object>(value));
+                    string normalizedArg = arg.Trim();
+                    if (Arguments.ContainsKey(normalizedArg))
+                        Arguments[normalizedArg] = new ArgumentValue<object>(value);
+                    else
+                        Arguments.Add(normalizedArg, new ArgumentValue<object>(value));
                 }
             }
 

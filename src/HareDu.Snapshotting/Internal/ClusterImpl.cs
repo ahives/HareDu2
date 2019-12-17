@@ -21,15 +21,15 @@ namespace HareDu.Snapshotting.Internal
     using HareDu.Model;
     using Model;
 
-    class RmqClusterImpl :
+    class ClusterImpl :
         BaseSnapshot<ClusterSnapshot>,
-        RmqCluster
+        Cluster
     {
         readonly List<IDisposable> _observers;
 
         public IReadOnlyList<SnapshotContext<ClusterSnapshot>> Snapshots => _snapshots;
 
-        public RmqClusterImpl(IBrokerObjectFactory factory)
+        public ClusterImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();
@@ -38,8 +38,8 @@ namespace HareDu.Snapshotting.Internal
         public ResourceSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
-                .Object<Cluster>()
-                .GetDetails(cancellationToken)
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
                 .Unfold();
 
             if (cluster.HasFaulted)
@@ -96,17 +96,17 @@ namespace HareDu.Snapshotting.Internal
         class ClusterSnapshotImpl :
             ClusterSnapshot
         {
-            public ClusterSnapshotImpl(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes)
+            public ClusterSnapshotImpl(SystemOverviewInfo systemOverview, IReadOnlyList<NodeInfo> nodes)
             {
-                ClusterName = cluster.ClusterName;
-                BrokerVersion = cluster.RabbitMqVersion;
-                Nodes = GetNodes(cluster, nodes);
+                ClusterName = systemOverview.ClusterName;
+                BrokerVersion = systemOverview.RabbitMqVersion;
+                Nodes = GetNodes(systemOverview, nodes);
             }
 
-            IReadOnlyList<NodeSnapshot> GetNodes(ClusterInfo cluster, IReadOnlyList<NodeInfo> nodes)
+            IReadOnlyList<NodeSnapshot> GetNodes(SystemOverviewInfo systemOverview, IReadOnlyList<NodeInfo> nodes)
             {
                 return nodes
-                    .Select(x => new NodeSnapshotImpl(cluster, x))
+                    .Select(x => new NodeSnapshotImpl(systemOverview, x))
                     .Cast<NodeSnapshot>()
                     .ToList();
             }
@@ -119,13 +119,13 @@ namespace HareDu.Snapshotting.Internal
             class NodeSnapshotImpl :
                 NodeSnapshot
             {
-                public NodeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
+                public NodeSnapshotImpl(SystemOverviewInfo systemOverview, NodeInfo node)
                 {
                     Identifier = node.Name;
                     Uptime = node.Uptime;
-                    ClusterIdentifier = cluster.ClusterName;
+                    ClusterIdentifier = systemOverview.ClusterName;
                     OS = new OperatingSystemSnapshotImpl(node);
-                    Runtime = new BrokerRuntimeSnapshotImpl(cluster, node);
+                    Runtime = new BrokerRuntimeSnapshotImpl(systemOverview, node);
                     ContextSwitching = new ContextSwitchDetailsImpl(node);
                     Disk = new DiskSnapshotImpl(node);
                     NetworkPartitions = node.Partitions.ToList();
@@ -316,11 +316,11 @@ namespace HareDu.Snapshotting.Internal
                 class BrokerRuntimeSnapshotImpl :
                     BrokerRuntimeSnapshot
                 {
-                    public BrokerRuntimeSnapshotImpl(ClusterInfo cluster, NodeInfo node)
+                    public BrokerRuntimeSnapshotImpl(SystemOverviewInfo systemOverview, NodeInfo node)
                     {
-                        ClusterIdentifier = cluster.ClusterName;
+                        ClusterIdentifier = systemOverview.ClusterName;
                         Identifier = node.Name;
-                        Version = cluster.ErlangVersion;
+                        Version = systemOverview.ErlangVersion;
                         Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
                         Database = new RuntimeDatabaseImpl(node);
                         GC = new GarbageCollectionImpl(node);

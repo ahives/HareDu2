@@ -19,16 +19,16 @@ namespace HareDu.Tests
     using Shouldly;
 
     [TestFixture]
-    public class ClusterTests :
+    public class SystemOverviewTests :
         HareDuTesting
     {
         [Test]
         public async Task Test()
         {
-            var container = GetContainerBuilder("TestData/ClusterInfo.json").Build();
+            var container = GetContainerBuilder("TestData/SystemOverviewInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
-                .Object<Cluster>()
-                .GetDetails();
+                .Object<SystemOverview>()
+                .Get();
 
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();

@@ -23,9 +23,9 @@ namespace HareDu.Testing.Fakes
         public T Object<T>()
             where T : BrokerObject
         {
-            if (typeof(T) == typeof(Cluster))
+            if (typeof(T) == typeof(SystemOverview))
             {
-                Cluster obj = new FakeClusterObject();
+                SystemOverview obj = new FakeSystemOverviewObject();
 
                 return (T) obj;
             }
