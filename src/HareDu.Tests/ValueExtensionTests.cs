@@ -13,85 +13,114 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
-    using System;
     using System.Linq;
     using Autofac;
-    using AutofacIntegration;
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
     using Shouldly;
 
     [TestFixture]
-    public class ValueExtensionTests
+    public class ValueExtensionTests :
+        HareDuTesting
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
-        }
-
-        [Test, Explicit]
+        [Test]
         public void Verify_Where_works()
         {
-            var vhosts = _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
+            var vhosts = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
-                .Where(x => x.Name == "HareDu");
+                .Where(x => x.Name == "TestVirtualHost");
 
-            foreach (var vhost in vhosts)
-            {
-                Console.WriteLine("Name: {0}", vhost.Name);
-                Console.WriteLine("Tracing: {0}", vhost.Tracing);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            vhosts.Count.ShouldBe(1);
+            vhosts[0].Name.ShouldBe("TestVirtualHost");
+            vhosts[0].PacketBytesReceived.ShouldBe<ulong>(301363575);
+            vhosts[0].RateOfPacketBytesReceived.ShouldNotBeNull();
+            vhosts[0].RateOfPacketBytesReceived?.Rate.ShouldBe(0.0M);
+            vhosts[0].PacketBytesSent.ShouldBe<ulong>(368933935);
+            vhosts[0].RateOfPacketBytesSent.ShouldNotBeNull();
+            vhosts[0].RateOfPacketBytesSent?.Rate.ShouldBe(0.0M);
+            vhosts[0].TotalMessages.ShouldBe<ulong>(0);
+            vhosts[0].RateOfMessages.ShouldNotBeNull();
+            vhosts[0].RateOfMessages?.Rate.ShouldBe(0.0M);
+            vhosts[0].ReadyMessages.ShouldBe<ulong>(0);
+            vhosts[0].RateOfReadyMessages.ShouldNotBeNull();
+            vhosts[0].RateOfReadyMessages?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats.ShouldNotBeNull();
+            vhosts[0].MessageStats?.TotalMessageGets.ShouldBe<ulong>(3);
+            vhosts[0].MessageStats?.MessageGetDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessageGetDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessagesConfirmedDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessagesPublishedDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.UnroutableMessagesDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessagesAcknowledgedDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessageDeliveryDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessageDeliveryGetDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessagesDeliveredWithoutAckDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessageGetDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessageGetsWithoutAckDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.MessagesRedeliveredDetails.ShouldNotBeNull();
+            vhosts[0].MessageStats?.TotalMessagesConfirmed.ShouldBe<ulong>(300000);
+            vhosts[0].MessageStats?.MessagesConfirmedDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessagesPublished.ShouldBe<ulong>(300000);
+            vhosts[0].MessageStats?.MessagesPublishedDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalUnroutableMessages.ShouldBe<ulong>(0);
+            vhosts[0].MessageStats?.UnroutableMessagesDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessagesAcknowledged.ShouldBe<ulong>(300000);
+            vhosts[0].MessageStats?.MessagesAcknowledgedDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessagesDelivered.ShouldBe<ulong>(300000);
+            vhosts[0].MessageStats?.MessageDeliveryDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessageDeliveryGets.ShouldBe<ulong>(300003);
+            vhosts[0].MessageStats?.MessageDeliveryGetDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessageDeliveredWithoutAck.ShouldBe<ulong>(0);
+            vhosts[0].MessageStats?.MessagesDeliveredWithoutAckDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessageGets.ShouldBe<ulong>(3);
+            vhosts[0].MessageStats?.MessageGetDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessageGetsWithoutAck.ShouldBe<ulong>(0);
+            vhosts[0].MessageStats?.MessageGetsWithoutAckDetails?.Rate.ShouldBe(0.0M);
+            vhosts[0].MessageStats?.TotalMessagesRedelivered.ShouldBe<ulong>(3);
+            vhosts[0].MessageStats?.MessagesRedeliveredDetails?.Rate.ShouldBe(0.0M);
         }
 
-        [Test, Explicit]
-        public void Verify_Unwrap_works()
+        [Test]
+        public void Verify_Unfold_works()
         {
-            var vhosts = _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Unfold();
-
-            foreach (var vhost in vhosts.Data)
-            {
-                Console.WriteLine("Name: {0}", vhost.Name);
-                Console.WriteLine("Tracing: {0}", vhost.Tracing);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            
+            result.HasData.ShouldBeTrue();
+            result.HasFaulted.ShouldBeFalse();
+            result.Data.Count.ShouldBe(3);
+            result.Data[0].Name.ShouldBe("/");
+            result.Data[1].Name.ShouldBe("HareDu");
+            result.Data[2].Name.ShouldBe("TestVirtualHost");
         }
 
-        [Test, Explicit]
-        public void Verify_Unwravel_works()
+        [Test]
+        public void Verify_Select_works()
         {
-            var vhosts = _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);
 
-            foreach (var vhost in vhosts)
-            {
-                Console.WriteLine("Name: {0}", vhost.Name);
-                Console.WriteLine("Tracing: {0}", vhost.Tracing);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            result.Count.ShouldBe(3);
+            result[0].Name.ShouldBe("/");
+            result[1].Name.ShouldBe("HareDu");
+            result[2].Name.ShouldBe("TestVirtualHost");
         }
 
-        [Test, Explicit]
+        [Test]
         public void Verify_Any_works()
         {
-            bool found = _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
+            bool found = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Any();
@@ -99,10 +128,11 @@ namespace HareDu.Tests
             found.ShouldBeTrue();
         }
 
-        [Test, Explicit]
+        [Test]
         public void Verify_Any_with_predicate_works()
         {
-            bool found = _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
+            bool found = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Any(x => x.Name == "HareDu");
@@ -110,24 +140,26 @@ namespace HareDu.Tests
             found.ShouldBeTrue();
         }
         
-        [Test, Explicit]
+        [Test]
         public void Verify_FirstOrDefault_works()
         {
-            ExchangeInfo exchange = _container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
+            ExchangeInfo exchange = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .GetAll()
                 .Where(x => x.Name == "E2" && x.VirtualHost == "HareDu")
                 .FirstOrDefault();
  
-            exchange.Name.ShouldBe("");
+            exchange.ShouldNotBeNull();
+            exchange.Durable.ShouldBeTrue();
+            exchange.Internal.ShouldBeFalse();
             exchange.AutoDelete.ShouldBeFalse();
-            Console.WriteLine("Name: {0}", exchange.Name);
-            Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-            Console.WriteLine("Internal: {0}", exchange.Internal);
-            Console.WriteLine("Durable: {0}", exchange.Durable);
-            Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-            Console.WriteLine("****************************************************");
-            Console.WriteLine();
+            exchange.Name.ShouldBe("E2");
+            exchange.RoutingType.ShouldBe("direct");
+            exchange.VirtualHost.ShouldBe("HareDu");
+            exchange.Arguments.ShouldNotBeNull();
+            exchange.Arguments.Count.ShouldBe(1);
+            exchange.Arguments["alternate-exchange"].ShouldBe("exchange");
         }
     }
 }

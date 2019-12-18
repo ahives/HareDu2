@@ -58,6 +58,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
             
@@ -83,6 +84,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
             
@@ -107,6 +109,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
             
@@ -130,6 +133,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
             

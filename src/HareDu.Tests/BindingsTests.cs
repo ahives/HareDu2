@@ -64,6 +64,7 @@ namespace HareDu.Tests
                 });
 
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             BindingDefinition definition = result.DebugInfo.Request.ToObject<BindingDefinition>();
             
@@ -401,6 +402,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             result.DebugInfo.URL.ShouldBe("api/bindings/HareDu/e/E2/q/Q4/Binding1");
         }
 

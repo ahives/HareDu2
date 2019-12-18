@@ -58,6 +58,7 @@ namespace HareDu.Tests
                 });
              
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -82,6 +83,7 @@ namespace HareDu.Tests
                 });
              
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -111,6 +113,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -131,6 +134,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -152,6 +156,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -173,6 +178,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -193,6 +199,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -213,6 +220,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             
@@ -232,6 +240,7 @@ namespace HareDu.Tests
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>();
             

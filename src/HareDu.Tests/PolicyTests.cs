@@ -71,6 +71,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
@@ -106,6 +107,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeTrue();
+            result.DebugInfo.ShouldNotBeNull();
 
             PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
@@ -142,6 +144,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeTrue();
+            result.DebugInfo.ShouldNotBeNull();
 
             PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
@@ -178,6 +181,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeTrue();
+            result.DebugInfo.ShouldNotBeNull();
 
             PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
@@ -213,6 +217,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeTrue();
+            result.DebugInfo.ShouldNotBeNull();
 
             PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             

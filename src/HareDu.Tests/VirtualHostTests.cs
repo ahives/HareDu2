@@ -100,9 +100,11 @@ namespace HareDu.Tests
                     });
                 });
             
+            result.DebugInfo.ShouldNotBeNull();
+            
             VirtualHostDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostDefinition>();
 
-//            Assert.AreEqual(, definition.Tracing);
+            definition.Tracing.ShouldBeTrue();
         }
 
         [Test]

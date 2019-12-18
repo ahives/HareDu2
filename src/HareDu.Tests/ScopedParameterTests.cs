@@ -59,6 +59,7 @@ namespace HareDu.Tests
                 });
 
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<long> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<long>>();
             
@@ -85,6 +86,7 @@ namespace HareDu.Tests
                 });
 
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -112,6 +114,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -138,6 +141,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -165,6 +169,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -191,6 +196,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -218,6 +224,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -244,6 +251,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -271,6 +279,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -298,6 +307,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -323,6 +333,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -348,6 +359,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -370,6 +382,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             
@@ -391,6 +404,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.ShouldNotBeNull();
             
             ScopedParameterDefinition<string> definition = result.DebugInfo.Request.ToObject<ScopedParameterDefinition<string>>();
             

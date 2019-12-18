@@ -83,6 +83,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -110,6 +111,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -135,6 +137,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -163,6 +166,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -192,6 +196,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -219,6 +224,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -244,6 +250,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -271,6 +278,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
@@ -297,6 +305,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             

@@ -70,6 +70,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             ExchangeDefinition definition = result.DebugInfo.Request.ToObject<ExchangeDefinition>();
 
@@ -106,6 +107,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/");
         }
 
@@ -132,6 +134,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/");
         }
 
@@ -159,6 +162,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             result.DebugInfo.URL.ShouldBe("api/exchanges//fake_exchange");
         }
 
@@ -174,6 +178,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.ShouldNotBeNull();
             result.DebugInfo.URL.ShouldBe("api/exchanges//");
         }
 

@@ -75,6 +75,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -102,6 +103,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -130,6 +132,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -157,6 +160,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -185,6 +189,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -212,6 +217,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -240,6 +246,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -265,6 +272,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(4);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -289,6 +297,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(4);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -314,6 +323,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
@@ -339,6 +349,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.ShouldNotBeNull();
 
             TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             

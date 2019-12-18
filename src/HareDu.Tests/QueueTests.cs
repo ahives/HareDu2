@@ -125,6 +125,7 @@ namespace HareDu.Tests
             result.Data[0]?.RoutingKey.ShouldBeNullOrEmpty();
             result.Data[0]?.Redelivered.ShouldBeTrue();
             result.Data[0]?.Properties?.Headers.ShouldNotBeNull();
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -160,6 +161,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -191,6 +193,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -223,6 +226,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -255,6 +259,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -286,6 +291,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -318,6 +324,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -349,6 +356,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -379,6 +387,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -411,6 +420,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -442,6 +452,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -474,6 +485,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -504,6 +516,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -533,6 +546,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -556,6 +570,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(4);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -585,6 +600,7 @@ namespace HareDu.Tests
             result.HasData.ShouldBeFalse();
             result.Data.ShouldBeNull();
             result.Errors.Count.ShouldBe(3);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
             
@@ -653,6 +669,7 @@ namespace HareDu.Tests
                 });
 
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -693,6 +710,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -730,6 +748,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -768,6 +787,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -805,6 +825,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -841,6 +862,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -877,6 +899,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -914,6 +937,7 @@ namespace HareDu.Tests
                 });
 
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
@@ -940,6 +964,7 @@ namespace HareDu.Tests
                 });
             
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
             result.DebugInfo.URL.ShouldBe("api/queues/HareDu/Queue1?if-unused=true");
         }
 

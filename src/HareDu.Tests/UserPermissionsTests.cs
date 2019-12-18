@@ -170,6 +170,7 @@ namespace HareDu.Tests
                 });
 
             result.HasFaulted.ShouldBeFalse();
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -198,6 +199,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -225,6 +227,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -253,6 +256,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -281,6 +285,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -308,6 +313,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -336,6 +342,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -364,6 +371,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -391,6 +399,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
@@ -417,6 +426,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
+            result.DebugInfo.ShouldNotBeNull();
 
             UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
