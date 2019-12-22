@@ -14,7 +14,7 @@
 namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -31,8 +31,8 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public DiskAlarmAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public DiskAlarmAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
             _status = DiagnosticAnalyzerStatus.Online;
         }

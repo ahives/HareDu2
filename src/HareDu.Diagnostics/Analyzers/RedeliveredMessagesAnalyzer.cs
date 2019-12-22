@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Redelivered Messages Analyzer";
         public string Description { get; }
@@ -32,10 +33,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.FaultTolerance;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public RedeliveredMessagesAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public RedeliveredMessagesAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -47,8 +49,8 @@ namespace HareDu.Diagnostics.Analyzers
             {
                 new DiagnosticAnalyzerDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
                 new DiagnosticAnalyzerDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
-                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.Analyzer.MessageRedeliveryCoefficient.ToString()),
-                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.Analyzer.MessageRedeliveryCoefficient.ToString())
+                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString()),
+                new DiagnosticAnalyzerDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
@@ -91,8 +93,8 @@ namespace HareDu.Diagnostics.Analyzers
         }
 
         ulong ComputeWarningThreshold(ulong total)
-            => _config.Analyzer.MessageRedeliveryCoefficient >= 1
+            => _config.MessageRedeliveryCoefficient >= 1
                 ? total
-                : Convert.ToUInt64(Math.Ceiling(total * _config.Analyzer.MessageRedeliveryCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(total * _config.MessageRedeliveryCoefficient));
     }
 }

@@ -41,7 +41,7 @@ namespace HareDu.Tests.Fakes
             _payload = string.Empty;
         }
 
-        public HttpClient Create(HareDuClientSettings settings)
+        public HttpClient Create(BrokerConfig settings)
         {
             var mock = new Mock<HttpMessageHandler>();
             

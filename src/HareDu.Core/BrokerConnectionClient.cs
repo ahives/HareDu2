@@ -22,7 +22,7 @@ namespace HareDu.Core
     public class BrokerConnectionClient :
         IBrokerConnectionClient
     {
-        public HttpClient Create(HareDuClientSettings settings)
+        public HttpClient Create(BrokerConfig settings)
         {
             var uri = new Uri($"{settings.BrokerUrl}/");
             var handler = new HttpClientHandler

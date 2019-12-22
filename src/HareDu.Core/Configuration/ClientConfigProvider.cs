@@ -20,8 +20,8 @@ namespace HareDu.Core.Configuration
         /// <summary>
         /// Specify the RabbitMQ server url to connect to.
         /// </summary>
-        /// <param name="rmqServerUrl"></param>
-        void ConnectTo(string rmqServerUrl);
+        /// <param name="brokerUrl"></param>
+        void ConnectTo(string brokerUrl);
 
         /// <summary>
         /// Specify the maximum time before the HTTP request to the RAbbitMQ server will fail.

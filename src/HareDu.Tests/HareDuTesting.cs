@@ -18,6 +18,7 @@ namespace HareDu.Tests
     using Core;
     using Core.Configuration;
     using Fakes;
+    using NUnit.Framework;
     using Registration;
 
     public class HareDuTesting
@@ -29,14 +30,21 @@ namespace HareDu.Tests
             builder.Register(x =>
                 {
                     var registration = x.Resolve<IBrokerObjectRegistration>();
-                    var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
+                    // var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
                     var connection = x.Resolve<IBrokerConnectionClient>();
+                    var configProvider = x.Resolve<IConfigurationProvider>();
 
-                    if (!settingsProvider.TryGet(out HareDuClientSettings settings))
+                    // if (!settingsProvider.TryGet(out HareDuClientSettings settings))
+                    //     throw new HareDuClientConfigurationException(
+                    //         "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                    string configPath = $"{TestContext.CurrentContext.TestDirectory}/scanner.yaml";
+
+                    if (!configProvider.TryGet(configPath, out HareDuConfig config))
                         throw new HareDuClientConfigurationException(
                             "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                    var client = connection.Create(settings);
+                    
+                    var client = connection.Create(config.Broker);
 
                     registration.RegisterAll(client);
 
@@ -53,8 +61,12 @@ namespace HareDu.Tests
                 .As<IBrokerObjectRegistration>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerClientConfigProvider>()
-                .As<IBrokerClientConfigProvider>()
+            // builder.RegisterType<BrokerClientConfigProvider>()
+            //     .As<IBrokerClientConfigProvider>()
+            //     .SingleInstance();
+
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
 
             return builder;
@@ -70,7 +82,7 @@ namespace HareDu.Tests
                     var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
                     var connection = x.Resolve<IBrokerConnectionClient>();
 
-                    if (!settingsProvider.TryGet(out HareDuClientSettings settings))
+                    if (!settingsProvider.TryGet(out BrokerConfig settings))
                         throw new HareDuClientConfigurationException(
                             "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 

@@ -15,9 +15,8 @@ namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -33,19 +32,23 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [OneTimeSetUp]
         public void Init()
         {
-            var configProvider = new DiagnosticScannerConfigProvider();
+            var configProvider = new ConfigurationProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            
+            configProvider.TryGet(path, out HareDuConfig config);
             
             _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new QueueGrowthAnalyzer(configProvider, knowledgeBaseProvider),
-                new MessagePagingAnalyzer(configProvider, knowledgeBaseProvider),
-                new RedeliveredMessagesAnalyzer(configProvider, knowledgeBaseProvider),
-                new ConsumerUtilizationAnalyzer(configProvider, knowledgeBaseProvider),
-                new UnroutableMessageAnalyzer(configProvider, knowledgeBaseProvider),
-                new QueueLowFlowAnalyzer(configProvider, knowledgeBaseProvider),
-                new QueueNoFlowAnalyzer(configProvider, knowledgeBaseProvider),
-                new QueueHighFlowAnalyzer(configProvider, knowledgeBaseProvider)
+                new QueueGrowthAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new MessagePagingAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new RedeliveredMessagesAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new ConsumerUtilizationAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new UnroutableMessageAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new QueueLowFlowAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new QueueNoFlowAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new QueueHighFlowAnalyzer(config.Analyzer, knowledgeBaseProvider)
             };
         }
 

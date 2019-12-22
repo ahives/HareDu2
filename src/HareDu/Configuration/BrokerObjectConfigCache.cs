@@ -17,6 +17,6 @@ namespace HareDu.Configuration
 
     public static class BrokerObjectConfigCache
     {
-        public static readonly HareDuClientSettings Default = new DefaultBrokerObjectConfig();
+        public static readonly BrokerConfig Default = new DefaultBrokerObjectConfig();
     }
 }

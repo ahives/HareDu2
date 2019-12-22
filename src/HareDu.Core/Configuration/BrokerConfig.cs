@@ -16,7 +16,7 @@ namespace HareDu.Core.Configuration
     using System;
     using Newtonsoft.Json;
 
-    public interface HareDuClientSettings
+    public interface BrokerConfig
     {
         [JsonProperty("rmqServerUrl")]
         string BrokerUrl { get; }
@@ -25,6 +25,6 @@ namespace HareDu.Core.Configuration
         TimeSpan Timeout { get; }
         
         [JsonProperty("credentials")]
-        HareDuCredentials Credentials { get; }
+        BrokerCredentials Credentials { get; }
     }
 }

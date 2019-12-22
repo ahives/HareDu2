@@ -11,20 +11,52 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Internal
+namespace HareDu.Core.Internal
 {
+    using System;
     using Configuration;
 
-    public class DefaultDiagnosticScannerConfig :
-        DiagnosticScannerConfig
+    public class DefaultHareDuConfig :
+        HareDuConfig
     {
-        public DefaultDiagnosticScannerConfig()
+        public DefaultHareDuConfig()
         {
             Analyzer = new DiagnosticAnalyzerConfigImpl();
+            Broker = new BrokerConfigImpl();
         }
 
+        public BrokerConfig Broker { get; }
         public bool OverrideAnalyzerConfig { get; }
         public DiagnosticAnalyzerConfig Analyzer { get; }
+
+        
+        class BrokerConfigImpl :
+            BrokerConfig
+        {
+            public BrokerConfigImpl()
+            {
+                BrokerUrl = "http://localhost:15672";
+                Credentials = new BrokerCredentialsImpl("guest", "guest");
+            }
+
+            public string BrokerUrl { get; }
+            public TimeSpan Timeout { get; }
+            public BrokerCredentials Credentials { get; }
+
+        
+            class BrokerCredentialsImpl :
+                BrokerCredentials
+            {
+                public BrokerCredentialsImpl(string username, string password)
+                {
+                    Username = username;
+                    Password = password;
+                }
+
+                public string Username { get; }
+                public string Password { get; }
+            }
+        }
 
         
         class DiagnosticAnalyzerConfigImpl :
@@ -33,7 +65,7 @@ namespace HareDu.Diagnostics.Internal
             public DiagnosticAnalyzerConfigImpl()
             {
                 SocketUsageCoefficient = 0.50M;
-                MessageRedeliveryCoefficient = 0.50M;
+                MessageRedeliveryCoefficient = 1M;
                 HighClosureRateWarningThreshold = 100;
                 HighCreationRateWarningThreshold = 100;
                 RuntimeProcessUsageCoefficient = 0.7M;

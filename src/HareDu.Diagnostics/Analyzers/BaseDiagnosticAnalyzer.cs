@@ -15,21 +15,18 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticAnalyzer :
         IObservable<DiagnosticAnalyzerContext>
     {
-        protected readonly IDiagnosticScannerConfigProvider _configProvider;
         protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
-        protected DiagnosticScannerConfig _config;
         protected DiagnosticAnalyzerStatus _status;
         readonly List<IObserver<DiagnosticAnalyzerContext>> _observers;
 
-        protected BaseDiagnosticAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        protected BaseDiagnosticAnalyzer(IKnowledgeBaseProvider knowledgeBaseProvider)
         {
-            _configProvider = configProvider;
             _knowledgeBaseProvider = knowledgeBaseProvider;
             _observers = new List<IObserver<DiagnosticAnalyzerContext>>();
         }

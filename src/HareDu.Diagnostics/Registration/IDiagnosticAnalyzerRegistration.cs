@@ -15,13 +15,13 @@ namespace HareDu.Diagnostics.Registration
 {
     using System.Collections.Generic;
     using Analyzers;
-    using Configuration;
+    using Core.Configuration;
     using KnowledgeBase;
 
     public interface IDiagnosticAnalyzerRegistration
     {
         IReadOnlyList<IDiagnosticAnalyzer> Analyzers { get; }
         
-        void RegisterAll(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider);
+        void RegisterAll(string path, IConfigurationProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider);
     }
 }

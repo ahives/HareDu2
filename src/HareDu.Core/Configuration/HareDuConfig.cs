@@ -11,10 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Core.Configuration
 {
-    public interface IDiagnosticScannerConfigProvider
+    public interface HareDuConfig
     {
-        bool TryGet(out DiagnosticScannerConfig config);
+        BrokerConfig Broker { get; }
+        
+        bool OverrideAnalyzerConfig { get; }
+        
+        DiagnosticAnalyzerConfig Analyzer { get; }
     }
 }

@@ -18,6 +18,6 @@ namespace HareDu.Core
 
     public interface IBrokerConnectionClient
     {
-        HttpClient Create(HareDuClientSettings settings);
+        HttpClient Create(BrokerConfig settings);
     }
 }

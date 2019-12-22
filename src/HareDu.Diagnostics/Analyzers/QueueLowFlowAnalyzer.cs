@@ -14,7 +14,7 @@
 namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -24,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Queue Low Flow Analyzer";
         public string Description { get; }
@@ -31,10 +32,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public QueueLowFlowAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public QueueLowFlowAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -45,12 +47,12 @@ namespace HareDu.Diagnostics.Analyzers
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
-                new DiagnosticAnalyzerDataImpl("QueueLowFlowThreshold", _config.Analyzer.QueueLowFlowThreshold.ToString())
+                new DiagnosticAnalyzerDataImpl("QueueLowFlowThreshold", _config.QueueLowFlowThreshold.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.Messages.Incoming.Total <= _config.Analyzer.QueueLowFlowThreshold)
+            if (data.Messages.Incoming.Total <= _config.QueueLowFlowThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);

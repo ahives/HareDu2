@@ -14,7 +14,7 @@
 namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -24,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Runtime Process Limit Analyzer";
         public string Description { get; }
@@ -31,10 +32,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public RuntimeProcessLimitAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public RuntimeProcessLimitAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)

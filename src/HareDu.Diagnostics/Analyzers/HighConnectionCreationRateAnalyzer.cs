@@ -14,7 +14,8 @@
 namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
+    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -23,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "High Connection Creation Rate Analyzer";
         public string Description { get; }
@@ -30,10 +32,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Connectivity;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public HighConnectionCreationRateAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public HighConnectionCreationRateAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -44,12 +47,12 @@ namespace HareDu.Diagnostics.Analyzers
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
-                new DiagnosticAnalyzerDataImpl("HighCreationRateThreshold", _config.Analyzer.HighCreationRateWarningThreshold.ToString())
+                new DiagnosticAnalyzerDataImpl("HighCreationRateThreshold", _config.HighCreationRateWarningThreshold.ToString())
             };
             
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsCreated.Rate >= _config.Analyzer.HighCreationRateWarningThreshold)
+            if (data.ConnectionsCreated.Rate >= _config.HighCreationRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);

@@ -14,7 +14,7 @@
 namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -24,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "High Connection Closure Rate Analyzer";
         public string Description => "";
@@ -31,10 +32,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Connectivity;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public HighConnectionClosureRateAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public HighConnectionClosureRateAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -46,12 +48,12 @@ namespace HareDu.Diagnostics.Analyzers
             {
                 new DiagnosticAnalyzerDataImpl("ConnectionsClosed.Rate", data.ConnectionsClosed.Rate.ToString()),
                 new DiagnosticAnalyzerDataImpl("HighClosureRateThreshold",
-                    _config.Analyzer.HighClosureRateWarningThreshold.ToString())
+                    _config.HighClosureRateWarningThreshold.ToString())
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsClosed.Rate >= _config.Analyzer.HighClosureRateWarningThreshold)
+            if (data.ConnectionsClosed.Rate >= _config.HighClosureRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);

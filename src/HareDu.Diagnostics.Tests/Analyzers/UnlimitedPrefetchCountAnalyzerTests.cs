@@ -14,8 +14,8 @@
 namespace HareDu.Diagnostics.Tests.Analyzers
 {
     using Autofac;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -36,8 +36,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScannerConfigProvider>()
-                .As<IDiagnosticScannerConfigProvider>()
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -46,9 +46,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test(Description = "")]
         public void Verify_analyzer_yellow_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountAnalyzer(config.Analyzer, knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(0);
 
@@ -61,9 +64,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_inconclusive_condition_1()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(5);
 

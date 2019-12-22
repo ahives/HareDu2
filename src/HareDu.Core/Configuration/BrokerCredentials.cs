@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,15 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Core.Configuration
 {
-    using YamlDotNet.Serialization;
+    using Newtonsoft.Json;
 
-    public interface DiagnosticScannerConfig
+    public interface BrokerCredentials
     {
-        [YamlMember(Alias = "override-analyzer-config")]
-        bool OverrideAnalyzerConfig { get; }
+        [JsonProperty("username")]
+        string Username { get; }
         
-        DiagnosticAnalyzerConfig Analyzer { get; }
+        [JsonProperty("password")]
+        string Password { get; }
     }
 }

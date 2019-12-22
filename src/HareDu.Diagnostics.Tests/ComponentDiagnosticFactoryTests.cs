@@ -14,11 +14,10 @@
 namespace HareDu.Diagnostics.Tests
 {
     using System.Collections.Generic;
-    using Analyzers;
     using Autofac;
     using AutofacIntegration;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using KnowledgeBase;
     using NUnit.Framework;
     using Registration;
@@ -42,17 +41,21 @@ namespace HareDu.Diagnostics.Tests
 
             _container = builder.Build();
 
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            var configProvider = _container.Resolve<IConfigurationProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            
+            configProvider.TryGet(path, out HareDuConfig config);
 
             _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new HighConnectionCreationRateAnalyzer(configProvider, knowledgeBaseProvider),
-                new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountAnalyzer(configProvider, knowledgeBaseProvider),
-                new ChannelThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
-                new ChannelLimitReachedAnalyzer(configProvider, knowledgeBaseProvider),
-                new BlockedConnectionAnalyzer(configProvider, knowledgeBaseProvider)
+                new HighConnectionCreationRateAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new HighConnectionClosureRateAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new ChannelThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new ChannelLimitReachedAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new BlockedConnectionAnalyzer(config.Analyzer, knowledgeBaseProvider)
             };
         }
 

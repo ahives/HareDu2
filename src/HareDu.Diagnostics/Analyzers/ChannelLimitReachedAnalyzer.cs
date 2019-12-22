@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -31,8 +31,8 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public ChannelLimitReachedAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public ChannelLimitReachedAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
             _status = DiagnosticAnalyzerStatus.Online;
         }

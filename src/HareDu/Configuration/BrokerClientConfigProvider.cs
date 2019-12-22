@@ -14,6 +14,7 @@
 namespace HareDu.Configuration
 {
     using System;
+    using System.IO;
     using System.Threading;
     using Core.Configuration;
     using Core.Extensions;
@@ -21,7 +22,16 @@ namespace HareDu.Configuration
     public class BrokerClientConfigProvider :
         IBrokerClientConfigProvider
     {
-        public HareDuClientSettings Init(Action<ClientConfigProvider> configuration)
+        readonly IConfigurationProvider _configurationProvider;
+        readonly string _path;
+
+        public BrokerClientConfigProvider(IConfigurationProvider configurationProvider)
+        {
+            _configurationProvider = configurationProvider;
+            _path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+        }
+
+        public BrokerConfig Init(Action<ClientConfigProvider> configuration)
         {
             if (configuration == null)
                 throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
@@ -29,44 +39,53 @@ namespace HareDu.Configuration
             var init = new ClientConfigProviderImpl();
             configuration(init);
 
-            HareDuClientSettings settings = init.Settings.Value;
+            BrokerConfig settings = init.Settings.Value;
 
-            if (settings.IsNull() ||
-                settings.Credentials.IsNull() ||
-                string.IsNullOrWhiteSpace(settings.Credentials.Username) ||
-                string.IsNullOrWhiteSpace(settings.Credentials.Password) ||
-                string.IsNullOrWhiteSpace(settings.BrokerUrl))
-            {
-                return BrokerObjectConfigCache.Default;
-            }
+            if (Validate(settings))
+                return settings;
+            
+            if (_configurationProvider.TryGet(_path, out HareDuConfig config))
+                return Validate(config.Broker) ? config.Broker : BrokerObjectConfigCache.Default;
 
-            return settings;
+            return BrokerObjectConfigCache.Default;
         }
 
-        public bool TryGet(out HareDuClientSettings settings)
+        public bool TryGet(out BrokerConfig settings)
         {
+            if (_configurationProvider.TryGet(_path, out HareDuConfig config))
+            {
+                settings = Validate(config.Broker) ? config.Broker : BrokerObjectConfigCache.Default;
+                return true;
+            }
+
             settings = BrokerObjectConfigCache.Default;
             return true;
         }
+
+        bool Validate(BrokerConfig config)
+            => !config.Credentials.IsNull() &&
+               !string.IsNullOrWhiteSpace(config.Credentials.Username) &&
+               !string.IsNullOrWhiteSpace(config.Credentials.Password) &&
+               !string.IsNullOrWhiteSpace(config.BrokerUrl);
 
 
         class ClientConfigProviderImpl :
             ClientConfigProvider
         {
-            string _rmqServerUrl;
+            string _brokerUrl;
             TimeSpan _timeout;
             string _username;
             string _password;
 
-            public Lazy<HareDuClientSettings> Settings { get; }
+            public Lazy<BrokerConfig> Settings { get; }
 
             public ClientConfigProviderImpl()
             {
-                Settings = new Lazy<HareDuClientSettings>(
-                    () => new HareDuClientSettingsImpl(_rmqServerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
+                Settings = new Lazy<BrokerConfig>(
+                    () => new BrokerConfigImpl(_brokerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void ConnectTo(string rmqServerUrl) => _rmqServerUrl = rmqServerUrl;
+            public void ConnectTo(string brokerUrl) => _brokerUrl = brokerUrl;
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 
@@ -77,25 +96,27 @@ namespace HareDu.Configuration
             }
 
 
-            class HareDuClientSettingsImpl :
-                HareDuClientSettings
+            class BrokerConfigImpl :
+                BrokerConfig
             {
-                public HareDuClientSettingsImpl(string rmqServerUrl, TimeSpan timeout, string username, string password)
+                public BrokerConfigImpl(string brokerUrl, TimeSpan timeout, string username, string password)
                 {
-                    BrokerUrl = rmqServerUrl;
+                    BrokerUrl = brokerUrl;
                     Timeout = timeout;
-                    Credentials = new HareDuCredentialsImpl(username, password);
+
+                    if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+                        Credentials = new BrokerCredentialsImpl(username, password);
                 }
 
                 public string BrokerUrl { get; }
                 public TimeSpan Timeout { get; }
-                public HareDuCredentials Credentials { get; }
+                public BrokerCredentials Credentials { get; }
 
 
-                class HareDuCredentialsImpl :
-                    HareDuCredentials
+                class BrokerCredentialsImpl :
+                    BrokerCredentials
                 {
-                    public HareDuCredentialsImpl(string username, string password)
+                    public BrokerCredentialsImpl(string username, string password)
                     {
                         Username = username;
                         Password = password;

@@ -11,23 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests.Configuration
+namespace HareDu.Core.Internal
 {
-    using Diagnostics.Configuration;
-    using NUnit.Framework;
-    using Shouldly;
+    using System;
+    using YamlDotNet.Serialization;
 
-    [TestFixture]
-    public class DiagnosticScannerConfigProviderTests
+    class RabbitMqBrokerConfigYaml
     {
-        [Test, Explicit]
-        public void Test()
-        {
-            var provider = new DiagnosticScannerConfigProvider();
-
-            provider.TryGet(out var config).ShouldBeTrue();
-//            Assert.IsTrue(config.OverrideAnalyzerConfig);
-            config.Analyzer.HighClosureRateWarningThreshold.ShouldBe<uint>(90);
-        }
+        [YamlMember(Alias = "url")]
+        public string BrokerUrl { get; set; }
+        
+        [YamlMember(Alias = "timeout")]
+        public TimeSpan Timeout { get; set; }
+        
+        [YamlMember(Alias = "username")]
+        public string Username { get; set; }
+        
+        [YamlMember(Alias = "password")]
+        public string Password { get; set; }
     }
 }

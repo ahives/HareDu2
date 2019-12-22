@@ -15,8 +15,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
 {
     using System.Collections.Generic;
     using Autofac;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -37,8 +37,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScannerConfigProvider>()
-                .As<IDiagnosticScannerConfigProvider>()
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -47,9 +47,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_sensor_red_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionAnalyzer(configProvider, knowledgeBaseProvider);
+            var sensor = new NetworkPartitionAnalyzer(config.Analyzer, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>
             {
@@ -67,9 +70,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_sensor_green_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionAnalyzer(configProvider, knowledgeBaseProvider);
+            var sensor = new NetworkPartitionAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>());
 

@@ -14,8 +14,8 @@
 namespace HareDu.Diagnostics.Tests.Analyzers
 {
     using Autofac;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -36,8 +36,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScannerConfigProvider>()
-                .As<IDiagnosticScannerConfigProvider>()
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -46,9 +46,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_yellow_condition()
         {
-            var configProvider = new DefaultConfigProvider1();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config1.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RedeliveredMessagesAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RedeliveredMessagesAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 90, 32.3M);
 
@@ -61,9 +64,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            var configProvider = new DefaultConfigProvider1();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RedeliveredMessagesAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RedeliveredMessagesAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 50, 32.3M);
 
@@ -76,67 +82,10 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_offline()
         {
-            var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RedeliveredMessagesAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new RedeliveredMessagesAnalyzer(null, knowledgeBaseProvider);
             
             analyzer.Status.ShouldBe(DiagnosticAnalyzerStatus.Offline);
-        }
-
-        
-        class DefaultConfigProvider1 :
-            IDiagnosticScannerConfigProvider
-        {
-            public bool TryGet(out DiagnosticScannerConfig config)
-            {
-                config = new FakeDiagnosticScannerConfig();
-                return true;
-            }
-
-
-            class FakeDiagnosticScannerConfig :
-                DiagnosticScannerConfig
-            {
-                public FakeDiagnosticScannerConfig()
-                {
-                    Analyzer = new FakeDiagnosticAnalyzerConfig();
-                }
-
-                public bool OverrideAnalyzerConfig { get; }
-                public DiagnosticAnalyzerConfig Analyzer { get; }
-
-
-                class FakeDiagnosticAnalyzerConfig :
-                    DiagnosticAnalyzerConfig
-                {
-                    public FakeDiagnosticAnalyzerConfig()
-                    {
-                        SocketUsageCoefficient = 1.0M;
-                        MessageRedeliveryCoefficient = 0.8M;
-                    }
-
-                    public uint HighClosureRateWarningThreshold { get; }
-                    public uint HighCreationRateWarningThreshold { get; }
-                    public uint QueueHighFlowThreshold { get; }
-                    public uint QueueLowFlowThreshold { get; }
-                    public decimal MessageRedeliveryCoefficient { get; }
-                    public decimal SocketUsageCoefficient { get; }
-                    public decimal RuntimeProcessUsageCoefficient { get; }
-                    public decimal FileDescriptorUsageWarningCoefficient { get; }
-                    public decimal ConsumerUtilizationWarningCoefficient { get; }
-                }
-            }
-        }
-
-        
-        class DefaultConfigProvider :
-            IDiagnosticScannerConfigProvider
-        {
-            public bool TryGet(out DiagnosticScannerConfig config)
-            {
-                config = null;
-                return false;
-            }
         }
     }
 }

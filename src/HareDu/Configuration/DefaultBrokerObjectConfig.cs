@@ -17,23 +17,23 @@ namespace HareDu.Configuration
     using Core.Configuration;
 
     public class DefaultBrokerObjectConfig :
-        HareDuClientSettings
+        BrokerConfig
     {
         public DefaultBrokerObjectConfig()
         {
             BrokerUrl = "http://localhost:15672";
-            Credentials = new HareDuCredentialsImpl("guest", "guest");
+            Credentials = new BrokerCredentialsImpl("guest", "guest");
         }
 
         public string BrokerUrl { get; }
         public TimeSpan Timeout { get; }
-        public HareDuCredentials Credentials { get; }
+        public BrokerCredentials Credentials { get; }
 
         
-        class HareDuCredentialsImpl :
-            HareDuCredentials
+        class BrokerCredentialsImpl :
+            BrokerCredentials
         {
-            public HareDuCredentialsImpl(string username, string password)
+            public BrokerCredentialsImpl(string username, string password)
             {
                 Username = username;
                 Password = password;

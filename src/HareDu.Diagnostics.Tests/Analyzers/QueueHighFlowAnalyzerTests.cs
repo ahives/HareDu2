@@ -14,8 +14,8 @@
 namespace HareDu.Diagnostics.Tests.Analyzers
 {
     using Autofac;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -36,8 +36,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScannerConfigProvider>()
-                .As<IDiagnosticScannerConfigProvider>()
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -46,9 +46,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_red_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueHighFlowAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueHighFlowAnalyzer(config.Analyzer, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot5(105);
 
@@ -61,9 +64,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueHighFlowAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueHighFlowAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot5(90);
 
@@ -76,22 +82,10 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_offline()
         {
-            var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueHighFlowAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new QueueHighFlowAnalyzer(null, knowledgeBaseProvider);
             
             analyzer.Status.ShouldBe(DiagnosticAnalyzerStatus.Offline);
-        }
-
-        
-        class DefaultConfigProvider :
-            IDiagnosticScannerConfigProvider
-        {
-            public bool TryGet(out DiagnosticScannerConfig config)
-            {
-                config = null;
-                return false;
-            }
         }
     }
 }

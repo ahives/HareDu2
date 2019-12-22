@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics.Registration
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
-    using Configuration;
+    using Core.Configuration;
     using KnowledgeBase;
 
     public class DiagnosticAnalyzerRegistration :
@@ -34,11 +34,13 @@ namespace HareDu.Diagnostics.Registration
             _types = GetTypes();
         }
         
-        public void RegisterAll(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public void RegisterAll(string path, IConfigurationProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             for (int i = 0; i < _types.Count; i++)
             {
-                _analyzers.Add((IDiagnosticAnalyzer) Activator.CreateInstance(_types[i], configProvider, knowledgeBaseProvider));
+                _analyzers.Add((IDiagnosticAnalyzer) Activator.CreateInstance(_types[i], config.Analyzer, knowledgeBaseProvider));
             }
         }
 

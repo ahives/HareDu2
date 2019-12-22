@@ -11,12 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Core.Internal
 {
-    using Internal;
+    using Configuration;
+    using YamlDotNet.Serialization;
 
-    public static class DiagnosticAnalyzerConfigCache
+    class HareDuConfigYaml
     {
-        public static readonly DiagnosticScannerConfig Default = new DefaultDiagnosticScannerConfig();
+        [YamlMember(Alias = "broker")]
+        public RabbitMqBrokerConfigYaml Broker { get; set; }
+
+        [YamlMember(Alias = "test")]
+        public bool OverrideAnalyzerConfig { get; set; }
+
+        [YamlMember(Alias = "analyzer")]
+        public DiagnosticAnalyzerConfigYaml Analyzer { get; set; }
     }
 }

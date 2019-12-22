@@ -17,8 +17,13 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using Configuration;
+    using Core;
+    using Core.Configuration;
     using Core.Extensions;
     using NUnit.Framework;
+    using Registration;
+    using Shouldly;
 
     [TestFixture]
     public class ExchangeTests
@@ -54,7 +59,41 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 Console.WriteLine();
             }
             
-            Assert.IsFalse(result.HasFaulted);
+            result.HasFaulted.ShouldBeFalse();
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
+        public async Task Should_be_able_to_get_all_exchanges2()
+        {
+            var registration = new BrokerObjectRegistration();
+            var configProvider = new ConfigurationProvider();
+            var provider = new BrokerClientConfigProvider(configProvider);
+            var settings = provider.Init(x => { });
+            var connectionClient = new BrokerConnectionClient();
+            var client = connectionClient.Create(settings);
+
+            registration.RegisterAll(client);
+            
+            var factory = new BrokerObjectFactory(registration.Cache, client);
+            
+            var result = await factory
+                .Object<Exchange>()
+                .GetAll();
+            
+            foreach (var exchange in result.Select(x => x.Data))
+            {
+                Console.WriteLine("Name: {0}", exchange.Name);
+                Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
+                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
+                Console.WriteLine("Internal: {0}", exchange.Internal);
+                Console.WriteLine("Durable: {0}", exchange.Durable);
+                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+            
+            result.HasFaulted.ShouldBeFalse();
             Console.WriteLine(result.ToJsonString());
         }
 

@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,10 @@
 // limitations under the License.
 namespace HareDu.Core.Configuration
 {
-    using Newtonsoft.Json;
+    using Internal;
 
-    public interface HareDuCredentials
+    public static class DiagnosticAnalyzerConfigCache
     {
-        [JsonProperty("username")]
-        string Username { get; }
-        
-        [JsonProperty("password")]
-        string Password { get; }
+        public static readonly HareDuConfig Default = new DefaultHareDuConfig();
     }
 }

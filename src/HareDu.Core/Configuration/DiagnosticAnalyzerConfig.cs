@@ -11,37 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Configuration
+namespace HareDu.Core.Configuration
 {
-    using YamlDotNet.Serialization;
-
     public interface DiagnosticAnalyzerConfig
     {
-        [YamlMember(Alias = "high-closure-rate-warning-threshold")]
         uint HighClosureRateWarningThreshold { get; }
         
-        [YamlMember(Alias = "high-creation-rate-warning-threshold")]
         uint HighCreationRateWarningThreshold { get; }
         
-        [YamlMember(Alias = "queue-high-flow-threshold")]
         uint QueueHighFlowThreshold { get; }
         
-        [YamlMember(Alias = "queue-low-flow-threshold")]
         uint QueueLowFlowThreshold { get; }
         
-        [YamlMember(Alias = "message-redelivery-coefficient")]
         decimal MessageRedeliveryCoefficient { get; }
 
-        [YamlMember(Alias = "socket-usage-coefficient")]
         decimal SocketUsageCoefficient { get; }
         
-        [YamlMember(Alias = "runtime-process-usage-coefficient")]
         decimal RuntimeProcessUsageCoefficient { get; }
         
-        [YamlMember(Alias = "file-descriptor-usage-warning-coefficient")]
         decimal FileDescriptorUsageWarningCoefficient { get; }
         
-        [YamlMember(Alias = "consumer-utilization-warning-coefficient")]
         decimal ConsumerUtilizationWarningCoefficient { get; }
     }
 }

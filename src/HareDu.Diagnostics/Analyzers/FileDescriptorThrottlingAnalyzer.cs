@@ -15,7 +15,8 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
+    using Core.Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
@@ -24,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "File Descriptor Throttling Analyzer";
         public string Description { get; }
@@ -31,10 +33,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public FileDescriptorThrottlingAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public FileDescriptorThrottlingAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -49,7 +52,7 @@ namespace HareDu.Diagnostics.Analyzers
             {
                 new DiagnosticAnalyzerDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
                 new DiagnosticAnalyzerDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
-                new DiagnosticAnalyzerDataImpl("FileDescriptorUsageWarningThreshold", _config.Analyzer.FileDescriptorUsageWarningCoefficient.ToString()),
+                new DiagnosticAnalyzerDataImpl("FileDescriptorUsageWarningThreshold", _config.FileDescriptorUsageWarningCoefficient.ToString()),
                 new DiagnosticAnalyzerDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
             };
 
@@ -90,8 +93,8 @@ namespace HareDu.Diagnostics.Analyzers
         }
 
         ulong ComputeWarningThreshold(ulong fileDescriptorsAvailable)
-            => _config.Analyzer.FileDescriptorUsageWarningCoefficient >= 1
+            => _config.FileDescriptorUsageWarningCoefficient >= 1
                 ? fileDescriptorsAvailable
-                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Analyzer.FileDescriptorUsageWarningCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.FileDescriptorUsageWarningCoefficient));
     }
 }

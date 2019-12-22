@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -25,6 +25,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Socket Descriptor Throttling Analyzer";
         public string Description =>
@@ -33,10 +34,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public SocketDescriptorThrottlingAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public SocketDescriptorThrottlingAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -91,8 +93,8 @@ namespace HareDu.Diagnostics.Analyzers
         }
 
         ulong ComputeWarningThreshold(ulong socketsAvailable)
-            => _config.Analyzer.SocketUsageCoefficient >= 1
+            => _config.SocketUsageCoefficient >= 1
                 ? socketsAvailable
-                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.Analyzer.SocketUsageCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.SocketUsageCoefficient));
     }
 }

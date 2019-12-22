@@ -13,10 +13,11 @@
 // limitations under the License.
 namespace HareDu.AutofacIntegration
 {
+    using System.IO;
     using Analytics;
     using Analytics.Registration;
     using Autofac;
-    using Diagnostics.Configuration;
+    using Core.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
@@ -29,13 +30,15 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var configProvider = x.Resolve<IDiagnosticScannerConfigProvider>();
+                    var configProvider = x.Resolve<IConfigurationProvider>();
                     
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
                     var analyzerRegistration = x.Resolve<IDiagnosticAnalyzerRegistration>();
                     
-                    analyzerRegistration.RegisterAll(configProvider, knowledgeBaseProvider);
+                    string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+                    
+                    analyzerRegistration.RegisterAll(path, configProvider, knowledgeBaseProvider);
 
                     var diagnosticRegistration = x.Resolve<IComponentDiagnosticRegistration>();
                     
@@ -73,8 +76,8 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticScanner>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScannerConfigProvider>()
-                .As<IDiagnosticScannerConfigProvider>()
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticReportTextFormatter>()

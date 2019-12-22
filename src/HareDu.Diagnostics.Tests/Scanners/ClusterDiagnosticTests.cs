@@ -15,9 +15,8 @@ namespace HareDu.Diagnostics.Tests.Scanners
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -33,18 +32,22 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [OneTimeSetUp]
         public void Init()
         {
-            var configProvider = new DiagnosticScannerConfigProvider();
+            var configProvider = new ConfigurationProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            
+            configProvider.TryGet(path, out HareDuConfig config);
             
             _analyzers = new List<IDiagnosticAnalyzer>
             {
-                new RuntimeProcessLimitAnalyzer(configProvider, knowledgeBaseProvider),
-                new SocketDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
-                new NetworkPartitionAnalyzer(configProvider, knowledgeBaseProvider),
-                new MemoryAlarmAnalyzer(configProvider, knowledgeBaseProvider),
-                new DiskAlarmAnalyzer(configProvider, knowledgeBaseProvider),
-                new AvailableCpuCoresAnalyzer(configProvider, knowledgeBaseProvider),
-                new FileDescriptorThrottlingAnalyzer(configProvider, knowledgeBaseProvider),
+                new RuntimeProcessLimitAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new SocketDescriptorThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new NetworkPartitionAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new MemoryAlarmAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new DiskAlarmAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new AvailableCpuCoresAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new FileDescriptorThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
             };
         }
 

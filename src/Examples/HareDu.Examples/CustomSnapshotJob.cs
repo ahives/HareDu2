@@ -45,11 +45,11 @@ namespace HareDu.Examples
                 .MostRecent()
                 .Cast<SnapshotContext<BrokerQueuesSnapshot>>();
             
-//            bool persisted = snapshot.PersistJson("/Users/albert/Documents/snapshots");
+            bool persisted = snapshot.PersistJson("/Users/albert/Documents/snapshots");
 
-            var response = _client.Index(snapshot, x => x.Index("haredu_snapshots"));
-            if (response.Result == Result.Created)
-                Console.WriteLine("Snapshot Recorded");
+            // var response = _client.Index(snapshot, x => x.Index("haredu_snapshots"));
+            // if (response.Result == Result.Created)
+            //     Console.WriteLine("Snapshot Recorded");
         }
     }
 }

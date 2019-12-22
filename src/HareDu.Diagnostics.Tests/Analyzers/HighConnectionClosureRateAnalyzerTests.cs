@@ -14,8 +14,8 @@
 namespace HareDu.Diagnostics.Tests.Analyzers
 {
     using Autofac;
+    using Core.Configuration;
     using Diagnostics.Analyzers;
-    using Diagnostics.Configuration;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
@@ -36,8 +36,8 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScannerConfigProvider>()
-                .As<IDiagnosticScannerConfigProvider>()
+            builder.RegisterType<ConfigurationProvider>()
+                .As<IConfigurationProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -46,9 +46,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_yellow_condition_1()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionClosureRateAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(102, 102);
 
@@ -61,9 +64,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_yellow_condition_2()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionClosureRateAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(100, 100);
 
@@ -76,9 +82,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            var configProvider = _container.Resolve<IDiagnosticScannerConfigProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            var configProvider = _container.Resolve<IConfigurationProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionClosureRateAnalyzer(config.Analyzer, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 99);
 
@@ -91,22 +100,10 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         [Test]
         public void Verify_analyzer_offline()
         {
-            var configProvider = new DefaultConfigProvider();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateAnalyzer(configProvider, knowledgeBaseProvider);
+            var analyzer = new HighConnectionClosureRateAnalyzer(null, knowledgeBaseProvider);
             
             analyzer.Status.ShouldBe(DiagnosticAnalyzerStatus.Offline);
-        }
-
-        
-        class DefaultConfigProvider :
-            IDiagnosticScannerConfigProvider
-        {
-            public bool TryGet(out DiagnosticScannerConfig config)
-            {
-                config = null;
-                return false;
-            }
         }
     }
 }

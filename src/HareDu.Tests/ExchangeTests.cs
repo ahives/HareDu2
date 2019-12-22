@@ -15,9 +15,13 @@ namespace HareDu.Tests
 {
     using System.Threading.Tasks;
     using Autofac;
+    using Configuration;
+    using Core;
+    using Core.Configuration;
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
+    using Registration;
     using Shouldly;
 
     [TestFixture]
@@ -29,6 +33,43 @@ namespace HareDu.Tests
         {
             var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .GetAll();
+            
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
+            result.Data.Count.ShouldBe(9);
+            result.Data[1].Durable.ShouldBeTrue();
+            result.Data[1].Internal.ShouldBeFalse();
+            result.Data[1].AutoDelete.ShouldBeFalse();
+            result.Data[1].Name.ShouldBe("E2");
+            result.Data[1].RoutingType.ShouldBe("direct");
+            result.Data[1].VirtualHost.ShouldBe("HareDu");
+            result.Data[1].Arguments.ShouldNotBeNull();
+            result.Data[1].Arguments.Count.ShouldBe(1);
+            result.Data[1].Arguments["alternate-exchange"].ShouldBe("exchange");
+        }
+
+        [Test]
+        public async Task Should_be_able_to_get_all_exchanges2()
+        {
+            var registration = new BrokerObjectRegistration();
+            var configProvider = new ConfigurationProvider();
+            var provider = new BrokerClientConfigProvider(configProvider);
+            var settings = provider.Init(x =>
+            {
+                // x.ConnectTo("http://localhost:15672");
+                // x.UsingCredentials("guest", "guest");
+            });
+            var connectionClient = new BrokerConnectionClient();
+            var client = connectionClient.Create(settings);
+            registration.RegisterAll(client);
+            
+            var factory = new BrokerObjectFactory(registration.Cache, client);
+            
+            // var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
+            var result = await factory
                 .Object<Exchange>()
                 .GetAll();
             

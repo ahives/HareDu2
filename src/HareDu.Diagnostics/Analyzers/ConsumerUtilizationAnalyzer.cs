@@ -14,7 +14,7 @@
 namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Configuration;
+    using Core.Configuration;
     using Core.Extensions;
     using Internal;
     using KnowledgeBase;
@@ -24,6 +24,7 @@ namespace HareDu.Diagnostics.Analyzers
         BaseDiagnosticAnalyzer,
         IDiagnosticAnalyzer
     {
+        readonly DiagnosticAnalyzerConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Consumer Utilization Analyzer";
         public string Description { get; }
@@ -31,10 +32,11 @@ namespace HareDu.Diagnostics.Analyzers
         public DiagnosticAnalyzerCategory Category => DiagnosticAnalyzerCategory.Throughput;
         public DiagnosticAnalyzerStatus Status => _status;
 
-        public ConsumerUtilizationAnalyzer(IDiagnosticScannerConfigProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(configProvider, knowledgeBaseProvider)
+        public ConsumerUtilizationAnalyzer(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+            : base(knowledgeBaseProvider)
         {
-            _status = _configProvider.TryGet(out _config) ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
+            _config = config;
+            _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
         public DiagnosticResult Execute<T>(T snapshot)
@@ -45,12 +47,12 @@ namespace HareDu.Diagnostics.Analyzers
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
                 new DiagnosticAnalyzerDataImpl("ConsumerUtilization", data.ConsumerUtilization.ToString()),
-                new DiagnosticAnalyzerDataImpl("Analyzer.ConsumerUtilizationWarningCoefficient", _config.Analyzer.ConsumerUtilizationWarningCoefficient.ToString())
+                new DiagnosticAnalyzerDataImpl("Analyzer.ConsumerUtilizationWarningCoefficient", _config.ConsumerUtilizationWarningCoefficient.ToString())
             };
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConsumerUtilization >= _config.Analyzer.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
+            if (data.ConsumerUtilization >= _config.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
                 result = new WarningDiagnosticResult(data.Node,
@@ -60,7 +62,7 @@ namespace HareDu.Diagnostics.Analyzers
                     analyzerData,
                     knowledgeBaseArticle);
             }
-            else if (data.ConsumerUtilization < _config.Analyzer.ConsumerUtilizationWarningCoefficient)
+            else if (data.ConsumerUtilization < _config.ConsumerUtilizationWarningCoefficient)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticResult(data.Node,

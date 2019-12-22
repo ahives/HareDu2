@@ -18,8 +18,8 @@ namespace HareDu.Configuration
 
     public interface IBrokerClientConfigProvider
     {
-        HareDuClientSettings Init(Action<ClientConfigProvider> configuration);
+        BrokerConfig Init(Action<ClientConfigProvider> configuration);
 
-        bool TryGet(out HareDuClientSettings settings);
+        bool TryGet(out BrokerConfig settings);
     }
 }
