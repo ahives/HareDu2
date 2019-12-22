@@ -11,15 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Configuration
+namespace HareDu.Core.Configuration
 {
-    using System;
-    using Core.Configuration;
+    using Internal;
 
-    public interface IBrokerClientConfigProvider
+    public static class ConfigCache
     {
-        BrokerConfig Init(Action<ClientConfigProvider> configuration);
-
-        bool TryGet(out BrokerConfig settings);
+        public static readonly HareDuConfig Default = new DefaultHareDuConfig();
     }
 }

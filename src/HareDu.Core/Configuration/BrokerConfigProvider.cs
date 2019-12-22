@@ -11,21 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Configuration
+namespace HareDu.Core.Configuration
 {
     using System;
     using System.IO;
     using System.Threading;
-    using Core.Configuration;
-    using Core.Extensions;
+    using Extensions;
 
-    public class BrokerClientConfigProvider :
-        IBrokerClientConfigProvider
+    public class BrokerConfigProvider :
+        IBrokerConfigProvider
     {
         readonly IConfigurationProvider _configurationProvider;
         readonly string _path;
 
-        public BrokerClientConfigProvider(IConfigurationProvider configurationProvider)
+        public BrokerConfigProvider(IConfigurationProvider configurationProvider)
         {
             _configurationProvider = configurationProvider;
             _path = $"{Directory.GetCurrentDirectory()}/config.yaml";
@@ -45,20 +44,20 @@ namespace HareDu.Configuration
                 return settings;
             
             if (_configurationProvider.TryGet(_path, out HareDuConfig config))
-                return Validate(config.Broker) ? config.Broker : BrokerObjectConfigCache.Default;
+                return Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
 
-            return BrokerObjectConfigCache.Default;
+            return ConfigCache.Default.Broker;
         }
 
         public bool TryGet(out BrokerConfig settings)
         {
             if (_configurationProvider.TryGet(_path, out HareDuConfig config))
             {
-                settings = Validate(config.Broker) ? config.Broker : BrokerObjectConfigCache.Default;
+                settings = Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
                 return true;
             }
 
-            settings = BrokerObjectConfigCache.Default;
+            settings = ConfigCache.Default.Broker;
             return true;
         }
 

@@ -16,7 +16,7 @@ namespace HareDu.Core.Internal
     using System;
     using Configuration;
 
-    public class DefaultHareDuConfig :
+    class DefaultHareDuConfig :
         HareDuConfig
     {
         public DefaultHareDuConfig()
@@ -26,7 +26,6 @@ namespace HareDu.Core.Internal
         }
 
         public BrokerConfig Broker { get; }
-        public bool OverrideAnalyzerConfig { get; }
         public DiagnosticAnalyzerConfig Analyzer { get; }
 
         

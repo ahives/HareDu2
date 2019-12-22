@@ -31,7 +31,7 @@ namespace HareDu.Core.Configuration
 
             if (!File.Exists(path))
             {
-                config = DiagnosticAnalyzerConfigCache.Default;
+                config = ConfigCache.Default;
                 return true;
             }
 
@@ -48,7 +48,7 @@ namespace HareDu.Core.Configuration
             }
             catch (Exception e)
             {
-                config = DiagnosticAnalyzerConfigCache.Default;
+                config = ConfigCache.Default;
                 return true;
             }
         }

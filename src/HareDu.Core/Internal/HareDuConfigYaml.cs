@@ -13,16 +13,12 @@
 // limitations under the License.
 namespace HareDu.Core.Internal
 {
-    using Configuration;
     using YamlDotNet.Serialization;
 
     class HareDuConfigYaml
     {
         [YamlMember(Alias = "broker")]
         public RabbitMqBrokerConfigYaml Broker { get; set; }
-
-        [YamlMember(Alias = "test")]
-        public bool OverrideAnalyzerConfig { get; set; }
 
         [YamlMember(Alias = "analyzer")]
         public DiagnosticAnalyzerConfigYaml Analyzer { get; set; }

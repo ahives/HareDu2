@@ -16,24 +16,24 @@ namespace HareDu
     using System;
     using System.Runtime.Serialization;
 
-    public class HareDuResourceInitException :
+    public class HareDuBrokerObjectInitException :
         Exception
     {
-        public HareDuResourceInitException()
+        public HareDuBrokerObjectInitException()
         {
         }
 
-        protected HareDuResourceInitException(SerializationInfo info, StreamingContext context)
+        protected HareDuBrokerObjectInitException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
 
-        public HareDuResourceInitException(string message)
+        public HareDuBrokerObjectInitException(string message)
             : base(message)
         {
         }
 
-        public HareDuResourceInitException(string message, Exception innerException)
+        public HareDuBrokerObjectInitException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

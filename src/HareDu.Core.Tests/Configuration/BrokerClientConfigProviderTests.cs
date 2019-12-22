@@ -11,9 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Tests
+namespace HareDu.Core.Tests.Configuration
 {
-    using Configuration;
     using Core.Configuration;
     using NUnit.Framework;
     using Shouldly;
@@ -22,10 +21,10 @@ namespace HareDu.Tests
     public class BrokerClientConfigProviderTests
     {
         [Test]
-        public void Test()
+        public void Verify_can_programmatically_initialize_client_api()
         {
             var configProvider = new ConfigurationProvider();
-            var provider = new BrokerClientConfigProvider(configProvider);
+            var provider = new BrokerConfigProvider(configProvider);
             var settings = provider.Init(x =>
             {
                 x.ConnectTo("http://localhost:15670");
@@ -39,10 +38,10 @@ namespace HareDu.Tests
         }
         
         [Test]
-        public void Test1()
+        public void Verify_can_initialize_client_api_via_config_file()
         {
             var configProvider = new ConfigurationProvider();
-            var provider = new BrokerClientConfigProvider(configProvider);
+            var provider = new BrokerConfigProvider(configProvider);
             var settings = provider.Init(x =>
             {
             });

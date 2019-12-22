@@ -41,7 +41,7 @@ namespace HareDu
                 .FirstOrDefault(IsNotFakeType<T>);
 
             if (type == null)
-                throw new HareDuResourceInitException($"Failed to find implementation class for interface {typeof(T)}");
+                throw new HareDuBrokerObjectInitException($"Failed to find implementation class for interface {typeof(T)}");
 
             if (_cache.ContainsKey(type.FullName))
                 return (T)_cache[type.FullName];

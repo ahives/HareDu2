@@ -17,8 +17,6 @@ namespace HareDu.Core.Configuration
     {
         BrokerConfig Broker { get; }
         
-        bool OverrideAnalyzerConfig { get; }
-        
         DiagnosticAnalyzerConfig Analyzer { get; }
     }
 }

@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu.Core.Configuration
 {
-    using Internal;
+    using System;
 
-    public static class DiagnosticAnalyzerConfigCache
+    public interface IBrokerConfigProvider
     {
-        public static readonly HareDuConfig Default = new DefaultHareDuConfig();
+        BrokerConfig Init(Action<ClientConfigProvider> configuration);
+
+        bool TryGet(out BrokerConfig settings);
     }
 }

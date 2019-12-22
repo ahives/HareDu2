@@ -14,7 +14,6 @@
 namespace HareDu.AutofacIntegration
 {
     using Autofac;
-    using Configuration;
     using Core;
     using Core.Configuration;
     using Registration;
@@ -29,7 +28,7 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var registration = x.Resolve<IBrokerObjectRegistration>();
-                    var settingsProvider = x.Resolve<IBrokerClientConfigProvider>();
+                    var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var brokerConnection = x.Resolve<IBrokerConnectionClient>();
 
                     if (!settingsProvider.TryGet(out BrokerConfig settings))
@@ -68,8 +67,8 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerConnectionClient>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerClientConfigProvider>()
-                .As<IBrokerClientConfigProvider>()
+            builder.RegisterType<BrokerConfigProvider>()
+                .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
             builder.RegisterType<ConfigurationProvider>()

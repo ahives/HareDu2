@@ -17,7 +17,6 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
-    using Configuration;
     using Core;
     using Core.Configuration;
     using Core.Extensions;
@@ -68,7 +67,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var registration = new BrokerObjectRegistration();
             var configProvider = new ConfigurationProvider();
-            var provider = new BrokerClientConfigProvider(configProvider);
+            var provider = new BrokerConfigProvider(configProvider);
             var settings = provider.Init(x => { });
             var connectionClient = new BrokerConnectionClient();
             var client = connectionClient.Create(settings);
