@@ -17,11 +17,11 @@ namespace HareDu.Diagnostics.Registration
     using System.Collections.Generic;
     using Analyzers;
 
-    public interface IComponentDiagnosticRegistration
+    public interface IComponentDiagnosticRegistry
     {
         IReadOnlyList<Type> Types { get; }
         
-        IDictionary<string, object> Cache { get; }
+        IDictionary<string, object> ObjectCache { get; }
 
         void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
 

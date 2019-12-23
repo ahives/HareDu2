@@ -62,9 +62,9 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
             diagnosticsRegistrar.RegisterAll(_analyzers);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
 
             factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
             diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
@@ -82,9 +82,9 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_TryGet_does_not_throw()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
             diagnosticsRegistrar.RegisterAll(_analyzers);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
 
             factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
             diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier());
@@ -93,11 +93,11 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic_after_instantiation()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistration();
+            var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
             diagnosticsRegistrar.RegisterAll(_analyzers);
             diagnosticsRegistrar.Register<FakeDiagnostic>(_analyzers);
 
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.Cache, diagnosticsRegistrar.Types, _analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);

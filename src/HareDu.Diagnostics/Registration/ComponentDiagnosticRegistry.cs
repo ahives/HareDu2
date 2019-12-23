@@ -19,16 +19,16 @@ namespace HareDu.Diagnostics.Registration
     using Analyzers;
     using Scanning;
 
-    public class ComponentDiagnosticRegistration :
-        IComponentDiagnosticRegistration
+    public class ComponentDiagnosticRegistry :
+        IComponentDiagnosticRegistry
     {
         readonly List<Type> _types;
         readonly IDictionary<string, object> _cache;
 
         public IReadOnlyList<Type> Types => _types;
-        public IDictionary<string, object> Cache => _cache;
+        public IDictionary<string, object> ObjectCache => _cache;
 
-        public ComponentDiagnosticRegistration()
+        public ComponentDiagnosticRegistry()
         {
             _cache = new Dictionary<string, object>();
             _types = GetTypes();

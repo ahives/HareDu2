@@ -28,30 +28,35 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var configProvider = x.Resolve<IConfigurationProvider>();
-                    var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
-
-                    var analyzerRegistration = x.Resolve<IDiagnosticAnalyzerRegistration>();
-
-                    string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+                    var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
                     
-                    analyzerRegistration.RegisterAll(path, configProvider, knowledgeBaseProvider);
+                    analyzerRegistry.RegisterAll();
 
-                    var diagnosticRegistration = x.Resolve<IComponentDiagnosticRegistration>();
+                    var diagnosticRegistry = x.Resolve<IComponentDiagnosticRegistry>();
                     
-                    diagnosticRegistration.RegisterAll(analyzerRegistration.Analyzers);
+                    diagnosticRegistry.RegisterAll(analyzerRegistry.ObjectCache);
 
-                    return new ComponentDiagnosticFactory(diagnosticRegistration.Cache, diagnosticRegistration.Types, analyzerRegistration.Analyzers);
+                    return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
                 })
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<ComponentDiagnosticRegistration>()
-                .As<IComponentDiagnosticRegistration>()
+            builder.Register(x =>
+                {
+                    var configProvider = x.Resolve<IConfigurationProvider>();
+                    string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+
+                    configProvider.TryGet(path, out var config);
+
+                    var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
+                    
+                    return new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+                })
+                .As<IDiagnosticAnalyzerRegistry>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticAnalyzerRegistration>()
-                .As<IDiagnosticAnalyzerRegistration>()
+            builder.RegisterType<ComponentDiagnosticRegistry>()
+                .As<IComponentDiagnosticRegistry>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()

@@ -11,17 +11,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Registration
+namespace HareDu.Diagnostics.Tests
 {
-    using System.Collections.Generic;
-    using Analyzers;
-    using Core.Configuration;
-    using KnowledgeBase;
+    using System.Reflection;
+    using NUnit.Framework;
+    using Registration;
+    using Shouldly;
 
-    public interface IDiagnosticAnalyzerRegistration
+    [TestFixture]
+    public class ComponentDiagnosticRegistryTests
     {
-        IReadOnlyList<IDiagnosticAnalyzer> Analyzers { get; }
-        
-        void RegisterAll(string path, IConfigurationProvider configProvider, IKnowledgeBaseProvider knowledgeBaseProvider);
+        [Test]
+        public void Test1()
+        {
+            var registry = new ComponentDiagnosticRegistry();
+
+            Should.Throw<TargetInvocationException>(() => registry.RegisterAll(null));
+        }
+
+        [Test]
+        public void Test2()
+        {
+        }
     }
 }
