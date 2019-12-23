@@ -18,15 +18,15 @@ namespace HareDu.Analytics.Registration
     using System.Linq;
     using Diagnostics;
 
-    public class AnalyticsRegistration :
-        IAnalyticsRegistration
+    public class AnalyticsRegistry :
+        IAnalyticsRegistry
     {
         readonly List<Type> _types;
         readonly IDictionary<string, IDiagnosticReportAnalyzer> _cache;
 
         public IDictionary<string, IDiagnosticReportAnalyzer> Cache => _cache;
 
-        public AnalyticsRegistration()
+        public AnalyticsRegistry()
         {
             _cache = new Dictionary<string, IDiagnosticReportAnalyzer>();
             _types = GetTypes();

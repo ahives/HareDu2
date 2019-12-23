@@ -51,7 +51,7 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IAnalyticsRegistration>();
+                    var registrar = x.Resolve<IAnalyticsRegistry>();
                     
                     registrar.RegisterAll();
                     
@@ -60,8 +60,8 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticReportAnalyzerFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<AnalyticsRegistration>()
-                .As<IAnalyticsRegistration>()
+            builder.RegisterType<AnalyticsRegistry>()
+                .As<IAnalyticsRegistry>()
                 .SingleInstance();
 
             builder.RegisterType<ComponentDiagnosticRegistration>()

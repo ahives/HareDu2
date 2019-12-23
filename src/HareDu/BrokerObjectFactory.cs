@@ -25,32 +25,32 @@ namespace HareDu
         IBrokerObjectFactory
     {
         readonly HttpClient _client;
-        readonly IDictionary<string, object> _brokerObjectCache;
+        readonly IDictionary<string, object> _objectCache;
 
-        public BrokerObjectFactory(HttpClient client, IDictionary<string, object> brokerObjectCache)
+        public BrokerObjectFactory(HttpClient client, IDictionary<string, object> objectCache)
         {
-            _brokerObjectCache = brokerObjectCache;
+            _objectCache = objectCache;
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public BrokerObjectFactory(HttpClient client, IBrokerObjectRegistration registrar)
+        public BrokerObjectFactory(HttpClient client, IBrokerObjectRegistry registrar)
         {
             _client = client;
             
             registrar.RegisterAll(client);
 
-            _brokerObjectCache = registrar.Cache;
+            _objectCache = registrar.ObjectCache;
         }
 
         public BrokerObjectFactory(HttpClient client)
         {
             _client = client;
             
-            IBrokerObjectRegistration registrar = new BrokerObjectRegistration();
+            IBrokerObjectRegistry registrar = new BrokerObjectRegistry();
             
             registrar.RegisterAll(client);
 
-            _brokerObjectCache = registrar.Cache;
+            _objectCache = registrar.ObjectCache;
         }
 
         public T Object<T>()
@@ -64,12 +64,12 @@ namespace HareDu
             if (type == null)
                 throw new HareDuBrokerObjectInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_brokerObjectCache.ContainsKey(type.FullName))
-                return (T)_brokerObjectCache[type.FullName];
+            if (_objectCache.ContainsKey(type.FullName))
+                return (T)_objectCache[type.FullName];
             
             var instance = (T)Activator.CreateInstance(type, _client);
 
-            _brokerObjectCache.Add(type.FullName, instance);
+            _objectCache.Add(type.FullName, instance);
             
             return instance;
         }

@@ -65,7 +65,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [Test]
         public async Task Should_be_able_to_get_all_exchanges2()
         {
-            var registration = new BrokerObjectRegistration();
+            var registration = new BrokerObjectRegistry();
             var configProvider = new ConfigurationProvider();
             var provider = new BrokerConfigProvider(configProvider);
             var settings = provider.Init(x => { });
@@ -74,7 +74,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
 
             registration.RegisterAll(client);
             
-            var factory = new BrokerObjectFactory(client, registration.Cache);
+            var factory = new BrokerObjectFactory(client, registration.ObjectCache);
             
             var result = await factory
                 .Object<Exchange>()

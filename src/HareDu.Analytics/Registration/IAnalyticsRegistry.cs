@@ -11,15 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Registration
+namespace HareDu.Analytics.Registration
 {
+    using System;
     using System.Collections.Generic;
-    using System.Net.Http;
 
-    public interface IBrokerObjectRegistration
+    public interface IAnalyticsRegistry
     {
-        IDictionary<string, object> Cache { get; }
+        IDictionary<string, IDiagnosticReportAnalyzer> Cache { get; }
+        
+        void RegisterAll();
 
-        void RegisterAll(HttpClient client);
+        void Register(Type type);
     }
 }

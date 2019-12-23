@@ -28,7 +28,7 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var registration = x.Resolve<IBrokerObjectRegistration>();
+                    var registration = x.Resolve<IBrokerObjectRegistry>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var connection = x.Resolve<IBrokerConnectionClient>();
 
@@ -40,7 +40,7 @@ namespace HareDu.Tests
 
                     registration.RegisterAll(client);
 
-                    return new BrokerObjectFactory(client, registration.Cache);
+                    return new BrokerObjectFactory(client, registration.ObjectCache);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -49,8 +49,8 @@ namespace HareDu.Tests
                 .As<IBrokerConnectionClient>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerObjectRegistration>()
-                .As<IBrokerObjectRegistration>()
+            builder.RegisterType<BrokerObjectRegistry>()
+                .As<IBrokerObjectRegistry>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()
@@ -70,7 +70,7 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var registration = x.Resolve<IBrokerObjectRegistration>();
+                    var registration = x.Resolve<IBrokerObjectRegistry>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var connection = x.Resolve<IBrokerConnectionClient>();
 
@@ -82,7 +82,7 @@ namespace HareDu.Tests
 
                     registration.RegisterAll(client);
 
-                    return new BrokerObjectFactory(client, registration.Cache);
+                    return new BrokerObjectFactory(client, registration.ObjectCache);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -91,8 +91,8 @@ namespace HareDu.Tests
                 .As<IBrokerConnectionClient>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerObjectRegistration>()
-                .As<IBrokerObjectRegistration>()
+            builder.RegisterType<BrokerObjectRegistry>()
+                .As<IBrokerObjectRegistry>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()

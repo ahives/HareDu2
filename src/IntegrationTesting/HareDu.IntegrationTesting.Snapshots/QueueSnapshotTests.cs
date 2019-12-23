@@ -61,15 +61,15 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerConnectionClient();
                 var client = comm.Create(config.Broker);
 
-                var brokerObjectRegistrar = new BrokerObjectRegistration();
+                var brokerObjectRegistrar = new BrokerObjectRegistry();
                 brokerObjectRegistrar.RegisterAll(client);
 
-                var registration = new SnapshotRegistration();
-                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar.Cache);
+                var registration = new SnapshotObjectRegistry();
+                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar.ObjectCache);
 
                 registration.RegisterAll(brokerFactory);
 
-                var factory = new SnapshotFactory(brokerFactory, registration.Cache);
+                var factory = new SnapshotFactory(brokerFactory, registration.ObjectCache);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()
@@ -88,11 +88,11 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerConnectionClient();
                 var client = comm.Create(config.Broker);
 
-                var brokerObjectRegistrar = new BrokerObjectRegistration();
+                var brokerObjectRegistrar = new BrokerObjectRegistry();
                 brokerObjectRegistrar.RegisterAll(client);
 
-                var registration = new SnapshotRegistration();
-                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar.Cache);
+                var registration = new SnapshotObjectRegistry();
+                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar.ObjectCache);
 
                 registration.RegisterAll(brokerFactory);
 

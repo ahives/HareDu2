@@ -25,43 +25,43 @@ namespace HareDu.Snapshotting
         ISnapshotFactory
     {
         readonly IBrokerObjectFactory _factory;
-        readonly IDictionary<string, object> _snapshotCache;
+        readonly IDictionary<string, object> _objectCache;
 
-        public SnapshotFactory(IBrokerObjectFactory factory, IDictionary<string, object> snapshotCache)
+        public SnapshotFactory(IBrokerObjectFactory factory, IDictionary<string, object> objectCache)
         {
             _factory = factory;
-            _snapshotCache = snapshotCache;
+            _objectCache = objectCache;
         }
 
-        public SnapshotFactory(IBrokerObjectFactory factory, ISnapshotRegistration registrar)
+        public SnapshotFactory(IBrokerObjectFactory factory, ISnapshotObjectRegistry registry)
         {
             _factory = factory;
 
-            registrar.RegisterAll(factory);
+            registry.RegisterAll(factory);
             
-            _snapshotCache = registrar.Cache;
+            _objectCache = registry.ObjectCache;
         }
 
         public SnapshotFactory(IBrokerObjectFactory factory)
         {
             _factory = factory;
             
-            ISnapshotRegistration registrar = new SnapshotRegistration();
+            ISnapshotObjectRegistry registry = new SnapshotObjectRegistry();
             
-            registrar.RegisterAll(factory);
+            registry.RegisterAll(factory);
 
-            _snapshotCache = registrar.Cache;
+            _objectCache = registry.ObjectCache;
         }
 
         public SnapshotFactory(HttpClient client)
         {
             _factory = new BrokerObjectFactory(client);
             
-            ISnapshotRegistration registrar = new SnapshotRegistration();
+            ISnapshotObjectRegistry registry = new SnapshotObjectRegistry();
             
-            registrar.RegisterAll(_factory);
+            registry.RegisterAll(_factory);
 
-            _snapshotCache = registrar.Cache;
+            _objectCache = registry.ObjectCache;
         }
 
         public SnapshotFactory(Action<ClientConfigProvider> config)
@@ -72,11 +72,11 @@ namespace HareDu.Snapshotting
             
             _factory = new BrokerObjectFactory(comm.Create(settings));
             
-            ISnapshotRegistration registrar = new SnapshotRegistration();
+            ISnapshotObjectRegistry registry = new SnapshotObjectRegistry();
             
-            registrar.RegisterAll(_factory);
+            registry.RegisterAll(_factory);
 
-            _snapshotCache = registrar.Cache;
+            _objectCache = registry.ObjectCache;
         }
 
         public SnapshotFactory()
@@ -89,11 +89,11 @@ namespace HareDu.Snapshotting
             
             _factory = new BrokerObjectFactory(comm.Create(settings));
             
-            ISnapshotRegistration registrar = new SnapshotRegistration();
+            ISnapshotObjectRegistry registrar = new SnapshotObjectRegistry();
             
             registrar.RegisterAll(_factory);
 
-            _snapshotCache = registrar.Cache;
+            _objectCache = registrar.ObjectCache;
         }
 
         public T Snapshot<T>()
@@ -107,12 +107,12 @@ namespace HareDu.Snapshotting
             if (type == null)
                 throw new HareDuSnapshotInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_snapshotCache.ContainsKey(type.FullName))
-                return (T)_snapshotCache[type.FullName];
+            if (_objectCache.ContainsKey(type.FullName))
+                return (T)_objectCache[type.FullName];
 
             var instance = Activator.CreateInstance(type, _factory);
 
-            _snapshotCache.Add(type.FullName, instance);
+            _objectCache.Add(type.FullName, instance);
             
             return (T)instance;
         }

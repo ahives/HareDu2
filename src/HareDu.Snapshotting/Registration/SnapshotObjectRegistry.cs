@@ -11,42 +11,36 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Registration
+namespace HareDu.Snapshotting.Registration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
-    using Core;
-    using Core.Testing;
 
-    public class BrokerObjectRegistration :
-        IBrokerObjectRegistration
+    public class SnapshotObjectRegistry :
+        ISnapshotObjectRegistry
     {
-        readonly IDictionary<string, object> _cache;
+        readonly Dictionary<string, object> _objectCache;
 
-        public IDictionary<string, object> Cache => _cache;
+        public IDictionary<string, object> ObjectCache => _objectCache;
 
-        public BrokerObjectRegistration()
+        public SnapshotObjectRegistry()
         {
-            _cache = new Dictionary<string, object>();
+            _objectCache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(HttpClient client)
+        public void RegisterAll(IBrokerObjectFactory factory)
         {
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(ResourceSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {
-                if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null)
-                    continue;
+                var instance = Activator.CreateInstance(type, factory);
                 
-                var resource = Activator.CreateInstance(type, client);
-                
-                _cache.Add(type.FullName, resource);
+                _objectCache.Add(type.FullName, instance);
             }
         }
     }
