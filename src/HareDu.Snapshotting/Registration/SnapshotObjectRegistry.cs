@@ -20,13 +20,13 @@ namespace HareDu.Snapshotting.Registration
     public class SnapshotObjectRegistry :
         ISnapshotObjectRegistry
     {
-        readonly Dictionary<string, object> _objectCache;
+        readonly Dictionary<string, object> _cache;
 
-        public IDictionary<string, object> ObjectCache => _objectCache;
+        public IDictionary<string, object> ObjectCache => _cache;
 
         public SnapshotObjectRegistry()
         {
-            _objectCache = new Dictionary<string, object>();
+            _cache = new Dictionary<string, object>();
         }
 
         public void RegisterAll(IBrokerObjectFactory factory)
@@ -40,8 +40,31 @@ namespace HareDu.Snapshotting.Registration
             {
                 var instance = Activator.CreateInstance(type, factory);
                 
-                _objectCache.Add(type.FullName, instance);
+                _cache.Add(type.FullName, instance);
             }
+        }
+
+        public void Register(IBrokerObjectFactory factory, Type type)
+        {
+            try
+            {
+                var instance = Activator.CreateInstance(type, factory);
+            
+                _cache.Add(type.FullName, instance);
+            }
+            catch { }
+        }
+
+        public void Register<T>(IBrokerObjectFactory factory)
+        {
+            try
+            {
+                Type type = typeof(T);
+                var instance = Activator.CreateInstance(type, factory);
+            
+                _cache.Add(type.FullName, instance);
+            }
+            catch { }
         }
     }
 }

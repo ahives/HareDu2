@@ -44,10 +44,33 @@ namespace HareDu.Registration
                 if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null)
                     continue;
                 
-                var resource = Activator.CreateInstance(type, client);
+                var instance = Activator.CreateInstance(type, client);
                 
-                _cache.Add(type.FullName, resource);
+                _cache.Add(type.FullName, instance);
             }
+        }
+
+        public void Register(HttpClient client, Type type)
+        {
+            try
+            {
+                var instance = Activator.CreateInstance(type, client);
+            
+                _cache.Add(type.FullName, instance);
+            }
+            catch { }
+        }
+
+        public void Register<T>(HttpClient client)
+        {
+            try
+            {
+                Type type = typeof(T);
+                var instance = Activator.CreateInstance(type, client);
+            
+                _cache.Add(type.FullName, instance);
+            }
+            catch { }
         }
     }
 }

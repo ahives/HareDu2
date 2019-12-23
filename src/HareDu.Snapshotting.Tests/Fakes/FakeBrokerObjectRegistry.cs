@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
+    using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using HareDu.Registration;
@@ -34,6 +35,16 @@ namespace HareDu.Snapshotting.Tests.Fakes
         {
             _cache.Add(typeof(FakeNodeObject).FullName, new FakeNodeObject());
             _cache.Add(typeof(FakeSystemOverviewObject).FullName, new FakeSystemOverviewObject());
+        }
+
+        public void Register(HttpClient client, Type type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Register<T>(HttpClient client)
+        {
+            throw new NotImplementedException();
         }
     }
 }

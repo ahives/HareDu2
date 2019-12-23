@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
+    using System;
     using System.Collections.Generic;
     using Registration;
 
@@ -31,6 +32,16 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public void RegisterAll(IBrokerObjectFactory factory)
         {
             _cache.Add(typeof(FakeCluster).FullName, new FakeCluster());
+        }
+
+        public void Register(IBrokerObjectFactory factory, Type type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Register<T>(IBrokerObjectFactory factory)
+        {
+            throw new NotImplementedException();
         }
     }
 }

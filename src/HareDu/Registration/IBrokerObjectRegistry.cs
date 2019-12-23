@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Registration
 {
+    using System;
     using System.Collections.Generic;
     using System.Net.Http;
 
@@ -21,5 +22,9 @@ namespace HareDu.Registration
         IDictionary<string, object> ObjectCache { get; }
 
         void RegisterAll(HttpClient client);
+
+        void Register(HttpClient client, Type type);
+
+        void Register<T>(HttpClient client);
     }
 }
