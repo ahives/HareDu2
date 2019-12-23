@@ -15,11 +15,16 @@ var solutionInfo = "./src/HareDu/SolutionVersion.cs";
 
 var solution = "./src/HareDu.sln";
 var buildPath = (DirectoryPath)(Directory("./src/HareDu/bin") + Directory(configuration));
+var coreBuildPath = (DirectoryPath)(Directory("./src/HareDu.Core/bin") + Directory(configuration));
+var snapshottingBuildPath = (DirectoryPath)(Directory("./src/HareDu.Snapshotting/bin") + Directory(configuration));
+var coreSnapshottingBuildPath = (DirectoryPath)(Directory("./src/HareDu.Snapshotting/bin") + Directory(configuration));
+// var coreBuildPath = (DirectoryPath)(Directory("./src/HareDu/bin") + Directory(configuration));
 var artifactsBasePath = (DirectoryPath)Directory("./artifacts");
 var baseBinPath = artifactsBasePath.Combine("bin");
-var bin452Path = baseBinPath.Combine("lib/net452");
+var bin462Path = baseBinPath.Combine("lib/net462");
+var binCorePath = baseBinPath.Combine("lib/netstandard2.0");
 var nugetPath = artifactsBasePath.Combine("nuget");
-var bin452FullPath = MakeAbsolute(bin452Path).FullPath;
+var bin462FullPath = MakeAbsolute(bin462Path).FullPath;
 
 TaskSetup(context =>
     {
@@ -82,12 +87,22 @@ Task("Copy-Build-Artifacts")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        EnsureDirectoryExists(bin452Path);
+        EnsureDirectoryExists(bin462Path);
 
-        CopyFiles(string.Format("{0}/*.dll", buildPath.ToString()), bin452Path);
-        CopyFiles(string.Format("{0}/*.pdb", buildPath.ToString()), bin452Path);
-        CopyFiles(string.Format("{0}/*.xml", buildPath.ToString()), bin452Path);
-        CopyFiles(string.Format("{0}/*.config", buildPath.ToString()), bin452Path);
+        CopyFiles(string.Format("{0}/net462/*.dll", snapshottingBuildPath.ToString()), bin462Path);
+        CopyFiles(string.Format("{0}/net462/*.pdb", snapshottingBuildPath.ToString()), bin462Path);
+        CopyFiles(string.Format("{0}/net462/*.xml", snapshottingBuildPath.ToString()), bin462Path);
+        CopyFiles(string.Format("{0}/net462/*.yaml", snapshottingBuildPath.ToString()), bin462Path);
+        CopyFiles(string.Format("{0}/net462/*.config", snapshottingBuildPath.ToString()), bin462Path);
+
+        EnsureDirectoryExists(binCorePath);
+
+        CopyFiles(string.Format("{0}/netstandard2.0/*.dll", coreBuildPath.ToString()), binCorePath);
+        CopyFiles(string.Format("{0}/netstandard2.0/*.pdb", coreBuildPath.ToString()), binCorePath);
+        CopyFiles(string.Format("{0}/netstandard2.0/*.xml", coreBuildPath.ToString()), binCorePath);
+        CopyFiles(string.Format("{0}/netstandard2.0/*.yaml", coreBuildPath.ToString()), binCorePath);
+        CopyFiles(string.Format("{0}/netstandard2.0/*.config", coreBuildPath.ToString()), binCorePath);
+        
         CopyFileToDirectory("license", artifactsBasePath);
     });
 
@@ -96,7 +111,16 @@ Task("Create-NuGet-Package")
     .IsDependentOn("Copy-Build-Artifacts")
     .Does(() =>
     {
-        var files = GetFiles(bin452Path.ToString());
+        var nuGetPackSettings = new NuGetPackSettings
+            {
+                OutputDirectory = rootAbsoluteDir + @"\artifacts\",
+                IncludeReferencedProjects = true,
+                Properties = new Dictionary<string, string>
+                {
+                    { "Configuration", "Release" }
+                }
+            };
+        var files = GetFiles(bin462Path.ToString());
         var nuspecBasePath = new DirectoryPath("./artifacts/nuspec");
         //var nuspec = string.Format("{0}.nuspec", product);
         var nuspec = "HareDu.nuspec";
@@ -114,10 +138,10 @@ Task("Create-NuGet-Package")
             ProjectUrl = new Uri("http://github.com/ahives/HareDu2"),
             LicenseUrl = new Uri("http://www.apache.org/licenses/LICENSE-2.0"),
             Owners = new []{"Albert L. Hives"},
-            Authors = new []{"Albert L. Hives", "Chris Patterson"},
+            Authors = new []{"Albert L. Hives"},
             Dependencies = new []
             {
-                new NuSpecDependency { Id = "Newtonsoft.Json", Version = "11.0.2" }
+                new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.2" }
             },
             Version = assemblyInfo.AssemblyVersion,
             BasePath = bin452Path,

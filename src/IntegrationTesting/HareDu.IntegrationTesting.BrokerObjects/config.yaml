@@ -3,7 +3,7 @@
       url:  http://localhost:15672
       username: guest
       password: guest
-  analyzer:
+  diagnostics:
     high-closure-rate-warning-threshold:  90
     high-creation-rate-warning-threshold: 60
     queue-high-flow-threshold:  90

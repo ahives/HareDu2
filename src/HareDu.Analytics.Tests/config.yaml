@@ -1,12 +1,13 @@
 ---
-  override-analyzer-config: true
-
-analyzer:
+broker:
+  url:  http://localhost:15672
+  username: guest
+  password: guest
+diagnostics:
   high-closure-rate-warning-threshold: 90
   high-creation-rate-warning-threshold: 90
   runtime-process-usage-coefficient: 0.7
   file-descriptor-usage-warning-coefficient: 0.7
   socket-usage-coefficient: 0.5
   message-redelivery-coefficient: 0.5
-
 ...

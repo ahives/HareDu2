@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Analyzers
 {
     using System;
     using System.Collections.Generic;
-    using Core.Configuration;
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticAnalyzer :

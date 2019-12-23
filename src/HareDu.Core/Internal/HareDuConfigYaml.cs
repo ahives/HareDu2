@@ -20,7 +20,7 @@ namespace HareDu.Core.Internal
         [YamlMember(Alias = "broker")]
         public RabbitMqBrokerConfigYaml Broker { get; set; }
 
-        [YamlMember(Alias = "analyzer")]
+        [YamlMember(Alias = "diagnostics")]
         public DiagnosticAnalyzerConfigYaml Analyzer { get; set; }
     }
 }
