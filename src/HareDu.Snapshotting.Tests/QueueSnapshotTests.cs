@@ -16,6 +16,8 @@ namespace HareDu.Snapshotting.Tests
     using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
+    using Core;
+    using Core.Configuration;
     using Fakes;
     using HareDu.Registration;
     using HareDu.Testing.Fakes;

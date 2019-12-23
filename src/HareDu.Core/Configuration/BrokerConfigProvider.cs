@@ -33,20 +33,19 @@ namespace HareDu.Core.Configuration
         public BrokerConfig Init(Action<ClientConfigProvider> configuration)
         {
             if (configuration == null)
-                throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+            {
+                if (_configurationProvider.TryGet(_path, out HareDuConfig config))
+                    return Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
 
+                return ConfigCache.Default.Broker;
+            }
+            
             var init = new ClientConfigProviderImpl();
             configuration(init);
 
             BrokerConfig settings = init.Settings.Value;
 
-            if (Validate(settings))
-                return settings;
-            
-            if (_configurationProvider.TryGet(_path, out HareDuConfig config))
-                return Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
-
-            return ConfigCache.Default.Broker;
+            return Validate(settings) ? settings : ConfigCache.Default.Broker;
         }
 
         public bool TryGet(out BrokerConfig settings)

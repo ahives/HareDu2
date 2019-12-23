@@ -40,7 +40,7 @@ namespace HareDu.Tests
 
                     registration.RegisterAll(client);
 
-                    return new BrokerObjectFactory(registration.Cache, client);
+                    return new BrokerObjectFactory(client, registration.Cache);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -82,7 +82,7 @@ namespace HareDu.Tests
 
                     registration.RegisterAll(client);
 
-                    return new BrokerObjectFactory(registration.Cache, client);
+                    return new BrokerObjectFactory(client, registration.Cache);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();

@@ -29,7 +29,6 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var configProvider = x.Resolve<IConfigurationProvider>();
-                    
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
                     var analyzerRegistration = x.Resolve<IDiagnosticAnalyzerRegistration>();

@@ -38,7 +38,7 @@ namespace HareDu.AutofacIntegration
 
                     registration.RegisterAll(client);
 
-                    return new BrokerObjectFactory(registration.Cache, client);
+                    return new BrokerObjectFactory(client, registration.Cache);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();

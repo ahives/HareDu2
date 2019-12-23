@@ -74,7 +74,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
 
             registration.RegisterAll(client);
             
-            var factory = new BrokerObjectFactory(registration.Cache, client);
+            var factory = new BrokerObjectFactory(client, registration.Cache);
             
             var result = await factory
                 .Object<Exchange>()

@@ -25,18 +25,18 @@ namespace HareDu.Core.Configuration
     {
         public bool TryGet(string path, out HareDuConfig config)
         {
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(new HyphenatedNamingConvention())
-                .Build();
-
-            if (!File.Exists(path))
-            {
-                config = ConfigCache.Default;
-                return true;
-            }
-
             try
             {
+                var deserializer = new DeserializerBuilder()
+                    .WithNamingConvention(new HyphenatedNamingConvention())
+                    .Build();
+
+                if (!File.Exists(path))
+                {
+                    config = ConfigCache.Default;
+                    return true;
+                }
+
                 using (var reader = File.OpenText(path))
                 {
                     var deserializedConfig = deserializer.Deserialize<HareDuConfigYaml>(reader);

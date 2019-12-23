@@ -18,4 +18,10 @@
       <ProjectReference Include="..\..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="config.yaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

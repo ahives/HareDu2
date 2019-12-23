@@ -33,7 +33,15 @@ namespace HareDu.Snapshotting.Exporters
 
         public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value)
         {
-            File.WriteAllText($"/Users/albert/Documents/snapshot_{value.Identifier}.json", value.ToJsonString());
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            
+            if (!File.Exists(path))
+            {
+                var directory = Directory.CreateDirectory(path);
+                
+                if (directory.Exists)
+                    File.WriteAllText($"{path}/snapshot_{value.Identifier}.json", value.ToJsonString());
+            }
         }
     }
 }

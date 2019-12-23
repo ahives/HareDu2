@@ -19,17 +19,38 @@ namespace HareDu
     using System.Net.Http;
     using Core;
     using Core.Testing;
+    using Registration;
 
     public class BrokerObjectFactory :
         IBrokerObjectFactory
     {
         readonly HttpClient _client;
-        readonly IDictionary<string, object> _cache;
+        readonly IDictionary<string, object> _brokerObjectCache;
 
-        public BrokerObjectFactory(IDictionary<string, object> cache, HttpClient client)
+        public BrokerObjectFactory(HttpClient client, IDictionary<string, object> brokerObjectCache)
         {
-            _cache = cache;
+            _brokerObjectCache = brokerObjectCache;
             _client = client ?? throw new ArgumentNullException(nameof(client));
+        }
+
+        public BrokerObjectFactory(HttpClient client, IBrokerObjectRegistration registrar)
+        {
+            _client = client;
+            
+            registrar.RegisterAll(client);
+
+            _brokerObjectCache = registrar.Cache;
+        }
+
+        public BrokerObjectFactory(HttpClient client)
+        {
+            _client = client;
+            
+            IBrokerObjectRegistration registrar = new BrokerObjectRegistration();
+            
+            registrar.RegisterAll(client);
+
+            _brokerObjectCache = registrar.Cache;
         }
 
         public T Object<T>()
@@ -43,12 +64,12 @@ namespace HareDu
             if (type == null)
                 throw new HareDuBrokerObjectInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_cache.ContainsKey(type.FullName))
-                return (T)_cache[type.FullName];
+            if (_brokerObjectCache.ContainsKey(type.FullName))
+                return (T)_brokerObjectCache[type.FullName];
             
             var instance = (T)Activator.CreateInstance(type, _client);
 
-            _cache.Add(type.FullName, instance);
+            _brokerObjectCache.Add(type.FullName, instance);
             
             return instance;
         }
