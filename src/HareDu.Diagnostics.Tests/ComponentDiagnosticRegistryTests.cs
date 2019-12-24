@@ -14,6 +14,8 @@
 namespace HareDu.Diagnostics.Tests
 {
     using System.Reflection;
+    using Core.Configuration;
+    using KnowledgeBase;
     using NUnit.Framework;
     using Registration;
     using Shouldly;
@@ -21,15 +23,24 @@ namespace HareDu.Diagnostics.Tests
     [TestFixture]
     public class ComponentDiagnosticRegistryTests
     {
-        [Test]
+        [Test, Explicit]
         public void Test1()
         {
-            var registry = new ComponentDiagnosticRegistry();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            
+            var configProvider = new ConfigurationProvider();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
+            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+            diagnosticAnalyzerRegistry.RegisterAll();
+            
+            var registry = new ComponentDiagnosticRegistry(null);
 
-            Should.Throw<TargetInvocationException>(() => registry.RegisterAll(null));
+            Should.Throw<TargetInvocationException>(() => registry.RegisterAll());
         }
 
-        [Test]
+        [Test, Explicit]
         public void Test2()
         {
         }

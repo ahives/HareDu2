@@ -62,9 +62,20 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
-            diagnosticsRegistrar.RegisterAll(_analyzers);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
+            // string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            //
+            // var configProvider = new ConfigurationProvider();
+            // configProvider.TryGet(path, out HareDuConfig config);
+            //
+            // var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            // var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+            // diagnosticAnalyzerRegistry.RegisterAll();
+            //
+            // var diagnosticsRegistrar = new ComponentDiagnosticRegistry(diagnosticAnalyzerRegistry.ObjectCache);
+            // diagnosticsRegistrar.RegisterAll();
+            //
+            // var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
+            var factory = _container.Resolve<IComponentDiagnosticFactory>();
 
             factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
             diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
@@ -82,9 +93,10 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_TryGet_does_not_throw()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
-            diagnosticsRegistrar.RegisterAll(_analyzers);
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
+            // var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
+            // diagnosticsRegistrar.RegisterAll();
+            // var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
+            var factory = _container.Resolve<IComponentDiagnosticFactory>();
 
             factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
             diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier());
@@ -93,11 +105,20 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Verify_can_get_diagnostic_after_instantiation()
         {
-            var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
-            diagnosticsRegistrar.RegisterAll(_analyzers);
-            diagnosticsRegistrar.Register<FakeDiagnostic>(_analyzers);
+            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            
+            var configProvider = new ConfigurationProvider();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
+            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+            diagnosticAnalyzerRegistry.RegisterAll();
+            
+            var diagnosticRegistry = new ComponentDiagnosticRegistry(diagnosticAnalyzerRegistry.ObjectCache);
+            diagnosticRegistry.RegisterAll();
+            diagnosticRegistry.Register<FakeDiagnostic>();
 
-            var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, _analyzers);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);

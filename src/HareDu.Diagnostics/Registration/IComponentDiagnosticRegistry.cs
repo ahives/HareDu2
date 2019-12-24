@@ -23,8 +23,10 @@ namespace HareDu.Diagnostics.Registration
         
         IDictionary<string, object> ObjectCache { get; }
 
-        void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
+        void RegisterAll();
 
-        void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> analyzers);
+        void Register(Type type);
+
+        void Register<T>();
     }
 }

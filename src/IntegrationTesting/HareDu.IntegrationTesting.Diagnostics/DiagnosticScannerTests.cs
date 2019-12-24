@@ -35,7 +35,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         {
             var builder = new ContainerBuilder();
             
-            builder.RegisterModule<HareDuSnapshottingModule>();
+            // builder.RegisterModule<HareDuSnapshottingModule>();
             builder.RegisterModule<HareDuDiagnosticsModule>();
 
             _container = builder.Build();
@@ -47,6 +47,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var resource = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerConnection>()
 //                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
+                // .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Execute();
             
             var scanner = _container.Resolve<IDiagnosticScanner>();

@@ -31,12 +31,12 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
-                    
+
                     analyzerRegistry.RegisterAll();
 
                     var diagnosticRegistry = x.Resolve<IComponentDiagnosticRegistry>();
                     
-                    diagnosticRegistry.RegisterAll(analyzerRegistry.ObjectCache);
+                    diagnosticRegistry.RegisterAll();
 
                     return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
                 })
@@ -72,7 +72,14 @@ namespace HareDu.AutofacIntegration
                 .As<IAnalyticsRegistry>()
                 .SingleInstance();
 
-            builder.RegisterType<ComponentDiagnosticRegistry>()
+            builder.Register(x =>
+                {
+                    var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
+
+                    analyzerRegistry.RegisterAll();
+
+                    return new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                })
                 .As<IComponentDiagnosticRegistry>()
                 .SingleInstance();
 

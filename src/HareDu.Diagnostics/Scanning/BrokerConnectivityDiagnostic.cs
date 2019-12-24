@@ -28,11 +28,11 @@ namespace HareDu.Diagnostics.Scanning
         readonly IReadOnlyList<IDiagnosticAnalyzer> _connectionAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _connectivityAnalyzers;
 
-        public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> sensors)
+        public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
-            _connectionAnalyzers = sensors.Where(IsConnectionThroughputAnalyzer).ToList();
-            _channelAnalyzers = sensors.Where(IsChannelThroughputAnalyzer).ToList();
-            _connectivityAnalyzers = sensors.Where(IsConnectivityAnalyzer).ToList();
+            _connectionAnalyzers = analyzers.Where(IsConnectionThroughputAnalyzer).ToList();
+            _channelAnalyzers = analyzers.Where(IsChannelThroughputAnalyzer).ToList();
+            _connectivityAnalyzers = analyzers.Where(IsConnectivityAnalyzer).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(BrokerConnectivitySnapshot snapshot)

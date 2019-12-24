@@ -22,33 +22,51 @@ namespace HareDu.Diagnostics.Registration
     public class ComponentDiagnosticRegistry :
         IComponentDiagnosticRegistry
     {
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
         readonly List<Type> _types;
         readonly IDictionary<string, object> _cache;
 
         public IReadOnlyList<Type> Types => _types;
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public ComponentDiagnosticRegistry()
+        public ComponentDiagnosticRegistry(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
+            _analyzers = analyzers;
             _cache = new Dictionary<string, object>();
             _types = GetTypes();
         }
 
-        public void Register<T>(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public void RegisterAll()
         {
-            Type type = typeof(T);
+            for (int i = 0; i < _types.Count; i++)
+            {
+                if (_cache.ContainsKey(_types[i].GetIdentifier()))
+                    continue;
+                
+                RegisterInstance(_types[i]);
+            }
+        }
+
+        public void Register(Type type)
+        {
+            if (_cache.ContainsKey(type.GetIdentifier()))
+                return;
             
             _types.Add(type);
             
-            Register(type, analyzers);
+            RegisterInstance(type);
         }
 
-        public void RegisterAll(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public void Register<T>()
         {
-            foreach (var type in _types)
-            {
-                Register(type, analyzers);
-            }
+            Type type = typeof(T);
+
+            if (_cache.ContainsKey(type.GetIdentifier()))
+                return;
+            
+            _types.Add(type);
+            
+            RegisterInstance(type);
         }
 
         List<Type> GetTypes() =>
@@ -58,11 +76,11 @@ namespace HareDu.Diagnostics.Registration
                 .Where(IsComponentDiagnostic)
                 .ToList();
 
-        void Register(Type type, IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        void RegisterInstance(Type type)
         {
             try
             {
-                var instance = Activator.CreateInstance(type, analyzers);
+                var instance = Activator.CreateInstance(type, _analyzers);
             
                 _cache.Add(type.GetIdentifier(), instance);
             }

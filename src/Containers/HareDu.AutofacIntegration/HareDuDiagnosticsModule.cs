@@ -15,11 +15,15 @@ namespace HareDu.AutofacIntegration
 {
     using System.IO;
     using Autofac;
+    using Core;
     using Core.Configuration;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
     using Diagnostics.Scanning;
+    using Registration;
+    using Snapshotting;
+    using Snapshotting.Registration;
 
     public class HareDuDiagnosticsModule :
         Module
@@ -34,7 +38,7 @@ namespace HareDu.AutofacIntegration
 
                     var diagnosticRegistry = x.Resolve<IComponentDiagnosticRegistry>();
                     
-                    diagnosticRegistry.RegisterAll(analyzerRegistry.ObjectCache);
+                    diagnosticRegistry.RegisterAll();
 
                     return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
                 })
@@ -46,7 +50,7 @@ namespace HareDu.AutofacIntegration
                     var configProvider = x.Resolve<IConfigurationProvider>();
                     string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
 
-                    configProvider.TryGet(path, out var config);
+                    configProvider.TryGet(path, out HareDuConfig config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
                     
@@ -55,8 +59,61 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticAnalyzerRegistry>()
                 .SingleInstance();
 
-            builder.RegisterType<ComponentDiagnosticRegistry>()
+            builder.Register(x =>
+                {
+                    var brokerObjectRegistry = x.Resolve<IBrokerObjectRegistry>();
+                    var settingsProvider = x.Resolve<IBrokerConfigProvider>();
+                    var brokerConnection = x.Resolve<IBrokerConnectionClient>();
+
+                    if (!settingsProvider.TryGet(out BrokerConfig settings))
+                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+                    
+                    var client = brokerConnection.Create(settings);
+
+                    brokerObjectRegistry.RegisterAll(client);
+
+                    return new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
+                })
+                .As<IBrokerObjectFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var snapshotObjectRegistry = x.Resolve<ISnapshotObjectRegistry>();
+                    var factory = x.Resolve<IBrokerObjectFactory>();
+
+                    snapshotObjectRegistry.RegisterAll(factory);
+
+                    return new SnapshotFactory(factory, snapshotObjectRegistry.ObjectCache);
+                })
+                .As<ISnapshotFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
+
+                    analyzerRegistry.RegisterAll();
+
+                    return new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                })
                 .As<IComponentDiagnosticRegistry>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotObjectRegistry>()
+                .As<ISnapshotObjectRegistry>()
+                .SingleInstance();
+
+            builder.RegisterType<BrokerObjectRegistry>()
+                .As<IBrokerObjectRegistry>()
+                .SingleInstance();
+
+            builder.RegisterType<BrokerConnectionClient>()
+                .As<IBrokerConnectionClient>()
+                .SingleInstance();
+
+            builder.RegisterType<BrokerConfigProvider>()
+                .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()

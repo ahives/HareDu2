@@ -41,11 +41,12 @@ namespace HareDu.Diagnostics.Registration
         
         public void RegisterAll()
         {
-            _cache.Clear();
-            
             for (int i = 0; i < _types.Count; i++)
             {
-                _cache.Add((IDiagnosticAnalyzer) Activator.CreateInstance(_types[i], _config, _knowledgeBaseProvider));
+                if (_cache.Any(x => x.Identifier == _types[i].GetIdentifier()))
+                    continue;
+                
+                RegisterInstance(_types[i]);
             }
         }
 
@@ -54,13 +55,7 @@ namespace HareDu.Diagnostics.Registration
             if (_cache.Any(x => x.Identifier == type.GetIdentifier()))
                 return;
             
-            try
-            {
-                var instance = (IDiagnosticAnalyzer)Activator.CreateInstance(type, _config, _knowledgeBaseProvider);
-            
-                _cache.Add(instance);
-            }
-            catch { }
+            RegisterInstance(type);
         }
 
         public void Register<T>()
@@ -68,7 +63,12 @@ namespace HareDu.Diagnostics.Registration
             Type type = typeof(T);
             if (_cache.Any(x => x.Identifier == type.GetIdentifier()))
                 return;
-            
+
+            RegisterInstance(type);
+        }
+
+        void RegisterInstance(Type type)
+        {
             try
             {
                 var instance = (IDiagnosticAnalyzer)Activator.CreateInstance(type, _config, _knowledgeBaseProvider);
