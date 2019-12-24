@@ -48,12 +48,12 @@ namespace HareDu.Snapshotting.Tests
 
             builder.Register(x =>
                 {
-                    var registration = x.Resolve<ISnapshotObjectRegistry>();
+                    var snapshotObjectRegistry = x.Resolve<ISnapshotObjectRegistry>();
                     var factory = x.Resolve<IBrokerObjectFactory>();
 
-                    registration.RegisterAll(factory);
+                    snapshotObjectRegistry.RegisterAll();
 
-                    return new SnapshotFactory(factory, registration.ObjectCache);
+                    return new SnapshotFactory(factory, snapshotObjectRegistry.ObjectCache);
                 })
                 .As<ISnapshotFactory>()
                 .SingleInstance();

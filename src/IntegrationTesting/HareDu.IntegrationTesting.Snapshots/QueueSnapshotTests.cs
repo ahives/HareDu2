@@ -61,15 +61,15 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerConnectionClient();
                 var client = comm.Create(config.Broker);
 
-                var brokerObjectRegistrar = new BrokerObjectRegistry();
-                brokerObjectRegistrar.RegisterAll(client);
+                var brokerObjectRegistry = new BrokerObjectRegistry();
+                brokerObjectRegistry.RegisterAll(client);
 
-                var registration = new SnapshotObjectRegistry();
-                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar.ObjectCache);
+                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
+                var snapshotObjectRegistry = new SnapshotObjectRegistry(brokerFactory);
 
-                registration.RegisterAll(brokerFactory);
+                snapshotObjectRegistry.RegisterAll();
 
-                var factory = new SnapshotFactory(brokerFactory, registration.ObjectCache);
+                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistry.ObjectCache);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()
@@ -88,15 +88,15 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerConnectionClient();
                 var client = comm.Create(config.Broker);
 
-                var brokerObjectRegistrar = new BrokerObjectRegistry();
-                brokerObjectRegistrar.RegisterAll(client);
+                var brokerObjectRegistry = new BrokerObjectRegistry();
+                brokerObjectRegistry.RegisterAll(client);
 
-                var registration = new SnapshotObjectRegistry();
-                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar.ObjectCache);
+                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
+                var snapshotObjectRegistry = new SnapshotObjectRegistry(brokerFactory);
 
-                registration.RegisterAll(brokerFactory);
+                snapshotObjectRegistry.RegisterAll();
 
-                var factory = new SnapshotFactory(brokerFactory, registration);
+                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistry);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()

@@ -82,7 +82,7 @@ namespace HareDu.AutofacIntegration
                     var snapshotObjectRegistry = x.Resolve<ISnapshotObjectRegistry>();
                     var factory = x.Resolve<IBrokerObjectFactory>();
 
-                    snapshotObjectRegistry.RegisterAll(factory);
+                    snapshotObjectRegistry.RegisterAll();
 
                     return new SnapshotFactory(factory, snapshotObjectRegistry.ObjectCache);
                 })

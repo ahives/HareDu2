@@ -20,16 +20,18 @@ namespace HareDu.Snapshotting.Registration
     public class SnapshotObjectRegistry :
         ISnapshotObjectRegistry
     {
+        readonly IBrokerObjectFactory _factory;
         readonly Dictionary<string, object> _cache;
 
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public SnapshotObjectRegistry()
+        public SnapshotObjectRegistry(IBrokerObjectFactory factory)
         {
+            _factory = factory;
             _cache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(IBrokerObjectFactory factory)
+        public void RegisterAll()
         {
             var types = GetType()
                 .Assembly
@@ -38,29 +40,35 @@ namespace HareDu.Snapshotting.Registration
 
             foreach (var type in types)
             {
-                var instance = Activator.CreateInstance(type, factory);
+                if (_cache.ContainsKey(type.FullName))
+                    continue;
                 
-                _cache.Add(type.FullName, instance);
+                RegisterInstance(type);
             }
         }
 
-        public void Register(IBrokerObjectFactory factory, Type type)
+        public void Register(Type type)
         {
-            try
-            {
-                var instance = Activator.CreateInstance(type, factory);
+            if (_cache.ContainsKey(type.FullName))
+                return;
             
-                _cache.Add(type.FullName, instance);
-            }
-            catch { }
+            RegisterInstance(type);
         }
 
-        public void Register<T>(IBrokerObjectFactory factory)
+        public void Register<T>()
+        {
+            Type type = typeof(T);
+            if (_cache.ContainsKey(type.FullName))
+                return;
+            
+            RegisterInstance(type);
+        }
+
+        void RegisterInstance(Type type)
         {
             try
             {
-                Type type = typeof(T);
-                var instance = Activator.CreateInstance(type, factory);
+                var instance = Activator.CreateInstance(type, _factory);
             
                 _cache.Add(type.FullName, instance);
             }

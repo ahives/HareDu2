@@ -15,16 +15,15 @@ namespace HareDu.Snapshotting.Registration
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.Http;
 
     public interface ISnapshotObjectRegistry
     {
         IDictionary<string, object> ObjectCache { get; }
 
-        void RegisterAll(IBrokerObjectFactory factory);
+        void RegisterAll();
 
-        void Register(IBrokerObjectFactory factory, Type type);
+        void Register(Type type);
 
-        void Register<T>(IBrokerObjectFactory factory);
+        void Register<T>();
     }
 }

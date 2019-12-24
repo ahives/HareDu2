@@ -33,7 +33,7 @@ namespace HareDu.Snapshotting.Tests
             _container = builder.Build();
         }
 
-        [Test]
+        [Test, Explicit]
         public void Test()
         {
             var resource = _container.Resolve<ISnapshotFactory>()

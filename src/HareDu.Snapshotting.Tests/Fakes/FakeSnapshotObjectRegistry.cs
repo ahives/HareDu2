@@ -29,17 +29,17 @@ namespace HareDu.Snapshotting.Tests.Fakes
             _cache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(IBrokerObjectFactory factory)
+        public void RegisterAll()
         {
             _cache.Add(typeof(FakeCluster).FullName, new FakeCluster());
         }
 
-        public void Register(IBrokerObjectFactory factory, Type type)
+        public void Register(Type type)
         {
             throw new NotImplementedException();
         }
 
-        public void Register<T>(IBrokerObjectFactory factory)
+        public void Register<T>()
         {
             throw new NotImplementedException();
         }
