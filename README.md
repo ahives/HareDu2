@@ -1,7 +1,8 @@
 HareDu 2
 ========
 
-[![Join the chat at https://gitter.im/HareDu2/Lobby](https://badges.gitter.im/HareDu2/Lobby.svg)](https://gitter.im/HareDu2/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Join the chat at https://gitter.im/HareDu2/Lobby](https://img.shields.io/gitter/room/haredu2/HareDu2?style=flat)
+![NuGet downloads](https://img.shields.io/nuget/dt/haredu?style=flat)
 
 HareDu 2 is a .NET client and library that consumes the RabbitMQ REST API and can be used to manage and monitor a RabbitMQ server or cluster.
 
@@ -33,52 +34,39 @@ Since HareDu 2 was built primarily using Core APIs in Mono 5.x, it is now possib
 
 Dependencies
 ============
-.NET Framework 4.5.2 or above
+.NET Framework 4.6.2 or above
 
 .NET Core 2.1 or above
 
-JSON.NET 11.0.2 or above
+JSON.NET 12.0.2 or above
 
 ASP.NET WebAPI 5.2.3 or above
 
 
-Debugging
-=========
+# Debugging
+
 
 If you find that making an API call is failing for reasons unknown, HareDu 2 introduces a way to return a text representation of the serialized JSON of the returned ```Result<T>``` monad. Here is an example,
 
-<pre><code class="c#">Result result = await Client
-    .Factory&lt;Shovel&lt;AMQP091Source, AMQP091Destination&gt;&gt;()
-    .Shovel(x =&gt;
-    {
-        x.Configure(c =&gt;
-        {
-            c.Name(&quot;my-shovel&quot;);
-            c.VirtualHost(&quot;%2f&quot;);
-        });
-        x.Source(s =&gt;
-        {
-            s.Uri(u =&gt; { u.Builder(b =&gt; { b.SetHeartbeat(1); }); });
-            s.PrefetchCount(2);
-            s.Queue(&quot;my-queue&quot;);
-        });
-        x.Destination(d =&gt;
-        {
-            d.Queue(&quot;another-queue&quot;);
-            d.Uri(u =&gt;
-            {
-                u.Builder(b =&gt;
+<pre><code class="c#">
+var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Queue>()
+                .Create(x =>
                 {
-                    b.SetHost(&quot;remote-server&quot;);
+                    x.Queue("TestQueue31");
+                    x.Configure(c =>
+                    {
+                        c.IsDurable();
+                        c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
+                    });
+                    x.Target(t => t.VirtualHost("HareDu"));
                 });
-            });
-        });
-    });
-
-Console.WriteLine(result.ToJson());
+            
+string debugText = result.ToJsonString());
 </code></pre>
 
-So, the output calling result.ToJson would be,
+
+So, the output calling the ToJsonString extension method would look something like this,
 
 <pre><code class="json">
 {
@@ -102,17 +90,15 @@ So, the output calling result.ToJson would be,
 
 
 
-Tested
-======
-macOS Sierra 10.12.5/High Sierra/Mojave
+# Tested
 
-Windows Server 2008 R2
+macOS Sierra 10.15.2 (Catalina)
 
-RabbitMQ 3.6.9
+RabbitMQ 3.7.15
 
-Erlang OTP R19.3 (x64)
+Erlang OTP 22.0.4 (x64)
 
-.NET 4.5.2 Framework
+.NET 4.6.2 Framework
 
 .NET Core 2.1
 
@@ -155,8 +141,8 @@ Ensure that you have the following configuration values set to enable the API to
 Configuration value "vm_memory_calculation_strategy" is set to "rss"
 
 
-Testing with RabbitMQ
-=====================
+# Testing with RabbitMQ
+
 Under the "simulation" solution folder you will find two projects of note, Publisher and Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
 
 If using .NET Core...  
@@ -170,3 +156,12 @@ If using .NET Core...
 
     dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/Publisher.dll
 
+
+# Coming Soon - HareDu 2
+
+HareDu 2 will introduce some pretty awesome new APIs and features but unfortunately there will be breaking changes to those who are currently using HareDu 1.x.
+
+**New Features**
+1. API registration using popular Dependency Injection containers (e.g., Autofac and .NET Core to start)
+2. Brand new APIs (e.g., taking snapshots, running diagnostic scans, etc.)
+3. File-based API configuration using YAML
