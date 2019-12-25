@@ -69,8 +69,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
             var configProvider = new ConfigurationProvider();
             var provider = new BrokerConfigProvider(configProvider);
             var settings = provider.Init(x => { });
-            var connectionClient = new BrokerConnectionClient();
-            var client = connectionClient.Create(settings);
+            var connectionClient = new BrokerCommunication();
+            var client = connectionClient.GetClient(settings);
 
             registration.RegisterAll(client);
             

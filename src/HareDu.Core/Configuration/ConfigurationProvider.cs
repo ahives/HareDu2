@@ -59,7 +59,7 @@ namespace HareDu.Core.Configuration
                 config.Broker.Credentials.IsNull() ||
                 string.IsNullOrWhiteSpace(config.Broker.Credentials.Username) ||
                 string.IsNullOrWhiteSpace(config.Broker.Credentials.Password) ||
-                string.IsNullOrWhiteSpace(config.Broker.BrokerUrl))
+                string.IsNullOrWhiteSpace(config.Broker.Url))
             {
                 return false;
             }
@@ -88,12 +88,12 @@ namespace HareDu.Core.Configuration
             {
                 public BrokerConfigImpl(RabbitMqBrokerConfigYaml config)
                 {
-                    BrokerUrl = config.BrokerUrl;
+                    Url = config.BrokerUrl;
                     Timeout = config.Timeout;
                     Credentials = new BrokerCredentialsImpl(config.Username, config.Password);
                 }
 
-                public string BrokerUrl { get; }
+                public string Url { get; }
                 public TimeSpan Timeout { get; }
                 public BrokerCredentials Credentials { get; }
 

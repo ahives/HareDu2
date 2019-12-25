@@ -16,8 +16,13 @@ namespace HareDu.Core
     using System.Net.Http;
     using Configuration;
 
-    public interface IBrokerConnectionClient
+    public interface IBrokerCommunication
     {
-        HttpClient Create(BrokerConfig settings);
+        /// <summary>
+        /// Given the <see cref="BrokerConfig"/> settings, returns a HTTP connection to the RabbitMQ broker.
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        HttpClient GetClient(BrokerConfig config);
     }
 }

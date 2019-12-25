@@ -11,16 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Tests
+namespace HareDu.Tests.BrokerObjects
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
     using NUnit.Framework;
     using Shouldly;
-    using Snapshotting;
 
     [TestFixture]
     public class ServerTests :

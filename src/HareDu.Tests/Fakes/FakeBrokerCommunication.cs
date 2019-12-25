@@ -26,22 +26,22 @@ namespace HareDu.Tests.Fakes
     using Moq.Protected;
     using NUnit.Framework;
 
-    public class FakeBrokerConnectionClient :
-        IBrokerConnectionClient
+    public class FakeBrokerCommunication :
+        IBrokerCommunication
     {
         readonly string _payload;
 
-        public FakeBrokerConnectionClient(string file)
+        public FakeBrokerCommunication(string file)
         {
             _payload = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{file}");
         }
 
-        public FakeBrokerConnectionClient()
+        public FakeBrokerCommunication()
         {
             _payload = string.Empty;
         }
 
-        public HttpClient Create(BrokerConfig settings)
+        public HttpClient GetClient(BrokerConfig config)
         {
             var mock = new Mock<HttpMessageHandler>();
             
@@ -58,7 +58,7 @@ namespace HareDu.Tests.Fakes
                     })
                 .Verifiable();
             
-            var uri = new Uri($"{settings.BrokerUrl}/");
+            var uri = new Uri($"{config.Url}/");
             var client = new HttpClient(mock.Object){BaseAddress = uri};
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

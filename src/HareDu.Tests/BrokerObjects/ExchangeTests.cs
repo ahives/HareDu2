@@ -11,16 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Tests
+namespace HareDu.Tests.BrokerObjects
 {
     using System.Threading.Tasks;
     using Autofac;
-    using Core;
-    using Core.Configuration;
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
 
     [TestFixture]

@@ -34,11 +34,11 @@ namespace HareDu.Core.Internal
         {
             public BrokerConfigImpl()
             {
-                BrokerUrl = "http://localhost:15672";
+                Url = "http://localhost:15672";
                 Credentials = new BrokerCredentialsImpl("guest", "guest");
             }
 
-            public string BrokerUrl { get; }
+            public string Url { get; }
             public TimeSpan Timeout { get; }
             public BrokerCredentials Credentials { get; }
 

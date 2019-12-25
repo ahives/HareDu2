@@ -19,7 +19,7 @@ namespace HareDu.Core.Configuration
     public interface BrokerConfig
     {
         [JsonProperty("rmqServerUrl")]
-        string BrokerUrl { get; }
+        string Url { get; }
         
         [JsonProperty("timeout")]
         TimeSpan Timeout { get; }

@@ -64,7 +64,7 @@ namespace HareDu.Core.Configuration
             => !config.Credentials.IsNull() &&
                !string.IsNullOrWhiteSpace(config.Credentials.Username) &&
                !string.IsNullOrWhiteSpace(config.Credentials.Password) &&
-               !string.IsNullOrWhiteSpace(config.BrokerUrl);
+               !string.IsNullOrWhiteSpace(config.Url);
 
 
         class ClientConfigProviderImpl :
@@ -99,14 +99,14 @@ namespace HareDu.Core.Configuration
             {
                 public BrokerConfigImpl(string brokerUrl, TimeSpan timeout, string username, string password)
                 {
-                    BrokerUrl = brokerUrl;
+                    Url = brokerUrl;
                     Timeout = timeout;
 
                     if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
                         Credentials = new BrokerCredentialsImpl(username, password);
                 }
 
-                public string BrokerUrl { get; }
+                public string Url { get; }
                 public TimeSpan Timeout { get; }
                 public BrokerCredentials Credentials { get; }
 

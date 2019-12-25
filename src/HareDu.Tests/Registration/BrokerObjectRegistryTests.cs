@@ -11,14 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Tests
+namespace HareDu.Tests.Registration
 {
     using System.Net.Http;
     using System.Reflection;
     using Core;
     using Core.Configuration;
+    using HareDu.Registration;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
 
     [TestFixture]
@@ -36,11 +36,11 @@ namespace HareDu.Tests
         public void Verify_will_register_all_broker_objects()
         {
             var registry = new BrokerObjectRegistry();
-            var comm = new BrokerConnectionClient();
+            var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            registry.RegisterAll(comm.Create(settings));
+            registry.RegisterAll(comm.GetClient(settings));
 
             registry.ObjectCache.Count.ShouldBe(20);
             registry.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
@@ -69,11 +69,11 @@ namespace HareDu.Tests
         public void Verify_will_register_all_broker_objects_plus_one_1()
         {
             var registry = new BrokerObjectRegistry();
-            var comm = new BrokerConnectionClient();
+            var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            var client = comm.Create(settings);
+            var client = comm.GetClient(settings);
             registry.RegisterAll(client);
             registry.Register(client, typeof(TestImpl));
 
@@ -98,18 +98,18 @@ namespace HareDu.Tests
             registry.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
             registry.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
             registry.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            registry.ObjectCache["HareDu.Tests.TestImpl"].ShouldNotBeNull();
+            registry.ObjectCache["HareDu.Tests.Registration.TestImpl"].ShouldNotBeNull();
         }
 
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_2()
         {
             var registry = new BrokerObjectRegistry();
-            var comm = new BrokerConnectionClient();
+            var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            var client = comm.Create(settings);
+            var client = comm.GetClient(settings);
             registry.RegisterAll(client);
             registry.Register<TestImpl>(client);
 
@@ -134,7 +134,7 @@ namespace HareDu.Tests
             registry.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
             registry.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
             registry.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            registry.ObjectCache["HareDu.Tests.TestImpl"].ShouldNotBeNull();
+            registry.ObjectCache["HareDu.Tests.Registration.TestImpl"].ShouldNotBeNull();
         }
     }
 

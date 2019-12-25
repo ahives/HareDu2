@@ -58,8 +58,8 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
             {
-                var comm = new BrokerConnectionClient();
-                var client = comm.Create(config.Broker);
+                var comm = new BrokerCommunication();
+                var client = comm.GetClient(config.Broker);
 
                 var brokerObjectRegistry = new BrokerObjectRegistry();
                 brokerObjectRegistry.RegisterAll(client);
@@ -85,8 +85,8 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
             {
-                var comm = new BrokerConnectionClient();
-                var client = comm.Create(config.Broker);
+                var comm = new BrokerCommunication();
+                var client = comm.GetClient(config.Broker);
 
                 var brokerObjectRegistry = new BrokerObjectRegistry();
                 brokerObjectRegistry.RegisterAll(client);
@@ -112,8 +112,8 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
             {
-                var comm = new BrokerConnectionClient();
-                var factory = new SnapshotFactory(new BrokerObjectFactory(comm.Create(config.Broker)));
+                var comm = new BrokerCommunication();
+                var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()
@@ -129,8 +129,8 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
             {
-                var comm = new BrokerConnectionClient();
-                var factory = new SnapshotFactory(comm.Create(config.Broker));
+                var comm = new BrokerCommunication();
+                var factory = new SnapshotFactory(comm.GetClient(config.Broker));
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()

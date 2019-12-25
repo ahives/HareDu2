@@ -28,7 +28,7 @@ namespace HareDu.Core.Tests.Configuration
             string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
             
             provider.TryGet(path, out var config).ShouldBeTrue();
-            config.Broker.BrokerUrl.ShouldBe("http://localhost:15672");
+            config.Broker.Url.ShouldBe("http://localhost:15672");
             config.Broker.Credentials.Username.ShouldBe("guest");
             config.Broker.Credentials.Password.ShouldBe("guest");
             config.Analyzer.HighClosureRateWarningThreshold.ShouldBe<uint>(90);

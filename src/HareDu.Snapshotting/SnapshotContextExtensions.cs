@@ -21,6 +21,8 @@ namespace HareDu.Snapshotting
     {
         public static SnapshotContext<T> MostRecent<T>(this IReadOnlyList<SnapshotContext<T>> snapshots)
             where T : Snapshot
-            => snapshots.IsNull() || !snapshots.Any() ? new EmptySnapshotContext<T>() : snapshots.Last();
+            => snapshots.IsNull() || !snapshots.Any()
+                ? new EmptySnapshotContext<T>()
+                : snapshots.Last();
     }
 }

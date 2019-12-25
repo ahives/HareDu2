@@ -31,7 +31,7 @@ namespace HareDu.Core.Tests.Configuration
                 x.UsingCredentials("guest1", "guest1");
             });
             
-            settings.BrokerUrl.ShouldBe("http://localhost:15670");
+            settings.Url.ShouldBe("http://localhost:15670");
             settings.Credentials.ShouldNotBeNull();
             settings.Credentials.Username.ShouldBe("guest1");
             settings.Credentials.Password.ShouldBe("guest1");
@@ -46,7 +46,7 @@ namespace HareDu.Core.Tests.Configuration
             {
             });
             
-            settings.BrokerUrl.ShouldBe("http://localhost:15672");
+            settings.Url.ShouldBe("http://localhost:15672");
             settings.Credentials.ShouldNotBeNull();
             settings.Credentials.Username.ShouldBe("guest");
             settings.Credentials.Password.ShouldBe("guest");

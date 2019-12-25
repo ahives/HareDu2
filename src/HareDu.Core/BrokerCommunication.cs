@@ -19,22 +19,22 @@ namespace HareDu.Core
     using System.Net.Http.Headers;
     using Configuration;
 
-    public class BrokerConnectionClient :
-        IBrokerConnectionClient
+    public class BrokerCommunication :
+        IBrokerCommunication
     {
-        public HttpClient Create(BrokerConfig settings)
+        public HttpClient GetClient(BrokerConfig config)
         {
-            var uri = new Uri($"{settings.BrokerUrl}/");
+            var uri = new Uri($"{config.Url}/");
             var handler = new HttpClientHandler
             {
-                Credentials = new NetworkCredential(settings.Credentials.Username, settings.Credentials.Password)
+                Credentials = new NetworkCredential(config.Credentials.Username, config.Credentials.Password)
             };
             
             var client = new HttpClient(handler){BaseAddress = uri};
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (settings.Timeout != TimeSpan.Zero)
-                client.Timeout = settings.Timeout;
+            if (config.Timeout != TimeSpan.Zero)
+                client.Timeout = config.Timeout;
 
             return client;
         }
