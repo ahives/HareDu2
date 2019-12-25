@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.IntegrationTesting.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Elasticsearch", "HareDu.Elasticsearch\HareDu.Elasticsearch.csproj", "{6CF6CC9C-1A4D-4E1F-A663-B1F68908002B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.CoreIntegration", "Containers\HareDu.CoreIntegration\HareDu.CoreIntegration.csproj", "{0887B628-CD51-4977-A7FE-31010BDD4F1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{6CF6CC9C-1A4D-4E1F-A663-B1F68908002B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CF6CC9C-1A4D-4E1F-A663-B1F68908002B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CF6CC9C-1A4D-4E1F-A663-B1F68908002B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0887B628-CD51-4977-A7FE-31010BDD4F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0887B628-CD51-4977-A7FE-31010BDD4F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0887B628-CD51-4977-A7FE-31010BDD4F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0887B628-CD51-4977-A7FE-31010BDD4F1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,5 +172,6 @@ Global
 		{E0377BB7-0ED4-4C9C-B595-9E45DEAABCD5} = {1122035F-6901-4855-961E-BF606CB9B19D}
 		{40F339C4-9CCA-43D4-88CB-96E8CA979A71} = {C052B545-549B-46FD-8366-8CD5FBB99C6E}
 		{5ABF8C59-F245-40C0-B74C-88088C67F64D} = {C052B545-549B-46FD-8366-8CD5FBB99C6E}
+		{0887B628-CD51-4977-A7FE-31010BDD4F1A} = {E7626643-0782-4ED0-A54C-AA4AAF377B3C}
 	EndGlobalSection
 EndGlobal

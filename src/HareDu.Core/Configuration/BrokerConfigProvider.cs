@@ -60,6 +60,18 @@ namespace HareDu.Core.Configuration
             return true;
         }
 
+        public bool TryGet(string path, out BrokerConfig settings)
+        {
+            if (_configurationProvider.TryGet(path, out HareDuConfig config))
+            {
+                settings = Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
+                return true;
+            }
+
+            settings = ConfigCache.Default.Broker;
+            return true;
+        }
+
         bool Validate(BrokerConfig config)
             => !config.Credentials.IsNull() &&
                !string.IsNullOrWhiteSpace(config.Credentials.Username) &&

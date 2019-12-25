@@ -20,6 +20,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Core;
     using Core.Configuration;
     using Core.Extensions;
+    using CoreIntegration;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Registration;
     using Shouldly;
@@ -63,18 +65,45 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         }
 
         [Test]
-        public async Task Should_be_able_to_get_all_exchanges2()
+        public async Task Should_be_able_to_get_all_exchanges_2()
         {
-            var registration = new BrokerObjectRegistry();
+            var services = new ServiceCollection()
+                .AddHareDu()
+                .BuildServiceProvider();
+            
+            var result = await services.GetService<IBrokerObjectFactory>()
+                .Object<Exchange>()
+                .GetAll();
+
+            foreach (var exchange in result.Select(x => x.Data))
+            {
+                Console.WriteLine("Name: {0}", exchange.Name);
+                Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
+                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
+                Console.WriteLine("Internal: {0}", exchange.Internal);
+                Console.WriteLine("Durable: {0}", exchange.Durable);
+                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+            
+            result.HasFaulted.ShouldBeFalse();
+            Console.WriteLine(result.ToJsonString());
+        }
+
+        [Test]
+        public async Task Should_be_able_to_get_all_exchanges_3()
+        {
+            var registry = new BrokerObjectRegistry();
             var configProvider = new ConfigurationProvider();
             var provider = new BrokerConfigProvider(configProvider);
             var settings = provider.Init(x => { });
             var connectionClient = new BrokerCommunication();
             var client = connectionClient.GetClient(settings);
 
-            registration.RegisterAll(client);
+            registry.RegisterAll(client);
             
-            var factory = new BrokerObjectFactory(client, registration.ObjectCache);
+            var factory = new BrokerObjectFactory(client, registry.ObjectCache);
             
             var result = await factory
                 .Object<Exchange>()

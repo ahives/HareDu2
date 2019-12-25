@@ -20,5 +20,7 @@ namespace HareDu.Core.Configuration
         BrokerConfig Init(Action<ClientConfigProvider> configuration);
 
         bool TryGet(out BrokerConfig settings);
+
+        bool TryGet(string path, out BrokerConfig settings);
     }
 }

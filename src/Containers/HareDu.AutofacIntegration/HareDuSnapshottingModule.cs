@@ -27,7 +27,7 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var brokerObjectRegistry = x.Resolve<IBrokerObjectRegistry>();
+                    var registry = x.Resolve<IBrokerObjectRegistry>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var comm = x.Resolve<IBrokerCommunication>();
 
@@ -36,21 +36,21 @@ namespace HareDu.AutofacIntegration
                     
                     var client = comm.GetClient(settings);
 
-                    brokerObjectRegistry.RegisterAll(client);
+                    registry.RegisterAll(client);
 
-                    return new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
+                    return new BrokerObjectFactory(client, registry.ObjectCache);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
             builder.Register(x =>
                 {
-                    var snapshotObjectRegistry = x.Resolve<ISnapshotObjectRegistry>();
+                    var registry = x.Resolve<ISnapshotObjectRegistry>();
                     var factory = x.Resolve<IBrokerObjectFactory>();
 
-                    snapshotObjectRegistry.RegisterAll();
+                    registry.RegisterAll();
 
-                    return new SnapshotFactory(factory, snapshotObjectRegistry.ObjectCache);
+                    return new SnapshotFactory(factory, registry.ObjectCache);
                 })
                 .As<ISnapshotFactory>()
                 .SingleInstance();
