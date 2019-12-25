@@ -70,7 +70,7 @@ namespace HareDu.Snapshotting.Tests
                 .Snapshot<BrokerQueues>()
                 .Execute();
 
-            BrokerQueuesSnapshot snapshot = resource.Snapshots.MostRecent().Snapshot;
+            BrokerQueuesSnapshot snapshot = resource.Timeline.MostRecent().Snapshot;
             
             snapshot.ClusterName.ShouldBe("fake_cluster");
             snapshot.Queues.ShouldNotBeNull();

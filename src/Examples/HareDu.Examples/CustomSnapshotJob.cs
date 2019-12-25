@@ -26,26 +26,26 @@ namespace HareDu.Examples
 
     public class CustomSnapshotJob<T> :
         IJob
-        where T : ResourceSnapshot<Snapshot>
+        where T : HareDuSnapshot<Snapshot>
     {
-        readonly T _resource;
+        readonly T _snapshot;
         readonly ElasticClient _client;
 
-        public CustomSnapshotJob(T resource, ElasticClient client)
+        public CustomSnapshotJob(T snapshot, ElasticClient client)
         {
-            _resource = resource;
+            _snapshot = snapshot;
             _client = client;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            _resource.Execute();
+            _snapshot.Execute();
 
-            var snapshot = _resource.Snapshots
+            var snapshot = _snapshot.Timeline
                 .MostRecent()
                 .Cast<SnapshotContext<BrokerQueuesSnapshot>>();
             
-            bool persisted = snapshot.PersistJson("/Users/albert/Documents/snapshots");
+            bool persisted = snapshot.TrySaveJson("/Users/albert/Documents/snapshots");
 
             // var response = _client.Index(snapshot, x => x.Index("haredu_snapshots"));
             // if (response.Result == Result.Created)

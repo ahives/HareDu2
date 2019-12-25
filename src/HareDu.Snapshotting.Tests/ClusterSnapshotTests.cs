@@ -69,7 +69,7 @@ namespace HareDu.Snapshotting.Tests
                 .Snapshot<Cluster>()
                 .Execute();
 
-            ClusterSnapshot snapshot = resource.Snapshots.MostRecent().Snapshot;
+            ClusterSnapshot snapshot = resource.Timeline.MostRecent().Snapshot;
             
             snapshot.BrokerVersion.ShouldBe("3.7.18");
             snapshot.ClusterName.ShouldBe("fake_cluster");

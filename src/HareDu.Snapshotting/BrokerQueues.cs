@@ -16,7 +16,7 @@ namespace HareDu.Snapshotting
     using Model;
 
     public interface BrokerQueues :
-        ResourceSnapshot<BrokerQueuesSnapshot>
+        HareDuSnapshot<BrokerQueuesSnapshot>
     {
     }
 }

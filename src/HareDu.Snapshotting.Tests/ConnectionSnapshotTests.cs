@@ -68,7 +68,7 @@ namespace HareDu.Snapshotting.Tests
                 .Snapshot<BrokerConnection>()
                 .Execute();
 
-            BrokerConnectivitySnapshot snapshot = resource.Snapshots.MostRecent().Snapshot;
+            BrokerConnectivitySnapshot snapshot = resource.Timeline.MostRecent().Snapshot;
             
             snapshot.BrokerVersion.ShouldBe("3.7.18");
             snapshot.ClusterName.ShouldBe("fake_cluster");

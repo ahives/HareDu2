@@ -63,7 +63,7 @@ namespace HareDu.Examples
         }
 
         static IContainer GetContainer<T>()
-            where T : ResourceSnapshot<Snapshot>
+            where T : HareDuSnapshot<Snapshot>
         {
             var builder = new ContainerBuilder();
 

@@ -26,7 +26,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public IReadOnlyList<SnapshotContext<NodeSnapshot>> Snapshots { get; }
+        public IReadOnlyList<SnapshotContext<NodeSnapshot>> Timeline { get; }
 
         public ClusterNodeImpl(IBrokerObjectFactory factory)
             : base(factory)
@@ -34,7 +34,7 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public ResourceSnapshot<NodeSnapshot> Execute(CancellationToken cancellationToken = default)
+        public HareDuSnapshot<NodeSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Object<SystemOverview>()
@@ -55,9 +55,9 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public ResourceSnapshot<NodeSnapshot> RegisterObserver(IObserver<SnapshotContext<NodeSnapshot>> observer) => throw new NotImplementedException();
+        public HareDuSnapshot<NodeSnapshot> RegisterObserver(IObserver<SnapshotContext<NodeSnapshot>> observer) => throw new NotImplementedException();
 
-        public ResourceSnapshot<NodeSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<NodeSnapshot>>> observers) => throw new NotImplementedException();
+        public HareDuSnapshot<NodeSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<NodeSnapshot>>> observers) => throw new NotImplementedException();
 
 
         class NodeSnapshotImpl :

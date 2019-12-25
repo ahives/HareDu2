@@ -23,14 +23,14 @@ namespace HareDu.Snapshotting.Tests.Fakes
         Cluster
     {
         readonly List<SnapshotContext<ClusterSnapshot>> _snapshots;
-        public IReadOnlyList<SnapshotContext<ClusterSnapshot>> Snapshots => _snapshots;
+        public IReadOnlyList<SnapshotContext<ClusterSnapshot>> Timeline => _snapshots;
 
         public FakeCluster()
         {
             _snapshots = new List<SnapshotContext<ClusterSnapshot>>();
         }
 
-        public ResourceSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
+        public HareDuSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshot1();
 
@@ -39,9 +39,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
             return this;
         }
 
-        public ResourceSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
+        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
 
-        public ResourceSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
+        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
 
 
         class SnapshotContextImpl :

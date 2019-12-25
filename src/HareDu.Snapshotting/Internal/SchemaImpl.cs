@@ -27,7 +27,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public IReadOnlyList<SnapshotContext<VirtualHostSchemaSnapshot>> Snapshots => _snapshots;
+        public IReadOnlyList<SnapshotContext<VirtualHostSchemaSnapshot>> Timeline => _snapshots;
 
         public SchemaImpl(IBrokerObjectFactory factory)
             : base(factory)
@@ -35,7 +35,7 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public ResourceSnapshot<VirtualHostSchemaSnapshot> Execute(CancellationToken cancellationToken = default)
+        public HareDuSnapshot<VirtualHostSchemaSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             var server = _factory
                 .Object<Server>()
@@ -82,7 +82,7 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public ResourceSnapshot<VirtualHostSchemaSnapshot> RegisterObserver(
+        public HareDuSnapshot<VirtualHostSchemaSnapshot> RegisterObserver(
             IObserver<SnapshotContext<VirtualHostSchemaSnapshot>> observer)
         {
             if (observer != null)
@@ -93,7 +93,7 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public ResourceSnapshot<VirtualHostSchemaSnapshot> RegisterObservers(
+        public HareDuSnapshot<VirtualHostSchemaSnapshot> RegisterObservers(
             IReadOnlyList<IObserver<SnapshotContext<VirtualHostSchemaSnapshot>>> observers)
         {
             if (observers != null)

@@ -40,7 +40,7 @@ namespace HareDu.Snapshotting.Tests
                 .Snapshot<Schema>()
                 .Execute();
 
-            var context = resource.Snapshots.MostRecent();
+            var context = resource.Timeline.MostRecent();
             
             // Console.WriteLine(context.Snapshot.Schema.ToJsonString());
         }

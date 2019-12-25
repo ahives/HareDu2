@@ -47,7 +47,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             
             var scanner = container.Resolve<IDiagnosticScanner>();
 
-            var snapshot = resource.Snapshots.MostRecent().Snapshot;
+            var snapshot = resource.Timeline.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = container.Resolve<IDiagnosticReportFormatter>();
@@ -81,7 +81,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             
             var scanner = services.GetService<IDiagnosticScanner>();
 
-            var snapshot = resource.Snapshots.MostRecent().Snapshot;
+            var snapshot = resource.Timeline.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = services.GetService<IDiagnosticReportFormatter>();

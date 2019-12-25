@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting
 
     public static class PersistenceExtensions
     {
-        public static bool PersistJson<T>(this SnapshotContext<T> context, string path)
+        public static bool TrySaveJson<T>(this SnapshotContext<T> context, string path)
             where T : Snapshot
         {
             string file = $"{path}/snapshot_{context.Identifier}.json";

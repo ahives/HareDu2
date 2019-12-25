@@ -123,7 +123,7 @@ namespace HareDu.Snapshotting
         }
 
         public T Snapshot<T>()
-            where T : ResourceSnapshot<Snapshot>
+            where T : HareDuSnapshot<Snapshot>
         {
             Type type = GetType()
                 .Assembly

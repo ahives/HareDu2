@@ -36,7 +36,7 @@ namespace HareDu.Snapshotting.Registration
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(ResourceSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(HareDuSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {
