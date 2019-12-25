@@ -16,6 +16,7 @@ namespace HareDu.CoreIntegration
     using System.IO;
     using Core;
     using Core.Configuration;
+    using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
     using Diagnostics.Scanning;
@@ -26,6 +27,12 @@ namespace HareDu.CoreIntegration
 
     public static class HareDuExtensions
     {
+        /// <summary>
+        /// Registers all the necessary components to use the low level HareDu Broker Object API.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDu(this IServiceCollection services)
         {
             services.AddSingleton<IBrokerCommunication, BrokerCommunication>();
@@ -33,22 +40,19 @@ namespace HareDu.CoreIntegration
             services.AddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.AddSingleton<IConfigurationProvider, ConfigurationProvider>();
-            
-            services.AddSingleton<IBrokerObjectFactory>(x =>
-            {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
-                var comm = x.GetService<IBrokerCommunication>();
 
-                if (!settingsProvider.TryGet(out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                return new BrokerObjectFactory(comm.GetClient(config));
-            });
+            services.AddBrokerObjectFactory();
 
             return services;
         }
 
+        /// <summary>
+        /// Registers all the necessary components to use the low level HareDu Broker Object API.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDu(this IServiceCollection services, string path)
         {
             services.AddSingleton<IBrokerCommunication, BrokerCommunication>();
@@ -56,22 +60,17 @@ namespace HareDu.CoreIntegration
             services.AddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.AddSingleton<IConfigurationProvider, ConfigurationProvider>();
-            
-            services.AddSingleton<IBrokerObjectFactory>(x =>
-            {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
-                var comm = x.GetService<IBrokerCommunication>();
 
-                if (!settingsProvider.TryGet(path, out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                return new BrokerObjectFactory(comm.GetClient(config));
-            });
+            services.AddBrokerObjectFactory(path);
 
             return services;
         }
 
+        /// <summary>
+        /// Registers all the necessary components to use the HareDu Snapshotting API.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services)
         {
             services.AddSingleton<ISnapshotObjectRegistry, SnapshotObjectRegistry>();
@@ -84,31 +83,22 @@ namespace HareDu.CoreIntegration
             
             services.AddSingleton<IConfigurationProvider, ConfigurationProvider>();
 
-            services.AddSingleton<IBrokerObjectFactory>(x =>
-            {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
-                var comm = x.GetService<IBrokerCommunication>();
+            services.AddBrokerObjectFactory();
 
-                if (!settingsProvider.TryGet(out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                return new BrokerObjectFactory(comm.GetClient(config));
-            });
-
-            services.AddSingleton<ISnapshotFactory>(x =>
-            {
-                var registry = x.GetService<ISnapshotObjectRegistry>();
-                var factory = x.GetService<IBrokerObjectFactory>();
-
-                registry.RegisterAll();
-
-                return new SnapshotFactory(factory, registry.ObjectCache);
-            });
+            services.AddSnapshotObjectRegistry();
+            
+            services.AddSnapshotFactory();
 
             return services;
         }
 
+        /// <summary>
+        /// Registers all the necessary components to use the HareDu Snapshotting API.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services, string path)
         {
             services.AddSingleton<ISnapshotObjectRegistry, SnapshotObjectRegistry>();
@@ -121,31 +111,21 @@ namespace HareDu.CoreIntegration
             
             services.AddSingleton<IConfigurationProvider, ConfigurationProvider>();
 
-            services.AddSingleton<IBrokerObjectFactory>(x =>
-            {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
-                var comm = x.GetService<IBrokerCommunication>();
+            services.AddBrokerObjectFactory(path);
 
-                if (!settingsProvider.TryGet(path, out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+            services.AddSnapshotObjectRegistry();
 
-                return new BrokerObjectFactory(comm.GetClient(config));
-            });
-
-            services.AddSingleton<ISnapshotFactory>(x =>
-            {
-                var registry = x.GetService<ISnapshotObjectRegistry>();
-                var factory = x.GetService<IBrokerObjectFactory>();
-
-                registry.RegisterAll();
-
-                return new SnapshotFactory(factory, registry.ObjectCache);
-            });
+            services.AddSnapshotFactory();
 
             return services;
         }
 
+        /// <summary>
+        /// Registers all the necessary components to use the HareDu Diagnostics API.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
             services.AddSingleton<ISnapshotObjectRegistry, SnapshotObjectRegistry>();
@@ -158,65 +138,36 @@ namespace HareDu.CoreIntegration
             
             services.AddSingleton<IConfigurationProvider, ConfigurationProvider>();
 
-            services.AddSingleton<IBrokerObjectFactory>(x =>
-            {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
-                var comm = x.GetService<IBrokerCommunication>();
+            services.AddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
-                if (!settingsProvider.TryGet(out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+            services.AddSingleton<IDiagnosticScanner, DiagnosticScanner>();
 
-                return new BrokerObjectFactory(comm.GetClient(config));
-            });
+            services.AddSingleton<IKnowledgeBaseProvider, DefaultKnowledgeBaseProvider>();
 
-            services.AddSingleton<ISnapshotFactory>(x =>
-            {
-                var registry = x.GetService<ISnapshotObjectRegistry>();
-                var factory = x.GetService<IBrokerObjectFactory>();
+            string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+            
+            services.AddBrokerObjectFactory(path);
 
-                registry.RegisterAll();
+            services.AddSnapshotObjectRegistry();
 
-                return new SnapshotFactory(factory, registry.ObjectCache);
-            });
+            services.AddSnapshotFactory();
 
-            services.AddSingleton<IComponentDiagnosticFactory>(x =>
-            {
-                var analyzerRegistry = x.GetService<IDiagnosticAnalyzerRegistry>();
-                    
-                analyzerRegistry.RegisterAll();
+            services.AddDiagnosticAnalyzerRegistry(path);
 
-                var diagnosticRegistry = x.GetService<IComponentDiagnosticRegistry>();
-                    
-                diagnosticRegistry.RegisterAll();
+            services.AddComponentDiagnosticRegistry();
 
-                return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
-            });
-
-            services.AddSingleton<IDiagnosticAnalyzerRegistry>(x =>
-            {
-                var configProvider = x.GetService<IConfigurationProvider>();
-                string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
-
-                configProvider.TryGet(path, out HareDuConfig config);
-
-                var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
-                    
-                return new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
-            });
-
-            services.AddSingleton<IComponentDiagnosticRegistry>(x =>
-            {
-                var analyzerRegistry = x.GetService<IDiagnosticAnalyzerRegistry>();
-
-                analyzerRegistry.RegisterAll();
-
-                return new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
-            });
+            services.AddComponentDiagnosticFactory();
 
             return services;
         }
 
+        /// <summary>
+        /// Registers all the necessary components to use the HareDu Diagnostics API.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string path)
         {
             services.AddSingleton<ISnapshotObjectRegistry, SnapshotObjectRegistry>();
@@ -229,6 +180,29 @@ namespace HareDu.CoreIntegration
             
             services.AddSingleton<IConfigurationProvider, ConfigurationProvider>();
 
+            services.AddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
+
+            services.AddSingleton<IDiagnosticScanner, DiagnosticScanner>();
+
+            services.AddSingleton<IKnowledgeBaseProvider, DefaultKnowledgeBaseProvider>();
+
+            services.AddBrokerObjectFactory(path);
+
+            services.AddSnapshotObjectRegistry();
+
+            services.AddSnapshotFactory();
+
+            services.AddDiagnosticAnalyzerRegistry(path);
+
+            services.AddComponentDiagnosticRegistry();
+
+            services.AddComponentDiagnosticFactory();
+
+            return services;
+        }
+
+        static void AddBrokerObjectFactory(this IServiceCollection services, string path)
+        {
             services.AddSingleton<IBrokerObjectFactory>(x =>
             {
                 var settingsProvider = x.GetService<IBrokerConfigProvider>();
@@ -240,30 +214,60 @@ namespace HareDu.CoreIntegration
 
                 return new BrokerObjectFactory(comm.GetClient(config));
             });
+        }
 
+        static void AddBrokerObjectFactory(this IServiceCollection services)
+        {
+            services.AddSingleton<IBrokerObjectFactory>(x =>
+            {
+                var settingsProvider = x.GetService<IBrokerConfigProvider>();
+                var comm = x.GetService<IBrokerCommunication>();
+
+                if (!settingsProvider.TryGet(out BrokerConfig config))
+                    throw new HareDuClientConfigurationException(
+                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                return new BrokerObjectFactory(comm.GetClient(config));
+            });
+        }
+
+        static void AddSnapshotFactory(this IServiceCollection services)
+        {
             services.AddSingleton<ISnapshotFactory>(x =>
             {
-                var registry = x.GetService<ISnapshotObjectRegistry>();
                 var factory = x.GetService<IBrokerObjectFactory>();
-
-                registry.RegisterAll();
+                var registry = x.GetService<ISnapshotObjectRegistry>();
 
                 return new SnapshotFactory(factory, registry.ObjectCache);
             });
+        }
 
+        static void AddSnapshotObjectRegistry(this IServiceCollection services)
+        {
+            services.AddSingleton<ISnapshotObjectRegistry>(x =>
+            {
+                var factory = x.GetService<IBrokerObjectFactory>();
+                var registry = new SnapshotObjectRegistry(factory);
+                
+                registry.RegisterAll();
+
+                return registry;
+            });
+        }
+
+        static void AddComponentDiagnosticFactory(this IServiceCollection services)
+        {
             services.AddSingleton<IComponentDiagnosticFactory>(x =>
             {
                 var analyzerRegistry = x.GetService<IDiagnosticAnalyzerRegistry>();
-                    
-                analyzerRegistry.RegisterAll();
-
                 var diagnosticRegistry = x.GetService<IComponentDiagnosticRegistry>();
-                    
-                diagnosticRegistry.RegisterAll();
 
                 return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
             });
+        }
 
+        static void AddDiagnosticAnalyzerRegistry(this IServiceCollection services, string path)
+        {
             services.AddSingleton<IDiagnosticAnalyzerRegistry>(x =>
             {
                 var configProvider = x.GetService<IConfigurationProvider>();
@@ -271,20 +275,25 @@ namespace HareDu.CoreIntegration
                 configProvider.TryGet(path, out HareDuConfig config);
 
                 var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
-                    
-                return new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
-            });
+                var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+                
+                registry.RegisterAll();
 
+                return registry;
+            });
+        }
+
+        static void AddComponentDiagnosticRegistry(this IServiceCollection services)
+        {
             services.AddSingleton<IComponentDiagnosticRegistry>(x =>
             {
                 var analyzerRegistry = x.GetService<IDiagnosticAnalyzerRegistry>();
+                var registry = new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                
+                registry.RegisterAll();
 
-                analyzerRegistry.RegisterAll();
-
-                return new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                return registry;
             });
-
-            return services;
         }
     }
 }

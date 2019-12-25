@@ -33,16 +33,35 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
-                    
-                    analyzerRegistry.RegisterAll();
-
                     var diagnosticRegistry = x.Resolve<IComponentDiagnosticRegistry>();
-                    
-                    diagnosticRegistry.RegisterAll();
 
                     return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
                 })
                 .As<IComponentDiagnosticFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var registry = x.Resolve<IBrokerObjectRegistry>();
+                    var settingsProvider = x.Resolve<IBrokerConfigProvider>();
+                    var comm = x.Resolve<IBrokerCommunication>();
+
+                    if (!settingsProvider.TryGet(out BrokerConfig settings))
+                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                    return new BrokerObjectFactory(comm.GetClient(settings), registry.ObjectCache);
+                })
+                .As<IBrokerObjectFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var registry = x.Resolve<ISnapshotObjectRegistry>();
+                    var factory = x.Resolve<IBrokerObjectFactory>();
+
+                    return new SnapshotFactory(factory, registry.ObjectCache);
+                })
+                .As<ISnapshotFactory>()
                 .SingleInstance();
 
             builder.Register(x =>
@@ -53,58 +72,54 @@ namespace HareDu.AutofacIntegration
                     configProvider.TryGet(path, out HareDuConfig config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
+                    var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
                     
-                    return new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+                    registry.RegisterAll();
+
+                    return registry;
                 })
                 .As<IDiagnosticAnalyzerRegistry>()
                 .SingleInstance();
 
             builder.Register(x =>
                 {
-                    var brokerObjectRegistry = x.Resolve<IBrokerObjectRegistry>();
-                    var settingsProvider = x.Resolve<IBrokerConfigProvider>();
-                    var brokerConnection = x.Resolve<IBrokerCommunication>();
-
-                    if (!settingsProvider.TryGet(out BrokerConfig settings))
-                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-                    
-                    var client = brokerConnection.GetClient(settings);
-
-                    brokerObjectRegistry.RegisterAll(client);
-
-                    return new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
-                })
-                .As<IBrokerObjectFactory>()
-                .SingleInstance();
-
-            builder.Register(x =>
-                {
-                    var snapshotObjectRegistry = x.Resolve<ISnapshotObjectRegistry>();
-                    var factory = x.Resolve<IBrokerObjectFactory>();
-
-                    snapshotObjectRegistry.RegisterAll();
-
-                    return new SnapshotFactory(factory, snapshotObjectRegistry.ObjectCache);
-                })
-                .As<ISnapshotFactory>()
-                .SingleInstance();
-
-            builder.Register(x =>
-                {
                     var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
+                    var registry = new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                    
+                    registry.RegisterAll();
 
-                    analyzerRegistry.RegisterAll();
-
-                    return new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                    return registry;
                 })
                 .As<IComponentDiagnosticRegistry>()
                 .SingleInstance();
 
-            builder.RegisterType<SnapshotObjectRegistry>()
+            builder.Register(x =>
+                {
+                    var factory = x.Resolve<IBrokerObjectFactory>();
+                    var registry = new SnapshotObjectRegistry(factory);
+
+                    registry.RegisterAll();
+
+                    return registry;
+                })
                 .As<ISnapshotObjectRegistry>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerObjectRegistry>()
+            builder.Register(x =>
+                {
+                    var comm = x.Resolve<IBrokerCommunication>();
+                    var configProvider = x.Resolve<IBrokerConfigProvider>();
+
+                    if (!configProvider.TryGet(out var config))
+                        throw new HareDuClientConfigurationException(
+                            "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                    var registry = new BrokerObjectRegistry();
+
+                    registry.RegisterAll(comm.GetClient(config));
+
+                    return registry;
+                })
                 .As<IBrokerObjectRegistry>()
                 .SingleInstance();
 

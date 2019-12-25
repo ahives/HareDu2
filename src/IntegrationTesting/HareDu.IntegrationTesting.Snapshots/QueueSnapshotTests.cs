@@ -17,6 +17,8 @@ namespace HareDu.IntegrationTesting.Snapshots
     using AutofacIntegration;
     using Core;
     using Core.Configuration;
+    using CoreIntegration;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Registration;
     using Snapshotting;
@@ -45,7 +47,7 @@ namespace HareDu.IntegrationTesting.Snapshots
             var resource = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerQueues>()
                 .RegisterObserver(new DefaultQueueSnapshotConsoleLogger())
-                .RegisterObserver(new BrokerQueuesJsonExporter())
+                // .RegisterObserver(new BrokerQueuesJsonExporter())
                 .Execute();
             
 //            resource.Snapshots.Export();
@@ -160,6 +162,19 @@ namespace HareDu.IntegrationTesting.Snapshots
             var factory = new SnapshotFactory();
 
             var resource = factory
+                .Snapshot<BrokerQueues>()
+                .RegisterObserver(new BrokerQueuesJsonExporter())
+                .Execute();
+        }
+
+        [Test]
+        public void Test7()
+        {
+            var services = new ServiceCollection()
+                .AddHareDuSnapshotting($"{TestContext.CurrentContext.TestDirectory}/config.yaml")
+                .BuildServiceProvider();
+
+            var resource = services.GetService<ISnapshotFactory>()
                 .Snapshot<BrokerQueues>()
                 .RegisterObserver(new BrokerQueuesJsonExporter())
                 .Execute();

@@ -18,9 +18,11 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using CoreIntegration;
     using HareDu.Diagnostics;
     using HareDu.Diagnostics.Formatting;
     using HareDu.Diagnostics.Scanning;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Snapshotting;
     using Snapshotting.Observers;
@@ -28,34 +30,61 @@ namespace HareDu.IntegrationTesting.Diagnostics
     [TestFixture]
     public class DiagnosticScannerTests
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
+        [Test]
+        public async Task Test1()
         {
             var builder = new ContainerBuilder();
             
-            // builder.RegisterModule<HareDuSnapshottingModule>();
             builder.RegisterModule<HareDuDiagnosticsModule>();
 
-            _container = builder.Build();
-        }
+            var container = builder.Build();
 
-        [Test]
-        public async Task Test()
-        {
-            var resource = _container.Resolve<ISnapshotFactory>()
+            var resource = container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerConnection>()
 //                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 // .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Execute();
             
-            var scanner = _container.Resolve<IDiagnosticScanner>();
+            var scanner = container.Resolve<IDiagnosticScanner>();
 
             var snapshot = resource.Snapshots.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
-            var formatter = _container.Resolve<IDiagnosticReportFormatter>();
+            var formatter = container.Resolve<IDiagnosticReportFormatter>();
+
+            string formattedReport = formatter.Format(report);
+            
+            Console.WriteLine(formattedReport);
+            
+//            for (int i = 0; i < report.Results.Count; i++)
+//            {
+//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", report.Results[i].ComponentIdentifier, report.Results[i].Status);
+//                
+//                if (report.Results[i].Status == DiagnosticStatus.Red)
+//                {
+//                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Reason);
+//                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Remediation);
+//                }
+//            }
+        }
+
+        [Test]
+        public async Task Test2()
+        {
+            var services = new ServiceCollection()
+                .AddHareDuDiagnostics($"{TestContext.CurrentContext.TestDirectory}/config.yaml")
+                .BuildServiceProvider();
+            
+            var resource = services.GetService<ISnapshotFactory>()
+                .Snapshot<BrokerConnection>()
+                .Execute();
+            
+            var scanner = services.GetService<IDiagnosticScanner>();
+
+            var snapshot = resource.Snapshots.MostRecent().Snapshot;
+            var report = scanner.Scan(snapshot);
+
+            var formatter = services.GetService<IDiagnosticReportFormatter>();
 
             string formattedReport = formatter.Format(report);
             
