@@ -35,12 +35,12 @@ namespace HareDu.Snapshotting.Tests
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<FakeSnapshotObjectRegistry>()
-                .As<ISnapshotObjectRegistry>()
+            builder.RegisterType<FakeSnapshotObjectRegistrar>()
+                .As<ISnapshotObjectRegistrar>()
                 .SingleInstance();
 
-            builder.RegisterType<FakeBrokerObjectRegistry>()
-                .As<IBrokerObjectRegistry>()
+            builder.RegisterType<FakeBrokerObjectRegistrar>()
+                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
             
             builder.Register(x => new FakeBrokerObjectFactory())
@@ -49,12 +49,12 @@ namespace HareDu.Snapshotting.Tests
 
             builder.Register(x =>
                 {
-                    var snapshotObjectRegistry = x.Resolve<ISnapshotObjectRegistry>();
+                    var registrar = x.Resolve<ISnapshotObjectRegistrar>();
                     var factory = x.Resolve<IBrokerObjectFactory>();
 
-                    snapshotObjectRegistry.RegisterAll();
+                    registrar.RegisterAll();
 
-                    return new SnapshotFactory(factory, snapshotObjectRegistry.ObjectCache);
+                    return new SnapshotFactory(factory, registrar);
                 })
                 .As<ISnapshotFactory>()
                 .SingleInstance();

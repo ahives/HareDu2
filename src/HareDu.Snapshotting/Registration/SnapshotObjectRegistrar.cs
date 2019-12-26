@@ -11,62 +11,64 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Registration
+namespace HareDu.Snapshotting.Registration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
-    using Core;
-    using Core.Testing;
 
-    public class BrokerObjectRegistry :
-        IBrokerObjectRegistry
+    public class SnapshotObjectRegistrar :
+        ISnapshotObjectRegistrar
     {
-        readonly IDictionary<string, object> _cache;
+        readonly IBrokerObjectFactory _factory;
+        readonly Dictionary<string, object> _cache;
 
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public BrokerObjectRegistry()
+        public SnapshotObjectRegistrar(IBrokerObjectFactory factory)
         {
+            _factory = factory;
             _cache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(HttpClient client)
+        public void RegisterAll()
         {
             var types = GetType()
                 .Assembly
                 .GetTypes()
-                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
+                .Where(x => typeof(HareDuSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
 
             foreach (var type in types)
             {
-                if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null)
+                if (_cache.ContainsKey(type.FullName))
                     continue;
                 
-                var instance = Activator.CreateInstance(type, client);
-                
-                _cache.Add(type.FullName, instance);
+                RegisterInstance(type);
             }
         }
 
-        public void Register(HttpClient client, Type type)
+        public void Register(Type type)
         {
-            try
-            {
-                var instance = Activator.CreateInstance(type, client);
+            if (_cache.ContainsKey(type.FullName))
+                return;
             
-                _cache.Add(type.FullName, instance);
-            }
-            catch { }
+            RegisterInstance(type);
         }
 
-        public void Register<T>(HttpClient client)
+        public void Register<T>()
+        {
+            Type type = typeof(T);
+            if (_cache.ContainsKey(type.FullName))
+                return;
+            
+            RegisterInstance(type);
+        }
+
+        void RegisterInstance(Type type)
         {
             try
             {
-                Type type = typeof(T);
-                var instance = Activator.CreateInstance(type, client);
+                var instance = Activator.CreateInstance(type, _factory);
             
                 _cache.Add(type.FullName, instance);
             }

@@ -19,14 +19,14 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using HareDu.Registration;
     using HareDu.Testing.Fakes;
 
-    public class FakeBrokerObjectRegistry :
-        IBrokerObjectRegistry
+    public class FakeBrokerObjectRegistrar :
+        IBrokerObjectRegistrar
     {
         readonly IDictionary<string, object> _cache;
         
         public IDictionary<string, object> ObjectCache => _cache;
         
-        public FakeBrokerObjectRegistry()
+        public FakeBrokerObjectRegistrar()
         {
             _cache = new Dictionary<string, object>();
         }

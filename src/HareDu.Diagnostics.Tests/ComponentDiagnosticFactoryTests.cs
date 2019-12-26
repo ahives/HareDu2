@@ -111,14 +111,14 @@ namespace HareDu.Diagnostics.Tests
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
-            var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+            var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistrar(config.Analyzer, knowledgeBaseProvider);
             diagnosticAnalyzerRegistry.RegisterAll();
             
-            var diagnosticRegistry = new ComponentDiagnosticRegistry(diagnosticAnalyzerRegistry.ObjectCache);
+            var diagnosticRegistry = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistry);
             diagnosticRegistry.RegisterAll();
             diagnosticRegistry.Register<FakeDiagnostic>();
 
-            var factory = new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, _analyzers);
+            var factory = new ComponentDiagnosticFactory(diagnosticAnalyzerRegistry, diagnosticRegistry);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);

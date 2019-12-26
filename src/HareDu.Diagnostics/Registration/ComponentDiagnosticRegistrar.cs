@@ -19,8 +19,8 @@ namespace HareDu.Diagnostics.Registration
     using Analyzers;
     using Scanning;
 
-    public class ComponentDiagnosticRegistry :
-        IComponentDiagnosticRegistry
+    public class ComponentDiagnosticRegistrar :
+        IComponentDiagnosticRegistrar
     {
         readonly IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
         readonly List<Type> _types;
@@ -29,9 +29,16 @@ namespace HareDu.Diagnostics.Registration
         public IReadOnlyList<Type> Types => _types;
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public ComponentDiagnosticRegistry(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public ComponentDiagnosticRegistrar(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
             _analyzers = analyzers;
+            _cache = new Dictionary<string, object>();
+            _types = GetTypes();
+        }
+
+        public ComponentDiagnosticRegistrar(IDiagnosticAnalyzerRegistrar registrar)
+        {
+            _analyzers = registrar.ObjectCache.Values.ToList();
             _cache = new Dictionary<string, object>();
             _types = GetTypes();
         }

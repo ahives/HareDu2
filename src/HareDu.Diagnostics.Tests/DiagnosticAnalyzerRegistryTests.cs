@@ -40,33 +40,32 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out var config);
             
-            var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticAnalyzerRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
 
             registry.RegisterAll();
             
             registry.ObjectCache.Count.ShouldBe(21);
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(DiskAlarmAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(MessagePagingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueGrowthAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldNotBeNull();
+            registry.ObjectCache[typeof(AvailableCpuCoresAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(BlockedConnectionAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ChannelLimitReachedAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ChannelThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ConsumerUtilizationAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(DiskAlarmAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(MemoryAlarmAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(MessagePagingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(NetworkPartitionAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueGrowthAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueHighFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueLowFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueNoFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(RedeliveredMessagesAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(UnroutableMessageAnalyzer).GetIdentifier()].ShouldNotBeNull();
         }
 
         [Test]
@@ -76,34 +75,33 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out var config);
             
-            var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticAnalyzerRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
 
             registry.RegisterAll();
             registry.RegisterAll();
             
             registry.ObjectCache.Count.ShouldBe(21);
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(DiskAlarmAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(MessagePagingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueGrowthAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldNotBeNull();
+            registry.ObjectCache[typeof(AvailableCpuCoresAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(BlockedConnectionAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ChannelLimitReachedAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ChannelThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ConsumerUtilizationAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(DiskAlarmAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(MemoryAlarmAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(MessagePagingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(NetworkPartitionAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueGrowthAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueHighFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueLowFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueNoFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(RedeliveredMessagesAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(UnroutableMessageAnalyzer).GetIdentifier()].ShouldNotBeNull();
         }
 
         [Test]
@@ -113,13 +111,13 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
-            var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticAnalyzerRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
 
             registry.Register(typeof(TestDiagnosticAnalyzer));
             registry.Register(typeof(TestDiagnosticAnalyzer));
 
             registry.ObjectCache.Count.ShouldBe(1);
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(TestDiagnosticAnalyzer).GetIdentifier()).ShouldNotBeNull();
+            registry.ObjectCache[typeof(TestDiagnosticAnalyzer).GetIdentifier()].ShouldNotBeNull();
         }
 
         [Test]
@@ -129,13 +127,13 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
-            var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticAnalyzerRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
 
             registry.Register<TestDiagnosticAnalyzer>();
             registry.Register<TestDiagnosticAnalyzer>();
 
             registry.ObjectCache.Count.ShouldBe(1);
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(TestDiagnosticAnalyzer).GetIdentifier()).ShouldNotBeNull();
+            registry.ObjectCache[typeof(TestDiagnosticAnalyzer).GetIdentifier()].ShouldNotBeNull();
         }
 
         [Test]
@@ -145,34 +143,34 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out var config);
             
-            var registry = new DiagnosticAnalyzerRegistry(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticAnalyzerRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
 
             registry.RegisterAll();
             registry.Register(typeof(TestDiagnosticAnalyzer));
 
             registry.ObjectCache.Count.ShouldBe(22);
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(DiskAlarmAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(MessagePagingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueGrowthAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldNotBeNull();
-            registry.ObjectCache.SingleOrDefault(x => x.Identifier == typeof(TestDiagnosticAnalyzer).GetIdentifier()).ShouldNotBeNull();
+            registry.ObjectCache[typeof(AvailableCpuCoresAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(BlockedConnectionAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ChannelLimitReachedAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ChannelThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(ConsumerUtilizationAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(DiskAlarmAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(MemoryAlarmAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(MessagePagingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(NetworkPartitionAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueGrowthAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueHighFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueLowFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(QueueNoFlowAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(RedeliveredMessagesAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(UnroutableMessageAnalyzer).GetIdentifier()].ShouldNotBeNull();
+            registry.ObjectCache[typeof(TestDiagnosticAnalyzer).GetIdentifier()].ShouldNotBeNull();
         }
     }
 

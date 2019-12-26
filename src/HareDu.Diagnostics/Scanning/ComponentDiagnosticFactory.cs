@@ -17,6 +17,7 @@ namespace HareDu.Diagnostics.Scanning
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
+    using Registration;
     using Snapshotting;
 
     /// <summary>
@@ -30,11 +31,11 @@ namespace HareDu.Diagnostics.Scanning
         readonly IList<IDisposable> _observers;
         readonly IEnumerable<Type> _types;
 
-        public ComponentDiagnosticFactory(IDictionary<string, object> cache, IReadOnlyList<Type> types, IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public ComponentDiagnosticFactory(IDiagnosticAnalyzerRegistrar diagnosticAnalyzerRegistrar, IComponentDiagnosticRegistrar componentDiagnosticRegistrar)
         {
-            _cache = cache;
-            _types = types;
-            _analyzers = analyzers;
+            _analyzers = diagnosticAnalyzerRegistrar.ObjectCache.Values.ToList();
+            _cache = componentDiagnosticRegistrar.ObjectCache;
+            _types = componentDiagnosticRegistrar.Types;
             _observers = new List<IDisposable>();
         }
 

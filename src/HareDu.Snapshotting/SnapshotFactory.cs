@@ -16,10 +16,6 @@ namespace HareDu.Snapshotting
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net.Http;
-    using Core;
-    using Core.Configuration;
-    using Core.Extensions;
     using Registration;
 
     public class SnapshotFactory :
@@ -28,98 +24,10 @@ namespace HareDu.Snapshotting
         readonly IBrokerObjectFactory _factory;
         readonly IDictionary<string, object> _cache;
 
-        public SnapshotFactory(IBrokerObjectFactory factory, IDictionary<string, object> snapshotObjectCache)
+        public SnapshotFactory(IBrokerObjectFactory factory, ISnapshotObjectRegistrar registrar)
         {
             _factory = factory;
-            _cache = snapshotObjectCache;
-        }
-
-        public SnapshotFactory(IBrokerObjectFactory factory, ISnapshotObjectRegistry registry)
-        {
-            _factory = factory;
-
-            registry.RegisterAll();
-            
-            _cache = registry.ObjectCache;
-        }
-
-        public SnapshotFactory(IBrokerObjectFactory factory)
-        {
-            _factory = factory;
-            
-            var registry = new SnapshotObjectRegistry(factory);
-            
-            registry.RegisterAll();
-
-            _cache = registry.ObjectCache;
-        }
-
-        public SnapshotFactory(HttpClient client)
-        {
-            _factory = new BrokerObjectFactory(client);
-            
-            var registry = new SnapshotObjectRegistry(_factory);
-            
-            registry.RegisterAll();
-
-            _cache = registry.ObjectCache;
-        }
-
-        public SnapshotFactory(Action<ClientConfigProvider> config)
-        {
-            var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
-            var settings = configProvider.Init(config);
-            var comm = new BrokerCommunication();
-            
-            _factory = new BrokerObjectFactory(comm.GetClient(settings));
-            
-            var registry = new SnapshotObjectRegistry(_factory);
-            
-            registry.RegisterAll();
-
-            _cache = registry.ObjectCache;
-        }
-
-        public SnapshotFactory(IBrokerConfigProvider configProvider)
-        {
-            BrokerConfig settings;
-            if (configProvider.IsNull())
-            {
-                var provider = new BrokerConfigProvider(new ConfigurationProvider());
-                if (!provider.TryGet(out settings))
-                    throw new HareDuClientConfigurationException();
-            }
-            else
-            {
-                configProvider.TryGet(out settings);
-            }
-
-            var comm = new BrokerCommunication();
-            
-            _factory = new BrokerObjectFactory(comm.GetClient(settings));
-            
-            var registry = new SnapshotObjectRegistry(_factory);
-            
-            registry.RegisterAll();
-
-            _cache = registry.ObjectCache;
-        }
-
-        public SnapshotFactory()
-        {
-            var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
-
-            configProvider.TryGet(out BrokerConfig settings);
-
-            var comm = new BrokerCommunication();
-            
-            _factory = new BrokerObjectFactory(comm.GetClient(settings));
-            
-            var registry = new SnapshotObjectRegistry(_factory);
-            
-            registry.RegisterAll();
-
-            _cache = registry.ObjectCache;
+            _cache = registrar.ObjectCache;
         }
 
         public T Snapshot<T>()

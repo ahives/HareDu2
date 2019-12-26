@@ -22,12 +22,12 @@ namespace HareDu.Tests.Registration
     using Shouldly;
 
     [TestFixture]
-    public class BrokerObjectRegistryTests
+    public class BrokerObjectRegistrarTests
     {
         [Test]
         public void Verify_will_throw_if_param_not_present()
         {
-            var registry = new BrokerObjectRegistry();
+            var registry = new BrokerObjectRegistrar();
 
             Should.Throw<TargetInvocationException>(() => registry.RegisterAll(null));
         }
@@ -35,7 +35,7 @@ namespace HareDu.Tests.Registration
         [Test]
         public void Verify_will_register_all_broker_objects()
         {
-            var registry = new BrokerObjectRegistry();
+            var registry = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
@@ -68,7 +68,7 @@ namespace HareDu.Tests.Registration
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_1()
         {
-            var registry = new BrokerObjectRegistry();
+            var registry = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
@@ -104,7 +104,7 @@ namespace HareDu.Tests.Registration
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_2()
         {
-            var registry = new BrokerObjectRegistry();
+            var registry = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 

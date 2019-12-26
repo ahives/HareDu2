@@ -17,9 +17,9 @@ namespace HareDu.Diagnostics.Registration
     using System.Collections.Generic;
     using Analyzers;
 
-    public interface IDiagnosticAnalyzerRegistry
+    public interface IDiagnosticAnalyzerRegistrar
     {
-        IReadOnlyList<IDiagnosticAnalyzer> ObjectCache { get; }
+        IDictionary<string, IDiagnosticAnalyzer> ObjectCache { get; }
         
         void RegisterAll();
         

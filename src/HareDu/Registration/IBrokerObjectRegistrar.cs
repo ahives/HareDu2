@@ -17,7 +17,7 @@ namespace HareDu.Registration
     using System.Collections.Generic;
     using System.Net.Http;
 
-    public interface IBrokerObjectRegistry
+    public interface IBrokerObjectRegistrar
     {
         IDictionary<string, object> ObjectCache { get; }
 

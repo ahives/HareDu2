@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Scanning
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
@@ -28,10 +29,13 @@ namespace HareDu.Diagnostics.Scanning
         readonly IReadOnlyList<IDiagnosticAnalyzer> _diskAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _memoryAnalyzers;
         readonly IReadOnlyList<IDiagnosticAnalyzer> _runtimeAnalyzers;
-        IReadOnlyList<IDiagnosticAnalyzer> _osAnalyzers;
+        readonly IReadOnlyList<IDiagnosticAnalyzer> _osAnalyzers;
 
         public ClusterDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
+            if (analyzers.IsNull())
+                throw new ArgumentNullException(nameof(analyzers));
+            
             _nodeAnalyzers = analyzers.Where(IsNodeAnalyzer).ToList();
             _diskAnalyzers = analyzers.Where(IsDiskAnalyzer).ToList();
             _memoryAnalyzers = analyzers.Where(IsMemoryAnalyzer).ToList();

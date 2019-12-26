@@ -63,15 +63,15 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerCommunication();
                 var client = comm.GetClient(config.Broker);
 
-                var brokerObjectRegistry = new BrokerObjectRegistry();
-                brokerObjectRegistry.RegisterAll(client);
+                var brokerObjectRegistrar = new BrokerObjectRegistrar();
+                brokerObjectRegistrar.RegisterAll(client);
 
-                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
-                var snapshotObjectRegistry = new SnapshotObjectRegistry(brokerFactory);
+                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar);
+                var snapshotObjectRegistrar = new SnapshotObjectRegistrar(brokerFactory);
 
-                snapshotObjectRegistry.RegisterAll();
+                snapshotObjectRegistrar.RegisterAll();
 
-                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistry.ObjectCache);
+                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistrar);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()
@@ -90,11 +90,11 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerCommunication();
                 var client = comm.GetClient(config.Broker);
 
-                var brokerObjectRegistry = new BrokerObjectRegistry();
-                brokerObjectRegistry.RegisterAll(client);
+                var brokerObjectRegistrar = new BrokerObjectRegistrar();
+                brokerObjectRegistrar.RegisterAll(client);
 
-                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistry.ObjectCache);
-                var snapshotObjectRegistry = new SnapshotObjectRegistry(brokerFactory);
+                var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar);
+                var snapshotObjectRegistry = new SnapshotObjectRegistrar(brokerFactory);
 
                 snapshotObjectRegistry.RegisterAll();
 
@@ -107,65 +107,65 @@ namespace HareDu.IntegrationTesting.Snapshots
             }
         }
 
-        [Test]
-        public void Test3()
-        {
-            var configurationProvider = new ConfigurationProvider();
-            
-            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
-            {
-                var comm = new BrokerCommunication();
-                var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
-
-                var resource = factory
-                    .Snapshot<BrokerQueues>()
-                    .RegisterObserver(new BrokerQueuesJsonExporter())
-                    .Execute();
-            }
-        }
-
-        [Test]
-        public void Test4()
-        {
-            var configurationProvider = new ConfigurationProvider();
-            
-            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
-            {
-                var comm = new BrokerCommunication();
-                var factory = new SnapshotFactory(comm.GetClient(config.Broker));
-
-                var resource = factory
-                    .Snapshot<BrokerQueues>()
-                    .RegisterObserver(new BrokerQueuesJsonExporter())
-                    .Execute();
-            }
-        }
-
-        [Test]
-        public void Test5()
-        {
-            var factory = new SnapshotFactory(x =>
-            {
-                x.ConnectTo("http://localhost:15672");
-                x.UsingCredentials("guest", "guest");
-            });
-
-            var resource = factory
-                .Snapshot<BrokerQueues>()
-                .RegisterObserver(new BrokerQueuesJsonExporter())
-                .Execute();
-        }
-
-        [Test]
-        public void Test6()
-        {
-            var factory = new SnapshotFactory();
-
-            var resource = factory
-                .Snapshot<BrokerQueues>()
-                .RegisterObserver(new BrokerQueuesJsonExporter())
-                .Execute();
-        }
+        // [Test]
+        // public void Test3()
+        // {
+        //     var configurationProvider = new ConfigurationProvider();
+        //     
+        //     if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
+        //     {
+        //         var comm = new BrokerCommunication();
+        //         var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
+        //
+        //         var resource = factory
+        //             .Snapshot<BrokerQueues>()
+        //             .RegisterObserver(new BrokerQueuesJsonExporter())
+        //             .Execute();
+        //     }
+        // }
+        //
+        // [Test]
+        // public void Test4()
+        // {
+        //     var configurationProvider = new ConfigurationProvider();
+        //     
+        //     if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
+        //     {
+        //         var comm = new BrokerCommunication();
+        //         var factory = new SnapshotFactory(comm.GetClient(config.Broker));
+        //
+        //         var resource = factory
+        //             .Snapshot<BrokerQueues>()
+        //             .RegisterObserver(new BrokerQueuesJsonExporter())
+        //             .Execute();
+        //     }
+        // }
+        //
+        // [Test]
+        // public void Test5()
+        // {
+        //     var factory = new SnapshotFactory(x =>
+        //     {
+        //         x.ConnectTo("http://localhost:15672");
+        //         x.UsingCredentials("guest", "guest");
+        //     });
+        //
+        //     var resource = factory
+        //         .Snapshot<BrokerQueues>()
+        //         .RegisterObserver(new BrokerQueuesJsonExporter())
+        //         .Execute();
+        // }
+        //
+        // [Test]
+        // public void Test6()
+        // {
+        //     var factory = new SnapshotFactory();
+        //
+        //     var resource = factory
+        //         .Snapshot<BrokerQueues>()
+        //         .RegisterObserver(new BrokerQueuesJsonExporter())
+        //         .Execute();
+        // }
 
         [Test]
         public void Test7()

@@ -26,16 +26,16 @@ namespace HareDu.Diagnostics.Tests
         [Test, Explicit]
         public void Test1()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            // string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            //
+            // var configProvider = new ConfigurationProvider();
+            // configProvider.TryGet(path, out HareDuConfig config);
             
-            var configProvider = new ConfigurationProvider();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
-            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
-            var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
-            diagnosticAnalyzerRegistry.RegisterAll();
-            
-            var registry = new ComponentDiagnosticRegistry(null);
+            // var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            // var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+            // diagnosticAnalyzerRegistry.RegisterAll();
+            IDiagnosticAnalyzerRegistrar registrar = null;
+            var registry = new ComponentDiagnosticRegistrar(registrar);
 
             Should.Throw<TargetInvocationException>(() => registry.RegisterAll());
         }

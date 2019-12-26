@@ -27,7 +27,7 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var registration = x.Resolve<IBrokerObjectRegistry>();
+                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var connection = x.Resolve<IBrokerCommunication>();
 
@@ -37,9 +37,9 @@ namespace HareDu.Tests
                     
                     var client = connection.GetClient(config);
 
-                    registration.RegisterAll(client);
+                    registrar.RegisterAll(client);
 
-                    return new BrokerObjectFactory(client, registration.ObjectCache);
+                    return new BrokerObjectFactory(client, registrar);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -48,8 +48,8 @@ namespace HareDu.Tests
                 .As<IBrokerCommunication>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerObjectRegistry>()
-                .As<IBrokerObjectRegistry>()
+            builder.RegisterType<BrokerObjectRegistrar>()
+                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()
@@ -69,7 +69,7 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var registration = x.Resolve<IBrokerObjectRegistry>();
+                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var connection = x.Resolve<IBrokerCommunication>();
 
@@ -79,9 +79,9 @@ namespace HareDu.Tests
 
                     var client = connection.GetClient(config);
 
-                    registration.RegisterAll(client);
+                    registrar.RegisterAll(client);
 
-                    return new BrokerObjectFactory(client, registration.ObjectCache);
+                    return new BrokerObjectFactory(client, registrar);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -90,8 +90,8 @@ namespace HareDu.Tests
                 .As<IBrokerCommunication>()
                 .SingleInstance();
 
-            builder.RegisterType<BrokerObjectRegistry>()
-                .As<IBrokerObjectRegistry>()
+            builder.RegisterType<BrokerObjectRegistrar>()
+                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()

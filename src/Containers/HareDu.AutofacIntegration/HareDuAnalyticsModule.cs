@@ -30,15 +30,10 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
+                    var diagnosticAnalyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
+                    var componentDiagnosticRegistrar = x.Resolve<IComponentDiagnosticRegistrar>();
 
-                    analyzerRegistry.RegisterAll();
-
-                    var diagnosticRegistry = x.Resolve<IComponentDiagnosticRegistry>();
-                    
-                    diagnosticRegistry.RegisterAll();
-
-                    return new ComponentDiagnosticFactory(diagnosticRegistry.ObjectCache, diagnosticRegistry.Types, analyzerRegistry.ObjectCache);
+                    return new ComponentDiagnosticFactory(diagnosticAnalyzerRegistrar, componentDiagnosticRegistrar);
                 })
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();
@@ -63,9 +58,13 @@ namespace HareDu.AutofacIntegration
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
                     
-                    return new DiagnosticAnalyzerRegistry(config.Analyzer, knowledgeBaseProvider);
+                    var registrar = new DiagnosticAnalyzerRegistrar(config.Analyzer, knowledgeBaseProvider);
+                    
+                    registrar.RegisterAll();
+
+                    return registrar;
                 })
-                .As<IDiagnosticAnalyzerRegistry>()
+                .As<IDiagnosticAnalyzerRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<AnalyticsRegistry>()
@@ -74,13 +73,13 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var analyzerRegistry = x.Resolve<IDiagnosticAnalyzerRegistry>();
+                    var registrar = new ComponentDiagnosticRegistrar(x.Resolve<IDiagnosticAnalyzerRegistrar>());
+                    
+                    registrar.RegisterAll();
 
-                    analyzerRegistry.RegisterAll();
-
-                    return new ComponentDiagnosticRegistry(analyzerRegistry.ObjectCache);
+                    return registrar;
                 })
-                .As<IComponentDiagnosticRegistry>()
+                .As<IComponentDiagnosticRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()

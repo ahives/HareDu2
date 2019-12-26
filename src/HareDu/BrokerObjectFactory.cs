@@ -27,29 +27,9 @@ namespace HareDu
         readonly HttpClient _client;
         readonly IDictionary<string, object> _objectCache;
 
-        public BrokerObjectFactory(HttpClient client, IDictionary<string, object> objectCache)
+        public BrokerObjectFactory(HttpClient client, IBrokerObjectRegistrar registrar)
         {
-            _objectCache = objectCache;
             _client = client ?? throw new ArgumentNullException(nameof(client));
-        }
-
-        public BrokerObjectFactory(HttpClient client, IBrokerObjectRegistry registrar)
-        {
-            _client = client;
-            
-            registrar.RegisterAll(client);
-
-            _objectCache = registrar.ObjectCache;
-        }
-
-        public BrokerObjectFactory(HttpClient client)
-        {
-            _client = client;
-            
-            IBrokerObjectRegistry registrar = new BrokerObjectRegistry();
-            
-            registrar.RegisterAll(client);
-
             _objectCache = registrar.ObjectCache;
         }
 

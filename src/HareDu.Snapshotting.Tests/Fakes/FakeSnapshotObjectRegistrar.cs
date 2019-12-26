@@ -17,14 +17,14 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using System.Collections.Generic;
     using Registration;
 
-    public class FakeSnapshotObjectRegistry :
-        ISnapshotObjectRegistry
+    public class FakeSnapshotObjectRegistrar :
+        ISnapshotObjectRegistrar
     {
         readonly IDictionary<string, object> _cache;
         
         public IDictionary<string, object> ObjectCache => _cache;
         
-        public FakeSnapshotObjectRegistry()
+        public FakeSnapshotObjectRegistrar()
         {
             _cache = new Dictionary<string, object>();
         }

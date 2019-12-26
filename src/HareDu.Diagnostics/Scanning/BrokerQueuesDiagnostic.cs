@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Scanning
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
@@ -27,10 +28,13 @@ namespace HareDu.Diagnostics.Scanning
         readonly IReadOnlyList<IDiagnosticAnalyzer> _queueAnalyzers;
         readonly List<IDiagnosticAnalyzer> _exchangeAnalyzers;
 
-        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> sensors)
+        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
-            _queueAnalyzers = sensors.Where(IsQueueAnalyzer).ToList();
-            _exchangeAnalyzers = sensors.Where(IsExchangeAnalyzer).ToList();
+            if (analyzers.IsNull())
+                throw new ArgumentNullException(nameof(analyzers));
+            
+            _queueAnalyzers = analyzers.Where(IsQueueAnalyzer).ToList();
+            _exchangeAnalyzers = analyzers.Where(IsExchangeAnalyzer).ToList();
         }
 
         public IReadOnlyList<DiagnosticResult> Scan(BrokerQueuesSnapshot snapshot)

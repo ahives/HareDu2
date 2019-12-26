@@ -20,22 +20,22 @@ namespace HareDu.Diagnostics.Registration
     using Core.Configuration;
     using KnowledgeBase;
 
-    public class DiagnosticAnalyzerRegistry :
-        IDiagnosticAnalyzerRegistry
+    public class DiagnosticAnalyzerRegistrar :
+        IDiagnosticAnalyzerRegistrar
     {
         readonly DiagnosticAnalyzerConfig _config;
         readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         readonly IConfigurationProvider _configProvider;
-        readonly List<IDiagnosticAnalyzer> _cache;
+        readonly IDictionary<string, IDiagnosticAnalyzer> _cache;
         readonly List<Type> _types;
 
-        public IReadOnlyList<IDiagnosticAnalyzer> ObjectCache => _cache;
+        public IDictionary<string, IDiagnosticAnalyzer> ObjectCache => _cache;
 
-        public DiagnosticAnalyzerRegistry(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public DiagnosticAnalyzerRegistrar(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _config = config;
             _knowledgeBaseProvider = knowledgeBaseProvider;
-            _cache = new List<IDiagnosticAnalyzer>();
+            _cache = new Dictionary<string, IDiagnosticAnalyzer>();
             _types = GetTypes();
         }
         
@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Registration
         {
             for (int i = 0; i < _types.Count; i++)
             {
-                if (_cache.Any(x => x.Identifier == _types[i].GetIdentifier()))
+                if (_cache.ContainsKey(_types[i].GetIdentifier()))
                     continue;
                 
                 RegisterInstance(_types[i]);
@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Registration
 
         public void Register(Type type)
         {
-            if (_cache.Any(x => x.Identifier == type.GetIdentifier()))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return;
             
             RegisterInstance(type);
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Registration
         public void Register<T>()
         {
             Type type = typeof(T);
-            if (_cache.Any(x => x.Identifier == type.GetIdentifier()))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return;
 
             RegisterInstance(type);
@@ -73,7 +73,7 @@ namespace HareDu.Diagnostics.Registration
             {
                 var instance = (IDiagnosticAnalyzer)Activator.CreateInstance(type, _config, _knowledgeBaseProvider);
             
-                _cache.Add(instance);
+                _cache.Add(type.GetIdentifier(), instance);
             }
             catch { }
         }

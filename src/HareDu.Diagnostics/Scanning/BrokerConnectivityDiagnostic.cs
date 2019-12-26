@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Scanning
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
@@ -30,6 +31,9 @@ namespace HareDu.Diagnostics.Scanning
 
         public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
         {
+            if (analyzers.IsNull())
+                throw new ArgumentNullException(nameof(analyzers));
+            
             _connectionAnalyzers = analyzers.Where(IsConnectionThroughputAnalyzer).ToList();
             _channelAnalyzers = analyzers.Where(IsChannelThroughputAnalyzer).ToList();
             _connectivityAnalyzers = analyzers.Where(IsConnectivityAnalyzer).ToList();
