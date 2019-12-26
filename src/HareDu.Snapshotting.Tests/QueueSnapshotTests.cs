@@ -18,6 +18,7 @@ namespace HareDu.Snapshotting.Tests
     using Autofac;
     using Core;
     using Core.Configuration;
+    using Extensions;
     using Fakes;
     using HareDu.Registration;
     using HareDu.Testing.Fakes;

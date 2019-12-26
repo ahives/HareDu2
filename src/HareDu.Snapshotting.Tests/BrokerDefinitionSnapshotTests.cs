@@ -16,6 +16,7 @@ namespace HareDu.Snapshotting.Tests
     using System;
     using Autofac;
     using AutofacIntegration;
+    using Extensions;
     using NUnit.Framework;
 
     [TestFixture]

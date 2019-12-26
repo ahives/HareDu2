@@ -15,8 +15,22 @@ namespace HareDu.Core.Extensions
 {
     public static class ValueExtensions
     {
+        /// <summary>
+        /// Returns true if the value is null, otherwise, returns true.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static bool IsNull<T>(this T value) => value == null;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static bool TryGetValue<T>(this ResultList<T> source, int index, out T value)
         {
             if (!source.HasData || index < 0 || index >= source.Data.Count)

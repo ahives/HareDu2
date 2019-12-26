@@ -25,6 +25,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Snapshotting;
+    using Snapshotting.Extensions;
     using Snapshotting.Observers;
 
     [TestFixture]

@@ -21,6 +21,7 @@ namespace HareDu.Examples
     using Nest;
     using Quartz;
     using Snapshotting;
+    using Snapshotting.Extensions;
     using Snapshotting.Model;
     using Snapshot = Snapshotting.Snapshot;
 
