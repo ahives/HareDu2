@@ -32,9 +32,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
 
         public HareDuSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
         {
-            ClusterSnapshot snapshot = new FakeClusterSnapshot1();
+            ClusterSnapshot snapshotLens = new FakeClusterSnapshot1();
 
-            _snapshots.Add(new SnapshotContextImpl(snapshot));
+            _snapshots.Add(new SnapshotContextImpl(snapshotLens));
 
             return this;
         }

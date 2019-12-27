@@ -13,26 +13,9 @@
 // limitations under the License.
 namespace HareDu.Snapshotting
 {
-    using System;
-    using Model;
-
-    public class EmptySnapshotContext<T> :
-        SnapshotContext<T>
-        where T : Snapshot
+    public interface ISnapshotWriter
     {
-        public EmptySnapshotContext()
-        {
-            Timestamp = DateTimeOffset.Now;
-//            Snapshot = new MyEmptySnapshot<T>();
-        }
-
-        public string Identifier { get; }
-        public T Snapshot => throw new Exception();
-        public DateTimeOffset Timestamp { get; }
-    }
-
-    public class MyEmptySnapshotLens<T> :
-        Snapshot
-    {
+        bool TrySave<T>(SnapshotContext<T> context, string file, string path)
+            where T : Snapshot;
     }
 }

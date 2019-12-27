@@ -23,6 +23,7 @@ namespace HareDu.Examples
     using Quartz;
     using Quartz.Impl;
     using Quartz.Logging;
+    using Scheduling;
     using Snapshotting;
     using Snapshotting.Model;
     using ITrigger = Quartz.ITrigger;
@@ -72,24 +73,30 @@ namespace HareDu.Examples
             builder.Register(x =>
                 {
                     var factory = new StdSchedulerFactory();
-                    var scheduler = factory.GetScheduler().Result;
+                    var scheduler = factory.GetScheduler().ConfigureAwait(false).GetAwaiter().GetResult();
 
-                    var resource = x.Resolve<ISnapshotFactory>()
-                        .Snapshot<T>();
+                    // var resource = x.Resolve<ISnapshotFactory>()
+                    //     .Snapshot<T>();
                     
-                    var nodes = new[]
-                    {
-                        new Uri("http://localhost:9200")
-                    };
-            
-                    var pool = new StickyConnectionPool(nodes);
-                    var client = new ElasticClient(new ConnectionSettings(pool));
+                    // var nodes = new[]
+                    // {
+                    //     new Uri("http://localhost:9200")
+                    // };
+                    //
+                    // var pool = new StickyConnectionPool(nodes);
+                    // var client = new ElasticClient(new ConnectionSettings(pool));
 
-                    scheduler.JobFactory = new CustomJobFactory<T>(resource, client);
+                    // scheduler.JobFactory = new CustomJobFactory<T>(resource, client);
+                    
+                    scheduler.JobFactory = new HareDuJobFactory<T>(x.Resolve<ISnapshotFactory>(), x.Resolve<ISnapshotWriter>());
 
                     return scheduler;
                 })
                 .As<IScheduler>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
                 .SingleInstance();
 
             var container = builder.Build();
