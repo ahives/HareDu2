@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Scheduling
 {
-    using System.IO;
     using System.Threading.Tasks;
     using Quartz;
     using Snapshotting;
@@ -37,7 +36,7 @@ namespace HareDu.Scheduling
             var snapshot = _factory.Snapshot<T>().Execute();
             var result = snapshot.Timeline.MostRecent();
 
-            _writer.TrySave(result, $"snapshot_{result.Identifier}.json", $"{Directory.GetCurrentDirectory()}/snapshots");
+            _writer.TrySave(result, $"snapshot_{result.Identifier}.json", context.JobDetail.JobDataMap["path"].ToString());
         }
     }
 }

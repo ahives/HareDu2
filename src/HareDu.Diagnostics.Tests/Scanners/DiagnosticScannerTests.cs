@@ -42,9 +42,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_BrokerConnectivityDiagnostic()
         {
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
+            BrokerConnectivitySnapshot snapshotLens = new FakeBrokerConnectivitySnapshot1();
             var scanner = _container.Resolve<IDiagnosticScanner>()
-                .Scan(snapshot);
+                .Scan(snapshotLens);
             
             scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
         }
@@ -52,9 +52,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_ClusterDiagnostic()
         {
-            ClusterSnapshot snapshot = new FakeClusterSnapshot1();
+            ClusterSnapshot snapshotLens = new FakeClusterSnapshot1();
             var scanner = _container.Resolve<IDiagnosticScanner>()
-                .Scan(snapshot);
+                .Scan(snapshotLens);
             
             scanner.ScannerIdentifier.ShouldBe(typeof(ClusterDiagnostic).GetIdentifier());
         }
@@ -62,9 +62,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_BrokerQueuesDiagnostic()
         {
-            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
+            BrokerQueuesSnapshot snapshotLens = new FakeBrokerQueuesSnapshot1(1);
             var scanner = _container.Resolve<IDiagnosticScanner>()
-                .Scan(snapshot);
+                .Scan(snapshotLens);
             
             scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesDiagnostic).GetIdentifier());
         }
@@ -72,11 +72,11 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_does_not_throw_when_scanner_not_found()
         {
-            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
+            BrokerQueuesSnapshot snapshotLens = new FakeBrokerQueuesSnapshot1(1);
             IComponentDiagnosticFactory factory = new FakeDiagnosticFactory();
             IDiagnosticScanner scanner = new DiagnosticScanner(factory);
 
-            var report = scanner.Scan(snapshot);
+            var report = scanner.Scan(snapshotLens);
             
             report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier());
             report.ShouldBe(DiagnosticCache.EmptyDiagnosticReport);

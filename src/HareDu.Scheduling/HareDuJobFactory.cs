@@ -14,6 +14,7 @@
 namespace HareDu.Scheduling
 {
     using System;
+    using System.Collections.Generic;
     using Quartz;
     using Quartz.Simpl;
     using Quartz.Spi;
@@ -36,12 +37,15 @@ namespace HareDu.Scheduling
         {
             try
             {
-                return new PersistSnapshotJob<T>(_factory, _writer);
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<T>))
+                    return new PersistSnapshotJob<T>(_factory, _writer);
+
+                return null;
             }
             catch (Exception e)
             {
                 throw new SchedulerException(
-                    $"Problem while instantiating job '{bundle.JobDetail.Key}' from MyJobFactory.");
+                    $"Problem while instantiating job '{bundle.JobDetail.Key}' from HareDuJobFactory.");
             }
         }
     }

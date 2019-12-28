@@ -21,7 +21,10 @@ namespace HareDu.CoreIntegration
     using Diagnostics.Registration;
     using Diagnostics.Scanning;
     using Microsoft.Extensions.DependencyInjection;
+    using Quartz;
+    using Quartz.Impl;
     using Registration;
+    using Scheduling;
     using Snapshotting;
     using Snapshotting.Registration;
 
@@ -90,6 +93,8 @@ namespace HareDu.CoreIntegration
             services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
                 x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
+            services.AddSingleton<ISnapshotWriter, SnapshotWriter>();
+
             return services;
         }
 
@@ -118,6 +123,8 @@ namespace HareDu.CoreIntegration
 
             services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
                 x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
+
+            services.AddSingleton<ISnapshotWriter, SnapshotWriter>();
 
             return services;
         }
@@ -203,6 +210,27 @@ namespace HareDu.CoreIntegration
 
             services.AddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
                 x.GetService<IDiagnosticAnalyzerRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
+
+            return services;
+        }
+
+        public static IServiceCollection AddSnapshotScheduling<T>(this IServiceCollection services)
+            where T : HareDuSnapshot<Snapshot>
+        {
+            services.AddSingleton(x =>
+            {
+                var factory = new StdSchedulerFactory();
+                var scheduler = factory
+                    .GetScheduler()
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
+
+                scheduler.JobFactory =
+                    new HareDuJobFactory<T>(x.GetService<ISnapshotFactory>(), x.GetService<ISnapshotWriter>());
+
+                return scheduler;
+            });
 
             return services;
         }
