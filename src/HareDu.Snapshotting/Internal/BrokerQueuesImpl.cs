@@ -27,7 +27,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public IReadOnlyList<SnapshotContext<BrokerQueuesSnapshot>> Timeline => _snapshots;
+        public IReadOnlyList<SnapshotResult<BrokerQueuesSnapshot>> Timeline => _snapshots;
 
         public BrokerQueuesImpl(IBrokerObjectFactory factory)
             : base(factory)
@@ -60,15 +60,15 @@ namespace HareDu.Snapshotting.Internal
             }
             
             BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(cluster.Select(x => x.Data), queues.Select(x => x.Data));
-            SnapshotContext<BrokerQueuesSnapshot> context = new SnapshotContextImpl(snapshot);
+            SnapshotResult<BrokerQueuesSnapshot> result = new SnapshotResultImpl(snapshot);
 
-            SaveSnapshot(context);
-            NotifyObservers(context);
+            SaveSnapshot(result);
+            NotifyObservers(result);
 
             return this;
         }
 
-        public HareDuSnapshot<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerQueuesSnapshot>> observer)
+        public HareDuSnapshot<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotResult<BrokerQueuesSnapshot>> observer)
         {
             if (observer != null)
             {
@@ -79,7 +79,7 @@ namespace HareDu.Snapshotting.Internal
         }
 
         public HareDuSnapshot<BrokerQueuesSnapshot> RegisterObservers(
-            IReadOnlyList<IObserver<SnapshotContext<BrokerQueuesSnapshot>>> observers)
+            IReadOnlyList<IObserver<SnapshotResult<BrokerQueuesSnapshot>>> observers)
         {
             if (observers != null)
             {

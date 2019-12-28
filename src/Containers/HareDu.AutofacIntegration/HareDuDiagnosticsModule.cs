@@ -30,37 +30,26 @@ namespace HareDu.AutofacIntegration
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(x =>
-                {
-                    var diagnosticAnalyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
-                    var componentDiagnosticRegistrar = x.Resolve<IComponentDiagnosticRegistrar>();
-
-                    return new ComponentDiagnosticFactory(diagnosticAnalyzerRegistrar, componentDiagnosticRegistrar);
-                })
+            builder.Register(x => new ComponentDiagnosticFactory(
+                    x.Resolve<IDiagnosticAnalyzerRegistrar>(), x.Resolve<IComponentDiagnosticRegistrar>()))
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var comm = x.Resolve<IBrokerCommunication>();
 
                     if (!settingsProvider.TryGet(out BrokerConfig settings))
                         throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                    return new BrokerObjectFactory(comm.GetClient(settings), registrar);
+                    return new BrokerObjectFactory(comm.GetClient(settings), x.Resolve<IBrokerObjectRegistrar>());
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x =>
-                {
-                    var registrar = x.Resolve<ISnapshotObjectRegistrar>();
-                    var factory = x.Resolve<IBrokerObjectFactory>();
-
-                    return new SnapshotFactory(factory, registrar);
-                })
+            builder.Register(x => new SnapshotFactory(
+                    x.Resolve<IBrokerObjectFactory>(), x.Resolve<ISnapshotObjectRegistrar>()))
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 

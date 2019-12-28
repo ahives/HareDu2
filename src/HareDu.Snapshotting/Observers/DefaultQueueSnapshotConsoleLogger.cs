@@ -17,7 +17,7 @@ namespace HareDu.Snapshotting.Observers
     using Model;
 
     public class DefaultQueueSnapshotConsoleLogger :
-        IObserver<SnapshotContext<BrokerQueuesSnapshot>>
+        IObserver<SnapshotResult<BrokerQueuesSnapshot>>
     {
         public void OnCompleted()
         {
@@ -29,7 +29,7 @@ namespace HareDu.Snapshotting.Observers
             throw new NotImplementedException();
         }
 
-        public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value)
+        public void OnNext(SnapshotResult<BrokerQueuesSnapshot> value)
         {
 //            Console.WriteLine($"");
 

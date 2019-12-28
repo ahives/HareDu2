@@ -87,7 +87,8 @@ namespace HareDu.CoreIntegration
 
             services.AddSnapshotObjectRegistry();
             
-            services.AddSnapshotFactory();
+            services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
+                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
             return services;
         }
@@ -115,7 +116,8 @@ namespace HareDu.CoreIntegration
 
             services.AddSnapshotObjectRegistry();
 
-            services.AddSnapshotFactory();
+            services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
+                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
             return services;
         }
@@ -150,13 +152,15 @@ namespace HareDu.CoreIntegration
 
             services.AddSnapshotObjectRegistry();
 
-            services.AddSnapshotFactory();
+            services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
+                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
             services.AddDiagnosticAnalyzerRegistry(path);
 
             services.AddComponentDiagnosticRegistry();
 
-            services.AddComponentDiagnosticFactory();
+            services.AddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
+                x.GetService<IDiagnosticAnalyzerRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
 
             return services;
         }
@@ -190,13 +194,15 @@ namespace HareDu.CoreIntegration
 
             services.AddSnapshotObjectRegistry();
 
-            services.AddSnapshotFactory();
+            services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
+                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
             services.AddDiagnosticAnalyzerRegistry(path);
 
             services.AddComponentDiagnosticRegistry();
 
-            services.AddComponentDiagnosticFactory();
+            services.AddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
+                x.GetService<IDiagnosticAnalyzerRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
 
             return services;
         }
@@ -207,13 +213,12 @@ namespace HareDu.CoreIntegration
             {
                 var settingsProvider = x.GetService<IBrokerConfigProvider>();
                 var comm = x.GetService<IBrokerCommunication>();
-                var registrar = x.GetService<IBrokerObjectRegistrar>();
 
                 if (!settingsProvider.TryGet(path, out BrokerConfig config))
                     throw new HareDuClientConfigurationException(
                         "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
                 
-                return new BrokerObjectFactory(comm.GetClient(config), registrar);
+                return new BrokerObjectFactory(comm.GetClient(config), x.GetService<IBrokerObjectRegistrar>());
             });
         }
 
@@ -223,24 +228,12 @@ namespace HareDu.CoreIntegration
             {
                 var settingsProvider = x.GetService<IBrokerConfigProvider>();
                 var comm = x.GetService<IBrokerCommunication>();
-                var registrar = x.GetService<IBrokerObjectRegistrar>();
 
                 if (!settingsProvider.TryGet(out BrokerConfig config))
                     throw new HareDuClientConfigurationException(
                         "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                return new BrokerObjectFactory(comm.GetClient(config), registrar);
-            });
-        }
-
-        static void AddSnapshotFactory(this IServiceCollection services)
-        {
-            services.AddSingleton<ISnapshotFactory>(x =>
-            {
-                var factory = x.GetService<IBrokerObjectFactory>();
-                var registrar = x.GetService<ISnapshotObjectRegistrar>();
-
-                return new SnapshotFactory(factory, registrar);
+                return new BrokerObjectFactory(comm.GetClient(config), x.GetService<IBrokerObjectRegistrar>());
             });
         }
 
@@ -248,23 +241,11 @@ namespace HareDu.CoreIntegration
         {
             services.AddSingleton<ISnapshotObjectRegistrar>(x =>
             {
-                var factory = x.GetService<IBrokerObjectFactory>();
-                var registrar = new SnapshotObjectRegistrar(factory);
+                var registrar = new SnapshotObjectRegistrar(x.GetService<IBrokerObjectFactory>());
                 
                 registrar.RegisterAll();
 
                 return registrar;
-            });
-        }
-
-        static void AddComponentDiagnosticFactory(this IServiceCollection services)
-        {
-            services.AddSingleton<IComponentDiagnosticFactory>(x =>
-            {
-                var diagnosticAnalyzerRegistrar = x.GetService<IDiagnosticAnalyzerRegistrar>();
-                var componentDiagnosticRegistrar = x.GetService<IComponentDiagnosticRegistrar>();
-
-                return new ComponentDiagnosticFactory(diagnosticAnalyzerRegistrar, componentDiagnosticRegistrar);
             });
         }
 
@@ -289,8 +270,7 @@ namespace HareDu.CoreIntegration
         {
             services.AddSingleton<IComponentDiagnosticRegistrar>(x =>
             {
-                var diagnosticAnalyzerRegistrar = x.GetService<IDiagnosticAnalyzerRegistrar>();
-                var registrar = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistrar);
+                var registrar = new ComponentDiagnosticRegistrar(x.GetService<IDiagnosticAnalyzerRegistrar>());
                 
                 registrar.RegisterAll();
 

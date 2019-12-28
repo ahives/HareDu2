@@ -22,32 +22,32 @@ namespace HareDu.Snapshotting.Tests.Fakes
     public class FakeCluster :
         Cluster
     {
-        readonly List<SnapshotContext<ClusterSnapshot>> _snapshots;
-        public IReadOnlyList<SnapshotContext<ClusterSnapshot>> Timeline => _snapshots;
+        readonly List<SnapshotResult<ClusterSnapshot>> _snapshots;
+        public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Timeline => _snapshots;
 
         public FakeCluster()
         {
-            _snapshots = new List<SnapshotContext<ClusterSnapshot>>();
+            _snapshots = new List<SnapshotResult<ClusterSnapshot>>();
         }
 
         public HareDuSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
         {
             ClusterSnapshot snapshotLens = new FakeClusterSnapshot1();
 
-            _snapshots.Add(new SnapshotContextImpl(snapshotLens));
+            _snapshots.Add(new SnapshotResultImpl(snapshotLens));
 
             return this;
         }
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
+        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotResult<ClusterSnapshot>> observer) => throw new NotImplementedException();
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
+        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<ClusterSnapshot>>> observers) => throw new NotImplementedException();
 
 
-        class SnapshotContextImpl :
-            SnapshotContext<ClusterSnapshot>
+        class SnapshotResultImpl :
+            SnapshotResult<ClusterSnapshot>
         {
-            public SnapshotContextImpl(ClusterSnapshot snapshot)
+            public SnapshotResultImpl(ClusterSnapshot snapshot)
             {
                 Identifier = NewId.NextGuid().ToString();
                 Snapshot = snapshot;

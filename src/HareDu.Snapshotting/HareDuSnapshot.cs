@@ -20,12 +20,12 @@ namespace HareDu.Snapshotting
     public interface HareDuSnapshot<out T>
         where T : Snapshot
     {
-        IReadOnlyList<SnapshotContext<T>> Timeline { get; }
+        IReadOnlyList<SnapshotResult<T>> Timeline { get; }
         
         HareDuSnapshot<T> Execute(CancellationToken cancellationToken = default);
 
-        HareDuSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
+        HareDuSnapshot<T> RegisterObserver(IObserver<SnapshotResult<T>> observer);
         
-        HareDuSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
+        HareDuSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<T>>> observers);
     }
 }

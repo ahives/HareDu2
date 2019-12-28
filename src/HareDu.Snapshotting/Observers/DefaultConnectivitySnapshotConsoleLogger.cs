@@ -19,7 +19,7 @@ namespace HareDu.Snapshotting.Observers
     using Model;
 
     public class DefaultConnectivitySnapshotConsoleLogger :
-        IObserver<SnapshotContext<BrokerConnectivitySnapshot>>
+        IObserver<SnapshotResult<BrokerConnectivitySnapshot>>
     {
         public void OnCompleted()
         {
@@ -31,7 +31,7 @@ namespace HareDu.Snapshotting.Observers
             throw new NotImplementedException();
         }
 
-        public void OnNext(SnapshotContext<BrokerConnectivitySnapshot> value)
+        public void OnNext(SnapshotResult<BrokerConnectivitySnapshot> value)
         {
             var snapshot = value.Select(x => x.Snapshot);
 

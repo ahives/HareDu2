@@ -14,25 +14,13 @@
 namespace HareDu.Snapshotting
 {
     using System;
-    using Model;
 
-    public class EmptySnapshotContext<T> :
-        SnapshotContext<T>
+    public class EmptySnapshotResult<T> :
+        SnapshotResult<T>
         where T : Snapshot
     {
-        public EmptySnapshotContext()
-        {
-            Timestamp = DateTimeOffset.Now;
-//            Snapshot = new MyEmptySnapshot<T>();
-        }
-
         public string Identifier { get; }
-        public T Snapshot => throw new Exception();
-        public DateTimeOffset Timestamp { get; }
-    }
-
-    public class MyEmptySnapshotLens<T> :
-        Snapshot
-    {
+        public T Snapshot => throw new HareDuSnapshotException("There is no snapshot present.");
+        public DateTimeOffset Timestamp => DateTimeOffset.Now;
     }
 }

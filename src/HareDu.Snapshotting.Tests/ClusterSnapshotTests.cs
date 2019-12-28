@@ -66,44 +66,45 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Verify_can_return_snapshot()
         {
-            var resource = _container.Resolve<ISnapshotFactory>()
+            var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<Cluster>()
                 .Execute();
 
-            ClusterSnapshot snapshot = resource.Timeline.MostRecent().Snapshot;
+            var result = snapshot.Timeline.MostRecent();
             
-            snapshot.BrokerVersion.ShouldBe("3.7.18");
-            snapshot.ClusterName.ShouldBe("fake_cluster");
-            snapshot.Nodes[0].ShouldNotBeNull();
-            snapshot.Nodes[0]?.Memory.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Memory?.AlarmInEffect.ShouldBeTrue();
-            snapshot.Nodes[0]?.Memory?.Limit.ShouldBe<ulong>(723746434);
-            snapshot.Nodes[0]?.OS.ShouldNotBeNull();
-            snapshot.Nodes[0]?.OS?.ProcessId.ShouldBe("OS123");
-            snapshot.Nodes[0]?.OS?.FileDescriptors.ShouldNotBeNull();
-            snapshot.Nodes[0]?.OS?.FileDescriptors?.Used.ShouldBe<ulong>(9203797);
-            snapshot.Nodes[0]?.OS?.SocketDescriptors.ShouldNotBeNull();
-            snapshot.Nodes[0]?.OS?.SocketDescriptors?.Used.ShouldBe<ulong>(8298347);
-            snapshot.Nodes[0]?.Disk.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.AlarmInEffect.ShouldBeTrue();
-            snapshot.Nodes[0]?.Disk?.Capacity.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.Capacity?.Available.ShouldBe<ulong>(7265368234);
-            snapshot.Nodes[0]?.Disk?.Limit.ShouldBe<ulong>(8928739432);
-            snapshot.Nodes[0]?.AvailableCoresDetected.ShouldBe<ulong>(8);
-            snapshot.Nodes[0]?.Disk?.IO.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.IO?.Writes.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.IO?.Writes?.Total.ShouldBe<ulong>(36478608776);
-            snapshot.Nodes[0]?.Disk?.IO?.Writes?.Bytes.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.IO?.Writes?.Bytes?.Total.ShouldBe<ulong>(728364283);
-            snapshot.Nodes[0]?.Disk?.IO?.Reads.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.IO?.Reads?.Total.ShouldBe<ulong>(892793874982);
-            snapshot.Nodes[0]?.Disk?.IO?.Reads?.Bytes.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Disk?.IO?.Reads?.Bytes?.Total.ShouldBe<ulong>(78738764);
-            snapshot.Nodes[0]?.Runtime.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Runtime.Processes.ShouldNotBeNull();
-            snapshot.Nodes[0]?.Runtime.Processes.Used.ShouldBe<ulong>(9199849);
-            snapshot.Nodes[0]?.IsRunning.ShouldBeTrue();
-            snapshot.Nodes[0]?.NetworkPartitions.ShouldBe(new List<string>{"partition1", "partition2", "partition3", "partition4"});
+            result.ShouldNotBeNull();
+            result.Snapshot.BrokerVersion.ShouldBe("3.7.18");
+            result.Snapshot.ClusterName.ShouldBe("fake_cluster");
+            result.Snapshot.Nodes[0].ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Memory.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Memory?.AlarmInEffect.ShouldBeTrue();
+            result.Snapshot.Nodes[0]?.Memory?.Limit.ShouldBe<ulong>(723746434);
+            result.Snapshot.Nodes[0]?.OS.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.OS?.ProcessId.ShouldBe("OS123");
+            result.Snapshot.Nodes[0]?.OS?.FileDescriptors.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.OS?.FileDescriptors?.Used.ShouldBe<ulong>(9203797);
+            result.Snapshot.Nodes[0]?.OS?.SocketDescriptors.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.OS?.SocketDescriptors?.Used.ShouldBe<ulong>(8298347);
+            result.Snapshot.Nodes[0]?.Disk.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.AlarmInEffect.ShouldBeTrue();
+            result.Snapshot.Nodes[0]?.Disk?.Capacity.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.Capacity?.Available.ShouldBe<ulong>(7265368234);
+            result.Snapshot.Nodes[0]?.Disk?.Limit.ShouldBe<ulong>(8928739432);
+            result.Snapshot.Nodes[0]?.AvailableCoresDetected.ShouldBe<ulong>(8);
+            result.Snapshot.Nodes[0]?.Disk?.IO.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Writes.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Writes?.Total.ShouldBe<ulong>(36478608776);
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Writes?.Bytes.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Writes?.Bytes?.Total.ShouldBe<ulong>(728364283);
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Reads.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Reads?.Total.ShouldBe<ulong>(892793874982);
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Reads?.Bytes.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Disk?.IO?.Reads?.Bytes?.Total.ShouldBe<ulong>(78738764);
+            result.Snapshot.Nodes[0]?.Runtime.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Runtime.Processes.ShouldNotBeNull();
+            result.Snapshot.Nodes[0]?.Runtime.Processes.Used.ShouldBe<ulong>(9199849);
+            result.Snapshot.Nodes[0]?.IsRunning.ShouldBeTrue();
+            result.Snapshot.Nodes[0]?.NetworkPartitions.ShouldBe(new List<string>{"partition1", "partition2", "partition3", "partition4"});
         }
     }
 }

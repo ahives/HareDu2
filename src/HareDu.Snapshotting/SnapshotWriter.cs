@@ -19,24 +19,25 @@ namespace HareDu.Snapshotting
     public class SnapshotWriter :
         ISnapshotWriter
     {
-        public bool TrySave<T>(SnapshotContext<T> context, string file, string path)
+        public bool TrySave<T>(SnapshotResult<T> result, string file, string path)
             where T : Snapshot
         {
             if (Directory.Exists(path))
-                return Write(context, file, path);
+                return Write(result, file, path);
             
             var dir = Directory.CreateDirectory(path);
 
-            return dir.Exists ? Write(context, file, path) : Write(context, file, path);
+            return dir.Exists ? Write(result, file, path) : Write(result, file, path);
         }
 
-        bool Write<T>(SnapshotContext<T> context, string file, string path) where T : Snapshot
+        bool Write<T>(SnapshotResult<T> result, string file, string path) where T : Snapshot
         {
             string fullPath = $"{path}/{file}";
+            
             if (File.Exists(fullPath))
                 return false;
 
-            File.WriteAllText(fullPath, context.ToJsonString());
+            File.WriteAllText(fullPath, result.ToJsonString());
             return true;
         }
     }

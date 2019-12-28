@@ -37,31 +37,31 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Verify_can_return_BrokerConnection_broker_object()
         {
-            var impl = _container.Resolve<ISnapshotFactory>()
+            var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerConnection>();
 
-            impl.ShouldNotBeNull();
-            impl.ShouldBeAssignableTo<BrokerConnection>();
+            snapshot.ShouldNotBeNull();
+            snapshot.ShouldBeAssignableTo<BrokerConnection>();
         }
 
         [Test]
         public async Task Verify_can_return_BrokerQueues_broker_object()
         {
-            var impl = _container.Resolve<ISnapshotFactory>()
+            var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerQueues>();
 
-            impl.ShouldNotBeNull();
-            impl.ShouldBeAssignableTo<BrokerQueues>();
+            snapshot.ShouldNotBeNull();
+            snapshot.ShouldBeAssignableTo<BrokerQueues>();
         }
 
         [Test]
         public async Task Verify_can_return_Cluster_broker_object()
         {
-            var impl = _container.Resolve<ISnapshotFactory>()
+            var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<Cluster>();
 
-            impl.ShouldNotBeNull();
-            impl.ShouldBeAssignableTo<Cluster>();
+            snapshot.ShouldNotBeNull();
+            snapshot.ShouldBeAssignableTo<Cluster>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace HareDu.Snapshotting.Exporters
     using Model;
 
     public class BrokerQueuesJsonExporter :
-        IObserver<SnapshotContext<BrokerQueuesSnapshot>>
+        IObserver<SnapshotResult<BrokerQueuesSnapshot>>
     {
         public void OnCompleted()
         {
@@ -31,7 +31,7 @@ namespace HareDu.Snapshotting.Exporters
             throw new NotImplementedException();
         }
 
-        public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value)
+        public void OnNext(SnapshotResult<BrokerQueuesSnapshot> value)
         {
             string path = $"{Directory.GetCurrentDirectory()}/snapshots";
             

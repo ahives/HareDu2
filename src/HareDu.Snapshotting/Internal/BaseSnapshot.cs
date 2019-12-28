@@ -19,26 +19,26 @@ namespace HareDu.Snapshotting.Internal
     using MassTransit;
 
     abstract class BaseSnapshot<T> :
-        IObservable<SnapshotContext<T>>
+        IObservable<SnapshotResult<T>>
         where T : Snapshot
     {
         protected readonly IBrokerObjectFactory _factory;
-        protected readonly List<SnapshotContext<T>> _snapshots;
+        protected readonly List<SnapshotResult<T>> _snapshots;
         
-        readonly List<IObserver<SnapshotContext<T>>> _observers;
+        readonly List<IObserver<SnapshotResult<T>>> _observers;
 
         protected BaseSnapshot(IBrokerObjectFactory factory)
         {
             _factory = factory;
-            _observers = new List<IObserver<SnapshotContext<T>>>();
-            _snapshots = new List<SnapshotContext<T>>();
+            _observers = new List<IObserver<SnapshotResult<T>>>();
+            _snapshots = new List<SnapshotResult<T>>();
         }
 
-        protected virtual void NotifyObservers(SnapshotContext<T> context)
+        protected virtual void NotifyObservers(SnapshotResult<T> result)
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(context);
+                observer.OnNext(result);
             }
         }
 
@@ -50,13 +50,13 @@ namespace HareDu.Snapshotting.Internal
             }
         }
 
-        protected virtual void SaveSnapshot(SnapshotContext<T> context)
+        protected virtual void SaveSnapshot(SnapshotResult<T> result)
         {
-            if (!context.IsNull())
-                _snapshots.Add(context);
+            if (!result.IsNull())
+                _snapshots.Add(result);
         }
 
-        public IDisposable Subscribe(IObserver<SnapshotContext<T>> observer)
+        public IDisposable Subscribe(IObserver<SnapshotResult<T>> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -68,10 +68,10 @@ namespace HareDu.Snapshotting.Internal
         class UnsubscribeObserver :
             IDisposable
         {
-            readonly List<IObserver<SnapshotContext<T>>> _observers;
-            readonly IObserver<SnapshotContext<T>> _observer;
+            readonly List<IObserver<SnapshotResult<T>>> _observers;
+            readonly IObserver<SnapshotResult<T>> _observer;
 
-            public UnsubscribeObserver(List<IObserver<SnapshotContext<T>>> observers, IObserver<SnapshotContext<T>> observer)
+            public UnsubscribeObserver(List<IObserver<SnapshotResult<T>>> observers, IObserver<SnapshotResult<T>> observer)
             {
                 _observers = observers;
                 _observer = observer;
@@ -85,10 +85,10 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        protected class SnapshotContextImpl :
-            SnapshotContext<T>
+        protected class SnapshotResultImpl :
+            SnapshotResult<T>
         {
-            public SnapshotContextImpl(T snapshot)
+            public SnapshotResultImpl(T snapshot)
             {
                 Identifier = NewId.NextGuid().ToString();
                 Snapshot = snapshot;

@@ -25,10 +25,10 @@ namespace HareDu.Snapshotting.Extensions
         /// <param name="snapshots"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static SnapshotContext<T> MostRecent<T>(this IReadOnlyList<SnapshotContext<T>> snapshots)
+        public static SnapshotResult<T> MostRecent<T>(this IReadOnlyList<SnapshotResult<T>> snapshots)
             where T : Snapshot
             => snapshots.IsNull() || !snapshots.Any()
-                ? new EmptySnapshotContext<T>()
+                ? new EmptySnapshotResult<T>()
                 : snapshots.Last();
     }
 }

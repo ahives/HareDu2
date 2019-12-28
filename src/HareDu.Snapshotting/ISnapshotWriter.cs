@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting
 {
     public interface ISnapshotWriter
     {
-        bool TrySave<T>(SnapshotContext<T> context, string file, string path)
+        bool TrySave<T>(SnapshotResult<T> result, string file, string path)
             where T : Snapshot;
     }
 }

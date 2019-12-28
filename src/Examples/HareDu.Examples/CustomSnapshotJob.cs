@@ -44,7 +44,7 @@ namespace HareDu.Examples
 
             var snapshot = _snapshot.Timeline
                 .MostRecent()
-                .Cast<SnapshotContext<BrokerQueuesSnapshot>>();
+                .Cast<SnapshotResult<BrokerQueuesSnapshot>>();
             
             bool persisted = snapshot.TrySaveJson("/Users/albert/Documents/snapshots");
 

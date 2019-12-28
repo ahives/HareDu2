@@ -27,7 +27,7 @@ namespace HareDu.Snapshotting.Internal
         BrokerConnection
     {
         readonly List<IDisposable> _observers;
-        public IReadOnlyList<SnapshotContext<BrokerConnectivitySnapshot>> Timeline => _snapshots;
+        public IReadOnlyList<SnapshotResult<BrokerConnectivitySnapshot>> Timeline => _snapshots;
 
         public BrokerConnectionImpl(IBrokerObjectFactory factory)
             : base(factory)
@@ -75,15 +75,15 @@ namespace HareDu.Snapshotting.Internal
                 connections.Select(x => x.Data),
                 channels.Select(x => x.Data));
             
-            SnapshotContext<BrokerConnectivitySnapshot> context = new SnapshotContextImpl(snapshot);
+            SnapshotResult<BrokerConnectivitySnapshot> result = new SnapshotResultImpl(snapshot);
 
-            SaveSnapshot(context);
-            NotifyObservers(context);
+            SaveSnapshot(result);
+            NotifyObservers(result);
 
             return this;
         }
 
-        public HareDuSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerConnectivitySnapshot>> observer)
+        public HareDuSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotResult<BrokerConnectivitySnapshot>> observer)
         {
             if (observer != null)
             {
@@ -94,7 +94,7 @@ namespace HareDu.Snapshotting.Internal
         }
 
         public HareDuSnapshot<BrokerConnectivitySnapshot> RegisterObservers(
-            IReadOnlyList<IObserver<SnapshotContext<BrokerConnectivitySnapshot>>> observers)
+            IReadOnlyList<IObserver<SnapshotResult<BrokerConnectivitySnapshot>>> observers)
         {
             if (observers != null)
             {
