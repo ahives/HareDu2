@@ -30,7 +30,8 @@ namespace HareDu.Snapshotting
             return dir.Exists ? Write(result, file, path) : Write(result, file, path);
         }
 
-        bool Write<T>(SnapshotResult<T> result, string file, string path) where T : Snapshot
+        bool Write<T>(SnapshotResult<T> result, string file, string path)
+            where T : Snapshot
         {
             string fullPath = $"{path}/{file}";
             

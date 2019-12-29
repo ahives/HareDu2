@@ -16,7 +16,10 @@ namespace HareDu.AutofacIntegration
     using Autofac;
     using Core;
     using Core.Configuration;
+    using Quartz;
+    using Quartz.Impl;
     using Registration;
+    using Scheduling;
     using Snapshotting;
     using Snapshotting.Registration;
 
@@ -71,6 +74,10 @@ namespace HareDu.AutofacIntegration
                     return registrar;
                 })
                 .As<IBrokerObjectRegistrar>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerCommunication>()

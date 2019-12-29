@@ -14,6 +14,7 @@
 namespace HareDu.Examples
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
@@ -43,21 +44,13 @@ namespace HareDu.Examples
                 .BuildServiceProvider();
 
             IScheduler scheduler = services.GetService<IScheduler>();
+            ISnapshotScheduler snapshotScheduler = services.GetService<ISnapshotScheduler>();
             
-            IJobDetail job = JobBuilder.Create<PersistSnapshotJob<BrokerQueues>>()
-                .WithIdentity("persist-snapshot-job")
-                .UsingJobData("path", $"{Directory.GetCurrentDirectory()}/snapshots")
-                .Build();
+            IDictionary<string, object> details = new Dictionary<string, object>();
 
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("persist-snapshot-trigger")
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(5)
-                    .RepeatForever()
-                    .WithMisfireHandlingInstructionFireNow())
-                .Build();
-            
-            await scheduler.ScheduleJob(job, trigger);
+            details["path"] = $"{Directory.GetCurrentDirectory()}/snapshots";
+
+            await snapshotScheduler.Schedule<PersistSnapshotJob<BrokerQueues>>("persist-snapshot", details);
             
             Console.WriteLine("Starting");
 

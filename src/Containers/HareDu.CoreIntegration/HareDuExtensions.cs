@@ -232,6 +232,8 @@ namespace HareDu.CoreIntegration
                 return scheduler;
             });
 
+            services.AddSingleton<ISnapshotScheduler, SnapshotScheduler>();
+
             return services;
         }
 

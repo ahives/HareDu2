@@ -49,4 +49,39 @@ namespace HareDu.Scheduling
             }
         }
     }
+
+    public class HareDuJobFactory :
+        SimpleJobFactory
+    {
+        readonly ISnapshotFactory _factory;
+        readonly ISnapshotWriter _writer;
+
+        public HareDuJobFactory(ISnapshotFactory factory, ISnapshotWriter writer)
+        {
+            _factory = factory;
+            _writer = writer;
+        }
+
+        public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
+        {
+            try
+            {
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnection>))
+                    return new PersistSnapshotJob<BrokerConnection>(_factory, _writer);
+
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerQueues>))
+                    return new PersistSnapshotJob<BrokerQueues>(_factory, _writer);
+
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<Cluster>))
+                    return new PersistSnapshotJob<Cluster>(_factory, _writer);
+
+                return new DoNothingJob();
+            }
+            catch (Exception e)
+            {
+                throw new SchedulerException(
+                    $"Problem while instantiating job '{bundle.JobDetail.Key}' from HareDuJobFactory.");
+            }
+        }
+    }
 }
