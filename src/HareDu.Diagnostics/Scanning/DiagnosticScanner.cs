@@ -27,15 +27,15 @@ namespace HareDu.Diagnostics.Scanning
             _factory = factory;
         }
 
-        public DiagnosticReport Scan<T>(T snapshot)
+        public ScannerResult Scan<T>(T snapshot)
             where T : Snapshot
         {
             if (!_factory.TryGet(out IComponentDiagnostic<T> diagnostic))
-                return DiagnosticCache.EmptyDiagnosticReport;
+                return DiagnosticCache.EmptyScannerResult;
             
             var results = diagnostic.Scan(snapshot);
             
-            return new SuccessfulDiagnosticReport(diagnostic.Identifier, results);
+            return new SuccessfulScannerResult(diagnostic.Identifier, results);
         }
 
         public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticAnalyzerContext>> observers)

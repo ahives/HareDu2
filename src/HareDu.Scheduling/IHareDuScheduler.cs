@@ -4,18 +4,18 @@ namespace HareDu.Scheduling
     using System.Threading.Tasks;
     using Quartz;
 
-    public interface ISnapshotScheduler
+    public interface IHareDuScheduler
     {
         Task Schedule<T>(string name, IDictionary<string, object> details)
             where T : IJob;
     }
 
-    public class SnapshotScheduler :
-        ISnapshotScheduler
+    public class HareDuScheduler :
+        IHareDuScheduler
     {
         readonly IScheduler _scheduler;
 
-        public SnapshotScheduler(IScheduler scheduler)
+        public HareDuScheduler(IScheduler scheduler)
         {
             _scheduler = scheduler;
         }

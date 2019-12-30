@@ -11,16 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting
+namespace HareDu.Diagnostics.Persistence
 {
     using System.IO;
     using Core.Extensions;
 
-    public class SnapshotWriter :
-        ISnapshotWriter
+    public class DiagnosticWriter :
+        IDiagnosticWriter
     {
-        public bool TrySave<T>(SnapshotResult<T> result, string file, string path)
-            where T : Snapshot
+        public bool TrySave(ScannerResult result, string file, string path)
         {
             if (Directory.Exists(path))
                 return Write(result, file, path);
@@ -30,8 +29,7 @@ namespace HareDu.Snapshotting
             return dir.Exists ? Write(result, file, path) : Write(result, file, path);
         }
 
-        bool Write<T>(SnapshotResult<T> result, string file, string path)
-            where T : Snapshot
+        bool Write(ScannerResult result, string file, string path)
         {
             string fullPath = $"{path}/{file}";
             

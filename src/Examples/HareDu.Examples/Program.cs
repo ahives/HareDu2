@@ -30,6 +30,7 @@ namespace HareDu.Examples
     using Scheduling;
     using Snapshotting;
     using Snapshotting.Model;
+    using Snapshotting.Persistence;
     using ITrigger = Quartz.ITrigger;
     using LogLevel = Quartz.Logging.LogLevel;
     using Snapshot = Snapshotting.Snapshot;
@@ -40,17 +41,20 @@ namespace HareDu.Examples
         {
             var services = new ServiceCollection()
                 .AddHareDuSnapshotting()
-                .AddSnapshotScheduling<BrokerQueues>()
+                .AddHareDuDiagnostics()
+                .AddHareDuScheduling<BrokerConnection>()
                 .BuildServiceProvider();
 
             IScheduler scheduler = services.GetService<IScheduler>();
-            ISnapshotScheduler snapshotScheduler = services.GetService<ISnapshotScheduler>();
+            IHareDuScheduler hareDuScheduler = services.GetService<IHareDuScheduler>();
             
             IDictionary<string, object> details = new Dictionary<string, object>();
 
-            details["path"] = $"{Directory.GetCurrentDirectory()}/snapshots";
+            // details["path"] = $"{Directory.GetCurrentDirectory()}/snapshots";
+            details["path"] = $"{Directory.GetCurrentDirectory()}/diagnostics";
 
-            await snapshotScheduler.Schedule<PersistSnapshotJob<BrokerQueues>>("persist-snapshot", details);
+            // await hareDuScheduler.Schedule<PersistSnapshotJob<BrokerQueues>>("persist-snapshot", details);
+            await hareDuScheduler.Schedule<PersistDiagnosticsJob<BrokerConnection>>("persist-diagnostic", details);
             
             Console.WriteLine("Starting");
 
@@ -116,7 +120,7 @@ namespace HareDu.Examples
 
                     // scheduler.JobFactory = new CustomJobFactory<T>(resource, client);
                     
-                    scheduler.JobFactory = new HareDuJobFactory<T>(x.Resolve<ISnapshotFactory>(), x.Resolve<ISnapshotWriter>());
+                    // scheduler.JobFactory = new HareDuJobFactory<T>(x.Resolve<ISnapshotFactory>(), x.Resolve<ISnapshotWriter>());
 
                     return scheduler;
                 })

@@ -36,9 +36,9 @@ namespace HareDu.Diagnostics.Analyzers
             _status = DiagnosticAnalyzerStatus.Online;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
             BrokerQueuesSnapshot data = snapshot as BrokerQueuesSnapshot;
 
             KnowledgeBaseArticle knowledgeBaseArticle;
@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.Churn.NotRouted.Total > 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.ClusterName,
+                result = new NegativeDiagnosticAnalyzerResult(data.ClusterName,
                     null,
                     Identifier,
                     ComponentType,
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.ClusterName,
+                result = new PositiveDiagnosticAnalyzerResult(data.ClusterName,
                     null,
                     Identifier,
                     ComponentType,

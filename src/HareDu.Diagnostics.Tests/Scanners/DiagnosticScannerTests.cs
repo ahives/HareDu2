@@ -72,14 +72,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_does_not_throw_when_scanner_not_found()
         {
-            BrokerQueuesSnapshot snapshotLens = new FakeBrokerQueuesSnapshot1(1);
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
             IComponentDiagnosticFactory factory = new FakeDiagnosticFactory();
             IDiagnosticScanner scanner = new DiagnosticScanner(factory);
 
-            var report = scanner.Scan(snapshotLens);
+            var report = scanner.Scan(snapshot);
             
             report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier());
-            report.ShouldBe(DiagnosticCache.EmptyDiagnosticReport);
+            report.ShouldBe(DiagnosticCache.EmptyScannerResult);
         }
 
         

@@ -39,9 +39,9 @@ namespace HareDu.Diagnostics.Analyzers
             _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
 
             var analyzerData = new List<DiagnosticAnalyzerData>
@@ -56,12 +56,12 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.ConnectionsClosed.Rate >= _config.HighClosureRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticAnalyzerResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticAnalyzerResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

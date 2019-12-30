@@ -17,32 +17,19 @@ namespace HareDu.Diagnostics.Internal
     using System.Collections.Generic;
     using KnowledgeBase;
 
-    class InconclusiveDiagnosticResult :
-        DiagnosticResult
+    class PositiveDiagnosticAnalyzerResult :
+        DiagnosticAnalyzerResult
     {
-        public InconclusiveDiagnosticResult(string parentComponentIdentifier, string componentIdentifier,
-            string analyzerIdentifier, ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> analyzerData,
-            KnowledgeBaseArticle knowledgeBaseArticle)
+        public PositiveDiagnosticAnalyzerResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
+            ComponentType componentType, List<DiagnosticAnalyzerData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
         {
             ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
-            ComponentType = componentType;
             AnalyzerIdentifier = analyzerIdentifier;
-            KnowledgeBaseArticle = knowledgeBaseArticle;
+            ComponentType = componentType;
             AnalyzerData = analyzerData;
-            Status = DiagnosticStatus.Inconclusive;
-            Timestamp = DateTimeOffset.Now;
-        }
-
-        public InconclusiveDiagnosticResult(string parentComponentIdentifier, string componentIdentifier,
-            string analyzerIdentifier, ComponentType componentType)
-        {
-            ParentComponentIdentifier = parentComponentIdentifier;
-            ComponentIdentifier = componentIdentifier;
-            ComponentType = componentType;
-            AnalyzerIdentifier = analyzerIdentifier;
-            AnalyzerData = DiagnosticCache.EmptyAnalyzerData;
-            Status = DiagnosticStatus.Inconclusive;
+            KnowledgeBaseArticle = knowledgeBaseArticle;
+            Status = DiagnosticStatus.Green;
             Timestamp = DateTimeOffset.Now;
         }
 

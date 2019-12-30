@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Scanning
         /// <param name="snapshot"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        DiagnosticReport Scan<T>(T snapshot)
+        ScannerResult Scan<T>(T snapshot)
             where T : Snapshot;
         
         /// <summary>

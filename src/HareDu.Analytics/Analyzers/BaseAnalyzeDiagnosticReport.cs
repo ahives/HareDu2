@@ -27,7 +27,7 @@ namespace HareDu.Analytics.Analyzers
             _supportedAnalyzers = GetSupportedDiagnosticAnalyzers();
         }
 
-        public virtual IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report)
+        public virtual IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report)
         {
             var filtered = ApplyFilter(report.Results);
             var rollup = GetRollup(filtered, x => x.ParentComponentIdentifier);
@@ -62,7 +62,7 @@ namespace HareDu.Analytics.Analyzers
 
         protected abstract IEnumerable<string> GetSupportedDiagnosticAnalyzers();
 
-        protected virtual IEnumerable<DiagnosticResult> ApplyFilter(IReadOnlyList<DiagnosticResult> results)
+        protected virtual IEnumerable<DiagnosticAnalyzerResult> ApplyFilter(IReadOnlyList<DiagnosticAnalyzerResult> results)
         {
             foreach (var result in results)
             {
@@ -79,8 +79,8 @@ namespace HareDu.Analytics.Analyzers
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 
-        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticResult> results,
-            Func<DiagnosticResult, string> rollupKey)
+        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticAnalyzerResult> results,
+            Func<DiagnosticAnalyzerResult, string> rollupKey)
         {
             var rollup = new Dictionary<string, List<DiagnosticStatus>>();
             

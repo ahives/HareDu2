@@ -36,10 +36,10 @@ namespace HareDu.Diagnostics.Analyzers
             _status = DiagnosticAnalyzerStatus.Online;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
             MemorySnapshot data = snapshot as MemorySnapshot;
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
@@ -53,12 +53,12 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.AlarmInEffect)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.NodeIdentifier,null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticAnalyzerResult(data.NodeIdentifier,null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.NodeIdentifier, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticAnalyzerResult(data.NodeIdentifier, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics
 
     public interface DiagnosticAnalyzerContext
     {
-        DiagnosticResult Result { get; }
+        DiagnosticAnalyzerResult Result { get; }
         
         DateTimeOffset Timestamp { get; }
     }

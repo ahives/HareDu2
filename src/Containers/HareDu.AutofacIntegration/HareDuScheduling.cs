@@ -16,11 +16,14 @@ namespace HareDu.AutofacIntegration
     using Autofac;
     using Core;
     using Core.Configuration;
+    using Diagnostics.Persistence;
+    using Diagnostics.Scanning;
     using Quartz;
     using Quartz.Impl;
     using Registration;
     using Scheduling;
     using Snapshotting;
+    using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
     public class HareDuScheduling :
@@ -86,7 +89,11 @@ namespace HareDu.AutofacIntegration
                         .GetResult();
 
                     scheduler.JobFactory =
-                        new HareDuJobFactory(x.Resolve<ISnapshotFactory>(), x.Resolve<ISnapshotWriter>());
+                        new HareDuJobFactory(
+                            x.Resolve<IDiagnosticScanner>(),
+                            x.Resolve<ISnapshotFactory>(),
+                            x.Resolve<ISnapshotWriter>(),
+                            x.Resolve<IDiagnosticWriter>());
 
                     return scheduler;
                 })

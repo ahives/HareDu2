@@ -19,12 +19,12 @@ namespace HareDu.Analytics
 
     public static class AnalyzerExtensions
     {
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory, string identifier)
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IDiagnosticReportAnalyzerFactory factory, string identifier)
             => factory.TryGet(identifier, out var analyzer)
                 ? analyzer.Analyze(report)
                 : AnalyticsCache.EmptyAnalyzerSummary;
 
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzer analyzer)
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IDiagnosticReportAnalyzer analyzer)
         {
             var summary = new List<AnalyzerSummary>();
             
@@ -33,12 +33,12 @@ namespace HareDu.Analytics
             return summary;
         }
 
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory, Type type)
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IDiagnosticReportAnalyzerFactory factory, Type type)
             => factory.TryGet(type, out var analyzer)
                 ? analyzer.Analyze(report)
                 : AnalyticsCache.EmptyAnalyzerSummary;
 
-        public static IReadOnlyList<AnalyzerSummary> Analyze<T>(this DiagnosticReport report, IDiagnosticReportAnalyzerFactory factory)
+        public static IReadOnlyList<AnalyzerSummary> Analyze<T>(this ScannerResult report, IDiagnosticReportAnalyzerFactory factory)
             where T : IDiagnosticReportAnalyzer
             => factory.TryGet<T>(out var analyzer)
                 ? analyzer.Analyze(report)

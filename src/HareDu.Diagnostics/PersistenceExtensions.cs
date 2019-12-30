@@ -19,7 +19,7 @@ namespace HareDu.Diagnostics
 
     public static class PersistenceExtensions
     {
-        public static bool PersistJson(this DiagnosticReport report, string path)
+        public static bool PersistJson(this ScannerResult report, string path)
         {
             string file = $"{path}/report_{report.Identifier.ToString()}.json";
             if (File.Exists(file))

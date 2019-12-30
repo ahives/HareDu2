@@ -39,12 +39,12 @@ namespace HareDu.Diagnostics.Scanning
             _connectivityAnalyzers = analyzers.Where(IsConnectivityAnalyzer).ToList();
         }
 
-        public IReadOnlyList<DiagnosticResult> Scan(BrokerConnectivitySnapshot snapshot)
+        public IReadOnlyList<DiagnosticAnalyzerResult> Scan(BrokerConnectivitySnapshot snapshot)
         {
             if (snapshot == null)
-                return DiagnosticCache.EmptyDiagnosticResults;
+                return DiagnosticCache.EmptyAnalyzerResults;
             
-            var results = new List<DiagnosticResult>();
+            var results = new List<DiagnosticAnalyzerResult>();
             
             results.AddRange(_connectivityAnalyzers.Select(x => x.Execute(snapshot)));
 

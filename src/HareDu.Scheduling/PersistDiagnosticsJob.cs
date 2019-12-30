@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2019 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,30 +14,33 @@
 namespace HareDu.Scheduling
 {
     using System.Threading.Tasks;
+    using Diagnostics.Persistence;
+    using Diagnostics.Scanning;
     using Quartz;
     using Snapshotting;
     using Snapshotting.Extensions;
-    using Snapshotting.Persistence;
 
-    public class PersistSnapshotJob<T> :
+    public class PersistDiagnosticsJob<T> :
         IJob
         where T : HareDuSnapshot<Snapshot>
     {
         readonly ISnapshotFactory _factory;
-        readonly ISnapshotWriter _writer;
+        readonly IDiagnosticScanner _scanner;
+        readonly IDiagnosticWriter _writer;
 
-        public PersistSnapshotJob(ISnapshotFactory factory, ISnapshotWriter writer)
+        public PersistDiagnosticsJob(ISnapshotFactory factory, IDiagnosticScanner scanner, IDiagnosticWriter writer)
         {
             _factory = factory;
+            _scanner = scanner;
             _writer = writer;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             var snapshot = _factory.Snapshot<T>().Execute();
-            var result = snapshot.Timeline.MostRecent();
+            var result = _scanner.Scan(snapshot.Timeline.MostRecent().Snapshot);
 
-            _writer.TrySave(result, $"snapshot_{result.Identifier}.json", context.JobDetail.JobDataMap["path"].ToString());
+            _writer.TrySave(result, $"diagnostics_{result.Identifier}.json", context.JobDetail.JobDataMap["path"].ToString());
         }
     }
 }

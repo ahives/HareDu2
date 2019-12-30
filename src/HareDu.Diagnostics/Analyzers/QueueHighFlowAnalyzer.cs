@@ -39,10 +39,10 @@ namespace HareDu.Diagnostics.Analyzers
             _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
             QueueSnapshot data = snapshot as QueueSnapshot;
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
             
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
@@ -55,12 +55,12 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.Messages.Incoming.Total >= _config.QueueHighFlowThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticAnalyzerResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticAnalyzerResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

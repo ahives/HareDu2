@@ -189,6 +189,6 @@ namespace HareDu.Diagnostics.Tests
         public ComponentType ComponentType { get; }
         public DiagnosticAnalyzerCategory Category { get; }
         public DiagnosticAnalyzerStatus Status { get; }
-        public DiagnosticResult Execute<T>(T snapshot) => throw new System.NotImplementedException();
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot) => throw new System.NotImplementedException();
     }
 }

@@ -15,6 +15,6 @@ namespace HareDu.Diagnostics.Formatting
 {
     public interface IDiagnosticReportFormatter
     {
-        string Format(DiagnosticReport report);
+        string Format(ScannerResult report);
     }
 }

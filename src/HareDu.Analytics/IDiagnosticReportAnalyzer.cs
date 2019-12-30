@@ -18,6 +18,6 @@ namespace HareDu.Analytics
 
     public interface IDiagnosticReportAnalyzer
     {
-        IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report);
+        IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report);
     }
 }

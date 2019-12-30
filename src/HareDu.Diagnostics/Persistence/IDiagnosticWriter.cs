@@ -11,20 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Persistence
 {
-    using System;
-    using System.Collections.Generic;
-    using MassTransit;
-    using Scanning;
-    using Snapshotting.Model;
-
-    class EmptyDiagnosticReport :
-        DiagnosticReport
+    public interface IDiagnosticWriter
     {
-        public Guid Identifier => NewId.NextGuid();
-        public string ScannerIdentifier => typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier();
-        public IReadOnlyList<DiagnosticResult> Results => new List<DiagnosticResult>();
-        public DateTimeOffset Timestamp => DateTimeOffset.UtcNow;
+        bool TrySave(ScannerResult result, string file, string path);
     }
 }

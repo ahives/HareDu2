@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Analyzers
             _observers = new List<IObserver<DiagnosticAnalyzerContext>>();
         }
 
-        protected virtual void NotifyObservers(DiagnosticResult result)
+        protected virtual void NotifyObservers(DiagnosticAnalyzerResult result)
         {
             foreach (var observer in _observers)
             {
@@ -50,13 +50,13 @@ namespace HareDu.Diagnostics.Analyzers
         class DiagnosticAnalyzerContextImpl :
             DiagnosticAnalyzerContext
         {
-            public DiagnosticAnalyzerContextImpl(DiagnosticResult result)
+            public DiagnosticAnalyzerContextImpl(DiagnosticAnalyzerResult result)
             {
                 Result = result;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
-            public DiagnosticResult Result { get; }
+            public DiagnosticAnalyzerResult Result { get; }
             public DateTimeOffset Timestamp { get; }
         }
         

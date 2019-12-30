@@ -21,6 +21,7 @@ namespace HareDu.AutofacIntegration
     using Registration;
     using Scheduling;
     using Snapshotting;
+    using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
     public class HareDuSnapshottingModule :

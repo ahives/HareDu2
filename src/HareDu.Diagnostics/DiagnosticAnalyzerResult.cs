@@ -15,22 +15,24 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
-    using MassTransit;
+    using KnowledgeBase;
 
-    public class SuccessfulDiagnosticReport :
-        DiagnosticReport
+    public interface DiagnosticAnalyzerResult
     {
-        public SuccessfulDiagnosticReport(string scannerIdentifier, IReadOnlyList<DiagnosticResult> results)
-        {
-            Identifier = NewId.NextGuid();
-            ScannerIdentifier = scannerIdentifier;
-            Results = results;
-            Timestamp = DateTimeOffset.Now;
-        }
-
-        public Guid Identifier { get; }
-        public string ScannerIdentifier { get; }
-        public IReadOnlyList<DiagnosticResult> Results { get; }
-        public DateTimeOffset Timestamp { get; }
+        string ParentComponentIdentifier { get; }
+        
+        string ComponentIdentifier { get; }
+        
+        ComponentType ComponentType { get; }
+        
+        string AnalyzerIdentifier { get; }
+        
+        DiagnosticStatus Status { get; }
+        
+        KnowledgeBaseArticle KnowledgeBaseArticle { get; }
+        
+        IReadOnlyList<DiagnosticAnalyzerData> AnalyzerData { get; }
+        
+        DateTimeOffset Timestamp { get; }
     }
 }

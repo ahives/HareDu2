@@ -129,7 +129,7 @@ namespace HareDu.Diagnostics.Tests
         {
             public string Identifier => GetType().GetIdentifier();
 
-            public IReadOnlyList<DiagnosticResult> Scan(FakeSnapshot snapshot) =>
+            public IReadOnlyList<DiagnosticAnalyzerResult> Scan(FakeSnapshot snapshot) =>
                 throw new System.NotImplementedException();
         }
 

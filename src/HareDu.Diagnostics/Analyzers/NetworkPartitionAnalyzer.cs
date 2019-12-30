@@ -37,10 +37,10 @@ namespace HareDu.Diagnostics.Analyzers
             _status = DiagnosticAnalyzerStatus.Online;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
             NodeSnapshot data = snapshot as NodeSnapshot;
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
 
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.NetworkPartitions.Any())
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.ClusterIdentifier,
+                result = new NegativeDiagnosticAnalyzerResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.ClusterIdentifier,
+                result = new PositiveDiagnosticAnalyzerResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,

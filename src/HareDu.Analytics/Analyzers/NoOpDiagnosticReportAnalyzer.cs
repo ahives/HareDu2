@@ -19,6 +19,6 @@ namespace HareDu.Analytics.Analyzers
     public class NoOpDiagnosticReportAnalyzer :
         IDiagnosticReportAnalyzer
     {
-        public IReadOnlyList<AnalyzerSummary> Analyze(DiagnosticReport report) => AnalyticsCache.EmptyAnalyzerSummary;
+        public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report) => AnalyticsCache.EmptyAnalyzerSummary;
     }
 }

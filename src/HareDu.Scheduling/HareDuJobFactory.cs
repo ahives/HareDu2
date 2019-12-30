@@ -15,22 +15,33 @@ namespace HareDu.Scheduling
 {
     using System;
     using System.Collections.Generic;
+    using Diagnostics.Persistence;
+    using Diagnostics.Scanning;
     using Quartz;
     using Quartz.Simpl;
     using Quartz.Spi;
     using Snapshotting;
+    using Snapshotting.Persistence;
 
     public class HareDuJobFactory<T> :
         SimpleJobFactory
         where T : HareDuSnapshot<Snapshot>
     {
+        readonly IDiagnosticScanner _scanner;
         readonly ISnapshotFactory _factory;
-        readonly ISnapshotWriter _writer;
+        readonly ISnapshotWriter _snapshotWriter;
+        readonly IDiagnosticWriter _diagnosticWriter;
 
-        public HareDuJobFactory(ISnapshotFactory factory, ISnapshotWriter writer)
+        public HareDuJobFactory(
+            IDiagnosticScanner scanner,
+            ISnapshotFactory factory,
+            ISnapshotWriter snapshotWriter,
+            IDiagnosticWriter diagnosticWriter)
         {
+            _scanner = scanner;
             _factory = factory;
-            _writer = writer;
+            _snapshotWriter = snapshotWriter;
+            _diagnosticWriter = diagnosticWriter;
         }
 
         public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
@@ -38,7 +49,10 @@ namespace HareDu.Scheduling
             try
             {
                 if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<T>))
-                    return new PersistSnapshotJob<T>(_factory, _writer);
+                    return new PersistSnapshotJob<T>(_factory, _snapshotWriter);
+
+                if (bundle.JobDetail.JobType == typeof(PersistDiagnosticsJob<T>))
+                    return new PersistDiagnosticsJob<T>(_factory, _scanner, _diagnosticWriter);
 
                 return null;
             }
@@ -53,13 +67,21 @@ namespace HareDu.Scheduling
     public class HareDuJobFactory :
         SimpleJobFactory
     {
+        readonly IDiagnosticScanner _scanner;
         readonly ISnapshotFactory _factory;
-        readonly ISnapshotWriter _writer;
+        readonly ISnapshotWriter _snapshotWriter;
+        readonly IDiagnosticWriter _diagnosticWriter;
 
-        public HareDuJobFactory(ISnapshotFactory factory, ISnapshotWriter writer)
+        public HareDuJobFactory(
+            IDiagnosticScanner scanner,
+            ISnapshotFactory factory,
+            ISnapshotWriter snapshotWriter,
+            IDiagnosticWriter diagnosticWriter)
         {
+            _scanner = scanner;
             _factory = factory;
-            _writer = writer;
+            _snapshotWriter = snapshotWriter;
+            _diagnosticWriter = diagnosticWriter;
         }
 
         public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
@@ -67,13 +89,16 @@ namespace HareDu.Scheduling
             try
             {
                 if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnection>))
-                    return new PersistSnapshotJob<BrokerConnection>(_factory, _writer);
+                    return new PersistSnapshotJob<BrokerConnection>(_factory, _snapshotWriter);
 
                 if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerQueues>))
-                    return new PersistSnapshotJob<BrokerQueues>(_factory, _writer);
+                    return new PersistSnapshotJob<BrokerQueues>(_factory, _snapshotWriter);
 
                 if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<Cluster>))
-                    return new PersistSnapshotJob<Cluster>(_factory, _writer);
+                    return new PersistSnapshotJob<Cluster>(_factory, _snapshotWriter);
+
+                if (bundle.JobDetail.JobType == typeof(PersistDiagnosticsJob<Cluster>))
+                    return new PersistDiagnosticsJob<Cluster>(_factory, _scanner, _diagnosticWriter);
 
                 return new DoNothingJob();
             }

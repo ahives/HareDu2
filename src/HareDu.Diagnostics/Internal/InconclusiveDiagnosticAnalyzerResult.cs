@@ -17,29 +17,42 @@ namespace HareDu.Diagnostics.Internal
     using System.Collections.Generic;
     using KnowledgeBase;
 
-    class NegativeDiagnosticResult :
-        DiagnosticResult
+    class InconclusiveDiagnosticAnalyzerResult :
+        DiagnosticAnalyzerResult
     {
-        public NegativeDiagnosticResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
-            ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
+        public InconclusiveDiagnosticAnalyzerResult(string parentComponentIdentifier, string componentIdentifier,
+            string analyzerIdentifier, ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> analyzerData,
+            KnowledgeBaseArticle knowledgeBaseArticle)
         {
             ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
-            AnalyzerIdentifier = analyzerIdentifier;
             ComponentType = componentType;
-            AnalyzerData = analyzerData;
+            AnalyzerIdentifier = analyzerIdentifier;
             KnowledgeBaseArticle = knowledgeBaseArticle;
-            Status = DiagnosticStatus.Red;
+            AnalyzerData = analyzerData;
+            Status = DiagnosticStatus.Inconclusive;
+            Timestamp = DateTimeOffset.Now;
+        }
+
+        public InconclusiveDiagnosticAnalyzerResult(string parentComponentIdentifier, string componentIdentifier,
+            string analyzerIdentifier, ComponentType componentType)
+        {
+            ParentComponentIdentifier = parentComponentIdentifier;
+            ComponentIdentifier = componentIdentifier;
+            ComponentType = componentType;
+            AnalyzerIdentifier = analyzerIdentifier;
+            AnalyzerData = DiagnosticCache.EmptyAnalyzerData;
+            Status = DiagnosticStatus.Inconclusive;
             Timestamp = DateTimeOffset.Now;
         }
 
         public string ParentComponentIdentifier { get; }
         public string ComponentIdentifier { get; }
+        public ComponentType ComponentType { get; }
         public string AnalyzerIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
         public IReadOnlyList<DiagnosticAnalyzerData> AnalyzerData { get; }
-        public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }
 }

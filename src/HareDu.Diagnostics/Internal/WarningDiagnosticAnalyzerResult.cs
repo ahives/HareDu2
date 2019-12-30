@@ -17,11 +17,11 @@ namespace HareDu.Diagnostics.Internal
     using System.Collections.Generic;
     using KnowledgeBase;
 
-    class PositiveDiagnosticResult :
-        DiagnosticResult
+    class WarningDiagnosticAnalyzerResult :
+        DiagnosticAnalyzerResult
     {
-        public PositiveDiagnosticResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
-            ComponentType componentType, List<DiagnosticAnalyzerData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
+        public WarningDiagnosticAnalyzerResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
+            ComponentType componentType, IReadOnlyList<DiagnosticAnalyzerData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
         {
             ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Internal
             ComponentType = componentType;
             AnalyzerData = analyzerData;
             KnowledgeBaseArticle = knowledgeBaseArticle;
-            Status = DiagnosticStatus.Green;
+            Status = DiagnosticStatus.Yellow;
             Timestamp = DateTimeOffset.Now;
         }
 

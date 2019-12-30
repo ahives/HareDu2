@@ -14,11 +14,12 @@
 namespace HareDu.Diagnostics.Formatting
 {
     using System.Text;
+    using Core.Extensions;
 
     public class DiagnosticReportTextFormatter :
         IDiagnosticReportFormatter
     {
-        public string Format(DiagnosticReport report)
+        public string Format(ScannerResult report)
         {
             var builder = new StringBuilder();
 
@@ -37,9 +38,9 @@ namespace HareDu.Diagnostics.Formatting
         }
         
         void Format(DiagnosticAnalyzerData data, ref StringBuilder builder) =>
-            builder.AppendLine($"\t\t{data?.PropertyName} => {data?.PropertyValue}");
+            builder.AppendLine($"\t\t{data.PropertyName} => {data.PropertyValue}");
 
-        void Format(DiagnosticResult result, ref StringBuilder builder)
+        void Format(DiagnosticAnalyzerResult result, ref StringBuilder builder)
         {
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
             builder.AppendLine($"\tComponent Identifier: {result.ComponentIdentifier}");
@@ -50,6 +51,9 @@ namespace HareDu.Diagnostics.Formatting
             
             foreach (var data in result.AnalyzerData)
             {
+                if (data.IsNull())
+                    continue;
+                
                 Format(data, ref builder);
             }
 

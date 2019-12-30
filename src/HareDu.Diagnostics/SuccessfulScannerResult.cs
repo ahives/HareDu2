@@ -11,16 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Diagnostics
 {
+    using System;
     using System.Collections.Generic;
-    using Snapshotting;
+    using MassTransit;
 
-    public interface IComponentDiagnostic<in T>
-        where T : Snapshot
+    public class SuccessfulScannerResult :
+        ScannerResult
     {
-        string Identifier { get; }
+        public SuccessfulScannerResult(string scannerIdentifier, IReadOnlyList<DiagnosticAnalyzerResult> results)
+        {
+            Identifier = NewId.NextGuid();
+            ScannerIdentifier = scannerIdentifier;
+            Results = results;
+            Timestamp = DateTimeOffset.Now;
+        }
 
-        IReadOnlyList<DiagnosticAnalyzerResult> Scan(T snapshot);
+        public Guid Identifier { get; }
+        public string ScannerIdentifier { get; }
+        public IReadOnlyList<DiagnosticAnalyzerResult> Results { get; }
+        public DateTimeOffset Timestamp { get; }
     }
 }

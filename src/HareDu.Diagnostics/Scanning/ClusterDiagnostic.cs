@@ -43,12 +43,12 @@ namespace HareDu.Diagnostics.Scanning
             _osAnalyzers = analyzers.Where(IsOperatingSystemAnalyzer).ToList();
         }
 
-        public IReadOnlyList<DiagnosticResult> Scan(ClusterSnapshot snapshot)
+        public IReadOnlyList<DiagnosticAnalyzerResult> Scan(ClusterSnapshot snapshot)
         {
             if (snapshot == null)
-                return DiagnosticCache.EmptyDiagnosticResults;
+                return DiagnosticCache.EmptyAnalyzerResults;
             
-            var results = new List<DiagnosticResult>();
+            var results = new List<DiagnosticAnalyzerResult>();
 
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {

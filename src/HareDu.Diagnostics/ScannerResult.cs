@@ -15,23 +15,14 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
-    using KnowledgeBase;
 
-    public interface DiagnosticResult
+    public interface ScannerResult
     {
-        string ParentComponentIdentifier { get; }
+        Guid Identifier { get; }
         
-        string ComponentIdentifier { get; }
+        string ScannerIdentifier { get; }
         
-        ComponentType ComponentType { get; }
-        
-        string AnalyzerIdentifier { get; }
-        
-        DiagnosticStatus Status { get; }
-        
-        KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-        
-        IReadOnlyList<DiagnosticAnalyzerData> AnalyzerData { get; }
+        IReadOnlyList<DiagnosticAnalyzerResult> Results { get; }
         
         DateTimeOffset Timestamp { get; }
     }

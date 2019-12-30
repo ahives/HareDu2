@@ -37,12 +37,12 @@ namespace HareDu.Diagnostics.Scanning
             _exchangeAnalyzers = analyzers.Where(IsExchangeAnalyzer).ToList();
         }
 
-        public IReadOnlyList<DiagnosticResult> Scan(BrokerQueuesSnapshot snapshot)
+        public IReadOnlyList<DiagnosticAnalyzerResult> Scan(BrokerQueuesSnapshot snapshot)
         {
             if (snapshot == null)
-                return DiagnosticCache.EmptyDiagnosticResults;
+                return DiagnosticCache.EmptyAnalyzerResults;
             
-            var results = new List<DiagnosticResult>();
+            var results = new List<DiagnosticAnalyzerResult>();
 
             results.AddRange(_exchangeAnalyzers.Select(x => x.Execute(snapshot)));
             

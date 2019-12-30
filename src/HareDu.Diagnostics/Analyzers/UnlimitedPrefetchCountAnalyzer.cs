@@ -37,10 +37,10 @@ namespace HareDu.Diagnostics.Analyzers
             _status = DiagnosticAnalyzerStatus.Online;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
             ChannelSnapshot data = snapshot as ChannelSnapshot;
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
             
             var analyzerData = new List<DiagnosticAnalyzerData>
             {
@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.PrefetchCount == 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.ConnectionIdentifier,
+                result = new WarningDiagnosticAnalyzerResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Inconclusive, out knowledgeBaseArticle);
-                result = new InconclusiveDiagnosticResult(data.ConnectionIdentifier,
+                result = new InconclusiveDiagnosticAnalyzerResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,

@@ -30,6 +30,6 @@ namespace HareDu.Diagnostics.Analyzers
         
         DiagnosticAnalyzerStatus Status { get; }
         
-        DiagnosticResult Execute<T>(T snapshot);
+        DiagnosticAnalyzerResult Execute<T>(T snapshot);
     }
 }

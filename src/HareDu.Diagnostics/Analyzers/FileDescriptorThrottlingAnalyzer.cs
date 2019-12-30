@@ -40,9 +40,9 @@ namespace HareDu.Diagnostics.Analyzers
             _status = !_config.IsNull() ? DiagnosticAnalyzerStatus.Online : DiagnosticAnalyzerStatus.Offline;
         }
 
-        public DiagnosticResult Execute<T>(T snapshot)
+        public DiagnosticAnalyzerResult Execute<T>(T snapshot)
         {
-            DiagnosticResult result;
+            DiagnosticAnalyzerResult result;
             OperatingSystemSnapshot data = snapshot as OperatingSystemSnapshot;
             
             KnowledgeBaseArticle knowledgeBaseArticle;
@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Analyzers
             if (data.FileDescriptors.Used < warningThreshold && warningThreshold < data.FileDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticResult(data.NodeIdentifier,
+                result = new PositiveDiagnosticAnalyzerResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
                     ComponentType,
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Analyzers
             else if (data.FileDescriptors.Used == data.FileDescriptors.Available)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticResult(data.NodeIdentifier,
+                result = new NegativeDiagnosticAnalyzerResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
                     ComponentType,
@@ -79,7 +79,7 @@ namespace HareDu.Diagnostics.Analyzers
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticResult(data.NodeIdentifier,
+                result = new WarningDiagnosticAnalyzerResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
                     ComponentType,
