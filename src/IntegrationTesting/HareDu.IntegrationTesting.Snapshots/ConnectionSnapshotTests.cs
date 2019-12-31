@@ -39,7 +39,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public async Task Test1()
         {
             var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
+                .Snapshot<BrokerConnectivity>()
                 .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Execute();
         }
@@ -48,7 +48,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public async Task Test2()
         {
             var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
+                .Snapshot<BrokerConnectivity>()
                 .Execute();
         }
     }

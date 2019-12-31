@@ -59,7 +59,9 @@ namespace HareDu.Snapshotting.Internal
                 return this;
             }
             
-            ClusterSnapshot snapshot = new ClusterSnapshotImpl(cluster.Select(x => x.Data), nodes.Select(x => x.Data));
+            ClusterSnapshot snapshot = new ClusterSnapshotImpl(
+                cluster.Select(x => x.Data),
+                nodes.Select(x => x.Data));
             SnapshotResult<ClusterSnapshot> result = new SnapshotResultImpl(snapshot);
 
             SaveSnapshot(result);
@@ -81,12 +83,12 @@ namespace HareDu.Snapshotting.Internal
         public HareDuSnapshot<ClusterSnapshot> RegisterObservers(
             IReadOnlyList<IObserver<SnapshotResult<ClusterSnapshot>>> observers)
         {
-            if (observers != null)
+            if (observers == null)
+                return this;
+            
+            for (int i = 0; i < observers.Count; i++)
             {
-                for (int i = 0; i < observers.Count; i++)
-                {
-                    _observers.Add(Subscribe(observers[i]));
-                }
+                _observers.Add(Subscribe(observers[i]));
             }
 
             return this;

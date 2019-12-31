@@ -88,8 +88,8 @@ namespace HareDu.Scheduling
         {
             try
             {
-                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnection>))
-                    return new PersistSnapshotJob<BrokerConnection>(_factory, _snapshotWriter);
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnectivity>))
+                    return new PersistSnapshotJob<BrokerConnectivity>(_factory, _snapshotWriter);
 
                 if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerQueues>))
                     return new PersistSnapshotJob<BrokerQueues>(_factory, _snapshotWriter);

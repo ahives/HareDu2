@@ -38,10 +38,10 @@ namespace HareDu.Snapshotting.Tests
         public async Task Verify_can_return_BrokerConnection_broker_object()
         {
             var snapshot = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>();
+                .Snapshot<BrokerConnectivity>();
 
             snapshot.ShouldNotBeNull();
-            snapshot.ShouldBeAssignableTo<BrokerConnection>();
+            snapshot.ShouldBeAssignableTo<BrokerConnectivity>();
         }
 
         [Test]

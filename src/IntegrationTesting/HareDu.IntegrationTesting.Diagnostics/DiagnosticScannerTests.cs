@@ -41,7 +41,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var container = builder.Build();
 
             var resource = container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
+                .Snapshot<BrokerConnectivity>()
 //                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 // .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .Execute();
@@ -77,7 +77,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 .BuildServiceProvider();
             
             var resource = services.GetService<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
+                .Snapshot<BrokerConnectivity>()
                 .Execute();
             
             var scanner = services.GetService<IDiagnosticScanner>();

@@ -66,7 +66,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test()
         {
             var snapshot = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnection>()
+                .Snapshot<BrokerConnectivity>()
                 .Execute();
 
             var result = snapshot.Timeline.MostRecent();

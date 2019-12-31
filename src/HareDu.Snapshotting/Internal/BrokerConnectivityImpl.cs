@@ -22,14 +22,14 @@ namespace HareDu.Snapshotting.Internal
     using HareDu.Model;
     using Model;
 
-    class BrokerConnectionImpl :
+    class BrokerConnectivityImpl :
         BaseSnapshot<BrokerConnectivitySnapshot>,
-        BrokerConnection
+        BrokerConnectivity
     {
         readonly List<IDisposable> _observers;
         public IReadOnlyList<SnapshotResult<BrokerConnectivitySnapshot>> Timeline => _snapshots;
 
-        public BrokerConnectionImpl(IBrokerObjectFactory factory)
+        public BrokerConnectivityImpl(IBrokerObjectFactory factory)
             : base(factory)
         {
             _observers = new List<IDisposable>();

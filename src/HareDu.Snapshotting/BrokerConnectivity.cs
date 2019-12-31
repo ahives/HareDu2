@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting
 {
     using Model;
 
-    public interface BrokerConnection :
+    public interface BrokerConnectivity :
         HareDuSnapshot<BrokerConnectivitySnapshot>
     {
     }

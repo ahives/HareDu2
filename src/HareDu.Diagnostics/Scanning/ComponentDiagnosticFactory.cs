@@ -66,24 +66,24 @@ namespace HareDu.Diagnostics.Scanning
         {
             for (int i = 0; i < observers.Count; i++)
             {
-                if (observers[i] != null)
+                if (observers[i] == null)
+                    continue;
+                
+                for (int j = 0; j < _analyzers.Count; j++)
                 {
-                    for (int j = 0; j < _analyzers.Count; j++)
-                    {
-                        _observers.Add(_analyzers[j].Subscribe(observers[i]));
-                    }
+                    _observers.Add(_analyzers[j].Subscribe(observers[i]));
                 }
             }
         }
 
         public void RegisterObserver(IObserver<DiagnosticAnalyzerContext> observer)
         {
-            if (observer != null)
+            if (observer == null)
+                return;
+            
+            for (int j = 0; j < _analyzers.Count; j++)
             {
-                for (int j = 0; j < _analyzers.Count; j++)
-                {
-                    _observers.Add(_analyzers[j].Subscribe(observer));
-                }
+                _observers.Add(_analyzers[j].Subscribe(observer));
             }
         }
     }

@@ -42,7 +42,7 @@ namespace HareDu.Examples
             var services = new ServiceCollection()
                 .AddHareDuSnapshotting()
                 .AddHareDuDiagnostics()
-                .AddHareDuScheduling<BrokerConnection>()
+                .AddHareDuScheduling<BrokerConnectivity>()
                 .BuildServiceProvider();
 
             IScheduler scheduler = services.GetService<IScheduler>();
@@ -54,7 +54,7 @@ namespace HareDu.Examples
             details["path"] = $"{Directory.GetCurrentDirectory()}/diagnostics";
 
             // await hareDuScheduler.Schedule<PersistSnapshotJob<BrokerQueues>>("persist-snapshot", details);
-            await hareDuScheduler.Schedule<PersistDiagnosticsJob<BrokerConnection>>("persist-diagnostic", details);
+            await hareDuScheduler.Schedule<PersistDiagnosticsJob<BrokerConnectivity>>("persist-diagnostic", details);
             
             Console.WriteLine("Starting");
 
