@@ -11,22 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Extensions
+namespace HareDu.Snapshotting
 {
-    using System.IO;
-    using Core.Extensions;
+    using System.Collections.Generic;
 
-    public static class PersistenceExtensions
+    public interface SnapshotTimeline<out T>
+        where T : Snapshot
     {
-        public static bool TrySaveJson<T>(this SnapshotResult<T> result, string path)
-            where T : Snapshot
-        {
-            string file = $"{path}/snapshot_{result.Identifier}.json";
-            if (File.Exists(file))
-                return false;
+        IReadOnlyList<SnapshotResult<T>> Results { get; }
 
-            File.WriteAllText(file, result.ToJsonString());
-            return true;
-        }
+        void Flush();
     }
 }

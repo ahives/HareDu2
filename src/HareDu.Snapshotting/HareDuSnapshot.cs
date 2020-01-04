@@ -16,11 +16,12 @@ namespace HareDu.Snapshotting
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using Persistence;
 
     public interface HareDuSnapshot<out T>
         where T : Snapshot
     {
-        IReadOnlyList<SnapshotResult<T>> Timeline { get; }
+        SnapshotTimeline<T> Timeline { get; }
         
         HareDuSnapshot<T> Execute(CancellationToken cancellationToken = default);
 

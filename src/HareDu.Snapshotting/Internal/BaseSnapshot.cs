@@ -24,6 +24,7 @@ namespace HareDu.Snapshotting.Internal
     {
         protected readonly IBrokerObjectFactory _factory;
         protected readonly List<SnapshotResult<T>> _snapshots;
+        protected readonly Lazy<SnapshotTimeline<T>> _timeline;
         
         readonly List<IObserver<SnapshotResult<T>>> _observers;
 
@@ -32,6 +33,20 @@ namespace HareDu.Snapshotting.Internal
             _factory = factory;
             _observers = new List<IObserver<SnapshotResult<T>>>();
             _snapshots = new List<SnapshotResult<T>>();
+            _timeline = new Lazy<SnapshotTimeline<T>>(() => new SnapshotTimelineImpl<T>(_snapshots));
+        }
+
+        public IDisposable Subscribe(IObserver<SnapshotResult<T>> observer)
+        {
+            if (!_observers.Contains(observer))
+                _observers.Add(observer);
+
+            return new UnsubscribeObserver(_observers, observer);
+        }
+
+        public void Flush()
+        {
+            _snapshots.Clear();
         }
 
         protected virtual void NotifyObservers(SnapshotResult<T> result)
@@ -53,15 +68,29 @@ namespace HareDu.Snapshotting.Internal
         protected virtual void SaveSnapshot(SnapshotResult<T> result)
         {
             if (!result.IsNull())
+            {
                 _snapshots.Add(result);
+            }
         }
 
-        public IDisposable Subscribe(IObserver<SnapshotResult<T>> observer)
+        
+        class SnapshotTimelineImpl<T> :
+            SnapshotTimeline<T>
+            where T : Snapshot
         {
-            if (!_observers.Contains(observer))
-                _observers.Add(observer);
+            readonly List<SnapshotResult<T>> _snapshots;
+            
+            public IReadOnlyList<SnapshotResult<T>> Results => _snapshots;
 
-            return new UnsubscribeObserver(_observers, observer);
+            public SnapshotTimelineImpl(List<SnapshotResult<T>> snapshots)
+            {
+                _snapshots = snapshots;
+            }
+
+            public void Flush()
+            {
+                _snapshots.Clear();
+            }
         }
 
 

@@ -24,6 +24,7 @@ namespace HareDu.Snapshotting.Tests
     using NUnit.Framework;
     using Registration;
     using Shouldly;
+    using Snapshotting.Extensions;
 
     [TestFixture]
     public class ConnectionSnapshotTests

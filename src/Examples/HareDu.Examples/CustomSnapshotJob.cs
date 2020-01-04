@@ -46,7 +46,7 @@ namespace HareDu.Examples
                 .MostRecent()
                 .Cast<SnapshotResult<BrokerQueuesSnapshot>>();
             
-            bool persisted = snapshot.TrySaveJson("/Users/albert/Documents/snapshots");
+            // bool persisted = snapshot.Save("/Users/albert/Documents/snapshots");
 
             // var response = _client.Index(snapshot, x => x.Index("haredu_snapshots"));
             // if (response.Result == Result.Created)

@@ -25,6 +25,7 @@ namespace HareDu.Snapshotting.Tests
     using Observers;
     using Registration;
     using Shouldly;
+    using Snapshotting.Extensions;
 
     [TestFixture]
     public class ClusterSnapshotTests

@@ -27,7 +27,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Timeline => _snapshots;
+        public SnapshotTimeline<ClusterSnapshot> Timeline => _timeline.Value;
 
         public ClusterImpl(IBrokerObjectFactory factory)
             : base(factory)

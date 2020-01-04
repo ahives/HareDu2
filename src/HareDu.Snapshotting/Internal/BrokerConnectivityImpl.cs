@@ -27,7 +27,8 @@ namespace HareDu.Snapshotting.Internal
         BrokerConnectivity
     {
         readonly List<IDisposable> _observers;
-        public IReadOnlyList<SnapshotResult<BrokerConnectivitySnapshot>> Timeline => _snapshots;
+
+        public SnapshotTimeline<BrokerConnectivitySnapshot> Timeline => _timeline.Value;
 
         public BrokerConnectivityImpl(IBrokerObjectFactory factory)
             : base(factory)

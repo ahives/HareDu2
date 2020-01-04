@@ -65,34 +65,6 @@ namespace HareDu.Examples
             await scheduler.Shutdown(true);
             
             Console.WriteLine("Stopped");
-            
-            // var container = GetContainer<BrokerQueues>();
-            //
-            // IScheduler scheduler = container.Resolve<IScheduler>();
-            //
-            // IJobDetail job = JobBuilder.Create<CustomSnapshotJob<BrokerQueues>>()
-            //     .WithIdentity("myJob", "group1")
-            //     .Build();
-            //
-            // ITrigger trigger = TriggerBuilder.Create()
-            //     .WithIdentity("myTrigger", "group1")
-            //     .WithSimpleSchedule(x => x
-            //         .WithIntervalInSeconds(5)
-            //         .RepeatForever()
-            //         .WithMisfireHandlingInstructionFireNow())
-            //     .Build();
-	           //
-            // await scheduler.ScheduleJob(job, trigger);
-            //
-            // Console.WriteLine("Starting");
-            //
-            // await scheduler.Start();
-            //
-            // Thread.Sleep(60000);
-            //
-            // await scheduler.Shutdown(true);
-            //
-            // Console.WriteLine("Stopped");
         }
 
         static IContainer GetContainer<T>()

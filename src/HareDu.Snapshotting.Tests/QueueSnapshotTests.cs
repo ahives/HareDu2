@@ -14,18 +14,15 @@
 namespace HareDu.Snapshotting.Tests
 {
     using System.Linq;
-    using System.Threading.Tasks;
     using Autofac;
-    using Core;
-    using Core.Configuration;
-    using Extensions;
     using Fakes;
     using HareDu.Registration;
     using HareDu.Testing.Fakes;
-    using Model;
     using NUnit.Framework;
+    using Persistence;
     using Registration;
     using Shouldly;
+    using Snapshotting.Extensions;
 
     [TestFixture]
     public class QueueSnapshotTests
@@ -61,6 +58,10 @@ namespace HareDu.Snapshotting.Tests
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
+                .SingleInstance();
+            
             _container = builder.Build();
         }
 

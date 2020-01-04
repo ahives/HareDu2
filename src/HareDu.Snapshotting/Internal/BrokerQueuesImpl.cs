@@ -27,7 +27,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public IReadOnlyList<SnapshotResult<BrokerQueuesSnapshot>> Timeline => _snapshots;
+        public SnapshotTimeline<BrokerQueuesSnapshot> Timeline => _timeline.Value;
 
         public BrokerQueuesImpl(IBrokerObjectFactory factory)
             : base(factory)

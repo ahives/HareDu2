@@ -22,19 +22,23 @@ namespace HareDu.Snapshotting.Tests.Fakes
     public class FakeCluster :
         Cluster
     {
+        readonly Lazy<SnapshotTimeline<ClusterSnapshot>> _timeline;
         readonly List<SnapshotResult<ClusterSnapshot>> _snapshots;
-        public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Timeline => _snapshots;
+        // public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Timeline => _snapshots;
+
+        public SnapshotTimeline<ClusterSnapshot> Timeline => _timeline.Value;
 
         public FakeCluster()
         {
             _snapshots = new List<SnapshotResult<ClusterSnapshot>>();
+            _timeline = new Lazy<SnapshotTimeline<ClusterSnapshot>>(() => new SnapshotTimelineImpl(_snapshots));
         }
 
         public HareDuSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
         {
-            ClusterSnapshot snapshotLens = new FakeClusterSnapshot1();
+            ClusterSnapshot snapshot = new FakeClusterSnapshot1();
 
-            _snapshots.Add(new SnapshotResultImpl(snapshotLens));
+            _snapshots.Add(new SnapshotResultImpl(snapshot));
 
             return this;
         }
@@ -42,6 +46,22 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotResult<ClusterSnapshot>> observer) => throw new NotImplementedException();
 
         public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<ClusterSnapshot>>> observers) => throw new NotImplementedException();
+
+        
+        class SnapshotTimelineImpl :
+            SnapshotTimeline<ClusterSnapshot>
+        {
+            public SnapshotTimelineImpl(List<SnapshotResult<ClusterSnapshot>> snapshots)
+            {
+                Results = snapshots;
+            }
+
+            public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Results { get; }
+            public void Flush()
+            {
+                throw new NotImplementedException();
+            }
+        }
 
 
         class SnapshotResultImpl :
