@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2019 Albert L. Hives
+﻿// Copyright 2013-2020 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ namespace HareDu
         BrokerObject
     {
         /// <summary>
-        /// Returns all bindgins on the current RabbitMQ node.
+        /// Returns all bindings on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>

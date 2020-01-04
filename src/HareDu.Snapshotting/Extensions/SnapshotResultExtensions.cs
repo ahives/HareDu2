@@ -1,4 +1,4 @@
-// Copyright 2013-2019 Albert L. Hives
+// Copyright 2013-2020 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,6 +32,15 @@ namespace HareDu.Snapshotting.Extensions
                 ? new EmptySnapshotResult<T>()
                 : timeline.Results.Last();
 
+        /// <summary>
+        /// Attempts to save the <see cref="SnapshotResult{T}"/> to disk.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="writer"></param>
+        /// <param name="file"></param>
+        /// <param name="path"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void Save<T>(this SnapshotResult<T> result, ISnapshotWriter writer, string file, string path)
             where T : Snapshot
         {
