@@ -16,6 +16,7 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Autofac;
     using Core.Configuration;
     using Diagnostics.Analyzers;
+    using Extensions;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;

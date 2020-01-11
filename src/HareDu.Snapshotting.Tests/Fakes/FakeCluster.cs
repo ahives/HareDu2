@@ -47,7 +47,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
 
         public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<ClusterSnapshot>>> observers) => throw new NotImplementedException();
 
-        
+
         class SnapshotTimelineImpl :
             SnapshotTimeline<ClusterSnapshot>
         {
@@ -57,7 +57,13 @@ namespace HareDu.Snapshotting.Tests.Fakes
             }
 
             public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Results { get; }
-            public void Flush()
+
+            public void PurgeAll()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Purge<U>(SnapshotResult<U> result) where U : Snapshot
             {
                 throw new NotImplementedException();
             }

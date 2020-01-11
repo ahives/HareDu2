@@ -18,6 +18,7 @@ namespace HareDu.Diagnostics.Scanning
     using System.Linq;
     using Analyzers;
     using Core.Extensions;
+    using Extensions;
     using Snapshotting.Model;
 
     public class BrokerConnectivityDiagnostic :

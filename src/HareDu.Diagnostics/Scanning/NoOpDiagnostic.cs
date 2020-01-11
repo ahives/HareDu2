@@ -14,6 +14,7 @@
 namespace HareDu.Diagnostics.Scanning
 {
     using System.Collections.Generic;
+    using Extensions;
     using Snapshotting;
 
     public class NoOpDiagnostic<T> :

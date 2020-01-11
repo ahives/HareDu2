@@ -20,6 +20,9 @@ namespace HareDu.Snapshotting
     {
         IReadOnlyList<SnapshotResult<T>> Results { get; }
 
-        void Flush();
+        void PurgeAll();
+
+        void Purge<U>(SnapshotResult<U> result)
+            where U : Snapshot;
     }
 }

@@ -17,6 +17,7 @@ namespace HareDu.Diagnostics.Registration
     using System.Collections.Generic;
     using System.Linq;
     using Analyzers;
+    using Extensions;
     using Scanning;
 
     public class ComponentDiagnosticRegistrar :

@@ -16,6 +16,7 @@ namespace HareDu.Analytics.Analyzers
     using System.Collections.Generic;
     using Diagnostics;
     using Diagnostics.Analyzers;
+    using Diagnostics.Extensions;
 
     public class QueueNoFlowReportAnalyzer :
         BaseAnalyzeDiagnosticReport,

@@ -16,6 +16,7 @@ namespace HareDu.Diagnostics.Tests
     using System.Linq;
     using Core.Configuration;
     using Diagnostics.Analyzers;
+    using Extensions;
     using KnowledgeBase;
     using NUnit.Framework;
     using Registration;

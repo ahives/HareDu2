@@ -13,8 +13,6 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Model
 {
-    using Newtonsoft.Json;
-
     public interface GarbageCollection
     {
         CollectedGarbage ChannelsClosed { get; }
@@ -23,14 +21,6 @@ namespace HareDu.Snapshotting.Model
 
         CollectedGarbage QueuesDeleted { get; }
 
-        [JsonProperty("gc_bytes_reclaimed")]
         CollectedGarbage ReclaimedBytes { get; }
-    }
-
-    public interface CollectedGarbage
-    {
-        ulong Total { get; }
-        
-        decimal Rate { get; }
     }
 }

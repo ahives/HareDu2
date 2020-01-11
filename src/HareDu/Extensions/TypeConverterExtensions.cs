@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Extensions
 {
     public static class TypeConverterExtensions
     {
@@ -24,6 +24,24 @@ namespace HareDu
                 return ulong.MaxValue;
 
             return ulong.TryParse(value, out ulong result) ? result : ulong.MaxValue;
+        }
+        
+        public static string ToRequeueModeString(this RequeueMode mode)
+        {
+            switch (mode)
+            {
+                case RequeueMode.DoNotAckRequeue:
+                    return "ack_requeue_false";
+                
+                case RequeueMode.RejectRequeue:
+                    return "reject_requeue_true";
+                
+                case RequeueMode.DoNotRejectRequeue:
+                    return "reject_requeue_false";
+
+                default:
+                    return "ack_requeue_true";
+            }
         }
     }
 }

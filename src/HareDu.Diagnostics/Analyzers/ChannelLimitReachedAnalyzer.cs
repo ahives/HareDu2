@@ -16,6 +16,7 @@ namespace HareDu.Diagnostics.Analyzers
     using System;
     using System.Collections.Generic;
     using Core.Configuration;
+    using Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;

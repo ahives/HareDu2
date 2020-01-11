@@ -18,6 +18,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Linq;
     using System.Threading;
     using Core.Extensions;
+    using HareDu.Extensions;
     using HareDu.Model;
     using Model;
 

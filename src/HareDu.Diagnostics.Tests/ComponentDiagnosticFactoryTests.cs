@@ -18,6 +18,7 @@ namespace HareDu.Diagnostics.Tests
     using AutofacIntegration;
     using Core.Configuration;
     using Diagnostics.Analyzers;
+    using Extensions;
     using KnowledgeBase;
     using NUnit.Framework;
     using Registration;

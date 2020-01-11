@@ -18,6 +18,7 @@ namespace HareDu.Diagnostics.Registration
     using System.Linq;
     using Analyzers;
     using Core.Configuration;
+    using Extensions;
     using KnowledgeBase;
 
     public class DiagnosticAnalyzerRegistrar :

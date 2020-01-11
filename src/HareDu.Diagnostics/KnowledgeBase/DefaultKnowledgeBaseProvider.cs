@@ -14,6 +14,7 @@
 namespace HareDu.Diagnostics.KnowledgeBase
 {
     using Analyzers;
+    using Extensions;
 
     public class DefaultKnowledgeBaseProvider :
         BaseKnowledgeBaseProvider

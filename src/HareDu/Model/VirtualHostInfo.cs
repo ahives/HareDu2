@@ -16,8 +16,7 @@ namespace HareDu.Model
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface VirtualHostInfo :
-        ResourceSummary
+    public interface VirtualHostInfo
     {
         [JsonProperty("name")]
         string Name { get; }

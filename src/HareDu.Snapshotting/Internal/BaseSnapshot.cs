@@ -44,11 +44,6 @@ namespace HareDu.Snapshotting.Internal
             return new UnsubscribeObserver(_observers, observer);
         }
 
-        public void Flush()
-        {
-            _snapshots.Clear();
-        }
-
         protected virtual void NotifyObservers(SnapshotResult<T> result)
         {
             foreach (var observer in _observers)
@@ -87,9 +82,15 @@ namespace HareDu.Snapshotting.Internal
                 _snapshots = snapshots;
             }
 
-            public void Flush()
+            public void PurgeAll()
             {
                 _snapshots.Clear();
+            }
+
+            public void Purge<U>(SnapshotResult<U> result)
+                where U : Snapshot
+            {
+                _snapshots.Remove(result.Cast<SnapshotResult<T>>());
             }
         }
 
