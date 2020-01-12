@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using System.Collections.Generic;
     using System.Linq;
     using Core.Configuration;
-    using Diagnostics.Analyzers;
+    using Diagnostics.Probes;
     using Extensions;
     using Fakes;
     using KnowledgeBase;
@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerQueuesDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
+        IReadOnlyList<IDiagnosticProbe> _probes;
 
         [OneTimeSetUp]
         public void Init()
@@ -40,16 +40,16 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _analyzers = new List<IDiagnosticAnalyzer>
+            _probes = new List<IDiagnosticProbe>
             {
-                new QueueGrowthAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new MessagePagingAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new RedeliveredMessagesAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new ConsumerUtilizationAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new UnroutableMessageAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new QueueLowFlowAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new QueueNoFlowAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new QueueHighFlowAnalyzer(config.Analyzer, knowledgeBaseProvider)
+                new QueueGrowthProbe(config.Analyzer, knowledgeBaseProvider),
+                new MessagePagingProbe(config.Analyzer, knowledgeBaseProvider),
+                new RedeliveredMessagesProbe(config.Analyzer, knowledgeBaseProvider),
+                new ConsumerUtilizationProbe(config.Analyzer, knowledgeBaseProvider),
+                new UnroutableMessageProbe(config.Analyzer, knowledgeBaseProvider),
+                new QueueLowFlowProbe(config.Analyzer, knowledgeBaseProvider),
+                new QueueNoFlowProbe(config.Analyzer, knowledgeBaseProvider),
+                new QueueHighFlowProbe(config.Analyzer, knowledgeBaseProvider)
             };
         }
 
@@ -58,18 +58,18 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
 
-            var report = new BrokerQueuesDiagnostic(_analyzers)
+            var report = new BrokerQueuesDiagnostic(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(8);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueLowFlowAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueNoFlowAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueHighFlowAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = null;
             
-            var report = new BrokerQueuesDiagnostic(_analyzers)
+            var report = new BrokerQueuesDiagnostic(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

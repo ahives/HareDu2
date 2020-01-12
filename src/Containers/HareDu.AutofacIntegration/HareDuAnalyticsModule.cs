@@ -30,7 +30,7 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var diagnosticAnalyzerRegistrar = x.Resolve<IDiagnosticAnalyzerRegistrar>();
+                    var diagnosticAnalyzerRegistrar = x.Resolve<IDiagnosticProbeRegistrar>();
                     var componentDiagnosticRegistrar = x.Resolve<IComponentDiagnosticRegistrar>();
 
                     return new ComponentDiagnosticFactory(diagnosticAnalyzerRegistrar, componentDiagnosticRegistrar);
@@ -58,13 +58,13 @@ namespace HareDu.AutofacIntegration
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
                     
-                    var registrar = new DiagnosticAnalyzerRegistrar(config.Analyzer, knowledgeBaseProvider);
+                    var registrar = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
                     
                     registrar.RegisterAll();
 
                     return registrar;
                 })
-                .As<IDiagnosticAnalyzerRegistrar>()
+                .As<IDiagnosticProbeRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<AnalyticsRegistry>()
@@ -73,7 +73,7 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var registrar = new ComponentDiagnosticRegistrar(x.Resolve<IDiagnosticAnalyzerRegistrar>());
+                    var registrar = new ComponentDiagnosticRegistrar(x.Resolve<IDiagnosticProbeRegistrar>());
                     
                     registrar.RegisterAll();
 

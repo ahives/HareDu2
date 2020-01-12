@@ -17,10 +17,11 @@ namespace HareDu.Diagnostics.Tests
     using Autofac;
     using AutofacIntegration;
     using Core.Configuration;
-    using Diagnostics.Analyzers;
+    using Diagnostics.Probes;
     using Extensions;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Probes;
     using Registration;
     using Scanning;
     using Shouldly;
@@ -30,7 +31,7 @@ namespace HareDu.Diagnostics.Tests
     [TestFixture]
     public class ComponentDiagnosticFactoryTests
     {
-        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
+        IReadOnlyList<IDiagnosticProbe> _probes;
         IContainer _container;
 
         [OneTimeSetUp]
@@ -49,14 +50,14 @@ namespace HareDu.Diagnostics.Tests
             
             configProvider.TryGet(path, out HareDuConfig config);
 
-            _analyzers = new List<IDiagnosticAnalyzer>
+            _probes = new List<IDiagnosticProbe>
             {
-                new HighConnectionCreationRateAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new HighConnectionClosureRateAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new ChannelThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new ChannelLimitReachedAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new BlockedConnectionAnalyzer(config.Analyzer, knowledgeBaseProvider)
+                new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider),
+                new HighConnectionClosureRateProbe(config.Analyzer, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountProbe(config.Analyzer, knowledgeBaseProvider),
+                new ChannelThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
+                new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider),
+                new BlockedConnectionProbe(config.Analyzer, knowledgeBaseProvider)
             };
         }
 
@@ -112,7 +113,7 @@ namespace HareDu.Diagnostics.Tests
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
-            var diagnosticAnalyzerRegistry = new DiagnosticAnalyzerRegistrar(config.Analyzer, knowledgeBaseProvider);
+            var diagnosticAnalyzerRegistry = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
             diagnosticAnalyzerRegistry.RegisterAll();
             
             var diagnosticRegistry = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistry);
@@ -130,7 +131,7 @@ namespace HareDu.Diagnostics.Tests
         {
             public string Identifier => GetType().GetIdentifier();
 
-            public IReadOnlyList<DiagnosticAnalyzerResult> Scan(FakeSnapshot snapshot) =>
+            public IReadOnlyList<DiagnosticProbeResult> Scan(FakeSnapshot snapshot) =>
                 throw new System.NotImplementedException();
         }
 

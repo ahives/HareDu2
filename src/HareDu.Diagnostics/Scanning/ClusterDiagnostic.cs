@@ -16,9 +16,9 @@ namespace HareDu.Diagnostics.Scanning
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
     using Core.Extensions;
     using Extensions;
+    using Probes;
     using Snapshotting.Model;
 
     public class ClusterDiagnostic :
@@ -26,77 +26,77 @@ namespace HareDu.Diagnostics.Scanning
     {
         public string Identifier => GetType().GetIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _nodeAnalyzers;
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _diskAnalyzers;
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _memoryAnalyzers;
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _runtimeAnalyzers;
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _osAnalyzers;
+        readonly IReadOnlyList<IDiagnosticProbe> _nodeProbes;
+        readonly IReadOnlyList<IDiagnosticProbe> _diskProbes;
+        readonly IReadOnlyList<IDiagnosticProbe> _memoryProbes;
+        readonly IReadOnlyList<IDiagnosticProbe> _runtimeProbes;
+        readonly IReadOnlyList<IDiagnosticProbe> _operatingSystemProbes;
 
-        public ClusterDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public ClusterDiagnostic(IReadOnlyList<IDiagnosticProbe> probes)
         {
-            if (analyzers.IsNull())
-                throw new ArgumentNullException(nameof(analyzers));
+            if (probes.IsNull())
+                throw new ArgumentNullException(nameof(probes));
             
-            _nodeAnalyzers = analyzers.Where(IsNodeAnalyzer).ToList();
-            _diskAnalyzers = analyzers.Where(IsDiskAnalyzer).ToList();
-            _memoryAnalyzers = analyzers.Where(IsMemoryAnalyzer).ToList();
-            _runtimeAnalyzers = analyzers.Where(IsRuntimeAnalyzer).ToList();
-            _osAnalyzers = analyzers.Where(IsOperatingSystemAnalyzer).ToList();
+            _nodeProbes = probes.Where(IsNodeProbe).ToList();
+            _diskProbes = probes.Where(IsDiskProbe).ToList();
+            _memoryProbes = probes.Where(IsMemoryProbe).ToList();
+            _runtimeProbes = probes.Where(IsRuntimeProbe).ToList();
+            _operatingSystemProbes = probes.Where(IsOperatingSystemProbe).ToList();
         }
 
-        public IReadOnlyList<DiagnosticAnalyzerResult> Scan(ClusterSnapshot snapshot)
+        public IReadOnlyList<DiagnosticProbeResult> Scan(ClusterSnapshot snapshot)
         {
             if (snapshot == null)
-                return DiagnosticCache.EmptyAnalyzerResults;
+                return DiagnosticCache.EmptyProbeResults;
             
-            var results = new List<DiagnosticAnalyzerResult>();
+            var results = new List<DiagnosticProbeResult>();
 
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {
                 if (snapshot.Nodes[i].IsNull())
                     continue;
                 
-                results.AddRange(_nodeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i])));
+                results.AddRange(_nodeProbes.Select(x => x.Execute(snapshot.Nodes[i])));
 
                 if (!snapshot.Nodes[i].Disk.IsNull())
-                    results.AddRange(_diskAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
+                    results.AddRange(_diskProbes.Select(x => x.Execute(snapshot.Nodes[i].Disk)));
 
                 if (!snapshot.Nodes[i].Memory.IsNull())
-                    results.AddRange(_memoryAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
+                    results.AddRange(_memoryProbes.Select(x => x.Execute(snapshot.Nodes[i].Memory)));
 
                 if (!snapshot.Nodes[i].Runtime.IsNull())
-                    results.AddRange(_runtimeAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
+                    results.AddRange(_runtimeProbes.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
 
                 if (!snapshot.Nodes[i].OS.IsNull())
-                    results.AddRange(_osAnalyzers.Select(x => x.Execute(snapshot.Nodes[i].OS)));
+                    results.AddRange(_operatingSystemProbes.Select(x => x.Execute(snapshot.Nodes[i].OS)));
             }
 
             return results;
         }
 
-        bool IsOperatingSystemAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.OperatingSystem;
+        bool IsOperatingSystemProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.OperatingSystem;
 
-        bool IsRuntimeAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.Runtime;
+        bool IsRuntimeProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.Runtime;
 
-        bool IsMemoryAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.Memory;
+        bool IsMemoryProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.Memory;
 
-        bool IsDiskAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.Disk;
+        bool IsDiskProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.Disk;
 
-        bool IsNodeAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.Node;
+        bool IsNodeProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.Node;
     }
 }

@@ -169,7 +169,7 @@ namespace HareDu.CoreIntegration
             services.AddComponentDiagnosticRegistry();
 
             services.TryAddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
-                x.GetService<IDiagnosticAnalyzerRegistrar>(),
+                x.GetService<IDiagnosticProbeRegistrar>(),
                 x.GetService<IComponentDiagnosticRegistrar>()));
 
             services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
@@ -214,7 +214,7 @@ namespace HareDu.CoreIntegration
             services.AddComponentDiagnosticRegistry();
 
             services.TryAddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
-                x.GetService<IDiagnosticAnalyzerRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
+                x.GetService<IDiagnosticProbeRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
 
             services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
             
@@ -292,14 +292,14 @@ namespace HareDu.CoreIntegration
 
         static void AddDiagnosticAnalyzerRegistry(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IDiagnosticAnalyzerRegistrar>(x =>
+            services.TryAddSingleton<IDiagnosticProbeRegistrar>(x =>
             {
                 var configProvider = x.GetService<IConfigurationProvider>();
 
                 configProvider.TryGet(path, out HareDuConfig config);
 
                 var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
-                var registrar = new DiagnosticAnalyzerRegistrar(config.Analyzer, knowledgeBaseProvider);
+                var registrar = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
                 
                 registrar.RegisterAll();
 
@@ -311,7 +311,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IComponentDiagnosticRegistrar>(x =>
             {
-                var registrar = new ComponentDiagnosticRegistrar(x.GetService<IDiagnosticAnalyzerRegistrar>());
+                var registrar = new ComponentDiagnosticRegistrar(x.GetService<IDiagnosticProbeRegistrar>());
                 
                 registrar.RegisterAll();
 

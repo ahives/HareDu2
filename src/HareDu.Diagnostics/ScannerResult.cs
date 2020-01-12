@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics
         
         string ScannerIdentifier { get; }
         
-        IReadOnlyList<DiagnosticAnalyzerResult> Results { get; }
+        IReadOnlyList<DiagnosticProbeResult> Results { get; }
         
         DateTimeOffset Timestamp { get; }
     }

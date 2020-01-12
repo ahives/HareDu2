@@ -12,13 +12,6 @@
     <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
         <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-            <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net462'" />
-    </ItemGroup>
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
         <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
         <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />

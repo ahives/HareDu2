@@ -15,8 +15,8 @@ namespace HareDu.Analytics.Analyzers
 {
     using System.Collections.Generic;
     using Diagnostics;
-    using Diagnostics.Analyzers;
     using Diagnostics.Extensions;
+    using Diagnostics.Probes;
 
     public class QueueNoFlowReportAnalyzer :
         BaseAnalyzeDiagnosticReport,
@@ -24,7 +24,7 @@ namespace HareDu.Analytics.Analyzers
     {
         protected override IEnumerable<string> GetSupportedDiagnosticAnalyzers()
         {
-            yield return typeof(QueueNoFlowAnalyzer).GetIdentifier();
+            yield return typeof(QueueNoFlowProbe).GetIdentifier();
 //            yield return typeof(QueueLowFlowAnalyzer).GetIdentifier();
         }
     }

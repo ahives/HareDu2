@@ -15,7 +15,6 @@ namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
-    using Analyzers;
 
     public interface IComponentDiagnosticRegistrar
     {

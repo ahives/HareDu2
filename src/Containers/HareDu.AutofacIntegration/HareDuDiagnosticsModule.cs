@@ -31,7 +31,7 @@ namespace HareDu.AutofacIntegration
         protected override void Load(ContainerBuilder builder)
         {
             builder.Register(x => new ComponentDiagnosticFactory(
-                    x.Resolve<IDiagnosticAnalyzerRegistrar>(), x.Resolve<IComponentDiagnosticRegistrar>()))
+                    x.Resolve<IDiagnosticProbeRegistrar>(), x.Resolve<IComponentDiagnosticRegistrar>()))
                 .As<IComponentDiagnosticFactory>()
                 .SingleInstance();
 
@@ -61,18 +61,18 @@ namespace HareDu.AutofacIntegration
                     configProvider.TryGet(path, out HareDuConfig config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
-                    var registrar = new DiagnosticAnalyzerRegistrar(config.Analyzer, knowledgeBaseProvider);
+                    var registrar = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
                     
                     registrar.RegisterAll();
 
                     return registrar;
                 })
-                .As<IDiagnosticAnalyzerRegistrar>()
+                .As<IDiagnosticProbeRegistrar>()
                 .SingleInstance();
 
             builder.Register(x =>
                 {
-                    var registrar = new ComponentDiagnosticRegistrar(x.Resolve<IDiagnosticAnalyzerRegistrar>());
+                    var registrar = new ComponentDiagnosticRegistrar(x.Resolve<IDiagnosticProbeRegistrar>());
                     
                     registrar.RegisterAll();
 

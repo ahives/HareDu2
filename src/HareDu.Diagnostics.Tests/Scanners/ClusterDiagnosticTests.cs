@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using System.Collections.Generic;
     using System.Linq;
     using Core.Configuration;
-    using Diagnostics.Analyzers;
+    using Diagnostics.Probes;
     using Extensions;
     using Fakes;
     using KnowledgeBase;
@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class ClusterDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
+        IReadOnlyList<IDiagnosticProbe> _probes;
 
         [OneTimeSetUp]
         public void Init()
@@ -40,15 +40,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _analyzers = new List<IDiagnosticAnalyzer>
+            _probes = new List<IDiagnosticProbe>
             {
-                new RuntimeProcessLimitAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new SocketDescriptorThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new NetworkPartitionAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new MemoryAlarmAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new DiskAlarmAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new AvailableCpuCoresAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new FileDescriptorThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
+                new RuntimeProcessLimitProbe(config.Analyzer, knowledgeBaseProvider),
+                new SocketDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
+                new NetworkPartitionProbe(config.Analyzer, knowledgeBaseProvider),
+                new MemoryAlarmProbe(config.Analyzer, knowledgeBaseProvider),
+                new DiskAlarmProbe(config.Analyzer, knowledgeBaseProvider),
+                new AvailableCpuCoresProbe(config.Analyzer, knowledgeBaseProvider),
+                new FileDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
             };
         }
 
@@ -57,17 +57,17 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshot1();
             
-            var report = new ClusterDiagnostic(_analyzers)
+            var report = new ClusterDiagnostic(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(7);
-            report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(RuntimeProcessLimitProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(SocketDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(NetworkPartitionProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(MemoryAlarmProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(DiskAlarmProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(AvailableCpuCoresProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(FileDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = null;
             
-            var report = new ClusterDiagnostic(_analyzers)
+            var report = new ClusterDiagnostic(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

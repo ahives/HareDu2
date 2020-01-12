@@ -15,8 +15,8 @@ namespace HareDu.Analytics.Analyzers
 {
     using System.Collections.Generic;
     using Diagnostics;
-    using Diagnostics.Analyzers;
     using Diagnostics.Extensions;
+    using Diagnostics.Probes;
 
     public class ThrottledChannelsReportAnalyzer :
         BaseAnalyzeDiagnosticReport,
@@ -24,7 +24,7 @@ namespace HareDu.Analytics.Analyzers
     {
         protected override IEnumerable<string> GetSupportedDiagnosticAnalyzers()
         {
-            yield return typeof(ChannelThrottlingAnalyzer).GetIdentifier();
+            yield return typeof(ChannelThrottlingProbe).GetIdentifier();
         }
     }
 }

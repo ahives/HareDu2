@@ -32,12 +32,12 @@ namespace HareDu.Diagnostics.Scanning
         /// Registers a list of observers that receives the output in real-time as the each sensor executes.
         /// </summary>
         /// <param name="observers"></param>
-        IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticAnalyzerContext>> observers);
+        IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers);
 
         /// <summary>
         /// Registers an observer that receives the output in real-time as the each sensor executes.
         /// </summary>
         /// <param name="observer"></param>
-        IDiagnosticScanner RegisterObserver(IObserver<DiagnosticAnalyzerContext> observer);
+        IDiagnosticScanner RegisterObserver(IObserver<DiagnosticProbeContext> observer);
     }
 }

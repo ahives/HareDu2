@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using System.Collections.Generic;
     using System.Linq;
     using Core.Configuration;
-    using Diagnostics.Analyzers;
+    using Diagnostics.Probes;
     using Extensions;
     using Fakes;
     using KnowledgeBase;
@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerConnectivityDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
+        IReadOnlyList<IDiagnosticProbe> _analyzers;
 
         [OneTimeSetUp]
         public void Init()
@@ -40,14 +40,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _analyzers = new List<IDiagnosticAnalyzer>
+            _analyzers = new List<IDiagnosticProbe>
             {
-                new HighConnectionCreationRateAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new HighConnectionClosureRateAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new ChannelThrottlingAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new ChannelLimitReachedAnalyzer(config.Analyzer, knowledgeBaseProvider),
-                new BlockedConnectionAnalyzer(config.Analyzer, knowledgeBaseProvider)
+                new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider),
+                new HighConnectionClosureRateProbe(config.Analyzer, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountProbe(config.Analyzer, knowledgeBaseProvider),
+                new ChannelThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
+                new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider),
+                new BlockedConnectionProbe(config.Analyzer, knowledgeBaseProvider)
             };
         }
 
@@ -60,12 +60,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             report.Count.ShouldBe(6);
-            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedAnalyzer).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionAnalyzer).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]

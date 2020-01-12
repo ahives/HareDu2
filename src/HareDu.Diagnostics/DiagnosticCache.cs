@@ -17,8 +17,8 @@ namespace HareDu.Diagnostics
 
     public static class DiagnosticCache
     {
-        public static readonly IReadOnlyList<DiagnosticAnalyzerResult> EmptyAnalyzerResults = new List<DiagnosticAnalyzerResult>();
+        public static readonly IReadOnlyList<DiagnosticProbeResult> EmptyProbeResults = new List<DiagnosticProbeResult>();
         public static readonly ScannerResult EmptyScannerResult = new EmptyScannerResult();
-        public static readonly IReadOnlyList<DiagnosticAnalyzerData> EmptyAnalyzerData = new List<DiagnosticAnalyzerData>();
+        public static readonly IReadOnlyList<DiagnosticProbeData> EmptyProbeData = new List<DiagnosticProbeData>();
     }
 }

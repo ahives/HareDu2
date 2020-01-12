@@ -16,9 +16,9 @@ namespace HareDu.Diagnostics.Scanning
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
     using Core.Extensions;
     using Extensions;
+    using Probes;
     using Snapshotting.Model;
 
     public class BrokerQueuesDiagnostic :
@@ -26,44 +26,44 @@ namespace HareDu.Diagnostics.Scanning
     {
         public string Identifier => GetType().GetIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _queueAnalyzers;
-        readonly List<IDiagnosticAnalyzer> _exchangeAnalyzers;
+        readonly IReadOnlyList<IDiagnosticProbe> _queueProbes;
+        readonly List<IDiagnosticProbe> _exchangeProbes;
 
-        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticProbe> probes)
         {
-            if (analyzers.IsNull())
-                throw new ArgumentNullException(nameof(analyzers));
+            if (probes.IsNull())
+                throw new ArgumentNullException(nameof(probes));
             
-            _queueAnalyzers = analyzers.Where(IsQueueAnalyzer).ToList();
-            _exchangeAnalyzers = analyzers.Where(IsExchangeAnalyzer).ToList();
+            _queueProbes = probes.Where(IsQueueProbe).ToList();
+            _exchangeProbes = probes.Where(IsExchangeProbe).ToList();
         }
 
-        public IReadOnlyList<DiagnosticAnalyzerResult> Scan(BrokerQueuesSnapshot snapshot)
+        public IReadOnlyList<DiagnosticProbeResult> Scan(BrokerQueuesSnapshot snapshot)
         {
             if (snapshot == null)
-                return DiagnosticCache.EmptyAnalyzerResults;
+                return DiagnosticCache.EmptyProbeResults;
             
-            var results = new List<DiagnosticAnalyzerResult>();
+            var results = new List<DiagnosticProbeResult>();
 
-            results.AddRange(_exchangeAnalyzers.Select(x => x.Execute(snapshot)));
+            results.AddRange(_exchangeProbes.Select(x => x.Execute(snapshot)));
             
             for (int i = 0; i < snapshot.Queues.Count; i++)
             {
                 if (!snapshot.Queues[i].IsNull())
-                    results.AddRange(_queueAnalyzers.Select(x => x.Execute(snapshot.Queues[i])));
+                    results.AddRange(_queueProbes.Select(x => x.Execute(snapshot.Queues[i])));
             }
 
             return results;
         }
 
-        bool IsExchangeAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.Exchange;
+        bool IsExchangeProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.Exchange;
 
-        bool IsQueueAnalyzer(IDiagnosticAnalyzer analyzer) =>
-            !analyzer.IsNull()
-            && analyzer.Status == DiagnosticAnalyzerStatus.Online
-            && analyzer.ComponentType == ComponentType.Queue;
+        bool IsQueueProbe(IDiagnosticProbe probe) =>
+            !probe.IsNull()
+            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.ComponentType == ComponentType.Queue;
     }
 }

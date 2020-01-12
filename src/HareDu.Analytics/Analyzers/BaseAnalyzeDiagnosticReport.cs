@@ -62,7 +62,7 @@ namespace HareDu.Analytics.Analyzers
 
         protected abstract IEnumerable<string> GetSupportedDiagnosticAnalyzers();
 
-        protected virtual IEnumerable<DiagnosticAnalyzerResult> ApplyFilter(IReadOnlyList<DiagnosticAnalyzerResult> results)
+        protected virtual IEnumerable<DiagnosticProbeResult> ApplyFilter(IReadOnlyList<DiagnosticProbeResult> results)
         {
             foreach (var result in results)
             {
@@ -79,8 +79,8 @@ namespace HareDu.Analytics.Analyzers
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 
-        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticAnalyzerResult> results,
-            Func<DiagnosticAnalyzerResult, string> rollupKey)
+        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticProbeResult> results,
+            Func<DiagnosticProbeResult, string> rollupKey)
         {
             var rollup = new Dictionary<string, List<DiagnosticStatus>>();
             

@@ -49,7 +49,7 @@ namespace HareDu.Core
                 
                 return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, null));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResultList<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -71,7 +71,7 @@ namespace HareDu.Core
                 
                 return new SuccessfulResult<T>(data, new DebugInfoImpl(url, null));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResult<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -91,7 +91,7 @@ namespace HareDu.Core
 
                 return new SuccessfulResult(new DebugInfoImpl(url, null));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -116,7 +116,7 @@ namespace HareDu.Core
 
                 return new SuccessfulResult(new DebugInfoImpl(url, request));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -140,7 +140,7 @@ namespace HareDu.Core
 
                 return new SuccessfulResult(new DebugInfoImpl(url, request));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -167,7 +167,7 @@ namespace HareDu.Core
 
                 return new SuccessfulResult<T>(data, new DebugInfoImpl(url, request));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResult<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -194,7 +194,7 @@ namespace HareDu.Core
 
                 return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, request));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResultList<T>(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }
@@ -214,7 +214,7 @@ namespace HareDu.Core
 
                 return new SuccessfulResult(new DebugInfoImpl(url, null));
             }
-            catch (MissingMethodException e)
+            catch (MissingMethodException)
             {
                 return new FaultedResult(new List<Error>{ new ErrorImpl("Could not properly handle '.' and/or '/' characters in URL.") });
             }

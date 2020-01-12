@@ -16,28 +16,28 @@ namespace HareDu.Diagnostics.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
     using Extensions;
+    using Probes;
     using Scanning;
 
     public class ComponentDiagnosticRegistrar :
         IComponentDiagnosticRegistrar
     {
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
+        readonly IReadOnlyList<IDiagnosticProbe> _analyzers;
         readonly List<Type> _types;
         readonly IDictionary<string, object> _cache;
 
         public IReadOnlyList<Type> Types => _types;
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public ComponentDiagnosticRegistrar(IReadOnlyList<IDiagnosticAnalyzer> analyzers)
+        public ComponentDiagnosticRegistrar(IReadOnlyList<IDiagnosticProbe> analyzers)
         {
             _analyzers = analyzers;
             _cache = new Dictionary<string, object>();
             _types = GetTypes();
         }
 
-        public ComponentDiagnosticRegistrar(IDiagnosticAnalyzerRegistrar registrar)
+        public ComponentDiagnosticRegistrar(IDiagnosticProbeRegistrar registrar)
         {
             _analyzers = registrar.ObjectCache.Values.ToList();
             _cache = new Dictionary<string, object>();

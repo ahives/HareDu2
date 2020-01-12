@@ -16,8 +16,8 @@ namespace HareDu.Diagnostics.Scanning
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Analyzers;
     using Extensions;
+    using Probes;
     using Registration;
     using Snapshotting;
 
@@ -28,13 +28,13 @@ namespace HareDu.Diagnostics.Scanning
         IComponentDiagnosticFactory
     {
         readonly IDictionary<string, object> _cache;
-        readonly IReadOnlyList<IDiagnosticAnalyzer> _analyzers;
+        readonly IReadOnlyList<IDiagnosticProbe> _analyzers;
         readonly IList<IDisposable> _observers;
         readonly IEnumerable<Type> _types;
 
-        public ComponentDiagnosticFactory(IDiagnosticAnalyzerRegistrar diagnosticAnalyzerRegistrar, IComponentDiagnosticRegistrar componentDiagnosticRegistrar)
+        public ComponentDiagnosticFactory(IDiagnosticProbeRegistrar diagnosticProbeRegistrar, IComponentDiagnosticRegistrar componentDiagnosticRegistrar)
         {
-            _analyzers = diagnosticAnalyzerRegistrar.ObjectCache.Values.ToList();
+            _analyzers = diagnosticProbeRegistrar.ObjectCache.Values.ToList();
             _cache = componentDiagnosticRegistrar.ObjectCache;
             _types = componentDiagnosticRegistrar.Types;
             _observers = new List<IDisposable>();
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Scanning
             return false;
         }
 
-        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticAnalyzerContext>> observers)
+        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers)
         {
             for (int i = 0; i < observers.Count; i++)
             {
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Scanning
             }
         }
 
-        public void RegisterObserver(IObserver<DiagnosticAnalyzerContext> observer)
+        public void RegisterObserver(IObserver<DiagnosticProbeContext> observer)
         {
             if (observer == null)
                 return;

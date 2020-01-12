@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics.Observers
     using Core.Extensions;
 
     public class DefaultDiagnosticConsoleLogger :
-        IObserver<DiagnosticAnalyzerContext>
+        IObserver<DiagnosticProbeContext>
     {
         public void OnCompleted()
         {
@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Observers
             Console.WriteLine(error.Message);
         }
 
-        public void OnNext(DiagnosticAnalyzerContext value)
+        public void OnNext(DiagnosticProbeContext value)
         {
             Console.WriteLine("Analyzer: {0}", value.Result.AnalyzerIdentifier);
             Console.WriteLine("Analyzer: {0}", value.Result);
