@@ -42,13 +42,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             _probes = new List<IDiagnosticProbe>
             {
-                new RuntimeProcessLimitProbe(config.Analyzer, knowledgeBaseProvider),
-                new SocketDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
-                new NetworkPartitionProbe(config.Analyzer, knowledgeBaseProvider),
-                new MemoryAlarmProbe(config.Analyzer, knowledgeBaseProvider),
-                new DiskAlarmProbe(config.Analyzer, knowledgeBaseProvider),
-                new AvailableCpuCoresProbe(config.Analyzer, knowledgeBaseProvider),
-                new FileDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
+                new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider),
+                new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),
+                new NetworkPartitionProbe(config.Diagnostics, knowledgeBaseProvider),
+                new MemoryAlarmProbe(config.Diagnostics, knowledgeBaseProvider),
+                new DiskAlarmProbe(config.Diagnostics, knowledgeBaseProvider),
+                new AvailableCpuCoresProbe(config.Diagnostics, knowledgeBaseProvider),
+                new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),
             };
         }
 

@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new DiskAlarmProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new DiskAlarmProbe(config.Diagnostics, knowledgeBaseProvider);
             
             DiskSnapshot snapshot = new FakeDiskSnapshot1(10283, true, 83.9M);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new DiskAlarmProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new DiskAlarmProbe(config.Diagnostics, knowledgeBaseProvider);
             
             DiskSnapshot snapshot = new FakeDiskSnapshot1(10283, false, 74.3M);
 

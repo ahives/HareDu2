@@ -31,15 +31,15 @@ namespace HareDu.Core.Tests.Configuration
             config.Broker.Url.ShouldBe("http://localhost:15672");
             config.Broker.Credentials.Username.ShouldBe("guest");
             config.Broker.Credentials.Password.ShouldBe("guest");
-            config.Analyzer.HighClosureRateWarningThreshold.ShouldBe<uint>(90);
-            config.Analyzer.HighCreationRateWarningThreshold.ShouldBe<uint>(60);
-            config.Analyzer.QueueHighFlowThreshold.ShouldBe<uint>(90);
-            config.Analyzer.QueueLowFlowThreshold.ShouldBe<uint>(10);
-            config.Analyzer.MessageRedeliveryCoefficient.ShouldBe(0.60M);
-            config.Analyzer.SocketUsageCoefficient.ShouldBe(0.60M);
-            config.Analyzer.RuntimeProcessUsageCoefficient.ShouldBe(0.65M);
-            config.Analyzer.FileDescriptorUsageWarningCoefficient.ShouldBe(0.65M);
-            config.Analyzer.ConsumerUtilizationWarningCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.HighClosureRateWarningThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.HighCreationRateWarningThreshold.ShouldBe<uint>(60);
+            config.Diagnostics.QueueHighFlowThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.QueueLowFlowThreshold.ShouldBe<uint>(10);
+            config.Diagnostics.MessageRedeliveryCoefficient.ShouldBe(0.60M);
+            config.Diagnostics.SocketUsageCoefficient.ShouldBe(0.60M);
+            config.Diagnostics.RuntimeProcessUsageCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.FileDescriptorUsageWarningCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.ConsumerUtilizationWarningCoefficient.ShouldBe(0.65M);
         }
     }
 }

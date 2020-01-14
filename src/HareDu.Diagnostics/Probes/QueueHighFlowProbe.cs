@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         IDiagnosticProbe
     {
-        readonly DiagnosticAnalyzerConfig _config;
+        readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Queue High Flow Analyzer";
         public string Description { get; }
@@ -33,7 +33,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
         
-        public QueueHighFlowProbe(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public QueueHighFlowProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _config = config;

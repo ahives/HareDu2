@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot4(3);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot4(0);
 

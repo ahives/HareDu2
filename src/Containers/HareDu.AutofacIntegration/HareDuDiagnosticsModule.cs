@@ -61,7 +61,7 @@ namespace HareDu.AutofacIntegration
                     configProvider.TryGet(path, out HareDuConfig config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
-                    var registrar = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
+                    var registrar = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
                     
                     registrar.RegisterAll();
 

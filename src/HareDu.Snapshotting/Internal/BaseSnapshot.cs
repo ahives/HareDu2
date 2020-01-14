@@ -62,10 +62,10 @@ namespace HareDu.Snapshotting.Internal
 
         protected virtual void SaveSnapshot(SnapshotResult<T> result)
         {
-            if (!result.IsNull())
-            {
-                _snapshots.Add(result);
-            }
+            if (result.IsNull())
+                return;
+            
+            _snapshots.Add(result);
         }
 
         

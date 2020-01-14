@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         IDiagnosticProbe
     {
-        readonly DiagnosticAnalyzerConfig _config;
+        readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "High Connection Closure Rate Analyzer";
         public string Description => "";
@@ -33,7 +33,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Connectivity;
         public DiagnosticProbeStatus Status => _status;
 
-        public HighConnectionClosureRateProbe(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public HighConnectionClosureRateProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _config = config;

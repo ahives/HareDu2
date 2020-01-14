@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(3, 2);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(3, 3);
 
@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot1(2, 3);
 

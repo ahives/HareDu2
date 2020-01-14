@@ -18,11 +18,10 @@ namespace HareDu.Diagnostics.Tests
     using AutofacIntegration;
     using Core.Configuration;
     using Diagnostics.Probes;
+    using Diagnostics.Registration;
     using Extensions;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Probes;
-    using Registration;
     using Scanning;
     using Shouldly;
     using Snapshotting;
@@ -52,12 +51,12 @@ namespace HareDu.Diagnostics.Tests
 
             _probes = new List<IDiagnosticProbe>
             {
-                new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider),
-                new HighConnectionClosureRateProbe(config.Analyzer, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountProbe(config.Analyzer, knowledgeBaseProvider),
-                new ChannelThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
-                new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider),
-                new BlockedConnectionProbe(config.Analyzer, knowledgeBaseProvider)
+                new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
+                new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider),
+                new ChannelThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),
+                new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider),
+                new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider)
             };
         }
 
@@ -113,7 +112,7 @@ namespace HareDu.Diagnostics.Tests
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
-            var diagnosticAnalyzerRegistry = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
+            var diagnosticAnalyzerRegistry = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
             diagnosticAnalyzerRegistry.RegisterAll();
             
             var diagnosticRegistry = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistry);

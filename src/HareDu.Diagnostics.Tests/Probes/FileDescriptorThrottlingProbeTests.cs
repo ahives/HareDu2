@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 90);
 
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 100);
 
@@ -87,7 +87,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 60);
 

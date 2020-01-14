@@ -53,7 +53,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionProbe(config.Analyzer, knowledgeBaseProvider);
+            var sensor = new NetworkPartitionProbe(config.Diagnostics, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>
             {
@@ -76,7 +76,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionProbe(config.Analyzer, knowledgeBaseProvider);
+            var sensor = new NetworkPartitionProbe(config.Diagnostics, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>());
 

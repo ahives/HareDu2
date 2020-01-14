@@ -43,9 +43,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_BrokerConnectivityDiagnostic()
         {
-            BrokerConnectivitySnapshot snapshotLens = new FakeBrokerConnectivitySnapshot1();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             var scanner = _container.Resolve<IDiagnosticScanner>()
-                .Scan(snapshotLens);
+                .Scan(snapshot);
             
             scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
         }
@@ -53,9 +53,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_ClusterDiagnostic()
         {
-            ClusterSnapshot snapshotLens = new FakeClusterSnapshot1();
+            ClusterSnapshot snapshot = new FakeClusterSnapshot1();
             var scanner = _container.Resolve<IDiagnosticScanner>()
-                .Scan(snapshotLens);
+                .Scan(snapshot);
             
             scanner.ScannerIdentifier.ShouldBe(typeof(ClusterDiagnostic).GetIdentifier());
         }
@@ -63,9 +63,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [Test]
         public void Verify_can_select_BrokerQueuesDiagnostic()
         {
-            BrokerQueuesSnapshot snapshotLens = new FakeBrokerQueuesSnapshot1(1);
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
             var scanner = _container.Resolve<IDiagnosticScanner>()
-                .Scan(snapshotLens);
+                .Scan(snapshot);
             
             scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesDiagnostic).GetIdentifier());
         }

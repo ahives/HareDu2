@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         IDiagnosticProbe
     {
-        readonly DiagnosticAnalyzerConfig _config;
+        readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
         public string Name => "File Descriptor Throttling Analyzer";
         public string Description { get; }
@@ -34,7 +34,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public FileDescriptorThrottlingProbe(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public FileDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _config = config;

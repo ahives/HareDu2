@@ -299,7 +299,7 @@ namespace HareDu.CoreIntegration
                 configProvider.TryGet(path, out HareDuConfig config);
 
                 var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
-                var registrar = new DiagnosticProbeRegistrar(config.Analyzer, knowledgeBaseProvider);
+                var registrar = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
                 
                 registrar.RegisterAll();
 

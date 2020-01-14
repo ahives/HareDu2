@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Registration
     public class DiagnosticProbeRegistrar :
         IDiagnosticProbeRegistrar
     {
-        readonly DiagnosticAnalyzerConfig _config;
+        readonly DiagnosticsConfig _config;
         readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         readonly IConfigurationProvider _configProvider;
         readonly IDictionary<string, IDiagnosticProbe> _cache;
@@ -32,7 +32,7 @@ namespace HareDu.Diagnostics.Registration
 
         public IDictionary<string, IDiagnosticProbe> ObjectCache => _cache;
 
-        public DiagnosticProbeRegistrar(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public DiagnosticProbeRegistrar(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _config = config;
             _knowledgeBaseProvider = knowledgeBaseProvider;

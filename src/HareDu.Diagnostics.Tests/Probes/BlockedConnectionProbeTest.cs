@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new BlockedConnectionProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot2("blocked");
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new BlockedConnectionProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot2("running");
 

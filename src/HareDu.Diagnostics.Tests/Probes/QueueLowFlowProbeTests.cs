@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueLowFlowProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot5(20);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueLowFlowProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot5(100);
 

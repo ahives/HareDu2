@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnroutableMessageProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new UnroutableMessageProbe(config.Diagnostics, knowledgeBaseProvider);
 
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot2(2);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnroutableMessageProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new UnroutableMessageProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot2(0);
 

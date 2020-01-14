@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(102, 100);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(100, 100);
 
@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
 

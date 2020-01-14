@@ -17,6 +17,6 @@ namespace HareDu.Core.Configuration
     {
         BrokerConfig Broker { get; }
         
-        DiagnosticAnalyzerConfig Analyzer { get; }
+        DiagnosticsConfig Diagnostics { get; }
     }
 }

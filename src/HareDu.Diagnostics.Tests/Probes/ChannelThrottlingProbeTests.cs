@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ChannelThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new ChannelThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 4, 2, 5, 8, 6, 1);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ChannelThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new ChannelThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot1("Channel1", 6, 2, 5, 8, 4, 1);
 

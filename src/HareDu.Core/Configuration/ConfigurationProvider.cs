@@ -75,12 +75,12 @@ namespace HareDu.Core.Configuration
             {
                 Broker = new BrokerConfigImpl(config.Broker);
                 // OverrideAnalyzerConfig = config.OverrideAnalyzerConfig;
-                Analyzer = new DiagnosticAnalyzerConfigImpl(config.Analyzer);
+                Diagnostics = new DiagnosticsConfigImpl(config.Analyzer);
             }
 
             public BrokerConfig Broker { get; }
             public bool OverrideAnalyzerConfig { get; }
-            public DiagnosticAnalyzerConfig Analyzer { get; }
+            public DiagnosticsConfig Diagnostics { get; }
 
             
             class BrokerConfigImpl :
@@ -113,10 +113,10 @@ namespace HareDu.Core.Configuration
             }
 
             
-            class DiagnosticAnalyzerConfigImpl :
-                DiagnosticAnalyzerConfig
+            class DiagnosticsConfigImpl :
+                DiagnosticsConfig
             {
-                public DiagnosticAnalyzerConfigImpl(DiagnosticAnalyzerConfigYaml config)
+                public DiagnosticsConfigImpl(DiagnosticAnalyzerConfigYaml config)
                 {
                     HighClosureRateWarningThreshold = config.HighClosureRateWarningThreshold;
                     HighCreationRateWarningThreshold = config.HighCreationRateWarningThreshold;

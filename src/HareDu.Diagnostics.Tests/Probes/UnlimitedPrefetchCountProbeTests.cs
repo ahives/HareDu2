@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(0);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(5);
 

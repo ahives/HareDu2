@@ -11,14 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Diagnostics.Tests.Registration
 {
     using Core.Configuration;
     using Diagnostics.Probes;
+    using Diagnostics.Registration;
     using Extensions;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
 
     [TestFixture]
@@ -40,7 +40,7 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out var config);
             
-            var registry = new DiagnosticProbeRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticProbeRegistrar(config.Diagnostics, new DefaultKnowledgeBaseProvider());
 
             registry.RegisterAll();
             
@@ -75,7 +75,7 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out var config);
             
-            var registry = new DiagnosticProbeRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticProbeRegistrar(config.Diagnostics, new DefaultKnowledgeBaseProvider());
 
             registry.RegisterAll();
             registry.RegisterAll();
@@ -111,7 +111,7 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
-            var registry = new DiagnosticProbeRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticProbeRegistrar(config.Diagnostics, new DefaultKnowledgeBaseProvider());
 
             registry.Register(typeof(TestDiagnosticProbe));
             registry.Register(typeof(TestDiagnosticProbe));
@@ -127,7 +127,7 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
-            var registry = new DiagnosticProbeRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticProbeRegistrar(config.Diagnostics, new DefaultKnowledgeBaseProvider());
 
             registry.Register<TestDiagnosticProbe>();
             registry.Register<TestDiagnosticProbe>();
@@ -143,7 +143,7 @@ namespace HareDu.Diagnostics.Tests
             var configProvider = new ConfigurationProvider();
             configProvider.TryGet(path, out var config);
             
-            var registry = new DiagnosticProbeRegistrar(config.Analyzer, new DefaultKnowledgeBaseProvider());
+            var registry = new DiagnosticProbeRegistrar(config.Diagnostics, new DefaultKnowledgeBaseProvider());
 
             registry.RegisterAll();
             registry.Register(typeof(TestDiagnosticProbe));
@@ -178,7 +178,7 @@ namespace HareDu.Diagnostics.Tests
         BaseDiagnosticProbe,
         IDiagnosticProbe
     {
-        public TestDiagnosticProbe(DiagnosticAnalyzerConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public TestDiagnosticProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
         }

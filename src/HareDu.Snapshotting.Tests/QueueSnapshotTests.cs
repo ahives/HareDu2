@@ -17,7 +17,6 @@ namespace HareDu.Snapshotting.Tests
     using Autofac;
     using Fakes;
     using HareDu.Registration;
-    using HareDu.Testing.Fakes;
     using NUnit.Framework;
     using Persistence;
     using Registration;

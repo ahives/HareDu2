@@ -11,10 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Testing.Fakes
+namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System;
-    using Model;
+    using HareDu.Model;
 
     public class FakeChannelInfo :
         ChannelInfo
@@ -35,6 +35,24 @@ namespace HareDu.Testing.Fakes
             UnacknowledgedMessages = 7882003;
             TotalConsumers = 90;
             ConnectionDetails = new ConnectionDetailsImpl();
+        }
+        
+        public FakeChannelInfo(int channel, int node, int connection)
+        {
+            TotalReductions = 872634826473;
+            VirtualHost = "TestVirtualHost";
+            Node = $"Node {node}";
+            FrameMax = 728349837;
+            Name = $"Channel {channel}";
+            TotalChannels = 87;
+            SentPending = 89;
+            PrefetchCount = 78;
+            UncommittedAcknowledgements = 98237843;
+            UncommittedMessages = 383902;
+            UnconfirmedMessages = 82930;
+            UnacknowledgedMessages = 7882003;
+            TotalConsumers = 90;
+            ConnectionDetails = new ConnectionDetailsImpl(connection);
         }
 
         public Rate ReductionDetails { get; }
@@ -87,6 +105,11 @@ namespace HareDu.Testing.Fakes
             public ConnectionDetailsImpl()
             {
                 Name = "Connection 1";
+            }
+
+            public ConnectionDetailsImpl(int connection)
+            {
+                Name = $"Connection {connection}";
             }
 
             public string PeerHost { get; }

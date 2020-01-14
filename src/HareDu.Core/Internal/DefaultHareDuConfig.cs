@@ -21,12 +21,12 @@ namespace HareDu.Core.Internal
     {
         public DefaultHareDuConfig()
         {
-            Analyzer = new DiagnosticAnalyzerConfigImpl();
+            Diagnostics = new DiagnosticsConfigImpl();
             Broker = new BrokerConfigImpl();
         }
 
         public BrokerConfig Broker { get; }
-        public DiagnosticAnalyzerConfig Analyzer { get; }
+        public DiagnosticsConfig Diagnostics { get; }
 
         
         class BrokerConfigImpl :
@@ -58,10 +58,10 @@ namespace HareDu.Core.Internal
         }
 
         
-        class DiagnosticAnalyzerConfigImpl :
-            DiagnosticAnalyzerConfig
+        class DiagnosticsConfigImpl :
+            DiagnosticsConfig
         {
-            public DiagnosticAnalyzerConfigImpl()
+            public DiagnosticsConfigImpl()
             {
                 SocketUsageCoefficient = 0.50M;
                 MessageRedeliveryCoefficient = 1M;

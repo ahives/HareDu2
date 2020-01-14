@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MemoryAlarmProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new MemoryAlarmProbe(config.Diagnostics, knowledgeBaseProvider);
             
             MemorySnapshot snapshot = new FakeMemorySnapshot1(103283, 823983, true);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MemoryAlarmProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new MemoryAlarmProbe(config.Diagnostics, knowledgeBaseProvider);
             
             MemorySnapshot snapshot = new FakeMemorySnapshot1(103283, 823983, false);
 

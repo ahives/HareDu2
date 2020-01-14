@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 9, 4.2M);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 10, 4.2M);
 
@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
 

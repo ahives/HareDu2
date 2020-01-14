@@ -42,14 +42,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             _probes = new List<IDiagnosticProbe>
             {
-                new QueueGrowthProbe(config.Analyzer, knowledgeBaseProvider),
-                new MessagePagingProbe(config.Analyzer, knowledgeBaseProvider),
-                new RedeliveredMessagesProbe(config.Analyzer, knowledgeBaseProvider),
-                new ConsumerUtilizationProbe(config.Analyzer, knowledgeBaseProvider),
-                new UnroutableMessageProbe(config.Analyzer, knowledgeBaseProvider),
-                new QueueLowFlowProbe(config.Analyzer, knowledgeBaseProvider),
-                new QueueNoFlowProbe(config.Analyzer, knowledgeBaseProvider),
-                new QueueHighFlowProbe(config.Analyzer, knowledgeBaseProvider)
+                new QueueGrowthProbe(config.Diagnostics, knowledgeBaseProvider),
+                new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider),
+                new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider),
+                new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider),
+                new UnroutableMessageProbe(config.Diagnostics, knowledgeBaseProvider),
+                new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider),
+                new QueueNoFlowProbe(config.Diagnostics, knowledgeBaseProvider),
+                new QueueHighFlowProbe(config.Diagnostics, knowledgeBaseProvider)
             };
         }
 

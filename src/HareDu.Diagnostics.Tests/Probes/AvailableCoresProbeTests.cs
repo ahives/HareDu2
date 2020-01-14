@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new AvailableCpuCoresProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new AvailableCpuCoresProbe(config.Diagnostics, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot3(0);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new AvailableCpuCoresProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new AvailableCpuCoresProbe(config.Diagnostics, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot3(5);
 

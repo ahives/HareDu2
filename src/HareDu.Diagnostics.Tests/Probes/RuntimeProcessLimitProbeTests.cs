@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
 
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 3, 3.2M);
 
@@ -70,7 +70,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
 
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 4, 3.2M);
 
@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(config.Analyzer, knowledgeBaseProvider);
+            var analyzer = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3.2M);
 

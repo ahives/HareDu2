@@ -42,12 +42,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             _analyzers = new List<IDiagnosticProbe>
             {
-                new HighConnectionCreationRateProbe(config.Analyzer, knowledgeBaseProvider),
-                new HighConnectionClosureRateProbe(config.Analyzer, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountProbe(config.Analyzer, knowledgeBaseProvider),
-                new ChannelThrottlingProbe(config.Analyzer, knowledgeBaseProvider),
-                new ChannelLimitReachedProbe(config.Analyzer, knowledgeBaseProvider),
-                new BlockedConnectionProbe(config.Analyzer, knowledgeBaseProvider)
+                new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
+                new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider),
+                new ChannelThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),
+                new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider),
+                new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider)
             };
         }
 
