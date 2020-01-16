@@ -20,6 +20,7 @@ namespace HareDu.Snapshotting.Internal
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using MassTransit;
     using Model;
 
     class BrokerConnectivityImpl :
@@ -75,10 +76,11 @@ namespace HareDu.Snapshotting.Internal
                 cluster.Select(x => x.Data),
                 connections.Select(x => x.Data),
                 channels.Select(x => x.Data));
-            
-            SnapshotResult<BrokerConnectivitySnapshot> result = new SnapshotResultImpl(snapshot);
 
-            SaveSnapshot(result);
+            string identifier = NewId.Next().ToString();
+            SnapshotResult<BrokerConnectivitySnapshot> result = new SnapshotResultImpl(identifier, snapshot);
+
+            SaveSnapshot(identifier, result);
             NotifyObservers(result);
 
             return this;

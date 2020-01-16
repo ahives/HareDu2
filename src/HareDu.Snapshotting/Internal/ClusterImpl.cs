@@ -19,6 +19,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Threading;
     using Core.Extensions;
     using HareDu.Model;
+    using MassTransit;
     using Model;
 
     class ClusterImpl :
@@ -62,9 +63,11 @@ namespace HareDu.Snapshotting.Internal
             ClusterSnapshot snapshot = new ClusterSnapshotImpl(
                 cluster.Select(x => x.Data),
                 nodes.Select(x => x.Data));
-            SnapshotResult<ClusterSnapshot> result = new SnapshotResultImpl(snapshot);
+            
+            string identifier = NewId.Next().ToString();
+            SnapshotResult<ClusterSnapshot> result = new SnapshotResultImpl(identifier, snapshot);
 
-            SaveSnapshot(result);
+            SaveSnapshot(identifier, result);
             NotifyObservers(result);
 
             return this;

@@ -20,6 +20,7 @@ namespace HareDu.Snapshotting.Internal
     using Core.Extensions;
     using HareDu.Extensions;
     using HareDu.Model;
+    using MassTransit;
     using Model;
 
     class BrokerQueuesImpl :
@@ -60,10 +61,14 @@ namespace HareDu.Snapshotting.Internal
                 return this;
             }
             
-            BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(cluster.Select(x => x.Data), queues.Select(x => x.Data));
-            SnapshotResult<BrokerQueuesSnapshot> result = new SnapshotResultImpl(snapshot);
+            BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(
+                cluster.Select(x => x.Data),
+                queues.Select(x => x.Data));
+            
+            string identifier = NewId.Next().ToString();
+            SnapshotResult<BrokerQueuesSnapshot> result = new SnapshotResultImpl(identifier, snapshot);
 
-            SaveSnapshot(result);
+            SaveSnapshot(identifier, result);
             NotifyObservers(result);
 
             return this;

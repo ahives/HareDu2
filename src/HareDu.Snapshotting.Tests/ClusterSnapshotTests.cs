@@ -71,7 +71,11 @@ namespace HareDu.Snapshotting.Tests
                 .Execute();
 
             var result = snapshot.Timeline.MostRecent();
-            
+
+            snapshot.Timeline.Results.Count.ShouldBe(1);
+            snapshot.Execute();
+            snapshot.Timeline.Results.Count.ShouldBe(2);
+
             result.ShouldNotBeNull();
             result.Snapshot.BrokerVersion.ShouldBe("3.7.18");
             result.Snapshot.ClusterName.ShouldBe("fake_cluster");

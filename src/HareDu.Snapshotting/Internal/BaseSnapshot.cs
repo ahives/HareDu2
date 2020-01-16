@@ -15,16 +15,16 @@ namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Core.Extensions;
-    using MassTransit;
 
     abstract class BaseSnapshot<T> :
         IObservable<SnapshotResult<T>>
         where T : Snapshot
     {
         protected readonly IBrokerObjectFactory _factory;
-        protected readonly List<SnapshotResult<T>> _snapshots;
         protected readonly Lazy<SnapshotTimeline<T>> _timeline;
+        protected readonly IDictionary<string, SnapshotResult<T>> _snapshots;
         
         readonly List<IObserver<SnapshotResult<T>>> _observers;
 
@@ -32,7 +32,7 @@ namespace HareDu.Snapshotting.Internal
         {
             _factory = factory;
             _observers = new List<IObserver<SnapshotResult<T>>>();
-            _snapshots = new List<SnapshotResult<T>>();
+            _snapshots = new Dictionary<string, SnapshotResult<T>>();
             _timeline = new Lazy<SnapshotTimeline<T>>(() => new SnapshotTimelineImpl<T>(_snapshots));
         }
 
@@ -60,12 +60,12 @@ namespace HareDu.Snapshotting.Internal
             }
         }
 
-        protected virtual void SaveSnapshot(SnapshotResult<T> result)
+        protected virtual void SaveSnapshot(string identifier, SnapshotResult<T> result)
         {
             if (result.IsNull())
                 return;
             
-            _snapshots.Add(result);
+            _snapshots.Add(identifier, result);
         }
 
         
@@ -73,11 +73,11 @@ namespace HareDu.Snapshotting.Internal
             SnapshotTimeline<T>
             where T : Snapshot
         {
-            readonly List<SnapshotResult<T>> _snapshots;
+            readonly IDictionary<string, SnapshotResult<T>> _snapshots;
             
-            public IReadOnlyList<SnapshotResult<T>> Results => _snapshots;
+            public IReadOnlyList<SnapshotResult<T>> Results => _snapshots.Values.ToList();
 
-            public SnapshotTimelineImpl(List<SnapshotResult<T>> snapshots)
+            public SnapshotTimelineImpl(IDictionary<string,SnapshotResult<T>> snapshots)
             {
                 _snapshots = snapshots;
             }
@@ -90,7 +90,7 @@ namespace HareDu.Snapshotting.Internal
             public void Purge<U>(SnapshotResult<U> result)
                 where U : Snapshot
             {
-                _snapshots.Remove(result.Cast<SnapshotResult<T>>());
+                _snapshots.Remove(result.Identifier);
             }
         }
 
@@ -118,9 +118,9 @@ namespace HareDu.Snapshotting.Internal
         protected class SnapshotResultImpl :
             SnapshotResult<T>
         {
-            public SnapshotResultImpl(T snapshot)
+            public SnapshotResultImpl(string identifier, T snapshot)
             {
-                Identifier = NewId.NextGuid().ToString();
+                Identifier = identifier;
                 Snapshot = snapshot;
                 Timestamp = DateTimeOffset.Now;
             }
