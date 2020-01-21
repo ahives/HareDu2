@@ -24,7 +24,7 @@ namespace HareDu.Internal
     using Model;
 
     class VirtualHostLimitsImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         VirtualHostLimits
     {
         public VirtualHostLimitsImpl(HttpClient client)

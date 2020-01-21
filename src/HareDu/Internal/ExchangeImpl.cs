@@ -25,7 +25,7 @@ namespace HareDu.Internal
     using Model;
 
     class ExchangeImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Exchange
     {
         public ExchangeImpl(HttpClient client)

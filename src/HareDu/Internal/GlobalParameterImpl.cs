@@ -25,7 +25,7 @@ namespace HareDu.Internal
     using Model;
 
     class GlobalParameterImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         GlobalParameter
     {
         public GlobalParameterImpl(HttpClient client)

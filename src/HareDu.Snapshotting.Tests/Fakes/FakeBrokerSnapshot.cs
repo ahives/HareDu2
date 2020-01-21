@@ -11,26 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Registration
+namespace HareDu.Snapshotting.Tests.Fakes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net.Http;
-
-    public interface IBrokerObjectRegistrar
+    public interface FakeBrokerSnapshot :
+        HareDuSnapshot<FakeHareDuSnapshot>
     {
-        IDictionary<string, object> ObjectCache { get; }
-
-        void RegisterAll(HttpClient client);
-
-        void Register(Type type, HttpClient client);
-
-        void Register<T>(HttpClient client);
-
-        bool TryRegisterAll(HttpClient client);
-        
-        bool TryRegister(Type type, HttpClient client);
-
-        bool TryRegister<T>(HttpClient client);
     }
 }

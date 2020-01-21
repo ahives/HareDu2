@@ -11,26 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Registration
+namespace HareDu.Core.Extensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Net.Http;
 
-    public interface IBrokerObjectRegistrar
+    public static class TypeExtensions
     {
-        IDictionary<string, object> ObjectCache { get; }
+        public static bool IsDerivedFrom(this Type type, Type fromType)
+        {
+            while (!type.IsNull() && type != typeof(object))
+            {
+                Type currentType = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
 
-        void RegisterAll(HttpClient client);
+                if (fromType == currentType)
+                    return true;
 
-        void Register(Type type, HttpClient client);
+                type = type.BaseType;
+            }
 
-        void Register<T>(HttpClient client);
-
-        bool TryRegisterAll(HttpClient client);
-        
-        bool TryRegister(Type type, HttpClient client);
-
-        bool TryRegister<T>(HttpClient client);
+            return false;
+        }
     }
 }

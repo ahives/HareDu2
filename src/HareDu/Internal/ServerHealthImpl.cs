@@ -22,7 +22,7 @@ namespace HareDu.Internal
     using Model;
 
     class ServerHealthImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         ServerHealth
     {
         public ServerHealthImpl(HttpClient client)

@@ -21,7 +21,7 @@ namespace HareDu.Internal
     using Model;
 
     class NodeHealthImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         NodeHealth
     {
         public NodeHealthImpl(HttpClient client)

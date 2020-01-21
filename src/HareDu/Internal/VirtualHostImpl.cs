@@ -24,7 +24,7 @@ namespace HareDu.Internal
     using Model;
 
     class VirtualHostImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         VirtualHost
     {
         public VirtualHostImpl(HttpClient client)

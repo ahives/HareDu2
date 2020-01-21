@@ -25,7 +25,7 @@ namespace HareDu.Internal
     using Model;
 
     class TopicPermissionsImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         TopicPermissions
     {
         public TopicPermissionsImpl(HttpClient client)

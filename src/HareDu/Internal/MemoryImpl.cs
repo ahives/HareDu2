@@ -21,7 +21,7 @@ namespace HareDu.Internal
     using Model;
 
     public class MemoryImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Memory
     {
         public MemoryImpl(HttpClient client)

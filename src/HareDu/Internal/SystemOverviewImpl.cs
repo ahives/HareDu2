@@ -21,7 +21,7 @@ namespace HareDu.Internal
     using Model;
 
     class SystemOverviewImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         SystemOverview
     {
         public SystemOverviewImpl(HttpClient client)

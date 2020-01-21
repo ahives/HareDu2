@@ -24,11 +24,11 @@ namespace HareDu.Core
     using System.Threading.Tasks;
     using Extensions;
 
-    public class RmqBrokerClient
+    public class BaseBrokerObject
     {
         readonly HttpClient _client;
 
-        protected RmqBrokerClient(HttpClient client)
+        protected BaseBrokerObject(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }

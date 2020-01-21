@@ -26,7 +26,7 @@ namespace HareDu.Internal
     using Model;
 
     class PolicyImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Policy
     {
         public PolicyImpl(HttpClient client)

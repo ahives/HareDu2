@@ -25,7 +25,7 @@ namespace HareDu.Internal
     using Model;
 
     class BindingImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Binding
     {
         public BindingImpl(HttpClient client)

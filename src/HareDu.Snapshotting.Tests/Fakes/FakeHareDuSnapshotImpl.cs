@@ -11,21 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting
+namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
 
-    public interface HareDuSnapshot<out T>
-        where T : Snapshot
+    public class FakeHareDuSnapshotImpl :
+        FakeBrokerSnapshot
     {
-        SnapshotTimeline<T> Timeline { get; }
-        
-        HareDuSnapshot<T> Execute(CancellationToken cancellationToken = default);
+        public SnapshotTimeline<FakeHareDuSnapshot> Timeline { get; }
+        public HareDuSnapshot<FakeHareDuSnapshot> Execute(CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
-        HareDuSnapshot<T> RegisterObserver(IObserver<SnapshotResult<T>> observer);
-        
-        HareDuSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<T>>> observers);
+        public HareDuSnapshot<FakeHareDuSnapshot> RegisterObserver(IObserver<SnapshotResult<FakeHareDuSnapshot>> observer) => throw new NotImplementedException();
+
+        public HareDuSnapshot<FakeHareDuSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<FakeHareDuSnapshot>>> observers) => throw new NotImplementedException();
     }
 }

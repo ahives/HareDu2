@@ -19,7 +19,7 @@ namespace HareDu.Snapshotting.Extensions
     {
         public static string ToByteString(this ulong bytes)
         {
-            if (bytes < 1000f)
+            if (bytes < 1000)
                 return $"{bytes}";
 
             if (bytes / 1000f < 1000)

@@ -18,6 +18,7 @@ namespace HareDu.Registration
     using System.Linq;
     using System.Net.Http;
     using Core;
+    using Core.Extensions;
     using Core.Testing;
 
     public class BrokerObjectRegistrar :
@@ -48,7 +49,7 @@ namespace HareDu.Registration
             }
         }
 
-        public void Register(HttpClient client, Type type)
+        public void Register(Type type, HttpClient client)
         {
             if (_cache.ContainsKey(type.FullName))
                 return;
@@ -65,12 +66,57 @@ namespace HareDu.Registration
             RegisterInstance(type, client);
         }
 
-        void RegisterInstance(Type type, HttpClient client)
+        public bool TryRegisterAll(HttpClient client)
+        {
+            if (client.IsNull())
+                return false;
+            
+            var types = GetType()
+                .Assembly
+                .GetTypes()
+                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
+
+            foreach (var type in types)
+            {
+                if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null || _cache.ContainsKey(type.FullName))
+                    continue;
+                
+                RegisterInstance(type, client);
+            }
+
+            return true;
+        }
+
+        public bool TryRegister(Type type, HttpClient client)
+        {
+            if (_cache.ContainsKey(type.FullName))
+                return false;
+            
+            RegisterInstance(type, client);
+            return true;
+        }
+
+        public bool TryRegister<T>(HttpClient client)
+        {
+            Type type = typeof(T);
+            if (_cache.ContainsKey(type.FullName))
+                return false;
+            
+            RegisterInstance(type, client);
+            return true;
+        }
+
+        protected virtual void RegisterInstance(Type type, HttpClient client)
         {
             try
             {
-                var instance = Activator.CreateInstance(type, client);
-            
+                var instance = type.IsDerivedFrom(typeof(BaseBrokerObject))
+                    ? Activator.CreateInstance(type, client)
+                    : Activator.CreateInstance(type);
+
+                if (instance.IsNull())
+                    return;
+                
                 _cache.Add(type.FullName, instance);
             }
             catch { }

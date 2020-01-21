@@ -21,7 +21,7 @@ namespace HareDu.Internal
     using Model;
 
     class NodeImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Node
     {
         public NodeImpl(HttpClient client)

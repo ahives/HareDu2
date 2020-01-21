@@ -21,7 +21,7 @@ namespace HareDu.Internal
     using Model;
 
     class ConsumerImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Consumer
     {
         public ConsumerImpl(HttpClient client)

@@ -25,7 +25,7 @@ namespace HareDu.Internal
     using Model;
 
     class ScopedParameterImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         ScopedParameter
     {
         public ScopedParameterImpl(HttpClient client)

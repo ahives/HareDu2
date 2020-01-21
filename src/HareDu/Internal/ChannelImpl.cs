@@ -21,7 +21,7 @@ namespace HareDu.Internal
     using Model;
 
     class ChannelImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Channel
     {
         public ChannelImpl(HttpClient client) :

@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting.Internal
     using System.Linq;
     using Core.Extensions;
 
-    abstract class BaseSnapshot<T> :
+    public abstract class BaseSnapshot<T> :
         IObservable<SnapshotResult<T>>
         where T : Snapshot
     {

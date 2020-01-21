@@ -16,6 +16,9 @@ namespace HareDu.Snapshotting.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Extensions;
+    using Core.Serialization;
+    using Internal;
 
     public class SnapshotObjectRegistrar :
         ISnapshotObjectRegistrar
@@ -33,12 +36,7 @@ namespace HareDu.Snapshotting.Registration
 
         public void RegisterAll()
         {
-            var types = GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(HareDuSnapshot<>).IsAssignableFrom(x) && !x.IsInterface);
-
-            foreach (var type in types)
+            foreach (var type in GetTypes())
             {
                 if (_cache.ContainsKey(type.FullName))
                     continue;
@@ -64,12 +62,55 @@ namespace HareDu.Snapshotting.Registration
             RegisterInstance(type);
         }
 
-        void RegisterInstance(Type type)
+        public bool TryRegister(Type type)
+        {
+            if (_cache.ContainsKey(type.FullName))
+                return false;
+            
+            RegisterInstance(type);
+            return true;
+        }
+
+        public bool TryRegister<T>()
+        {
+            Type type = typeof(T);
+            if (_cache.ContainsKey(type.FullName))
+                return false;
+            
+            RegisterInstance(type);
+            return true;
+        }
+
+        protected virtual IEnumerable<Type> GetTypes() =>
+            from concrete in GetConcreteTypes()
+            from @interface in GetInterfaces(concrete)
+            where @interface.GetGenericTypeDefinition() == typeof(HareDuSnapshot<>)
+            select concrete;
+
+        protected virtual IEnumerable<Type> GetInterfaces(Type type)
+        {
+            return type.GetInterfaces().Where(x => x.IsGenericType);
+        }
+
+        protected virtual IEnumerable<Type> GetConcreteTypes()
+        {
+            return GetType()
+                .Assembly
+                .GetTypes()
+                .Where(x => x.IsConcrete());
+        }
+
+        protected virtual void RegisterInstance(Type type)
         {
             try
             {
-                var instance = Activator.CreateInstance(type, _factory);
-            
+                var instance = type.IsDerivedFrom(typeof(BaseSnapshot<>))
+                    ? Activator.CreateInstance(type, _factory)
+                    : Activator.CreateInstance(type);
+
+                if (instance.IsNull())
+                    return;
+                
                 _cache.Add(type.FullName, instance);
             }
             catch { }

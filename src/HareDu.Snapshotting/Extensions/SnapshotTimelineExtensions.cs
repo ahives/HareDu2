@@ -26,7 +26,7 @@ namespace HareDu.Snapshotting.Extensions
             }
         }
 
-        public static void Flush<T, U>(this SnapshotTimeline<T> timeline, ISnapshotWriter writer, string file, string path)
+        public static void Flush<T>(this SnapshotTimeline<T> timeline, ISnapshotWriter writer, string file, string path)
             where T : Snapshot
         {
             for (int i = 0; i < timeline.Results.Count; i++)

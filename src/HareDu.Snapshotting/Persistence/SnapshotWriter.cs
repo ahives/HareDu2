@@ -22,15 +22,25 @@ namespace HareDu.Snapshotting.Persistence
         public bool TrySave<T>(SnapshotResult<T> result, string file, string path)
             where T : Snapshot
         {
-            if (Directory.Exists(path))
+            if (DirectoryExists(path))
                 return Write(result, file, path);
-            
-            var dir = Directory.CreateDirectory(path);
 
-            return dir.Exists ? Write(result, file, path) : Write(result, file, path);
+            if (CreateDirectory(path))
+                return Write(result, file, path);
+
+            return false;
         }
 
-        bool Write<T>(SnapshotResult<T> result, string file, string path)
+        protected virtual bool CreateDirectory(string path)
+        {
+            var directory = Directory.CreateDirectory(path);
+
+            return directory.IsNull() && directory.Exists;
+        }
+
+        protected virtual bool DirectoryExists(string path) => Directory.Exists(path);
+
+        protected virtual bool Write<T>(SnapshotResult<T> result, string file, string path)
             where T : Snapshot
         {
             string fullPath = $"{path}/{file}";

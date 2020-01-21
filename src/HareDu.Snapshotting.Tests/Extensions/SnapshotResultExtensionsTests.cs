@@ -13,12 +13,17 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests.Extensions
 {
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using Fakes;
     using MassTransit;
     using Model;
+    using Moq;
+    using Moq.Protected;
     using NUnit.Framework;
+    using Persistence;
     using Shouldly;
     using Snapshotting.Extensions;
 
@@ -60,11 +65,270 @@ namespace HareDu.Snapshotting.Tests.Extensions
             snapshot.ShouldNotBeNull();
         }
 
+        [Test]
+        public void Verify_can_save_when_directory_exists()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+
+            var mock = new Mock<SnapshotWriter>();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.Write<ClusterSnapshot>(
+                    It.IsAny<SnapshotResult<ClusterSnapshot>>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                .Returns(true)
+                .Verifiable();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.DirectoryExists(It.IsAny<string>()))
+                .Returns(true)
+                .Verifiable();
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+            var writer = mock.Object;
+            
+            snapshot.Save(writer, file, path).ShouldBeTrue();
+            mock.VerifyAll();
+            mock.VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public void Verify_can_save_when_directory_does_not_exists()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+
+            var mock = new Mock<SnapshotWriter>();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.Write<ClusterSnapshot>(
+                    It.IsAny<SnapshotResult<ClusterSnapshot>>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                .Returns(true)
+                .Verifiable();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.DirectoryExists(It.IsAny<string>()))
+                .Returns(false)
+                .Verifiable();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.CreateDirectory(It.IsAny<string>()))
+                .Returns(true)
+                .Verifiable();
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+            var writer = mock.Object;
+            
+            snapshot.Save(writer, file, path).ShouldBeTrue();
+            mock.VerifyAll();
+            mock.VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public void Verify_cannot_save_when_directory_does_not_exists_or_cannot_be_created()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+
+            var mock = new Mock<SnapshotWriter>();
+
+            // mock.Protected()
+            //     .As<ISnapshotWriterMock>()
+            //     .Setup(x => x.Write<ClusterSnapshot>(
+            //         It.IsAny<SnapshotResult<ClusterSnapshot>>(),
+            //         It.IsAny<string>(),
+            //         It.IsAny<string>()))
+            //     .Returns(false)
+            //     .Verifiable();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.DirectoryExists(It.IsAny<string>()))
+                .Returns(false)
+                .Verifiable();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.CreateDirectory(It.IsAny<string>()))
+                .Returns(false)
+                .Verifiable();
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+            var writer = mock.Object;
+            
+            snapshot.Save(writer, file, path).ShouldBeFalse();
+            mock.VerifyAll();
+            mock.VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public void Verify_cannot_write()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+
+            var mock = new Mock<SnapshotWriter>();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.Write<ClusterSnapshot>(
+                    It.IsAny<SnapshotResult<ClusterSnapshot>>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                .Returns(false)
+                .Verifiable();
+
+            mock.Protected()
+                .As<ISnapshotWriterMock>()
+                .Setup(x => x.DirectoryExists(It.IsAny<string>()))
+                .Returns(true)
+                .Verifiable();
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+            var writer = mock.Object;
+            
+            snapshot.Save(writer, file, path).ShouldBeFalse();
+            mock.VerifyAll();
+            mock.VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public void Verify_cannot_save_null_param_1()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+
+            Should.Throw<ArgumentNullException>(() => { snapshot.Save(null, file, path).ShouldBeFalse(); });
+        }
+
+        [Test]
+        public void Verify_cannot_save_null_param_2()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+
+            Should.Throw<ArgumentNullException>(() => { snapshot.Save(new SnapshotWriter(), null, path).ShouldBeFalse(); });
+        }
+
+        [Test]
+        public void Verify_cannot_save_null_param_3()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            var snapshot = timeline.MostRecent();
+            
+            snapshot.ShouldNotBeNull();
+            snapshot.Identifier.ShouldBe(identifier3);
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+
+            Should.Throw<ArgumentNullException>(() => { snapshot.Save(null, file, null).ShouldBeFalse(); });
+        }
+
+        [Test]
+        public void Verify_cannot_save_null_param_4()
+        {
+            string identifier1 = NewId.Next().ToString();
+            string identifier2 = NewId.Next().ToString();
+            string identifier3 = NewId.Next().ToString();
+            IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
+            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+
+            SnapshotResult<ClusterSnapshot> snapshot = null;
+            
+            string path = $"{Directory.GetCurrentDirectory()}/snapshots";
+            string file = "test.json";
+
+            Should.Throw<ArgumentNullException>(() => { snapshot.Save(new SnapshotWriter(), file, path).ShouldBeFalse(); });
+        }
+
         IEnumerable<SnapshotResult<ClusterSnapshot>> GetResults(string identifier1, string identifier2, string identifier3)
         {
             yield return new FakeSnapshotResult<ClusterSnapshot>(new FakeClusterSnapshot1(), identifier1);
             yield return new FakeSnapshotResult<ClusterSnapshot>(new FakeClusterSnapshot1(), identifier2);
             yield return new FakeSnapshotResult<ClusterSnapshot>(new FakeClusterSnapshot1(), identifier3);
+        }
+
+        
+        interface ISnapshotWriterMock
+        {
+            bool Write<T>(SnapshotResult<T> result, string file, string path)
+                where T : Snapshot;
+
+            bool CreateDirectory(string path);
+            
+            bool DirectoryExists(string path);
         }
 
         

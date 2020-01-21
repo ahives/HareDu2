@@ -41,7 +41,7 @@ namespace HareDu.Snapshotting.Extensions
         /// <param name="path"></param>
         /// <typeparam name="T"></typeparam>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void Save<T>(this SnapshotResult<T> result, ISnapshotWriter writer, string file, string path)
+        public static bool Save<T>(this SnapshotResult<T> result, ISnapshotWriter writer, string file, string path)
             where T : Snapshot
         {
             if (string.IsNullOrWhiteSpace(file))
@@ -56,7 +56,7 @@ namespace HareDu.Snapshotting.Extensions
             if (result.IsNull())
                 throw new ArgumentNullException(nameof(result));
 
-            writer.TrySave(result, file, path);
+            return writer.TrySave(result, file, path);
         }
     }
 }

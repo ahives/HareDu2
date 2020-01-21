@@ -25,7 +25,7 @@ namespace HareDu.Internal
     using Model;
 
     class QueueImpl :
-        RmqBrokerClient,
+        BaseBrokerObject,
         Queue
     {
         public QueueImpl(HttpClient client)
