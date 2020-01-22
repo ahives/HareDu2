@@ -167,15 +167,6 @@ namespace HareDu.Snapshotting.Tests.Extensions
 
             var mock = new Mock<SnapshotWriter>();
 
-            // mock.Protected()
-            //     .As<ISnapshotWriterMock>()
-            //     .Setup(x => x.Write<ClusterSnapshot>(
-            //         It.IsAny<SnapshotResult<ClusterSnapshot>>(),
-            //         It.IsAny<string>(),
-            //         It.IsAny<string>()))
-            //     .Returns(false)
-            //     .Verifiable();
-
             mock.Protected()
                 .As<ISnapshotWriterMock>()
                 .Setup(x => x.DirectoryExists(It.IsAny<string>()))

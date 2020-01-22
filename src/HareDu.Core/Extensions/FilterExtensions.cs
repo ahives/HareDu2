@@ -26,7 +26,13 @@ namespace HareDu.Core.Extensions
         /// <param name="predicate"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IReadOnlyList<T> Where<T>(this ResultList<T> source, Func<T, bool> predicate) => !source.HasData ? default : Filter(source.Data, predicate);
+        public static IReadOnlyList<T> Where<T>(this ResultList<T> source, Func<T, bool> predicate)
+        {
+            if (source.IsNull())
+                return new List<T>();
+            
+            return !source.HasData ? new List<T>() : Filter(source.Data, predicate);
+        }
 
         /// <summary>
         /// Returns a filtered list of results meeting the specified predicate.
@@ -38,11 +44,11 @@ namespace HareDu.Core.Extensions
         public static IReadOnlyList<T> Where<T>(this Task<ResultList<T>> source, Func<T, bool> predicate)
         {
             if (source.IsNull())
-                return default;
+                return new List<T>();
             
             ResultList<T> result = source.Result;
 
-            return !result.HasData ? default : Filter(result.Data, predicate);
+            return !result.HasData ? new List<T>() : Filter(result.Data, predicate);
         }
 
         static IReadOnlyList<T> Filter<T>(IReadOnlyList<T> list, Func<T, bool> predicate)

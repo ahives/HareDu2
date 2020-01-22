@@ -19,6 +19,7 @@ namespace HareDu.Core
         Result
     {
         IReadOnlyList<TResult> Data { get; }
+        
         bool HasData { get; }
     }
 }

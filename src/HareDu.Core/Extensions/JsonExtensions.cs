@@ -50,6 +50,12 @@ namespace HareDu.Core.Extensions
             }
         }
 
+        /// <summary>
+        /// Deserializes the contents of <see cref="HttpResponseMessage"/> and returns <see cref="Task{T}"/>
+        /// </summary>
+        /// <param name="responseMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static async Task<T> ToObject<T>(this HttpResponseMessage responseMessage)
         {
             string rawResponse = await responseMessage.Content.ReadAsStringAsync();
@@ -66,6 +72,12 @@ namespace HareDu.Core.Extensions
             }
         }
 
+        /// <summary>
+        /// Deserializes the contents of a string encoded object and returns <see cref="T"/>
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T ToObject<T>(this string value)
         {
             if (string.IsNullOrWhiteSpace(value))

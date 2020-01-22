@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
+// Copyright 2013-2020 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,27 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core
+namespace HareDu.Core.Tests.Fakes
 {
     using System;
-    using System.Collections.Generic;
 
-    public interface Result
+    public interface FakeObject
     {
+        Guid Id { get; }
+        
         DateTimeOffset Timestamp { get; }
-        
-        DebugInfo DebugInfo { get; }
-        
-        IReadOnlyList<Error> Errors { get; }
-        
-        bool HasFaulted { get; }
-    }
-    
-    public interface Result<out TResult> :
-        Result
-    {
-        TResult Data { get; }
-        
-        bool HasData { get; }
     }
 }
