@@ -60,7 +60,7 @@ namespace HareDu.Internal
             string sourceBinding = impl.SourceBinding.Value;
             string destinationBinding = impl.DestinationBinding.Value;
             BindingType bindingType = impl.BindingType.Value;
-            string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
+            string vhost = impl.VirtualHost.Value.ToSanitizedName();
 
             string url = bindingType == BindingType.Exchange
                 ? $"api/bindings/{vhost}/e/{sourceBinding}/e/{destinationBinding}"
@@ -84,7 +84,7 @@ namespace HareDu.Internal
             impl.Verify();
 
             string destination = impl.BindingDestination.Value;
-            string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
+            string vhost = impl.VirtualHost.Value.ToSanitizedName();
             string bindingName = impl.BindingName.Value;
             string source = impl.BindingSource.Value;
             BindingType bindingType = impl.BindingType.Value;

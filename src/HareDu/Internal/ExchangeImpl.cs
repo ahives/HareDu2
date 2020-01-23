@@ -57,7 +57,7 @@ namespace HareDu.Internal
 
             Debug.Assert(definition != null);
 
-            string url = $"api/exchanges/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.ExchangeName.Value}";
+            string url = $"api/exchanges/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.ExchangeName.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -76,7 +76,7 @@ namespace HareDu.Internal
             
             impl.Validate();
 
-            string vhost = impl.VirtualHost.Value.SanitizeVirtualHostName();
+            string vhost = impl.VirtualHost.Value.ToSanitizedName();
             
             string url = $"api/exchanges/{vhost}/{impl.ExchangeName.Value}";
             if (!string.IsNullOrWhiteSpace(impl.Query.Value))

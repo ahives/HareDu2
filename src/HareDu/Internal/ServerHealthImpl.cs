@@ -42,7 +42,7 @@ namespace HareDu.Internal
             switch (impl.CheckUpType)
             {
                 case HealthCheckType.VirtualHost:
-                    url = $"api/aliveness-test/{impl.RmqObjectName.SanitizeVirtualHostName()}";
+                    url = $"api/aliveness-test/{impl.RmqObjectName.ToSanitizedName()}";
                     break;
                     
                 case HealthCheckType.Node:

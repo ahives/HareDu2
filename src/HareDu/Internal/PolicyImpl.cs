@@ -58,7 +58,7 @@ namespace HareDu.Internal
 
             Debug.Assert(definition != null);
             
-            string url = $"api/policies/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.PolicyName.Value}";
+            string url = $"api/policies/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.PolicyName.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -77,7 +77,7 @@ namespace HareDu.Internal
 
             impl.Verify();
             
-            string url = $"api/policies/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.PolicyName.Value}";
+            string url = $"api/policies/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.PolicyName.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));

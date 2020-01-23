@@ -57,7 +57,7 @@ namespace HareDu.Internal
 
             Debug.Assert(definition != null);
 
-            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}";
+            string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -76,7 +76,7 @@ namespace HareDu.Internal
 
             impl.Validate();
             
-            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}";
+            string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}";
             if (!string.IsNullOrWhiteSpace(impl.Query.Value))
                 url = $"{url}?{impl.Query.Value}";
             
@@ -97,7 +97,7 @@ namespace HareDu.Internal
 
             impl.Validate();
 
-            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}/contents";
+            string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
@@ -120,7 +120,7 @@ namespace HareDu.Internal
 
             Debug.Assert(definition != null);
 
-            string url = $"api/queues/{impl.VirtualHost.Value.SanitizeVirtualHostName()}/{impl.QueueName.Value}/get";
+            string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/get";
             
             if (impl.Errors.Value.Any())
                 return new FaultedResultList<PeekedMessageInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));

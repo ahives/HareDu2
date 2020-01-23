@@ -54,7 +54,7 @@ namespace HareDu.Internal
 
             VirtualHostDefinition definition = impl.Definition.Value;
 
-            string url = $"api/vhosts/{impl.VirtualHostName.Value.SanitizeVirtualHostName()}";
+            string url = $"api/vhosts/{impl.VirtualHostName.Value.ToSanitizedName()}";
 
             if (impl.Errors.Value.Any())
                 return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
@@ -73,7 +73,7 @@ namespace HareDu.Internal
 
             impl.Validate();
 
-            string vHost = impl.VirtualHostName.Value.SanitizeVirtualHostName();
+            string vHost = impl.VirtualHostName.Value.ToSanitizedName();
 
             string url = $"api/vhosts/{vHost}";
 
@@ -97,7 +97,7 @@ namespace HareDu.Internal
 
             impl.Validate();
 
-            string url = $"/api/vhosts/{vhost.SanitizeVirtualHostName()}/start/{impl.Node.Value}";
+            string url = $"/api/vhosts/{vhost.ToSanitizedName()}/start/{impl.Node.Value}";
 
             var errors = new List<Error>();
             errors.AddRange(impl.Errors.Value);
