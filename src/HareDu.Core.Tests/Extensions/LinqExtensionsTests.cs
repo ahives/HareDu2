@@ -14,77 +14,300 @@
 namespace HareDu.Core.Tests.Extensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Core.Extensions;
-    using Fakes;
     using NUnit.Framework;
     using Shouldly;
 
     [TestFixture]
-    public class LinqExtensionsTests
+    public class LinqExtensionsTests :
+        HareDuTesting
     {
         [Test]
-        public void Verify_Any_works()
+        public void Verify_can_find_any_values_async()
         {
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            bool found = Get(id1, id2, id3).Any();
+            bool found = GetResultListAsync(id1, id2, id3).Any();
             
             found.ShouldBeTrue();
         }
 
         [Test]
-        public void Verify_Any_with_predicate_works()
+        public void Verify_can_find_any_values()
         {
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            bool found = Get(id1, id2, id3).Any(x => x.Id == id2);
+            bool found = GetResultList(id1, id2, id3).Any();
             
             found.ShouldBeTrue();
+        }
+
+        [Test]
+        public void Verify_can_find_any_values_given_criteria_found_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+
+            bool found = GetResultListAsync(id1, id2, id3).Any(x => x.Id == id2);
+            
+            found.ShouldBeTrue();
+        }
+
+        [Test]
+        public void Verify_can_find_any_values_given_criteria_not_found_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            Guid id4 = Guid.NewGuid();
+
+            bool found = GetResultListAsync(id1, id2, id3).Any(x => x.Id == id4);
+            
+            found.ShouldBeFalse();
+        }
+
+        [Test]
+        public void Verify_can_find_any_values_given_criteria_found()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+
+            bool found = GetResultList(id1, id2, id3).Any(x => x.Id == id2);
+            
+            found.ShouldBeTrue();
+        }
+
+        [Test]
+        public void Verify_can_find_any_values_given_criteria_not_found()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            Guid id4 = Guid.NewGuid();
+
+            bool found = GetResultList(id1, id2, id3).Any(x => x.Id == id4);
+            
+            found.ShouldBeFalse();
         }
         
         [Test]
-        public void Verify_FirstOrDefault_works()
+        public void Verify_can_get_first_object_or_default_async()
         {
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = Get(id1, id2, id3).FirstOrDefault();
+            var result = GetResultListAsync(id1, id2, id3).FirstOrDefault();
+ 
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(id1);
+        }
+        
+        [Test]
+        public void Verify_can_get_first_object_or_default_predicate_found_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            
+            var result = GetResultListAsync(id1, id2, id3).FirstOrDefault(x => x.Id == id3);
+ 
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(id3);
+        }
+        
+        [Test]
+        public void Verify_can_get_first_object_or_default_predicate_not_found_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            Guid id4 = Guid.NewGuid();
+            
+            var result = GetResultListAsync(id1, id2, id3).FirstOrDefault(x => x.Id == id4);
+ 
+            result.ShouldBeNull();
+        }
+        
+        [Test]
+        public void Verify_can_get_first_object_or_default_1()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            
+            var result = GetResultList(id1, id2, id3).FirstOrDefault();
+ 
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(id1);
+        }
+        
+        [Test]
+        public void Verify_can_get_first_object_or_default_2()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            
+            var result = GetResultList(id1, id2, id3).FirstOrDefault(x => x.Id == id3);
+ 
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(id3);
+        }
+        
+        [Test]
+        public void Verify_can_get_first_object_or_default_3()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            Guid id4 = Guid.NewGuid();
+            
+            var result = GetResultList(id1, id2, id3).FirstOrDefault(x => x.Id == id4);
+ 
+            result.ShouldBeNull();
+        }
+        
+        [Test]
+        public void Verify_can_get_first_object_or_default_4()
+        {
+            var result = GetResultList().FirstOrDefault();
+ 
+            result.ShouldBe(default);
+        }
+
+        [Test]
+        public void Verify_returns_single_object_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            
+            var result = GetResultListAsync(id1).SingleOrDefault();
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id1);
         }
 
-        Task<ResultList<FakeObject>> Get(Guid id1, Guid id2, Guid id3) =>
-            Task.FromResult<ResultList<FakeObject>>(
-                new SuccessfulResultList<FakeObject>(GetAll(id1, id2, id3).ToList(), null));
-
-        IEnumerable<FakeObject> GetAll(Guid id1, Guid id2, Guid id3)
+        [Test]
+        public void Verify_single_or_default_does_not_throw_async()
         {
-            yield return new FakeObjectImpl(id1);
-            yield return new FakeObjectImpl(id2);
-            yield return new FakeObjectImpl(id3);
+            var result = GetResultListAsync().SingleOrDefault();
+ 
+            result.ShouldBeNull();
         }
 
-        
-        class FakeObjectImpl :
-            FakeObject
+        [Test]
+        public void Verify_returns_single_object()
         {
-            public FakeObjectImpl(Guid id)
-            {
-                Id = id;
-                Timestamp = DateTimeOffset.UtcNow;
-            }
+            Guid id = Guid.NewGuid();
+            
+            var result = GetResultList(id).SingleOrDefault();
+ 
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(id);
+        }
 
-            public Guid Id { get; }
-            public DateTimeOffset Timestamp { get; }
+        [Test]
+        public void Verify_does_not_throw_when_list_null()
+        {
+            var result = GetNullResultList().SingleOrDefault();
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_there_are_multiple_elements()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            
+            var result = GetResultList(id1, id2, id3).SingleOrDefault();
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_ResultList_empty_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            
+            var result = GetResultListAsync().SingleOrDefault(x => x.Id == id1);
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_ResultList_null_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            
+            var result = GetNullResultListAsync().SingleOrDefault(x => x.Id == id1);
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_ResultList_empty()
+        {
+            Guid id1 = Guid.NewGuid();
+            
+            var result = GetResultList().SingleOrDefault(x => x.Id == id1);
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_can_return_single_element()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            
+            var result = GetResultList(id1, id2, id3).SingleOrDefault(x => x.Id == id2);
+ 
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(id2);
+        }
+
+        [Test]
+        public void Verify_will_return_default_element()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            Guid id3 = Guid.NewGuid();
+            Guid id4 = Guid.NewGuid();
+            
+            var result = GetResultList(id1, id2, id3).SingleOrDefault(x => x.Id == id4);
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_ResultList_has_multiple_results_matching_criteria_async()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            
+            var result = GetResultListAsync(id1, id2, id2).SingleOrDefault(x => x.Id == id2);
+ 
+            result.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_does_not_throw_when_ResultList_has_multiple_results_matching_criteria()
+        {
+            Guid id1 = Guid.NewGuid();
+            Guid id2 = Guid.NewGuid();
+            
+            var result = GetResultListAsync(id1, id2, id2).SingleOrDefault(x => x.Id == id2);
+ 
+            result.ShouldBeNull();
         }
     }
 }

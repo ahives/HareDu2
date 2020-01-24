@@ -14,16 +14,14 @@
 namespace HareDu.Core.Tests.Extensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Core.Extensions;
     using Fakes;
     using NUnit.Framework;
     using Shouldly;
 
     [TestFixture]
-    public class ValueExtensionsTests
+    public class ValueExtensionsTests :
+        HareDuTesting
     {
         [Test]
         public void Verify_can_get_value_from_result_list()
@@ -32,7 +30,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = Get(id1, id2, id3).Unfold();
+            var result = GetResultListAsync(id1, id2, id3).Unfold();
             
             result.TryGetValue(1, out FakeObject value).ShouldBeTrue();
             value.Id.ShouldBe(id2);
@@ -45,7 +43,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = Get(id1, id2, id3).Unfold();
+            var result = GetResultListAsync(id1, id2, id3).Unfold();
             
             result.TryGetValue(100, out FakeObject value).ShouldBeFalse();
         }
@@ -53,7 +51,7 @@ namespace HareDu.Core.Tests.Extensions
         [Test]
         public void Verify_object_is_not_null()
         {
-            var result = new FakeObjectImpl(Guid.NewGuid());
+            var result = Get(Guid.NewGuid());
             
             result.IsNull().ShouldBeFalse();
         }
@@ -64,31 +62,6 @@ namespace HareDu.Core.Tests.Extensions
             FakeObject result = null;
             
             result.IsNull().ShouldBeTrue();
-        }
-        
-        Task<ResultList<FakeObject>> Get(Guid id1, Guid id2, Guid id3) =>
-            Task.FromResult<ResultList<FakeObject>>(
-                new SuccessfulResultList<FakeObject>(GetAll(id1, id2, id3).ToList(), null));
-
-        IEnumerable<FakeObject> GetAll(Guid id1, Guid id2, Guid id3)
-        {
-            yield return new FakeObjectImpl(id1);
-            yield return new FakeObjectImpl(id2);
-            yield return new FakeObjectImpl(id3);
-        }
-
-        
-        class FakeObjectImpl :
-            FakeObject
-        {
-            public FakeObjectImpl(Guid id)
-            {
-                Id = id;
-                Timestamp = DateTimeOffset.UtcNow;
-            }
-
-            public Guid Id { get; }
-            public DateTimeOffset Timestamp { get; }
         }
     }
 }

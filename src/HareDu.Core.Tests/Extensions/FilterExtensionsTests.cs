@@ -14,16 +14,13 @@
 namespace HareDu.Core.Tests.Extensions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Core.Extensions;
-    using Fakes;
     using NUnit.Framework;
     using Shouldly;
 
     [TestFixture]
-    public class FilterExtensionsTests
+    public class FilterExtensionsTests :
+        HareDuTesting
     {
         [Test]
         public void Verify_can_select_data_list_async_1()
@@ -73,46 +70,6 @@ namespace HareDu.Core.Tests.Extensions
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(0);
-        }
-
-        Task<ResultList<FakeObject>> GetResultListAsync() =>
-            Task.FromResult<ResultList<FakeObject>>(
-                new SuccessfulResultList<FakeObject>(GetAllEmpty().ToList(), null));
-
-        Task<ResultList<FakeObject>> GetResultListAsync(Guid id1, Guid id2, Guid id3) =>
-            Task.FromResult<ResultList<FakeObject>>(
-                new SuccessfulResultList<FakeObject>(GetAll(id1, id2, id3).ToList(), null));
-
-        ResultList<FakeObject> GetResultList(Guid id1, Guid id2, Guid id3) =>
-            new SuccessfulResultList<FakeObject>(GetAll(id1, id2, id3).ToList(), null);
-
-        ResultList<FakeObject> GetResultList() =>
-            new SuccessfulResultList<FakeObject>(GetAllEmpty().ToList(), null);
-
-        IEnumerable<FakeObject> GetAll(Guid id1, Guid id2, Guid id3)
-        {
-            yield return new FakeObjectImpl(id1);
-            yield return new FakeObjectImpl(id2);
-            yield return new FakeObjectImpl(id3);
-        }
-
-        IEnumerable<FakeObject> GetAllEmpty()
-        {
-            yield break;
-        }
-
-        
-        class FakeObjectImpl :
-            FakeObject
-        {
-            public FakeObjectImpl(Guid id)
-            {
-                Id = id;
-                Timestamp = DateTimeOffset.UtcNow;
-            }
-
-            public Guid Id { get; }
-            public DateTimeOffset Timestamp { get; }
         }
     }
 }
