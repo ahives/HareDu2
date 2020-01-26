@@ -21,24 +21,28 @@ namespace HareDu.Core.Tests
 
     public class HareDuTesting
     {
-        protected Result<FakeObject> GetResult(Guid id) =>
-            new SuccessfulResult<FakeObject>(Get(id), null);
+        protected Result<FakeObject> GetResult(Guid id, bool hasData) => new FakeResult<FakeObject>(Get(id), hasData);
 
-        protected Task<Result<FakeObject>> GetResultAsync(Guid id1) =>
-            Task.FromResult<Result<FakeObject>>(
-                new SuccessfulResult<FakeObject>(Get(id1), null));
+        protected Result<FakeObject> GetResult() => new FakeResult<FakeObject>();
 
-        protected Task<ResultList<FakeObject>> GetResultListAsync(params Guid[] identifiers) =>
+        protected Task<Result<FakeObject>> GetResultAsync(Guid id, bool hasData) =>
+            Task.FromResult<Result<FakeObject>>(new FakeResult<FakeObject>(Get(id), hasData));
+
+        protected Task<Result<FakeObject>> GetResultAsync() =>
+            Task.FromResult<Result<FakeObject>>(new FakeResult<FakeObject>());
+
+        protected Task<Result<FakeObject>> GetNullResultAsync() => Task.FromResult<Result<FakeObject>>(null);
+
+        protected Task<ResultList<FakeObject>> GetResultListAsync(bool hasData, params Guid[] identifiers) =>
             Task.FromResult<ResultList<FakeObject>>(
-                new SuccessfulResultList<FakeObject>(GetAll(identifiers).ToList(), null));
+                new FakeResultList<FakeObject>(GetAll(identifiers).ToList(), hasData));
 
-        protected Task<ResultList<FakeObject>> GetNullResultListAsync() =>
-            Task.FromResult<ResultList<FakeObject>>(null);
+        protected Task<ResultList<FakeObject>> GetNullResultListAsync() => Task.FromResult<ResultList<FakeObject>>(null);
 
         protected ResultList<FakeObject> GetNullResultList() => null;
 
-        protected ResultList<FakeObject> GetResultList(params Guid[] identifiers) =>
-            new SuccessfulResultList<FakeObject>(GetAll(identifiers).ToList(), null);
+        protected ResultList<FakeObject> GetResultList(bool hasData, params Guid[] identifiers) =>
+            new FakeResultList<FakeObject>(GetAll(identifiers).ToList(), hasData);
 
         protected FakeObject Get(Guid id) => new FakeObjectImpl(id);
 
@@ -50,6 +54,49 @@ namespace HareDu.Core.Tests
             }
         }
 
+
+        class FakeResultList<T> :
+            ResultList<T>
+        {
+            public FakeResultList(IReadOnlyList<T> data, bool hasData)
+            {
+                Data = data;
+                HasFaulted = false;
+                HasData = hasData;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<T> Data { get; }
+            public bool HasData { get; }
+        }
+        
+        
+        class FakeResult<T> :
+            Result<T>
+        {
+            public FakeResult(T data, bool hasData)
+            {
+                Data = data;
+                HasData = hasData;
+                HasFaulted = false;
+            }
+
+            public FakeResult()
+            {
+                HasData = false;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public T Data { get; }
+            public bool HasData { get; }
+        }
+        
         
         class FakeObjectImpl :
             FakeObject

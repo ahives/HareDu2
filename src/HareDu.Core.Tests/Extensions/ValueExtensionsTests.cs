@@ -30,22 +30,37 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1, id2, id3).Unfold();
+            var result = GetResultListAsync(true, id1, id2, id3).Unfold();
             
             result.TryGetValue(1, out FakeObject value).ShouldBeTrue();
             value.Id.ShouldBe(id2);
         }
 
         [Test]
-        public void Verify_cannot_get_value_from_result_list()
+        public void Verify_can_get_value_from_result_list_async()
         {
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
-            
-            var result = GetResultListAsync(id1, id2, id3).Unfold();
+
+            GetResultListAsync(true, id1, id2, id3).TryGetValue(1, out FakeObject value).ShouldBeTrue();
+            value.Id.ShouldBe(id2);
+        }
+
+        [Test]
+        public void Verify_cannot_get_value_from_result_list()
+        {
+            var result = GetResultListAsync(true, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()).Unfold();
             
             result.TryGetValue(100, out FakeObject value).ShouldBeFalse();
+            value.IsNull().ShouldBeTrue();
+        }
+
+        [Test]
+        public void Verify_cannot_get_value_from_result_list_async()
+        {
+            GetResultListAsync(true, Guid.NewGuid(), Guid.NewGuid()).TryGetValue(100, out FakeObject value).ShouldBeFalse();
+            value.IsNull().ShouldBeTrue();
         }
 
         [Test]
@@ -62,6 +77,12 @@ namespace HareDu.Core.Tests.Extensions
             FakeObject result = null;
             
             result.IsNull().ShouldBeTrue();
+        }
+
+        [Test]
+        public void Test()
+        {
+            
         }
     }
 }

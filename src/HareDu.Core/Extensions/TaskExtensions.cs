@@ -17,8 +17,14 @@ namespace HareDu.Core.Extensions
 
     public static class TaskExtensions
     {
+        /// <summary>
+        /// Unwrap <see cref="Task{T}"/> and return T.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T Unfold<T>(this Task<T> result)
-            => !result.IsCanceled && !result.IsFaulted
+            => !result.IsNull() && !result.IsCanceled && !result.IsFaulted
                 ? result.Result
                 : default;
     }

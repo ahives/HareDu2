@@ -28,7 +28,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
 
-            var data = GetResultListAsync(id2, id1, id2).Where(x => x.Id == id2);
+            var data = GetResultListAsync(true, id2, id1, id2).Where(x => x.Id == id2);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(2);
@@ -41,7 +41,7 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id = Guid.NewGuid();
 
-            var data = GetResultListAsync().Where(x => x.Id == id);
+            var data = GetResultListAsync(false).Where(x => x.Id == id);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(0);
@@ -53,7 +53,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
 
-            var data = GetResultList(id2, id1, id2).Where(x => x.Id == id2);
+            var data = GetResultList(true, id2, id1, id2).Where(x => x.Id == id2);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(2);
@@ -66,7 +66,7 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id = Guid.NewGuid();
 
-            var data = GetResultList().Where(x => x.Id == id);
+            var data = GetResultList(false).Where(x => x.Id == id);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(0);

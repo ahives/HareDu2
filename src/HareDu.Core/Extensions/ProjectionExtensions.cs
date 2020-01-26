@@ -34,7 +34,23 @@ namespace HareDu.Core.Extensions
                 
             Result<T> result = source.Unfold();
 
-            return result.HasData ? projector(result) : default;
+            return !result.IsNull() && result.HasData ? projector(result) : default;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="projector"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
+        public static TResult Select<T, TResult>(this Result<T> source, Func<Result<T>, TResult> projector)
+        {
+            if (source.IsNull() || !source.HasData || projector.IsNull())
+                return default;
+            
+            return !source.IsNull() && source.HasData ? projector(source) : default;
         }
         
         /// <summary>
@@ -52,23 +68,7 @@ namespace HareDu.Core.Extensions
                 
             ResultList<T> result = source.Unfold();
 
-            return result.HasData ? projector(result) : default;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="projector"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <returns></returns>
-        public static TResult Select<T, TResult>(this Result<T> source, Func<Result<T>, TResult> projector)
-        {
-            if (source.IsNull() || !source.HasData || projector.IsNull())
-                return default;
-            
-            return source.HasData ? projector(source) : default;
+            return !result.IsNull() && result.HasData ? projector(result) : default;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace HareDu.Core.Extensions
             if (source.IsNull() || !source.HasData || projector.IsNull())
                 return Array.Empty<T>();
 
-            return source.HasData ? projector(source) : new List<T>();
+            return !source.IsNull() && source.HasData ? projector(source) : Array.Empty<T>();
         }
     }
 }

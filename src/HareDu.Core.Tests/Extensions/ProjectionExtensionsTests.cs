@@ -23,13 +23,13 @@ namespace HareDu.Core.Tests.Extensions
         HareDuTesting
     {
         [Test]
-        public void Verify_can_select_data_list_async()
+        public void Verify_can_select_list_data_async()
         {
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            var data = GetResultListAsync(id1, id2, id3).Select(x => x.Data);
+            var data = GetResultListAsync(true, id1, id2, id3).Select(x => x.Data);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(3);
@@ -39,13 +39,29 @@ namespace HareDu.Core.Tests.Extensions
         }
 
         [Test]
-        public void Verify_can_select_data_list()
+        public void Verify_select_empty_list_will_not_throw_async()
+        {
+            var data = GetResultListAsync(false).Select(x => x.Data);
+            
+            data.ShouldBe(default);
+        }
+        
+        [Test]
+        public void Verify_will_not_throw_on_select_data_null_async()
+        {
+            var data = GetNullResultListAsync().Select(x => x.Data);
+            
+            data.ShouldBe(default);
+        }
+
+        [Test]
+        public void Verify_can_select_list_data()
         {
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            var data = GetResultList(id1, id2, id3).Select(x => x.Data);
+            var data = GetResultList(true, id1, id2, id3).Select(x => x.Data);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(3);
@@ -59,10 +75,34 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id = Guid.NewGuid();
 
-            var data = GetResultAsync(id).Select(x => x.Data);
+            var data = GetResultAsync(id, true).Select(x => x.Data);
             
             data.ShouldNotBeNull();
             data.Id.ShouldBe(id);
+        }
+
+        [Test]
+        public void Verify_will_not_throw_when_data_missing_async()
+        {
+            var data = GetResultAsync(Guid.NewGuid(), false).Select(x => x.Data);
+            
+            data.ShouldBe(default);
+        }
+
+        [Test]
+        public void Verify_will_not_throw_on_select_when_data_null_async()
+        {
+            var data = GetNullResultAsync().Select(x => x.Data);
+            
+            data.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_will_not_throw_when_result_null_async()
+        {
+            var data = GetNullResultAsync().Select(x => x.Data);
+            
+            data.ShouldBeNull();
         }
 
         [Test]
@@ -70,16 +110,32 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id = Guid.NewGuid();
 
-            var data = GetResult(id).Select(x => x.Data);
+            var data = GetResult(id, true).Select(x => x.Data);
             
             data.ShouldNotBeNull();
             data.Id.ShouldBe(id);
         }
 
         [Test]
+        public void Verify_will_not_throw_when_no_data_present_1()
+        {
+            var data = GetResult().Select(x => x.Data);
+            
+            data.ShouldBeNull();
+        }
+
+        [Test]
+        public void Verify_will_not_throw_when_no_data_present_2()
+        {
+            var data = GetResultAsync().Select(x => x.Data);
+            
+            data.ShouldBeNull();
+        }
+
+        [Test]
         public void Verify_can_select_empty_list()
         {
-            var data = GetResultList().Select(x => x.Data);
+            var data = GetResultList(false).Select(x => x.Data);
             
             data.ShouldNotBeNull();
             data.Count.ShouldBe(0);

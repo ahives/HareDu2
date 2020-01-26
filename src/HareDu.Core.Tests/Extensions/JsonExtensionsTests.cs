@@ -62,14 +62,12 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id = Guid.NewGuid();
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
-            FakeObject obj = new FakeObjectImpl(id, timestamp);
+            FakeObject obj1 = new FakeObjectImpl(id, timestamp);
 
-            string json = $"{{" +
-                          $"\n  \"id\": \"{id}\"," +
-                          $"\n  \"timestamp\": \"{timestamp:O}\"" +
-                          $"\n}}";
+            FakeObject obj2 = obj1.ToJsonString().ToObject<FakeObject>();
             
-            obj.ToJsonString().ShouldBe(json);
+            obj2.Timestamp.ShouldBe(timestamp);
+            obj2.Id.ShouldBe(id);
         }
 
         [Test]

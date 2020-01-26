@@ -29,7 +29,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            bool found = GetResultListAsync(id1, id2, id3).Any();
+            bool found = GetResultListAsync(true, id1, id2, id3).Any();
             
             found.ShouldBeTrue();
         }
@@ -41,7 +41,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            bool found = GetResultList(id1, id2, id3).Any();
+            bool found = GetResultList(true, id1, id2, id3).Any();
             
             found.ShouldBeTrue();
         }
@@ -53,7 +53,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            bool found = GetResultListAsync(id1, id2, id3).Any(x => x.Id == id2);
+            bool found = GetResultListAsync(true, id1, id2, id3).Any(x => x.Id == id2);
             
             found.ShouldBeTrue();
         }
@@ -66,7 +66,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id3 = Guid.NewGuid();
             Guid id4 = Guid.NewGuid();
 
-            bool found = GetResultListAsync(id1, id2, id3).Any(x => x.Id == id4);
+            bool found = GetResultListAsync(true, id1, id2, id3).Any(x => x.Id == id4);
             
             found.ShouldBeFalse();
         }
@@ -78,7 +78,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
 
-            bool found = GetResultList(id1, id2, id3).Any(x => x.Id == id2);
+            bool found = GetResultList(true, id1, id2, id3).Any(x => x.Id == id2);
             
             found.ShouldBeTrue();
         }
@@ -91,7 +91,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id3 = Guid.NewGuid();
             Guid id4 = Guid.NewGuid();
 
-            bool found = GetResultList(id1, id2, id3).Any(x => x.Id == id4);
+            bool found = GetResultList(true, id1, id2, id3).Any(x => x.Id == id4);
             
             found.ShouldBeFalse();
         }
@@ -103,7 +103,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1, id2, id3).FirstOrDefault();
+            var result = GetResultListAsync(true, id1, id2, id3).FirstOrDefault();
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id1);
@@ -116,7 +116,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1, id2, id3).FirstOrDefault(x => x.Id == id3);
+            var result = GetResultListAsync(true, id1, id2, id3).FirstOrDefault(x => x.Id == id3);
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id3);
@@ -130,7 +130,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id3 = Guid.NewGuid();
             Guid id4 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1, id2, id3).FirstOrDefault(x => x.Id == id4);
+            var result = GetResultListAsync(true, id1, id2, id3).FirstOrDefault(x => x.Id == id4);
  
             result.ShouldBeNull();
         }
@@ -142,7 +142,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultList(id1, id2, id3).FirstOrDefault();
+            var result = GetResultList(true, id1, id2, id3).FirstOrDefault();
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id1);
@@ -155,7 +155,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultList(id1, id2, id3).FirstOrDefault(x => x.Id == id3);
+            var result = GetResultList(true, id1, id2, id3).FirstOrDefault(x => x.Id == id3);
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id3);
@@ -169,7 +169,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id3 = Guid.NewGuid();
             Guid id4 = Guid.NewGuid();
             
-            var result = GetResultList(id1, id2, id3).FirstOrDefault(x => x.Id == id4);
+            var result = GetResultList(true, id1, id2, id3).FirstOrDefault(x => x.Id == id4);
  
             result.ShouldBeNull();
         }
@@ -177,7 +177,7 @@ namespace HareDu.Core.Tests.Extensions
         [Test]
         public void Verify_can_get_first_object_or_default_4()
         {
-            var result = GetResultList().FirstOrDefault();
+            var result = GetResultList(false).FirstOrDefault();
  
             result.ShouldBe(default);
         }
@@ -187,7 +187,7 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id1 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1).SingleOrDefault();
+            var result = GetResultListAsync(true, id1).SingleOrDefault();
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id1);
@@ -196,7 +196,7 @@ namespace HareDu.Core.Tests.Extensions
         [Test]
         public void Verify_single_or_default_does_not_throw_async()
         {
-            var result = GetResultListAsync().SingleOrDefault();
+            var result = GetResultListAsync(false).SingleOrDefault();
  
             result.ShouldBeNull();
         }
@@ -206,7 +206,7 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id = Guid.NewGuid();
             
-            var result = GetResultList(id).SingleOrDefault();
+            var result = GetResultList(true, id).SingleOrDefault();
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id);
@@ -227,7 +227,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultList(id1, id2, id3).SingleOrDefault();
+            var result = GetResultList(true, id1, id2, id3).SingleOrDefault();
  
             result.ShouldBeNull();
         }
@@ -237,7 +237,7 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id1 = Guid.NewGuid();
             
-            var result = GetResultListAsync().SingleOrDefault(x => x.Id == id1);
+            var result = GetResultListAsync(false).SingleOrDefault(x => x.Id == id1);
  
             result.ShouldBeNull();
         }
@@ -257,7 +257,7 @@ namespace HareDu.Core.Tests.Extensions
         {
             Guid id1 = Guid.NewGuid();
             
-            var result = GetResultList().SingleOrDefault(x => x.Id == id1);
+            var result = GetResultList(false).SingleOrDefault(x => x.Id == id1);
  
             result.ShouldBeNull();
         }
@@ -269,7 +269,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultList(id1, id2, id3).SingleOrDefault(x => x.Id == id2);
+            var result = GetResultList(true, id1, id2, id3).SingleOrDefault(x => x.Id == id2);
  
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id2);
@@ -283,7 +283,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id3 = Guid.NewGuid();
             Guid id4 = Guid.NewGuid();
             
-            var result = GetResultList(id1, id2, id3).SingleOrDefault(x => x.Id == id4);
+            var result = GetResultList(true, id1, id2, id3).SingleOrDefault(x => x.Id == id4);
  
             result.ShouldBeNull();
         }
@@ -294,7 +294,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1, id2, id2).SingleOrDefault(x => x.Id == id2);
+            var result = GetResultListAsync(true, id1, id2, id2).SingleOrDefault(x => x.Id == id2);
  
             result.ShouldBeNull();
         }
@@ -305,7 +305,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id1 = Guid.NewGuid();
             Guid id2 = Guid.NewGuid();
             
-            var result = GetResultListAsync(id1, id2, id2).SingleOrDefault(x => x.Id == id2);
+            var result = GetResultListAsync(true, id1, id2, id2).SingleOrDefault(x => x.Id == id2);
  
             result.ShouldBeNull();
         }
