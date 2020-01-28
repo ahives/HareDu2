@@ -26,6 +26,8 @@ namespace HareDu.Snapshotting.Registration
 
         void Register<T>();
 
+        bool TryRegisterAll();
+        
         bool TryRegister(Type type);
 
         bool TryRegister<T>();

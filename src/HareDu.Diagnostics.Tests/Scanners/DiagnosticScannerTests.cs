@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using System.Collections.Generic;
     using Autofac;
     using AutofacIntegration;
-    using Extensions;
+    using Core.Extensions;
     using Fakes;
     using NUnit.Framework;
     using Scanning;

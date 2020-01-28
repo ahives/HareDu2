@@ -36,18 +36,23 @@ namespace HareDu.Snapshotting.Registration
 
         public void RegisterAll()
         {
+            bool registered = true;
+            
             foreach (var type in GetTypes())
             {
-                if (_cache.ContainsKey(type.FullName))
+                if (_cache.ContainsKey(type.GetIdentifier()))
                     continue;
                 
-                RegisterInstance(type);
+                registered = RegisterInstance(type) & registered;
             }
+            
+            if (!registered)
+                _cache.Clear();
         }
 
         public void Register(Type type)
         {
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return;
             
             RegisterInstance(type);
@@ -56,29 +61,45 @@ namespace HareDu.Snapshotting.Registration
         public void Register<T>()
         {
             Type type = typeof(T);
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return;
             
             RegisterInstance(type);
         }
 
+        public bool TryRegisterAll()
+        {
+            bool registered = true;
+            
+            foreach (var type in GetTypes())
+            {
+                if (_cache.ContainsKey(type.GetIdentifier()))
+                    continue;
+                
+                registered = RegisterInstance(type) & registered;
+            }
+            
+            if (!registered)
+                _cache.Clear();
+
+            return registered;
+        }
+
         public bool TryRegister(Type type)
         {
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return false;
             
-            RegisterInstance(type);
-            return true;
+            return RegisterInstance(type);
         }
 
         public bool TryRegister<T>()
         {
             Type type = typeof(T);
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return false;
             
-            RegisterInstance(type);
-            return true;
+            return RegisterInstance(type);
         }
 
         protected virtual IEnumerable<Type> GetTypes() =>
@@ -100,7 +121,7 @@ namespace HareDu.Snapshotting.Registration
                 .Where(x => x.IsConcrete());
         }
 
-        protected virtual void RegisterInstance(Type type)
+        protected virtual bool RegisterInstance(Type type)
         {
             try
             {
@@ -109,11 +130,18 @@ namespace HareDu.Snapshotting.Registration
                     : Activator.CreateInstance(type);
 
                 if (instance.IsNull())
-                    return;
+                    return false;
+
+                string key = type.GetIdentifier();
                 
-                _cache.Add(type.FullName, instance);
+                _cache.Add(key, instance);
+                
+                return _cache.ContainsKey(key);
             }
-            catch { }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

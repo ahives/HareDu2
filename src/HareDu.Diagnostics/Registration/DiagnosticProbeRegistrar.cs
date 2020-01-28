@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics.Registration
     using System.Collections.Generic;
     using System.Linq;
     using Core.Configuration;
-    using Extensions;
+    using Core.Extensions;
     using KnowledgeBase;
     using Probes;
 
@@ -66,6 +66,25 @@ namespace HareDu.Diagnostics.Registration
                 return;
 
             RegisterInstance(type);
+        }
+
+        public bool TryRegister(Type type)
+        {
+            if (_cache.ContainsKey(type.GetIdentifier()))
+                return false;
+            
+            RegisterInstance(type);
+            return true;
+        }
+
+        public bool TryRegister<T>()
+        {
+            Type type = typeof(T);
+            if (_cache.ContainsKey(type.GetIdentifier()))
+                return false;
+            
+            RegisterInstance(type);
+            return true;
         }
 
         void RegisterInstance(Type type)

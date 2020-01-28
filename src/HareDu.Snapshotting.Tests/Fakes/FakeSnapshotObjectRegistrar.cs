@@ -44,6 +44,8 @@ namespace HareDu.Snapshotting.Tests.Fakes
             throw new NotImplementedException();
         }
 
+        public bool TryRegisterAll() => throw new NotImplementedException();
+
         public bool TryRegister(Type type) => throw new NotImplementedException();
 
         public bool TryRegister<T>() => throw new NotImplementedException();

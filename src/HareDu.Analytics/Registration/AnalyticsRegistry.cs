@@ -16,8 +16,8 @@ namespace HareDu.Analytics.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Extensions;
     using Diagnostics;
-    using Diagnostics.Extensions;
 
     public class AnalyticsRegistry :
         IAnalyticsRegistry

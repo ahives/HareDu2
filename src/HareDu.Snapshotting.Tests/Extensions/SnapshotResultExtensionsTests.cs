@@ -83,7 +83,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
 
             mock.Protected()
                 .As<ISnapshotWriterMock>()
-                .Setup(x => x.Write<ClusterSnapshot>(
+                .Setup(x => x.Write(
                     It.IsAny<SnapshotResult<ClusterSnapshot>>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()))
@@ -123,7 +123,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
 
             mock.Protected()
                 .As<ISnapshotWriterMock>()
-                .Setup(x => x.Write<ClusterSnapshot>(
+                .Setup(x => x.Write(
                     It.IsAny<SnapshotResult<ClusterSnapshot>>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()))
@@ -206,7 +206,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
 
             mock.Protected()
                 .As<ISnapshotWriterMock>()
-                .Setup(x => x.Write<ClusterSnapshot>(
+                .Setup(x => x.Write(
                     It.IsAny<SnapshotResult<ClusterSnapshot>>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()))

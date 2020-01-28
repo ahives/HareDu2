@@ -14,9 +14,9 @@
 namespace HareDu.Diagnostics.Tests.Registration
 {
     using Core.Configuration;
+    using Core.Extensions;
     using Diagnostics.Probes;
     using Diagnostics.Registration;
-    using Extensions;
     using KnowledgeBase;
     using NUnit.Framework;
     using Shouldly;

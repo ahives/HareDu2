@@ -13,9 +13,11 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests
 {
+    using System;
     using Autofac;
     using Core;
     using Core.Configuration;
+    using Core.Extensions;
     using Fakes;
     using HareDu.Registration;
     using NUnit.Framework;
@@ -86,10 +88,10 @@ namespace HareDu.Snapshotting.Tests
             registrar.RegisterAll();
             
             registrar.ObjectCache.Count.ShouldBe(4);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
         }
 
         [Test]
@@ -101,19 +103,19 @@ namespace HareDu.Snapshotting.Tests
             registrar.RegisterAll();
             
             registrar.ObjectCache.Count.ShouldBe(4);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
 
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
             registrar.ObjectCache.Count.ShouldBe(5);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -125,19 +127,19 @@ namespace HareDu.Snapshotting.Tests
             registrar.RegisterAll();
             
             registrar.ObjectCache.Count.ShouldBe(4);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
 
             registrar.Register<FakeHareDuSnapshotImpl>();
             
             registrar.ObjectCache.Count.ShouldBe(5);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -149,19 +151,19 @@ namespace HareDu.Snapshotting.Tests
             registrar.RegisterAll();
             
             registrar.ObjectCache.Count.ShouldBe(4);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
 
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeTrue();
             
             registrar.ObjectCache.Count.ShouldBe(5);
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerConnectivityImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.BrokerQueuesImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Internal.ClusterNodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -173,7 +175,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -185,7 +187,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.TryRegister(typeof(FakeHareDuSnapshotImpl));
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -197,7 +199,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.Register<FakeHareDuSnapshotImpl>();
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -209,7 +211,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeTrue();
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -222,7 +224,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -235,7 +237,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.Register<FakeHareDuSnapshotImpl>();
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -248,7 +250,7 @@ namespace HareDu.Snapshotting.Tests
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeFalse();
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
         }
 
         [Test]
@@ -261,7 +263,14 @@ namespace HareDu.Snapshotting.Tests
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
             registrar.ObjectCache.Count.ShouldBe(1);
-            registrar.ObjectCache["HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
+        }
+
+        string GetKey(string className, string assembly)
+        {
+            Type type = Type.GetType($"{className}, {assembly}");
+
+            return type.GetIdentifier();
         }
     }
 }

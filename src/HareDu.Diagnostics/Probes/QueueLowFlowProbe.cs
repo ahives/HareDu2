@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Extensions;
     using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;

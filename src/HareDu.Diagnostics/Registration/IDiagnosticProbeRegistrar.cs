@@ -26,5 +26,9 @@ namespace HareDu.Diagnostics.Registration
         void Register(Type type);
         
         void Register<T>();
+
+        bool TryRegister(Type type);
+
+        bool TryRegister<T>();
     }
 }

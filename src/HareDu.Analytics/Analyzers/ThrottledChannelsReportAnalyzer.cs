@@ -14,8 +14,8 @@
 namespace HareDu.Analytics.Analyzers
 {
     using System.Collections.Generic;
+    using Core.Extensions;
     using Diagnostics;
-    using Diagnostics.Extensions;
     using Diagnostics.Probes;
 
     public class ThrottledChannelsReportAnalyzer :

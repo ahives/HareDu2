@@ -16,8 +16,8 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using System.Collections.Generic;
     using System.Linq;
     using Core.Configuration;
+    using Core.Extensions;
     using Diagnostics.Probes;
-    using Extensions;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;

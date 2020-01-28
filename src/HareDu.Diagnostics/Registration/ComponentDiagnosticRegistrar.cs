@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Extensions;
+    using Core.Extensions;
     using Probes;
     using Scanning;
 

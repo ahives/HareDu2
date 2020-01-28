@@ -16,8 +16,8 @@ namespace HareDu.Analytics
     using System;
     using System.Collections.Generic;
     using Analyzers;
+    using Core.Extensions;
     using Diagnostics;
-    using Diagnostics.Extensions;
 
     public class DiagnosticReportAnalyzerFactory :
         IDiagnosticReportAnalyzerFactory

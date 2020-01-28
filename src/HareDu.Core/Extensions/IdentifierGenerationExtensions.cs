@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Extensions
+namespace HareDu.Core.Extensions
 {
     using System;
     using System.Security.Cryptography;
     using System.Text;
 
-    public static class DiagnosticIdentifierExtensions
+    public static class IdentifierGenerationExtensions
     {
         /// <summary>
         /// Generates a unique guid identifier based on the type.

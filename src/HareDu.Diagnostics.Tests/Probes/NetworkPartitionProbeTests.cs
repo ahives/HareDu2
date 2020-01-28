@@ -16,8 +16,8 @@ namespace HareDu.Diagnostics.Tests.Probes
     using System.Collections.Generic;
     using Autofac;
     using Core.Configuration;
+    using Core.Extensions;
     using Diagnostics.Probes;
-    using Extensions;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;

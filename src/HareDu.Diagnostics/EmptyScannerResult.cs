@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
-    using Extensions;
+    using Core.Extensions;
     using MassTransit;
     using Scanning;
     using Snapshotting.Model;
