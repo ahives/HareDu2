@@ -23,14 +23,14 @@ namespace HareDu.Snapshotting.Registration
     public class SnapshotObjectRegistrar :
         ISnapshotObjectRegistrar
     {
-        readonly IBrokerObjectFactory _factory;
+        readonly ISnapshotInstanceCreator _creator;
         readonly Dictionary<string, object> _cache;
 
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public SnapshotObjectRegistrar(IBrokerObjectFactory factory)
+        public SnapshotObjectRegistrar(ISnapshotInstanceCreator creator)
         {
-            _factory = factory;
+            _creator = creator;
             _cache = new Dictionary<string, object>();
         }
 
@@ -125,9 +125,7 @@ namespace HareDu.Snapshotting.Registration
         {
             try
             {
-                var instance = type.IsDerivedFrom(typeof(BaseSnapshot<>))
-                    ? Activator.CreateInstance(type, _factory)
-                    : Activator.CreateInstance(type);
+                var instance = _creator.CreateInstance(type);
 
                 if (instance.IsNull())
                     return false;

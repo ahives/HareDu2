@@ -49,8 +49,8 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var factory = x.Resolve<IBrokerObjectFactory>();
-                    var registrar = new SnapshotObjectRegistrar(factory);
+                    var creator = x.Resolve<ISnapshotInstanceCreator>();
+                    var registrar = new SnapshotObjectRegistrar(creator);
 
                     registrar.RegisterAll();
 
@@ -77,6 +77,10 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
+            builder.RegisterType<SnapshotInstanceCreator>()
+                .As<ISnapshotInstanceCreator>()
+                .SingleInstance();
+            
             builder.RegisterType<SnapshotWriter>()
                 .As<ISnapshotWriter>()
                 .SingleInstance();

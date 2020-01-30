@@ -16,6 +16,7 @@ namespace HareDu.Snapshotting
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Extensions;
     using Registration;
 
     public class SnapshotFactory :
@@ -41,12 +42,14 @@ namespace HareDu.Snapshotting
             if (type == null)
                 throw new HareDuSnapshotInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_cache.ContainsKey(type.FullName))
-                return (T)_cache[type.FullName];
+            string key = type.GetIdentifier();
+            
+            if (_cache.ContainsKey(key))
+                return (T)_cache[key];
 
             var instance = Activator.CreateInstance(type, _factory);
 
-            _cache.Add(type.FullName, instance);
+            _cache.Add(key, instance);
             
             return (T)instance;
         }

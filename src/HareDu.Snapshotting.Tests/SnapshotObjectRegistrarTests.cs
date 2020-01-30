@@ -20,6 +20,8 @@ namespace HareDu.Snapshotting.Tests
     using Core.Extensions;
     using Fakes;
     using HareDu.Registration;
+    using Moq;
+    using Moq.Protected;
     using NUnit.Framework;
     using Registration;
     using Shouldly;
@@ -64,6 +66,10 @@ namespace HareDu.Snapshotting.Tests
                 .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
+            builder.RegisterType<SnapshotInstanceCreator>()
+                .As<ISnapshotInstanceCreator>()
+                .SingleInstance();
+
             builder.RegisterType<BrokerCommunication>()
                 .As<IBrokerCommunication>()
                 .SingleInstance();
@@ -82,8 +88,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_all_concrete_classes_that_implement_HareDuSnapshot_interface()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.RegisterAll();
             
@@ -97,8 +103,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_with_others_1()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.RegisterAll();
             
@@ -121,8 +127,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_with_others_2()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.RegisterAll();
             
@@ -145,8 +151,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_with_others_3()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.RegisterAll();
             
@@ -169,8 +175,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_1()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
@@ -181,8 +187,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_2()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.TryRegister(typeof(FakeHareDuSnapshotImpl));
             
@@ -193,8 +199,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_3()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.Register<FakeHareDuSnapshotImpl>();
             
@@ -205,8 +211,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_4()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
 
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeTrue();
             
@@ -217,8 +223,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_1()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
             
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
@@ -230,8 +236,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_2()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
             
             registrar.Register<FakeHareDuSnapshotImpl>();
             registrar.Register<FakeHareDuSnapshotImpl>();
@@ -243,8 +249,8 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_3()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
             
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeTrue();
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeFalse();
@@ -256,14 +262,50 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_4()
         {
-            var factory = _container.Resolve<IBrokerObjectFactory>();
-            var registrar = new SnapshotObjectRegistrar(factory);
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var registrar = new SnapshotObjectRegistrar(creator);
             
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
             registrar.ObjectCache.Count.ShouldBe(1);
             registrar.ObjectCache[GetKey("HareDu.Snapshotting.Tests.Fakes.FakeHareDuSnapshotImpl", "HareDu.Snapshotting.Tests")].ShouldNotBeNull();
+        }
+
+        [Test]
+        public void Verify_will_not_register_any_objects_if_instance_null()
+        {
+            var mock = new Mock<ISnapshotInstanceCreator>();
+
+            mock
+                .Setup(x => x.CreateInstance(It.IsAny<Type>()))
+                .Returns(null)
+                .Verifiable();
+
+            var registrar = new SnapshotObjectRegistrar(mock.Object);
+            
+            registrar.RegisterAll();
+            
+            registrar.ObjectCache.Count.ShouldBe(0);
+            mock.VerifyAll();
+        }
+
+        [Test]
+        public void Verify_will_not_register_any_objects_if_instance_throws()
+        {
+            var mock = new Mock<ISnapshotInstanceCreator>();
+
+            mock
+                .Setup(x => x.CreateInstance(It.IsAny<Type>()))
+                .Throws<Exception>()
+                .Verifiable();
+
+            var registrar = new SnapshotObjectRegistrar(mock.Object);
+            
+            registrar.RegisterAll();
+            
+            registrar.ObjectCache.Count.ShouldBe(0);
+            mock.VerifyAll();
         }
 
         string GetKey(string className, string assembly)

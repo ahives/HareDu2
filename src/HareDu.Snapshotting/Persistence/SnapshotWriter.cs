@@ -35,7 +35,7 @@ namespace HareDu.Snapshotting.Persistence
         {
             var directory = Directory.CreateDirectory(path);
 
-            return directory.IsNull() && directory.Exists;
+            return !directory.IsNull() && directory.Exists;
         }
 
         protected virtual bool DirectoryExists(string path) => Directory.Exists(path);

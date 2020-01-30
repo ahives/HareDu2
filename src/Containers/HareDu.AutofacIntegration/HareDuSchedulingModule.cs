@@ -26,7 +26,7 @@ namespace HareDu.AutofacIntegration
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
-    public class HareDuScheduling :
+    public class HareDuSchedulingModule :
         Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -51,8 +51,8 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var factory = x.Resolve<IBrokerObjectFactory>();
-                    var registrar = new SnapshotObjectRegistrar(factory);
+                    var creator = x.Resolve<ISnapshotInstanceCreator>();
+                    var registrar = new SnapshotObjectRegistrar(creator);
 
                     registrar.RegisterAll();
 
@@ -98,6 +98,10 @@ namespace HareDu.AutofacIntegration
                     return scheduler;
                 })
                 .As<IScheduler>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotInstanceCreator>()
+                .As<ISnapshotInstanceCreator>()
                 .SingleInstance();
 
             builder.RegisterType<SnapshotWriter>()
