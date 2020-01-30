@@ -78,6 +78,8 @@ namespace HareDu.CoreIntegration
         /// <returns></returns>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services)
         {
+            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
+            
             services.TryAddSingleton<ISnapshotInstanceCreator, SnapshotInstanceCreator>();
             
             services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
@@ -111,6 +113,8 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services, string path)
         {
+            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
+            
             services.TryAddSingleton<ISnapshotInstanceCreator, SnapshotInstanceCreator>();
             
             services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
@@ -143,6 +147,8 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
+            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
+            
             services.TryAddSingleton<ISnapshotInstanceCreator, SnapshotInstanceCreator>();
             
             services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
@@ -192,6 +198,8 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string path)
         {
+            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
+            
             services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
 
             services.TryAddSingleton<IBrokerObjectRegistrar, BrokerObjectRegistrar>();
@@ -288,7 +296,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<ISnapshotObjectRegistrar>(x =>
             {
-                var registrar = new SnapshotObjectRegistrar(x.GetService<ISnapshotInstanceCreator>());
+                var registrar = new SnapshotObjectRegistrar(x.GetService<ISnapshotTypeFinder>(), x.GetService<ISnapshotInstanceCreator>());
                 
                 registrar.RegisterAll();
 

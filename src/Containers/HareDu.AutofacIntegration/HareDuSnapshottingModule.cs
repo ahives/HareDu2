@@ -16,10 +16,7 @@ namespace HareDu.AutofacIntegration
     using Autofac;
     using Core;
     using Core.Configuration;
-    using Quartz;
-    using Quartz.Impl;
     using Registration;
-    using Scheduling;
     using Snapshotting;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
@@ -50,7 +47,8 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var creator = x.Resolve<ISnapshotInstanceCreator>();
-                    var registrar = new SnapshotObjectRegistrar(creator);
+                    var finder = x.Resolve<ISnapshotTypeFinder>();
+                    var registrar = new SnapshotObjectRegistrar(finder, creator);
 
                     registrar.RegisterAll();
 
@@ -75,6 +73,10 @@ namespace HareDu.AutofacIntegration
                     return registrar;
                 })
                 .As<IBrokerObjectRegistrar>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotTypeFinder>()
+                .As<ISnapshotTypeFinder>()
                 .SingleInstance();
 
             builder.RegisterType<SnapshotInstanceCreator>()

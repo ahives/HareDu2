@@ -17,33 +17,34 @@ namespace HareDu.Snapshotting.Registration
     using System.Collections.Generic;
     using System.Linq;
     using Core.Extensions;
-    using Core.Serialization;
-    using Internal;
 
     public class SnapshotObjectRegistrar :
         ISnapshotObjectRegistrar
     {
         readonly ISnapshotInstanceCreator _creator;
+        readonly ISnapshotTypeFinder _finder;
         readonly Dictionary<string, object> _cache;
 
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public SnapshotObjectRegistrar(ISnapshotInstanceCreator creator)
+        public SnapshotObjectRegistrar(ISnapshotTypeFinder finder, ISnapshotInstanceCreator creator)
         {
             _creator = creator;
+            _finder = finder;
             _cache = new Dictionary<string, object>();
         }
 
         public void RegisterAll()
         {
             bool registered = true;
-            
-            foreach (var type in GetTypes())
+            var types = _finder.GetTypes().ToList();
+
+            for (int i = 0; i < types.Count; i++)
             {
-                if (_cache.ContainsKey(type.GetIdentifier()))
+                if (_cache.ContainsKey(types[i].GetIdentifier()))
                     continue;
                 
-                registered = RegisterInstance(type) & registered;
+                registered = RegisterInstance(types[i]) & registered;
             }
             
             if (!registered)
@@ -70,13 +71,14 @@ namespace HareDu.Snapshotting.Registration
         public bool TryRegisterAll()
         {
             bool registered = true;
-            
-            foreach (var type in GetTypes())
+            var types = _finder.GetTypes().ToList();
+
+            for (int i = 0; i < types.Count; i++)
             {
-                if (_cache.ContainsKey(type.GetIdentifier()))
+                if (_cache.ContainsKey(types[i].GetIdentifier()))
                     continue;
                 
-                registered = RegisterInstance(type) & registered;
+                registered = RegisterInstance(types[i]) & registered;
             }
             
             if (!registered)
@@ -100,25 +102,6 @@ namespace HareDu.Snapshotting.Registration
                 return false;
             
             return RegisterInstance(type);
-        }
-
-        protected virtual IEnumerable<Type> GetTypes() =>
-            from concrete in GetConcreteTypes()
-            from @interface in GetInterfaces(concrete)
-            where @interface.GetGenericTypeDefinition() == typeof(HareDuSnapshot<>)
-            select concrete;
-
-        protected virtual IEnumerable<Type> GetInterfaces(Type type)
-        {
-            return type.GetInterfaces().Where(x => x.IsGenericType);
-        }
-
-        protected virtual IEnumerable<Type> GetConcreteTypes()
-        {
-            return GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => x.IsConcrete());
         }
 
         protected virtual bool RegisterInstance(Type type)

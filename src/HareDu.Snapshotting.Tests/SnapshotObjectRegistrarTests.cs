@@ -66,6 +66,10 @@ namespace HareDu.Snapshotting.Tests
                 .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
+            builder.RegisterType<SnapshotTypeFinder>()
+                .As<ISnapshotTypeFinder>()
+                .SingleInstance();
+
             builder.RegisterType<SnapshotInstanceCreator>()
                 .As<ISnapshotInstanceCreator>()
                 .SingleInstance();
@@ -86,12 +90,29 @@ namespace HareDu.Snapshotting.Tests
         }
 
         [Test]
-        public void Verify_can_register_all_concrete_classes_that_implement_HareDuSnapshot_interface()
+        public void Verify_can_register_all_concrete_classes_that_implement_HareDuSnapshot_interface_1()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.RegisterAll();
+            
+            registrar.ObjectCache.Count.ShouldBe(4);
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerQueuesImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.ClusterNodeImpl", "HareDu.Snapshotting")].ShouldNotBeNull();
+        }
+
+        [Test]
+        public void Verify_can_register_all_concrete_classes_that_implement_HareDuSnapshot_interface_2()
+        {
+            var creator = _container.Resolve<ISnapshotInstanceCreator>();
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
+
+            registrar.TryRegisterAll().ShouldBeTrue();
             
             registrar.ObjectCache.Count.ShouldBe(4);
             registrar.ObjectCache[GetKey("HareDu.Snapshotting.Internal.BrokerConnectivityImpl","HareDu.Snapshotting")].ShouldNotBeNull();
@@ -104,7 +125,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_with_others_1()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.RegisterAll();
             
@@ -128,7 +150,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_with_others_2()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.RegisterAll();
             
@@ -152,7 +175,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_with_others_3()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.RegisterAll();
             
@@ -176,7 +200,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_1()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             
@@ -188,7 +213,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_2()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.TryRegister(typeof(FakeHareDuSnapshotImpl));
             
@@ -200,7 +226,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_3()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.Register<FakeHareDuSnapshotImpl>();
             
@@ -212,7 +239,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_can_register_parameterless_snapshot_implementation_without_others_4()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
 
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeTrue();
             
@@ -224,7 +252,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_1()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
             
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
@@ -237,7 +266,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_2()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
             
             registrar.Register<FakeHareDuSnapshotImpl>();
             registrar.Register<FakeHareDuSnapshotImpl>();
@@ -250,7 +280,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_3()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
             
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeTrue();
             registrar.TryRegister<FakeHareDuSnapshotImpl>().ShouldBeFalse();
@@ -263,7 +294,8 @@ namespace HareDu.Snapshotting.Tests
         public void Verify_cannot_register_identical_parameterless_snapshot_implementations_4()
         {
             var creator = _container.Resolve<ISnapshotInstanceCreator>();
-            var registrar = new SnapshotObjectRegistrar(creator);
+            var finder = _container.Resolve<ISnapshotTypeFinder>();
+            var registrar = new SnapshotObjectRegistrar(finder, creator);
             
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
             registrar.Register(typeof(FakeHareDuSnapshotImpl));
@@ -277,12 +309,11 @@ namespace HareDu.Snapshotting.Tests
         {
             var mock = new Mock<ISnapshotInstanceCreator>();
 
-            mock
-                .Setup(x => x.CreateInstance(It.IsAny<Type>()))
+            mock.Setup(x => x.CreateInstance(It.IsAny<Type>()))
                 .Returns(null)
                 .Verifiable();
 
-            var registrar = new SnapshotObjectRegistrar(mock.Object);
+            var registrar = new SnapshotObjectRegistrar(_container.Resolve<ISnapshotTypeFinder>(), mock.Object);
             
             registrar.RegisterAll();
             
@@ -295,17 +326,32 @@ namespace HareDu.Snapshotting.Tests
         {
             var mock = new Mock<ISnapshotInstanceCreator>();
 
-            mock
-                .Setup(x => x.CreateInstance(It.IsAny<Type>()))
+            mock.Setup(x => x.CreateInstance(It.IsAny<Type>()))
                 .Throws<Exception>()
                 .Verifiable();
 
-            var registrar = new SnapshotObjectRegistrar(mock.Object);
+            var registrar = new SnapshotObjectRegistrar(_container.Resolve<ISnapshotTypeFinder>(), mock.Object);
             
             registrar.RegisterAll();
             
             registrar.ObjectCache.Count.ShouldBe(0);
             mock.VerifyAll();
+        }
+
+        [Test]
+        public void Verify_register_all_will_not_register_same_object_twice()
+        {
+            var mock = new Mock<ISnapshotInstanceCreator>();
+
+            mock.Setup(x => x.CreateInstance(It.IsAny<Type>()))
+                .Returns(new FakeBrokerSnapshotImpl())
+                .Verifiable();
+
+            var registrar = new SnapshotObjectRegistrar(new FakeSnapshotTypeFinderImpl(), mock.Object);
+            
+            registrar.RegisterAll();
+            
+            registrar.ObjectCache.Count.ShouldBe(1);
         }
 
         string GetKey(string className, string assembly)

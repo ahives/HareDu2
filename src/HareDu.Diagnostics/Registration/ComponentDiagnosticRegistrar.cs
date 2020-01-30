@@ -34,14 +34,14 @@ namespace HareDu.Diagnostics.Registration
         {
             _analyzers = analyzers;
             _cache = new Dictionary<string, object>();
-            _types = GetTypes();
+            _types = GetTypes().ToList();
         }
 
         public ComponentDiagnosticRegistrar(IDiagnosticProbeRegistrar registrar)
         {
             _analyzers = registrar.ObjectCache.Values.ToList();
             _cache = new Dictionary<string, object>();
-            _types = GetTypes();
+            _types = GetTypes().ToList();
         }
 
         public void RegisterAll()
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Registration
             RegisterInstance(type);
         }
 
-        List<Type> GetTypes() =>
+        IEnumerable<Type> GetTypes() =>
             GetType()
                 .Assembly
                 .GetTypes()
