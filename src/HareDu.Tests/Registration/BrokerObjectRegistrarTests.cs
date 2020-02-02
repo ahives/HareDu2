@@ -13,10 +13,11 @@
 // limitations under the License.
 namespace HareDu.Tests.Registration
 {
+    using System;
     using System.Net.Http;
-    using System.Reflection;
     using Core;
     using Core.Configuration;
+    using Core.Extensions;
     using HareDu.Registration;
     using NUnit.Framework;
     using Shouldly;
@@ -27,359 +28,334 @@ namespace HareDu.Tests.Registration
         [Test]
         public void Verify_will_register_all_broker_objects_1()
         {
-            var registrar = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
+
+            var finder = new BrokerObjectTypeFinder();
+            var creator = new BrokerObjectInstanceCreator(comm.GetClient(settings));
+            var registrar = new BrokerObjectRegistrar(finder, creator);
             
-            registrar.RegisterAll(comm.GetClient(settings));
+            registrar.RegisterAll();
 
             registrar.ObjectCache.Count.ShouldBe(20);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
         }
 
         [Test]
         public void Verify_will_register_all_broker_objects_2()
         {
-            var registrar = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            
-            registrar.TryRegisterAll(comm.GetClient(settings));
+
+            var finder = new BrokerObjectTypeFinder();
+            var creator = new BrokerObjectInstanceCreator(comm.GetClient(settings));
+            var registrar = new BrokerObjectRegistrar(finder, creator);
+
+            registrar.TryRegisterAll();
 
             registrar.ObjectCache.Count.ShouldBe(20);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-        }
-
-        [Test]
-        public void Verify_cannot_register_all_broker_objects_1()
-        {
-            var registrar = new BrokerObjectRegistrar();
-            
-            registrar.RegisterAll(null);
-
-            registrar.ObjectCache.Count.ShouldBe(0);
-        }
-
-        [Test]
-        public void Verify_cannot_register_all_broker_objects_2()
-        {
-            var registrar = new BrokerObjectRegistrar();
-            
-            registrar.TryRegisterAll(null);
-
-            registrar.ObjectCache.Count.ShouldBe(0);
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
         }
 
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_1()
         {
-            var registrar = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
             var client = comm.GetClient(settings);
-            
-            registrar.RegisterAll(client);
+
+            var finder = new BrokerObjectTypeFinder();
+            var creator = new BrokerObjectInstanceCreator(comm.GetClient(settings));
+            var registrar = new BrokerObjectRegistrar(finder, creator);
+
+            registrar.RegisterAll();
 
             registrar.ObjectCache.Count.ShouldBe(20);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
 
             registrar.Register(typeof(TestImpl), client);
 
             registrar.ObjectCache.Count.ShouldBe(21);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Tests.Registration.TestImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Tests.Registration.TestImpl", "HareDu.Tests")].ShouldNotBeNull();
         }
 
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_2()
         {
-            var registrar = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            var client = comm.GetClient(settings);
             
-            registrar.RegisterAll(client);
+            var client = comm.GetClient(settings);
+            var finder = new BrokerObjectTypeFinder();
+            var creator = new BrokerObjectInstanceCreator(client);
+            var registrar = new BrokerObjectRegistrar(finder, creator);
+
+            registrar.RegisterAll();
 
             registrar.ObjectCache.Count.ShouldBe(20);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
 
             registrar.TryRegister(typeof(TestImpl), client);
 
             registrar.ObjectCache.Count.ShouldBe(21);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Tests.Registration.TestImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Tests.Registration.TestImpl", "HareDu.Tests")].ShouldNotBeNull();
         }
 
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_3()
         {
-            var registrar = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            var client = comm.GetClient(settings);
             
-            registrar.RegisterAll(client);
+            var client = comm.GetClient(settings);
+            var finder = new BrokerObjectTypeFinder();
+            var creator = new BrokerObjectInstanceCreator(client);
+            var registrar = new BrokerObjectRegistrar(finder, creator);
+            
+            registrar.RegisterAll();
 
             registrar.ObjectCache.Count.ShouldBe(20);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
+
             registrar.Register<TestImpl>(client);
 
             registrar.ObjectCache.Count.ShouldBe(21);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Tests.Registration.TestImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Tests.Registration.TestImpl", "HareDu.Tests")].ShouldNotBeNull();
         }
 
         [Test]
         public void Verify_will_register_all_broker_objects_plus_one_4()
         {
-            var registrar = new BrokerObjectRegistrar();
             var comm = new BrokerCommunication();
             var configProvider = new BrokerConfigProvider(new ConfigurationProvider());
 
             configProvider.TryGet(out BrokerConfig settings);
-            var client = comm.GetClient(settings);
             
-            registrar.RegisterAll(client);
+            var client = comm.GetClient(settings);
+            var finder = new BrokerObjectTypeFinder();
+            var creator = new BrokerObjectInstanceCreator(client);
+            var registrar = new BrokerObjectRegistrar(finder, creator);
+            
+            registrar.RegisterAll();
 
             registrar.ObjectCache.Count.ShouldBe(20);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
+
             registrar.TryRegister<TestImpl>(client);
 
             registrar.ObjectCache.Count.ShouldBe(21);
-            registrar.ObjectCache["HareDu.Internal.BindingImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ChannelImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConnectionImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ConsumerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ExchangeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.GlobalParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.MemoryImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.NodeImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.PolicyImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.QueueImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ScopedParameterImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerHealthImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.ServerImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.SystemOverviewImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.TopicPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.UserPermissionsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Internal.VirtualHostLimitsImpl"].ShouldNotBeNull();
-            registrar.ObjectCache["HareDu.Tests.Registration.TestImpl"].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.BindingImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ChannelImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConnectionImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ConsumerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ExchangeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.GlobalParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.MemoryImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.NodeImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.PolicyImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.QueueImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ScopedParameterImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerHealthImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.ServerImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.SystemOverviewImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.TopicPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.UserPermissionsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Internal.VirtualHostLimitsImpl", "HareDu")].ShouldNotBeNull();
+            registrar.ObjectCache[GetKey("HareDu.Tests.Registration.TestImpl", "HareDu.Tests")].ShouldNotBeNull();
         }
 
-        [Test]
-        public void Verify_cannot_register_broker_object_1()
+        string GetKey(string className, string assembly)
         {
-            var registrar = new BrokerObjectRegistrar();
-            
-            registrar.Register<TestImpl>(null);
+            Type type = Type.GetType($"{className}, {assembly}");
 
-            registrar.ObjectCache.Count.ShouldBe(0);
-        }
-
-        [Test]
-        public void Verify_cannot_register_broker_object_2()
-        {
-            var registrar = new BrokerObjectRegistrar();
-
-            registrar.Register(typeof(TestImpl), null);
-
-            registrar.ObjectCache.Count.ShouldBe(0);
-        }
-
-        [Test]
-        public void Verify_cannot_register_broker_object_3()
-        {
-            var registrar = new BrokerObjectRegistrar();
-            
-            registrar.TryRegister<TestImpl>(null);
-
-            registrar.ObjectCache.Count.ShouldBe(0);
+            return type.GetIdentifier();
         }
     }
 

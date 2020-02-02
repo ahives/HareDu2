@@ -18,6 +18,7 @@ namespace HareDu
     using System.Linq;
     using System.Net.Http;
     using Core;
+    using Core.Extensions;
     using Core.Testing;
     using Registration;
 
@@ -25,12 +26,14 @@ namespace HareDu
         IBrokerObjectFactory
     {
         readonly HttpClient _client;
-        readonly IDictionary<string, object> _objectCache;
+        readonly IBrokerObjectRegistrar _registrar;
 
         public BrokerObjectFactory(HttpClient client, IBrokerObjectRegistrar registrar)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _objectCache = registrar.ObjectCache;
+            _registrar = registrar;
+            
+            _registrar.RegisterAll();
         }
 
         public T Object<T>()
@@ -44,14 +47,14 @@ namespace HareDu
             if (type == null)
                 throw new HareDuBrokerObjectInitException($"Failed to find implementation class for interface {typeof(T)}");
 
-            if (_objectCache.ContainsKey(type.FullName))
-                return (T)_objectCache[type.FullName];
+            string key = type.GetIdentifier();
             
-            var instance = (T)Activator.CreateInstance(type, _client);
-
-            _objectCache.Add(type.FullName, instance);
+            if (_registrar.ObjectCache.ContainsKey(key))
+                return (T)_registrar.ObjectCache[key];
             
-            return instance;
+            _registrar.Register(type, _client);
+            
+            return (T)_registrar.ObjectCache[key];
         }
 
         public void CancelPendingRequest()

@@ -50,6 +50,19 @@ namespace HareDu.Snapshotting.Tests
             
             builder.Register(x =>
                 {
+                    var finder = x.Resolve<IBrokerObjectTypeFinder>();
+                    var creator = x.Resolve<IBrokerObjectInstanceCreator>();
+                    var registrar = new BrokerObjectRegistrar(finder, creator);
+
+                    registrar.RegisterAll();
+
+                    return registrar;
+                })
+                .As<IBrokerObjectRegistrar>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
                     var comm = x.Resolve<IBrokerCommunication>();
                     var configProvider = x.Resolve<IBrokerConfigProvider>();
 
@@ -57,15 +70,15 @@ namespace HareDu.Snapshotting.Tests
                         throw new HareDuClientConfigurationException(
                             "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                    var registrar = new BrokerObjectRegistrar();
-
-                    registrar.RegisterAll(comm.GetClient(config));
-
-                    return registrar;
+                    return new BrokerObjectInstanceCreator(comm.GetClient(config));
                 })
-                .As<IBrokerObjectRegistrar>()
+                .As<IBrokerObjectInstanceCreator>()
                 .SingleInstance();
 
+            builder.RegisterType<BrokerObjectTypeFinder>()
+                .As<IBrokerObjectTypeFinder>()
+                .SingleInstance();
+            
             builder.RegisterType<SnapshotTypeFinder>()
                 .As<ISnapshotTypeFinder>()
                 .SingleInstance();

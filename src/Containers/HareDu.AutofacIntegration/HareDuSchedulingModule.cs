@@ -64,16 +64,11 @@ namespace HareDu.AutofacIntegration
             
             builder.Register(x =>
                 {
-                    var comm = x.Resolve<IBrokerCommunication>();
-                    var configProvider = x.Resolve<IBrokerConfigProvider>();
+                    var finder = x.Resolve<IBrokerObjectTypeFinder>();
+                    var creator = x.Resolve<IBrokerObjectInstanceCreator>();
+                    var registrar = new BrokerObjectRegistrar(finder, creator);
 
-                    if (!configProvider.TryGet(out var config))
-                        throw new HareDuClientConfigurationException(
-                            "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                    var registrar = new BrokerObjectRegistrar();
-
-                    registrar.RegisterAll(comm.GetClient(config));
+                    registrar.RegisterAll();
 
                     return registrar;
                 })
@@ -99,6 +94,24 @@ namespace HareDu.AutofacIntegration
                     return scheduler;
                 })
                 .As<IScheduler>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var comm = x.Resolve<IBrokerCommunication>();
+                    var configProvider = x.Resolve<IBrokerConfigProvider>();
+
+                    if (!configProvider.TryGet(out var config))
+                        throw new HareDuClientConfigurationException(
+                            "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                    return new BrokerObjectInstanceCreator(comm.GetClient(config));
+                })
+                .As<IBrokerObjectInstanceCreator>()
+                .SingleInstance();
+
+            builder.RegisterType<BrokerObjectTypeFinder>()
+                .As<IBrokerObjectTypeFinder>()
                 .SingleInstance();
 
             builder.RegisterType<SnapshotTypeFinder>()

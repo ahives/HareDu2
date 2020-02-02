@@ -17,41 +17,45 @@ namespace HareDu.Registration
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using Core;
     using Core.Extensions;
     using Core.Testing;
 
     public class BrokerObjectRegistrar :
         IBrokerObjectRegistrar
     {
+        readonly IBrokerObjectTypeFinder _finder;
+        readonly IBrokerObjectInstanceCreator _creator;
         readonly IDictionary<string, object> _cache;
 
         public IDictionary<string, object> ObjectCache => _cache;
 
-        public BrokerObjectRegistrar()
+        public BrokerObjectRegistrar(IBrokerObjectTypeFinder finder, IBrokerObjectInstanceCreator creator)
         {
+            _finder = finder;
+            _creator = creator;
             _cache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(HttpClient client)
+        public void RegisterAll()
         {
-            var types = GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
+            var types = _finder.GetTypes().ToList();
+            bool registered = true;
 
-            foreach (var type in types)
+            for (int i = 0; i < types.Count; i++)
             {
-                if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null || _cache.ContainsKey(type.FullName))
+                if (types[i].GetInterface(typeof(HareDuTestingFake).FullName) != null || _cache.ContainsKey(types[i].GetIdentifier()))
                     continue;
                 
-                RegisterInstance(type, client);
+                registered = RegisterInstance(types[i]) & registered;
             }
+
+            if (!registered)
+                _cache.Clear();
         }
 
         public void Register(Type type, HttpClient client)
         {
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return;
             
             RegisterInstance(type, client);
@@ -60,66 +64,88 @@ namespace HareDu.Registration
         public void Register<T>(HttpClient client)
         {
             Type type = typeof(T);
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return;
             
             RegisterInstance(type, client);
         }
 
-        public bool TryRegisterAll(HttpClient client)
+        public bool TryRegisterAll()
         {
-            if (client.IsNull())
-                return false;
-            
-            var types = GetType()
-                .Assembly
-                .GetTypes()
-                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
+            var types = _finder.GetTypes().ToList();
+            bool registered = true;
 
-            foreach (var type in types)
+            for (int i = 0; i < types.Count; i++)
             {
-                if (type.GetInterface(typeof(HareDuTestingFake).FullName) != null || _cache.ContainsKey(type.FullName))
+                if (types[i].GetInterface(typeof(HareDuTestingFake).FullName) != null || _cache.ContainsKey(types[i].GetIdentifier()))
                     continue;
                 
-                RegisterInstance(type, client);
+                registered = RegisterInstance(types[i]) & registered;
             }
 
-            return true;
+            if (!registered)
+                _cache.Clear();
+
+            return registered;
         }
 
         public bool TryRegister(Type type, HttpClient client)
         {
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return false;
             
-            RegisterInstance(type, client);
-            return true;
+            return RegisterInstance(type, client);
         }
 
         public bool TryRegister<T>(HttpClient client)
         {
             Type type = typeof(T);
-            if (_cache.ContainsKey(type.FullName))
+            if (_cache.ContainsKey(type.GetIdentifier()))
                 return false;
             
-            RegisterInstance(type, client);
-            return true;
+            return RegisterInstance(type, client);
         }
 
-        protected virtual void RegisterInstance(Type type, HttpClient client)
+        protected virtual bool RegisterInstance(Type type, HttpClient client)
         {
             try
             {
-                var instance = type.IsDerivedFrom(typeof(BaseBrokerObject))
-                    ? Activator.CreateInstance(type, client)
-                    : Activator.CreateInstance(type);
+                var instance = _creator.CreateInstance(type, client);
 
                 if (instance.IsNull())
-                    return;
-                
-                _cache.Add(type.FullName, instance);
+                    return false;
+
+                string key = type.GetIdentifier();
+
+                _cache.Add(key, instance);
+
+                return _cache.ContainsKey(key);
             }
-            catch { }
+            catch
+            {
+                return false;
+            }
+        }
+
+        protected virtual bool RegisterInstance(Type type)
+        {
+            try
+            {
+                var instance = _creator.CreateInstance(type);
+
+                if (instance.IsNull())
+                    return false;
+
+                string key = type.GetIdentifier();
+
+                _cache.Add(key, instance);
+
+                return _cache.ContainsKey(key);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

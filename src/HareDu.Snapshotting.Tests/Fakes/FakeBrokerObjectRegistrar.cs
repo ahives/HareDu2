@@ -30,7 +30,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             _cache = new Dictionary<string, object>();
         }
 
-        public void RegisterAll(HttpClient client)
+        public void RegisterAll()
         {
             _cache.Add(typeof(FakeNodeObject).FullName, new FakeNodeObject());
             _cache.Add(typeof(FakeSystemOverviewObject).FullName, new FakeSystemOverviewObject());
@@ -46,7 +46,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             throw new NotImplementedException();
         }
 
-        public bool TryRegisterAll(HttpClient client) => throw new NotImplementedException();
+        public bool TryRegisterAll() => throw new NotImplementedException();
 
         public bool TryRegister(Type type, HttpClient client) => throw new NotImplementedException();
 

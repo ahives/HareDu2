@@ -63,13 +63,16 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerCommunication();
                 var client = comm.GetClient(config.Broker);
 
-                var brokerObjectRegistrar = new BrokerObjectRegistrar();
-                brokerObjectRegistrar.RegisterAll(client);
+                var finder1 = new BrokerObjectTypeFinder();
+                var creator1 = new BrokerObjectInstanceCreator(client);
+                var brokerObjectRegistrar = new BrokerObjectRegistrar(finder1, creator1);
+
+                brokerObjectRegistrar.RegisterAll();
 
                 var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar);
-                var instanceCreator = new SnapshotInstanceCreator(brokerFactory);
+                var creator = new SnapshotInstanceCreator(brokerFactory);
                 var finder = _container.Resolve<ISnapshotTypeFinder>();
-                var snapshotObjectRegistrar = new SnapshotObjectRegistrar(instanceCreator, finder);
+                var snapshotObjectRegistrar = new SnapshotObjectRegistrar(finder, creator);
 
                 snapshotObjectRegistrar.RegisterAll();
 
@@ -92,17 +95,20 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var comm = new BrokerCommunication();
                 var client = comm.GetClient(config.Broker);
 
-                var brokerObjectRegistrar = new BrokerObjectRegistrar();
-                brokerObjectRegistrar.RegisterAll(client);
+                var finder1 = new BrokerObjectTypeFinder();
+                var creator1 = new BrokerObjectInstanceCreator(client);
+                var brokerObjectRegistrar = new BrokerObjectRegistrar(finder1, creator1);
+
+                brokerObjectRegistrar.RegisterAll();
 
                 var brokerFactory = new BrokerObjectFactory(client, brokerObjectRegistrar);
-                var instanceCreator = new SnapshotInstanceCreator(brokerFactory);
+                var creator = new SnapshotInstanceCreator(brokerFactory);
                 var finder = _container.Resolve<ISnapshotTypeFinder>();
-                var snapshotObjectRegistry = new SnapshotObjectRegistrar(instanceCreator, finder);
+                var snapshotObjectRegistrar = new SnapshotObjectRegistrar(finder, creator);
 
-                snapshotObjectRegistry.RegisterAll();
+                snapshotObjectRegistrar.RegisterAll();
 
-                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistry);
+                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistrar);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()

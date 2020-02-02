@@ -15,22 +15,18 @@ namespace HareDu.Registration
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.Http;
+    using System.Linq;
+    using Core;
 
-    public interface IBrokerObjectRegistrar
+    public class BrokerObjectTypeFinder :
+        IBrokerObjectTypeFinder
     {
-        IDictionary<string, object> ObjectCache { get; }
-
-        void RegisterAll();
-
-        void Register(Type type, HttpClient client);
-
-        void Register<T>(HttpClient client);
-
-        bool TryRegisterAll();
-        
-        bool TryRegister(Type type, HttpClient client);
-
-        bool TryRegister<T>(HttpClient client);
+        public IEnumerable<Type> GetTypes()
+        {
+            return GetType()
+                .Assembly
+                .GetTypes()
+                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && !x.IsInterface);
+        }
     }
 }

@@ -46,6 +46,8 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
 
+            services.AddBrokerObjectRegistrar();
+            
             services.AddBrokerObjectFactory();
 
             return services;
@@ -65,6 +67,8 @@ namespace HareDu.CoreIntegration
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+
+            services.AddBrokerObjectRegistrar(path);
 
             services.AddBrokerObjectFactory(path);
 
@@ -94,7 +98,7 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory();
 
-            services.AddSnapshotObjectRegistry();
+            services.AddSnapshotObjectRegistrar();
             
             services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
                 x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
@@ -129,7 +133,7 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory(path);
 
-            services.AddSnapshotObjectRegistry();
+            services.AddSnapshotObjectRegistrar();
 
             services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
                 x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
@@ -171,14 +175,14 @@ namespace HareDu.CoreIntegration
             
             services.AddBrokerObjectFactory(path);
 
-            services.AddSnapshotObjectRegistry();
+            services.AddSnapshotObjectRegistrar();
 
             services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
                 x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
-            services.AddDiagnosticAnalyzerRegistry(path);
+            services.AddDiagnosticAnalyzerRegistrar(path);
 
-            services.AddComponentDiagnosticRegistry();
+            services.AddComponentDiagnosticRegistrar();
 
             services.TryAddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
                 x.GetService<IDiagnosticProbeRegistrar>(),
@@ -218,14 +222,14 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory(path);
 
-            services.AddSnapshotObjectRegistry();
+            services.AddSnapshotObjectRegistrar();
 
             services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
                 x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
 
-            services.AddDiagnosticAnalyzerRegistry(path);
+            services.AddDiagnosticAnalyzerRegistrar(path);
 
-            services.AddComponentDiagnosticRegistry();
+            services.AddComponentDiagnosticRegistrar();
 
             services.TryAddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
                 x.GetService<IDiagnosticProbeRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
@@ -292,7 +296,7 @@ namespace HareDu.CoreIntegration
             });
         }
 
-        static void AddSnapshotObjectRegistry(this IServiceCollection services)
+        static void AddSnapshotObjectRegistrar(this IServiceCollection services)
         {
             services.TryAddSingleton<ISnapshotObjectRegistrar>(x =>
             {
@@ -304,7 +308,7 @@ namespace HareDu.CoreIntegration
             });
         }
 
-        static void AddDiagnosticAnalyzerRegistry(this IServiceCollection services, string path)
+        static void AddDiagnosticAnalyzerRegistrar(this IServiceCollection services, string path)
         {
             services.TryAddSingleton<IDiagnosticProbeRegistrar>(x =>
             {
@@ -321,12 +325,68 @@ namespace HareDu.CoreIntegration
             });
         }
 
-        static void AddComponentDiagnosticRegistry(this IServiceCollection services)
+        static void AddComponentDiagnosticRegistrar(this IServiceCollection services)
         {
             services.TryAddSingleton<IComponentDiagnosticRegistrar>(x =>
             {
                 var registrar = new ComponentDiagnosticRegistrar(x.GetService<IDiagnosticProbeRegistrar>());
                 
+                registrar.RegisterAll();
+
+                return registrar;
+            });
+        }
+
+        static void AddBrokerObjectRegistrar(this IServiceCollection services)
+        {
+            services.TryAddSingleton<IBrokerObjectInstanceCreator>(x =>
+            {
+                var configProvider = x.GetService<IBrokerConfigProvider>();
+                var comm = x.GetService<IBrokerCommunication>();
+
+                if (!configProvider.TryGet(out BrokerConfig config))
+                    throw new HareDuClientConfigurationException(
+                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                return new BrokerObjectInstanceCreator(comm.GetClient(config));
+            });
+            
+            services.TryAddSingleton<IBrokerObjectTypeFinder, BrokerObjectTypeFinder>();
+            
+            services.TryAddSingleton<IBrokerObjectRegistrar>(x =>
+            {
+                var finder = x.GetService<IBrokerObjectTypeFinder>();
+                var creator = x.GetService<IBrokerObjectInstanceCreator>();
+                var registrar = new BrokerObjectRegistrar(finder, creator);
+
+                registrar.RegisterAll();
+
+                return registrar;
+            });
+        }
+
+        static void AddBrokerObjectRegistrar(this IServiceCollection services, string path)
+        {
+            services.TryAddSingleton<IBrokerObjectInstanceCreator>(x =>
+            {
+                var configProvider = x.GetService<IBrokerConfigProvider>();
+                var comm = x.GetService<IBrokerCommunication>();
+
+                if (!configProvider.TryGet(path, out BrokerConfig config))
+                    throw new HareDuClientConfigurationException(
+                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                return new BrokerObjectInstanceCreator(comm.GetClient(config));
+            });
+            
+            services.TryAddSingleton<IBrokerObjectTypeFinder, BrokerObjectTypeFinder>();
+            
+            services.TryAddSingleton<IBrokerObjectRegistrar>(x =>
+            {
+                var finder = x.GetService<IBrokerObjectTypeFinder>();
+                var creator = x.GetService<IBrokerObjectInstanceCreator>();
+                var registrar = new BrokerObjectRegistrar(finder, creator);
+
                 registrar.RegisterAll();
 
                 return registrar;

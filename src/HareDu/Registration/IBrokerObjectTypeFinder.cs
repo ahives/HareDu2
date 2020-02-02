@@ -15,22 +15,9 @@ namespace HareDu.Registration
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.Http;
 
-    public interface IBrokerObjectRegistrar
+    public interface IBrokerObjectTypeFinder
     {
-        IDictionary<string, object> ObjectCache { get; }
-
-        void RegisterAll();
-
-        void Register(Type type, HttpClient client);
-
-        void Register<T>(HttpClient client);
-
-        bool TryRegisterAll();
-        
-        bool TryRegister(Type type, HttpClient client);
-
-        bool TryRegister<T>(HttpClient client);
+        IEnumerable<Type> GetTypes();
     }
 }

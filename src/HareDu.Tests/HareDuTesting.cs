@@ -37,7 +37,7 @@ namespace HareDu.Tests
                     
                     var client = connection.GetClient(config);
 
-                    registrar.RegisterAll(client);
+                    registrar.RegisterAll();
 
                     return new BrokerObjectFactory(client, registrar);
                 })
@@ -79,7 +79,7 @@ namespace HareDu.Tests
 
                     var client = connection.GetClient(config);
 
-                    registrar.RegisterAll(client);
+                    registrar.RegisterAll();
 
                     return new BrokerObjectFactory(client, registrar);
                 })
