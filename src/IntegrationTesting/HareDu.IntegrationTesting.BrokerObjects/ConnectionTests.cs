@@ -19,6 +19,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using AutofacIntegration;
     using Core.Extensions;
     using NUnit.Framework;
+    using Registration;
 
     [TestFixture]
     public class ConnectionTests

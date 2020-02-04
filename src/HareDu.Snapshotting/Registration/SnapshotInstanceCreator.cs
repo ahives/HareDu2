@@ -15,6 +15,7 @@ namespace HareDu.Snapshotting.Registration
 {
     using System;
     using Core.Extensions;
+    using HareDu.Registration;
     using Internal;
 
     public class SnapshotInstanceCreator :

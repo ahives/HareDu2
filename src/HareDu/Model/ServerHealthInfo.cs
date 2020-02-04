@@ -13,11 +13,9 @@
 // limitations under the License.
 namespace HareDu.Model
 {
-    using Core;
     using Newtonsoft.Json;
 
-    public interface ServerHealthInfo :
-        BrokerObject
+    public interface ServerHealthInfo
     {
         [JsonProperty("status")]
         string Status { get; }

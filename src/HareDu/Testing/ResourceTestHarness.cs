@@ -14,6 +14,7 @@
 namespace HareDu.Testing
 {
     using System;
+    using Registration;
 
     public abstract class ResourceTestHarness :
         IResourceTestHarness

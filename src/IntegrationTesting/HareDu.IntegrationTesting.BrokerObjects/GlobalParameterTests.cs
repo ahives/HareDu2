@@ -21,6 +21,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Core.Extensions;
     using Model;
     using NUnit.Framework;
+    using Registration;
 
     [TestFixture]
     public class GlobalParameterTests

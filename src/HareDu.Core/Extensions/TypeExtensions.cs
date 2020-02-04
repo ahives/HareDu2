@@ -31,5 +31,7 @@ namespace HareDu.Core.Extensions
 
             return false;
         }
+
+        public static Type Find(this Type[] types, Predicate<Type> predicate) => Array.Find(types, predicate);
     }
 }

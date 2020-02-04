@@ -99,13 +99,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
             var settings = provider.Init(x => { });
             var connectionClient = new BrokerCommunication();
             var client = connectionClient.GetClient(settings);
-            var finder = new BrokerObjectTypeFinder();
-            var creator = new BrokerObjectInstanceCreator(client);
-            var registrar = new BrokerObjectRegistrar(finder, creator);
-
-            registrar.RegisterAll();
             
-            var factory = new BrokerObjectFactory(client, registrar);
+            var factory = new BrokerObjectFactory(client);
             
             var result = await factory
                 .Object<Exchange>()

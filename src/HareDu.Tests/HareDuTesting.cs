@@ -17,7 +17,7 @@ namespace HareDu.Tests
     using Core;
     using Core.Configuration;
     using Fakes;
-    using HareDu.Registration;
+    using Registration;
 
     public class HareDuTesting
     {
@@ -27,7 +27,6 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var connection = x.Resolve<IBrokerCommunication>();
 
@@ -37,19 +36,13 @@ namespace HareDu.Tests
                     
                     var client = connection.GetClient(config);
 
-                    registrar.RegisterAll();
-
-                    return new BrokerObjectFactory(client, registrar);
+                    return new BrokerObjectFactory(client);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
             builder.Register(x => new FakeBrokerCommunication(path))
                 .As<IBrokerCommunication>()
-                .SingleInstance();
-
-            builder.RegisterType<BrokerObjectRegistrar>()
-                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()
@@ -69,7 +62,6 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var registrar = x.Resolve<IBrokerObjectRegistrar>();
                     var settingsProvider = x.Resolve<IBrokerConfigProvider>();
                     var connection = x.Resolve<IBrokerCommunication>();
 
@@ -79,19 +71,13 @@ namespace HareDu.Tests
 
                     var client = connection.GetClient(config);
 
-                    registrar.RegisterAll();
-
-                    return new BrokerObjectFactory(client, registrar);
+                    return new BrokerObjectFactory(client);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
             builder.Register(x => new FakeBrokerCommunication())
                 .As<IBrokerCommunication>()
-                .SingleInstance();
-
-            builder.RegisterType<BrokerObjectRegistrar>()
-                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()

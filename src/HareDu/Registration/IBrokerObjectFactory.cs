@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu
+namespace HareDu.Registration
 {
     using Core;
 
@@ -25,6 +25,8 @@ namespace HareDu
         /// <returns>An interface of resources available on a RabbitMQ server.</returns>
         T Object<T>()
             where T : BrokerObject;
+
+        bool IsRegistered(string key);
         
         /// <summary>
         /// Cancel pending running thread.

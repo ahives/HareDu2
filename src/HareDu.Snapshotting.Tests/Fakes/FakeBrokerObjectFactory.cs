@@ -15,6 +15,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
 {
     using Core;
     using Core.Testing;
+    using HareDu.Registration;
 
     public class FakeBrokerObjectFactory :
         IBrokerObjectFactory,
@@ -60,6 +61,8 @@ namespace HareDu.Snapshotting.Tests.Fakes
 
             return default;
         }
+
+        public bool IsRegistered(string key) => throw new System.NotImplementedException();
 
         public void CancelPendingRequest()
         {

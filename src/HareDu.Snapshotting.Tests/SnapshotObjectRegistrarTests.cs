@@ -21,7 +21,6 @@ namespace HareDu.Snapshotting.Tests
     using Fakes;
     using HareDu.Registration;
     using Moq;
-    using Moq.Protected;
     using NUnit.Framework;
     using Registration;
     using Shouldly;
@@ -43,40 +42,9 @@ namespace HareDu.Snapshotting.Tests
                     if (!settingsProvider.TryGet(out BrokerConfig settings))
                         throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                    return new BrokerObjectFactory(comm.GetClient(settings), x.Resolve<IBrokerObjectRegistrar>());
+                    return new BrokerObjectFactory(comm.GetClient(settings));
                 })
                 .As<IBrokerObjectFactory>()
-                .SingleInstance();
-            
-            builder.Register(x =>
-                {
-                    var finder = x.Resolve<IBrokerObjectTypeFinder>();
-                    var creator = x.Resolve<IBrokerObjectInstanceCreator>();
-                    var registrar = new BrokerObjectRegistrar(finder, creator);
-
-                    registrar.RegisterAll();
-
-                    return registrar;
-                })
-                .As<IBrokerObjectRegistrar>()
-                .SingleInstance();
-
-            builder.Register(x =>
-                {
-                    var comm = x.Resolve<IBrokerCommunication>();
-                    var configProvider = x.Resolve<IBrokerConfigProvider>();
-
-                    if (!configProvider.TryGet(out var config))
-                        throw new HareDuClientConfigurationException(
-                            "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                    return new BrokerObjectInstanceCreator(comm.GetClient(config));
-                })
-                .As<IBrokerObjectInstanceCreator>()
-                .SingleInstance();
-
-            builder.RegisterType<BrokerObjectTypeFinder>()
-                .As<IBrokerObjectTypeFinder>()
                 .SingleInstance();
             
             builder.RegisterType<SnapshotTypeFinder>()

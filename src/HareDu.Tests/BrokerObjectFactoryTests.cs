@@ -13,10 +13,15 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
+    using System;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using Core;
+    using Core.Extensions;
     using NUnit.Framework;
+    using Registration;
     using Shouldly;
 
     [TestFixture]
@@ -28,7 +33,7 @@ namespace HareDu.Tests
         public void Init()
         {
             var builder = new ContainerBuilder();
-            
+
             builder.RegisterModule<HareDuModule>();
 
             _container = builder.Build();
@@ -233,5 +238,87 @@ namespace HareDu.Tests
             impl.ShouldNotBeNull();
             impl.ShouldBeAssignableTo<VirtualHost>();
         }
+
+        [Test]
+        public void Verify_all_broker_objects_are_registered()
+        {
+            var factory = _container.Resolve<IBrokerObjectFactory>();
+
+            factory.IsRegistered("HareDu.Binding").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Channel").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Connection").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Consumer").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Exchange").ShouldBeTrue();
+            factory.IsRegistered("HareDu.GlobalParameter").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Memory").ShouldBeTrue();
+            factory.IsRegistered("HareDu.NodeHealth").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Node").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Policy").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Queue").ShouldBeTrue();
+            factory.IsRegistered("HareDu.ScopedParameter").ShouldBeTrue();
+            factory.IsRegistered("HareDu.ServerHealth").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Server").ShouldBeTrue();
+            factory.IsRegistered("HareDu.SystemOverview").ShouldBeTrue();
+            factory.IsRegistered("HareDu.TopicPermissions").ShouldBeTrue();
+            factory.IsRegistered("HareDu.User").ShouldBeTrue();
+            factory.IsRegistered("HareDu.UserPermissions").ShouldBeTrue();
+            factory.IsRegistered("HareDu.VirtualHost").ShouldBeTrue();
+            factory.IsRegistered("HareDu.VirtualHostLimits").ShouldBeTrue();
+            // factory.IsRegistered().ShouldBeTrue();
+        }
+
+        [Test]
+        public void Verify_can_register_new_broker_objects()
+        {
+            var factory = _container.Resolve<IBrokerObjectFactory>();
+
+            factory.IsRegistered("HareDu.Binding").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Channel").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Connection").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Consumer").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Exchange").ShouldBeTrue();
+            factory.IsRegistered("HareDu.GlobalParameter").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Memory").ShouldBeTrue();
+            factory.IsRegistered("HareDu.NodeHealth").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Node").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Policy").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Queue").ShouldBeTrue();
+            factory.IsRegistered("HareDu.ScopedParameter").ShouldBeTrue();
+            factory.IsRegistered("HareDu.ServerHealth").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Server").ShouldBeTrue();
+            factory.IsRegistered("HareDu.SystemOverview").ShouldBeTrue();
+            factory.IsRegistered("HareDu.TopicPermissions").ShouldBeTrue();
+            factory.IsRegistered("HareDu.User").ShouldBeTrue();
+            factory.IsRegistered("HareDu.UserPermissions").ShouldBeTrue();
+            factory.IsRegistered("HareDu.VirtualHost").ShouldBeTrue();
+            factory.IsRegistered("HareDu.VirtualHostLimits").ShouldBeTrue();
+
+            factory.Object<TestBrokerObject>();
+            factory.IsRegistered("HareDu.Tests.TestBrokerObject").ShouldBeTrue();
+        }
+        // _cache.Add(typeof(FakeNodeObject).FullName, new FakeNodeObject());
+        // _cache.Add(typeof(FakeSystemOverviewObject).FullName, new FakeSystemOverviewObject());
+
+        string GetKey(string className, string assembly)
+        {
+            Type type = Type.GetType($"{className}, {assembly}");
+
+            return type.GetIdentifier();
+        }
+    }
+
+    class TestImpl :
+        BaseBrokerObject,
+        TestBrokerObject
+    {
+        public TestImpl(HttpClient client)
+            : base(client)
+        {
+        }
+    }
+
+    interface TestBrokerObject :
+        BrokerObject
+    {
     }
 }

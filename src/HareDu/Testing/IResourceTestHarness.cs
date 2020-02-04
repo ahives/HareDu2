@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Testing
 {
+    using Registration;
+
     public interface IResourceTestHarness
     {
         IBrokerObjectFactory Client { get; }

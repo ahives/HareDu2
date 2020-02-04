@@ -20,6 +20,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Core;
     using Model;
     using NUnit.Framework;
+    using Registration;
 
     [TestFixture]
     public class ServerTests

@@ -16,6 +16,7 @@ namespace HareDu.Tests
     using Autofac;
     using Core.Extensions;
     using NUnit.Framework;
+    using Registration;
     using Shouldly;
 
     [TestFixture]

@@ -16,12 +16,9 @@ namespace HareDu.Snapshotting.Tests
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Autofac;
-    using Extensions;
     using Fakes;
     using HareDu.Registration;
-    using Model;
     using NUnit.Framework;
-    using Observers;
     using Registration;
     using Shouldly;
     using Snapshotting.Extensions;
@@ -38,10 +35,6 @@ namespace HareDu.Snapshotting.Tests
 
             builder.RegisterType<FakeSnapshotObjectRegistrar>()
                 .As<ISnapshotObjectRegistrar>()
-                .SingleInstance();
-
-            builder.RegisterType<FakeBrokerObjectRegistrar>()
-                .As<IBrokerObjectRegistrar>()
                 .SingleInstance();
             
             builder.Register(x => new FakeBrokerObjectFactory())

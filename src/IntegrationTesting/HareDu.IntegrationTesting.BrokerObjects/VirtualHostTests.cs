@@ -20,6 +20,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Core;
     using Core.Extensions;
     using NUnit.Framework;
+    using Registration;
 
     [TestFixture]
     public class VirtualHostTests
