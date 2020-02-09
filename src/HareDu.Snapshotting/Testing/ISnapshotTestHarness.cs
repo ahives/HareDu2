@@ -13,6 +13,8 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Testing
 {
+    using Registration;
+
     public interface ISnapshotTestHarness
     {
         ISnapshotFactory Client { get; }

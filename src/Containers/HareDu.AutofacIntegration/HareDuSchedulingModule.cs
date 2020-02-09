@@ -39,28 +39,13 @@ namespace HareDu.AutofacIntegration
                     if (!settingsProvider.TryGet(out BrokerConfig settings))
                         throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
-                    // return new BrokerObjectFactory(comm.GetClient(settings), x.Resolve<IBrokerObjectRegistrar>());
                     return new BrokerObjectFactory(comm.GetClient(settings));
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x => new SnapshotFactory(
-                    x.Resolve<IBrokerObjectFactory>(), x.Resolve<ISnapshotObjectRegistrar>()))
+            builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
                 .As<ISnapshotFactory>()
-                .SingleInstance();
-
-            builder.Register(x =>
-                {
-                    var creator = x.Resolve<ISnapshotInstanceCreator>();
-                    var finder = x.Resolve<ISnapshotTypeFinder>();
-                    var registrar = new SnapshotObjectRegistrar(finder, creator);
-
-                    registrar.RegisterAll();
-
-                    return registrar;
-                })
-                .As<ISnapshotObjectRegistrar>()
                 .SingleInstance();
 
             builder.Register(x =>
@@ -82,14 +67,6 @@ namespace HareDu.AutofacIntegration
                     return scheduler;
                 })
                 .As<IScheduler>()
-                .SingleInstance();
-
-            builder.RegisterType<SnapshotTypeFinder>()
-                .As<ISnapshotTypeFinder>()
-                .SingleInstance();
-
-            builder.RegisterType<SnapshotInstanceCreator>()
-                .As<ISnapshotInstanceCreator>()
                 .SingleInstance();
 
             builder.RegisterType<SnapshotWriter>()

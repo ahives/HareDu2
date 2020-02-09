@@ -132,7 +132,7 @@ namespace HareDu.Registration
         {
             var types = findType.Assembly.GetTypes();
             var @interfaces = types
-                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && x.IsInterface && !ValueExtensions.IsNull<Type>(x))
+                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && x.IsInterface && !x.IsNull())
                 .ToList();
             var typeMap = new Dictionary<string, Type>();
 

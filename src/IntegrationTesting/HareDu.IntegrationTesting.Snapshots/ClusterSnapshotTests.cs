@@ -19,6 +19,7 @@ namespace HareDu.IntegrationTesting.Snapshots
     using NUnit.Framework;
     using Snapshotting;
     using Snapshotting.Observers;
+    using Snapshotting.Registration;
 
     [TestFixture]
     public class ClusterSnapshotTests

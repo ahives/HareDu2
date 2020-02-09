@@ -14,6 +14,7 @@
 namespace HareDu.Snapshotting.Testing
 {
     using System;
+    using Registration;
 
     public abstract class SnapshotTestHarness :
         ISnapshotTestHarness

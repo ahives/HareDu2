@@ -22,6 +22,7 @@ namespace HareDu.Scheduling
     using Quartz.Spi;
     using Snapshotting;
     using Snapshotting.Persistence;
+    using Snapshotting.Registration;
 
     public class HareDuJobFactory<T> :
         SimpleJobFactory

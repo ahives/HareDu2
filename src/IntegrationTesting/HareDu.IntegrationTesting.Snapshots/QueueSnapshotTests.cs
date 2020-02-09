@@ -64,13 +64,7 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var client = comm.GetClient(config.Broker);
 
                 var brokerFactory = new BrokerObjectFactory(client);
-                var creator = new SnapshotInstanceCreator(brokerFactory);
-                var finder = _container.Resolve<ISnapshotTypeFinder>();
-                var snapshotObjectRegistrar = new SnapshotObjectRegistrar(finder, creator);
-
-                snapshotObjectRegistrar.RegisterAll();
-
-                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistrar);
+                var factory = new SnapshotFactory(brokerFactory);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()
@@ -90,13 +84,7 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var client = comm.GetClient(config.Broker);
 
                 var brokerFactory = new BrokerObjectFactory(client);
-                var creator = new SnapshotInstanceCreator(brokerFactory);
-                var finder = _container.Resolve<ISnapshotTypeFinder>();
-                var snapshotObjectRegistrar = new SnapshotObjectRegistrar(finder, creator);
-
-                snapshotObjectRegistrar.RegisterAll();
-
-                var factory = new SnapshotFactory(brokerFactory, snapshotObjectRegistrar);
+                var factory = new SnapshotFactory(brokerFactory);
 
                 var resource = factory
                     .Snapshot<BrokerQueues>()

@@ -13,28 +13,9 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Registration
 {
-    using System;
-    using Core.Extensions;
-    using HareDu.Registration;
-    using Internal;
-
-    public class SnapshotInstanceCreator :
-        ISnapshotInstanceCreator
+    public interface ISnapshotFactory
     {
-        readonly IBrokerObjectFactory _factory;
-
-        public SnapshotInstanceCreator(IBrokerObjectFactory factory)
-        {
-            _factory = factory;
-        }
-
-        public object CreateInstance(Type type)
-        {
-            var instance = type.IsDerivedFrom(typeof(BaseSnapshot<>))
-                ? Activator.CreateInstance(type, _factory)
-                : Activator.CreateInstance(type);
-            
-            return instance;
-        }
+        T Snapshot<T>()
+            where T : HareDuSnapshot<Snapshot>;
     }
 }

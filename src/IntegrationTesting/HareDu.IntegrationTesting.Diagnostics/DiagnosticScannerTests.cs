@@ -27,6 +27,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Snapshotting;
     using Snapshotting.Extensions;
     using Snapshotting.Observers;
+    using Snapshotting.Registration;
 
     [TestFixture]
     public class DiagnosticScannerTests

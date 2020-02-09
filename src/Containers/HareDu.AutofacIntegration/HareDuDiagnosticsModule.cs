@@ -48,8 +48,7 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x => new SnapshotFactory(
-                    x.Resolve<IBrokerObjectFactory>(), x.Resolve<ISnapshotObjectRegistrar>()))
+            builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 
@@ -79,27 +78,6 @@ namespace HareDu.AutofacIntegration
                     return registrar;
                 })
                 .As<IComponentDiagnosticRegistrar>()
-                .SingleInstance();
-
-            builder.Register(x =>
-                {
-                    var creator = x.Resolve<ISnapshotInstanceCreator>();
-                    var finder = x.Resolve<ISnapshotTypeFinder>();
-                    var registrar = new SnapshotObjectRegistrar(finder, creator);
-
-                    registrar.RegisterAll();
-
-                    return registrar;
-                })
-                .As<ISnapshotObjectRegistrar>()
-                .SingleInstance();
-
-            builder.RegisterType<SnapshotTypeFinder>()
-                .As<ISnapshotTypeFinder>()
-                .SingleInstance();
-
-            builder.RegisterType<SnapshotInstanceCreator>()
-                .As<ISnapshotInstanceCreator>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerCommunication>()

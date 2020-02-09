@@ -18,6 +18,7 @@ namespace HareDu.Scheduling
     using Snapshotting;
     using Snapshotting.Extensions;
     using Snapshotting.Persistence;
+    using Snapshotting.Registration;
 
     public class PersistSnapshotJob<T> :
         IJob

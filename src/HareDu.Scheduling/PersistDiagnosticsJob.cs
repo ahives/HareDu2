@@ -19,6 +19,7 @@ namespace HareDu.Scheduling
     using Quartz;
     using Snapshotting;
     using Snapshotting.Extensions;
+    using Snapshotting.Registration;
 
     public class PersistDiagnosticsJob<T> :
         IJob

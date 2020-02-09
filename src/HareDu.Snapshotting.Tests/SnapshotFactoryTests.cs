@@ -16,7 +16,9 @@ namespace HareDu.Snapshotting.Tests
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using Fakes;
     using NUnit.Framework;
+    using Registration;
     using Shouldly;
 
     [TestFixture]
@@ -35,7 +37,7 @@ namespace HareDu.Snapshotting.Tests
         }
 
         [Test]
-        public async Task Verify_can_return_BrokerConnection_broker_object()
+        public async Task Verify_can_return_BrokerConnection_snapshot()
         {
             var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerConnectivity>();
@@ -45,7 +47,7 @@ namespace HareDu.Snapshotting.Tests
         }
 
         [Test]
-        public async Task Verify_can_return_BrokerQueues_broker_object()
+        public async Task Verify_can_return_BrokerQueues_snapshot()
         {
             var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<BrokerQueues>();
@@ -55,13 +57,23 @@ namespace HareDu.Snapshotting.Tests
         }
 
         [Test]
-        public async Task Verify_can_return_Cluster_broker_object()
+        public async Task Verify_can_return_Cluster_snapshot()
         {
             var snapshot = _container.Resolve<ISnapshotFactory>()
                 .Snapshot<Cluster>();
 
             snapshot.ShouldNotBeNull();
             snapshot.ShouldBeAssignableTo<Cluster>();
+        }
+
+        [Test]
+        public async Task Verify_can_return_new_snapshots()
+        {
+            var snapshot = _container.Resolve<ISnapshotFactory>()
+                .Snapshot<FakeBrokerSnapshot>();
+
+            snapshot.ShouldNotBeNull();
+            snapshot.ShouldBeAssignableTo<FakeBrokerSnapshot>();
         }
     }
 }

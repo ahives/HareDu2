@@ -78,12 +78,6 @@ namespace HareDu.CoreIntegration
         /// <returns></returns>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services)
         {
-            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
-            
-            services.TryAddSingleton<ISnapshotInstanceCreator, SnapshotInstanceCreator>();
-            
-            services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
-            
             services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -91,11 +85,8 @@ namespace HareDu.CoreIntegration
             services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
 
             services.AddBrokerObjectFactory();
-
-            services.AddSnapshotObjectRegistrar();
             
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
-                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
+            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
 
             services.TryAddSingleton<ISnapshotWriter, SnapshotWriter>();
 
@@ -111,12 +102,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
-            
-            services.TryAddSingleton<ISnapshotInstanceCreator, SnapshotInstanceCreator>();
-            
-            services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
-            
             services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -125,10 +110,7 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory(path);
 
-            services.AddSnapshotObjectRegistrar();
-
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
-                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
+            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
 
             services.TryAddSingleton<ISnapshotWriter, SnapshotWriter>();
 
@@ -143,12 +125,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
-            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
-            
-            services.TryAddSingleton<ISnapshotInstanceCreator, SnapshotInstanceCreator>();
-            
-            services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
-            
             services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -165,10 +141,7 @@ namespace HareDu.CoreIntegration
             
             services.AddBrokerObjectFactory(path);
 
-            services.AddSnapshotObjectRegistrar();
-
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
-                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
+            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
 
             services.AddDiagnosticAnalyzerRegistrar(path);
 
@@ -192,10 +165,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<ISnapshotTypeFinder, SnapshotTypeFinder>();
-            
-            services.TryAddSingleton<ISnapshotObjectRegistrar, SnapshotObjectRegistrar>();
-            
             services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -210,10 +179,7 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory(path);
 
-            services.AddSnapshotObjectRegistrar();
-
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(
-                x.GetService<IBrokerObjectFactory>(), x.GetService<ISnapshotObjectRegistrar>()));
+            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
 
             services.AddDiagnosticAnalyzerRegistrar(path);
 
@@ -281,18 +247,6 @@ namespace HareDu.CoreIntegration
                         "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
 
                 return new BrokerObjectFactory(comm.GetClient(config));
-            });
-        }
-
-        static void AddSnapshotObjectRegistrar(this IServiceCollection services)
-        {
-            services.TryAddSingleton<ISnapshotObjectRegistrar>(x =>
-            {
-                var registrar = new SnapshotObjectRegistrar(x.GetService<ISnapshotTypeFinder>(), x.GetService<ISnapshotInstanceCreator>());
-                
-                registrar.RegisterAll();
-
-                return registrar;
             });
         }
 
