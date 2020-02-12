@@ -21,14 +21,14 @@ namespace HareDu.Diagnostics.Scanning
     using Snapshotting.Model;
 
     public class BrokerQueuesDiagnostic :
-        IComponentDiagnostic<BrokerQueuesSnapshot>
+        ComponentDiagnostic<BrokerQueuesSnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticProbe> _queueProbes;
-        readonly List<IDiagnosticProbe> _exchangeProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _queueProbes;
+        readonly List<DiagnosticProbe> _exchangeProbes;
 
-        public BrokerQueuesDiagnostic(IReadOnlyList<IDiagnosticProbe> probes)
+        public BrokerQueuesDiagnostic(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));
@@ -55,12 +55,12 @@ namespace HareDu.Diagnostics.Scanning
             return results;
         }
 
-        bool IsExchangeProbe(IDiagnosticProbe probe) =>
+        bool IsExchangeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Exchange;
 
-        bool IsQueueProbe(IDiagnosticProbe probe) =>
+        bool IsQueueProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Queue;

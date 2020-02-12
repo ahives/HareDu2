@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class BlockedConnectionProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Blocked Connection Analyzer";

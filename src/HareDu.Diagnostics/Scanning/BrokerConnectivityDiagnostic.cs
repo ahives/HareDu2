@@ -21,15 +21,15 @@ namespace HareDu.Diagnostics.Scanning
     using Snapshotting.Model;
 
     public class BrokerConnectivityDiagnostic :
-        IComponentDiagnostic<BrokerConnectivitySnapshot>
+        ComponentDiagnostic<BrokerConnectivitySnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticProbe> _channelProbes;
-        readonly IReadOnlyList<IDiagnosticProbe> _connectionProbes;
-        readonly IReadOnlyList<IDiagnosticProbe> _connectivityProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _channelProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _connectionProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _connectivityProbes;
 
-        public BrokerConnectivityDiagnostic(IReadOnlyList<IDiagnosticProbe> probes)
+        public BrokerConnectivityDiagnostic(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));
@@ -73,19 +73,19 @@ namespace HareDu.Diagnostics.Scanning
             return results;
         }
 
-        bool IsChannelThroughputProbe(IDiagnosticProbe probe) =>
+        bool IsChannelThroughputProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Channel
             && probe.Category != DiagnosticProbeCategory.Connectivity;
 
-        bool IsConnectionThroughputProbe(IDiagnosticProbe probe) =>
+        bool IsConnectionThroughputProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Connection
             && probe.Category != DiagnosticProbeCategory.Connectivity;
 
-        bool IsConnectivityProbe(IDiagnosticProbe probe) =>
+        bool IsConnectivityProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && (probe.ComponentType == ComponentType.Connection || probe.ComponentType == ComponentType.Channel)

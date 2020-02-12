@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class ChannelLimitReachedProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Channel Limit Reached Analyzer";

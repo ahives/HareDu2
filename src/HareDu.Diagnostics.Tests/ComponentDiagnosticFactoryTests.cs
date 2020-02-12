@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Tests
     [TestFixture]
     public class ComponentDiagnosticFactoryTests
     {
-        IReadOnlyList<IDiagnosticProbe> _probes;
+        IReadOnlyList<DiagnosticProbe> _probes;
         IContainer _container;
 
         [OneTimeSetUp]
@@ -49,7 +49,7 @@ namespace HareDu.Diagnostics.Tests
             
             configProvider.TryGet(path, out HareDuConfig config);
 
-            _probes = new List<IDiagnosticProbe>
+            _probes = new List<DiagnosticProbe>
             {
                 new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
@@ -112,21 +112,22 @@ namespace HareDu.Diagnostics.Tests
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
-            var diagnosticAnalyzerRegistry = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
-            diagnosticAnalyzerRegistry.RegisterAll();
-            
-            var diagnosticRegistry = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistry);
-            diagnosticRegistry.RegisterAll();
-            diagnosticRegistry.Register<FakeDiagnostic>();
+            // var diagnosticAnalyzerRegistry = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
+            // diagnosticAnalyzerRegistry.RegisterAll();
+            //
+            // var diagnosticRegistry = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistry);
+            // diagnosticRegistry.RegisterAll();
+            // diagnosticRegistry.Register<FakeDiagnostic>();
 
-            var factory = new ComponentDiagnosticFactory(diagnosticAnalyzerRegistry, diagnosticRegistry);
+            // var factory = new ComponentDiagnosticFactory(diagnosticAnalyzerRegistry, diagnosticRegistry);
+            var factory = new ComponentDiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
         class FakeDiagnostic :
-            IComponentDiagnostic<FakeSnapshot>
+            ComponentDiagnostic<FakeSnapshot>
         {
             public string Identifier => GetType().GetIdentifier();
 

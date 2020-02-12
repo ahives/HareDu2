@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class ChannelThrottlingProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Channel Throttling Analyzer";

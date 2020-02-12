@@ -143,13 +143,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
 
-            services.AddDiagnosticAnalyzerRegistrar(path);
-
-            services.AddComponentDiagnosticRegistrar();
-
-            services.TryAddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
-                x.GetService<IDiagnosticProbeRegistrar>(),
-                x.GetService<IComponentDiagnosticRegistrar>()));
+            services.AddDiagnostics(path);
 
             services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
 
@@ -181,12 +175,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
 
-            services.AddDiagnosticAnalyzerRegistrar(path);
-
-            services.AddComponentDiagnosticRegistrar();
-
-            services.TryAddSingleton<IComponentDiagnosticFactory>(x => new ComponentDiagnosticFactory(
-                x.GetService<IDiagnosticProbeRegistrar>(), x.GetService<IComponentDiagnosticRegistrar>()));
+            services.AddDiagnostics(path);
 
             services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
             
@@ -250,32 +239,17 @@ namespace HareDu.CoreIntegration
             });
         }
 
-        static void AddDiagnosticAnalyzerRegistrar(this IServiceCollection services, string path)
+        static void AddDiagnostics(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IDiagnosticProbeRegistrar>(x =>
+            services.TryAddSingleton<IComponentDiagnosticFactory>(x =>
             {
                 var configProvider = x.GetService<IConfigurationProvider>();
 
                 configProvider.TryGet(path, out HareDuConfig config);
 
                 var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
-                var registrar = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
                 
-                registrar.RegisterAll();
-
-                return registrar;
-            });
-        }
-
-        static void AddComponentDiagnosticRegistrar(this IServiceCollection services)
-        {
-            services.TryAddSingleton<IComponentDiagnosticRegistrar>(x =>
-            {
-                var registrar = new ComponentDiagnosticRegistrar(x.GetService<IDiagnosticProbeRegistrar>());
-                
-                registrar.RegisterAll();
-
-                return registrar;
+                return new ComponentDiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
             });
         }
     }

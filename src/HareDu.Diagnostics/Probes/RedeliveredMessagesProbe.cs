@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class RedeliveredMessagesProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();

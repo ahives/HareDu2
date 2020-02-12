@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class NetworkPartitionProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Network Partition Analyzer";

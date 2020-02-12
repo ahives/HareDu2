@@ -18,6 +18,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Diagnostics.Registration;
     using Fakes;
     using NUnit.Framework;
     using Scanning;
@@ -87,7 +88,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         class FakeDiagnosticFactory :
             IComponentDiagnosticFactory
         {
-            public bool TryGet<T>(out IComponentDiagnostic<T> diagnostic)
+            public bool TryGet<T>(out ComponentDiagnostic<T> diagnostic)
                 where T : Snapshot
             {
                 diagnostic = new NoOpDiagnostic<T>();

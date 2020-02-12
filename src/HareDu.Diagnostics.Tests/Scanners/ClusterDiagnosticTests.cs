@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class ClusterDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticProbe> _probes;
+        IReadOnlyList<DiagnosticProbe> _probes;
 
         [OneTimeSetUp]
         public void Init()
@@ -40,7 +40,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _probes = new List<IDiagnosticProbe>
+            _probes = new List<DiagnosticProbe>
             {
                 new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider),
                 new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),

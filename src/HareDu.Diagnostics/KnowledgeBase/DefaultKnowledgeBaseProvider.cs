@@ -135,7 +135,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
         class KnowledgeBaseArticleImpl<T> :
             KnowledgeBaseArticle
-            where T : IDiagnosticProbe
+            where T : DiagnosticProbe
         {
             public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason, string remediation)
             {

@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerQueuesDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticProbe> _probes;
+        IReadOnlyList<DiagnosticProbe> _probes;
 
         [OneTimeSetUp]
         public void Init()
@@ -40,7 +40,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _probes = new List<IDiagnosticProbe>
+            _probes = new List<DiagnosticProbe>
             {
                 new QueueGrowthProbe(config.Diagnostics, knowledgeBaseProvider),
                 new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider),

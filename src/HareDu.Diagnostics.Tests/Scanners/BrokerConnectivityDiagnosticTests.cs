@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerConnectivityDiagnosticTests
     {
-        IReadOnlyList<IDiagnosticProbe> _analyzers;
+        IReadOnlyList<DiagnosticProbe> _analyzers;
 
         [OneTimeSetUp]
         public void Init()
@@ -40,7 +40,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _analyzers = new List<IDiagnosticProbe>
+            _analyzers = new List<DiagnosticProbe>
             {
                 new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),

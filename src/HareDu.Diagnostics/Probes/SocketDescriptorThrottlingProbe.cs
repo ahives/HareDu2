@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class SocketDescriptorThrottlingProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();

@@ -14,16 +14,22 @@
 namespace HareDu.IntegrationTesting.Diagnostics
 {
     using System;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
+    using Core;
+    using Core.Configuration;
     using CoreIntegration;
     using HareDu.Diagnostics;
     using HareDu.Diagnostics.Formatting;
+    using HareDu.Diagnostics.KnowledgeBase;
+    using HareDu.Diagnostics.Registration;
     using HareDu.Diagnostics.Scanning;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using Registration;
     using Snapshotting;
     using Snapshotting.Extensions;
     using Snapshotting.Observers;
@@ -102,6 +108,30 @@ namespace HareDu.IntegrationTesting.Diagnostics
 //                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Remediation);
 //                }
 //            }
+        }
+        
+        [Test]
+        public async Task Test3()
+        {
+            var configProvider = new ConfigurationProvider();
+            configProvider.TryGet($"{Directory.GetCurrentDirectory()}/config.yaml", out HareDuConfig config);
+
+            var comm = new BrokerCommunication();
+            var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
+
+            var resource = factory.Snapshot<BrokerConnectivity>().Execute();
+            
+            IDiagnosticScanner scanner = new DiagnosticScanner(
+                new ComponentDiagnosticFactory(config.Diagnostics, new DefaultKnowledgeBaseProvider()));
+
+            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var report = scanner.Scan(snapshot);
+
+            var formatter = new DiagnosticReportTextFormatter();
+
+            string formattedReport = formatter.Format(report);
+            
+            Console.WriteLine(formattedReport);
         }
     }
 }

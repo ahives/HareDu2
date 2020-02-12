@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class UnroutableMessageProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Unroutable Message Analyzer";

@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class HighConnectionCreationRateProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();

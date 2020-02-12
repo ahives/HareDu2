@@ -15,17 +15,16 @@ namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
+    using Scanning;
+    using Snapshotting;
 
-    public interface IComponentDiagnosticRegistrar
+    public interface IComponentDiagnosticFactory
     {
-        IReadOnlyList<Type> Types { get; }
-        
-        IDictionary<string, object> ObjectCache { get; }
+        bool TryGet<T>(out ComponentDiagnostic<T> diagnostic)
+            where T : Snapshot;
 
-        void RegisterAll();
+        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers);
 
-        void Register(Type type);
-
-        void Register<T>();
+        void RegisterObserver(IObserver<DiagnosticProbeContext> observer);
     }
 }

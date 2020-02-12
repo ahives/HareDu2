@@ -115,10 +115,10 @@ namespace HareDu.Snapshotting.Registration
                         x.IsGenericType && x.GetGenericTypeDefinition() == typeof(HareDuSnapshot<>)))
                     continue;
                 
-                if (interfaces.ContainsKey(type.FullName.Trim()))
+                if (interfaces.ContainsKey(type.FullName))
                     continue;
                     
-                interfaces.Add(type.FullName.Trim(), type);
+                interfaces.Add(type.FullName, type);
             }
 
             var typeMap = new Dictionary<string, Type>();

@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class AvailableCpuCoresProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Available CPU Cores Analyzer";

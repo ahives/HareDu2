@@ -21,17 +21,17 @@ namespace HareDu.Diagnostics.Scanning
     using Snapshotting.Model;
 
     public class ClusterDiagnostic :
-        IComponentDiagnostic<ClusterSnapshot>
+        ComponentDiagnostic<ClusterSnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
 
-        readonly IReadOnlyList<IDiagnosticProbe> _nodeProbes;
-        readonly IReadOnlyList<IDiagnosticProbe> _diskProbes;
-        readonly IReadOnlyList<IDiagnosticProbe> _memoryProbes;
-        readonly IReadOnlyList<IDiagnosticProbe> _runtimeProbes;
-        readonly IReadOnlyList<IDiagnosticProbe> _operatingSystemProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _nodeProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _diskProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _memoryProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _runtimeProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _operatingSystemProbes;
 
-        public ClusterDiagnostic(IReadOnlyList<IDiagnosticProbe> probes)
+        public ClusterDiagnostic(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));
@@ -73,27 +73,27 @@ namespace HareDu.Diagnostics.Scanning
             return results;
         }
 
-        bool IsOperatingSystemProbe(IDiagnosticProbe probe) =>
+        bool IsOperatingSystemProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.OperatingSystem;
 
-        bool IsRuntimeProbe(IDiagnosticProbe probe) =>
+        bool IsRuntimeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Runtime;
 
-        bool IsMemoryProbe(IDiagnosticProbe probe) =>
+        bool IsMemoryProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Memory;
 
-        bool IsDiskProbe(IDiagnosticProbe probe) =>
+        bool IsDiskProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Disk;
 
-        bool IsNodeProbe(IDiagnosticProbe probe) =>
+        bool IsNodeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
             && probe.Status == DiagnosticProbeStatus.Online
             && probe.ComponentType == ComponentType.Node;

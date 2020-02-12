@@ -18,7 +18,7 @@ namespace HareDu.Diagnostics.Scanning
     using Snapshotting;
 
     public class NoOpDiagnostic<T> :
-        IComponentDiagnostic<T>
+        ComponentDiagnostic<T>
         where T : Snapshot
     {
         public string Identifier => GetType().GetIdentifier();

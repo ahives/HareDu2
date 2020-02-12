@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class MessagePagingProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Message Paging Analyzer";

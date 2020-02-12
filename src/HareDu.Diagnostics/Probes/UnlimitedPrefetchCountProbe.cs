@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class UnlimitedPrefetchCountProbe :
         BaseDiagnosticProbe,
-        IDiagnosticProbe
+        DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
         public string Name => "Unlimited Prefetch Count Analyzer";
