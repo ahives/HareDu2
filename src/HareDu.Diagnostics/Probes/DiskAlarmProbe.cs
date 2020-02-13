@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public DiskAlarmProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public DiskAlarmProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             DiskSnapshot data = snapshot as DiskSnapshot;
             DiagnosticProbeResult result;
 
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Disk.FreeAlarm", data.AlarmInEffect.ToString()),
                 new DiagnosticProbeDataImpl("Disk.Limit", data.Limit.ToString()),
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Probes
                     null,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Probes
                     null,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

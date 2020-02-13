@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot3(0.5M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(ConsumerUtilizationProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot3(0.4M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(ConsumerUtilizationProbe).GetIdentifier());
@@ -88,11 +88,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot3(1.0M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(ConsumerUtilizationProbe).GetIdentifier());

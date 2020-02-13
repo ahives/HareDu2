@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Efficiency;
         public DiagnosticProbeStatus Status => _status;
 
-        public UnroutableMessageProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public UnroutableMessageProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Probes
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Churn.NotRouted.Total", data.Churn.NotRouted.Total.ToString())
             };
@@ -56,7 +56,7 @@ namespace HareDu.Diagnostics.Probes
                     null,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -66,7 +66,7 @@ namespace HareDu.Diagnostics.Probes
                     null,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

@@ -66,7 +66,7 @@ namespace HareDu.Analytics.Analyzers
         {
             foreach (var result in results)
             {
-                if (_supportedAnalyzers.Contains(result.AnalyzerIdentifier))
+                if (_supportedAnalyzers.Contains(result.ProbeIdentifier))
                     yield return result;
             }
         }

@@ -37,10 +37,6 @@ namespace HareDu.Diagnostics.Tests.Probes
             builder.RegisterType<DefaultKnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
-
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
-                .SingleInstance();
             
             _container = builder.Build();
         }
@@ -48,12 +44,8 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_sensor_red_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new NetworkPartitionProbe(knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>
             {
@@ -62,7 +54,7 @@ namespace HareDu.Diagnostics.Tests.Probes
                 "node3@rabbitmq"
             });
 
-            var result = sensor.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(NetworkPartitionProbe).GetIdentifier());
@@ -71,16 +63,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_sensor_green_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var sensor = new NetworkPartitionProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new NetworkPartitionProbe(knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot2(new List<string>());
 
-            var result = sensor.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(NetworkPartitionProbe).GetIdentifier());

@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(102, 102);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(100, 100);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
@@ -88,11 +88,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 99);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
@@ -102,9 +102,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new HighConnectionClosureRateProbe(null, knowledgeBaseProvider);
+            var probe = new HighConnectionClosureRateProbe(null, knowledgeBaseProvider);
             
-            analyzer.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
         }
     }
 }

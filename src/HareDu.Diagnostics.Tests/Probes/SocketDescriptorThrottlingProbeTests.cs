@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 9, 4.2M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
 
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 10, 4.2M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
@@ -88,11 +88,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new SocketDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
@@ -102,9 +102,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new SocketDescriptorThrottlingProbe(null, knowledgeBaseProvider);
+            var probe = new SocketDescriptorThrottlingProbe(null, knowledgeBaseProvider);
             
-            analyzer.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
         }
     }
 }

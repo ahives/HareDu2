@@ -20,23 +20,21 @@ namespace HareDu.Diagnostics.Registration
     using Core.Extensions;
     using KnowledgeBase;
     using Probes;
-    using Scanning;
     using Snapshotting;
 
     /// <summary>
     /// This class should be instantiate once since construction can be expensive.
     /// </summary>
-    public class ComponentDiagnosticFactory :
-        IComponentDiagnosticFactory
+    public class DiagnosticFactory :
+        IDiagnosticFactory
     {
         readonly DiagnosticsConfig _config;
         readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
         readonly IDictionary<string, object> _cache;
         readonly IDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
-        readonly IEnumerable<Type> _types;
 
-        public ComponentDiagnosticFactory(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public DiagnosticFactory(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
             _config = config;
             _knowledgeBaseProvider = knowledgeBaseProvider;
@@ -53,7 +51,7 @@ namespace HareDu.Diagnostics.Registration
                 throw new HareDuBrokerObjectInitException();
         }
 
-        public bool TryGet<T>(out ComponentDiagnostic<T> diagnostic)
+        public bool TryGet<T>(out Diagnostic<T> diagnostic)
             where T : Snapshot
         {
             Type type = typeof(T);
@@ -70,7 +68,7 @@ namespace HareDu.Diagnostics.Registration
                 return false;
             }
             
-            diagnostic = (ComponentDiagnostic<T>) _cache[type.FullName];
+            diagnostic = (Diagnostic<T>) _cache[type.FullName];
             return true;
         }
 
@@ -159,12 +157,12 @@ namespace HareDu.Diagnostics.Registration
                 if (type.IsNull())
                     continue;
 
-                if (!type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ComponentDiagnostic<>)))
+                if (!type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(Diagnostic<>)))
                     continue;
 
                 var genericType = type
                     .GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ComponentDiagnostic<>));
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(Diagnostic<>));
 
                 if (genericType.IsNull())
                     continue;
@@ -238,8 +236,11 @@ namespace HareDu.Diagnostics.Registration
 
         protected virtual DiagnosticProbe CreateProbeInstance(Type type)
         {
-            var instance = (DiagnosticProbe)Activator.CreateInstance(type, _config, _knowledgeBaseProvider);
-
+            var instance = type.GetConstructors()[0].GetParameters()[0].ParameterType == typeof(DiagnosticsConfig)
+                           && type.GetConstructors()[0].GetParameters()[1].ParameterType == typeof(IKnowledgeBaseProvider)
+                ? (DiagnosticProbe) Activator.CreateInstance(type, _config, _knowledgeBaseProvider)
+                : (DiagnosticProbe) Activator.CreateInstance(type, _knowledgeBaseProvider);
+            
             return instance;
         }
     }

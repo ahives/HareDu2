@@ -31,13 +31,13 @@ namespace HareDu.Diagnostics.Observers
 
         public void OnNext(DiagnosticProbeContext value)
         {
-            Console.WriteLine("Analyzer: {0}", value.Result.AnalyzerIdentifier);
+            Console.WriteLine("Analyzer: {0}", value.Result.ProbeIdentifier);
             Console.WriteLine("Analyzer: {0}", value.Result);
             Console.WriteLine("Timestamp: {0}", value.Timestamp.ToString());
             Console.WriteLine("Component Identifier: {0}", value.Result.ComponentIdentifier);
             Console.WriteLine("Component Type: {0}", value.Result.ComponentType);
             Console.WriteLine("Status: {0}", value.Result.Status);
-            Console.WriteLine("Data => {0}", value.Result.AnalyzerData.ToJsonString());
+            Console.WriteLine("Data => {0}", value.Result.ProbeData.ToJsonString());
 
             if (value.Result.Status == DiagnosticStatus.Red)
             {

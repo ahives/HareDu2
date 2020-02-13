@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public MemoryAlarmProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public MemoryAlarmProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Probes
 
             KnowledgeBaseArticle knowledgeBaseArticle;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Memory.FreeAlarm", data.AlarmInEffect.ToString()),
                 new DiagnosticProbeDataImpl("Memory.Limit", data.Limit.ToString()),
@@ -54,12 +54,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.AlarmInEffect)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.NodeIdentifier, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticProbeResult(data.NodeIdentifier, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

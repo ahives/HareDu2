@@ -36,10 +36,6 @@ namespace HareDu.Diagnostics.Tests.Probes
             builder.RegisterType<DefaultKnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
-
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
-                .SingleInstance();
             
             _container = builder.Build();
         }
@@ -47,16 +43,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_red_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new MessagePagingProbe(knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot4(3);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(MessagePagingProbe).GetIdentifier());
@@ -65,16 +57,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new MessagePagingProbe(knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot4(0);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(MessagePagingProbe).GetIdentifier());

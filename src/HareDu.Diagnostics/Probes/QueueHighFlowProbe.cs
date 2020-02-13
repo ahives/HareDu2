@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Probes
             QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticProbeResult result;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
                 new DiagnosticProbeDataImpl("QueueHighFlowThreshold", _config.QueueHighFlowThreshold.ToString())
@@ -55,12 +55,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.Messages.Incoming.Total >= _config.QueueHighFlowThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

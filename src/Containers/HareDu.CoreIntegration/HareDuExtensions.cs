@@ -16,11 +16,11 @@ namespace HareDu.CoreIntegration
     using System.IO;
     using Core;
     using Core.Configuration;
+    using Diagnostics;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Persistence;
     using Diagnostics.Registration;
-    using Diagnostics.Scanning;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Quartz.Impl;
@@ -241,7 +241,7 @@ namespace HareDu.CoreIntegration
 
         static void AddDiagnostics(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IComponentDiagnosticFactory>(x =>
+            services.TryAddSingleton<IDiagnosticFactory>(x =>
             {
                 var configProvider = x.GetService<IConfigurationProvider>();
 
@@ -249,7 +249,7 @@ namespace HareDu.CoreIntegration
 
                 var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
                 
-                return new ComponentDiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
             });
         }
     }

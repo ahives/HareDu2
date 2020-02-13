@@ -11,20 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Registration
+namespace HareDu.Diagnostics
 {
-    using System;
     using System.Collections.Generic;
-    using Scanning;
+    using Core.Extensions;
     using Snapshotting;
 
-    public interface IComponentDiagnosticFactory
+    public class NoOpDiagnostic<T> :
+        Diagnostic<T>
+        where T : Snapshot
     {
-        bool TryGet<T>(out ComponentDiagnostic<T> diagnostic)
-            where T : Snapshot;
+        public string Identifier => GetType().GetIdentifier();
 
-        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers);
-
-        void RegisterObserver(IObserver<DiagnosticProbeContext> observer);
+        public IReadOnlyList<DiagnosticProbeResult> Scan(T snapshot) => DiagnosticCache.EmptyProbeResults;
     }
 }

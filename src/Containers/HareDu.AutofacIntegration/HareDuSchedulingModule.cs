@@ -16,8 +16,8 @@ namespace HareDu.AutofacIntegration
     using Autofac;
     using Core;
     using Core.Configuration;
+    using Diagnostics;
     using Diagnostics.Persistence;
-    using Diagnostics.Scanning;
     using Quartz;
     using Quartz.Impl;
     using Registration;

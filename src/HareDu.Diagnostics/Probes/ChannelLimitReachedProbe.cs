@@ -32,7 +32,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public ChannelLimitReachedProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public ChannelLimitReachedProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Probes
             ConnectionSnapshot data = snapshot as ConnectionSnapshot;
             DiagnosticProbeResult result;
 
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Channels.Count", data.Channels.Count.ToString()),
                 new DiagnosticProbeDataImpl("ChannelLimit", data.OpenChannelsLimit.ToString())
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData, knowledgeBaseArticle);
+                    probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

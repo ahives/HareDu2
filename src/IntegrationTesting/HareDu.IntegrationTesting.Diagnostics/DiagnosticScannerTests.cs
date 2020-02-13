@@ -26,7 +26,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using HareDu.Diagnostics.Formatting;
     using HareDu.Diagnostics.KnowledgeBase;
     using HareDu.Diagnostics.Registration;
-    using HareDu.Diagnostics.Scanning;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Registration;
@@ -122,7 +121,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var resource = factory.Snapshot<BrokerConnectivity>().Execute();
             
             IDiagnosticScanner scanner = new DiagnosticScanner(
-                new ComponentDiagnosticFactory(config.Diagnostics, new DefaultKnowledgeBaseProvider()));
+                new DiagnosticFactory(config.Diagnostics, new DefaultKnowledgeBaseProvider()));
 
             var snapshot = resource.Timeline.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);

@@ -15,8 +15,8 @@ namespace HareDu.Scheduling
 {
     using System;
     using System.Collections.Generic;
+    using Diagnostics;
     using Diagnostics.Persistence;
-    using Diagnostics.Scanning;
     using Quartz;
     using Quartz.Simpl;
     using Quartz.Spi;

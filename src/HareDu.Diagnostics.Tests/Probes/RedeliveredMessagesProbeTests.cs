@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 90, 32.3M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RedeliveredMessagesProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 50, 32.3M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RedeliveredMessagesProbe).GetIdentifier());
@@ -84,9 +84,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RedeliveredMessagesProbe(null, knowledgeBaseProvider);
+            var probe = new RedeliveredMessagesProbe(null, knowledgeBaseProvider);
             
-            analyzer.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
         }
     }
 }

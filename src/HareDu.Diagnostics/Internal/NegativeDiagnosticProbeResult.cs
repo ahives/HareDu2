@@ -25,9 +25,9 @@ namespace HareDu.Diagnostics.Internal
         {
             ParentComponentIdentifier = parentComponentIdentifier;
             ComponentIdentifier = componentIdentifier;
-            AnalyzerIdentifier = analyzerIdentifier;
+            ProbeIdentifier = analyzerIdentifier;
             ComponentType = componentType;
-            AnalyzerData = analyzerData;
+            ProbeData = analyzerData;
             KnowledgeBaseArticle = knowledgeBaseArticle;
             Status = DiagnosticStatus.Red;
             Timestamp = DateTimeOffset.Now;
@@ -35,10 +35,10 @@ namespace HareDu.Diagnostics.Internal
 
         public string ParentComponentIdentifier { get; }
         public string ComponentIdentifier { get; }
-        public string AnalyzerIdentifier { get; }
+        public string ProbeIdentifier { get; }
         public DiagnosticStatus Status { get; }
         public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-        public IReadOnlyList<DiagnosticProbeData> AnalyzerData { get; }
+        public IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
         public ComponentType ComponentType { get; }
         public DateTimeOffset Timestamp { get; }
     }

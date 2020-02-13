@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider);
 
             QueueSnapshot snapshot = new FakeQueueSnapshot5(20);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot5(100);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
@@ -84,9 +84,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueLowFlowProbe(null, knowledgeBaseProvider);
+            var probe = new QueueLowFlowProbe(null, knowledgeBaseProvider);
             
-            analyzer.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
         }
     }
 }

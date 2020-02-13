@@ -48,7 +48,7 @@ namespace HareDu.Diagnostics.Probes
             KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.FileDescriptors.Available);
 
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
                 new DiagnosticProbeDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Probes
                     data.ProcessId,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else if (data.FileDescriptors.Used == data.FileDescriptors.Available)
@@ -73,7 +73,7 @@ namespace HareDu.Diagnostics.Probes
                     data.ProcessId,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -83,7 +83,7 @@ namespace HareDu.Diagnostics.Probes
                     data.ProcessId,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

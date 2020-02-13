@@ -18,7 +18,7 @@ namespace HareDu.Analytics.Tests
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
-    using Diagnostics.Scanning;
+    using Diagnostics;
     using Fakes;
     using Snapshotting.Model;
     using NUnit.Framework;

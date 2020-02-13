@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Probes
             DiagnosticProbeResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
 
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("ConsumerUtilization", data.ConsumerUtilization.ToString()),
                 new DiagnosticProbeDataImpl("Analyzer.ConsumerUtilizationWarningCoefficient", _config.ConsumerUtilizationWarningCoefficient.ToString())
@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else if (data.ConsumerUtilization < _config.ConsumerUtilizationWarningCoefficient)
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -79,7 +79,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

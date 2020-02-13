@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             ChannelSnapshot data = snapshot as ChannelSnapshot;
             DiagnosticProbeResult result;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
@@ -56,7 +56,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -66,7 +66,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

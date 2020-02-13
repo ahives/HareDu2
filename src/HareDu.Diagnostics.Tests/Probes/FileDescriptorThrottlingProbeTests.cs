@@ -51,11 +51,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 90);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
@@ -69,11 +69,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 100);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
@@ -87,11 +87,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new FileDescriptorThrottlingProbe(config.Diagnostics, knowledgeBaseProvider);
             
             OperatingSystemSnapshot snapshot = new FakeOperatingSystemSnapshot1(100, 60);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
@@ -101,9 +101,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new FileDescriptorThrottlingProbe(null, knowledgeBaseProvider);
+            var probe = new FileDescriptorThrottlingProbe(null, knowledgeBaseProvider);
             
-            analyzer.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
         }
     }
 }

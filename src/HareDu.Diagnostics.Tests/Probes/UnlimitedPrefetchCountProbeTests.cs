@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(0);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(UnlimitedPrefetchCountProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(5);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Inconclusive);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(UnlimitedPrefetchCountProbe).GetIdentifier());

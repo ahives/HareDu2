@@ -21,7 +21,6 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Scanning;
     using Shouldly;
     using Snapshotting.Model;
 
@@ -45,9 +44,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider),
-                new ChannelThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),
-                new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider),
-                new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider)
+                new ChannelThrottlingProbe(knowledgeBaseProvider),
+                new ChannelLimitReachedProbe(knowledgeBaseProvider),
+                new BlockedConnectionProbe(knowledgeBaseProvider)
             };
         }
 
@@ -60,12 +59,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             report.Count.ShouldBe(6);
-            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]

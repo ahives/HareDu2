@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public QueueGrowthProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public QueueGrowthProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticProbeResult result;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Messages.Incoming.Rate", data.Messages.Incoming.Rate.ToString()),
                 new DiagnosticProbeDataImpl("Messages.Acknowledged.Rate", data.Messages.Acknowledged.Rate.ToString())
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -67,7 +67,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

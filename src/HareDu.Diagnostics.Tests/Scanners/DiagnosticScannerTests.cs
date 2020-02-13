@@ -21,7 +21,6 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Diagnostics.Registration;
     using Fakes;
     using NUnit.Framework;
-    using Scanning;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
@@ -75,7 +74,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         public void Verify_does_not_throw_when_scanner_not_found()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
-            IComponentDiagnosticFactory factory = new FakeDiagnosticFactory();
+            IDiagnosticFactory factory = new FakeDiagnosticFactory();
             IDiagnosticScanner scanner = new DiagnosticScanner(factory);
 
             var report = scanner.Scan(snapshot);
@@ -86,9 +85,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
 
         
         class FakeDiagnosticFactory :
-            IComponentDiagnosticFactory
+            IDiagnosticFactory
         {
-            public bool TryGet<T>(out ComponentDiagnostic<T> diagnostic)
+            public bool TryGet<T>(out Diagnostic<T> diagnostic)
                 where T : Snapshot
             {
                 diagnostic = new NoOpDiagnostic<T>();

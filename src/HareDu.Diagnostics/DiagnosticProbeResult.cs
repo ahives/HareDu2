@@ -25,13 +25,13 @@ namespace HareDu.Diagnostics
         
         ComponentType ComponentType { get; }
         
-        string AnalyzerIdentifier { get; }
+        string ProbeIdentifier { get; }
         
         DiagnosticStatus Status { get; }
         
         KnowledgeBaseArticle KnowledgeBaseArticle { get; }
         
-        IReadOnlyList<DiagnosticProbeData> AnalyzerData { get; }
+        IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
         
         DateTimeOffset Timestamp { get; }
     }

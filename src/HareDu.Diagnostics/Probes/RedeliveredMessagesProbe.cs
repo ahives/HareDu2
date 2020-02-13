@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Probes
             DiagnosticProbeResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
                 new DiagnosticProbeDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else if (data.Messages.Redelivered.Total >= data.Messages.Incoming.Total)
@@ -73,7 +73,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -83,7 +83,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

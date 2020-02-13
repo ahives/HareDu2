@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Tests
+namespace HareDu.Diagnostics.Tests.Registration
 {
     using System.Collections.Generic;
     using Autofac;
@@ -22,7 +22,6 @@ namespace HareDu.Diagnostics.Tests
     using Diagnostics.Registration;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Scanning;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
@@ -54,9 +53,9 @@ namespace HareDu.Diagnostics.Tests
                 new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider),
-                new ChannelThrottlingProbe(config.Diagnostics, knowledgeBaseProvider),
-                new ChannelLimitReachedProbe(config.Diagnostics, knowledgeBaseProvider),
-                new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider)
+                new ChannelThrottlingProbe(knowledgeBaseProvider),
+                new ChannelLimitReachedProbe(knowledgeBaseProvider),
+                new BlockedConnectionProbe(knowledgeBaseProvider)
             };
         }
 
@@ -76,7 +75,7 @@ namespace HareDu.Diagnostics.Tests
             // diagnosticsRegistrar.RegisterAll();
             //
             // var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
-            var factory = _container.Resolve<IComponentDiagnosticFactory>();
+            var factory = _container.Resolve<IDiagnosticFactory>();
 
             factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
             diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
@@ -85,7 +84,7 @@ namespace HareDu.Diagnostics.Tests
         [Test]
         public void Test()
         {
-            var factory = _container.Resolve<IComponentDiagnosticFactory>();
+            var factory = _container.Resolve<IDiagnosticFactory>();
 
             factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
 //            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
@@ -97,7 +96,7 @@ namespace HareDu.Diagnostics.Tests
             // var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
             // diagnosticsRegistrar.RegisterAll();
             // var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
-            var factory = _container.Resolve<IComponentDiagnosticFactory>();
+            var factory = _container.Resolve<IDiagnosticFactory>();
 
             factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
             diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier());
@@ -120,14 +119,14 @@ namespace HareDu.Diagnostics.Tests
             // diagnosticRegistry.Register<FakeDiagnostic>();
 
             // var factory = new ComponentDiagnosticFactory(diagnosticAnalyzerRegistry, diagnosticRegistry);
-            var factory = new ComponentDiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+            var factory = new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
         class FakeDiagnostic :
-            ComponentDiagnostic<FakeSnapshot>
+            Diagnostic<FakeSnapshot>
         {
             public string Identifier => GetType().GetIdentifier();
 

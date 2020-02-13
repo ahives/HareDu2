@@ -14,8 +14,8 @@
 namespace HareDu.Scheduling
 {
     using System.Threading.Tasks;
+    using Diagnostics;
     using Diagnostics.Persistence;
-    using Diagnostics.Scanning;
     using Quartz;
     using Snapshotting;
     using Snapshotting.Extensions;

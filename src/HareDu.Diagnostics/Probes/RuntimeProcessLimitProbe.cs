@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Probes
             DiagnosticProbeResult result;
             BrokerRuntimeSnapshot data = snapshot as BrokerRuntimeSnapshot;
 
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Processes.Limit", data.Processes.Limit.ToString()),
                 new DiagnosticProbeDataImpl("Processes.Used", data.Processes.Used.ToString())
@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

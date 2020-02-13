@@ -36,10 +36,6 @@ namespace HareDu.Diagnostics.Tests.Probes
             builder.RegisterType<DefaultKnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
-
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
-                .SingleInstance();
             
             _container = builder.Build();
         }
@@ -47,16 +43,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_yellow_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueGrowthProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new QueueGrowthProbe(knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot1(103283, 8734.5M, 823983, 8423.5M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Yellow);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueGrowthProbe).GetIdentifier());
@@ -65,16 +57,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new QueueGrowthProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new QueueGrowthProbe(knowledgeBaseProvider);
             
             QueueSnapshot snapshot = new FakeQueueSnapshot1(103283, 8423.5M, 823983, 8734.5M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueGrowthProbe).GetIdentifier());

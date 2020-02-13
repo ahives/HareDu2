@@ -21,7 +21,6 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Scanning;
     using Shouldly;
     using Snapshotting.Model;
 
@@ -42,13 +41,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             _probes = new List<DiagnosticProbe>
             {
-                new QueueGrowthProbe(config.Diagnostics, knowledgeBaseProvider),
-                new MessagePagingProbe(config.Diagnostics, knowledgeBaseProvider),
+                new QueueGrowthProbe(knowledgeBaseProvider),
+                new MessagePagingProbe(knowledgeBaseProvider),
                 new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider),
                 new ConsumerUtilizationProbe(config.Diagnostics, knowledgeBaseProvider),
-                new UnroutableMessageProbe(config.Diagnostics, knowledgeBaseProvider),
+                new UnroutableMessageProbe(knowledgeBaseProvider),
                 new QueueLowFlowProbe(config.Diagnostics, knowledgeBaseProvider),
-                new QueueNoFlowProbe(config.Diagnostics, knowledgeBaseProvider),
+                new QueueNoFlowProbe(knowledgeBaseProvider),
                 new QueueHighFlowProbe(config.Diagnostics, knowledgeBaseProvider)
             };
         }
@@ -62,14 +61,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             report.Count.ShouldBe(8);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.AnalyzerIdentifier == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeIdentifier == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]

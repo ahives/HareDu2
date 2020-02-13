@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public QueueNoFlowProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public QueueNoFlowProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             QueueSnapshot data = snapshot as QueueSnapshot;
             DiagnosticProbeResult result;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString())
             };
@@ -52,12 +52,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.Messages.Incoming.Total == 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

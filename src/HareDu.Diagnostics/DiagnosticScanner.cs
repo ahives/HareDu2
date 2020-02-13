@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scanning
+namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
@@ -21,9 +21,9 @@ namespace HareDu.Diagnostics.Scanning
     public class DiagnosticScanner :
         IDiagnosticScanner
     {
-        readonly IComponentDiagnosticFactory _factory;
+        readonly IDiagnosticFactory _factory;
 
-        public DiagnosticScanner(IComponentDiagnosticFactory factory)
+        public DiagnosticScanner(IDiagnosticFactory factory)
         {
             _factory = factory;
         }
@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Scanning
         public ScannerResult Scan<T>(T snapshot)
             where T : Snapshot
         {
-            if (!_factory.TryGet(out ComponentDiagnostic<T> diagnostic))
+            if (!_factory.TryGet(out Diagnostic<T> diagnostic))
                 return DiagnosticCache.EmptyScannerResult;
             
             var results = diagnostic.Scan(snapshot);

@@ -18,10 +18,10 @@ namespace HareDu.AutofacIntegration
     using Analytics.Registration;
     using Autofac;
     using Core.Configuration;
+    using Diagnostics;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
-    using Diagnostics.Scanning;
 
     public class HareDuAnalyticsModule :
         Module
@@ -37,9 +37,9 @@ namespace HareDu.AutofacIntegration
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    return new ComponentDiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                    return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
                 })
-                .As<IComponentDiagnosticFactory>()
+                .As<IDiagnosticFactory>()
                 .SingleInstance();
 
             builder.Register(x =>

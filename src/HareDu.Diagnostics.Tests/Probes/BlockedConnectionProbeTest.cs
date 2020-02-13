@@ -36,10 +36,6 @@ namespace HareDu.Diagnostics.Tests.Probes
             builder.RegisterType<DefaultKnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
-
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
-                .SingleInstance();
             
             _container = builder.Build();
         }
@@ -47,16 +43,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_red_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new BlockedConnectionProbe(knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot2("blocked");
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(BlockedConnectionProbe).GetIdentifier());
@@ -65,16 +57,12 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new BlockedConnectionProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new BlockedConnectionProbe(knowledgeBaseProvider);
             
             ConnectionSnapshot snapshot = new FakeConnectionSnapshot2("running");
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(BlockedConnectionProbe).GetIdentifier());

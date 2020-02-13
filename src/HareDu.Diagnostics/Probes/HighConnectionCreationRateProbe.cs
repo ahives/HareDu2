@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Probes
             DiagnosticProbeResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
                 new DiagnosticProbeDataImpl("HighCreationRateThreshold", _config.HighCreationRateWarningThreshold.ToString())
@@ -55,12 +55,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.ConnectionsCreated.Rate >= _config.HighCreationRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
-                result = new WarningDiagnosticProbeResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new WarningDiagnosticProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(null, null, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

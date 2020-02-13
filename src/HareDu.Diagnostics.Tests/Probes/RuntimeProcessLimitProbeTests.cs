@@ -52,11 +52,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
 
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 3, 3.2M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
@@ -70,11 +70,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
 
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(3, 4, 3.2M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Red);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
@@ -88,11 +88,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
             
             BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3.2M);
 
-            var result = analyzer.Execute(snapshot);
+            var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticStatus.Green);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
@@ -102,9 +102,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var analyzer = new RuntimeProcessLimitProbe(null, knowledgeBaseProvider);
+            var probe = new RuntimeProcessLimitProbe(null, knowledgeBaseProvider);
             
-            analyzer.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace HareDu.Diagnostics.Probes
             KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.OS.SocketDescriptors.Available);
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("OS.Sockets.Available", data.OS.SocketDescriptors.Available.ToString()),
                 new DiagnosticProbeDataImpl("OS.Sockets.Used", data.OS.SocketDescriptors.Used.ToString()),
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else if (data.OS.SocketDescriptors.Used == data.OS.SocketDescriptors.Available)
@@ -73,7 +73,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
             else
@@ -83,7 +83,7 @@ namespace HareDu.Diagnostics.Probes
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    analyzerData,
+                    probeData,
                     knowledgeBaseArticle);
             }
 

@@ -31,7 +31,7 @@ namespace HareDu.Diagnostics.Probes
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
         public DiagnosticProbeStatus Status => _status;
 
-        public ChannelThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public ChannelThrottlingProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
             : base(knowledgeBaseProvider)
         {
             _status = DiagnosticProbeStatus.Online;
@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             ChannelSnapshot data = snapshot as ChannelSnapshot;
             DiagnosticProbeResult result;
             
-            var analyzerData = new List<DiagnosticProbeData>
+            var probeData = new List<DiagnosticProbeData>
             {
                 new DiagnosticProbeDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
                 new DiagnosticProbeDataImpl("PrefetchCount", data.PrefetchCount.ToString())
@@ -53,12 +53,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.UnacknowledgedMessages > data.PrefetchCount)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new NegativeDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, analyzerData, knowledgeBaseArticle);
+                result = new PositiveDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

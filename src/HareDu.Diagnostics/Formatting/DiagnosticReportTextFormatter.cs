@@ -45,11 +45,11 @@ namespace HareDu.Diagnostics.Formatting
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
             builder.AppendLine($"\tComponent Identifier: {result.ComponentIdentifier}");
             builder.AppendLine($"\tComponent Type: {result.ComponentType.ToString()}");
-            builder.AppendLine($"\tAnalyzer: {result.AnalyzerIdentifier}");
+            builder.AppendLine($"\tAnalyzer: {result.ProbeIdentifier}");
             builder.AppendLine($"\tStatus: {result.Status.ToString()}");
             builder.AppendLine("\tAnalyzer Data");
             
-            foreach (var data in result.AnalyzerData)
+            foreach (var data in result.ProbeData)
             {
                 if (data.IsNull())
                     continue;
