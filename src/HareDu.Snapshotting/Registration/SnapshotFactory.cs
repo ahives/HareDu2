@@ -16,6 +16,8 @@ namespace HareDu.Snapshotting.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Core;
+    using Core.Configuration;
     using Core.Extensions;
     using HareDu.Registration;
     using Internal;
@@ -23,12 +25,27 @@ namespace HareDu.Snapshotting.Registration
     public class SnapshotFactory :
         ISnapshotFactory
     {
+        readonly HareDuConfig _config;
         readonly IBrokerObjectFactory _factory;
         readonly IDictionary<string, object> _cache;
 
         public SnapshotFactory(IBrokerObjectFactory factory)
         {
             _factory = factory;
+            _cache = new Dictionary<string, object>();
+            
+            bool registered = TryRegisterAll();
+            if (!registered)
+                throw new HareDuBrokerObjectInitException();
+        }
+
+        public SnapshotFactory(HareDuConfig config)
+        {
+            _config = config;
+            
+            var comm = new BrokerCommunication();
+            
+            _factory = new BrokerObjectFactory(comm.GetClient(_config.Broker));
             _cache = new Dictionary<string, object>();
             
             bool registered = TryRegisterAll();

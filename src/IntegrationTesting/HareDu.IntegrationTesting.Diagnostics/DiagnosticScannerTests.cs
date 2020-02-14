@@ -132,5 +132,26 @@ namespace HareDu.IntegrationTesting.Diagnostics
             
             Console.WriteLine(formattedReport);
         }
+        
+        [Test]
+        public async Task Test4()
+        {
+            var configProvider = new ConfigurationProvider();
+            configProvider.TryGet($"{Directory.GetCurrentDirectory()}/config.yaml", out HareDuConfig config);
+
+            var factory = new SnapshotFactory(config);
+            var resource = factory.Snapshot<BrokerConnectivity>().Execute();
+
+            IDiagnosticScanner scanner = new DiagnosticScanner(config);
+
+            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var report = scanner.Scan(snapshot);
+
+            var formatter = new DiagnosticReportTextFormatter();
+
+            string formattedReport = formatter.Format(report);
+            
+            Console.WriteLine(formattedReport);
+        }
     }
 }

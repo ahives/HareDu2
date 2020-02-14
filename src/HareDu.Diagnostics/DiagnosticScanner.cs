@@ -15,17 +15,26 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
+    using Core.Configuration;
+    using KnowledgeBase;
     using Registration;
     using Snapshotting;
 
     public class DiagnosticScanner :
         IDiagnosticScanner
     {
+        readonly HareDuConfig _config;
         readonly IDiagnosticFactory _factory;
 
         public DiagnosticScanner(IDiagnosticFactory factory)
         {
             _factory = factory;
+        }
+
+        public DiagnosticScanner(HareDuConfig config)
+        {
+            _config = config;
+            _factory = new DiagnosticFactory(_config.Diagnostics, new DefaultKnowledgeBaseProvider());
         }
 
         public ScannerResult Scan<T>(T snapshot)
