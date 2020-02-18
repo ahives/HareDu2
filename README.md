@@ -4,12 +4,21 @@ HareDu 2
 ![Join the chat at https://gitter.im/HareDu2/Lobby](https://img.shields.io/gitter/room/haredu2/HareDu2?style=flat)
 ![NuGet downloads](https://img.shields.io/nuget/dt/haredu?style=flat)
 
-HareDu 2 is a .NET client and library that consumes the RabbitMQ REST API and can be used to manage and monitor a RabbitMQ server or cluster.
+.NET API for managing and monitoring RabbitMQ clusters using the RabbitMQ RESTful API.
 
 
 Docs under construction here
 
 https://ahives.gitbooks.io/haredu2/content/
+
+History
+=======
+HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came about from feedback of production deployments and because the original API was lacking in some key areas. In particular,  
+1. Increased test coverage
+2. Improved low level administrative APIs
+3. New APIs for diagnostics, cluster snapshotting and monitoring
+4. Dependency Injection (e.g., Autofac, .NET Core) support for quick API registration
+5. .NET Core support
 
 
 Get It

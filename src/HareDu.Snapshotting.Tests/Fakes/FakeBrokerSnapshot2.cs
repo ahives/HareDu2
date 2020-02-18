@@ -13,8 +13,9 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
-    public interface FakeHareDuSnapshot :
-        Snapshot
+    public interface FakeBrokerSnapshot2 :
+        HareDuSnapshot<FakeHareDuSnapshot2>
     {
+        
     }
 }

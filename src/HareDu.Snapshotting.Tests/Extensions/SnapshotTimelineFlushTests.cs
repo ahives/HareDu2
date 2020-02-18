@@ -24,6 +24,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
     using Registration;
     using Shouldly;
     using Snapshotting.Extensions;
+    using Snapshotting.Registration;
 
     [TestFixture]
     public class SnapshotTimelineFlushTests
@@ -39,15 +40,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x =>
-                {
-                    // var registrar = x.Resolve<ISnapshotObjectRegistrar>();
-                    var factory = x.Resolve<IBrokerObjectFactory>();
-
-                    // registrar.RegisterAll();
-
-                    return new SnapshotFactory(factory);
-                })
+            builder.RegisterType<SnapshotFactory>()
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 

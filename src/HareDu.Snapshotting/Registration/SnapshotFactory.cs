@@ -57,18 +57,18 @@ namespace HareDu.Snapshotting.Registration
             where T : HareDuSnapshot<Snapshot>
         {
             Type type = typeof(T);
-            
+
             if (type.IsNull())
-                throw new HareDuSnapshotInitException($"Failed to find implementation class for interface {typeof(T)}");
+                return default;
+            
+            if (_cache.ContainsKey(type.FullName))
+                return (T) _cache[type.FullName];
             
             var typeMap = GetTypeMap(typeof(T));
 
             if (!typeMap.ContainsKey(type.FullName))
                 return default;
             
-            if (_cache.ContainsKey(type.FullName))
-                return (T) _cache[type.FullName];
-                
             bool registered = RegisterInstance(typeMap[type.FullName], type.FullName);
 
             if (registered)
@@ -128,8 +128,7 @@ namespace HareDu.Snapshotting.Registration
 
             foreach (var type in types)
             {
-                if (!type.IsInterface || !type.GetInterfaces().Any(x =>
-                        x.IsGenericType && x.GetGenericTypeDefinition() == typeof(HareDuSnapshot<>)))
+                if (!type.IsInterface || !type.InheritsFromInterface(typeof(HareDuSnapshot<>)))
                     continue;
                 
                 if (interfaces.ContainsKey(type.FullName))

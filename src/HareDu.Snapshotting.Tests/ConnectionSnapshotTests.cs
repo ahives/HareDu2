@@ -23,6 +23,7 @@ namespace HareDu.Snapshotting.Tests
     using Registration;
     using Shouldly;
     using Snapshotting.Extensions;
+    using Snapshotting.Registration;
 
     [TestFixture]
     public class ConnectionSnapshotTests
@@ -38,15 +39,7 @@ namespace HareDu.Snapshotting.Tests
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x =>
-                {
-                    // var registrar = x.Resolve<ISnapshotObjectRegistrar>();
-                    var factory = x.Resolve<IBrokerObjectFactory>();
-
-                    // registrar.RegisterAll();
-
-                    return new SnapshotFactory(factory);
-                })
+            builder.RegisterType<SnapshotFactory>()
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 

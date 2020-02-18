@@ -56,13 +56,7 @@ namespace HareDu.Diagnostics.Registration
         {
             Type type = typeof(T);
             
-            if (type.IsNull())
-            {
-                diagnostic = new NoOpDiagnostic<T>();
-                return false;
-            }
-
-            if (!_cache.ContainsKey(type.FullName))
+            if (type.IsNull() || !_cache.ContainsKey(type.FullName))
             {
                 diagnostic = new NoOpDiagnostic<T>();
                 return false;
