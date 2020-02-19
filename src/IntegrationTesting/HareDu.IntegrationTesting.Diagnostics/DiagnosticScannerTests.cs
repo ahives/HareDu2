@@ -79,7 +79,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test2()
         {
             var services = new ServiceCollection()
-                .AddHareDuDiagnostics($"{TestContext.CurrentContext.TestDirectory}/config.yaml")
+                .AddHareDuDiagnostics($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .BuildServiceProvider();
             
             var resource = services.GetService<ISnapshotFactory>()
@@ -112,8 +112,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test3()
         {
-            var configProvider = new ConfigurationProvider();
-            configProvider.TryGet($"{Directory.GetCurrentDirectory()}/config.yaml", out HareDuConfig config);
+            var configProvider = new FileConfigurationProvider();
+            configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
             var comm = new BrokerCommunication();
             var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
@@ -136,8 +136,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test4()
         {
-            var configProvider = new ConfigurationProvider();
-            configProvider.TryGet($"{Directory.GetCurrentDirectory()}/config.yaml", out HareDuConfig config);
+            var configProvider = new FileConfigurationProvider();
+            configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
             var factory = new SnapshotFactory(config);
             var resource = factory.Snapshot<BrokerConnectivity>().Execute();

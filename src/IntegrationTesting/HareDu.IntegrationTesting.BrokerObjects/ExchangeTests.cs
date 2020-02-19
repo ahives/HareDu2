@@ -94,13 +94,11 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [Test]
         public async Task Should_be_able_to_get_all_exchanges_3()
         {
-            var configProvider = new ConfigurationProvider();
-            var provider = new BrokerConfigProvider(configProvider);
-            var settings = provider.Init(x => { });
-            var connectionClient = new BrokerCommunication();
-            var client = connectionClient.GetClient(settings);
+            var provider = new BrokerConfigProvider();
+            var config = provider.Configure(x => { });
+            var comm = new BrokerCommunication();
             
-            var factory = new BrokerObjectFactory(client);
+            var factory = new BrokerObjectFactory(comm.GetClient(config));
             
             var result = await factory
                 .Object<Exchange>()

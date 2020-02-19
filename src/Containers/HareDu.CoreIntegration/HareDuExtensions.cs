@@ -44,7 +44,7 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
             
             services.AddBrokerObjectFactory();
 
@@ -64,7 +64,7 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
             services.AddBrokerObjectFactory(path);
 
@@ -82,7 +82,7 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
             services.AddBrokerObjectFactory();
             
@@ -106,7 +106,7 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
             services.AddBrokerObjectFactory(path);
 
@@ -129,7 +129,7 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
@@ -137,7 +137,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<IKnowledgeBaseProvider, DefaultKnowledgeBaseProvider>();
 
-            string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+            string path = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
             
             services.AddBrokerObjectFactory(path);
 
@@ -163,7 +163,7 @@ namespace HareDu.CoreIntegration
             
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IConfigurationProvider, ConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
@@ -213,14 +213,13 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
             {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
+                var provider = x.GetService<IFileConfigurationProvider>();
+
+                provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+
                 var comm = x.GetService<IBrokerCommunication>();
 
-                if (!settingsProvider.TryGet(path, out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-                
-                return new BrokerObjectFactory(comm.GetClient(config));
+                return new BrokerObjectFactory(comm.GetClient(config.Broker));
             });
         }
 
@@ -228,14 +227,13 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
             {
-                var settingsProvider = x.GetService<IBrokerConfigProvider>();
+                var provider = x.GetService<IFileConfigurationProvider>();
+
+                provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+
                 var comm = x.GetService<IBrokerCommunication>();
 
-                if (!settingsProvider.TryGet(out BrokerConfig config))
-                    throw new HareDuClientConfigurationException(
-                        "Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                return new BrokerObjectFactory(comm.GetClient(config));
+                return new BrokerObjectFactory(comm.GetClient(config.Broker));
             });
         }
 
@@ -243,7 +241,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IDiagnosticFactory>(x =>
             {
-                var configProvider = x.GetService<IConfigurationProvider>();
+                var configProvider = x.GetService<IFileConfigurationProvider>();
 
                 configProvider.TryGet(path, out HareDuConfig config);
 

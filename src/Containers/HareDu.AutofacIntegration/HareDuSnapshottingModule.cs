@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.AutofacIntegration
 {
+    using System.IO;
     using Autofac;
     using Core;
     using Core.Configuration;
@@ -28,13 +29,13 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var settingsProvider = x.Resolve<IBrokerConfigProvider>();
+                    var provider = x.Resolve<IFileConfigurationProvider>();
+
+                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+
                     var comm = x.Resolve<IBrokerCommunication>();
 
-                    if (!settingsProvider.TryGet(out BrokerConfig settings))
-                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                    return new BrokerObjectFactory(comm.GetClient(settings));
+                    return new BrokerObjectFactory(comm.GetClient(config.Broker));
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -55,8 +56,8 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
+            builder.RegisterType<FileConfigurationProvider>()
+                .As<IFileConfigurationProvider>()
                 .SingleInstance();
             
             base.Load(builder);

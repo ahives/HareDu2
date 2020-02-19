@@ -23,9 +23,9 @@ namespace HareDu.Core.Tests.Configuration
         [Test]
         public void Test()
         {
-            var provider = new ConfigurationProvider();
+            var provider = new FileConfigurationProvider();
 
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             
             provider.TryGet(path, out var config).ShouldBeTrue();
             config.Broker.Url.ShouldBe("http://localhost:15672");

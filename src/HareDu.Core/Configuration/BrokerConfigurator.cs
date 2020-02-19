@@ -15,13 +15,13 @@ namespace HareDu.Core.Configuration
 {
     using System;
 
-    public interface ClientConfigProvider
+    public interface BrokerConfigurator
     {
         /// <summary>
         /// Specify the RabbitMQ server url to connect to.
         /// </summary>
-        /// <param name="brokerUrl"></param>
-        void ConnectTo(string brokerUrl);
+        /// <param name="url"></param>
+        void ConnectTo(string url);
 
         /// <summary>
         /// Specify the maximum time before the HTTP request to the RAbbitMQ server will fail.

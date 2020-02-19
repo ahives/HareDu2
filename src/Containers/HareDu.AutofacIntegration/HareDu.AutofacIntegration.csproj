@@ -17,4 +17,9 @@
       <ProjectReference Include="..\..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="HareDuShovelModule.cs" />
+      <Content Include="HareDuShovelModule.cs" />
+    </ItemGroup>
+
 </Project>

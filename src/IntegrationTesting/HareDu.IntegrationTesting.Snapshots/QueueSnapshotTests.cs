@@ -56,9 +56,9 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test1()
         {
-            var configurationProvider = new ConfigurationProvider();
+            var configurationProvider = new FileConfigurationProvider();
             
-            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
+            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
                 var comm = new BrokerCommunication();
                 var client = comm.GetClient(config.Broker);
@@ -76,9 +76,9 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test2()
         {
-            var configurationProvider = new ConfigurationProvider();
+            var configurationProvider = new FileConfigurationProvider();
             
-            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
+            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
                 var comm = new BrokerCommunication();
                 var client = comm.GetClient(config.Broker);
@@ -98,7 +98,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         // {
         //     var configurationProvider = new ConfigurationProvider();
         //     
-        //     if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
+        //     if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
         //     {
         //         var comm = new BrokerCommunication();
         //         var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
@@ -115,7 +115,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         // {
         //     var configurationProvider = new ConfigurationProvider();
         //     
-        //     if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/config.yaml", out HareDuConfig config))
+        //     if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
         //     {
         //         var comm = new BrokerCommunication();
         //         var factory = new SnapshotFactory(comm.GetClient(config.Broker));
@@ -157,7 +157,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public void Test7()
         {
             var services = new ServiceCollection()
-                .AddHareDuSnapshotting($"{TestContext.CurrentContext.TestDirectory}/config.yaml")
+                .AddHareDuSnapshotting($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .BuildServiceProvider();
 
             var resource = services.GetService<ISnapshotFactory>()

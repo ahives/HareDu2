@@ -36,8 +36,8 @@ namespace HareDu.Diagnostics.Tests.Probes
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
+            builder.RegisterType<FileConfigurationProvider>()
+                .As<IFileConfigurationProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -46,8 +46,8 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_yellow_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            var configProvider = _container.Resolve<IFileConfigurationProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
@@ -64,8 +64,8 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_red_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            var configProvider = _container.Resolve<IFileConfigurationProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
@@ -82,8 +82,8 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_analyzer_green_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
-            var configProvider = _container.Resolve<IConfigurationProvider>();
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            var configProvider = _container.Resolve<IFileConfigurationProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();

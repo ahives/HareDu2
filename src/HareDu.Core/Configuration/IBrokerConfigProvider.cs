@@ -17,10 +17,6 @@ namespace HareDu.Core.Configuration
 
     public interface IBrokerConfigProvider
     {
-        BrokerConfig Init(Action<ClientConfigProvider> configuration);
-
-        bool TryGet(out BrokerConfig settings);
-
-        bool TryGet(string path, out BrokerConfig settings);
+        BrokerConfig Configure(Action<BrokerConfigurator> configurator);
     }
 }

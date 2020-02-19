@@ -23,9 +23,10 @@ namespace HareDu.Core.Tests.Configuration
         [Test]
         public void Verify_can_programmatically_initialize_client_api()
         {
-            var configProvider = new ConfigurationProvider();
-            var provider = new BrokerConfigProvider(configProvider);
-            var settings = provider.Init(x =>
+            // var configProvider = new ConfigurationProvider();
+            // var provider = new BrokerConfigProvider(configProvider);
+            var provider = new BrokerConfigProvider();
+            var settings = provider.Configure(x =>
             {
                 x.ConnectTo("http://localhost:15670");
                 x.UsingCredentials("guest1", "guest1");
@@ -40,9 +41,10 @@ namespace HareDu.Core.Tests.Configuration
         [Test]
         public void Verify_can_initialize_client_api_via_config_file()
         {
-            var configProvider = new ConfigurationProvider();
-            var provider = new BrokerConfigProvider(configProvider);
-            var settings = provider.Init(x =>
+            // var configProvider = new ConfigurationProvider();
+            // var provider = new BrokerConfigProvider(configProvider);
+            var provider = new BrokerConfigProvider();
+            var settings = provider.Configure(x =>
             {
             });
             

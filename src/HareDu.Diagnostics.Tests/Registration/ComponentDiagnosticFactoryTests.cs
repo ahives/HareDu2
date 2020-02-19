@@ -41,10 +41,10 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             _container = builder.Build();
 
-            var configProvider = _container.Resolve<IConfigurationProvider>();
+            var configProvider = _container.Resolve<IFileConfigurationProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
 
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             
             configProvider.TryGet(path, out HareDuConfig config);
 
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_get_diagnostic()
         {
-            // string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            // string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             //
             // var configProvider = new ConfigurationProvider();
             // configProvider.TryGet(path, out HareDuConfig config);
@@ -105,9 +105,9 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_get_diagnostic_after_instantiation()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/config.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             
-            var configProvider = new ConfigurationProvider();
+            var configProvider = new FileConfigurationProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();

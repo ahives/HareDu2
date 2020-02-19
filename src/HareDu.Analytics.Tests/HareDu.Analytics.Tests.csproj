@@ -21,9 +21,6 @@
 
     <ItemGroup>
       <None Remove="config.yaml" />
-      <Content Include="config.yaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
 
 </Project>

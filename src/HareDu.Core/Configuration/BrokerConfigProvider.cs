@@ -21,55 +21,17 @@ namespace HareDu.Core.Configuration
     public class BrokerConfigProvider :
         IBrokerConfigProvider
     {
-        readonly IConfigurationProvider _configurationProvider;
-        readonly string _path;
-
-        public BrokerConfigProvider(IConfigurationProvider configurationProvider)
+        public BrokerConfig Configure(Action<BrokerConfigurator> configurator)
         {
-            _configurationProvider = configurationProvider;
-            _path = $"{Directory.GetCurrentDirectory()}/config.yaml";
-        }
-
-        public BrokerConfig Init(Action<ClientConfigProvider> configuration)
-        {
-            if (configuration == null)
-            {
-                if (_configurationProvider.TryGet(_path, out HareDuConfig config))
-                    return Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
-
+            if (configurator == null)
                 return ConfigCache.Default.Broker;
-            }
             
-            var init = new ClientConfigProviderImpl();
-            configuration(init);
+            var impl = new BrokerConfiguratorImpl();
+            configurator(impl);
 
-            BrokerConfig settings = init.Settings.Value;
+            BrokerConfig config = impl.Settings.Value;
 
-            return Validate(settings) ? settings : ConfigCache.Default.Broker;
-        }
-
-        public bool TryGet(out BrokerConfig settings)
-        {
-            if (_configurationProvider.TryGet(_path, out HareDuConfig config))
-            {
-                settings = Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
-                return true;
-            }
-
-            settings = ConfigCache.Default.Broker;
-            return true;
-        }
-
-        public bool TryGet(string path, out BrokerConfig settings)
-        {
-            if (_configurationProvider.TryGet(path, out HareDuConfig config))
-            {
-                settings = Validate(config.Broker) ? config.Broker : ConfigCache.Default.Broker;
-                return true;
-            }
-
-            settings = ConfigCache.Default.Broker;
-            return true;
+            return Validate(config) ? config : ConfigCache.Default.Broker;
         }
 
         bool Validate(BrokerConfig config)
@@ -79,8 +41,8 @@ namespace HareDu.Core.Configuration
                !string.IsNullOrWhiteSpace(config.Url);
 
 
-        class ClientConfigProviderImpl :
-            ClientConfigProvider
+        class BrokerConfiguratorImpl :
+            BrokerConfigurator
         {
             string _brokerUrl;
             TimeSpan _timeout;
@@ -89,13 +51,13 @@ namespace HareDu.Core.Configuration
 
             public Lazy<BrokerConfig> Settings { get; }
 
-            public ClientConfigProviderImpl()
+            public BrokerConfiguratorImpl()
             {
                 Settings = new Lazy<BrokerConfig>(
                     () => new BrokerConfigImpl(_brokerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void ConnectTo(string brokerUrl) => _brokerUrl = brokerUrl;
+            public void ConnectTo(string url) => _brokerUrl = url;
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 

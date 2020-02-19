@@ -31,10 +31,9 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var configProvider = x.Resolve<IConfigurationProvider>();
-                    string path = $"{Directory.GetCurrentDirectory()}/config.yaml";
+                    var provider = x.Resolve<IFileConfigurationProvider>();
 
-                    configProvider.TryGet(path, out HareDuConfig config);
+                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
@@ -45,13 +44,13 @@ namespace HareDu.AutofacIntegration
 
             builder.Register(x =>
                 {
-                    var settingsProvider = x.Resolve<IBrokerConfigProvider>();
+                    var provider = x.Resolve<IFileConfigurationProvider>();
+
+                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+
                     var comm = x.Resolve<IBrokerCommunication>();
 
-                    if (!settingsProvider.TryGet(out BrokerConfig settings))
-                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                    return new BrokerObjectFactory(comm.GetClient(settings));
+                    return new BrokerObjectFactory(comm.GetClient(config.Broker));
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -72,8 +71,8 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticScanner>()
                 .SingleInstance();
 
-            builder.RegisterType<ConfigurationProvider>()
-                .As<IConfigurationProvider>()
+            builder.RegisterType<FileConfigurationProvider>()
+                .As<IFileConfigurationProvider>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticReportTextFormatter>()
