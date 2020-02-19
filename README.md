@@ -13,18 +13,17 @@ https://ahives.gitbooks.io/haredu2/content/
 
 History
 =======
-HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came about from feedback of production deployments and because the original API was lacking in some key areas. In particular,  
+HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
 1. Increased test coverage
 2. Improved low level administrative APIs
 3. New APIs for diagnostics, cluster snapshotting and monitoring
 4. Dependency Injection (e.g., Autofac, .NET Core) support for quick API registration
 5. .NET Core support
+6. 
 
 
-Get It
-======
-
-You can now get HareDu on NuGet by searching for HareDu. Also, you can check out HareDu at http://www.nuget.org/packages/HareDu/
+# Get It
+You can now get HareDu 2 on NuGet by searching for HareDu. Also, you can check out HareDu at https://github.com/ahives/HareDu2
 
 From the Package Manager Console in Visual Studio you can run the following PowerShell script to get the latest version of HareDu...
 
@@ -41,15 +40,26 @@ PM> Install-Package -Version 2.0.0 HareDu
 Since HareDu 2 was built primarily using Core APIs in Mono 5.x, it is now possible to get it in your preferred .NET environment on your preferred operating systems (e.g. Windows, macOS, Linux, etc.). 
 
 
-Dependencies
-============
-.NET Framework 4.6.2 or above
-
-.NET Core 2.1 or above
+# Dependencies
+.NET Framework 4.6.2 or above/.NET Core 2.1 or above
 
 JSON.NET 12.0.2 or above
 
 ASP.NET WebAPI 5.2.3 or above
+
+
+# Using the Broker API
+The Broker API is considered the low level API because it allows you to administer RabbitMQ like 
+
+<pre><code class="c#">
+var settingsProvider = x.Resolve<IBrokerConfigProvider>();
+var comm = new BrokerCommunication();
+
+bool settingsProvider.TryGet(out BrokerConfig settings))
+                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
+
+                    return new BrokerObjectFactory(comm.GetClient(settings));
+</code></pre>
 
 
 # Debugging
@@ -58,7 +68,7 @@ ASP.NET WebAPI 5.2.3 or above
 If you find that making an API call is failing for reasons unknown, HareDu 2 introduces a way to return a text representation of the serialized JSON of the returned ```Result<T>``` monad. Here is an example,
 
 <pre><code class="c#">
-var result = await _container.Resolve<IBrokerObjectFactory>()
+var result = await factory
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -75,7 +85,7 @@ string debugText = result.ToJsonString());
 </code></pre>
 
 
-So, the output calling the ToJsonString extension method would look something like this,
+So, the resulting output of calling the ToJsonString extension method would look something like this,
 
 <pre><code class="json">
 {
