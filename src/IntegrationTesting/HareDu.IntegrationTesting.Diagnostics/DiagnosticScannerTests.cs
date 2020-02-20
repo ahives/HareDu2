@@ -115,8 +115,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var configProvider = new FileConfigurationProvider();
             configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-            var comm = new BrokerCommunication();
-            var factory = new SnapshotFactory(new BrokerObjectFactory(comm.GetClient(config.Broker)));
+            var factory = new SnapshotFactory(new BrokerObjectFactory(config.Broker));
 
             var resource = factory.Snapshot<BrokerConnectivity>().Execute();
             

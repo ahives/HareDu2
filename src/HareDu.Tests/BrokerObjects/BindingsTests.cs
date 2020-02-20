@@ -16,9 +16,9 @@ namespace HareDu.Tests.BrokerObjects
     using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
+    using HareDu.Registration;
     using Model;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
 
     [TestFixture]
@@ -29,6 +29,7 @@ namespace HareDu.Tests.BrokerObjects
         public async Task Should_be_able_to_get_all_bindings()
         {
             var container = GetContainerBuilder("TestData/BindingInfo.json").Build();
+            
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .GetAll();

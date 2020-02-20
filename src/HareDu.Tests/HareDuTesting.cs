@@ -13,12 +13,19 @@
 // limitations under the License.
 namespace HareDu.Tests
 {
+    using System;
     using System.IO;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Autofac;
-    using Core;
     using Core.Configuration;
-    using Fakes;
-    using Registration;
+    using HareDu.Registration;
+    using Moq;
+    using Moq.Protected;
+    using NUnit.Framework;
 
     public class HareDuTesting
     {
@@ -28,19 +35,11 @@ namespace HareDu.Tests
 
             builder.Register(x =>
                 {
-                    var provider = x.Resolve<IFileConfigurationProvider>();
-
-                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
-
-                    var comm = x.Resolve<IBrokerCommunication>();
-
-                    return new BrokerObjectFactory(comm.GetClient(config.Broker));
+                    string data = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{path}");
+                    
+                    return new BrokerObjectFactory(GetClient(data));
                 })
                 .As<IBrokerObjectFactory>()
-                .SingleInstance();
-
-            builder.Register(x => new FakeBrokerCommunication(path))
-                .As<IBrokerCommunication>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()
@@ -58,21 +57,8 @@ namespace HareDu.Tests
         {
             var builder = new ContainerBuilder();
 
-            builder.Register(x =>
-                {
-                    var provider = x.Resolve<IFileConfigurationProvider>();
-
-                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
-
-                    var comm = x.Resolve<IBrokerCommunication>();
-
-                    return new BrokerObjectFactory(comm.GetClient(config.Broker));
-                })
+            builder.Register(x => new BrokerObjectFactory(GetClient(string.Empty)))
                 .As<IBrokerObjectFactory>()
-                .SingleInstance();
-
-            builder.Register(x => new FakeBrokerCommunication())
-                .As<IBrokerCommunication>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()
@@ -84,6 +70,30 @@ namespace HareDu.Tests
                 .SingleInstance();
 
             return builder;
+        }
+        
+        protected HttpClient GetClient(string data)
+        {
+            var mock = new Mock<HttpMessageHandler>();
+            
+            mock.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(
+                    new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent(data)
+                    })
+                .Verifiable();
+            
+            var uri = new Uri("http://localhost:15672/");
+            var client = new HttpClient(mock.Object){BaseAddress = uri};
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            return client;
         }
     }
 }

@@ -48,19 +48,13 @@ namespace HareDu.AutofacIntegration
 
                     provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-                    var comm = x.Resolve<IBrokerCommunication>();
-
-                    return new BrokerObjectFactory(comm.GetClient(config.Broker));
+                    return new BrokerObjectFactory(config.Broker);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
             builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
                 .As<ISnapshotFactory>()
-                .SingleInstance();
-
-            builder.RegisterType<BrokerCommunication>()
-                .As<IBrokerCommunication>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticsConfigProvider>()

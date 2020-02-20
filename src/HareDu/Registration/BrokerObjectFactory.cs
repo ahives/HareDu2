@@ -16,10 +16,12 @@ namespace HareDu.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using Core;
+    using Core.Configuration;
     using Core.Extensions;
-    using Core.Testing;
 
     public class BrokerObjectFactory :
         IBrokerObjectFactory
@@ -30,6 +32,16 @@ namespace HareDu.Registration
         public BrokerObjectFactory(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _cache = new Dictionary<string, object>();
+            
+            bool registered = TryRegisterAll();
+            if (!registered)
+                throw new HareDuBrokerObjectInitException();
+        }
+
+        public BrokerObjectFactory(BrokerConfig config)
+        {
+            _client = GetClient(config);
             _cache = new Dictionary<string, object>();
             
             bool registered = TryRegisterAll();
@@ -68,11 +80,22 @@ namespace HareDu.Registration
             _client.CancelPendingRequests();
         }
 
-        bool IsNotFakeType<T>(Type x)
-            where T : BrokerObject
-            => typeof(T).IsAssignableFrom(x)
-               && !x.IsInterface
-               && x.GetInterface(typeof(HareDuTestingFake).FullName) == null;
+        protected virtual HttpClient GetClient(BrokerConfig config)
+        {
+            var uri = new Uri($"{config.Url}/");
+            var handler = new HttpClientHandler
+            {
+                Credentials = new NetworkCredential(config.Credentials.Username, config.Credentials.Password)
+            };
+            
+            var client = new HttpClient(handler){BaseAddress = uri};
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (config.Timeout != TimeSpan.Zero)
+                client.Timeout = config.Timeout;
+
+            return client;
+        }
 
         protected virtual bool TryRegisterAll()
         {

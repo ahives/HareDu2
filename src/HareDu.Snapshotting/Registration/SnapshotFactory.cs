@@ -43,9 +43,10 @@ namespace HareDu.Snapshotting.Registration
         {
             _config = config;
             
-            var comm = new BrokerCommunication();
+            // var comm = new BrokerCommunication();
             
-            _factory = new BrokerObjectFactory(comm.GetClient(_config));
+            // _factory = new BrokerObjectFactory(comm.GetClient(_config));
+            _factory = new BrokerObjectFactory(_config);
             _cache = new Dictionary<string, object>();
             
             bool registered = TryRegisterAll();

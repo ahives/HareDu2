@@ -51,6 +51,22 @@ ASP.NET WebAPI 5.2.3 or above
 # Using the Broker API
 The Broker API is considered the low level API because it allows you to administer RabbitMQ like 
 
+Initializing the Broker API using a YAML configuration file...
+<pre><code class="c#">
+
+</code></pre>
+
+Initializing the Broker API programmatically...
+<pre><code class="c#">
+var provider = new BrokerConfigProvider();
+var config = provider.Configure(x =>
+{
+    x.ConnectTo("http://localhost:15672");
+    x.UsingCredentials("guest", "guest");
+});
+</code></pre>
+
+
 <pre><code class="c#">
 var settingsProvider = x.Resolve<IBrokerConfigProvider>();
 var comm = new BrokerCommunication();

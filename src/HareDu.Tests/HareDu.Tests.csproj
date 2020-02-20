@@ -138,6 +138,6 @@
     <None Remove="config1.yaml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Registration" />
+    <Folder Include="Fakes" />
   </ItemGroup>
 </Project>

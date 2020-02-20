@@ -40,8 +40,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDu(this IServiceCollection services)
         {
-            services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
-            
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
@@ -60,8 +58,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDu(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
-            
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
@@ -78,8 +74,6 @@ namespace HareDu.CoreIntegration
         /// <returns></returns>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services)
         {
-            services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
-            
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
@@ -102,8 +96,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
-            
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
@@ -125,8 +117,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
-            services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
-            
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
@@ -159,8 +149,6 @@ namespace HareDu.CoreIntegration
         /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
-            
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
@@ -217,9 +205,7 @@ namespace HareDu.CoreIntegration
 
                 provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-                var comm = x.GetService<IBrokerCommunication>();
-
-                return new BrokerObjectFactory(comm.GetClient(config.Broker));
+                return new BrokerObjectFactory(config.Broker);
             });
         }
 
@@ -231,9 +217,7 @@ namespace HareDu.CoreIntegration
 
                 provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-                var comm = x.GetService<IBrokerCommunication>();
-
-                return new BrokerObjectFactory(comm.GetClient(config.Broker));
+                return new BrokerObjectFactory(config.Broker);
             });
         }
 

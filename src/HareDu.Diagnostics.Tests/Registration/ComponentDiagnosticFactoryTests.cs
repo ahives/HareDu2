@@ -93,9 +93,6 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_TryGet_does_not_throw()
         {
-            // var diagnosticsRegistrar = new ComponentDiagnosticRegistry();
-            // diagnosticsRegistrar.RegisterAll();
-            // var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
             var factory = _container.Resolve<IDiagnosticFactory>();
 
             factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
@@ -111,14 +108,6 @@ namespace HareDu.Diagnostics.Tests.Registration
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
-            // var diagnosticAnalyzerRegistry = new DiagnosticProbeRegistrar(config.Diagnostics, knowledgeBaseProvider);
-            // diagnosticAnalyzerRegistry.RegisterAll();
-            //
-            // var diagnosticRegistry = new ComponentDiagnosticRegistrar(diagnosticAnalyzerRegistry);
-            // diagnosticRegistry.RegisterAll();
-            // diagnosticRegistry.Register<FakeDiagnostic>();
-
-            // var factory = new ComponentDiagnosticFactory(diagnosticAnalyzerRegistry, diagnosticRegistry);
             var factory = new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();

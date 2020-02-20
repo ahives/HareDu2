@@ -60,10 +60,7 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
-                var comm = new BrokerCommunication();
-                var client = comm.GetClient(config.Broker);
-
-                var brokerFactory = new BrokerObjectFactory(client);
+                var brokerFactory = new BrokerObjectFactory(config.Broker);
                 var factory = new SnapshotFactory(brokerFactory);
 
                 var resource = factory
@@ -80,10 +77,7 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
-                var comm = new BrokerCommunication();
-                var client = comm.GetClient(config.Broker);
-
-                var brokerFactory = new BrokerObjectFactory(client);
+                var brokerFactory = new BrokerObjectFactory(config.Broker);
                 var factory = new SnapshotFactory(brokerFactory);
 
                 var resource = factory

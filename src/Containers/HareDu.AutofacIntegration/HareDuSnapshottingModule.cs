@@ -15,10 +15,8 @@ namespace HareDu.AutofacIntegration
 {
     using System.IO;
     using Autofac;
-    using Core;
     using Core.Configuration;
     using Registration;
-    using Snapshotting;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
@@ -33,9 +31,7 @@ namespace HareDu.AutofacIntegration
 
                     provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-                    var comm = x.Resolve<IBrokerCommunication>();
-
-                    return new BrokerObjectFactory(comm.GetClient(config.Broker));
+                    return new BrokerObjectFactory(config.Broker);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
@@ -46,10 +42,6 @@ namespace HareDu.AutofacIntegration
             
             builder.RegisterType<SnapshotWriter>()
                 .As<ISnapshotWriter>()
-                .SingleInstance();
-
-            builder.RegisterType<BrokerCommunication>()
-                .As<IBrokerCommunication>()
                 .SingleInstance();
 
             builder.RegisterType<BrokerConfigProvider>()

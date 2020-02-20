@@ -16,8 +16,8 @@ namespace HareDu.Tests.BrokerObjects
     using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
+    using HareDu.Registration;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
 
     [TestFixture]
