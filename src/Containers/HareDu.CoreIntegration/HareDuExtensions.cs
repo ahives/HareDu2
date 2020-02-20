@@ -127,7 +127,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
             
-            services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
+            services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
@@ -161,7 +161,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerCommunication, BrokerCommunication>();
             
-            services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
+            services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
             services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
 
@@ -193,19 +193,19 @@ namespace HareDu.CoreIntegration
                     .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult();
-
+        
                 scheduler.JobFactory =
                     new HareDuJobFactory<T>(
                         x.GetService<IDiagnosticScanner>(),
                         x.GetService<ISnapshotFactory>(),
                         x.GetService<ISnapshotWriter>(),
                         x.GetService<IDiagnosticWriter>());
-
+        
                 return scheduler;
             });
-
+        
             services.TryAddSingleton<IHareDuScheduler, HareDuScheduler>();
-
+        
             return services;
         }
 

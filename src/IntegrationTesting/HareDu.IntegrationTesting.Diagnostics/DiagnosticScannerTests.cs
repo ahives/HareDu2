@@ -139,10 +139,50 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var configProvider = new FileConfigurationProvider();
             configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-            var factory = new SnapshotFactory(config);
+            var factory = new SnapshotFactory(config.Broker);
             var resource = factory.Snapshot<BrokerConnectivity>().Execute();
 
             IDiagnosticScanner scanner = new DiagnosticScanner(config);
+
+            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var report = scanner.Scan(snapshot);
+
+            var formatter = new DiagnosticReportTextFormatter();
+
+            string formattedReport = formatter.Format(report);
+            
+            Console.WriteLine(formattedReport);
+        }
+        
+        [Test]
+        public async Task Test5()
+        {
+            var provider1 = new BrokerConfigProvider();
+            var config1 = provider1.Configure(x =>
+            {
+                x.ConnectTo("http://localhost:15672");
+                x.UsingCredentials("guest", "guest");
+            });
+            var factory1 = new SnapshotFactory(config1);
+            var resource = factory1.Snapshot<BrokerConnectivity>().Execute();
+
+            var provider2 = new DiagnosticsConfigProvider();
+
+            var config = provider2.Configure(x =>
+            {
+                x.SetMessageRedeliveryCoefficient(0.60M);
+                x.SetSocketUsageCoefficient(0.60M);
+                x.SetConsumerUtilizationWarningCoefficient(0.65M);
+                x.SetQueueHighFlowThreshold(90);
+                x.SetQueueLowFlowThreshold(10);
+                x.SetRuntimeProcessUsageCoefficient(0.65M);
+                x.SetFileDescriptorUsageWarningCoefficient(0.65M);
+                x.SetHighClosureRateWarningThreshold(90);
+                x.SetHighCreationRateWarningThreshold(60);
+            });
+            
+            var factory2 = new DiagnosticFactory(config, new DefaultKnowledgeBaseProvider());
+            IDiagnosticScanner scanner = new DiagnosticScanner(factory2);
 
             var snapshot = resource.Timeline.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);

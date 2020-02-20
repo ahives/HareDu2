@@ -25,7 +25,7 @@ namespace HareDu.Snapshotting.Registration
     public class SnapshotFactory :
         ISnapshotFactory
     {
-        readonly HareDuConfig _config;
+        readonly BrokerConfig _config;
         readonly IBrokerObjectFactory _factory;
         readonly IDictionary<string, object> _cache;
 
@@ -39,13 +39,13 @@ namespace HareDu.Snapshotting.Registration
                 throw new HareDuBrokerObjectInitException();
         }
 
-        public SnapshotFactory(HareDuConfig config)
+        public SnapshotFactory(BrokerConfig config)
         {
             _config = config;
             
             var comm = new BrokerCommunication();
             
-            _factory = new BrokerObjectFactory(comm.GetClient(_config.Broker));
+            _factory = new BrokerObjectFactory(comm.GetClient(_config));
             _cache = new Dictionary<string, object>();
             
             bool registered = TryRegisterAll();

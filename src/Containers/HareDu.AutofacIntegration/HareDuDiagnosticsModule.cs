@@ -63,6 +63,10 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerCommunication>()
                 .SingleInstance();
 
+            builder.RegisterType<DiagnosticsConfigProvider>()
+                .As<IDiagnosticsConfigProvider>()
+                .SingleInstance();
+
             builder.RegisterType<BrokerConfigProvider>()
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();

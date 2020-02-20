@@ -36,6 +36,12 @@ namespace HareDu.Diagnostics.Registration
 
         public DiagnosticFactory(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
         {
+            if (config.IsNull())
+                throw new HareDuBrokerObjectInitException();
+            
+            if (knowledgeBaseProvider.IsNull())
+                throw new HareDuBrokerObjectInitException();
+
             _config = config;
             _knowledgeBaseProvider = knowledgeBaseProvider;
             _cache = new Dictionary<string, object>();
