@@ -96,9 +96,6 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var provider = new BrokerConfigProvider();
             var config = provider.Configure(x => { });
-            // var comm = new BrokerCommunication();
-            
-            // var factory = new BrokerObjectFactory(comm.GetClient(config));
             var factory = new BrokerObjectFactory(config);
             
             var result = await factory

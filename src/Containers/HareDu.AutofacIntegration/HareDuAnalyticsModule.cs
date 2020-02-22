@@ -30,7 +30,7 @@ namespace HareDu.AutofacIntegration
         {
             builder.Register(x =>
                 {
-                    var configProvider = x.Resolve<IFileConfigurationProvider>();
+                    var configProvider = x.Resolve<IFileConfigProvider>();
                     string path = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
 
                     configProvider.TryGet(path, out var config);
@@ -61,8 +61,8 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticScanner>()
                 .SingleInstance();
 
-            builder.RegisterType<FileConfigurationProvider>()
-                .As<IFileConfigurationProvider>()
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IFileConfigProvider>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticReportTextFormatter>()

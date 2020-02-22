@@ -23,7 +23,7 @@ namespace HareDu.Core.Tests.Configuration
         [Test]
         public void Test()
         {
-            var provider = new FileConfigurationProvider();
+            var provider = new YamlConfigProvider();
 
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             

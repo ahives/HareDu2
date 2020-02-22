@@ -16,7 +16,7 @@ namespace HareDu.Model
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
-    public interface ServerDefinitionInfo
+    public interface ServerInfo
     {
         [JsonProperty("rabbit_version")]
         string RabbitMqVersion { get; }

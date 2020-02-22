@@ -20,14 +20,14 @@ namespace HareDu.AutofacIntegration
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
-    public class HareDuSnapshottingModule :
+    public class HareDuSnapshotModule :
         Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder.Register(x =>
                 {
-                    var provider = x.Resolve<IFileConfigurationProvider>();
+                    var provider = x.Resolve<IFileConfigProvider>();
 
                     provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
@@ -48,8 +48,8 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<FileConfigurationProvider>()
-                .As<IFileConfigurationProvider>()
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IFileConfigProvider>()
                 .SingleInstance();
             
             base.Load(builder);

@@ -165,5 +165,104 @@ namespace HareDu.Tests.BrokerObjects
             result.Data[0].ReclaimedBytesFromGCDetails?.Rate.ShouldBe(147054.4M);
             result.Data[0].Type.ShouldBe("disc");
         }
+        
+        [Test]
+        public async Task Verify_will_return_node_memory_usage()
+        {
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetMemoryUsage("haredu@localhost");
+            
+            result.HasData.ShouldBeTrue();
+            result.HasFaulted.ShouldBeFalse();
+            result.Data.Memory.ConnectionReaders.ShouldBe(0);
+            result.Data.Memory.ConnectionWriters.ShouldBe(0);
+            result.Data.Memory.ConnectionChannels.ShouldBe(0);
+            result.Data.Memory.ConnectionOther.ShouldBe(132692);
+            result.Data.Memory.QueueProcesses.ShouldBe(210444);
+            result.Data.Memory.QueueSlaveProcesses.ShouldBe(0);
+            result.Data.Memory.QuorumQueueProcesses.ShouldBe(76132);
+            result.Data.Memory.Plugins.ShouldBe(4035284);
+            result.Data.Memory.OtherProcesses.ShouldBe(23706508);
+            result.Data.Memory.Metrics.ShouldBe(235692);
+            result.Data.Memory.ManagementDatabase.ShouldBe(1053904);
+            result.Data.Memory.Mnesia.ShouldBe(190488);
+            result.Data.Memory.QuorumInMemoryStorage.ShouldBe(45464);
+            result.Data.Memory.OtherInMemoryStorage.ShouldBe(3508368);
+            result.Data.Memory.Binary.ShouldBe(771152);
+            result.Data.Memory.MessageIndex.ShouldBe(338800);
+            result.Data.Memory.ByteCode.ShouldBe(27056269);
+            result.Data.Memory.Atom.ShouldBe(1566897);
+            result.Data.Memory.OtherSystem.ShouldBe(16660090);
+            result.Data.Memory.AllocatedUnused.ShouldBe(17765544);
+            result.Data.Memory.ReservedUnallocated.ShouldBe(0);
+            result.Data.Memory.Strategy.ShouldBe("rss");
+            result.Data.Memory.Total.Erlang.ShouldBe(79588184);
+            result.Data.Memory.Total.Strategy.ShouldBe(32055296);
+            result.Data.Memory.Total.Allocated.ShouldBe(97353728);
+        }
+
+        [Test]
+        public async Task Verify_will_not_return_node_memory_usage_when_node_missing_1()
+        {
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetMemoryUsage(string.Empty);
+            
+            result.HasData.ShouldBeFalse();
+            result.HasFaulted.ShouldBeTrue();
+        }
+
+        [Test]
+        public async Task Verify_will_not_return_node_memory_usage_when_node_missing_2()
+        {
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetMemoryUsage(null);
+            
+            result.HasData.ShouldBeFalse();
+            result.HasFaulted.ShouldBeTrue();
+        }
+
+        [Test]
+        public async Task Verify_will_not_return_node_memory_usage_when_node_missing_3()
+        {
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetMemoryUsage("   ");
+            
+            result.HasData.ShouldBeFalse();
+            result.HasFaulted.ShouldBeTrue();
+        }
+        
+        [Test]
+        public async Task Verify_can_check_if_named_node_healthy()
+        {
+            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetHealth("rabbit@localhost");
+
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.Status.ShouldBe("ok");
+        }
+
+        [Test]
+        public async Task Verify_can_check_if_node_healthy()
+        {
+            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").Build();
+            var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetHealth();
+            
+            result.HasFaulted.ShouldBeFalse();
+            result.HasData.ShouldBeTrue();
+            result.Data.Status.ShouldBe("ok");
+        }
     }
 }

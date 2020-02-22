@@ -53,5 +53,34 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 Console.WriteLine();
             }
         }
+
+        [Test]
+        public async Task Verify_can_check_if_named_node_healthy()
+        {
+            var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetHealth("rabbit@localhost");
+
+            if (result.HasData)
+            {
+                var info = result.Select(x => x.Data);
+                
+                Console.WriteLine((string) "Reason: {0}", (object) info.Reason);
+                Console.WriteLine((string) "Status: {0}", (object) info.Status);
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+//            Console.WriteLine(result.DebugInfo.URL);
+        }
+
+        [Test]
+        public async Task Verify_can_check_if_node_healthy()
+        {
+            var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetHealth();
+            
+            Console.WriteLine((string) result.DebugInfo.URL);
+        }
     }
 }

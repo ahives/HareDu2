@@ -42,7 +42,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
             
             services.AddBrokerObjectFactory();
 
@@ -60,7 +60,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
 
             services.AddBrokerObjectFactory(path);
 
@@ -72,11 +72,11 @@ namespace HareDu.CoreIntegration
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services)
+        public static IServiceCollection AddHareDuSnapshot(this IServiceCollection services)
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
 
             services.AddBrokerObjectFactory();
             
@@ -94,11 +94,11 @@ namespace HareDu.CoreIntegration
         /// <param name="path"></param>
         /// <returns></returns>
         /// <exception cref="HareDuClientConfigurationException"></exception>
-        public static IServiceCollection AddHareDuSnapshotting(this IServiceCollection services, string path)
+        public static IServiceCollection AddHareDuSnapshot(this IServiceCollection services, string path)
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
 
             services.AddBrokerObjectFactory(path);
 
@@ -119,7 +119,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
@@ -151,7 +151,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigurationProvider, FileConfigurationProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
@@ -201,7 +201,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
             {
-                var provider = x.GetService<IFileConfigurationProvider>();
+                var provider = x.GetService<IFileConfigProvider>();
 
                 provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
@@ -213,7 +213,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
             {
-                var provider = x.GetService<IFileConfigurationProvider>();
+                var provider = x.GetService<IFileConfigProvider>();
 
                 provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
@@ -225,7 +225,7 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IDiagnosticFactory>(x =>
             {
-                var configProvider = x.GetService<IFileConfigurationProvider>();
+                var configProvider = x.GetService<IFileConfigProvider>();
 
                 configProvider.TryGet(path, out HareDuConfig config);
 

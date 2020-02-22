@@ -32,7 +32,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [OneTimeSetUp]
         public void Init()
         {
-            var configProvider = new FileConfigurationProvider();
+            var configProvider = new YamlConfigProvider();
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
             
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";

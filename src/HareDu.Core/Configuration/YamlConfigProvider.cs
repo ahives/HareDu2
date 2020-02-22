@@ -20,8 +20,8 @@ namespace HareDu.Core.Configuration
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
-    public class FileConfigurationProvider :
-        IFileConfigurationProvider
+    public class YamlConfigProvider :
+        IFileConfigProvider
     {
         public bool TryGet(string path, out HareDuConfig config)
         {

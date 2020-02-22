@@ -40,9 +40,9 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [Test]
         public async Task Should_be_able_to_get_all_definitions()
         {
-            Result<ServerDefinitionInfo> result = await _container.Resolve<IBrokerObjectFactory>()
+            Result<ServerInfo> result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Server>()
-                .GetDefinition();
+                .Get();
 
             if (result.HasData)
             {

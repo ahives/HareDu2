@@ -33,5 +33,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
 
             return new SuccessfulResultList<NodeInfo>(data, null);
         }
+
+        public async Task<Result<NodeHealthInfo>> GetHealth(string node = null, CancellationToken cancellationToken = default) => throw new System.NotImplementedException();
+
+        public async Task<Result<NodeMemoryUsageInfo>> GetMemoryUsage(string node, CancellationToken cancellationToken = default) => throw new System.NotImplementedException();
     }
 }

@@ -15,6 +15,11 @@ namespace HareDu.Snapshotting.Registration
 {
     public interface ISnapshotFactory
     {
+        /// <summary>
+        /// Returns a snapshot.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         T Snapshot<T>()
             where T : HareDuSnapshot<Snapshot>;
     }

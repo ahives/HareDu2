@@ -27,5 +27,21 @@ namespace HareDu
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// Runs a test to check if the current RabbitMQ node is healthy.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result<NodeHealthInfo>> GetHealth(string node = null, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Result<NodeMemoryUsageInfo>> GetMemoryUsage(string node, CancellationToken cancellationToken = default);
     }
 }

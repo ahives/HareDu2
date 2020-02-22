@@ -42,10 +42,6 @@ namespace HareDu.Snapshotting.Registration
         public SnapshotFactory(BrokerConfig config)
         {
             _config = config;
-            
-            // var comm = new BrokerCommunication();
-            
-            // _factory = new BrokerObjectFactory(comm.GetClient(_config));
             _factory = new BrokerObjectFactory(_config);
             _cache = new Dictionary<string, object>();
             

@@ -29,7 +29,7 @@ namespace HareDu.Tests.BrokerObjects
             var container = GetContainerBuilder("TestData/ServerDefinitionInfo.json").Build();
             var result = await container.Resolve<IBrokerObjectFactory>()
                 .Object<Server>()
-                .GetDefinition();
+                .Get();
             
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();

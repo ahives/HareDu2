@@ -1,5 +1,4 @@
-HareDu 2
-========
+# HareDu 2
 
 ![Join the chat at https://gitter.im/HareDu2/Lobby](https://img.shields.io/gitter/room/haredu2/HareDu2?style=flat)
 ![NuGet downloads](https://img.shields.io/nuget/dt/haredu?style=flat)
@@ -11,8 +10,8 @@ Docs under construction here
 
 https://ahives.gitbooks.io/haredu2/content/
 
-History
-=======
+# History
+
 HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
 1. Increased test coverage
 2. Improved low level administrative APIs
@@ -20,6 +19,166 @@ HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came
 4. Dependency Injection (e.g., Autofac, .NET Core) support for quick API registration
 5. .NET Core support
 6. 
+
+# Overview
+
+HareDu 2 comes with three major APIs; that is, Broker, Snapshotting, and Diagnostics, respectively.  
+
+### Broker API
+
+The Broker API is the lowest level API because it interacts directly with the RabbitMQ broker. With this API you can administer the broker and perform the below operations on each broker object:
+
+| Broker Object  | Operations |
+|---| --- |
+| **Binding** | GetAll, Create, Delete |
+| **Channel** | GetAll |
+| **Connection** | GetAll |
+| **Consumer** | GetAll |
+| **Exchange** | GetAll, Create, Delete |
+| **GlobalParameter** | GetAll, Create, Delete |
+| **Node** | GetAll, GetHealth, GetMemoryUsage |
+| **Policy** | GetAll, Create, Delete |
+| **Queue** | GetAll, Create, Delete, Empty, Peek |
+| **ScopedParameter** | GetAll, Create, Delete |
+| **Server**  | Get, GetHealth |
+| **SystemOverview** | Get |
+| **TopicPermissions** | GetAll, Create, Delete |
+| **User** | GetAll, GetAllWithoutPermissions, Create, Delete |
+| **UserPermissions** | GetAll, Create, Delete |
+| **VirtualHost** | GetAll, Create, Delete, Startup |
+| **VirtualHostLimits** | GetAll, Define, Delete |
+
+
+#### Using the Broker API
+The Broker API is considered the low level API because it allows you to administer RabbitMQ (e.g., users, queues, exchanges, etc.).
+
+**Step 1: Get the configuration to allow HareDu to communicate with the RabbitMQ broker.**
+
+From a YAML file...
+<pre><code class="c#">
+var provider = new YamlConfigProvider();
+provider.TryGet("haredu.yaml", out HareDuConfig config);
+</code></pre>
+
+Programmatically...
+
+<pre><code class="c#">
+var provider = new BrokerConfigProvider();
+var config = provider.Configure(x =>
+{
+    x.ConnectTo("http://localhost:15672");
+    x.UsingCredentials("guest", "guest");
+});
+</code></pre>
+
+
+**Step 2: Initialize BrokerFactory**
+
+If using file-based configuration => ```var factory = new BrokerObjectFactory(config.Broker);```  
+If using broker configuration => ```var factory = new BrokerObjectFactory(config);```
+
+**Step 3: Get an API object**
+
+```var obj = factory.Object<Exchange>();```
+
+
+**Step 4: Call methods from API object**
+<pre><code class="c#">
+var result = obj.GetAll();
+</code></pre>
+Note: The above code will return a `Task<T>` so if you want to return the unwrapped ```Result``` or ```Result<T>``` monad you need to use an ```await``` or call the HareDu ```Unfold``` extension method.
+
+Using the async/await pattern...
+
+```var result = await obj.GetAll();```
+
+Using the HareDu extension method...
+
+```var result = obj.GetAll().Unfold();```
+
+The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier.
+
+**Register the Broker API**
+Using Autofac IoC container...
+
+```builder.RegisterModule<HareDuModule>();```
+
+Using .NET Core IoC container...
+<pre><code class="c#">
+var services = new ServiceCollection()
+                .AddHareDu()
+                .BuildServiceProvider();
+</code></pre>
+Note: The above IoC container code defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
+
+From this point you can skip to step 3. Since HareDu is a fluent API, you can method chain steps 3 and 4 together like so...
+
+**Autofac**
+
+```var result = await container.Resolve<IBrokerObjectFactory>().Object<Exchange>().GetAll();```
+
+**.NET Core**
+
+```var result = await services.GetService<IBrokerObjectFactory>().Object<Exchange>().GetAll();```
+
+
+### Snapshot API
+
+The Snapshotting API sits atop the Broker API and provides a high level rollup of RabbitMQ broker metrics. Each snapshot makes one or more calls to the Broker API  
+methods aggregating the metric data into a developer-friendly object. Each snapshot is then captured on a timeline that can be then flushed to disk or saved to a database.
+
+#### Using the API
+**Step 1: Configure and initialize a SnapshotFactory.**
+
+If you have a BrokerFactory object already initialized => ```var factory = new SnapshotFactory(brokerFactory);```  
+If you do not have a BrokerFactory object already initialized => ```var factory = new SnapshotFactory(config);```
+
+**Step 2: Get an API object**
+
+```var snapshot = factory.Snapshot<BrokerQueues>();```
+
+The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier.
+
+**Step 3: Take a snapshot**
+
+```snapshot.Execute();```
+
+Snapshots are accessible via the ```Timeline``` property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
+```var factory.Timeline.MostRecent()```
+
+**Register the Snapshot API**
+Using Autofac IoC container...
+
+```builder.RegisterModule<HareDuSnapshotModule>();```
+
+Using .NET Core IoC container...
+<pre><code class="c#">
+var services = new ServiceCollection()
+                .AddHareDuSnapshot()
+                .BuildServiceProvider();
+</code></pre>
+Note: The above IoC container code defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
+
+From this point you can skip to step 3. Since HareDu is a fluent API, you can method chain steps 3 and 4 together like so...
+
+**Autofac**
+
+```var result = await container.Resolve<ISnapshotFactory>().Snapshot<BrokerQueues>().GetAll();```
+
+**.NET Core**
+
+```var result = await services.GetService<ISnapshotFactory>().Snapshot<BrokerQueues>().GetAll();```
+
+
+
+### Diagnostics API
+
+blah, blah, blah
+
+
+### Gotchas
+
+Please note that registering an API will register all dependent objects so there is no need to include them.
 
 
 # Get It
@@ -48,60 +207,14 @@ JSON.NET 12.0.2 or above
 ASP.NET WebAPI 5.2.3 or above
 
 
-# Using the Broker API
-The Broker API is considered the low level API because it allows you to administer RabbitMQ like 
-
-Initializing the Broker API using a YAML configuration file...
-<pre><code class="c#">
-
-</code></pre>
-
-Initializing the Broker API programmatically...
-<pre><code class="c#">
-var provider = new BrokerConfigProvider();
-var config = provider.Configure(x =>
-{
-    x.ConnectTo("http://localhost:15672");
-    x.UsingCredentials("guest", "guest");
-});
-</code></pre>
-
-
-<pre><code class="c#">
-var settingsProvider = x.Resolve<IBrokerConfigProvider>();
-var comm = new BrokerCommunication();
-
-bool settingsProvider.TryGet(out BrokerConfig settings))
-                        throw new HareDuClientConfigurationException("Settings cannot be null and should at least have user credentials, RabbitMQ server URL and port.");
-
-                    return new BrokerObjectFactory(comm.GetClient(settings));
-</code></pre>
-
-
 # Debugging
 
 
-If you find that making an API call is failing for reasons unknown, HareDu 2 introduces a way to return a text representation of the serialized JSON of the returned ```Result<T>``` monad. Here is an example,
+If you find that making an API call is failing for reasons unknown, HareDu 2 introduces a way to return a text representation of the serialized JSON of the returned ```Result``` or ```Result<T>``` monads. Here is an example,
 
-<pre><code class="c#">
-var result = await factory
-                .Object<Queue>()
-                .Create(x =>
-                {
-                    x.Queue("TestQueue31");
-                    x.Configure(c =>
-                    {
-                        c.IsDurable();
-                        c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
-                    });
-                    x.Target(t => t.VirtualHost("HareDu"));
-                });
-            
-string debugText = result.ToJsonString());
-</code></pre>
+```string debugText = result.ToJsonString()```
 
-
-So, the resulting output of calling the ToJsonString extension method would look something like this,
+That's it. So, the resulting output of calling the ToJsonString extension method might look something like this,
 
 <pre><code class="json">
 {
@@ -129,7 +242,7 @@ So, the resulting output of calling the ToJsonString extension method would look
 
 macOS Sierra 10.15.2 (Catalina)
 
-RabbitMQ 3.7.15
+RabbitMQ 3.7.x, 3.8.2
 
 Erlang OTP 22.0.4 (x64)
 
@@ -191,12 +304,3 @@ If using .NET Core...
 
     dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/Publisher.dll
 
-
-# Coming Soon - HareDu 2
-
-HareDu 2 will introduce some pretty awesome new APIs and features but unfortunately there will be breaking changes to those who are currently using HareDu 1.x.
-
-**New Features**
-1. API registration using popular Dependency Injection containers (e.g., Autofac and .NET Core to start)
-2. Brand new APIs (e.g., taking snapshots, running diagnostic scans, etc.)
-3. File-based API configuration using YAML

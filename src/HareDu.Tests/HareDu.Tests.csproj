@@ -136,6 +136,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Remove="config1.yaml" />
+    <None Remove="TestData\MemoryUsageInfo.json" />
+    <Content Include="TestData\MemoryUsageInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fakes" />

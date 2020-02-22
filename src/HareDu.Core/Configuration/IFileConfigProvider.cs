@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Core.Configuration
 {
-    public interface IFileConfigurationProvider
+    public interface IFileConfigProvider
     {
         bool TryGet(string path, out HareDuConfig config);
     }

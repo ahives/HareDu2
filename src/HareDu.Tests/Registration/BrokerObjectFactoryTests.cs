@@ -170,36 +170,6 @@ namespace HareDu.Tests.Registration
         }
 
         [Test]
-        public async Task Verify_can_return_ServerHealth_broker_object()
-        {
-            var impl = _container.Resolve<IBrokerObjectFactory>()
-                .Object<ServerHealth>();
-
-            impl.ShouldNotBeNull();
-            impl.ShouldBeAssignableTo<ServerHealth>();
-        }
-
-        [Test]
-        public async Task Verify_can_return_NodeHealth_broker_object()
-        {
-            var impl = _container.Resolve<IBrokerObjectFactory>()
-                .Object<NodeHealth>();
-
-            impl.ShouldNotBeNull();
-            impl.ShouldBeAssignableTo<NodeHealth>();
-        }
-
-        [Test]
-        public async Task Verify_can_return_Memory_broker_object()
-        {
-            var impl = _container.Resolve<IBrokerObjectFactory>()
-                .Object<Memory>();
-
-            impl.ShouldNotBeNull();
-            impl.ShouldBeAssignableTo<Memory>();
-        }
-
-        [Test]
         public async Task Verify_can_return_Consumer_broker_object()
         {
             var impl = _container.Resolve<IBrokerObjectFactory>()

@@ -40,7 +40,7 @@ namespace HareDu.Examples
         static async Task Main(string[] args)
         {
             var services = new ServiceCollection()
-                .AddHareDuSnapshotting()
+                .AddHareDuSnapshot()
                 .AddHareDuDiagnostics()
                 .AddHareDuScheduling<BrokerConnectivity>()
                 .BuildServiceProvider();
@@ -72,7 +72,7 @@ namespace HareDu.Examples
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<HareDuSnapshottingModule>();
+            builder.RegisterModule<HareDuSnapshotModule>();
 
             builder.Register(x =>
                 {

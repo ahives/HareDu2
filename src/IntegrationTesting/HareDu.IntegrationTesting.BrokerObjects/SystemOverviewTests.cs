@@ -23,7 +23,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Registration;
 
     [TestFixture]
-    public class ClusterTests
+    public class SystemOverviewTests
     {
         IContainer _container;
 

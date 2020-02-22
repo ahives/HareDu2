@@ -37,8 +37,8 @@ namespace HareDu.Diagnostics.Tests.Probes
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<FileConfigurationProvider>()
-                .As<IFileConfigurationProvider>()
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IFileConfigProvider>()
                 .SingleInstance();
             
             _container = builder.Build();
@@ -48,7 +48,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_red_condition_1()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
-            var configProvider = _container.Resolve<IFileConfigurationProvider>();
+            var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
@@ -66,7 +66,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_red_condition_2()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
-            var configProvider = _container.Resolve<IFileConfigurationProvider>();
+            var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
@@ -84,7 +84,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         public void Verify_analyzer_green_condition()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
-            var configProvider = _container.Resolve<IFileConfigurationProvider>();
+            var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();

@@ -75,9 +75,15 @@ namespace HareDu.Model
         long ReservedUnallocated { get; }
         
         [JsonProperty("strategy")]
-        long Strategy { get; }
+        string Strategy { get; }
         
         [JsonProperty("total")]
         TotalMemoryInfo Total { get; }
+        
+        [JsonProperty("quorum_queue_procs")]
+        long QuorumQueueProcesses { get; }
+        
+        [JsonProperty("quorum_ets")]
+        long QuorumInMemoryStorage { get; }
     }
 }

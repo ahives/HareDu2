@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Internal
 {
+    using System;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -29,15 +30,64 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<Result<ServerDefinitionInfo>> GetDefinition(CancellationToken cancellationToken = default)
+        public async Task<Result<ServerInfo>> Get(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/definitions";
             
-            Result<ServerDefinitionInfo> result = await Get<ServerDefinitionInfo>(url, cancellationToken);
+            Result<ServerInfo> result = await Get<ServerInfo>(url, cancellationToken);
 
             return result;
+        }
+
+        public async Task<Result<ServerHealthInfo>> GetHealth(Action<HealthCheckAction> action,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new HealthCheckActionImpl();
+            action(impl);
+
+            string url;
+            
+            switch (impl.CheckUpType)
+            {
+                case HealthCheckType.VirtualHost:
+                    url = $"api/aliveness-test/{impl.RmqObjectName.ToSanitizedName()}";
+                    break;
+                    
+                case HealthCheckType.Node:
+                    url = $"api/healthchecks/node/{impl.RmqObjectName}";
+                    break;
+                    
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            Result<ServerHealthInfo> result = await Get<ServerHealthInfo>(url, cancellationToken);
+
+            return result;
+        }
+
+        
+        class HealthCheckActionImpl :
+            HealthCheckAction
+        {
+            public string RmqObjectName { get; private set; }
+            public HealthCheckType CheckUpType { get; private set; }
+            
+            public void VirtualHost(string name)
+            {
+                CheckUpType = HealthCheckType.VirtualHost;
+                RmqObjectName = name;
+            }
+
+            public void Node(string name)
+            {
+                CheckUpType = HealthCheckType.Node;
+                RmqObjectName = name;
+            }
         }
     }
 }

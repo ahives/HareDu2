@@ -36,7 +36,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         {
             var builder = new ContainerBuilder();
             
-            builder.RegisterModule<HareDuSnapshottingModule>();
+            builder.RegisterModule<HareDuSnapshotModule>();
 
             _container = builder.Build();
         }
@@ -56,7 +56,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test1()
         {
-            var configurationProvider = new FileConfigurationProvider();
+            var configurationProvider = new YamlConfigProvider();
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
@@ -73,7 +73,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test2()
         {
-            var configurationProvider = new FileConfigurationProvider();
+            var configurationProvider = new YamlConfigProvider();
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
@@ -151,7 +151,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public void Test7()
         {
             var services = new ServiceCollection()
-                .AddHareDuSnapshotting($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDuSnapshot($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .BuildServiceProvider();
 
             var resource = services.GetService<ISnapshotFactory>()

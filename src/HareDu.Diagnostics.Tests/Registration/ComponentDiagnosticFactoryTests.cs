@@ -41,7 +41,7 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             _container = builder.Build();
 
-            var configProvider = _container.Resolve<IFileConfigurationProvider>();
+            var configProvider = _container.Resolve<IFileConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
 
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
@@ -104,7 +104,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             
-            var configProvider = new FileConfigurationProvider();
+            var configProvider = new YamlConfigProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();

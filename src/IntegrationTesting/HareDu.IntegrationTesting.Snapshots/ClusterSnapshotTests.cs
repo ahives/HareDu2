@@ -31,7 +31,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<HareDuSnapshottingModule>();
+            builder.RegisterModule<HareDuSnapshotModule>();
 
             _container = builder.Build();
         }
