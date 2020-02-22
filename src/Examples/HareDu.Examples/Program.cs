@@ -42,11 +42,12 @@ namespace HareDu.Examples
             var services = new ServiceCollection()
                 .AddHareDuSnapshot()
                 .AddHareDuDiagnostics()
-                .AddHareDuScheduling<BrokerConnectivity>()
-                .BuildServiceProvider();
+                .AddHareDuScheduling<BrokerConnectivity>();
 
-            IScheduler scheduler = services.GetService<IScheduler>();
-            IHareDuScheduler hareDuScheduler = services.GetService<IHareDuScheduler>();
+            var provider = services.BuildServiceProvider();
+
+            IScheduler scheduler = provider.GetService<IScheduler>();
+            IHareDuScheduler hareDuScheduler = provider.GetService<IHareDuScheduler>();
             
             IDictionary<string, object> details = new Dictionary<string, object>();
 
