@@ -17,8 +17,8 @@ namespace HareDu.IntegrationTesting.Snapshots
     using Autofac;
     using AutofacIntegration;
     using NUnit.Framework;
+    using Observers;
     using Snapshotting;
-    using Snapshotting.Observers;
     using Snapshotting.Registration;
 
     [TestFixture]

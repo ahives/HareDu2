@@ -31,7 +31,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Registration;
     using Snapshotting;
     using Snapshotting.Extensions;
-    using Snapshotting.Observers;
     using Snapshotting.Registration;
 
     [TestFixture]

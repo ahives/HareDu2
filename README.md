@@ -208,13 +208,23 @@ Once you have registered a SnapshotFactory, it is easy to take a snapshot.
 
 ```var result = await services.GetService<ISnapshotFactory>().Snapshot<BrokerQueues>().Execute();```
 
+<br>
 
 #### Viewing snapshots
 
-Snapshots are accessible via the ```Timeline``` property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
+Snapshots are accessible via the Timeline property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
 ```var factory.Timeline.MostRecent()```
 
+#### Registering Observers
 
+When setting up the SnapshotFactory, you can register observers. On each time a snapshot is taken (i.e. when the Execute method is called), all registered observers will be notified. Registering an observer is simple.
+
+<pre><code class="c#">
+var snapshot = factor
+    .Snapshot<BrokerQueues>()
+    .RegisterObserver(new SomeCoolObserver())
+    .Execute();
+</code></pre>
 
 ### Diagnostics API
 

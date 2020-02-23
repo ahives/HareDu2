@@ -203,7 +203,7 @@ namespace HareDu.CoreIntegration
             {
                 var provider = x.GetService<IFileConfigProvider>();
 
-                provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+                provider.TryGet(path, out HareDuConfig config);
 
                 return new BrokerObjectFactory(config.Broker);
             });

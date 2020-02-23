@@ -11,12 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Exporters
+namespace HareDu.IntegrationTesting.Snapshots.Observers
 {
     using System;
     using System.IO;
     using Core.Extensions;
-    using Model;
+    using Snapshotting;
+    using Snapshotting.Model;
 
     public class BrokerQueuesJsonExporter :
         IObserver<SnapshotResult<BrokerQueuesSnapshot>>

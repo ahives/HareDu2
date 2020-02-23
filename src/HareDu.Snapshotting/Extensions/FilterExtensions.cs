@@ -18,7 +18,7 @@ namespace HareDu.Snapshotting.Extensions
     using HareDu.Model;
     using Model;
 
-    public static class SnapshotFilterExtensions
+    public static class FilterExtensions
     {
         public static IReadOnlyList<ChannelSnapshot> FilterByConnection(this IReadOnlyList<ChannelInfo> channels, string connection)
         {

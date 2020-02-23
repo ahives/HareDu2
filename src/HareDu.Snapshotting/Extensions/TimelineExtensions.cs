@@ -15,7 +15,7 @@ namespace HareDu.Snapshotting.Extensions
 {
     using Persistence;
 
-    public static class SnapshotTimelineExtensions
+    public static class TimelineExtensions
     {
         public static void Flush<T>(this SnapshotTimeline<T> timeline, ISnapshotWriter writer, string path)
             where T : Snapshot

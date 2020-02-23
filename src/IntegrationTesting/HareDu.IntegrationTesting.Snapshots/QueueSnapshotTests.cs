@@ -20,10 +20,9 @@ namespace HareDu.IntegrationTesting.Snapshots
     using CoreIntegration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using Observers;
     using Registration;
     using Snapshotting;
-    using Snapshotting.Exporters;
-    using Snapshotting.Observers;
     using Snapshotting.Registration;
 
     [TestFixture]

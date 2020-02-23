@@ -11,11 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Snapshotting.Observers
+namespace HareDu.IntegrationTesting.Snapshots.Observers
 {
     using System;
-    using Extensions;
-    using Model;
+    using Snapshotting;
+    using Snapshotting.Extensions;
+    using Snapshotting.Model;
 
     public class DefaultClusterSnapshotConsoleLogger :
         IObserver<SnapshotResult<ClusterSnapshot>>
