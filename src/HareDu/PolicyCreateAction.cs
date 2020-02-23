@@ -33,6 +33,6 @@ namespace HareDu
         /// Specify what virtual host will the policy be scoped to.
         /// </summary>
         /// <param name="target">Define where the policy will live</param>
-        void Target(Action<PolicyTarget> target);
+        void Targeting(Action<PolicyTarget> target);
     }
 }

@@ -27,7 +27,7 @@ namespace HareDu
         /// Specify the target for which the exchange will be deleted.
         /// </summary>
         /// <param name="target">Define the location where the exchange (i.e. virtual host) will be deleted</param>
-        void Target(Action<ExchangeTarget> target);
+        void Targeting(Action<ExchangeTarget> target);
 
         /// <summary>
         /// Specify the conditions for which the exchange can be deleted.

@@ -49,7 +49,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                         c.IsDurable();
                         c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -95,7 +95,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Delete(x =>
                 {
                     x.Queue("TestQueue10");
-                    x.Target(l => l.VirtualHost("HareDu"));
+                    x.Targeting(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
 //                        c.HasNoConsumers();
@@ -122,7 +122,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                         c.TruncateIfAbove(5000);
                         c.Encoding(MessageEncoding.Auto);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
 //            Assert.IsFalse(result.HasFaulted);
@@ -137,7 +137,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Empty(x =>
                 {
                     x.Queue("");
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);

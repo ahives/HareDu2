@@ -68,7 +68,7 @@ namespace HareDu.Tests.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeFalse();
@@ -104,7 +104,7 @@ namespace HareDu.Tests.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -141,7 +141,7 @@ namespace HareDu.Tests.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -240,7 +240,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Policy("P4");
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeFalse();
@@ -255,7 +255,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Policy(string.Empty);
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -271,7 +271,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Policy("P4");
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -287,7 +287,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Policy(string.Empty);
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -302,7 +302,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Object<Policy>()
                 .Delete(x =>
                 {
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();

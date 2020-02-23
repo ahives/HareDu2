@@ -33,6 +33,6 @@ namespace HareDu
         /// Specify the target for which the exchange will be created.
         /// </summary>
         /// <param name="target">Define the location of the exchange (i.e. virtual host) that is targeted for deletion</param>
-        void Target(Action<ExchangeTarget> target);
+        void Targeting(Action<ExchangeTarget> target);
     }
 }

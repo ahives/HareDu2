@@ -27,6 +27,6 @@ namespace HareDu
         /// Specify what virtual host will the policy be deleted.
         /// </summary>
         /// <param name="target">Define where the policy will be delete from</param>
-        void Target(Action<PolicyTarget> target);
+        void Targeting(Action<PolicyTarget> target);
     }
 }

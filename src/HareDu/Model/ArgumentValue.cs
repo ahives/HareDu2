@@ -21,15 +21,12 @@ namespace HareDu.Model
         public TValue Value { get; }
         public Error Error { get; }
         
-        public ArgumentValue(TValue value, string errorMsg)
+        public ArgumentValue(TValue value, string errorMsg = null)
         {
             Value = value;
-            Error = new ErrorImpl(errorMsg);
-        }
 
-        public ArgumentValue(TValue value)
-        {
-            Value = value;
+            if (!string.IsNullOrWhiteSpace(errorMsg))
+                Error = new ErrorImpl(errorMsg);
         }
 
         

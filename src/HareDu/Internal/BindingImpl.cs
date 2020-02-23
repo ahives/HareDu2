@@ -150,7 +150,7 @@ namespace HareDu.Internal
                 _errors.AddRange(impl.Errors.Value);
             }
 
-            public void Target(Action<BindingTarget> target)
+            public void Targeting(Action<BindingTarget> target)
             {
                 _targetCalled = true;
                 
@@ -306,7 +306,7 @@ namespace HareDu.Internal
                     .ToList());
             }
 
-            public void Target(Action<BindingTarget> target)
+            public void Targeting(Action<BindingTarget> target)
             {
                 _targetCalled = true;
                 

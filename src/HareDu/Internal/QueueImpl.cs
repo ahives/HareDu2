@@ -171,7 +171,7 @@ namespace HareDu.Internal
                 _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
             }
 
-            public void Target(Action<QueuePeekTarget> target)
+            public void Targeting(Action<QueuePeekTarget> target)
             {
                 var impl = new QueuePeekTargetImpl();
                 target(impl);
@@ -298,7 +298,7 @@ namespace HareDu.Internal
 
             public void Queue(string name) => _queue = name;
 
-            public void Target(Action<QueueTarget> target)
+            public void Targeting(Action<QueueTarget> target)
             {
                 var impl = new QueueTargetImpl();
                 target(impl);
@@ -351,7 +351,7 @@ namespace HareDu.Internal
 
             public void Queue(string name) => _queue = name;
 
-            public void Target(Action<QueueTarget> target)
+            public void Targeting(Action<QueueTarget> target)
             {
                 var impl = new QueueTargetImpl();
                 target(impl);
@@ -446,7 +446,7 @@ namespace HareDu.Internal
                 _arguments = impl.Arguments;
             }
 
-            public void Target(Action<QueueCreateTarget> target)
+            public void Targeting(Action<QueueCreateTarget> target)
             {
                 var impl = new QueueCreateTargetImpl();
                 target(impl);
@@ -516,12 +516,12 @@ namespace HareDu.Internal
                     SetArg(arg, value);
                 }
 
-                public void SetQueueExpiration(long milliseconds)
+                public void SetQueueExpiration(ulong milliseconds)
                 {
-                    SetArg("x-expires", milliseconds);
+                    SetArg("x-expires", milliseconds, milliseconds < 1 ? "x-expires cannot have a value less than 1" : null);
                 }
 
-                public void SetPerQueuedMessageExpiration(long milliseconds)
+                public void SetPerQueuedMessageExpiration(ulong milliseconds)
                 {
                     SetArg("x-message-ttl", milliseconds);
                 }
@@ -541,13 +541,13 @@ namespace HareDu.Internal
                     SetArg("alternate-exchange", exchange);
                 }
 
-                void SetArg(string arg, object value)
+                void SetArg(string arg, object value, string errorMsg = null)
                 {
                     string normalizedArg = arg.Trim();
                     if (Arguments.ContainsKey(normalizedArg))
-                        Arguments[normalizedArg] = new ArgumentValue<object>(value);
+                        Arguments[normalizedArg] = new ArgumentValue<object>(value, errorMsg);
                     else
-                        Arguments.Add(normalizedArg, new ArgumentValue<object>(value));
+                        Arguments.Add(normalizedArg, new ArgumentValue<object>(value, errorMsg));
                 }
             }
 

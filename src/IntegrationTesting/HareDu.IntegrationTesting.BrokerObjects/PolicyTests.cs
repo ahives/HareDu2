@@ -74,7 +74,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
 //            Assert.IsFalse(result.HasFaulted);
@@ -101,7 +101,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);
@@ -116,7 +116,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Delete(x =>
                 {
                     x.Policy("P4");
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             Assert.IsFalse(result.HasFaulted);

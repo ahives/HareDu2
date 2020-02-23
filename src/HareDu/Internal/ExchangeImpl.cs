@@ -128,7 +128,7 @@ namespace HareDu.Internal
                 _query = query;
             }
 
-            public void Target(Action<ExchangeTarget> target)
+            public void Targeting(Action<ExchangeTarget> target)
             {
                 var impl = new ExchangeTargetImpl();
                 target(impl);
@@ -207,7 +207,7 @@ namespace HareDu.Internal
                 _arguments = impl.Arguments;
             }
 
-            public void Target(Action<ExchangeTarget> target)
+            public void Targeting(Action<ExchangeTarget> target)
             {
                 var impl = new ExchangeTargetImpl();
                 target(impl);

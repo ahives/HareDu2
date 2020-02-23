@@ -62,7 +62,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeFalse();
@@ -96,7 +96,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -125,7 +125,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -154,7 +154,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -183,7 +183,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -212,7 +212,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -240,7 +240,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -268,7 +268,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -295,7 +295,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
 
             result.HasFaulted.ShouldBeTrue();
@@ -400,7 +400,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeFalse();
@@ -423,7 +423,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -445,7 +445,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination(string.Empty);
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -467,7 +467,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination(string.Empty);
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -489,7 +489,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination(string.Empty);
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -511,7 +511,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -533,7 +533,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination(string.Empty);
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -554,7 +554,7 @@ namespace HareDu.Tests.BrokerObjects
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -569,7 +569,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Object<Binding>()
                 .Delete(x =>
                 {
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();

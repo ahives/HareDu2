@@ -119,7 +119,7 @@ namespace HareDu.Internal
                     _errors.Add(new ErrorImpl("The name of the policy is missing."));
             }
             
-            public void Target(Action<PolicyTarget> target)
+            public void Targeting(Action<PolicyTarget> target)
             {
                 _targetCalled = true;
                 var impl = new PolicyTargetImpl();
@@ -213,7 +213,7 @@ namespace HareDu.Internal
                     _errors.Add(new ErrorImpl($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set"));
             }
 
-            public void Target(Action<PolicyTarget> target)
+            public void Targeting(Action<PolicyTarget> target)
             {
                 _targetCalled = true;
                 var impl = new PolicyTargetImpl();

@@ -16,6 +16,9 @@ namespace HareDu.Core
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// ````
+    /// </summary>
     public interface Result
     {
         DateTimeOffset Timestamp { get; }
@@ -27,10 +30,14 @@ namespace HareDu.Core
         bool HasFaulted { get; }
     }
     
-    public interface Result<out TResult> :
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface Result<out T> :
         Result
     {
-        TResult Data { get; }
+        T Data { get; }
         
         bool HasData { get; }
     }

@@ -67,7 +67,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("fake_arg", "8238b");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeFalse();
@@ -103,7 +103,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("fake_arg", "8238b");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -130,7 +130,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("fake_arg", "8238b");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -158,7 +158,7 @@ namespace HareDu.Tests.BrokerObjects
                             arg.Set("fake_arg", "8238b");
                         });
                     });
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                 });
             
             result.HasFaulted.ShouldBeTrue();
@@ -192,7 +192,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Exchange("E3");
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
                 });
             
@@ -208,7 +208,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Exchange(string.Empty);
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
                 });
             
@@ -225,7 +225,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Exchange("E3");
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                     x.WithConditions(c => c.IfUnused());
                 });
             
@@ -242,7 +242,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Exchange("E3");
-                    x.Target(t => {});
+                    x.Targeting(t => {});
                     x.WithConditions(c => c.IfUnused());
                 });
             
@@ -259,7 +259,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Exchange(string.Empty);
-                    x.Target(t => t.VirtualHost(string.Empty));
+                    x.Targeting(t => t.VirtualHost(string.Empty));
                     x.WithConditions(c => c.IfUnused());
                 });
             
@@ -276,7 +276,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Delete(x =>
                 {
                     x.Exchange(string.Empty);
-                    x.Target(t => {});
+                    x.Targeting(t => {});
                     x.WithConditions(c => c.IfUnused());
                 });
             

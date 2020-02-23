@@ -79,7 +79,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                             arg.Set("arg1", "value1");
                         });
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
 //            Assert.IsFalse(result.HasFaulted);
@@ -100,7 +100,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                         b.Destination("Q4");
                         b.Type(BindingType.Queue);
                     });
-                    x.Target(t => t.VirtualHost("HareDu"));
+                    x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
 //            Assert.IsFalse(result.HasFaulted);

@@ -52,34 +52,36 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 | **VirtualHost** | GetAll, Create, Delete, Startup |
 | **VirtualHostLimits** | GetAll, Define, Delete |
 
-#### Registering the Broker API
+#### Registering objects
+The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-*with Autofac*
+**Autofac**
+```csharp
+builder.RegisterModule<HareDuModule>();
+```
 
-```builder.RegisterModule<HareDuModule>();```
-
-*with .NET Core DI*
-
-```services.AddHareDu();```
+**.NET Core DI**
+```csharp
+services.AddHareDu();
+```
 
 Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
 
 <br>
 
-Without IoC containers you would write the following code...
+Registering objects without IoC containers is pretty simple as well...
 
-*with YAML configuration*
-<pre><code class="c#">
+*YAML configuration*
+```csharp
 var provider = new YamlConfigProvider();
 
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
 var factory = new BrokerObjectFactory(config.Broker);
-</code></pre>
+```
 
-*without YAML configuration...*
-
-<pre><code class="c#">
+*Programmatically*
+```csharp
 var provider = new BrokerConfigProvider();
 var config = provider.Configure(x =>
 {
@@ -88,77 +90,116 @@ var config = provider.Configure(x =>
 });
 
 var factory = new BrokerObjectFactory(config);
-</code></pre>
+```
+Note: Initializing BrokerObjectFactory should be a one time activity, therefore, should be initialized using the Singleton pattern.
 
-
-#### Using the Broker API
+#### Performing operations on the broker
 The Broker API is considered the low level API because it allows you to administer RabbitMQ (e.g., users, queues, exchanges, etc.).
 
 **Step 1: Get a broker object**
+```csharp
+var obj = factory.Object<Queue>();
+```
 
-```var obj = factory.Object<Exchange>();```
+**Step 2: Call methods on broker object**
+```csharp
+var result = obj.GetAll();
+```
 
+Note: The above code will return a `Task<T>` so if you want to return the unwrapped ```Result```, ```Result<T>``` or ```ResultList``` you need to use an ```await``` or call the HareDu ```Unfold``` extension method.
 
-**Step 2: Call methods from API object**
+Using the *async/await* pattern...
+```csharp
+var result = await obj.GetAll();
+```
 
-```var result = obj.GetAll();```
+Using the HareDu *Unfold* extension method...
+```csharp
+var result = obj.GetAll().Unfold();
+```
 
-Note: The above code will return a `Task<T>` so if you want to return the unwrapped ```Result``` or ```Result<T>``` monad you need to use an ```await``` or call the HareDu ```Unfold``` extension method.
-
-Using the async/await pattern...
-
-```var result = await obj.GetAll();```
-
-Using the HareDu extension method...
-
-```var result = obj.GetAll().Unfold();```
-
-The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier.
-
-From this point you can skip to step 3. Since HareDu is a fluent API, you can method chain steps 3 and 4 together like so...
+The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier. Since HareDu is a fluent API, you can method chain everything together like so...
 
 **Autofac**
-
-```var result = await container.Resolve<IBrokerObjectFactory>().Object<Exchange>().GetAll();```
+```csharp
+var result = await container.Resolve<IBrokerObjectFactory>()
+    .Object<Queue>()
+    .GetAll();
+```
 
 **.NET Core**
+```csharp
+var result = await services.GetService<IBrokerObjectFactory>()
+    .Object<Queue>()
+    .GetAll();
+```
 
-```var result = await services.GetService<IBrokerObjectFactory>().Object<Exchange>().GetAll();```
+<br>
+
+*ex: Create a durable queue called *HareDuQueue* on a vhost called *HareDu* on node *rabbit@localhost* that is deleted when not in use with per-message time to live (x-message-ttl) value of 2 seconds*
+
+Here is the code...
+
+```csharp
+var result = await container.Resolve<IBrokerObjectFactory>()
+                .Object<Queue>()
+                .Create(x =>
+                {
+                    x.Queue("HareDuQueue");
+                    x.Configure(c =>
+                    {
+                        c.IsDurable();
+                        c.AutoDeleteWhenNotInUse();
+                        c.HasArguments(arg =>
+                        {
+                            arg.SetQueueExpiration(5000);
+                            arg.SetPerQueuedMessageExpiration(2000);
+                        });
+                    });
+                    x.Targeting(t =>
+                    {
+                        t.VirtualHost("HareDu");
+                        t.Node("rabbit@localhost");
+                    });
+                });
+```
 
 
 ### Snapshot API
 
 The Snapshotting API sits atop the Broker API and provides a high level rollup of RabbitMQ broker metrics. Each snapshot makes one or more calls to the Broker API methods aggregating the metric data into a developer-friendly object. Each snapshot is then captured on a timeline that can be then flushed to disk or saved to a database.
 
-#### Registering the Snapshot API
+#### Registering objects
+The very first thing you need to do is register/initialize the appropriate objects you will need to take snapshots metric data on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-*with Autofac*
+**Autofac**
+```csharp
+builder.RegisterModule<HareDuSnapshotModule>();
+```
 
-```builder.RegisterModule<HareDuSnapshotModule>();```
-
-*with .NET Core DI*
-
-```services.AddHareDuSnapshot();```
+**.NET Core DI**
+```csharp
+services.AddHareDuSnapshot();
+```
 
 Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
 
 <br>
 
-Without IoC containers you would write the following code...
+Registering objects without IoC containers is pretty simple as well...
 
-**Option 1: with YAML configuration**
-<pre><code class="c#">
+*YAML configuration*
+```csharp
 var provider = new YamlConfigProvider();
 
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
 var brokerFactory = new BrokerObjectFactory(config.Broker);
 var factory = new SnapshotFactory(brokerFactory);
-</code></pre>
+```
 
-**Option 2a: without YAML configuration**
-
-<pre><code class="c#">
+*Programmatically*
+```csharp
 var provider = new BrokerConfigProvider();
 var config = provider.Configure(x =>
 {
@@ -168,20 +209,8 @@ var config = provider.Configure(x =>
 
 var brokerFactory = new BrokerObjectFactory(config);
 var factory = new SnapshotFactory(brokerFactory);
-</code></pre>
-
-**Option 2b: without YAML configuration**
-
-<pre><code class="c#">
-var provider = new BrokerConfigProvider();
-var config = provider.Configure(x =>
-{
-    x.ConnectTo("http://localhost:15672");
-    x.UsingCredentials("guest", "guest");
-});
-
-var factory = new SnapshotFactory(config);
-</code></pre>
+```
+Note: if you have the broker configuration already you can simply pass it to the SnapshotFactory instead of explicitly initializing BrokerObjectFactory.
 
 <br>
 
@@ -189,46 +218,61 @@ var factory = new SnapshotFactory(config);
 Once you have registered a SnapshotFactory, it is easy to take a snapshot.
 
 **Step 1: Define which snapshot you want to take**
-
-```var snapshot = factory.Snapshot<BrokerQueues>();```
+```csharp
+var snapshot = factory.Snapshot<BrokerQueues>();
+```
 
 **Step 2: Take the snapshot**
-
-```snapshot.Execute();```
+```csharp
+snapshot.Execute();
+```
 
 <br>
 
-*The above code becomes even simpler using IoC. Below is how you would take a snapshot on the first take...*
+*The above code becomes even simpler using an IoC container. Below is how you would take a snapshot on the first take...*
 
-*with Autofac*
+*Autofac*
+```csharp
+var result = await container.Resolve<ISnapshotFactory>()
+    .Snapshot<BrokerQueues>()
+    .Execute();
+```
 
-```var result = await container.Resolve<ISnapshotFactory>().Snapshot<BrokerQueues>().Execute();```
-
-*with .NET Core DI*
-
-```var result = await services.GetService<ISnapshotFactory>().Snapshot<BrokerQueues>().Execute();```
+*.NET Core DI*
+```csharp
+var result = await services.GetService<ISnapshotFactory>()
+    .Snapshot<BrokerQueues>()
+    .Execute();
+```
 
 <br>
 
 #### Viewing snapshots
 
 Snapshots are accessible via the Timeline property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
-```var factory.Timeline.MostRecent()```
+
+```csharp
+var factory.Timeline.MostRecent();
+```
 
 #### Registering Observers
 
 When setting up the SnapshotFactory, you can register observers. On each time a snapshot is taken (i.e. when the Execute method is called), all registered observers will be notified. Registering an observer is simple.
 
-<pre><code class="c#">
+```csharp
 var snapshot = factor
     .Snapshot<BrokerQueues>()
     .RegisterObserver(new SomeCoolObserver())
     .Execute();
-</code></pre>
+```
 
 ### Diagnostics API
 
 blah, blah, blah
+
+```csharp
+
+```
 
 
 ### Gotchas
