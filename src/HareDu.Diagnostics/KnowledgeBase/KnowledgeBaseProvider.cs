@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
     using Core.Extensions;
     using Probes;
 
-    public class DefaultKnowledgeBaseProvider :
+    public class KnowledgeBaseProvider :
         BaseKnowledgeBaseProvider
     {
         protected override void Load()

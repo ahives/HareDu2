@@ -43,9 +43,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
             return this;
         }
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotResult<ClusterSnapshot>> observer) => throw new NotImplementedException();
+        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<ClusterSnapshot>>> observers) => throw new NotImplementedException();
+        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
 
 
         class SnapshotTimelineImpl :

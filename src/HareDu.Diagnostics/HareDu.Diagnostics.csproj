@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <Folder Include="Extensions" />
+      <Folder Include="Observers" />
     </ItemGroup>
 
 </Project>

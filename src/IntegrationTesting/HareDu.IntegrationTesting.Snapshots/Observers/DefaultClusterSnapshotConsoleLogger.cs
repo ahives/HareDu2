@@ -19,7 +19,7 @@ namespace HareDu.IntegrationTesting.Snapshots.Observers
     using Snapshotting.Model;
 
     public class DefaultClusterSnapshotConsoleLogger :
-        IObserver<SnapshotResult<ClusterSnapshot>>
+        IObserver<SnapshotContext<ClusterSnapshot>>
     {
         public void OnCompleted()
         {
@@ -31,7 +31,7 @@ namespace HareDu.IntegrationTesting.Snapshots.Observers
             throw new NotImplementedException();
         }
 
-        public void OnNext(SnapshotResult<ClusterSnapshot> value)
+        public void OnNext(SnapshotContext<ClusterSnapshot> value)
         {
             Console.WriteLine($"Cluster Name: {value.Snapshot.ClusterName}");
             Console.WriteLine();

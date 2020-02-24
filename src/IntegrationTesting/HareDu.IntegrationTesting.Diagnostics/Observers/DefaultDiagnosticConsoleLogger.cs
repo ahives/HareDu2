@@ -11,10 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Observers
+namespace HareDu.IntegrationTesting.Diagnostics.Observers
 {
     using System;
     using Core.Extensions;
+    using HareDu.Diagnostics;
 
     public class DefaultDiagnosticConsoleLogger :
         IObserver<DiagnosticProbeContext>
@@ -31,18 +32,18 @@ namespace HareDu.Diagnostics.Observers
 
         public void OnNext(DiagnosticProbeContext value)
         {
-            Console.WriteLine("Probe Identifier: {0}", value.Result.ProbeIdentifier);
-            Console.WriteLine("Probe: {0}", value.Result);
-            Console.WriteLine("Timestamp: {0}", value.Timestamp.ToString());
-            Console.WriteLine("Component Identifier: {0}", value.Result.ComponentIdentifier);
-            Console.WriteLine("Component Type: {0}", value.Result.ComponentType);
-            Console.WriteLine("Status: {0}", value.Result.Status);
-            Console.WriteLine("Data => {0}", value.Result.ProbeData.ToJsonString());
+            Console.WriteLine((string) "Probe Identifier: {0}", (object) value.Result.ProbeIdentifier);
+            Console.WriteLine((string) "Probe: {0}", (object) value.Result);
+            Console.WriteLine((string) "Timestamp: {0}", (object) value.Timestamp.ToString());
+            Console.WriteLine((string) "Component Identifier: {0}", (object) value.Result.ComponentIdentifier);
+            Console.WriteLine((string) "Component Type: {0}", (object) value.Result.ComponentType);
+            Console.WriteLine((string) "Status: {0}", (object) value.Result.Status);
+            Console.WriteLine((string) "Data => {0}", (object) value.Result.ProbeData.ToJsonString());
 
             if (value.Result.Status == DiagnosticStatus.Red)
             {
-                Console.WriteLine("Reason: {0}", value.Result.KnowledgeBaseArticle.Reason);
-                Console.WriteLine("Remediation: {0}", value.Result.KnowledgeBaseArticle.Remediation);
+                Console.WriteLine((string) "Reason: {0}", (object) value.Result.KnowledgeBaseArticle.Reason);
+                Console.WriteLine((string) "Remediation: {0}", (object) value.Result.KnowledgeBaseArticle.Remediation);
             }
 
             Console.WriteLine();

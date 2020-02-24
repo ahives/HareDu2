@@ -35,7 +35,7 @@ namespace HareDu.Diagnostics
         public DiagnosticScanner(DiagnosticsConfig config)
         {
             _config = config;
-            _factory = new DiagnosticFactory(_config, new DefaultKnowledgeBaseProvider());
+            _factory = new DiagnosticFactory(_config, new KnowledgeBaseProvider());
         }
 
         public DiagnosticScanner(DiagnosticsConfig config, IKnowledgeBaseProvider kb)

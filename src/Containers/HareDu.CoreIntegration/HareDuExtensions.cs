@@ -122,7 +122,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<IDiagnosticScanner, DiagnosticScanner>();
 
-            services.TryAddSingleton<IKnowledgeBaseProvider, DefaultKnowledgeBaseProvider>();
+            services.TryAddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
 
             string path = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
             
@@ -154,7 +154,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<IDiagnosticScanner, DiagnosticScanner>();
 
-            services.TryAddSingleton<IKnowledgeBaseProvider, DefaultKnowledgeBaseProvider>();
+            services.TryAddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
 
             services.AddBrokerObjectFactory(path);
 

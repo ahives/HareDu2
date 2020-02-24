@@ -77,7 +77,7 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticReportFormatter>()
                 .SingleInstance();
 
-            builder.RegisterType<DefaultKnowledgeBaseProvider>()
+            builder.RegisterType<KnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 

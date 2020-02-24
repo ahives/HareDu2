@@ -34,7 +34,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         public void Init()
         {
             var configProvider = new YamlConfigProvider();
-            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            var knowledgeBaseProvider = new KnowledgeBaseProvider();
             
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             

@@ -14,18 +14,14 @@
 namespace HareDu.Snapshotting
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading;
 
-    public interface HareDuSnapshot<out T>
-        where T : Snapshot
+    public interface SnapshotContext<out TSnapshot>
+        where TSnapshot : Snapshot
     {
-        SnapshotTimeline<T> Timeline { get; }
-        
-        HareDuSnapshot<T> Execute(CancellationToken cancellationToken = default);
+        string Identifier { get; }
 
-        HareDuSnapshot<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
-        
-        HareDuSnapshot<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
+        TSnapshot Snapshot { get; }
+
+        DateTimeOffset Timestamp { get; }
     }
 }

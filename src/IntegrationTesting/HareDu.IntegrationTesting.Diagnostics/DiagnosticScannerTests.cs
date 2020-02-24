@@ -119,7 +119,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var resource = factory.Snapshot<BrokerConnectivity>().Execute();
             
             IDiagnosticScanner scanner = new DiagnosticScanner(
-                new DiagnosticFactory(config.Diagnostics, new DefaultKnowledgeBaseProvider()));
+                new DiagnosticFactory(config.Diagnostics, new KnowledgeBaseProvider()));
 
             var snapshot = resource.Timeline.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
@@ -179,7 +179,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 x.SetHighCreationRateWarningThreshold(60);
             });
             
-            var factory2 = new DiagnosticFactory(config, new DefaultKnowledgeBaseProvider());
+            var factory2 = new DiagnosticFactory(config, new KnowledgeBaseProvider());
             IDiagnosticScanner scanner = new DiagnosticScanner(factory2);
 
             var snapshot = resource.Timeline.MostRecent().Snapshot;

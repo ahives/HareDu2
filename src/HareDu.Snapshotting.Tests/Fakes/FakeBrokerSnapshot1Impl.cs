@@ -17,13 +17,14 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using System.Collections.Generic;
     using System.Threading;
 
-    public class FakeBrokerSnapshot1Impl : FakeBrokerSnapshot1
+    public class FakeBrokerSnapshot1Impl :
+        FakeBrokerSnapshot1
     {
         public SnapshotTimeline<FakeHareDuSnapshot1> Timeline { get; }
         public HareDuSnapshot<FakeHareDuSnapshot1> Execute(CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
-        public HareDuSnapshot<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotResult<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
+        public HareDuSnapshot<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotContext<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
 
-        public HareDuSnapshot<FakeHareDuSnapshot1> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<FakeHareDuSnapshot1>>> observers) => throw new NotImplementedException();
+        public HareDuSnapshot<FakeHareDuSnapshot1> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<FakeHareDuSnapshot1>>> observers) => throw new NotImplementedException();
     }
 }

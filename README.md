@@ -55,12 +55,12 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-**Autofac**
+*Autofac*
 ```csharp
 builder.RegisterModule<HareDuModule>();
 ```
 
-**.NET Core DI**
+*.NET Core DI*
 ```csharp
 var services = new ServiceCollection()
     .AddHareDu()
@@ -122,14 +122,14 @@ var result = obj.GetAll().Unfold();
 
 The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier. Since HareDu is a fluent API, you can method chain everything together like so...
 
-**Autofac**
+*Autofac*
 ```csharp
 var result = await container.Resolve<IBrokerObjectFactory>()
     .Object<Queue>()
     .GetAll();
 ```
 
-**.NET Core**
+*.NET Core*
 ```csharp
 var result = await services.GetService<IBrokerObjectFactory>()
     .Object<Queue>()
@@ -174,12 +174,12 @@ The Snapshot API sits atop the Broker API and provides a high level rollup of Ra
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to take snapshots metric data on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-**Autofac**
+*Autofac*
 ```csharp
 builder.RegisterModule<HareDuSnapshotModule>();
 ```
 
-**.NET Core DI**
+*.NET Core DI*
 ```csharp
 var services = new ServiceCollection()
     .AddHareDuSnapshot()
@@ -235,14 +235,14 @@ snapshot.Execute();
 
 *The above code becomes even simpler using an IoC container. Below is how you would take a snapshot on the first take...*
 
-**Autofac**
+*Autofac*
 ```csharp
 var result = await container.Resolve<ISnapshotFactory>()
     .Snapshot<BrokerQueues>()
     .Execute();
 ```
 
-**.NET Core DI**
+*.NET Core DI*
 ```csharp
 var result = await services.GetService<ISnapshotFactory>()
     .Snapshot<BrokerQueues>()
@@ -260,7 +260,7 @@ var snapshot = factory.Timeline.MostRecent();
 
 #### Registering Observers
 
-When setting up the SnapshotFactory, you can register observers. On each time a snapshot is taken (i.e. when the Execute method is called), all registered observers will be notified. Registering an observer is simple.
+When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Execute``` method is called), all registered observers will be notified with an object of ```SnapshotResult<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Execute``` method or else the registered observers will not receive notifications.
 
 ```csharp
 var snapshot = factor
@@ -277,12 +277,12 @@ Each snapshot makes one or more calls to the Broker API methods aggregating the 
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform diagnostic scans on snapshot data captured from the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-**Autofac**
+*Autofac*
 ```csharp
 builder.RegisterModule<HareDuDiagnosticsModule>();
 ```
 
-**.NET Core DI**
+*.NET Core DI*
 ```csharp
 var services = new ServiceCollection()
     .AddHareDuDiagnostics()
@@ -302,7 +302,7 @@ var provider = new YamlConfigProvider();
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
 var kb = new DefaultKnowledgeBaseProvider();
-var scanner = new DiagnosticScanner(config.Diagnostics, new DefaultKnowledgeBaseProvider());
+var scanner = new DiagnosticScanner(config.Diagnostics, kb);
 ```
 
 *Programmatically*
@@ -322,9 +322,9 @@ var config = provider.Configure(x =>
             });
 
 var kb = new DefaultKnowledgeBaseProvider();
-var scanner = new DiagnosticScanner(config.Diagnostics, new DefaultKnowledgeBaseProvider());
+var scanner = new DiagnosticScanner(config.Diagnostics, kb);
 ```
-
+Since the ```DiagnosticScanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```DiagnosticScanner``` as singletons. This applies to most things in HareDu 2.
 #### Scanning snapshots
 
 ```csharp
@@ -332,6 +332,38 @@ var result = scanner.Scan(snapshot);
 ```
 
 The above code will return a ```ScannerResult``` object, which contains the result of executing each diagnostic probe against the snapshot data.
+
+
+### YAML Configuration
+
+```yaml
+---
+  broker:
+      url:  http://localhost:15672
+      username: guest
+      password: guest
+  diagnostics:
+    high-closure-rate-warning-threshold:  100
+    high-creation-rate-warning-threshold: 100
+    queue-high-flow-threshold:  100
+    queue-low-flow-threshold: 20
+    message-redelivery-coefficient: 0.50
+    socket-usage-coefficient: 0.60
+    runtime-process-usage-coefficient:  0.65
+    file-descriptor-usage-warning-coefficient:  0.65
+    consumer-utilization-warning-coefficient: 0.50
+...
+```
+
+#### Registering Observers
+
+When setting up ```DiagnosticScanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotResult<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
+
+```csharp
+var result = scanner
+    .RegisterObserver(new SomeCoolObserver())
+    .Scan(snapshot);
+```
 
 
 ### Gotchas

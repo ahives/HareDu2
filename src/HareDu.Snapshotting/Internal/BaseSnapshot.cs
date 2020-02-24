@@ -20,24 +20,24 @@ namespace HareDu.Snapshotting.Internal
     using HareDu.Registration;
 
     public abstract class BaseSnapshot<T> :
-        IObservable<SnapshotResult<T>>
+        IObservable<SnapshotContext<T>>
         where T : Snapshot
     {
         protected readonly IBrokerObjectFactory _factory;
         protected readonly Lazy<SnapshotTimeline<T>> _timeline;
         protected readonly IDictionary<string, SnapshotResult<T>> _snapshots;
         
-        readonly List<IObserver<SnapshotResult<T>>> _observers;
+        readonly List<IObserver<SnapshotContext<T>>> _observers;
 
         protected BaseSnapshot(IBrokerObjectFactory factory)
         {
             _factory = factory;
-            _observers = new List<IObserver<SnapshotResult<T>>>();
+            _observers = new List<IObserver<SnapshotContext<T>>>();
             _snapshots = new Dictionary<string, SnapshotResult<T>>();
             _timeline = new Lazy<SnapshotTimeline<T>>(() => new SnapshotTimelineImpl<T>(_snapshots));
         }
 
-        public IDisposable Subscribe(IObserver<SnapshotResult<T>> observer)
+        public IDisposable Subscribe(IObserver<SnapshotContext<T>> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -45,11 +45,11 @@ namespace HareDu.Snapshotting.Internal
             return new UnsubscribeObserver(_observers, observer);
         }
 
-        protected virtual void NotifyObservers(SnapshotResult<T> result)
+        protected virtual void NotifyObservers(string identifier, T snapshot, DateTimeOffset timestamp)
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(result);
+                observer.OnNext(new SnapshotContextImpl(identifier, snapshot, timestamp));
             }
         }
 
@@ -61,12 +61,12 @@ namespace HareDu.Snapshotting.Internal
             }
         }
 
-        protected virtual void SaveSnapshot(string identifier, SnapshotResult<T> result)
+        protected virtual void SaveSnapshot(string identifier, T snapshot, DateTimeOffset timestamp)
         {
-            if (result.IsNull())
+            if (snapshot.IsNull())
                 return;
             
-            _snapshots.Add(identifier, result);
+            _snapshots.Add(identifier, new SnapshotResultImpl(identifier, snapshot, timestamp));
         }
 
         
@@ -99,10 +99,10 @@ namespace HareDu.Snapshotting.Internal
         class UnsubscribeObserver :
             IDisposable
         {
-            readonly List<IObserver<SnapshotResult<T>>> _observers;
-            readonly IObserver<SnapshotResult<T>> _observer;
+            readonly List<IObserver<SnapshotContext<T>>> _observers;
+            readonly IObserver<SnapshotContext<T>> _observer;
 
-            public UnsubscribeObserver(List<IObserver<SnapshotResult<T>>> observers, IObserver<SnapshotResult<T>> observer)
+            public UnsubscribeObserver(List<IObserver<SnapshotContext<T>>> observers, IObserver<SnapshotContext<T>> observer)
             {
                 _observers = observers;
                 _observer = observer;
@@ -116,14 +116,30 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        protected class SnapshotResultImpl :
+        class SnapshotResultImpl :
             SnapshotResult<T>
         {
-            public SnapshotResultImpl(string identifier, T snapshot)
+            public SnapshotResultImpl(string identifier, T snapshot, DateTimeOffset timestamp)
             {
                 Identifier = identifier;
                 Snapshot = snapshot;
-                Timestamp = DateTimeOffset.Now;
+                Timestamp = timestamp;
+            }
+
+            public string Identifier { get; }
+            public T Snapshot { get; }
+            public DateTimeOffset Timestamp { get; }
+        }
+
+
+        class SnapshotContextImpl :
+            SnapshotContext<T>
+        {
+            public SnapshotContextImpl(string identifier, T snapshot, DateTimeOffset timestamp)
+            {
+                Identifier = identifier;
+                Snapshot = snapshot;
+                Timestamp = timestamp;
             }
 
             public string Identifier { get; }

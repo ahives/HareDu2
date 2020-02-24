@@ -108,7 +108,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var configProvider = new YamlConfigProvider();
             configProvider.TryGet(path, out HareDuConfig config);
             
-            var knowledgeBaseProvider = new DefaultKnowledgeBaseProvider();
+            var knowledgeBaseProvider = new KnowledgeBaseProvider();
             var factory = new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
 
             factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();

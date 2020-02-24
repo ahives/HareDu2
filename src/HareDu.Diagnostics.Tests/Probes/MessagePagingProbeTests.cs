@@ -33,7 +33,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DefaultKnowledgeBaseProvider>()
+            builder.RegisterType<KnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
             

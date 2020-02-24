@@ -32,7 +32,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DefaultKnowledgeBaseProvider>()
+            builder.RegisterType<KnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
@@ -44,7 +44,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_analyzer_yellow_condition()
+        public void Verify_probe_yellow_condition()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_analyzer_red_condition()
+        public void Verify_probe_red_condition()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
@@ -80,7 +80,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_analyzer_green_condition()
+        public void Verify_probe_green_condition()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
@@ -98,7 +98,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_analyzer_offline()
+        public void Verify_probe_offline()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new FileDescriptorThrottlingProbe(null, knowledgeBaseProvider);

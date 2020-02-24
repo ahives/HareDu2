@@ -34,7 +34,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DefaultKnowledgeBaseProvider>()
+            builder.RegisterType<KnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
             
@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_sensor_red_condition()
+        public void Verify_probe_red_condition()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new NetworkPartitionProbe(knowledgeBaseProvider);
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_sensor_green_condition()
+        public void Verify_probe_green_condition()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new NetworkPartitionProbe(knowledgeBaseProvider);

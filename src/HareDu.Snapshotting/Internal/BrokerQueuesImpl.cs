@@ -67,15 +67,15 @@ namespace HareDu.Snapshotting.Internal
                 queues.Select(x => x.Data));
             
             string identifier = NewId.Next().ToString();
-            SnapshotResult<BrokerQueuesSnapshot> result = new SnapshotResultImpl(identifier, snapshot);
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            SaveSnapshot(identifier, result);
-            NotifyObservers(result);
+            SaveSnapshot(identifier, snapshot, timestamp);
+            NotifyObservers(identifier, snapshot, timestamp);
 
             return this;
         }
 
-        public HareDuSnapshot<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotResult<BrokerQueuesSnapshot>> observer)
+        public HareDuSnapshot<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerQueuesSnapshot>> observer)
         {
             if (observer != null)
             {
@@ -86,7 +86,7 @@ namespace HareDu.Snapshotting.Internal
         }
 
         public HareDuSnapshot<BrokerQueuesSnapshot> RegisterObservers(
-            IReadOnlyList<IObserver<SnapshotResult<BrokerQueuesSnapshot>>> observers)
+            IReadOnlyList<IObserver<SnapshotContext<BrokerQueuesSnapshot>>> observers)
         {
             if (observers != null)
             {

@@ -51,17 +51,17 @@ namespace HareDu.Snapshotting.Internal
             NodeSnapshot snapshot = new NodeSnapshotImpl(cluster, nodes);
             
             string identifier = NewId.Next().ToString();
-            SnapshotResult<NodeSnapshot> result = new SnapshotResultImpl(identifier, snapshot);
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            SaveSnapshot(identifier, result);
-            NotifyObservers(result);
+            SaveSnapshot(identifier, snapshot, timestamp);
+            NotifyObservers(identifier, snapshot, timestamp);
 
             return this;
         }
 
-        public HareDuSnapshot<NodeSnapshot> RegisterObserver(IObserver<SnapshotResult<NodeSnapshot>> observer) => throw new NotImplementedException();
+        public HareDuSnapshot<NodeSnapshot> RegisterObserver(IObserver<SnapshotContext<NodeSnapshot>> observer) => throw new NotImplementedException();
 
-        public HareDuSnapshot<NodeSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotResult<NodeSnapshot>>> observers) => throw new NotImplementedException();
+        public HareDuSnapshot<NodeSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<NodeSnapshot>>> observers) => throw new NotImplementedException();
 
 
         class NodeSnapshotImpl :

@@ -79,15 +79,15 @@ namespace HareDu.Snapshotting.Internal
                 channels.Select(x => x.Data));
 
             string identifier = NewId.Next().ToString();
-            SnapshotResult<BrokerConnectivitySnapshot> result = new SnapshotResultImpl(identifier, snapshot);
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            SaveSnapshot(identifier, result);
-            NotifyObservers(result);
+            SaveSnapshot(identifier, snapshot, timestamp);
+            NotifyObservers(identifier, snapshot, timestamp);
 
             return this;
         }
 
-        public HareDuSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotResult<BrokerConnectivitySnapshot>> observer)
+        public HareDuSnapshot<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerConnectivitySnapshot>> observer)
         {
             if (observer != null)
             {
@@ -98,7 +98,7 @@ namespace HareDu.Snapshotting.Internal
         }
 
         public HareDuSnapshot<BrokerConnectivitySnapshot> RegisterObservers(
-            IReadOnlyList<IObserver<SnapshotResult<BrokerConnectivitySnapshot>>> observers)
+            IReadOnlyList<IObserver<SnapshotContext<BrokerConnectivitySnapshot>>> observers)
         {
             if (observers != null)
             {
