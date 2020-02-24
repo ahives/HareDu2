@@ -23,10 +23,7 @@ namespace HareDu.CoreIntegration
     using Diagnostics.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
-    using Quartz.Impl;
     using Registration;
-    using Scheduling;
-    using Snapshotting;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
@@ -167,33 +164,6 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
             
-            return services;
-        }
-
-        public static IServiceCollection AddHareDuScheduling<T>(this IServiceCollection services)
-            where T : HareDuSnapshot<Snapshot>
-        {
-            services.TryAddSingleton(x =>
-            {
-                var factory = new StdSchedulerFactory();
-                var scheduler = factory
-                    .GetScheduler()
-                    .ConfigureAwait(false)
-                    .GetAwaiter()
-                    .GetResult();
-        
-                scheduler.JobFactory =
-                    new HareDuJobFactory<T>(
-                        x.GetService<IDiagnosticScanner>(),
-                        x.GetService<ISnapshotFactory>(),
-                        x.GetService<ISnapshotWriter>(),
-                        x.GetService<IDiagnosticWriter>());
-        
-                return scheduler;
-            });
-        
-            services.TryAddSingleton<IHareDuScheduler, HareDuScheduler>();
-        
             return services;
         }
 

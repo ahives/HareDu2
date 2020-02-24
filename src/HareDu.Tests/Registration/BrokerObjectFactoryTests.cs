@@ -220,13 +220,10 @@ namespace HareDu.Tests.Registration
             factory.IsRegistered("HareDu.Consumer").ShouldBeTrue();
             factory.IsRegistered("HareDu.Exchange").ShouldBeTrue();
             factory.IsRegistered("HareDu.GlobalParameter").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Memory").ShouldBeTrue();
-            factory.IsRegistered("HareDu.NodeHealth").ShouldBeTrue();
             factory.IsRegistered("HareDu.Node").ShouldBeTrue();
             factory.IsRegistered("HareDu.Policy").ShouldBeTrue();
             factory.IsRegistered("HareDu.Queue").ShouldBeTrue();
             factory.IsRegistered("HareDu.ScopedParameter").ShouldBeTrue();
-            factory.IsRegistered("HareDu.ServerHealth").ShouldBeTrue();
             factory.IsRegistered("HareDu.Server").ShouldBeTrue();
             factory.IsRegistered("HareDu.SystemOverview").ShouldBeTrue();
             factory.IsRegistered("HareDu.TopicPermissions").ShouldBeTrue();
@@ -234,7 +231,6 @@ namespace HareDu.Tests.Registration
             factory.IsRegistered("HareDu.UserPermissions").ShouldBeTrue();
             factory.IsRegistered("HareDu.VirtualHost").ShouldBeTrue();
             factory.IsRegistered("HareDu.VirtualHostLimits").ShouldBeTrue();
-            // factory.IsRegistered().ShouldBeTrue();
         }
 
         [Test]
@@ -248,13 +244,10 @@ namespace HareDu.Tests.Registration
             factory.IsRegistered("HareDu.Consumer").ShouldBeTrue();
             factory.IsRegistered("HareDu.Exchange").ShouldBeTrue();
             factory.IsRegistered("HareDu.GlobalParameter").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Memory").ShouldBeTrue();
-            factory.IsRegistered("HareDu.NodeHealth").ShouldBeTrue();
             factory.IsRegistered("HareDu.Node").ShouldBeTrue();
             factory.IsRegistered("HareDu.Policy").ShouldBeTrue();
             factory.IsRegistered("HareDu.Queue").ShouldBeTrue();
             factory.IsRegistered("HareDu.ScopedParameter").ShouldBeTrue();
-            factory.IsRegistered("HareDu.ServerHealth").ShouldBeTrue();
             factory.IsRegistered("HareDu.Server").ShouldBeTrue();
             factory.IsRegistered("HareDu.SystemOverview").ShouldBeTrue();
             factory.IsRegistered("HareDu.TopicPermissions").ShouldBeTrue();
@@ -264,10 +257,8 @@ namespace HareDu.Tests.Registration
             factory.IsRegistered("HareDu.VirtualHostLimits").ShouldBeTrue();
 
             factory.Object<TestBrokerObject>();
-            factory.IsRegistered("HareDu.Tests.TestBrokerObject").ShouldBeTrue();
+            factory.IsRegistered("HareDu.Tests.Registration.TestBrokerObject").ShouldBeTrue();
         }
-        // _cache.Add(typeof(FakeNodeObject).FullName, new FakeNodeObject());
-        // _cache.Add(typeof(FakeSystemOverviewObject).FullName, new FakeSystemOverviewObject());
 
         string GetKey(string className, string assembly)
         {

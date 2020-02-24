@@ -20,6 +20,8 @@
     <ItemGroup>
       <Compile Remove="HareDuShovelModule.cs" />
       <Content Include="HareDuShovelModule.cs" />
+      <Compile Remove="HareDuSchedulingModule.cs" />
+      <Content Include="HareDuSchedulingModule.cs" />
     </ItemGroup>
 
 </Project>

@@ -20,6 +20,7 @@ namespace HareDu.Diagnostics.Registration
     using Core.Extensions;
     using KnowledgeBase;
     using Probes;
+    using Scans;
     using Snapshotting;
 
     /// <summary>
@@ -57,18 +58,18 @@ namespace HareDu.Diagnostics.Registration
                 throw new HareDuBrokerObjectInitException();
         }
 
-        public bool TryGet<T>(out Diagnostic<T> diagnostic)
+        public bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
             where T : Snapshot
         {
             Type type = typeof(T);
             
             if (type.IsNull() || !_cache.ContainsKey(type.FullName))
             {
-                diagnostic = new NoOpDiagnostic<T>();
+                diagnosticScan = new NoOpDiagnosticScan<T>();
                 return false;
             }
             
-            diagnostic = (Diagnostic<T>) _cache[type.FullName];
+            diagnosticScan = (DiagnosticScan<T>) _cache[type.FullName];
             return true;
         }
 
@@ -157,12 +158,12 @@ namespace HareDu.Diagnostics.Registration
                 if (type.IsNull())
                     continue;
 
-                if (!type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(Diagnostic<>)))
+                if (!type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(DiagnosticScan<>)))
                     continue;
 
                 var genericType = type
                     .GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(Diagnostic<>));
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(DiagnosticScan<>));
 
                 if (genericType.IsNull())
                     continue;

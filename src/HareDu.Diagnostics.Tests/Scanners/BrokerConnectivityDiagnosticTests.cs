@@ -21,6 +21,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Scans;
     using Shouldly;
     using Snapshotting.Model;
 
@@ -55,7 +56,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             
-            var report = new BrokerConnectivityDiagnostic(_analyzers)
+            var report = new BrokerConnectivityScan(_analyzers)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(6);
@@ -72,7 +73,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = null;
             
-            var report = new BrokerConnectivityDiagnostic(_analyzers)
+            var report = new BrokerConnectivityScan(_analyzers)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

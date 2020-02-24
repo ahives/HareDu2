@@ -17,8 +17,8 @@ HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came
 2. Improved low level administrative APIs
 3. New APIs for diagnostics, cluster snapshotting and monitoring
 4. Dependency Injection (e.g., Autofac, .NET Core) support for quick API registration
-5. .NET Core support
-6. 
+5. .NET Core support 
+
 
 # Overview
 
@@ -52,7 +52,7 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 | **VirtualHost** | GetAll, Create, Delete, Startup |
 | **VirtualHostLimits** | GetAll, Define, Delete |
 
-#### Registering objects
+#### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
 **Autofac**
@@ -62,7 +62,9 @@ builder.RegisterModule<HareDuModule>();
 
 **.NET Core DI**
 ```csharp
-services.AddHareDu();
+var services = new ServiceCollection()
+    .AddHareDu()
+    .BuildServiceProvider();
 ```
 
 Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
@@ -167,9 +169,9 @@ var result = await container.Resolve<IBrokerObjectFactory>()
 
 ### Snapshot API
 
-The Snapshotting API sits atop the Broker API and provides a high level rollup of RabbitMQ broker metrics. Each snapshot makes one or more calls to the Broker API methods aggregating the metric data into a developer-friendly object. Each snapshot is then captured on a timeline that can be then flushed to disk or saved to a database.
+The Snapshot API sits atop the Broker API and provides a high level rollup of RabbitMQ broker metrics. Each snapshot makes one or more calls to the Broker API methods aggregating the metric data into a developer-friendly object. Each snapshot is then captured on a timeline that can be then flushed to disk or saved to a database.
 
-#### Registering objects
+#### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to take snapshots metric data on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
 **Autofac**
@@ -179,7 +181,9 @@ builder.RegisterModule<HareDuSnapshotModule>();
 
 **.NET Core DI**
 ```csharp
-services.AddHareDuSnapshot();
+var services = new ServiceCollection()
+    .AddHareDuSnapshot()
+    .BuildServiceProvider();
 ```
 
 Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
@@ -231,20 +235,19 @@ snapshot.Execute();
 
 *The above code becomes even simpler using an IoC container. Below is how you would take a snapshot on the first take...*
 
-*Autofac*
+**Autofac**
 ```csharp
 var result = await container.Resolve<ISnapshotFactory>()
     .Snapshot<BrokerQueues>()
     .Execute();
 ```
 
-*.NET Core DI*
+**.NET Core DI**
 ```csharp
 var result = await services.GetService<ISnapshotFactory>()
     .Snapshot<BrokerQueues>()
     .Execute();
 ```
-
 <br>
 
 #### Viewing snapshots
@@ -252,7 +255,7 @@ var result = await services.GetService<ISnapshotFactory>()
 Snapshots are accessible via the Timeline property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
 
 ```csharp
-var factory.Timeline.MostRecent();
+var snapshot = factory.Timeline.MostRecent();
 ```
 
 #### Registering Observers
@@ -268,11 +271,67 @@ var snapshot = factor
 
 ### Diagnostics API
 
-blah, blah, blah
+The Diagnostics API sits atop the Snapshot API, providing a means to scan snapshot data for issues.  
+Each snapshot makes one or more calls to the Broker API methods aggregating the metric data into a developer-friendly object. Each snapshot is then captured on a timeline that can be then flushed to disk or saved to a database.
+
+#### Registering API objects
+The very first thing you need to do is register/initialize the appropriate objects you will need to perform diagnostic scans on snapshot data captured from the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
+
+**Autofac**
+```csharp
+builder.RegisterModule<HareDuDiagnosticsModule>();
+```
+
+**.NET Core DI**
+```csharp
+var services = new ServiceCollection()
+    .AddHareDuDiagnostics()
+    .BuildServiceProvider();
+```
+
+Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
+
+<br>
+
+Registering objects without IoC containers is pretty simple...
+
+*YAML configuration*
+```csharp
+var provider = new YamlConfigProvider();
+
+provider.TryGet("haredu.yaml", out HareDuConfig config);
+
+var kb = new DefaultKnowledgeBaseProvider();
+var scanner = new DiagnosticScanner(config.Diagnostics, new DefaultKnowledgeBaseProvider());
+```
+
+*Programmatically*
+```csharp
+var provider = new DiagnosticsConfigProvider();
+var config = provider.Configure(x =>
+            {
+                x.SetMessageRedeliveryCoefficient(0.60M);
+                x.SetSocketUsageCoefficient(0.60M);
+                x.SetConsumerUtilizationWarningCoefficient(0.65M);
+                x.SetQueueHighFlowThreshold(90);
+                x.SetQueueLowFlowThreshold(10);
+                x.SetRuntimeProcessUsageCoefficient(0.65M);
+                x.SetFileDescriptorUsageWarningCoefficient(0.65M);
+                x.SetHighClosureRateWarningThreshold(90);
+                x.SetHighCreationRateWarningThreshold(60);
+            });
+
+var kb = new DefaultKnowledgeBaseProvider();
+var scanner = new DiagnosticScanner(config.Diagnostics, new DefaultKnowledgeBaseProvider());
+```
+
+#### Scanning snapshots
 
 ```csharp
-
+var result = scanner.Scan(snapshot);
 ```
+
+The above code will return a ```ScannerResult``` object, which contains the result of executing each diagnostic probe against the snapshot data.
 
 
 ### Gotchas
@@ -287,7 +346,7 @@ From the Package Manager Console in Visual Studio you can run the following Powe
 
 PM> Install-Package HareDu
 
-or if you want a specific version of HareDu you can get your Du by doing...
+or if you want a specific version of HareDu you can do the following...
 
 PM> Install-Package -Version <version> HareDu
 
@@ -296,6 +355,30 @@ Example,
 PM> Install-Package -Version 2.0.0 HareDu
 
 Since HareDu 2 was built primarily using Core APIs in Mono 5.x, it is now possible to get it in your preferred .NET environment on your preferred operating systems (e.g. Windows, macOS, Linux, etc.). 
+
+You need the following packages if you are using; 
+
+| API  | Packages Needed |
+|---| --- |
+| **Broker** | HareDu |
+|  | HareDu.Core |
+| **Snapshot** | HareDu.Snapshotting |
+|  | HareDu |
+|  | HareDu.Core |
+| **Diagnostics** | HareDu.Diagnostics |
+|  | HareDu.Snapshotting |
+|  | HareDu |
+|  | HareDu.Core |
+| **Autofac** | HareDu.AutofacIntegration |
+|  | HareDu.Snapshotting |
+|  | HareDu.Diagnostics |
+|  | HareDu |
+|  | HareDu.Core |
+| **.NET Core**  | HareDu.CoreIntegration |
+|  | HareDu.Snapshotting |
+|  | HareDu.Diagnostics |
+|  | HareDu |
+|  | HareDu.Core |
 
 
 # Dependencies
@@ -328,12 +411,6 @@ That's it. So, the resulting output of calling the ToJsonString extension method
   &quot;hasFaulted&quot;: true
 }
 </code></pre>
-
-
-
-
-
-
 
 
 
@@ -378,24 +455,20 @@ https://www.rabbitmq.com/logging.html#connection-lifecycle-events
 
 
 
-
-# Using API
-
-https://www.rabbitmq.com/management.html#clustering-subset-of-nodes
-
-
 # Testing with RabbitMQ
 
-Under the "simulation" solution folder you will find two projects of note, Publisher and Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
+Under the "IntegrationTesting" solution folder you will find two projects of note, HareDu.IntegrationTesting.Publisher and HareDu.IntegrationTesting.Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
+
+Ensure that your RabbitMQ broker has the proper plugins enabled by following the below documentation.
+https://www.rabbitmq.com/management.html#clustering
+
 
 If using .NET Core...  
 1. Create a VirtualHost called "TestVirtualHost"
-   Note: This can be done by either using the low level HareDu API or by logging in to the RabbitMQ UI and creating a vhost
+   Note: This can be done by either using the HareDu Broker API or by logging in to the RabbitMQ UI and creating a vhost
 2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
-   
-   dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/Consumer.dll
-   
+   dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Consumer.dll
 3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start publishing messages:
+    dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Publisher.dll
 
-    dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/Publisher.dll
-
+Note: if you are using JetBrains Rider you can simply configure both projects and run them within the IDE.

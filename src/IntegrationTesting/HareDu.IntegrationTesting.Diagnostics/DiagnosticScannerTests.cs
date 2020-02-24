@@ -140,7 +140,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var factory = new SnapshotFactory(config.Broker);
             var resource = factory.Snapshot<BrokerConnectivity>().Execute();
 
-            IDiagnosticScanner scanner = new DiagnosticScanner(config);
+            IDiagnosticScanner scanner = new DiagnosticScanner(config.Diagnostics);
 
             var snapshot = resource.Timeline.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);

@@ -14,13 +14,16 @@
 namespace HareDu.Diagnostics
 {
     using System.Collections.Generic;
+    using Core.Extensions;
+    using Scans;
     using Snapshotting;
 
-    public interface Diagnostic<in T>
+    public class NoOpDiagnosticScan<T> :
+        DiagnosticScan<T>
         where T : Snapshot
     {
-        string Identifier { get; }
+        public string Identifier => GetType().GetIdentifier();
 
-        IReadOnlyList<DiagnosticProbeResult> Scan(T snapshot);
+        public IReadOnlyList<DiagnosticProbeResult> Scan(T snapshot) => DiagnosticCache.EmptyProbeResults;
     }
 }

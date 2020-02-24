@@ -22,6 +22,7 @@ namespace HareDu.Diagnostics.Tests.Registration
     using Diagnostics.Registration;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Scans;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
@@ -78,7 +79,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var factory = _container.Resolve<IDiagnosticFactory>();
 
             factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
-            diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
+            diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityScan).GetIdentifier());
         }
 
         [Test]
@@ -96,7 +97,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var factory = _container.Resolve<IDiagnosticFactory>();
 
             factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
-            diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnostic<ConnectionSnapshot>).GetIdentifier());
+            diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnosticScan<ConnectionSnapshot>).GetIdentifier());
         }
 
         [Test]
@@ -114,8 +115,8 @@ namespace HareDu.Diagnostics.Tests.Registration
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
-        class FakeDiagnostic :
-            Diagnostic<FakeSnapshot>
+        class FakeDiagnosticScan :
+            DiagnosticScan<FakeSnapshot>
         {
             public string Identifier => GetType().GetIdentifier();
 

@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Scans
 {
     using System;
     using System.Collections.Generic;
@@ -20,15 +20,15 @@ namespace HareDu.Diagnostics
     using Probes;
     using Snapshotting.Model;
 
-    public class BrokerQueuesDiagnostic :
-        Diagnostic<BrokerQueuesSnapshot>
+    public class BrokerQueuesScan :
+        DiagnosticScan<BrokerQueuesSnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
 
         readonly IReadOnlyList<DiagnosticProbe> _queueProbes;
         readonly List<DiagnosticProbe> _exchangeProbes;
 
-        public BrokerQueuesDiagnostic(IReadOnlyList<DiagnosticProbe> probes)
+        public BrokerQueuesScan(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));

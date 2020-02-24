@@ -21,6 +21,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Scans;
     using Shouldly;
     using Snapshotting.Model;
 
@@ -56,7 +57,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshot1();
             
-            var report = new ClusterDiagnostic(_probes)
+            var report = new ClusterScan(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(7);
@@ -74,7 +75,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = null;
             
-            var report = new ClusterDiagnostic(_probes)
+            var report = new ClusterScan(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

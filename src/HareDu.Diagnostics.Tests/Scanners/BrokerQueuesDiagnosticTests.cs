@@ -21,6 +21,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Scans;
     using Shouldly;
     using Snapshotting.Model;
 
@@ -57,7 +58,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
 
-            var report = new BrokerQueuesDiagnostic(_probes)
+            var report = new BrokerQueuesScan(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(8);
@@ -76,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = null;
             
-            var report = new BrokerQueuesDiagnostic(_probes)
+            var report = new BrokerQueuesScan(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

@@ -15,11 +15,12 @@ namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
+    using Scans;
     using Snapshotting;
 
     public interface IDiagnosticFactory
     {
-        bool TryGet<T>(out Diagnostic<T> diagnostic)
+        bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
             where T : Snapshot;
 
         void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers);

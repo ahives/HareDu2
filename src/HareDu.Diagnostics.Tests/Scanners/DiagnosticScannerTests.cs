@@ -22,6 +22,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Diagnostics.Registration;
     using Fakes;
     using NUnit.Framework;
+    using Scans;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
@@ -48,7 +49,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityDiagnostic).GetIdentifier());
+            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityScan).GetIdentifier());
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(ClusterDiagnostic).GetIdentifier());
+            scanner.ScannerIdentifier.ShouldBe(typeof(ClusterScan).GetIdentifier());
         }
 
         [Test]
@@ -68,7 +69,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesDiagnostic).GetIdentifier());
+            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesScan).GetIdentifier());
         }
 
         [Test]
@@ -80,7 +81,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
 
             var report = scanner.Scan(snapshot);
             
-            report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnostic<EmptySnapshot>).GetIdentifier());
+            report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnosticScan<EmptySnapshot>).GetIdentifier());
             report.ShouldBe(DiagnosticCache.EmptyScannerResult);
         }
 
@@ -88,10 +89,10 @@ namespace HareDu.Diagnostics.Tests.Scanners
         class FakeDiagnosticFactory :
             IDiagnosticFactory
         {
-            public bool TryGet<T>(out Diagnostic<T> diagnostic)
+            public bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
                 where T : Snapshot
             {
-                diagnostic = new NoOpDiagnostic<T>();
+                diagnosticScan = new NoOpDiagnosticScan<T>();
                 return false;
             }
 

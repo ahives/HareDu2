@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.Scans
 {
     using System;
     using System.Collections.Generic;
@@ -20,8 +20,8 @@ namespace HareDu.Diagnostics
     using Probes;
     using Snapshotting.Model;
 
-    public class BrokerConnectivityDiagnostic :
-        Diagnostic<BrokerConnectivitySnapshot>
+    public class BrokerConnectivityScan :
+        DiagnosticScan<BrokerConnectivitySnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
 
@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics
         readonly IReadOnlyList<DiagnosticProbe> _connectionProbes;
         readonly IReadOnlyList<DiagnosticProbe> _connectivityProbes;
 
-        public BrokerConnectivityDiagnostic(IReadOnlyList<DiagnosticProbe> probes)
+        public BrokerConnectivityScan(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));
