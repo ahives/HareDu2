@@ -46,7 +46,7 @@ namespace HareDu.Tests
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<YamlConfigProvider>()
+            builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
                 .SingleInstance();
 
@@ -65,7 +65,7 @@ namespace HareDu.Tests
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<YamlConfigProvider>()
+            builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
                 .SingleInstance();
 

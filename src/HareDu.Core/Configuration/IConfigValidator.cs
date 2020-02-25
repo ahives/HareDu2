@@ -11,13 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Core.Configuration
 {
-    public enum DiagnosticStatus
+    public interface IConfigValidator
     {
-        Unhealthy,
-        Healthy,
-        Warning,
-        Inconclusive
+        bool Validate(HareDuConfig config);
     }
 }

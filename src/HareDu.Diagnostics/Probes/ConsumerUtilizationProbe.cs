@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Consumer Utilization Analyzer";
+        public string Name => "Consumer Utilization Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.ConsumerUtilization >= _config.ConsumerUtilizationWarningCoefficient && data.ConsumerUtilization < 1.0M)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
                 result = new WarningDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
@@ -64,7 +64,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else if (data.ConsumerUtilization < _config.ConsumerUtilizationWarningCoefficient)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
@@ -74,7 +74,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,

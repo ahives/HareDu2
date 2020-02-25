@@ -61,8 +61,16 @@ namespace HareDu.AutofacIntegration
                 .As<IDiagnosticScanner>()
                 .SingleInstance();
 
-            builder.RegisterType<YamlConfigProvider>()
+            builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<HareDuConfigValidator>()
+                .As<IConfigValidator>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticReportTextFormatter>()

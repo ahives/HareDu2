@@ -40,7 +40,7 @@ namespace HareDu.IntegrationTesting.Diagnostics.Observers
             Console.WriteLine((string) "Status: {0}", (object) value.Result.Status);
             Console.WriteLine((string) "Data => {0}", (object) value.Result.ProbeData.ToJsonString());
 
-            if (value.Result.Status == DiagnosticStatus.Red)
+            if (value.Result.Status == DiagnosticStatus.Unhealthy)
             {
                 Console.WriteLine((string) "Reason: {0}", (object) value.Result.KnowledgeBaseArticle.Reason);
                 Console.WriteLine((string) "Remediation: {0}", (object) value.Result.KnowledgeBaseArticle.Remediation);

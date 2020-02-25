@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Available CPU Cores Analyzer";
+        public string Name => "Available CPU Cores Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.AvailableCoresDetected <= 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,

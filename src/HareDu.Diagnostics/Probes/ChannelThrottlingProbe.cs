@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Channel Throttling Analyzer";
+        public string Name => "Channel Throttling Probe";
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -52,12 +52,12 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.UnacknowledgedMessages > data.PrefetchCount)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 

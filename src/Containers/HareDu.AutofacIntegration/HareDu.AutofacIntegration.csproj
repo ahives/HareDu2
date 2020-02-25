@@ -22,6 +22,8 @@
       <Content Include="HareDuShovelModule.cs" />
       <Compile Remove="HareDuSchedulingModule.cs" />
       <Content Include="HareDuSchedulingModule.cs" />
+      <Compile Remove="HareDuAnalyticsModule.cs" />
+      <Content Include="HareDuAnalyticsModule.cs" />
     </ItemGroup>
 
 </Project>

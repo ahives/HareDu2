@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Blocked Connection Analyzer";
+        public string Name => "Blocked Connection Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.State == ConnectionState.Blocked)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,

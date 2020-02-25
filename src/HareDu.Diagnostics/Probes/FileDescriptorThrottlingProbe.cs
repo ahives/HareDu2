@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Probes
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "File Descriptor Throttling Analyzer";
+        public string Name => "File Descriptor Throttling Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.OperatingSystem;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.FileDescriptors.Used < warningThreshold && warningThreshold < data.FileDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else if (data.FileDescriptors.Used == data.FileDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
                 result = new WarningDiagnosticProbeResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,

@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Probes
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Socket Descriptor Throttling Analyzer";
+        public string Name => "Socket Descriptor Throttling Probe";
         public string Description =>
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.OS.SocketDescriptors.Used < warningThreshold && warningThreshold < data.OS.SocketDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else if (data.OS.SocketDescriptors.Used == data.OS.SocketDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
                 result = new WarningDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,

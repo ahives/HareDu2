@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Channel Limit Reached Analyzer";
+        public string Name => "Channel Limit Reached Probe";
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -53,7 +53,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (Convert.ToUInt64(data.Channels.Count) >= data.OpenChannelsLimit)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,

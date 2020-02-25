@@ -14,13 +14,19 @@
 namespace HareDu.Analytics.Tests
 {
     using System;
+    using System.IO;
     using Analyzers;
     using Autofac;
     using AutofacIntegration;
+    using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
+    using Diagnostics.Formatting;
+    using Diagnostics.KnowledgeBase;
+    using Diagnostics.Registration;
     using Fakes;
     using NUnit.Framework;
+    using Registration;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -33,7 +39,59 @@ namespace HareDu.Analytics.Tests
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<HareDuAnalyticsModule>();
+            // builder.RegisterModule<HareDuAnalyticsModule>();
+            builder.Register(x =>
+                {
+                    var configProvider = x.Resolve<IFileConfigProvider>();
+                    string path = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
+
+                    configProvider.TryGet(path, out var config);
+
+                    var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
+
+                    return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                })
+                .As<IDiagnosticFactory>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var registrar = x.Resolve<IAnalyticsRegistry>();
+                    
+                    registrar.RegisterAll();
+                    
+                    return new DiagnosticReportAnalyzerFactory(registrar.Cache);
+                })
+                .As<IDiagnosticReportAnalyzerFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<AnalyticsRegistry>()
+                .As<IAnalyticsRegistry>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticScanner>()
+                .As<IDiagnosticScanner>()
+                .SingleInstance();
+
+            builder.RegisterType<YamlFileConfigProvider>()
+                .As<IFileConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<HareDuConfigValidator>()
+                .As<IConfigValidator>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticReportTextFormatter>()
+                .As<IDiagnosticReportFormatter>()
+                .SingleInstance();
+
+            builder.RegisterType<KnowledgeBaseProvider>()
+                .As<IKnowledgeBaseProvider>()
+                .SingleInstance();
             
             _container = builder.Build();
         }

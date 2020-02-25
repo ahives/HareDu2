@@ -29,7 +29,7 @@ namespace HareDu.Diagnostics.Internal
             ComponentType = componentType;
             ProbeData = analyzerData;
             KnowledgeBaseArticle = knowledgeBaseArticle;
-            Status = DiagnosticStatus.Yellow;
+            Status = DiagnosticStatus.Warning;
             Timestamp = DateTimeOffset.Now;
         }
 

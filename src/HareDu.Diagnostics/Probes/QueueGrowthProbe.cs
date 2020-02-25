@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Queue Growth Analyzer";
+        public string Name => "Queue Growth Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Messages.Incoming.Rate > data.Messages.Acknowledged.Rate)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
                 result = new WarningDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,

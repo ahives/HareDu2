@@ -39,7 +39,11 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            
+            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
+            
+            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
             
             services.AddBrokerObjectFactory();
 
@@ -57,7 +61,11 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            
+            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
+            
+            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
 
             services.AddBrokerObjectFactory(path);
 
@@ -73,7 +81,11 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            
+            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
+            
+            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
 
             services.AddBrokerObjectFactory();
             
@@ -95,7 +107,11 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            
+            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
+            
+            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
 
             services.AddBrokerObjectFactory(path);
 
@@ -116,7 +132,11 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            
+            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
+            
+            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
@@ -148,7 +168,11 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
             
-            services.TryAddSingleton<IFileConfigProvider, YamlConfigProvider>();
+            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            
+            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
+            
+            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 

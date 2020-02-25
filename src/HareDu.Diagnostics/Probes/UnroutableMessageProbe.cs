@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Unroutable Message Analyzer";
+        public string Name => "Unroutable Message Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Exchange;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Efficiency;
@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.Churn.NotRouted.Total > 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.ClusterName,
                     null,
                     Identifier,
@@ -61,7 +61,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.ClusterName,
                     null,
                     Identifier,

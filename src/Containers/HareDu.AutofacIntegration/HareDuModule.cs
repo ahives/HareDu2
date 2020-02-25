@@ -39,8 +39,16 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<YamlConfigProvider>()
+            builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IConfigProvider>()
+                .SingleInstance();
+
+            builder.RegisterType<HareDuConfigValidator>()
+                .As<IConfigValidator>()
                 .SingleInstance();
             
             base.Load(builder);

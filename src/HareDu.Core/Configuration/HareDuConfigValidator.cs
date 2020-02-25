@@ -11,13 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Core.Configuration
 {
-    public enum DiagnosticStatus
+    using Extensions;
+
+    public class HareDuConfigValidator :
+        IConfigValidator
     {
-        Unhealthy,
-        Healthy,
-        Warning,
-        Inconclusive
+        public bool Validate(HareDuConfig config)
+        {
+            if (config.IsNull() ||
+                config.Broker.Credentials.IsNull() ||
+                string.IsNullOrWhiteSpace(config.Broker.Credentials.Username) ||
+                string.IsNullOrWhiteSpace(config.Broker.Credentials.Password) ||
+                string.IsNullOrWhiteSpace(config.Broker.Url))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

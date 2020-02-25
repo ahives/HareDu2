@@ -75,7 +75,8 @@ Registering objects without IoC containers is pretty simple as well...
 
 *YAML configuration*
 ```csharp
-var provider = new YamlConfigProvider();
+var validator = new HareDuConfigValidator();
+var provider = new YamlFileConfigProvider(validator);
 
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
@@ -194,7 +195,8 @@ Registering objects without IoC containers is pretty simple as well...
 
 *YAML configuration*
 ```csharp
-var provider = new YamlConfigProvider();
+var validator = new HareDuConfigValidator();
+var provider = new YamlFileConfigProvider(validator);
 
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
@@ -297,7 +299,8 @@ Registering objects without IoC containers is pretty simple...
 
 *YAML configuration*
 ```csharp
-var provider = new YamlConfigProvider();
+var validator = new HareDuConfigValidator();
+var provider = new YamlFileConfigProvider(validator);
 
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
@@ -333,8 +336,30 @@ var result = scanner.Scan(snapshot);
 
 The above code will return a ```ScannerResult``` object, which contains the result of executing each diagnostic probe against the snapshot data.
 
+#### Registering Observers
 
-### YAML Configuration
+When setting up ```DiagnosticScanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotContext<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotContext<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
+
+```csharp
+var result = scanner
+    .RegisterObserver(new SomeCoolObserver())
+    .Scan(snapshot);
+```
+
+
+### Configuration
+Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API. The section called *diagnostics* has the configuration needed to use the Diagnostics API.
+
+| Section | Setting | Description |
+| --- |---| --- |
+| **broker** | **url** | The url of the RabbitMQ node that has metrics enabled. |
+| | **username** | This user should have administrative access to the RAbbitMQ broker. |
+| | **password** | Decrypted password of a user that has administrative access to the RabbitMQ broker. |
+| **diagnostics** | **high-closure-rate-warning-threshold** | Defines what is the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is healthy. Greater or equal to this number generates a warning, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the value is less than this threshold then the system is considered to be operating normally. |
+| **** |  |
+| **** |  |
+| **** |  |
+
 
 ```yaml
 ---
@@ -353,16 +378,6 @@ The above code will return a ```ScannerResult``` object, which contains the resu
     file-descriptor-usage-warning-coefficient:  0.65
     consumer-utilization-warning-coefficient: 0.50
 ...
-```
-
-#### Registering Observers
-
-When setting up ```DiagnosticScanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotResult<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
-
-```csharp
-var result = scanner
-    .RegisterObserver(new SomeCoolObserver())
-    .Scan(snapshot);
 ```
 
 

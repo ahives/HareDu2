@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Probes
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Redelivered Messages ";
+        public string Name => "Redelivered Messages Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.FaultTolerance;
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Messages.Redelivered.Total >= warningThreshold && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && warningThreshold < data.Messages.Incoming.Total)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
                 result = new WarningDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else if (data.Messages.Redelivered.Total >= data.Messages.Incoming.Total)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.Node,
                     data.Identifier,
                     Identifier,

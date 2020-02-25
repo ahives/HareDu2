@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Queue No Flow Analyzer";
+        public string Name => "Queue No Flow Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -51,12 +51,12 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Messages.Incoming.Total == 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 

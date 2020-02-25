@@ -14,26 +14,27 @@
 namespace HareDu.Core.Configuration
 {
     using System;
+    using System.IO;
     using Internal;
     using YamlDotNet.Serialization;
     using YamlDotNet.Serialization.NamingConventions;
 
-    public class YamlConfigProvider :
-        IConfigProvider
+    public class YamlFileConfigProvider :
+        IFileConfigProvider
     {
         readonly IConfigValidator _validator;
 
-        public YamlConfigProvider(IConfigValidator validator)
+        public YamlFileConfigProvider(IConfigValidator validator)
         {
             _validator = validator;
         }
 
-        public YamlConfigProvider()
+        public YamlFileConfigProvider()
         {
             _validator = new HareDuConfigValidator();
         }
 
-        public bool TryGet(string text, out HareDuConfig config)
+        public bool TryGet(string path, out HareDuConfig config)
         {
             try
             {
@@ -41,11 +42,20 @@ namespace HareDu.Core.Configuration
                     .WithNamingConvention(new HyphenatedNamingConvention())
                     .Build();
 
-                var deserializedConfig = deserializer.Deserialize<HareDuConfigYaml>(text);
-                
-                config = new HareDuConfigImpl(deserializedConfig);
+                if (!File.Exists(path))
+                {
+                    config = ConfigCache.Default;
+                    return true;
+                }
 
-                return _validator.Validate(config);
+                using (var reader = File.OpenText(path))
+                {
+                    var deserializedConfig = deserializer.Deserialize<HareDuConfigYaml>(reader);
+                    
+                    config = new HareDuConfigImpl(deserializedConfig);
+
+                    return _validator.Validate(config);
+                }
             }
             catch (Exception e)
             {

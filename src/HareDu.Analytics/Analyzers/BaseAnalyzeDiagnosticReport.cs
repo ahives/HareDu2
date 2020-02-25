@@ -35,19 +35,19 @@ namespace HareDu.Analytics.Analyzers
             var summary = (from result in rollup
                     let green = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Green)
+                            .Count(x => x == DiagnosticStatus.Healthy)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Green))
+                        CalcPercentage(result.Value, DiagnosticStatus.Healthy))
                     let red = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Red)
+                            .Count(x => x == DiagnosticStatus.Unhealthy)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Red))
+                        CalcPercentage(result.Value, DiagnosticStatus.Unhealthy))
                     let yellow = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Yellow)
+                            .Count(x => x == DiagnosticStatus.Warning)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Yellow))
+                        CalcPercentage(result.Value, DiagnosticStatus.Warning))
                     let inconclusive = new AnalyzerResultImpl(
                         result.Value
                             .Count(x => x == DiagnosticStatus.Inconclusive)

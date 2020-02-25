@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "High Connection Closure Rate Analyzer";
+        public string Name => "High Connection Closure Rate Probe";
         public string Description => "";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Connectivity;
@@ -55,12 +55,12 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.ConnectionsClosed.Rate >= _config.HighClosureRateWarningThreshold)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Yellow, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
                 result = new WarningDiagnosticProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 

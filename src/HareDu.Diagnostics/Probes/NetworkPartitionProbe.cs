@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Network Partition Analyzer";
+        public string Name => "Network Partition Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Connectivity;
@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.NetworkPartitions.Any())
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,

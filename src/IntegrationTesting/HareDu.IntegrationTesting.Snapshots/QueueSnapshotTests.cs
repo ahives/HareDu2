@@ -55,7 +55,8 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test1()
         {
-            var configurationProvider = new YamlConfigProvider();
+            var validator = new HareDuConfigValidator();
+            var configurationProvider = new YamlFileConfigProvider(validator);
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
@@ -72,7 +73,8 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test2()
         {
-            var configurationProvider = new YamlConfigProvider();
+            var validator = new HareDuConfigValidator();
+            var configurationProvider = new YamlFileConfigProvider(validator);
             
             if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {

@@ -105,7 +105,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             
-            var configProvider = new YamlConfigProvider();
+            var validator = new HareDuConfigValidator();
+            var configProvider = new YamlFileConfigProvider(validator);
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new KnowledgeBaseProvider();

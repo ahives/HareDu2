@@ -111,7 +111,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test3()
         {
-            var configProvider = new YamlConfigProvider();
+            var validator = new HareDuConfigValidator();
+            var configProvider = new YamlFileConfigProvider(validator);
             configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
             var factory = new SnapshotFactory(new BrokerObjectFactory(config.Broker));
@@ -134,7 +135,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test4()
         {
-            var configProvider = new YamlConfigProvider();
+            var validator = new HareDuConfigValidator();
+            var configProvider = new YamlFileConfigProvider(validator);
             configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
             var factory = new SnapshotFactory(config.Broker);

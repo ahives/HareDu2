@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
     {
         readonly DiagnosticsConfig _config;
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Runtime Process Limit Analyzer";
+        public string Name => "Runtime Process Limit Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Runtime;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Processes.Used < data.Processes.Limit)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -64,7 +64,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,

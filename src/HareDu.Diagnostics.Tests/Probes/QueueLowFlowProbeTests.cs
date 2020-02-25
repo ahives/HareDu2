@@ -37,7 +37,7 @@ namespace HareDu.Diagnostics.Tests.Probes
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<YamlConfigProvider>()
+            builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
                 .SingleInstance();
             
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Red);
+            result.Status.ShouldBe(DiagnosticStatus.Unhealthy);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
         }
 
@@ -76,7 +76,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Green);
+            result.Status.ShouldBe(DiagnosticStatus.Healthy);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
         }
 

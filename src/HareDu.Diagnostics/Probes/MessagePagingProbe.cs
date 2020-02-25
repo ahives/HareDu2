@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         public string Identifier => GetType().GetIdentifier();
-        public string Name => "Message Paging Analyzer";
+        public string Name => "Message Paging Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Memory;
@@ -51,12 +51,12 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Memory.PagedOut.Total > 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Red, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
                 result = new NegativeDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Green, out knowledgeBaseArticle);
+                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
                 result = new PositiveDiagnosticProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
