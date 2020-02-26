@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Probes
             if (data.AlarmInEffect)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,
+                result = new UnhealthyProbeResult(data.NodeIdentifier,
                     null,
                     Identifier,
                     ComponentType,
@@ -64,7 +64,7 @@ namespace HareDu.Diagnostics.Probes
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.NodeIdentifier,
+                result = new HealthyProbeResult(data.NodeIdentifier,
                     null,
                     Identifier,
                     ComponentType,

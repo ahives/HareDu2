@@ -56,12 +56,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.ConnectionsClosed.Rate >= _config.HighClosureRateWarningThreshold)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
-                result = new WarningDiagnosticProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                result = new WarningProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                result = new HealthyProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

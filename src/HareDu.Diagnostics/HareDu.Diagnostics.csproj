@@ -16,9 +16,4 @@
       <ProjectReference Include="..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extensions" />
-      <Folder Include="Observers" />
-    </ItemGroup>
-
 </Project>

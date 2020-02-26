@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Probes
             if (data.PrefetchCount == 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
-                result = new WarningDiagnosticProbeResult(data.ConnectionIdentifier,
+                result = new WarningProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,

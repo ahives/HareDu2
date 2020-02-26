@@ -53,7 +53,7 @@ namespace HareDu.Diagnostics.Probes
             if (data.Messages.Incoming.Rate > data.Messages.Acknowledged.Rate)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
-                result = new WarningDiagnosticProbeResult(data.Node,
+                result = new WarningProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Probes
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.Node,
+                result = new HealthyProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,

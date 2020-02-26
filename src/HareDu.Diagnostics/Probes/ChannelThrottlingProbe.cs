@@ -53,12 +53,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.UnacknowledgedMessages > data.PrefetchCount)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                result = new UnhealthyProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                result = new HealthyProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

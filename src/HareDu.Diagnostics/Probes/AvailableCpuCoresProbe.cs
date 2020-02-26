@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Probes
             if (data.AvailableCoresDetected <= 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.ClusterIdentifier,
+                result = new UnhealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Probes
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.ClusterIdentifier,
+                result = new HealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,

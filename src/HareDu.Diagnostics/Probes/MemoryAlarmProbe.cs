@@ -54,12 +54,12 @@ namespace HareDu.Diagnostics.Probes
             if (data.AlarmInEffect)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.NodeIdentifier,null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                result = new UnhealthyProbeResult(data.NodeIdentifier,null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.NodeIdentifier, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                result = new HealthyProbeResult(data.NodeIdentifier, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
             }
 
             NotifyObservers(result);

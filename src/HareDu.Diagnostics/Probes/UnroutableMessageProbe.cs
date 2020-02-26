@@ -52,7 +52,7 @@ namespace HareDu.Diagnostics.Probes
             if (data.Churn.NotRouted.Total > 0)
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
-                result = new NegativeDiagnosticProbeResult(data.ClusterName,
+                result = new UnhealthyProbeResult(data.ClusterName,
                     null,
                     Identifier,
                     ComponentType,
@@ -62,7 +62,7 @@ namespace HareDu.Diagnostics.Probes
             else
             {
                 _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new PositiveDiagnosticProbeResult(data.ClusterName,
+                result = new HealthyProbeResult(data.ClusterName,
                     null,
                     Identifier,
                     ComponentType,

@@ -28,6 +28,77 @@ To use HareDu, you must have the appropriate RabbitMQ plugins installed and enab
 
 Configuration value "vm_memory_calculation_strategy" is set to "rss"
 
+
+### Configuration
+Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API. The section called *diagnostics* has the configuration needed to use the Diagnostics API.
+
+| Section | Setting | Description |
+| --- |---| --- |
+| **broker** | url | The url of the RabbitMQ node that has metrics enabled. |
+| | username | This user should have administrative access to the RabbitMQ broker. |
+| | password | Decrypted password of a user that has administrative access to the RabbitMQ broker. |
+| **diagnostics** | high-closure-rate-warning-threshold | Defines the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is considered healthy. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of closed connections is less than this setting then the system is considered to be operating normally. |
+|  | high-creation-rate-warning-threshold | Defines the maximum acceptable rate of which connections to the RabbitMQ broker can be made in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally. |
+|  | queue-high-flow-threshold | Defines the maximum acceptable number of messages that can be published to a queue. If the number of published messages is greater than or equal to this setting then this queue is considered unhealthy  |
+|  | queue-low-flow-threshold |  |
+|  | message-redelivery-coefficient |  |
+|  | socket-usage-coefficient |  |
+|  | runtime-process-usage-coefficient |  |
+|  | file-descriptor-usage-warning-coefficient |  |
+|  | consumer-utilization-warning-coefficient |  |
+
+
+```yaml
+---
+  broker:
+      url:  http://localhost:15672
+      username: guest
+      password: guest
+  diagnostics:
+    high-closure-rate-warning-threshold:  100
+    high-creation-rate-warning-threshold: 100
+    queue-high-flow-threshold:  100
+    queue-low-flow-threshold: 20
+    message-redelivery-coefficient: 0.50
+    socket-usage-coefficient: 0.60
+    runtime-process-usage-coefficient:  0.65
+    file-descriptor-usage-warning-coefficient:  0.65
+    consumer-utilization-warning-coefficient: 0.50
+...
+```
+There are several ways to configure HareDu. Let's look at the major scenarios.
+
+##### I just want to configure the Broker/Snapshot API
+You can either do this explicitly by calling the ```BrokerConfigProvider``` directly like so...
+```csharp
+var provider = new BrokerConfigProvider();
+var config = provider.Configure(x =>
+{
+    x.ConnectTo("http://localhost:15672");
+    x.UsingCredentials("guest", "guest");
+});
+```
+...or you can simply read YAML configuration. There are two ways to read YAML. Either you can read a YAML configuration file like so...
+```csharp
+var validator = new HareDuConfigValidator();
+var provider = new YamlFileConfigProvider(validator);
+
+provider.TryGet("haredu.yaml", out HareDuConfig config);
+```
+...or you can read YAML text like this...
+```csharp
+var validator = new HareDuConfigValidator();
+var provider = new YamlConfigProvider(validator);
+
+provider.TryGet(yamlText, out HareDuConfig config);
+```
+From here you need only call ```config.Broker``` to access the broker configuration.
+<br>
+
+##### I just want to configure the Diagnostics API
+
+
+
 ### Broker API
 
 The Broker API is the lowest level API because it interacts directly with the RabbitMQ broker. With this API you can administer the broker and perform the below operations on each broker object:
@@ -71,38 +142,15 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 
 <br>
 
-Registering objects without IoC containers is pretty simple as well...
-
-*YAML configuration*
-```csharp
-var validator = new HareDuConfigValidator();
-var provider = new YamlFileConfigProvider(validator);
-
-provider.TryGet("haredu.yaml", out HareDuConfig config);
-
-var factory = new BrokerObjectFactory(config.Broker);
-```
-
-*Programmatically*
-```csharp
-var provider = new BrokerConfigProvider();
-var config = provider.Configure(x =>
-{
-    x.ConnectTo("http://localhost:15672");
-    x.UsingCredentials("guest", "guest");
-});
-
-var factory = new BrokerObjectFactory(config);
-```
-Note: Initializing BrokerObjectFactory should be a one time activity, therefore, should be initialized using the Singleton pattern.
-
 #### Performing operations on the broker
 The Broker API is considered the low level API because it allows you to administer RabbitMQ (e.g., users, queues, exchanges, etc.).
 
 **Step 1: Get a broker object**
 ```csharp
+var factory = new BrokerObjectFactory(config);
 var obj = factory.Object<Queue>();
 ```
+Note: Initializing BrokerObjectFactory should be a one time activity, therefore, should be initialized using the Singleton pattern.
 
 **Step 2: Call methods on broker object**
 ```csharp
@@ -191,40 +239,13 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 
 <br>
 
-Registering objects without IoC containers is pretty simple as well...
-
-*YAML configuration*
-```csharp
-var validator = new HareDuConfigValidator();
-var provider = new YamlFileConfigProvider(validator);
-
-provider.TryGet("haredu.yaml", out HareDuConfig config);
-
-var brokerFactory = new BrokerObjectFactory(config.Broker);
-var factory = new SnapshotFactory(brokerFactory);
-```
-
-*Programmatically*
-```csharp
-var provider = new BrokerConfigProvider();
-var config = provider.Configure(x =>
-{
-    x.ConnectTo("http://localhost:15672");
-    x.UsingCredentials("guest", "guest");
-});
-
-var brokerFactory = new BrokerObjectFactory(config);
-var factory = new SnapshotFactory(brokerFactory);
-```
-Note: if you have the broker configuration already you can simply pass it to the SnapshotFactory instead of explicitly initializing BrokerObjectFactory.
-
-<br>
-
 #### Taking snapshots
 Once you have registered a SnapshotFactory, it is easy to take a snapshot.
 
 **Step 1: Define which snapshot you want to take**
 ```csharp
+var brokerFactory = new BrokerObjectFactory(config);
+var factory = new SnapshotFactory(brokerFactory);
 var snapshot = factory.Snapshot<BrokerQueues>();
 ```
 
@@ -344,40 +365,6 @@ When setting up ```DiagnosticScanner```, you can register observers. These obser
 var result = scanner
     .RegisterObserver(new SomeCoolObserver())
     .Scan(snapshot);
-```
-
-
-### Configuration
-Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API. The section called *diagnostics* has the configuration needed to use the Diagnostics API.
-
-| Section | Setting | Description |
-| --- |---| --- |
-| **broker** | **url** | The url of the RabbitMQ node that has metrics enabled. |
-| | **username** | This user should have administrative access to the RAbbitMQ broker. |
-| | **password** | Decrypted password of a user that has administrative access to the RabbitMQ broker. |
-| **diagnostics** | **high-closure-rate-warning-threshold** | Defines what is the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is healthy. Greater or equal to this number generates a warning, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the value is less than this threshold then the system is considered to be operating normally. |
-| **** |  |
-| **** |  |
-| **** |  |
-
-
-```yaml
----
-  broker:
-      url:  http://localhost:15672
-      username: guest
-      password: guest
-  diagnostics:
-    high-closure-rate-warning-threshold:  100
-    high-creation-rate-warning-threshold: 100
-    queue-high-flow-threshold:  100
-    queue-low-flow-threshold: 20
-    message-redelivery-coefficient: 0.50
-    socket-usage-coefficient: 0.60
-    runtime-process-usage-coefficient:  0.65
-    file-descriptor-usage-warning-coefficient:  0.65
-    consumer-utilization-warning-coefficient: 0.50
-...
 ```
 
 
