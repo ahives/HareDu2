@@ -68,7 +68,7 @@ Configuring your HareDu-powered application can be as simple as modifying the *h
 ```
 There are several ways to configure HareDu. Let's look at the major scenarios.
 
-##### I just want to configure the Broker/Snapshot API
+#### I just want to configure the Broker/Snapshot API
 You can either do this explicitly by calling the ```BrokerConfigProvider``` directly like so...
 ```csharp
 var provider = new BrokerConfigProvider();
@@ -95,8 +95,9 @@ provider.TryGet(yamlText, out HareDuConfig config);
 From here you need only call ```config.Broker``` to access the broker configuration. In the above example, ```YamlFileConfigProvider``` and ```YamlConfigProvider``` are shown to be initialized by explicitly passing ```IConfigValidator```, which can be a custom validator. However, if you want to use the default validator then use the parameterless constructor.
 <br>
 
-##### I just want to configure the Diagnostics API
-There are a couple ways to configure the Diagnostics API. Since most of the default diagnostic probes are configurable by passing in settings, we give you a way to codify those settings.
+#### I just want to configure the Diagnostics API
+There are a couple ways to configure the Diagnostics API. Since most of the default diagnostic probes are configurable by passing in settings, we give you a way to codify those settings. The first option is to read the *haredu.yaml* file. The other option is set the configuration explicitly like so...
+
 ```csharp
 var provider = new DiagnosticsConfigProvider();
 var config = provider.Configure(x =>
@@ -112,7 +113,6 @@ var config = provider.Configure(x =>
                 x.SetHighCreationRateWarningThreshold(60);
             });
 ```
-
 
 ### Broker API
 
