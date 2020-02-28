@@ -22,30 +22,26 @@ HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came
 
 # Overview
 
-HareDu 2 comes with three major APIs; that is, Broker, Snapshotting, and Diagnostics, respectively.  
-
-To use HareDu, you must have the appropriate RabbitMQ plugins installed and enabled. Ensure that you have the following configuration values set to enable the API to pull statistics from your RabbitMQ cluster:
-
-Configuration value "vm_memory_calculation_strategy" is set to "rss"
+HareDu 2 comes with three major APIs; that is, Broker, Snapshot, and Diagnostics, respectively. To use HareDu, you must have the appropriate RabbitMQ plugins installed and enabled.
 
 
 ### Configuration
 Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API. The section called *diagnostics* has the configuration needed to use the Diagnostics API.
 
-| Section | Setting | Description |
-| --- |---| --- |
-| **broker** | url | The url of the RabbitMQ node that has metrics enabled. |
-| | username | This user should have administrative access to the RabbitMQ broker. |
-| | password | Decrypted password of a user that has administrative access to the RabbitMQ broker. |
-| **diagnostics** | high-closure-rate-warning-threshold | Defines the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is considered healthy. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of closed connections is less than this setting then the system is considered to be operating normally. |
-|  | high-creation-rate-warning-threshold | Defines the maximum acceptable rate of which connections to the RabbitMQ broker can be made in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally. |
-|  | queue-high-flow-threshold | Defines the maximum acceptable number of messages that can be published to a queue. If the number of published messages is greater than or equal to this setting then this queue is considered unhealthy  |
-|  | queue-low-flow-threshold |  |
-|  | message-redelivery-coefficient |  |
-|  | socket-usage-coefficient |  |
-|  | runtime-process-usage-coefficient |  |
-|  | file-descriptor-usage-warning-coefficient |  |
-|  | consumer-utilization-warning-coefficient |  |
+| Setting | Description |
+| ---| --- |
+| url | The url of the RabbitMQ node that has metrics enabled. |
+| username | This user should have administrative access to the RabbitMQ broker. |
+| password | Decrypted password of a user that has administrative access to the RabbitMQ broker. |
+| high-closure-rate-warning-threshold | Defines the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is considered healthy. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of closed connections is less than this setting then the system is considered to be operating normally. |
+| high-creation-rate-warning-threshold | Defines the maximum acceptable rate of which connections to the RabbitMQ broker can be made in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally. |
+| queue-high-flow-threshold | Defines the maximum acceptable number of messages that can be published to a queue. If the number of published messages is greater than or equal to this setting then this queue is considered unhealthy  |
+| queue-low-flow-threshold |  |
+| message-redelivery-coefficient |  |
+| socket-usage-coefficient |  |
+| runtime-process-usage-coefficient |  |
+| file-descriptor-usage-warning-coefficient |  |
+| consumer-utilization-warning-coefficient |  |
 
 
 ```yaml
@@ -113,6 +109,8 @@ var config = provider.Configure(x =>
                 x.SetHighCreationRateWarningThreshold(60);
             });
 ```
+
+<br>
 
 ### Broker API
 
@@ -354,6 +352,7 @@ var result = scanner
     .RegisterObserver(new SomeCoolObserver())
     .Scan(snapshot);
 ```
+<br>
 
 
 ### Gotchas
