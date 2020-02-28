@@ -22,26 +22,29 @@ namespace HareDu.Core.Configuration
         IConfigProvider
     {
         readonly IConfigValidator _validator;
+        readonly IDeserializer _deserializer;
 
         public YamlConfigProvider(IConfigValidator validator)
         {
             _validator = validator;
+            _deserializer = new DeserializerBuilder()
+                .WithNamingConvention(new HyphenatedNamingConvention())
+                .Build();
         }
 
         public YamlConfigProvider()
         {
             _validator = new HareDuConfigValidator();
+            _deserializer = new DeserializerBuilder()
+                .WithNamingConvention(new HyphenatedNamingConvention())
+                .Build();
         }
 
         public bool TryGet(string text, out HareDuConfig config)
         {
             try
             {
-                var deserializer = new DeserializerBuilder()
-                    .WithNamingConvention(new HyphenatedNamingConvention())
-                    .Build();
-
-                var deserializedConfig = deserializer.Deserialize<HareDuConfigYaml>(text);
+                var deserializedConfig = _deserializer.Deserialize<HareDuConfigYaml>(text);
                 
                 config = new HareDuConfigImpl(deserializedConfig);
 
@@ -54,14 +57,13 @@ namespace HareDu.Core.Configuration
             }
         }
 
-
+        
         class HareDuConfigImpl :
             HareDuConfig
         {
             public HareDuConfigImpl(HareDuConfigYaml config)
             {
                 Broker = new BrokerConfigImpl(config.Broker);
-                // OverrideAnalyzerConfig = config.OverrideAnalyzerConfig;
                 Diagnostics = new DiagnosticsConfigImpl(config.Analyzer);
             }
 

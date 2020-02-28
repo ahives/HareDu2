@@ -80,23 +80,38 @@ var config = provider.Configure(x =>
 ```
 ...or you can simply read YAML configuration. There are two ways to read YAML. Either you can read a YAML configuration file like so...
 ```csharp
-var validator = new HareDuConfigValidator();
+var validator = new YourCustomConfigValidator();
 var provider = new YamlFileConfigProvider(validator);
 
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 ```
 ...or you can read YAML text like this...
 ```csharp
-var validator = new HareDuConfigValidator();
+var validator = new YourCustomConfigValidator();
 var provider = new YamlConfigProvider(validator);
 
 provider.TryGet(yamlText, out HareDuConfig config);
 ```
-From here you need only call ```config.Broker``` to access the broker configuration.
+From here you need only call ```config.Broker``` to access the broker configuration. In the above example, ```YamlFileConfigProvider``` and ```YamlConfigProvider``` are shown to be initialized by explicitly passing ```IConfigValidator```, which can be a custom validator. However, if you want to use the default validator then use the parameterless constructor.
 <br>
 
 ##### I just want to configure the Diagnostics API
-
+There are a couple ways to configure the Diagnostics API. Since most of the default diagnostic probes are configurable by passing in settings, we give you a way to codify those settings.
+```csharp
+var provider = new DiagnosticsConfigProvider();
+var config = provider.Configure(x =>
+            {
+                x.SetMessageRedeliveryCoefficient(0.60M);
+                x.SetSocketUsageCoefficient(0.60M);
+                x.SetConsumerUtilizationWarningCoefficient(0.65M);
+                x.SetQueueHighFlowThreshold(90);
+                x.SetQueueLowFlowThreshold(10);
+                x.SetRuntimeProcessUsageCoefficient(0.65M);
+                x.SetFileDescriptorUsageWarningCoefficient(0.65M);
+                x.SetHighClosureRateWarningThreshold(90);
+                x.SetHighCreationRateWarningThreshold(60);
+            });
+```
 
 
 ### Broker API
@@ -294,8 +309,7 @@ var snapshot = factor
 
 ### Diagnostics API
 
-The Diagnostics API sits atop the Snapshot API, providing a means to scan snapshot data for issues.  
-Each snapshot makes one or more calls to the Broker API methods aggregating the metric data into a developer-friendly object. Each snapshot is then captured on a timeline that can be then flushed to disk or saved to a database.
+The Diagnostics API sits atop the Snapshot API, providing a means to scan snapshot data for issues. This API consists of what we call *diagnostic probes* whose purpose is to analyze a particular set of data from a particular snapshot and returns a result of that analysis back to the calling *diagnostic scan*. A diagnostic scan looks at the entire snapshot and determines which probes should be called. The ```DiagnosticScanner``` is the single point of contact to analyzing snapshot data with the Diagnostic API.
 
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform diagnostic scans on snapshot data captured from the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
@@ -316,39 +330,13 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 
 <br>
 
-Registering objects without IoC containers is pretty simple...
+Registering objects without IoC containers is pretty simple as well...
 
-*YAML configuration*
 ```csharp
-var validator = new HareDuConfigValidator();
-var provider = new YamlFileConfigProvider(validator);
-
-provider.TryGet("haredu.yaml", out HareDuConfig config);
-
 var kb = new DefaultKnowledgeBaseProvider();
 var scanner = new DiagnosticScanner(config.Diagnostics, kb);
 ```
-
-*Programmatically*
-```csharp
-var provider = new DiagnosticsConfigProvider();
-var config = provider.Configure(x =>
-            {
-                x.SetMessageRedeliveryCoefficient(0.60M);
-                x.SetSocketUsageCoefficient(0.60M);
-                x.SetConsumerUtilizationWarningCoefficient(0.65M);
-                x.SetQueueHighFlowThreshold(90);
-                x.SetQueueLowFlowThreshold(10);
-                x.SetRuntimeProcessUsageCoefficient(0.65M);
-                x.SetFileDescriptorUsageWarningCoefficient(0.65M);
-                x.SetHighClosureRateWarningThreshold(90);
-                x.SetHighCreationRateWarningThreshold(60);
-            });
-
-var kb = new DefaultKnowledgeBaseProvider();
-var scanner = new DiagnosticScanner(config.Diagnostics, kb);
-```
-Since the ```DiagnosticScanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```DiagnosticScanner``` as singletons. This applies to most things in HareDu 2.
+Since the ```DiagnosticScanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```DiagnosticScanner``` as a singleton. This applies to most things in HareDu 2.
 #### Scanning snapshots
 
 ```csharp

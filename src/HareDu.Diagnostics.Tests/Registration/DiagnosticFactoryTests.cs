@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Registration
 {
+    using System;
     using System.Collections.Generic;
     using Autofac;
     using AutofacIntegration;
@@ -28,7 +29,7 @@ namespace HareDu.Diagnostics.Tests.Registration
     using Snapshotting.Model;
 
     [TestFixture]
-    public class ComponentDiagnosticFactoryTests
+    public class DiagnosticFactoryTests
     {
         IReadOnlyList<DiagnosticProbe> _probes;
         IContainer _container;
@@ -61,6 +62,27 @@ namespace HareDu.Diagnostics.Tests.Registration
         }
 
         [Test]
+        public void Verify_can_add_new_probes()
+        {
+            var factory = _container.Resolve<IDiagnosticFactory>();
+            var kb = _container.Resolve<IKnowledgeBaseProvider>();
+            int probeCountBefore = factory.GetAvailableProbes().Count;
+            var probe = new FakeProbe(5, kb);
+
+            factory.RegisterProbe(probe).ShouldBeTrue();
+            
+            factory.GetAvailableProbes().Count.ShouldBe(probeCountBefore + 1);
+        }
+        
+        [Test]
+        public void Verify_can_get_available_probes()
+        {
+            var probes = _container.Resolve<IDiagnosticFactory>().GetAvailableProbes();
+            
+            Console.WriteLine(probes.ToJsonString());
+        }
+
+        [Test]
         public void Verify_can_get_diagnostic()
         {
             // string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
@@ -87,7 +109,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         {
             var factory = _container.Resolve<IDiagnosticFactory>();
 
-            factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
+            factory.TryGet<BrokerConnectivitySnapshot>(out _).ShouldBeTrue();
 //            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
@@ -112,7 +134,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var knowledgeBaseProvider = new KnowledgeBaseProvider();
             var factory = new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
 
-            factory.TryGet<FakeSnapshot>(out var diagnostic).ShouldBeFalse();
+            factory.TryGet<FakeSnapshot>(out _).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
@@ -128,6 +150,26 @@ namespace HareDu.Diagnostics.Tests.Registration
         interface FakeSnapshot :
             Snapshot
         {
+        }
+
+        class FakeProbe :
+            BaseDiagnosticProbe,
+            DiagnosticProbe
+        {
+            public FakeProbe(int someConfigValue, IKnowledgeBaseProvider kb)
+                : base(kb)
+            {
+            }
+
+            public IDisposable Subscribe(IObserver<DiagnosticProbeContext> observer) => throw new NotImplementedException();
+
+            public string Identifier { get; }
+            public string Name { get; }
+            public string Description { get; }
+            public ComponentType ComponentType { get; }
+            public DiagnosticProbeCategory Category { get; }
+            public DiagnosticProbeStatus Status { get; }
+            public DiagnosticProbeResult Execute<T>(T snapshot) => throw new NotImplementedException();
         }
     }
 }

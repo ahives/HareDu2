@@ -30,21 +30,15 @@ namespace HareDu.Diagnostics.Registration
         IDiagnosticFactory
     {
         readonly DiagnosticsConfig _config;
-        readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
+        readonly IKnowledgeBaseProvider _kb;
         readonly IDictionary<string, object> _cache;
         readonly IDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
 
-        public DiagnosticFactory(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
+        public DiagnosticFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
-            if (config.IsNull())
-                throw new HareDuBrokerObjectInitException();
-            
-            if (knowledgeBaseProvider.IsNull())
-                throw new HareDuBrokerObjectInitException();
-
-            _config = config;
-            _knowledgeBaseProvider = knowledgeBaseProvider;
+            _config = !config.IsNull() ? config : throw new HareDuBrokerObjectInitException();
+            _kb = !kb.IsNull() ? kb : throw new HareDuBrokerObjectInitException();
             _cache = new Dictionary<string, object>();
             _probeCache = new Dictionary<string, DiagnosticProbe>();
             _observers = new List<IDisposable>();
@@ -101,6 +95,19 @@ namespace HareDu.Diagnostics.Registration
                 _observers.Add(probes[j].Subscribe(observer));
             }
         }
+
+        public bool RegisterProbe<T>(T probe)
+            where T : DiagnosticProbe
+        {
+            if (probe.IsNull())
+                return false;
+            
+            _probeCache.Add(typeof(T).FullName, probe);
+
+            return _probeCache.ContainsKey(typeof(T).FullName);
+        }
+
+        public IReadOnlyList<string> GetAvailableProbes() => _probeCache.Keys.ToList();
 
         protected virtual bool TryRegisterAll()
         {
@@ -239,8 +246,8 @@ namespace HareDu.Diagnostics.Registration
         {
             var instance = type.GetConstructors()[0].GetParameters()[0].ParameterType == typeof(DiagnosticsConfig)
                            && type.GetConstructors()[0].GetParameters()[1].ParameterType == typeof(IKnowledgeBaseProvider)
-                ? (DiagnosticProbe) Activator.CreateInstance(type, _config, _knowledgeBaseProvider)
-                : (DiagnosticProbe) Activator.CreateInstance(type, _knowledgeBaseProvider);
+                ? (DiagnosticProbe) Activator.CreateInstance(type, _config, _kb)
+                : (DiagnosticProbe) Activator.CreateInstance(type, _kb);
             
             return instance;
         }

@@ -19,6 +19,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using AutofacIntegration;
     using Core.Configuration;
     using Core.Extensions;
+    using Diagnostics.Probes;
     using Diagnostics.Registration;
     using Fakes;
     using NUnit.Framework;
@@ -105,6 +106,10 @@ namespace HareDu.Diagnostics.Tests.Scanners
             {
                 throw new NotImplementedException();
             }
+
+            public bool RegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
+
+            public IReadOnlyList<string> GetAvailableProbes() => throw new NotImplementedException();
         }
     }
 }

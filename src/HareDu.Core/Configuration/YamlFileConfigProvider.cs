@@ -23,25 +23,28 @@ namespace HareDu.Core.Configuration
         IFileConfigProvider
     {
         readonly IConfigValidator _validator;
+        readonly IDeserializer _deserializer;
 
         public YamlFileConfigProvider(IConfigValidator validator)
         {
             _validator = validator;
+            _deserializer = new DeserializerBuilder()
+                .WithNamingConvention(new HyphenatedNamingConvention())
+                .Build();
         }
 
         public YamlFileConfigProvider()
         {
             _validator = new HareDuConfigValidator();
+            _deserializer = new DeserializerBuilder()
+                .WithNamingConvention(new HyphenatedNamingConvention())
+                .Build();
         }
 
         public bool TryGet(string path, out HareDuConfig config)
         {
             try
             {
-                var deserializer = new DeserializerBuilder()
-                    .WithNamingConvention(new HyphenatedNamingConvention())
-                    .Build();
-
                 if (!File.Exists(path))
                 {
                     config = ConfigCache.Default;
@@ -50,7 +53,7 @@ namespace HareDu.Core.Configuration
 
                 using (var reader = File.OpenText(path))
                 {
-                    var deserializedConfig = deserializer.Deserialize<HareDuConfigYaml>(reader);
+                    var deserializedConfig = _deserializer.Deserialize<HareDuConfigYaml>(reader);
                     
                     config = new HareDuConfigImpl(deserializedConfig);
 
@@ -71,7 +74,6 @@ namespace HareDu.Core.Configuration
             public HareDuConfigImpl(HareDuConfigYaml config)
             {
                 Broker = new BrokerConfigImpl(config.Broker);
-                // OverrideAnalyzerConfig = config.OverrideAnalyzerConfig;
                 Diagnostics = new DiagnosticsConfigImpl(config.Analyzer);
             }
 

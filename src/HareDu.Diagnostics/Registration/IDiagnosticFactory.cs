@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
+    using Probes;
     using Scans;
     using Snapshotting;
 
@@ -26,5 +27,10 @@ namespace HareDu.Diagnostics.Registration
         void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers);
 
         void RegisterObserver(IObserver<DiagnosticProbeContext> observer);
+
+        bool RegisterProbe<T>(T probe)
+            where T : DiagnosticProbe;
+
+        IReadOnlyList<string> GetAvailableProbes();
     }
 }
