@@ -3,7 +3,7 @@
 ![Join the chat at https://gitter.im/HareDu2/Lobby](https://img.shields.io/gitter/room/haredu2/HareDu2?style=flat)
 ![NuGet downloads](https://img.shields.io/nuget/dt/haredu?style=flat)
 
-.NET API for managing and monitoring RabbitMQ clusters using the RabbitMQ RESTful API.
+.NET library for managing and monitoring RabbitMQ clusters using the RabbitMQ RESTful API.
 
 
 Docs under construction here
@@ -12,7 +12,7 @@ https://ahives.gitbooks.io/haredu2/content/
 
 # History
 
-HareDu 2 is a complete rewrite of the original HareDu 1.x API. This rewrite came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
+If you are familiar with HareDu, you should know that HareDu 2 introduces some really cool features. That said, HareDu 2 is a significant change from its predecessor. HareDu 2 came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
 1. Increased test coverage
 2. Improved low level administrative APIs
 3. New APIs for diagnostics, cluster snapshotting and monitoring
@@ -43,7 +43,7 @@ Configuring your HareDu-powered application can be as simple as modifying the *h
 | file-descriptor-usage-warning-coefficient |  |
 | consumer-utilization-warning-coefficient |  |
 
-
+HareDu YAML looks like this...
 ```yaml
 ---
   broker:
