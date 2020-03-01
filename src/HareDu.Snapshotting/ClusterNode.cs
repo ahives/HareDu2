@@ -16,7 +16,7 @@ namespace HareDu.Snapshotting
     using Model;
 
     public interface ClusterNode :
-        HareDuSnapshot<NodeSnapshot>
+        SnapshotLens<NodeSnapshot>
     {
     }
 }

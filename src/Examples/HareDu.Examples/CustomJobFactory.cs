@@ -24,7 +24,7 @@ namespace HareDu.Examples
 
     public class CustomJobFactory<T> :
         SimpleJobFactory
-        where T : HareDuSnapshot<Snapshot>
+        where T : SnapshotLens<Snapshot>
     {
         readonly T _resource;
         readonly ElasticClient _client;

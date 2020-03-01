@@ -49,11 +49,11 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Test()
         {
-            var snapshot = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnectivity>()
-                .Execute();
+            var camera = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivity>()
+                .TakeSnapshot();
 
-            var result = snapshot.Timeline.MostRecent();
+            var result = camera.History.MostRecent();
             
             result.ShouldNotBeNull();
             result.Snapshot.ShouldNotBeNull();

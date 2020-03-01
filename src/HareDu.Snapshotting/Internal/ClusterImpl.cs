@@ -29,7 +29,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public SnapshotTimeline<ClusterSnapshot> Timeline => _timeline.Value;
+        public SnapshotTimeline<ClusterSnapshot> History => _timeline.Value;
 
         public ClusterImpl(IBrokerObjectFactory factory)
             : base(factory)
@@ -37,7 +37,7 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public HareDuSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
+        public SnapshotLens<ClusterSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Object<SystemOverview>()
@@ -74,7 +74,7 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer)
+        public SnapshotLens<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer)
         {
             if (observer != null)
             {
@@ -84,7 +84,7 @@ namespace HareDu.Snapshotting.Internal
             return this;
         }
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(
+        public SnapshotLens<ClusterSnapshot> RegisterObservers(
             IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers)
         {
             if (observers == null)

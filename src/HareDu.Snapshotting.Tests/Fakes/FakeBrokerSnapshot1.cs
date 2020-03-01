@@ -14,7 +14,7 @@
 namespace HareDu.Snapshotting.Tests.Fakes
 {
     public interface FakeBrokerSnapshot1 :
-        HareDuSnapshot<FakeHareDuSnapshot1>
+        SnapshotLens<FakeHareDuSnapshot1>
     {
     }
 }

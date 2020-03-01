@@ -46,14 +46,14 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var container = builder.Build();
 
             var resource = container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnectivity>()
+                .Lens<BrokerConnectivity>()
 //                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 // .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .Execute();
+                .TakeSnapshot();
             
             var scanner = container.Resolve<IDiagnosticScanner>();
 
-            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var snapshot = resource.History.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = container.Resolve<IDiagnosticReportFormatter>();
@@ -82,12 +82,12 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 .BuildServiceProvider();
             
             var resource = services.GetService<ISnapshotFactory>()
-                .Snapshot<BrokerConnectivity>()
-                .Execute();
+                .Lens<BrokerConnectivity>()
+                .TakeSnapshot();
             
             var scanner = services.GetService<IDiagnosticScanner>();
 
-            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var snapshot = resource.History.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = services.GetService<IDiagnosticReportFormatter>();
@@ -117,12 +117,12 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
             var factory = new SnapshotFactory(new BrokerObjectFactory(config.Broker));
 
-            var resource = factory.Snapshot<BrokerConnectivity>().Execute();
+            var resource = factory.Lens<BrokerConnectivity>().TakeSnapshot();
             
             IDiagnosticScanner scanner = new DiagnosticScanner(
                 new DiagnosticFactory(config.Diagnostics, new KnowledgeBaseProvider()));
 
-            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var snapshot = resource.History.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = new DiagnosticReportTextFormatter();
@@ -140,11 +140,11 @@ namespace HareDu.IntegrationTesting.Diagnostics
             configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
             var factory = new SnapshotFactory(config.Broker);
-            var resource = factory.Snapshot<BrokerConnectivity>().Execute();
+            var resource = factory.Lens<BrokerConnectivity>().TakeSnapshot();
 
             IDiagnosticScanner scanner = new DiagnosticScanner(config.Diagnostics);
 
-            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var snapshot = resource.History.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = new DiagnosticReportTextFormatter();
@@ -164,7 +164,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 x.UsingCredentials("guest", "guest");
             });
             var factory1 = new SnapshotFactory(config1);
-            var resource = factory1.Snapshot<BrokerConnectivity>().Execute();
+            var resource = factory1.Lens<BrokerConnectivity>().TakeSnapshot();
 
             var provider2 = new DiagnosticsConfigProvider();
 
@@ -184,7 +184,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var factory2 = new DiagnosticFactory(config, new KnowledgeBaseProvider());
             IDiagnosticScanner scanner = new DiagnosticScanner(factory2);
 
-            var snapshot = resource.Timeline.MostRecent().Snapshot;
+            var snapshot = resource.History.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
 
             var formatter = new DiagnosticReportTextFormatter();

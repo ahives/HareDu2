@@ -50,8 +50,8 @@ namespace HareDu.Snapshotting.Registration
                 throw new HareDuBrokerObjectInitException();
         }
 
-        public T Snapshot<T>()
-            where T : HareDuSnapshot<Snapshot>
+        public T Lens<T>()
+            where T : SnapshotLens<Snapshot>
         {
             Type type = typeof(T);
 
@@ -125,7 +125,7 @@ namespace HareDu.Snapshotting.Registration
 
             foreach (var type in types)
             {
-                if (!type.IsInterface || !type.InheritsFromInterface(typeof(HareDuSnapshot<>)))
+                if (!type.IsInterface || !type.InheritsFromInterface(typeof(SnapshotLens<>)))
                     continue;
                 
                 if (interfaces.ContainsKey(type.FullName))

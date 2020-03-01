@@ -55,26 +55,26 @@ namespace HareDu.Snapshotting.Tests.Extensions
         public void Verify_flush_writes_to_disk_and_clears_buffer()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var snapshot = factory.Snapshot<BrokerQueues>();
+            var snapshot = factory.Lens<BrokerQueues>();
 
             for (int i = 0; i < 10; i++)
             {
-                snapshot.Execute();
+                snapshot.TakeSnapshot();
             }
 
-            snapshot.Timeline.Results.ShouldNotBeNull();
-            snapshot.Timeline.Results.Any().ShouldBeTrue();
+            snapshot.History.Results.ShouldNotBeNull();
+            snapshot.History.Results.Any().ShouldBeTrue();
 
             var files = new List<string>();
             for (int i = 0; i < 10; i++)
             {
                 files.Add(
-                    $"{TestContext.CurrentContext.TestDirectory}/snapshots/snapshot_{snapshot.Timeline.Results[i].Identifier}.json");
+                    $"{TestContext.CurrentContext.TestDirectory}/snapshots/snapshot_{snapshot.History.Results[i].Identifier}.json");
             }
             
-            snapshot.Timeline.Flush(_container.Resolve<ISnapshotWriter>(), $"{TestContext.CurrentContext.TestDirectory}/snapshots");
+            snapshot.History.Flush(_container.Resolve<ISnapshotWriter>(), $"{TestContext.CurrentContext.TestDirectory}/snapshots");
 
-            snapshot.Timeline.Results.ShouldNotBeNull();
+            snapshot.History.Results.ShouldNotBeNull();
             // snapshot.Timeline.Results.Any().ShouldBeFalse();
             
             for (int i = 0; i < 10; i++)

@@ -39,18 +39,18 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public async Task Test1()
         {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnectivity>()
+            var camera = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivity>()
                 .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .Execute();
+                .TakeSnapshot();
         }
 
         [Test]
         public async Task Test2()
         {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerConnectivity>()
-                .Execute();
+            var camera = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivity>()
+                .TakeSnapshot();
         }
     }
 }

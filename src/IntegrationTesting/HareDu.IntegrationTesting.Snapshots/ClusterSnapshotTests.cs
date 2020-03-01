@@ -39,10 +39,10 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public async Task Test()
         {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<Cluster>()
+            var lens = _container.Resolve<ISnapshotFactory>()
+                .Lens<Cluster>()
                 .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
-                .Execute();
+                .TakeSnapshot();
 
 //            var snapshot = resource.Snapshots[0].Select(x => x.Data);
 //            Console.WriteLine($"Cluster: {snapshot.ClusterName}");

@@ -26,7 +26,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         readonly List<SnapshotResult<ClusterSnapshot>> _snapshots;
         // public IReadOnlyList<SnapshotResult<ClusterSnapshot>> Timeline => _snapshots;
 
-        public SnapshotTimeline<ClusterSnapshot> Timeline => _timeline.Value;
+        public SnapshotTimeline<ClusterSnapshot> History => _timeline.Value;
 
         public FakeCluster()
         {
@@ -34,7 +34,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             _timeline = new Lazy<SnapshotTimeline<ClusterSnapshot>>(() => new SnapshotTimelineImpl(_snapshots));
         }
 
-        public HareDuSnapshot<ClusterSnapshot> Execute(CancellationToken cancellationToken = default)
+        public SnapshotLens<ClusterSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshot1();
 
@@ -43,9 +43,9 @@ namespace HareDu.Snapshotting.Tests.Fakes
             return this;
         }
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
+        public SnapshotLens<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer) => throw new NotImplementedException();
 
-        public HareDuSnapshot<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
+        public SnapshotLens<ClusterSnapshot> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<ClusterSnapshot>>> observers) => throw new NotImplementedException();
 
 
         class SnapshotTimelineImpl :

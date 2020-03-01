@@ -16,11 +16,11 @@ namespace HareDu.Snapshotting.Registration
     public interface ISnapshotFactory
     {
         /// <summary>
-        /// Returns a snapshot.
+        /// Returns a snapshot lens.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        T Snapshot<T>()
-            where T : HareDuSnapshot<Snapshot>;
+        T Lens<T>()
+            where T : SnapshotLens<Snapshot>;
     }
 }

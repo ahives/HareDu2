@@ -20,11 +20,11 @@ namespace HareDu.Snapshotting.Tests.Fakes
     public class FakeHareDuSnapshot1Impl :
         FakeBrokerSnapshot1
     {
-        public SnapshotTimeline<FakeHareDuSnapshot1> Timeline { get; }
-        public HareDuSnapshot<FakeHareDuSnapshot1> Execute(CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public SnapshotTimeline<FakeHareDuSnapshot1> History { get; }
+        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
-        public HareDuSnapshot<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotContext<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
+        public SnapshotLens<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotContext<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
 
-        public HareDuSnapshot<FakeHareDuSnapshot1> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<FakeHareDuSnapshot1>>> observers) => throw new NotImplementedException();
+        public SnapshotLens<FakeHareDuSnapshot1> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<FakeHareDuSnapshot1>>> observers) => throw new NotImplementedException();
     }
 }

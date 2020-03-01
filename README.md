@@ -16,14 +16,14 @@ https://ahives.gitbooks.io/haredu2/content/
 | Package Name | Framework | .NET Standard |
 |---| --- | --- |
 | **Main** |  |  |
-| HareDu | 4.6.2 | 2.0 |
 | HareDu.Core | 4.6.2 | 2.0 |
+| **API** |  |  |
+| HareDu | 4.6.2 | 2.0 |
+| HareDu.Snapshotting | 4.6.2 | 2.0 |
+| HareDu.Diagnostics | 4.6.2 | 2.0 |
 | **Containers** | | |
 | HareDu.AutofacIntegration | 4.6.2 | 2.0 |
 | HareDu.CoreIntegration | 4.6.2 | 2.0 |
-| **Other** |  |  |
-| HareDu.Snapshotting | 4.6.2 | 2.0 |
-| HareDu.Diagnostics | 4.6.2 | 2.0 |
 
 
 # Why HareDu 2?
@@ -273,43 +273,51 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 #### Taking snapshots
 Once you have registered a SnapshotFactory, it is easy to take a snapshot.
 
-**Step 1: Define which snapshot you want to take**
+**Step 1: Define what type of snapshot you want to take**
 ```csharp
-var brokerFactory = new BrokerObjectFactory(config);
-var factory = new SnapshotFactory(brokerFactory);
-var snapshot = factory.Snapshot<BrokerQueues>();
+var factory = new SnapshotFactory(new BrokerObjectFactory(config));
+var lens = factory.Lens<BrokerQueues>();
 ```
+In this code snippet, the lens variable returns a ``SnapshotLens`` for taking snapshots of type ```BrokerQueues```.
 
 **Step 2: Take the snapshot**
 ```csharp
-snapshot.Execute();
+lens.TakeSnapshot();
 ```
-
-<br>
 
 *The above code becomes even simpler using an IoC container. Below is how you would take a snapshot on the first take...*
 
 *Autofac*
 ```csharp
-var result = await container.Resolve<ISnapshotFactory>()
-    .Snapshot<BrokerQueues>()
-    .Execute();
+var lens = await container.Resolve<ISnapshotFactory>()
+    .Lens<BrokerQueues>()
+    .TakeSnapshot();
 ```
 
 *.NET Core DI*
 ```csharp
-var result = await services.GetService<ISnapshotFactory>()
-    .Snapshot<BrokerQueues>()
-    .Execute();
+var lens = await services.GetService<ISnapshotFactory>()
+    .Lens<BrokerQueues>()
+    .TakeSnapshot();
 ```
 <br>
 
 #### Viewing snapshots
 
-Snapshots are accessible via the Timeline property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
+Snapshots are accessible via the Timeline property on the ```SnapshotFactory```. Getting the most recent snapshot is as easy as calling the ```MostRecent``` extension method off of the ```History``` property on the lens like so...  
 
 ```csharp
-var result = factory.Timeline.MostRecent();
+var result = factory.History.MostRecent();
+```
+Since ```MostRecent``` returns a ```SnapshotResult<T>``` you can easily get the actual snapshot data by simple calling the ```Snapshot``` property like this...
+
+```csharp
+var snapshot = result.Snapshot;
+```
+...or more concisely...
+
+```csharp
+var snapshot = factory.History.MostRecent().Snapshot;
 ```
 
 #### Registering Observers
@@ -317,15 +325,16 @@ var result = factory.Timeline.MostRecent();
 When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Execute``` method is called), all registered observers will be notified with an object of ```SnapshotResult<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Execute``` method or else the registered observers will not receive notifications.
 
 ```csharp
-var snapshot = factor
-    .Snapshot<BrokerQueues>()
+var lens = factor
+    .Lens<BrokerQueues>()
     .RegisterObserver(new SomeCoolObserver())
-    .Execute();
+    .TakeSnapshot();
 ```
 
-Putting the above concepts together, here is an example of taking a snapshot of RabbitMQ broker queue data, registering an observer to receive notifications when a snapshot is taken, and returning the most recent snapshot from the snapshot timeline.
-
+#### Putting it altogether
+Below is an example of taking a snapshot of RabbitMQ broker queue data, registering an observer to receive notifications when said snapshot is taken, and returning the most recent snapshot from the snapshot timeline.
 ```csharp
+// Define the snapshot observer
 public class BrokerQueuesObserver :
     IObserver<SnapshotContext<BrokerQueuesSnapshot>>
 {
@@ -336,16 +345,24 @@ public class BrokerQueuesObserver :
     public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value) => throw new NotImplementedException();
 }
 
-var factory = new SnapshotFactory(config);
-var snapshot = factory
-    .Snapshot<BrokerQueues>()
+var provider = new YamlFileConfigProvider();
+
+// Get the API configuration
+provider.TryGet("haredu.yaml", out HareDuConfig config);
+
+// Initialize the snapshot factory
+var factory = new SnapshotFactory(config.Broker);
+
+// Select a snapshot lens and optionally register observers on the lens
+var lens = factory
+    .Lens<BrokerQueues>()
     .RegisterObserver(new BrokerQueuesObserver());
 
-snapshot.Execute();
+// Take a snapshot
+lens.TakeSnapshot();
 
-var result = snapshot.Timeline.MostRecent();
+var result = lens.History.MostRecent();
 ```
-
 
 ### Diagnostics API
 
@@ -373,10 +390,10 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 Registering objects without IoC containers is pretty simple as well...
 
 ```csharp
-var kb = new KnowledgeBaseProvider();
-var scanner = new DiagnosticScanner(config.Diagnostics, kb);
+var scanner = new DiagnosticScanner(config.Diagnostics, new KnowledgeBaseProvider());
 ```
 Since the ```DiagnosticScanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```DiagnosticScanner``` as a singleton. This applies to most things in HareDu 2.
+
 #### Scanning snapshots
 
 ```csharp
@@ -395,12 +412,41 @@ var result = scanner
     .Scan(snapshot);
 ```
 <br>
-Putting the above concepts together, we are now able to scan a snapshot.
+
+#### Putting it altogether
+
+Below is an example of scanning a ```BrokerQueues``` snapshot.
 
 ```csharp
-var kb = new KnowledgeBaseProvider();
-var scanner = new DiagnosticScanner(config.Diagnostics, kb);
+// Define the scanner observer
+public class BrokerQueuesScannerObserver :
+    IObserver<DiagnosticProbeContext>
+{
+    public void OnCompleted() => throw new NotImplementedException();
 
+    public void OnError(Exception error) => throw new NotImplementedException();
+
+    public void OnNext(DiagnosticProbeContext value) => throw new NotImplementedException();
+}
+
+var provider = new YamlFileConfigProvider();
+
+// Get the API configuration
+provider.TryGet("haredu.yaml", out HareDuConfig config);
+
+var factory = new SnapshotFactory(config.Broker);
+
+// Take a snapshot
+var lens = factory
+    .Lens<BrokerQueues>()
+    .TakeSnapshot();
+
+// Initialize the diagnostic scanner and register the observer
+var scanner = new DiagnosticScanner(config.Diagnostics, new KnowledgeBaseProvider())
+    .RegisterObserver(new BrokerQueuesScannerObserver());
+
+// Scan the results of the most recent snapshot taken
+var result = scanner.Scan(lens.History.MostRecent());
 ```
 
 ### Gotchas

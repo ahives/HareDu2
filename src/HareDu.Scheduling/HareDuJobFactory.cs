@@ -26,7 +26,7 @@ namespace HareDu.Scheduling
 
     public class HareDuJobFactory<T> :
         SimpleJobFactory
-        where T : HareDuSnapshot<Snapshot>
+        where T : SnapshotLens<Snapshot>
     {
         readonly IDiagnosticScanner _scanner;
         readonly ISnapshotFactory _factory;

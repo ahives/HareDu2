@@ -48,15 +48,15 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Verify_can_return_snapshot()
         {
-            var snapshot = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<Cluster>()
-                .Execute();
+            var camera = _container.Resolve<ISnapshotFactory>()
+                .Lens<Cluster>()
+                .TakeSnapshot();
 
-            var result = snapshot.Timeline.MostRecent();
+            var result = camera.History.MostRecent();
 
-            snapshot.Timeline.Results.Count.ShouldBe(1);
-            snapshot.Execute();
-            snapshot.Timeline.Results.Count.ShouldBe(2);
+            camera.History.Results.Count.ShouldBe(1);
+            camera.TakeSnapshot();
+            camera.History.Results.Count.ShouldBe(2);
 
             result.ShouldNotBeNull();
             result.Snapshot.BrokerVersion.ShouldBe("3.7.18");

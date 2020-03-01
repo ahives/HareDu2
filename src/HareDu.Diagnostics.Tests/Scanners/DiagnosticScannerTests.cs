@@ -13,19 +13,14 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.Tests.Scanners
 {
-    using System;
-    using System.Collections.Generic;
     using Autofac;
     using AutofacIntegration;
-    using Core.Configuration;
     using Core.Extensions;
-    using Diagnostics.Probes;
     using Diagnostics.Registration;
     using Fakes;
     using NUnit.Framework;
     using Scans;
     using Shouldly;
-    using Snapshotting;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -84,32 +79,6 @@ namespace HareDu.Diagnostics.Tests.Scanners
             
             report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnosticScan<EmptySnapshot>).GetIdentifier());
             report.ShouldBe(DiagnosticCache.EmptyScannerResult);
-        }
-
-        
-        class FakeDiagnosticFactory :
-            IDiagnosticFactory
-        {
-            public bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
-                where T : Snapshot
-            {
-                diagnosticScan = new NoOpDiagnosticScan<T>();
-                return false;
-            }
-
-            public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void RegisterObserver(IObserver<DiagnosticProbeContext> observer)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool RegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
-
-            public IReadOnlyList<string> GetAvailableProbes() => throw new NotImplementedException();
         }
     }
 }

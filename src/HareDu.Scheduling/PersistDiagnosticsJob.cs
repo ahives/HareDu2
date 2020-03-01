@@ -23,7 +23,7 @@ namespace HareDu.Scheduling
 
     public class PersistDiagnosticsJob<T> :
         IJob
-        where T : HareDuSnapshot<Snapshot>
+        where T : SnapshotLens<Snapshot>
     {
         readonly ISnapshotFactory _factory;
         readonly IDiagnosticScanner _scanner;
@@ -38,8 +38,8 @@ namespace HareDu.Scheduling
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var snapshot = _factory.Snapshot<T>().Execute();
-            var result = _scanner.Scan(snapshot.Timeline.MostRecent().Snapshot);
+            var snapshot = _factory.Lens<T>().TakeSnapshot();
+            var result = _scanner.Scan(snapshot.History.MostRecent().Snapshot);
 
             _writer.TrySave(result, $"diagnostics_{result.Identifier}.json", context.JobDetail.JobDataMap["path"].ToString());
         }

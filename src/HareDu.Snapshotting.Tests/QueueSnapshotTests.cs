@@ -14,9 +14,11 @@
 namespace HareDu.Snapshotting.Tests
 {
     using System.Linq;
+    using System.Threading.Tasks;
     using Autofac;
     using Fakes;
     using HareDu.Registration;
+    using Model;
     using NUnit.Framework;
     using Persistence;
     using Registration;
@@ -48,16 +50,16 @@ namespace HareDu.Snapshotting.Tests
             
             _container = builder.Build();
         }
-
+        
         [Test]
         public void Test()
         {
-            var snapshot = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerQueues>()
-                .Execute();
+            var lens = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerQueues>()
+                .TakeSnapshot();
 
-            var result = snapshot.Timeline.MostRecent();
-            
+            var result = lens.History.MostRecent();
+
             result.Snapshot.ClusterName.ShouldBe("fake_cluster");
             result.Snapshot.Queues.ShouldNotBeNull();
             result.Snapshot.Queues[0].Memory.ShouldNotBeNull();

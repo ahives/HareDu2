@@ -43,11 +43,11 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test()
         {
-            var resource = _container.Resolve<ISnapshotFactory>()
-                .Snapshot<BrokerQueues>()
+            var lens = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerQueues>()
                 .RegisterObserver(new DefaultQueueSnapshotConsoleLogger())
                 // .RegisterObserver(new BrokerQueuesJsonExporter())
-                .Execute();
+                .TakeSnapshot();
             
 //            resource.Snapshots.Export();
         }
@@ -63,10 +63,10 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var brokerFactory = new BrokerObjectFactory(config.Broker);
                 var factory = new SnapshotFactory(brokerFactory);
 
-                var resource = factory
-                    .Snapshot<BrokerQueues>()
+                var lens = factory
+                    .Lens<BrokerQueues>()
                     .RegisterObserver(new BrokerQueuesJsonExporter())
-                    .Execute();
+                    .TakeSnapshot();
             }
         }
 
@@ -81,10 +81,10 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var brokerFactory = new BrokerObjectFactory(config.Broker);
                 var factory = new SnapshotFactory(brokerFactory);
 
-                var resource = factory
-                    .Snapshot<BrokerQueues>()
+                var lens = factory
+                    .Lens<BrokerQueues>()
                     .RegisterObserver(new BrokerQueuesJsonExporter())
-                    .Execute();
+                    .TakeSnapshot();
             }
         }
 
@@ -156,9 +156,9 @@ namespace HareDu.IntegrationTesting.Snapshots
                 .BuildServiceProvider();
 
             var resource = services.GetService<ISnapshotFactory>()
-                .Snapshot<BrokerQueues>()
+                .Lens<BrokerQueues>()
                 .RegisterObserver(new BrokerQueuesJsonExporter())
-                .Execute();
+                .TakeSnapshot();
         }
     }
 }

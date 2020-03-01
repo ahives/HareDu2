@@ -27,7 +27,7 @@ namespace HareDu.Examples
 
     public class CustomSnapshotJob<T> :
         IJob
-        where T : HareDuSnapshot<Snapshot>
+        where T : SnapshotLens<Snapshot>
     {
         readonly T _snapshot;
         readonly ElasticClient _client;
@@ -40,9 +40,9 @@ namespace HareDu.Examples
 
         public async Task Execute(IJobExecutionContext context)
         {
-            _snapshot.Execute();
+            _snapshot.TakeSnapshot();
 
-            var snapshot = _snapshot.Timeline
+            var snapshot = _snapshot.History
                 .MostRecent()
                 .Cast<SnapshotResult<BrokerQueuesSnapshot>>();
             
