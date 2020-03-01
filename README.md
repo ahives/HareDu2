@@ -3,27 +3,41 @@
 ![Join the chat at https://gitter.im/HareDu2/Lobby](https://img.shields.io/gitter/room/haredu2/HareDu2?style=flat)
 ![NuGet downloads](https://img.shields.io/nuget/dt/haredu?style=flat)
 
-.NET library for managing and monitoring RabbitMQ clusters using the RabbitMQ RESTful API.
+HareDu is a .NET library for managing and monitoring RabbitMQ clusters using the RabbitMQ RESTful API.
 
+HareDu is Apache 2.0 licensed.
 
 Docs under construction here
 
 https://ahives.gitbooks.io/haredu2/content/
 
-# History
+### HareDu 2 NuGet Packages
 
-If you are familiar with HareDu, you should know that HareDu 2 introduces some really cool features. That said, HareDu 2 is a significant change from its predecessor. HareDu 2 came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
+| Package Name | Framework | .NET Standard |
+|---| --- | --- |
+| **Main** |  |  |
+| HareDu | 4.6.2 | 2.0 |
+| HareDu.Core | 4.6.2 | 2.0 |
+| **Containers** | | |
+| HareDu.AutofacIntegration | 4.6.2 | 2.0 |
+| HareDu.CoreIntegration | 4.6.2 | 2.0 |
+| **Other** |  |  |
+| HareDu.Snapshotting | 4.6.2 | 2.0 |
+| HareDu.Diagnostics | 4.6.2 | 2.0 |
+
+
+# Why HareDu 2?
+
+If you are familiar with HareDu, you should know that HareDu 2 introduces some really cool new functionality. HareDu 2 came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
 1. Increased test coverage
 2. Improved low level administrative APIs
-3. New APIs for diagnostics, cluster snapshotting and monitoring
+3. New APIs for diagnostics and snapshotting broker information
 4. Dependency Injection (e.g., Autofac, .NET Core) support for quick API registration
 5. .NET Core support 
 
 
-# Overview
-
+# Fundamentals
 HareDu 2 comes with three major APIs; that is, Broker, Snapshot, and Diagnostics, respectively. To use HareDu, you must have the appropriate RabbitMQ plugins installed and enabled.
-
 
 ### Configuration
 Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API. The section called *diagnostics* has the configuration needed to use the Diagnostics API.
@@ -205,7 +219,12 @@ var result = await services.GetService<IBrokerObjectFactory>()
 Here is the code...
 
 ```csharp
-var result = await container.Resolve<IBrokerObjectFactory>()
+var provider = new YamlFileConfigProvider();
+
+provider.TryGet("haredu.yaml", out HareDuConfig config);
+
+var factory = new BrokerObjectFactory(config);
+var result = await factory
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -227,7 +246,6 @@ var result = await container.Resolve<IBrokerObjectFactory>()
                     });
                 });
 ```
-
 
 ### Snapshot API
 
@@ -291,7 +309,7 @@ var result = await services.GetService<ISnapshotFactory>()
 Snapshots are accessible via the Timeline property on the SnapshotFactory. Getting the most recent snapshot is as easy as calling the MostRecent extension method like so...  
 
 ```csharp
-var snapshot = factory.Timeline.MostRecent();
+var result = factory.Timeline.MostRecent();
 ```
 
 #### Registering Observers
@@ -304,6 +322,30 @@ var snapshot = factor
     .RegisterObserver(new SomeCoolObserver())
     .Execute();
 ```
+
+Putting the above concepts together, here is an example of taking a snapshot of RabbitMQ broker queue data, registering an observer to receive notifications when a snapshot is taken, and returning the most recent snapshot from the snapshot timeline.
+
+```csharp
+public class BrokerQueuesObserver :
+    IObserver<SnapshotContext<BrokerQueuesSnapshot>>
+{
+    public void OnCompleted() => throw new NotImplementedException();
+
+    public void OnError(Exception error) => throw new NotImplementedException();
+
+    public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value) => throw new NotImplementedException();
+}
+
+var factory = new SnapshotFactory(config);
+var snapshot = factory
+    .Snapshot<BrokerQueues>()
+    .RegisterObserver(new BrokerQueuesObserver());
+
+snapshot.Execute();
+
+var result = snapshot.Timeline.MostRecent();
+```
+
 
 ### Diagnostics API
 
@@ -331,7 +373,7 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 Registering objects without IoC containers is pretty simple as well...
 
 ```csharp
-var kb = new DefaultKnowledgeBaseProvider();
+var kb = new KnowledgeBaseProvider();
 var scanner = new DiagnosticScanner(config.Diagnostics, kb);
 ```
 Since the ```DiagnosticScanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```DiagnosticScanner``` as a singleton. This applies to most things in HareDu 2.
@@ -353,16 +395,20 @@ var result = scanner
     .Scan(snapshot);
 ```
 <br>
+Putting the above concepts together, we are now able to scan a snapshot.
 
+```csharp
+var kb = new KnowledgeBaseProvider();
+var scanner = new DiagnosticScanner(config.Diagnostics, kb);
+
+```
 
 ### Gotchas
 
 Registering an API will register all dependent objects so there is no need to include them. So, if you intend on using both the Broker and Snapshot APIs then including the Snapshot API will also register everything in the Broker API. The same can be said for the Diagnostic API, since it is dependent on both the Broker and Snapshot APIs.
 
 
-# Get It
-You can now get HareDu 2 on NuGet by searching for HareDu. Also, you can check out HareDu at https://github.com/ahives/HareDu2
-
+## Get It
 From the Package Manager Console in Visual Studio you can run the following PowerShell script to get the latest version of HareDu...
 
 PM> Install-Package HareDu
@@ -375,32 +421,24 @@ Example,
 
 PM> Install-Package -Version 2.0.0 HareDu
 
-Since HareDu 2 was built primarily using Core APIs in Mono 5.x, it is now possible to get it in your preferred .NET environment on your preferred operating systems (e.g. Windows, macOS, Linux, etc.). 
+The above applies for any NuGet package you wish to install.
 
-You need the following packages if you are using; 
+## Using HareDu with RabbitMQ
 
-| API  | Packages Needed |
-|---| --- |
-| **Broker** | HareDu |
-|  | HareDu.Core |
-| **Snapshot** | HareDu.Snapshotting |
-|  | HareDu |
-|  | HareDu.Core |
-| **Diagnostics** | HareDu.Diagnostics |
-|  | HareDu.Snapshotting |
-|  | HareDu |
-|  | HareDu.Core |
-| **Autofac** | HareDu.AutofacIntegration |
-|  | HareDu.Snapshotting |
-|  | HareDu.Diagnostics |
-|  | HareDu |
-|  | HareDu.Core |
-| **.NET Core**  | HareDu.CoreIntegration |
-|  | HareDu.Snapshotting |
-|  | HareDu.Diagnostics |
-|  | HareDu |
-|  | HareDu.Core |
+Under the "IntegrationTesting" solution folder you will find two projects of note, HareDu.IntegrationTesting.Publisher and HareDu.IntegrationTesting.Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
 
+Ensure that your RabbitMQ broker has the proper plugins enabled by following the below documentation.
+https://www.rabbitmq.com/management.html#clustering
+
+If using .NET Core...  
+1. Create a VirtualHost called "TestVirtualHost"
+   Note: This can be done by either using the HareDu Broker API or by logging in to the RabbitMQ UI and creating a vhost
+2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
+   dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Consumer.dll
+3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start publishing messages:
+    dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Publisher.dll
+
+Note: if you are using JetBrains Rider you can simply configure both projects and run them within the IDE.
 
 # Dependencies
 .NET Framework 4.6.2 or above/.NET Core 2.1 or above
@@ -412,84 +450,34 @@ ASP.NET WebAPI 5.2.3 or above
 
 # Debugging
 
-
 If you find that making an API call is failing for reasons unknown, HareDu 2 introduces a way to return a text representation of the serialized JSON of the returned ```Result``` or ```Result<T>``` monads. Here is an example,
 
-```string debugText = result.ToJsonString()```
+```csharp
+string debugText = result.ToJsonString();
+```
 
 That's it. So, the resulting output of calling the ToJsonString extension method might look something like this,
 
-<pre><code class="json">
+```json
 {
-  &quot;timestamp&quot;: &quot;2018-12-31T18:04:39.511627+00:00&quot;,
-  &quot;debugInfo&quot;: null,
-  &quot;errors&quot;: [
+  "timestamp": "2018-12-31T18:04:39.511627+00:00",
+  "debugInfo": null,
+  "errors": [
     {
-      &quot;reason&quot;: &quot;RabbitMQ server did not recognize the request due to malformed syntax.&quot;,
-      &quot;timestamp&quot;: &quot;2018-12-31T18:04:39.511303+00:00&quot;
+      "reason": "RabbitMQ server did not recognize the request due to malformed syntax.",
+      "timestamp": "2018-12-31T18:04:39.511303+00:00"
     }
   ],
-  &quot;hasFaulted&quot;: true
+  "hasFaulted": true
 }
-</code></pre>
-
-
+```
 
 # Tested
 
-macOS Sierra 10.15.2 (Catalina)
+|   | Version |
+|---| --- |
+| Operating System | macOS Catalina 10.15.3 |
+| RabbitMQ | 3.7.x, 3.8.2 |
+| Erlang OTP | 22.0.4 (x64) |
+| .NET Runtime | Framework 4.6.2, Core 2.1 |
 
-RabbitMQ 3.7.x, 3.8.2
-
-Erlang OTP 22.0.4 (x64)
-
-.NET 4.6.2 Framework
-
-.NET Core 2.1
-
-
-https://www.rabbitmq.com/monitoring.html
-
-https://www.rabbitmq.com/heartbeats.html
-
-https://www.rabbitmq.com/nettick.html
-
-https://www.rabbitmq.com/management.html
-
-https://www.rabbitmq.com/memory-use.html
-
-https://pulse.mozilla.org/doc/stats.html
-
-https://docs.appoptics.com/kb/host_infrastructure/integrations/rabbitmq/
-
-https://www.datadoghq.com/blog/rabbitmq-monitoring/
-
-https://www.rabbitmq.com/rabbitmqctl.8.html
-
-https://www.rabbitmq.com/channels.html
-
-https://www.rabbitmq.com/confirms.html
-
-https://www.rabbitmq.com/heartbeats.html
-
-https://www.rabbitmq.com/logging.html#connection-lifecycle-events
-
-
-
-# Testing with RabbitMQ
-
-Under the "IntegrationTesting" solution folder you will find two projects of note, HareDu.IntegrationTesting.Publisher and HareDu.IntegrationTesting.Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
-
-Ensure that your RabbitMQ broker has the proper plugins enabled by following the below documentation.
-https://www.rabbitmq.com/management.html#clustering
-
-
-If using .NET Core...  
-1. Create a VirtualHost called "TestVirtualHost"
-   Note: This can be done by either using the HareDu Broker API or by logging in to the RabbitMQ UI and creating a vhost
-2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
-   dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Consumer.dll
-3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start publishing messages:
-    dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Publisher.dll
-
-Note: if you are using JetBrains Rider you can simply configure both projects and run them within the IDE.

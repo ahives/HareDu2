@@ -16,6 +16,8 @@ namespace HareDu.Diagnostics.KnowledgeBase
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Extensions;
+    using Probes;
 
     public abstract class BaseKnowledgeBaseProvider :
         IKnowledgeBaseProvider
@@ -65,6 +67,38 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
             articles = null;
             return false;
+        }
+
+        public void Add<T>(DiagnosticStatus status, string reason, string remediation)
+            where T : DiagnosticProbe
+        {
+            _articles.Add(new KnowledgeBaseArticleImpl<T>(status, reason, remediation));
+        }
+
+
+        protected class KnowledgeBaseArticleImpl<T> :
+            KnowledgeBaseArticle
+            where T : DiagnosticProbe
+        {
+            public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason, string remediation)
+            {
+                DiagnosticStatus = diagnosticStatus;
+                Reason = reason;
+                Remediation = remediation;
+                Identifier = typeof(T).GetIdentifier();
+            }
+
+            public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason)
+            {
+                DiagnosticStatus = diagnosticStatus;
+                Reason = reason;
+                Identifier = typeof(T).GetIdentifier();
+            }
+
+            public string Identifier { get; }
+            public DiagnosticStatus DiagnosticStatus { get; }
+            public string Reason { get; }
+            public string Remediation { get; }
         }
     }
 }

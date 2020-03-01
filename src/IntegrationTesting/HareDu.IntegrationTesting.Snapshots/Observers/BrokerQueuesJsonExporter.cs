@@ -14,7 +14,9 @@
 namespace HareDu.IntegrationTesting.Snapshots.Observers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Core.Extensions;
     using Snapshotting;
     using Snapshotting.Model;
@@ -22,15 +24,9 @@ namespace HareDu.IntegrationTesting.Snapshots.Observers
     public class BrokerQueuesJsonExporter :
         IObserver<SnapshotContext<BrokerQueuesSnapshot>>
     {
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
+        public void OnCompleted() => throw new NotImplementedException();
 
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
+        public void OnError(Exception error) => throw new NotImplementedException();
 
         public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value)
         {

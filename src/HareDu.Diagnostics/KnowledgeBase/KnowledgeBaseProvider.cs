@@ -131,31 +131,5 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 "Set a prefetch count above zero based on how many consumer cores available."));
             _articles.Add(new KnowledgeBaseArticleImpl<UnlimitedPrefetchCountProbe>(DiagnosticStatus.Inconclusive, "Unable to determine whether prefetch count has an inappropriate value."));
         }
-
-
-        class KnowledgeBaseArticleImpl<T> :
-            KnowledgeBaseArticle
-            where T : DiagnosticProbe
-        {
-            public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason, string remediation)
-            {
-                DiagnosticStatus = diagnosticStatus;
-                Reason = reason;
-                Remediation = remediation;
-                Identifier = typeof(T).GetIdentifier();
-            }
-
-            public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason)
-            {
-                DiagnosticStatus = diagnosticStatus;
-                Reason = reason;
-                Identifier = typeof(T).GetIdentifier();
-            }
-
-            public string Identifier { get; }
-            public DiagnosticStatus DiagnosticStatus { get; }
-            public string Reason { get; }
-            public string Remediation { get; }
-        }
     }
 }

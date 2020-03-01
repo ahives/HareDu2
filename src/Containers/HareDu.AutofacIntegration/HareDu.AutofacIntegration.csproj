@@ -9,11 +9,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\HareDu.Analytics\HareDu.Analytics.csproj" />
       <ProjectReference Include="..\..\HareDu.Core\HareDu.Core.csproj" />
       <ProjectReference Include="..\..\HareDu.Diagnostics\HareDu.Diagnostics.csproj" />
-      <ProjectReference Include="..\..\HareDu.Scheduling\HareDu.Scheduling.csproj" />
-      <ProjectReference Include="..\..\HareDu.Shovel\HareDu.Shovel.csproj" />
       <ProjectReference Include="..\..\HareDu\HareDu.csproj" />
     </ItemGroup>
 

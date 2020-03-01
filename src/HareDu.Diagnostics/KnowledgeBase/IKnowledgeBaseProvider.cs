@@ -14,11 +14,15 @@
 namespace HareDu.Diagnostics.KnowledgeBase
 {
     using System.Collections.Generic;
+    using Probes;
 
     public interface IKnowledgeBaseProvider
     {
         bool TryGet(string identifier, DiagnosticStatus diagnosticStatus, out KnowledgeBaseArticle article);
         
         bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles);
+
+        void Add<T>(DiagnosticStatus status, string reason, string remediation)
+            where T : DiagnosticProbe;
     }
 }
