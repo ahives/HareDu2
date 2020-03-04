@@ -26,7 +26,7 @@ namespace HareDu.Snapshotting.Internal
 
     class BrokerConnectivityImpl :
         BaseSnapshot<BrokerConnectivitySnapshot>,
-        BrokerConnectivity
+        SnapshotLens<BrokerConnectivitySnapshot>
     {
         readonly List<IDisposable> _observers;
 
@@ -84,6 +84,63 @@ namespace HareDu.Snapshotting.Internal
             SaveSnapshot(identifier, snapshot, timestamp);
             NotifyObservers(identifier, snapshot, timestamp);
 
+            return this;
+        }
+
+        public SnapshotLens<BrokerConnectivitySnapshot> TakeSnapshot(
+            out SnapshotResult<BrokerConnectivitySnapshot> result, CancellationToken cancellationToken = default)
+        {
+            var cluster = _factory
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
+                .Unfold();
+
+            if (cluster.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
+                
+                result = new EmptySnapshotResult<BrokerConnectivitySnapshot>();
+                return this;
+            }
+
+            var connections = _factory
+                .Object<Connection>()
+                .GetAll(cancellationToken)
+                .Unfold();
+
+            if (connections.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve connection information."));
+                
+                result = new EmptySnapshotResult<BrokerConnectivitySnapshot>();
+                return this;
+            }
+
+            var channels = _factory
+                .Object<Channel>()
+                .GetAll(cancellationToken)
+                .Unfold();
+
+            if (channels.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve channel information."));
+                
+                result = new EmptySnapshotResult<BrokerConnectivitySnapshot>();
+                return this;
+            }
+            
+            BrokerConnectivitySnapshot snapshot = new BrokerConnectivitySnapshotImpl(
+                cluster.Select(x => x.Data),
+                connections.Select(x => x.Data),
+                channels.Select(x => x.Data));
+
+            string identifier = NewId.Next().ToString();
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
+
+            SaveSnapshot(identifier, snapshot, timestamp);
+            NotifyObservers(identifier, snapshot, timestamp);
+
+            result = new SnapshotResultImpl(identifier, snapshot, timestamp);
             return this;
         }
 

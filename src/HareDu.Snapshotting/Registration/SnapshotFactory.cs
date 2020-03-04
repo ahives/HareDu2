@@ -16,7 +16,6 @@ namespace HareDu.Snapshotting.Registration
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core;
     using Core.Configuration;
     using Core.Extensions;
     using HareDu.Registration;
@@ -50,28 +49,31 @@ namespace HareDu.Snapshotting.Registration
                 throw new HareDuBrokerObjectInitException();
         }
 
-        public T Lens<T>()
-            where T : SnapshotLens<Snapshot>
+        public SnapshotLens<T> Lens<T>()
+            where T : Snapshot
+        {
+            Type type = typeof(T);
+            
+            if (type.IsNull())
+                return new EmptySnapshotLens<T>();
+            
+            if (_cache.ContainsKey(type.FullName))
+                return (SnapshotLens<T>) _cache[type.FullName];
+
+            return new EmptySnapshotLens<T>();
+        }
+
+        public ISnapshotFactory Register<T>(SnapshotLens<T> lens)
+            where T : Snapshot
         {
             Type type = typeof(T);
 
-            if (type.IsNull())
-                return default;
-            
             if (_cache.ContainsKey(type.FullName))
-                return (T) _cache[type.FullName];
+                return this;
             
-            var typeMap = GetTypeMap(typeof(T));
+            _cache.Add(type.FullName, lens);
 
-            if (!typeMap.ContainsKey(type.FullName))
-                return default;
-            
-            bool registered = RegisterInstance(typeMap[type.FullName], type.FullName);
-
-            if (registered)
-                return (T) _cache[type.FullName];
-
-            return default;
+            return this;
         }
 
         protected virtual bool TryRegisterAll()
@@ -125,7 +127,7 @@ namespace HareDu.Snapshotting.Registration
 
             foreach (var type in types)
             {
-                if (!type.IsInterface || !type.InheritsFromInterface(typeof(SnapshotLens<>)))
+                if (!type.IsInterface || !type.InheritsFromInterface(typeof(Snapshot)))
                     continue;
                 
                 if (interfaces.ContainsKey(type.FullName))
@@ -135,15 +137,17 @@ namespace HareDu.Snapshotting.Registration
             }
 
             var typeMap = new Dictionary<string, Type>();
-            
+
             foreach (var @interface in interfaces)
             {
-                var type = types.Find(x => @interface.Value.IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
-
-                if (type.IsNull())
-                    continue;
-                
-                typeMap.Add(@interface.Key, type);
+                foreach (var type in types)
+                {
+                    if (type.IsInterface)
+                        continue;
+                    
+                    if (type.GetInterfaces().Any(x => x == Type.GetType($"{typeof(SnapshotLens<>).FullName}[{@interface.Key}]")))
+                        typeMap.Add(@interface.Key, type);
+                }
             }
 
             return typeMap;

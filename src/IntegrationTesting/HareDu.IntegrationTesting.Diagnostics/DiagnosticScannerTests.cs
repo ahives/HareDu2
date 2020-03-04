@@ -31,6 +31,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Registration;
     using Snapshotting;
     using Snapshotting.Extensions;
+    using Snapshotting.Model;
     using Snapshotting.Registration;
 
     [TestFixture]
@@ -46,7 +47,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var container = builder.Build();
 
             var resource = container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerConnectivity>()
+                // .Lens<BrokerConnectivity>()
+                .Lens<BrokerConnectivitySnapshot>()
 //                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 // .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .TakeSnapshot();
@@ -82,7 +84,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 .BuildServiceProvider();
             
             var resource = services.GetService<ISnapshotFactory>()
-                .Lens<BrokerConnectivity>()
+                // .Lens<BrokerConnectivity>()
+                .Lens<BrokerConnectivitySnapshot>()
                 .TakeSnapshot();
             
             var scanner = services.GetService<IDiagnosticScanner>();
@@ -117,7 +120,10 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
             var factory = new SnapshotFactory(new BrokerObjectFactory(config.Broker));
 
-            var resource = factory.Lens<BrokerConnectivity>().TakeSnapshot();
+            var resource = factory
+                // .Lens<BrokerConnectivity>()
+                .Lens<BrokerConnectivitySnapshot>()
+                .TakeSnapshot();
             
             IDiagnosticScanner scanner = new DiagnosticScanner(
                 new DiagnosticFactory(config.Diagnostics, new KnowledgeBaseProvider()));
@@ -140,7 +146,10 @@ namespace HareDu.IntegrationTesting.Diagnostics
             configProvider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
             var factory = new SnapshotFactory(config.Broker);
-            var resource = factory.Lens<BrokerConnectivity>().TakeSnapshot();
+            var resource = factory
+                // .Lens<BrokerConnectivity>()
+                .Lens<BrokerConnectivitySnapshot>()
+                .TakeSnapshot();
 
             IDiagnosticScanner scanner = new DiagnosticScanner(config.Diagnostics);
 
@@ -164,7 +173,10 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 x.UsingCredentials("guest", "guest");
             });
             var factory1 = new SnapshotFactory(config1);
-            var resource = factory1.Lens<BrokerConnectivity>().TakeSnapshot();
+            var resource = factory1
+                // .Lens<BrokerConnectivity>()
+                .Lens<BrokerConnectivitySnapshot>()
+                .TakeSnapshot();
 
             var provider2 = new DiagnosticsConfigProvider();
 

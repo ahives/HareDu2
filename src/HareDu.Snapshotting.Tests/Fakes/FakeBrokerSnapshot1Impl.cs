@@ -18,10 +18,11 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using System.Threading;
 
     public class FakeBrokerSnapshot1Impl :
-        FakeBrokerSnapshot1
+        SnapshotLens<FakeHareDuSnapshot1>
     {
         public SnapshotTimeline<FakeHareDuSnapshot1> History { get; }
         public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(out SnapshotResult<FakeHareDuSnapshot1> result, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
         public SnapshotLens<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotContext<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
 

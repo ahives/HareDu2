@@ -14,4 +14,9 @@
       <PackageReference Include="NewId" Version="3.0.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Internal\ClusterNodeImpl.cs" />
+      <Content Include="Internal\ClusterNodeImpl.cs" />
+    </ItemGroup>
+
 </Project>

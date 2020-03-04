@@ -21,12 +21,14 @@ namespace HareDu.Scheduling
     using Quartz.Simpl;
     using Quartz.Spi;
     using Snapshotting;
+    using Snapshotting.Model;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
     public class HareDuJobFactory<T> :
         SimpleJobFactory
-        where T : SnapshotLens<Snapshot>
+        // where T : SnapshotLens<Snapshot>
+        where T : Snapshot
     {
         readonly IDiagnosticScanner _scanner;
         readonly ISnapshotFactory _factory;
@@ -89,17 +91,26 @@ namespace HareDu.Scheduling
         {
             try
             {
-                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnectivity>))
-                    return new PersistSnapshotJob<BrokerConnectivity>(_factory, _snapshotWriter);
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnectivitySnapshot>))
+                    return new PersistSnapshotJob<BrokerConnectivitySnapshot>(_factory, _snapshotWriter);
 
-                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerQueues>))
-                    return new PersistSnapshotJob<BrokerQueues>(_factory, _snapshotWriter);
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerQueuesSnapshot>))
+                    return new PersistSnapshotJob<BrokerQueuesSnapshot>(_factory, _snapshotWriter);
 
-                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<Cluster>))
-                    return new PersistSnapshotJob<Cluster>(_factory, _snapshotWriter);
+                if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<ClusterSnapshot>))
+                    return new PersistSnapshotJob<ClusterSnapshot>(_factory, _snapshotWriter);
 
-                if (bundle.JobDetail.JobType == typeof(PersistDiagnosticsJob<Cluster>))
-                    return new PersistDiagnosticsJob<Cluster>(_factory, _scanner, _diagnosticWriter);
+                // if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerConnectivity>))
+                //     return new PersistSnapshotJob<BrokerConnectivity>(_factory, _snapshotWriter);
+                //
+                // if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<BrokerQueues>))
+                //     return new PersistSnapshotJob<BrokerQueues>(_factory, _snapshotWriter);
+                //
+                // if (bundle.JobDetail.JobType == typeof(PersistSnapshotJob<Cluster>))
+                //     return new PersistSnapshotJob<Cluster>(_factory, _snapshotWriter);
+                //
+                // if (bundle.JobDetail.JobType == typeof(PersistDiagnosticsJob<Cluster>))
+                //     return new PersistDiagnosticsJob<Cluster>(_factory, _scanner, _diagnosticWriter);
 
                 return new DoNothingJob();
             }

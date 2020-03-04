@@ -24,4 +24,9 @@
       <None Remove="TestData\ClusterInfo.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Fakes\FakeBrokerSnapshot1.cs" />
+      <Content Include="Fakes\FakeBrokerSnapshot1.cs" />
+    </ItemGroup>
+
 </Project>

@@ -16,15 +16,87 @@ namespace HareDu.Snapshotting.Tests.Fakes
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using MassTransit;
 
     public class FakeHareDuSnapshot1Impl :
-        FakeBrokerSnapshot1
+        SnapshotLens<FakeHareDuSnapshot1>
     {
-        public SnapshotTimeline<FakeHareDuSnapshot1> History { get; }
-        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        readonly Lazy<SnapshotTimeline<FakeHareDuSnapshot1>> _timeline;
+        readonly List<SnapshotResult<FakeHareDuSnapshot1>> _snapshots;
 
+        public SnapshotTimeline<FakeHareDuSnapshot1> History => _timeline.Value;
+
+        public FakeHareDuSnapshot1Impl()
+        {
+            _snapshots = new List<SnapshotResult<FakeHareDuSnapshot1>>();
+            _timeline = new Lazy<SnapshotTimeline<FakeHareDuSnapshot1>>(() => new SnapshotTimelineImpl(_snapshots));
+        }
+
+        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default)
+        {
+            FakeHareDuSnapshot1 snapshot = new FakeHareDuSnapshotImpl();
+
+            _snapshots.Add(new SnapshotResultImpl(snapshot));
+
+            return this;
+        }
+
+        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(out SnapshotResult<FakeHareDuSnapshot1> result,
+            CancellationToken cancellationToken = default)
+        {
+            var snapshot = new SnapshotResultImpl(new FakeHareDuSnapshotImpl());
+            
+            _snapshots.Add(snapshot);
+
+            result = snapshot;
+            return this;
+        }
         public SnapshotLens<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotContext<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
 
         public SnapshotLens<FakeHareDuSnapshot1> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<FakeHareDuSnapshot1>>> observers) => throw new NotImplementedException();
+
+        
+        class FakeHareDuSnapshotImpl :
+            FakeHareDuSnapshot1
+        {
+        }
+
+
+        class SnapshotTimelineImpl :
+            SnapshotTimeline<FakeHareDuSnapshot1>
+        {
+            public SnapshotTimelineImpl(List<SnapshotResult<FakeHareDuSnapshot1>> snapshots)
+            {
+                Results = snapshots;
+            }
+
+            public IReadOnlyList<SnapshotResult<FakeHareDuSnapshot1>> Results { get; }
+
+            public void PurgeAll()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Purge<U>(SnapshotResult<U> result) where U : Snapshot
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
+        class SnapshotResultImpl :
+            SnapshotResult<FakeHareDuSnapshot1>
+        {
+            public SnapshotResultImpl(FakeHareDuSnapshot1 snapshot)
+            {
+                Identifier = NewId.NextGuid().ToString();
+                Snapshot = snapshot;
+                Timestamp = DateTimeOffset.Now;
+            }
+
+            public string Identifier { get; }
+            public FakeHareDuSnapshot1 Snapshot { get; }
+            public DateTimeOffset Timestamp { get; }
+        }
     }
 }

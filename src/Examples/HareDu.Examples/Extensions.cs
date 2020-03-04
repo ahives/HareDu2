@@ -26,7 +26,8 @@ namespace HareDu.Examples
     public static class Extensions
     {
         public static IServiceCollection AddHareDuScheduling<T>(this IServiceCollection services)
-            where T : SnapshotLens<Snapshot>
+            // where T : SnapshotLens<Snapshot>
+            where T : Snapshot
         {
             services.TryAddSingleton(x =>
             {

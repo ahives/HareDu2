@@ -15,14 +15,13 @@ namespace HareDu.IntegrationTesting.Snapshots
 {
     using Autofac;
     using AutofacIntegration;
-    using Core;
     using Core.Configuration;
     using CoreIntegration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Observers;
     using Registration;
-    using Snapshotting;
+    using Snapshotting.Model;
     using Snapshotting.Registration;
 
     [TestFixture]
@@ -44,7 +43,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public void Test()
         {
             var lens = _container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerQueues>()
+                .Lens<BrokerQueuesSnapshot>()
                 .RegisterObserver(new DefaultQueueSnapshotConsoleLogger())
                 // .RegisterObserver(new BrokerQueuesJsonExporter())
                 .TakeSnapshot();
@@ -64,7 +63,7 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var factory = new SnapshotFactory(brokerFactory);
 
                 var lens = factory
-                    .Lens<BrokerQueues>()
+                    .Lens<BrokerQueuesSnapshot>()
                     .RegisterObserver(new BrokerQueuesJsonExporter())
                     .TakeSnapshot();
             }
@@ -82,7 +81,7 @@ namespace HareDu.IntegrationTesting.Snapshots
                 var factory = new SnapshotFactory(brokerFactory);
 
                 var lens = factory
-                    .Lens<BrokerQueues>()
+                    .Lens<BrokerQueuesSnapshot>()
                     .RegisterObserver(new BrokerQueuesJsonExporter())
                     .TakeSnapshot();
             }
@@ -156,7 +155,7 @@ namespace HareDu.IntegrationTesting.Snapshots
                 .BuildServiceProvider();
 
             var resource = services.GetService<ISnapshotFactory>()
-                .Lens<BrokerQueues>()
+                .Lens<BrokerQueuesSnapshot>()
                 .RegisterObserver(new BrokerQueuesJsonExporter())
                 .TakeSnapshot();
         }

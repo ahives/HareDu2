@@ -55,7 +55,7 @@ namespace HareDu.Snapshotting.Tests
         public void Test()
         {
             var lens = _container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerQueues>()
+                .Lens<BrokerQueuesSnapshot>()
                 .TakeSnapshot();
 
             var result = lens.History.MostRecent();

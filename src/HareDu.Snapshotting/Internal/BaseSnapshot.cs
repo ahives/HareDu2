@@ -69,7 +69,7 @@ namespace HareDu.Snapshotting.Internal
             _snapshots.Add(identifier, new SnapshotResultImpl(identifier, snapshot, timestamp));
         }
 
-        
+
         class SnapshotTimelineImpl<T> :
             SnapshotTimeline<T>
             where T : Snapshot
@@ -116,7 +116,7 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        class SnapshotResultImpl :
+        protected class SnapshotResultImpl :
             SnapshotResult<T>
         {
             public SnapshotResultImpl(string identifier, T snapshot, DateTimeOffset timestamp)

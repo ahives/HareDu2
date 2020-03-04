@@ -19,6 +19,7 @@ namespace HareDu.IntegrationTesting.Snapshots
     using NUnit.Framework;
     using Observers;
     using Snapshotting;
+    using Snapshotting.Model;
     using Snapshotting.Registration;
 
     [TestFixture]
@@ -40,7 +41,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public async Task Test()
         {
             var lens = _container.Resolve<ISnapshotFactory>()
-                .Lens<Cluster>()
+                .Lens<ClusterSnapshot>()
                 .RegisterObserver(new DefaultClusterSnapshotConsoleLogger())
                 .TakeSnapshot();
 

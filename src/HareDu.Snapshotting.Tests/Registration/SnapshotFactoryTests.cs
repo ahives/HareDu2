@@ -17,6 +17,7 @@ namespace HareDu.Snapshotting.Tests.Registration
     using Autofac;
     using AutofacIntegration;
     using Fakes;
+    using Model;
     using NUnit.Framework;
     using Shouldly;
     using Snapshotting.Registration;
@@ -40,50 +41,52 @@ namespace HareDu.Snapshotting.Tests.Registration
         public async Task Verify_can_return_BrokerConnection_snapshot()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var lens = factory.Lens<BrokerConnectivity>();
+            var lens = factory.Lens<BrokerConnectivitySnapshot>();
 
             lens.ShouldNotBeNull();
-            lens.ShouldBeAssignableTo<BrokerConnectivity>();
+            lens.ShouldBeAssignableTo<SnapshotLens<BrokerConnectivitySnapshot>>();
         }
 
         [Test]
         public async Task Verify_can_return_BrokerQueues_snapshot()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var lens = factory.Lens<BrokerQueues>();
+            var lens = factory.Lens<BrokerQueuesSnapshot>();
 
             lens.ShouldNotBeNull();
-            lens.ShouldBeAssignableTo<BrokerQueues>();
+            lens.ShouldBeAssignableTo<SnapshotLens<BrokerQueuesSnapshot>>();
         }
 
         [Test]
         public async Task Verify_can_return_Cluster_snapshot()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var lens = factory.Lens<Cluster>();
+            var lens = factory.Lens<ClusterSnapshot>();
 
             lens.ShouldNotBeNull();
-            lens.ShouldBeAssignableTo<Cluster>();
+            lens.ShouldBeAssignableTo<SnapshotLens<ClusterSnapshot>>();
         }
 
         [Test]
         public async Task Verify_can_return_new_snapshots()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var lens = factory.Lens<FakeBrokerSnapshot1>();
+            var lens = factory
+                .Register(new FakeHareDuSnapshot1Impl())
+                .Lens<FakeHareDuSnapshot1>();
 
             lens.ShouldNotBeNull();
-            lens.ShouldBeAssignableTo<FakeBrokerSnapshot1>();
+            lens.ShouldBeAssignableTo<SnapshotLens<FakeHareDuSnapshot1>>();
         }
 
         [Test]
         public void Verify_snapshot_not_implemented_does_not_throw()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var lens = factory.Lens<FakeBrokerSnapshot2>();
+            var lens = factory.Lens<FakeHareDuSnapshot2>();
 
-            lens.ShouldBeNull();
-            lens.ShouldBeAssignableTo<FakeBrokerSnapshot2>();
+            lens.ShouldNotBeNull();
+            lens.ShouldBeAssignableTo<SnapshotLens<FakeHareDuSnapshot2>>();
         }
     }
 }

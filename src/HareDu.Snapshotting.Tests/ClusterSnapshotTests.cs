@@ -18,6 +18,7 @@ namespace HareDu.Snapshotting.Tests
     using Autofac;
     using Fakes;
     using HareDu.Registration;
+    using Model;
     using NUnit.Framework;
     using Registration;
     using Shouldly;
@@ -49,7 +50,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Verify_can_return_snapshot()
         {
             var camera = _container.Resolve<ISnapshotFactory>()
-                .Lens<Cluster>()
+                .Lens<ClusterSnapshot>()
                 .TakeSnapshot();
 
             var result = camera.History.MostRecent();

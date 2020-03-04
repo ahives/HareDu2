@@ -25,7 +25,7 @@ namespace HareDu.Snapshotting.Internal
 
     class ClusterImpl :
         BaseSnapshot<ClusterSnapshot>,
-        Cluster
+        SnapshotLens<ClusterSnapshot>
     {
         readonly List<IDisposable> _observers;
 
@@ -71,6 +71,49 @@ namespace HareDu.Snapshotting.Internal
             SaveSnapshot(identifier, snapshot, timestamp);
             NotifyObservers(identifier, snapshot, timestamp);
 
+            return this;
+        }
+
+        public SnapshotLens<ClusterSnapshot> TakeSnapshot(out SnapshotResult<ClusterSnapshot> result,
+            CancellationToken cancellationToken = default)
+        {
+            var cluster = _factory
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
+                .Unfold();
+
+            if (cluster.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
+                
+                result = new EmptySnapshotResult<ClusterSnapshot>();
+                return this;
+            }
+
+            var nodes = _factory
+                .Object<Node>()
+                .GetAll(cancellationToken)
+                .Unfold();
+
+            if (nodes.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve node information."));
+                
+                result = new EmptySnapshotResult<ClusterSnapshot>();
+                return this;
+            }
+            
+            ClusterSnapshot snapshot = new ClusterSnapshotImpl(
+                cluster.Select(x => x.Data),
+                nodes.Select(x => x.Data));
+            
+            string identifier = NewId.Next().ToString();
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
+
+            SaveSnapshot(identifier, snapshot, timestamp);
+            NotifyObservers(identifier, snapshot, timestamp);
+
+            result = new SnapshotResultImpl(identifier, snapshot, timestamp);
             return this;
         }
 

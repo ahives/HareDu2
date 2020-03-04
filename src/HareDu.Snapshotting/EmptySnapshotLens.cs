@@ -17,17 +17,22 @@ namespace HareDu.Snapshotting
     using System.Collections.Generic;
     using System.Threading;
 
-    public interface SnapshotLens<T>
+    public class EmptySnapshotLens<T> :
+        SnapshotLens<T>
         where T : Snapshot
     {
-        SnapshotTimeline<T> History { get; }
-        
-        SnapshotLens<T> TakeSnapshot(CancellationToken cancellationToken = default);
-        
-        SnapshotLens<T> TakeSnapshot(out SnapshotResult<T> result, CancellationToken cancellationToken = default);
+        public SnapshotTimeline<T> History => new EmptySnapshotTimeline<T>();
 
-        SnapshotLens<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
-        
-        SnapshotLens<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers);
+        public SnapshotLens<T> TakeSnapshot(CancellationToken cancellationToken = default) => this;
+
+        public SnapshotLens<T> TakeSnapshot(out SnapshotResult<T> result, CancellationToken cancellationToken = default)
+        {
+            result = new EmptySnapshotResult<T>();
+            return this;
+        }
+
+        public SnapshotLens<T> RegisterObserver(IObserver<SnapshotContext<T>> observer) => this;
+
+        public SnapshotLens<T> RegisterObservers(IReadOnlyList<IObserver<SnapshotContext<T>>> observers) => this;
     }
 }

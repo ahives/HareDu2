@@ -18,7 +18,7 @@ namespace HareDu.IntegrationTesting.Snapshots
     using AutofacIntegration;
     using NUnit.Framework;
     using Observers;
-    using Snapshotting;
+    using Snapshotting.Model;
     using Snapshotting.Registration;
 
     [TestFixture]
@@ -39,8 +39,8 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public async Task Test1()
         {
-            var camera = _container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerConnectivity>()
+            var lens = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivitySnapshot>()
                 .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
                 .TakeSnapshot();
         }
@@ -48,8 +48,8 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public async Task Test2()
         {
-            var camera = _container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerConnectivity>()
+            var lens = _container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivitySnapshot>()
                 .TakeSnapshot();
         }
     }

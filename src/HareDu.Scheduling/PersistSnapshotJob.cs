@@ -22,7 +22,8 @@ namespace HareDu.Scheduling
 
     public class PersistSnapshotJob<T> :
         IJob
-        where T : SnapshotLens<Snapshot>
+        // where T : SnapshotLens<Snapshot>
+        where T : Snapshot
     {
         readonly ISnapshotFactory _factory;
         readonly ISnapshotWriter _writer;
@@ -35,6 +36,7 @@ namespace HareDu.Scheduling
 
         public async Task Execute(IJobExecutionContext context)
         {
+            // var snapshot = _factory.Lens<T>().TakeSnapshot();
             var snapshot = _factory.Lens<T>().TakeSnapshot();
             var result = snapshot.History.MostRecent();
 

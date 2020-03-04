@@ -26,7 +26,7 @@ namespace HareDu.Snapshotting.Internal
 
     class BrokerQueuesImpl :
         BaseSnapshot<BrokerQueuesSnapshot>,
-        BrokerQueues
+        SnapshotLens<BrokerQueuesSnapshot>
     {
         readonly List<IDisposable> _observers;
 
@@ -72,6 +72,49 @@ namespace HareDu.Snapshotting.Internal
             SaveSnapshot(identifier, snapshot, timestamp);
             NotifyObservers(identifier, snapshot, timestamp);
 
+            return this;
+        }
+
+        public SnapshotLens<BrokerQueuesSnapshot> TakeSnapshot(out SnapshotResult<BrokerQueuesSnapshot> result,
+            CancellationToken cancellationToken = default)
+        {
+            var cluster = _factory
+                .Object<SystemOverview>()
+                .Get(cancellationToken)
+                .Unfold();
+
+            if (cluster.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
+                
+                result = new EmptySnapshotResult<BrokerQueuesSnapshot>();
+                return this;
+            }
+
+            var queues = _factory
+                .Object<Queue>()
+                .GetAll(cancellationToken)
+                .Unfold();
+
+            if (queues.HasFaulted)
+            {
+                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve queue information."));
+                
+                result = new EmptySnapshotResult<BrokerQueuesSnapshot>();
+                return this;
+            }
+            
+            BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(
+                cluster.Select(x => x.Data),
+                queues.Select(x => x.Data));
+            
+            string identifier = NewId.Next().ToString();
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
+
+            SaveSnapshot(identifier, snapshot, timestamp);
+            NotifyObservers(identifier, snapshot, timestamp);
+
+            result = new SnapshotResultImpl(identifier, snapshot, timestamp);
             return this;
         }
 

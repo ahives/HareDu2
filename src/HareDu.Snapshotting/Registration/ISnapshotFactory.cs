@@ -16,11 +16,14 @@ namespace HareDu.Snapshotting.Registration
     public interface ISnapshotFactory
     {
         /// <summary>
-        /// Returns a snapshot lens.
+        /// Returns a snapshot lens if present. Otherwise, it returns a default lens if none is present.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        T Lens<T>()
-            where T : SnapshotLens<Snapshot>;
+        SnapshotLens<T> Lens<T>()
+            where T : Snapshot;
+
+        ISnapshotFactory Register<T>(SnapshotLens<T> lens)
+            where T : Snapshot;
     }
 }

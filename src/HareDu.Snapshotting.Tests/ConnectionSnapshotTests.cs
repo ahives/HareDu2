@@ -50,7 +50,7 @@ namespace HareDu.Snapshotting.Tests
         public async Task Test()
         {
             var camera = _container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerConnectivity>()
+                .Lens<BrokerConnectivitySnapshot>()
                 .TakeSnapshot();
 
             var result = camera.History.MostRecent();

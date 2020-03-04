@@ -19,6 +19,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
     using Autofac;
     using Fakes;
     using HareDu.Registration;
+    using Model;
     using NUnit.Framework;
     using Persistence;
     using Registration;
@@ -55,7 +56,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
         public void Verify_flush_writes_to_disk_and_clears_buffer()
         {
             var factory = _container.Resolve<ISnapshotFactory>();
-            var snapshot = factory.Lens<BrokerQueues>();
+            var snapshot = factory.Lens<BrokerQueuesSnapshot>();
 
             for (int i = 0; i < 10; i++)
             {
