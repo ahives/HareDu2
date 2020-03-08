@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_probe_yellow_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu1.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
@@ -58,25 +58,25 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Warning);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RedeliveredMessagesProbe).GetIdentifier());
         }
 
         [Test]
         public void Verify_probe_green_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
-            var configProvider = _container.Resolve<IFileConfigProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
+            var provider = _container.Resolve<IFileConfigProvider>();
             
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var probe = new RedeliveredMessagesProbe(config.Diagnostics, knowledgeBaseProvider);
+            provider.TryGet(path, out HareDuConfig config);
             
-            QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 50, 32.3M);
+            var probe = new RedeliveredMessagesProbe(config.Diagnostics, _container.Resolve<IKnowledgeBaseProvider>());
+            
+            QueueSnapshot snapshot = new FakeQueueSnapshot2(100, 54.4M, 40, 32.3M);
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Healthy);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RedeliveredMessagesProbe).GetIdentifier());
         }
 
@@ -86,7 +86,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new RedeliveredMessagesProbe(null, knowledgeBaseProvider);
             
-            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(ProbeStatus.Offline);
         }
     }
 }

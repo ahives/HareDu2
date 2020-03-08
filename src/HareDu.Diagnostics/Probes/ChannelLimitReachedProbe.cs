@@ -15,9 +15,7 @@ namespace HareDu.Diagnostics.Probes
 {
     using System;
     using System.Collections.Generic;
-    using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -30,45 +28,43 @@ namespace HareDu.Diagnostics.Probes
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public ChannelLimitReachedProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public ChannelLimitReachedProbe(IKnowledgeBaseProvider kb)
+            : base(kb)
         {
-            _status = DiagnosticProbeStatus.Online;
+            _status = ProbeStatus.Online;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
             ConnectionSnapshot data = snapshot as ConnectionSnapshot;
-            DiagnosticProbeResult result;
+            ProbeResult result;
 
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("Channels.Count", data.Channels.Count.ToString()),
-                new DiagnosticProbeDataImpl("ChannelLimit", data.OpenChannelsLimit.ToString())
+                new ProbeDataImpl("Channels.Count", data.Channels.Count.ToString()),
+                new ProbeDataImpl("OpenChannelLimit", data.OpenChannelsLimit.ToString())
             };
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
             if (Convert.ToUInt64(data.Channels.Count) >= data.OpenChannelsLimit)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
-                    probeData, knowledgeBaseArticle);
+                    probeData, article);
             }
 
             NotifyObservers(result);

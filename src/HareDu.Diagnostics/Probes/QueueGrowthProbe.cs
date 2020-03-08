@@ -14,9 +14,7 @@
 namespace HareDu.Diagnostics.Probes
 {
     using System.Collections.Generic;
-    using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -29,46 +27,44 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public QueueGrowthProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public QueueGrowthProbe(IKnowledgeBaseProvider kb)
+            : base(kb)
         {
-            _status = DiagnosticProbeStatus.Online;
+            _status = ProbeStatus.Online;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
             QueueSnapshot data = snapshot as QueueSnapshot;
-            DiagnosticProbeResult result;
+            ProbeResult result;
             
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("Messages.Incoming.Rate", data.Messages.Incoming.Rate.ToString()),
-                new DiagnosticProbeDataImpl("Messages.Acknowledged.Rate", data.Messages.Acknowledged.Rate.ToString())
+                new ProbeDataImpl("Messages.Incoming.Rate", data.Messages.Incoming.Rate.ToString()),
+                new ProbeDataImpl("Messages.Acknowledged.Rate", data.Messages.Acknowledged.Rate.ToString())
             };
-            
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
             if (data.Messages.Incoming.Rate > data.Messages.Acknowledged.Rate)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);

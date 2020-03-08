@@ -13,11 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    public enum DiagnosticStatus
+    using System;
+
+    public interface ProbeContext
     {
-        Unhealthy,
-        Healthy,
-        Warning,
-        Inconclusive
+        ProbeResult Result { get; }
+        
+        DateTimeOffset Timestamp { get; }
     }
 }

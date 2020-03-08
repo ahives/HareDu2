@@ -11,11 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Core.Configuration.Internal
 {
-    public enum DiagnosticProbeStatus
+    using System;
+    using YamlDotNet.Serialization;
+
+    class RabbitMqBrokerConfigYaml
     {
-        Online,
-        Offline
+        [YamlMember(Alias = "url")]
+        public string BrokerUrl { get; set; }
+        
+        [YamlMember(Alias = "timeout")]
+        public TimeSpan Timeout { get; set; }
+        
+        [YamlMember(Alias = "username")]
+        public string Username { get; set; }
+        
+        [YamlMember(Alias = "password")]
+        public string Password { get; set; }
     }
 }

@@ -11,18 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.KnowledgeBase
+namespace HareDu.Core.Configuration
 {
-    using System.Collections.Generic;
-    using Probes;
-
-    public interface IKnowledgeBaseProvider
+    public interface ProbesConfig
     {
-        bool TryGet(string identifier, DiagnosticProbeResultStatus status, out KnowledgeBaseArticle article);
+        uint HighClosureRateThreshold { get; }
         
-        bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles);
+        uint HighCreationRateThreshold { get; }
+        
+        uint QueueHighFlowThreshold { get; }
+        
+        uint QueueLowFlowThreshold { get; }
+        
+        decimal MessageRedeliveryThresholdCoefficient { get; }
 
-        void Add<T>(DiagnosticProbeResultStatus status, string reason, string remediation)
-            where T : DiagnosticProbe;
+        decimal SocketUsageThresholdCoefficient { get; }
+        
+        decimal RuntimeProcessUsageThresholdCoefficient { get; }
+        
+        decimal FileDescriptorUsageThresholdCoefficient { get; }
+        
+        decimal ConsumerUtilizationThreshold { get; }
     }
 }

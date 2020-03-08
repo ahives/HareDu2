@@ -17,7 +17,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -31,60 +30,59 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.OperatingSystem;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public FileDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public FileDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+            : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? DiagnosticProbeStatus.Online : DiagnosticProbeStatus.Offline;
+            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
-            DiagnosticProbeResult result;
+            ProbeResult result;
             OperatingSystemSnapshot data = snapshot as OperatingSystemSnapshot;
             
-            KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.FileDescriptors.Available);
 
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
-                new DiagnosticProbeDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
-                new DiagnosticProbeDataImpl("FileDescriptorUsageWarningThreshold", _config.FileDescriptorUsageWarningCoefficient.ToString()),
-                new DiagnosticProbeDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
+                new ProbeDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
+                new ProbeDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
+                new ProbeDataImpl("FileDescriptorUsageThresholdCoefficient", _config.Probes.FileDescriptorUsageThresholdCoefficient.ToString()),
+                new ProbeDataImpl("CalculatedThreshold", warningThreshold.ToString())
             };
 
             if (data.FileDescriptors.Used < warningThreshold && warningThreshold < data.FileDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else if (data.FileDescriptors.Used == data.FileDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.NodeIdentifier,
                     data.ProcessId,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);
@@ -93,8 +91,8 @@ namespace HareDu.Diagnostics.Probes
         }
 
         ulong ComputeWarningThreshold(ulong fileDescriptorsAvailable)
-            => _config.FileDescriptorUsageWarningCoefficient >= 1
+            => _config.Probes.FileDescriptorUsageThresholdCoefficient >= 1
                 ? fileDescriptorsAvailable
-                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.FileDescriptorUsageWarningCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Probes.FileDescriptorUsageThresholdCoefficient));
     }
 }

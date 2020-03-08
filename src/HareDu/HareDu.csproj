@@ -35,4 +35,9 @@
   <ItemGroup>
     <ProjectReference Include="..\HareDu.Core\HareDu.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="haredu.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

@@ -30,12 +30,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
             return false;
         }
 
-        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers)
+        public void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)
         {
             throw new NotImplementedException();
         }
 
-        public void RegisterObserver(IObserver<DiagnosticProbeContext> observer)
+        public void RegisterObserver(IObserver<ProbeContext> observer)
         {
             throw new NotImplementedException();
         }

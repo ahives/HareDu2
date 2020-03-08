@@ -182,15 +182,15 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
             var config = provider2.Configure(x =>
             {
-                x.SetMessageRedeliveryCoefficient(0.60M);
-                x.SetSocketUsageCoefficient(0.60M);
-                x.SetConsumerUtilizationWarningCoefficient(0.65M);
+                x.SetMessageRedeliveryThresholdCoefficient(0.60M);
+                x.SetSocketUsageThresholdCoefficient(0.60M);
+                x.SetConsumerUtilizationThreshold(0.65M);
                 x.SetQueueHighFlowThreshold(90);
                 x.SetQueueLowFlowThreshold(10);
-                x.SetRuntimeProcessUsageCoefficient(0.65M);
-                x.SetFileDescriptorUsageWarningCoefficient(0.65M);
-                x.SetHighClosureRateWarningThreshold(90);
-                x.SetHighCreationRateWarningThreshold(60);
+                x.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                x.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                x.SetHighClosureRateThreshold(90);
+                x.SetHighCreationRateThreshold(60);
             });
             
             var factory2 = new DiagnosticFactory(config, new KnowledgeBaseProvider());

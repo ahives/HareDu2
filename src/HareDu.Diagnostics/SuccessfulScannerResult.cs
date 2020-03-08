@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics
     public class SuccessfulScannerResult :
         ScannerResult
     {
-        public SuccessfulScannerResult(string scannerIdentifier, IReadOnlyList<DiagnosticProbeResult> results)
+        public SuccessfulScannerResult(string scannerIdentifier, IReadOnlyList<ProbeResult> results)
         {
             Identifier = NewId.NextGuid();
             ScannerIdentifier = scannerIdentifier;
@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics
 
         public Guid Identifier { get; }
         public string ScannerIdentifier { get; }
-        public IReadOnlyList<DiagnosticProbeResult> Results { get; }
+        public IReadOnlyList<ProbeResult> Results { get; }
         public DateTimeOffset Timestamp { get; }
     }
 }

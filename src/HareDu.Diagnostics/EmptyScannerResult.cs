@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics
     {
         public Guid Identifier => NewId.NextGuid();
         public string ScannerIdentifier => typeof(NoOpDiagnosticScan<EmptySnapshot>).GetIdentifier();
-        public IReadOnlyList<DiagnosticProbeResult> Results => new List<DiagnosticProbeResult>();
+        public IReadOnlyList<ProbeResult> Results => new List<ProbeResult>();
         public DateTimeOffset Timestamp => DateTimeOffset.UtcNow;
     }
 }

@@ -14,10 +14,24 @@
 namespace HareDu.Diagnostics
 {
     using System;
+    using System.Collections.Generic;
+    using KnowledgeBase;
 
-    public interface DiagnosticProbeContext
+    public interface ProbeResult
     {
-        DiagnosticProbeResult Result { get; }
+        string ParentComponentIdentifier { get; }
+        
+        string ComponentIdentifier { get; }
+        
+        ComponentType ComponentType { get; }
+        
+        string ProbeIdentifier { get; }
+        
+        DiagnosticProbeResultStatus Status { get; }
+        
+        KnowledgeBaseArticle KnowledgeBaseArticle { get; }
+        
+        IReadOnlyList<ProbeData> ProbeData { get; }
         
         DateTimeOffset Timestamp { get; }
     }

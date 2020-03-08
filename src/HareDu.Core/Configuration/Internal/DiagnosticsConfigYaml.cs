@@ -11,18 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.KnowledgeBase
+namespace HareDu.Core.Configuration.Internal
 {
-    using System.Collections.Generic;
-    using Probes;
+    using YamlDotNet.Serialization;
 
-    public interface IKnowledgeBaseProvider
+    class DiagnosticsConfigYaml
     {
-        bool TryGet(string identifier, DiagnosticProbeResultStatus status, out KnowledgeBaseArticle article);
-        
-        bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles);
-
-        void Add<T>(DiagnosticProbeResultStatus status, string reason, string remediation)
-            where T : DiagnosticProbe;
+        [YamlMember(Alias = "probes")]
+        public DiagnosticProbeConfigYaml Probes { get; set; }
     }
 }

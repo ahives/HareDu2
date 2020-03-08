@@ -14,9 +14,7 @@
 namespace HareDu.Diagnostics.Probes
 {
     using System.Collections.Generic;
-    using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -29,36 +27,34 @@ namespace HareDu.Diagnostics.Probes
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public ChannelThrottlingProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public ChannelThrottlingProbe(IKnowledgeBaseProvider kb)
+            : base(kb)
         {
-            _status = DiagnosticProbeStatus.Online;
+            _status = ProbeStatus.Online;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
             ChannelSnapshot data = snapshot as ChannelSnapshot;
-            DiagnosticProbeResult result;
+            ProbeResult result;
             
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
-                new DiagnosticProbeDataImpl("PrefetchCount", data.PrefetchCount.ToString())
+                new ProbeDataImpl("UnacknowledgedMessages", data.UnacknowledgedMessages.ToString()),
+                new ProbeDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
             if (data.UnacknowledgedMessages > data.PrefetchCount)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
-                result = new UnhealthyProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                result = new UnhealthyProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new HealthyProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                result = new HealthyProbeResult(data.ConnectionIdentifier, data.Identifier, Identifier, ComponentType, probeData, article);
             }
 
             NotifyObservers(result);

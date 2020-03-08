@@ -74,7 +74,7 @@ namespace HareDu.Core.Configuration
             public HareDuConfigImpl(HareDuConfigYaml config)
             {
                 Broker = new BrokerConfigImpl(config.Broker);
-                Diagnostics = new DiagnosticsConfigImpl(config.Analyzer);
+                Diagnostics = new DiagnosticsConfigImpl(config.Diagnostics);
             }
 
             public BrokerConfig Broker { get; }
@@ -115,28 +115,49 @@ namespace HareDu.Core.Configuration
             class DiagnosticsConfigImpl :
                 DiagnosticsConfig
             {
-                public DiagnosticsConfigImpl(DiagnosticAnalyzerConfigYaml config)
+                public DiagnosticsConfigImpl(DiagnosticsConfigYaml config)
                 {
-                    HighClosureRateWarningThreshold = config.HighClosureRateWarningThreshold;
-                    HighCreationRateWarningThreshold = config.HighCreationRateWarningThreshold;
-                    QueueHighFlowThreshold = config.QueueHighFlowThreshold;
-                    QueueLowFlowThreshold = config.QueueLowFlowThreshold;
-                    MessageRedeliveryCoefficient = config.MessageRedeliveryCoefficient;
-                    SocketUsageCoefficient = config.SocketUsageCoefficient;
-                    RuntimeProcessUsageCoefficient = config.RuntimeProcessUsageCoefficient;
-                    FileDescriptorUsageWarningCoefficient = config.FileDescriptorUsageWarningCoefficient;
-                    ConsumerUtilizationWarningCoefficient = config.ConsumerUtilizationWarningCoefficient;
+                    Probes = new ProbesConfigImpl(config.Probes);
                 }
 
-                public uint HighClosureRateWarningThreshold { get; }
-                public uint HighCreationRateWarningThreshold { get; }
+                public ProbesConfig Probes { get; }
+                public uint HighClosureRateThreshold { get; }
+                public uint HighCreationRateThreshold { get; }
                 public uint QueueHighFlowThreshold { get; }
                 public uint QueueLowFlowThreshold { get; }
-                public decimal MessageRedeliveryCoefficient { get; }
-                public decimal SocketUsageCoefficient { get; }
-                public decimal RuntimeProcessUsageCoefficient { get; }
-                public decimal FileDescriptorUsageWarningCoefficient { get; }
-                public decimal ConsumerUtilizationWarningCoefficient { get; }
+                public decimal MessageRedeliveryThresholdCoefficient { get; }
+                public decimal SocketUsageThresholdCoefficient { get; }
+                public decimal RuntimeProcessUsageThresholdCoefficient { get; }
+                public decimal FileDescriptorUsageThresholdCoefficient { get; }
+                public decimal ConsumerUtilizationThreshold { get; }
+
+                
+                class ProbesConfigImpl :
+                    ProbesConfig
+                {
+                    public ProbesConfigImpl(DiagnosticProbeConfigYaml config)
+                    {
+                        HighClosureRateThreshold = config.HighClosureRateThreshold;
+                        HighCreationRateThreshold = config.HighCreationRateThreshold;
+                        QueueHighFlowThreshold = config.QueueHighFlowThreshold;
+                        QueueLowFlowThreshold = config.QueueLowFlowThreshold;
+                        MessageRedeliveryThresholdCoefficient = config.MessageRedeliveryCoefficient;
+                        SocketUsageThresholdCoefficient = config.SocketUsageThresholdCoefficient;
+                        RuntimeProcessUsageThresholdCoefficient = config.RuntimeProcessUsageThresholdCoefficient;
+                        FileDescriptorUsageThresholdCoefficient = config.FileDescriptorUsageThresholdCoefficient;
+                        ConsumerUtilizationThreshold = config.ConsumerUtilizationThreshold;
+                    }
+
+                    public uint HighClosureRateThreshold { get; }
+                    public uint HighCreationRateThreshold { get; }
+                    public uint QueueHighFlowThreshold { get; }
+                    public uint QueueLowFlowThreshold { get; }
+                    public decimal MessageRedeliveryThresholdCoefficient { get; }
+                    public decimal SocketUsageThresholdCoefficient { get; }
+                    public decimal RuntimeProcessUsageThresholdCoefficient { get; }
+                    public decimal FileDescriptorUsageThresholdCoefficient { get; }
+                    public decimal ConsumerUtilizationThreshold { get; }
+                }
             }
         }
     }

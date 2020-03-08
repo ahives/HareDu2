@@ -5,13 +5,13 @@
       password: guest
   diagnostics:
     probes:
-      high-closure-rate-threshold:  90
-      high-creation-rate-threshold: 60
-      queue-high-flow-threshold:  90
-      queue-low-flow-threshold: 10
-      message-redelivery-threshold-coefficient: 0.60
+      high-closure-rate-threshold:  100
+      high-creation-rate-threshold: 100
+      queue-high-flow-threshold:  100
+      queue-low-flow-threshold: 20
+      message-redelivery-threshold-coefficient: 0.50
       socket-usage-threshold-coefficient: 0.60
       runtime-process-usage-threshold-coefficient:  0.65
       file-descriptor-usage-threshold-coefficient:  0.65
-      consumer-utilization-threshold: 0.65
+      consumer-utilization-threshold: 0.50
 ...

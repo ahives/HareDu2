@@ -21,6 +21,6 @@ namespace HareDu.Diagnostics.Scans
     {
         string Identifier { get; }
 
-        IReadOnlyList<DiagnosticProbeResult> Scan(T snapshot);
+        IReadOnlyList<ProbeResult> Scan(T snapshot);
     }
 }

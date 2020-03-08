@@ -44,14 +44,16 @@ Configuring your HareDu-powered application can be as simple as modifying the *h
 
 | Setting | Description |
 | ---| --- |
+| **Broker** | |
 | url | The url of the RabbitMQ node that has metrics enabled. |
 | username | This user should have administrative access to the RabbitMQ broker. |
 | password | Decrypted password of a user that has administrative access to the RabbitMQ broker. |
+| **Diagnostics** | |
 | high-closure-rate-warning-threshold | Defines the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is considered healthy. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of closed connections is less than this setting then the system is considered to be operating normally. |
 | high-creation-rate-warning-threshold | Defines the maximum acceptable rate of which connections to the RabbitMQ broker can be made in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally. |
 | queue-high-flow-threshold | Defines the maximum acceptable number of messages that can be published to a queue. If the number of published messages is greater than or equal to this setting then this queue is considered unhealthy  |
 | queue-low-flow-threshold |  |
-| message-redelivery-coefficient |  |
+| message-redelivery-threshold-coefficient | Is used to help calculate |
 | socket-usage-coefficient |  |
 | runtime-process-usage-coefficient |  |
 | file-descriptor-usage-warning-coefficient |  |
@@ -65,15 +67,16 @@ HareDu YAML looks like this...
       username: guest
       password: guest
   diagnostics:
-    high-closure-rate-warning-threshold:  100
-    high-creation-rate-warning-threshold: 100
-    queue-high-flow-threshold:  100
-    queue-low-flow-threshold: 20
-    message-redelivery-coefficient: 0.50
-    socket-usage-coefficient: 0.60
-    runtime-process-usage-coefficient:  0.65
-    file-descriptor-usage-warning-coefficient:  0.65
-    consumer-utilization-warning-coefficient: 0.50
+    probes:
+        high-closure-rate-warning-threshold:  100
+        high-creation-rate-warning-threshold: 100
+        queue-high-flow-threshold:  100
+        queue-low-flow-threshold: 20
+        message-redelivery-coefficient: 0.50
+        socket-usage-coefficient: 0.60
+        runtime-process-usage-coefficient:  0.65
+        file-descriptor-usage-warning-coefficient:  0.65
+        consumer-utilization-warning-coefficient: 0.50
 ...
 ```
 There are several ways to configure HareDu. Let's look at the major scenarios.
@@ -112,15 +115,15 @@ There are a couple ways to configure the Diagnostics API. Since most of the defa
 var provider = new DiagnosticsConfigProvider();
 var config = provider.Configure(x =>
             {
-                x.SetMessageRedeliveryCoefficient(0.60M);
-                x.SetSocketUsageCoefficient(0.60M);
-                x.SetConsumerUtilizationWarningCoefficient(0.65M);
+                x.SetMessageRedeliveryThresholdCoefficient(0.60M);
+                x.SetSocketUsageThresholdCoefficient(0.60M);
+                x.SetConsumerUtilizationThreshold(0.65M);
                 x.SetQueueHighFlowThreshold(90);
                 x.SetQueueLowFlowThreshold(10);
-                x.SetRuntimeProcessUsageCoefficient(0.65M);
-                x.SetFileDescriptorUsageWarningCoefficient(0.65M);
-                x.SetHighClosureRateWarningThreshold(90);
-                x.SetHighCreationRateWarningThreshold(60);
+                x.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                x.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                x.SetHighClosureRateThreshold(90);
+                x.SetHighCreationRateThreshold(60);
             });
 ```
 
@@ -271,14 +274,14 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 <br>
 
 #### Taking snapshots
-Once you have registered a SnapshotFactory, it is easy to take a snapshot.
+Once you have registered a ```SnapshotFactory```, it is easy to take a snapshot.
 
 **Step 1: Define what type of snapshot you want to take**
 ```csharp
 var factory = new SnapshotFactory(new BrokerObjectFactory(config));
-var lens = factory.Lens<BrokerQueues>();
+var lens = factory.Lens<BrokerQueuesSnapshot>();
 ```
-In this code snippet, the lens variable returns a ``SnapshotLens`` for taking snapshots of type ```BrokerQueues```.
+In this code snippet, the lens variable returns a ``SnapshotLens`` for taking snapshots of type ```BrokerQueuesSnapshot```.
 
 **Step 2: Take the snapshot**
 ```csharp
@@ -290,14 +293,14 @@ lens.TakeSnapshot();
 *Autofac*
 ```csharp
 var lens = await container.Resolve<ISnapshotFactory>()
-    .Lens<BrokerQueues>()
+    .Lens<BrokerQueuesSnapshot>()
     .TakeSnapshot();
 ```
 
 *.NET Core DI*
 ```csharp
 var lens = await services.GetService<ISnapshotFactory>()
-    .Lens<BrokerQueues>()
+    .Lens<BrokerQueuesSnapshot>()
     .TakeSnapshot();
 ```
 <br>
@@ -322,11 +325,11 @@ var snapshot = factory.History.MostRecent().Snapshot;
 
 #### Registering Observers
 
-When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Execute``` method is called), all registered observers will be notified with an object of ```SnapshotResult<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Execute``` method or else the registered observers will not receive notifications.
+When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<T>```. Each time a snapshot is taken (i.e. when the ```Execute``` method is called), all registered observers will be notified with an object of ```SnapshotResult<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Execute``` method or else the registered observers will not receive notifications.
 
 ```csharp
 var lens = factor
-    .Lens<BrokerQueues>()
+    .Lens<BrokerQueuesSnapshot>()
     .RegisterObserver(new SomeCoolObserver())
     .TakeSnapshot();
 ```
@@ -355,7 +358,7 @@ var factory = new SnapshotFactory(config.Broker);
 
 // Select a snapshot lens and optionally register observers on the lens
 var lens = factory
-    .Lens<BrokerQueues>()
+    .Lens<BrokerQueuesSnapshot>()
     .RegisterObserver(new BrokerQueuesObserver());
 
 // Take a snapshot
@@ -404,7 +407,7 @@ The above code will return a ```ScannerResult``` object, which contains the resu
 
 #### Registering Observers
 
-When setting up ```DiagnosticScanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotContext<TSnapshot>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotContext<TSnapshot>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
+When setting up ```DiagnosticScanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotContext<T>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotContext<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
 
 ```csharp
 var result = scanner
@@ -438,7 +441,7 @@ var factory = new SnapshotFactory(config.Broker);
 
 // Take a snapshot
 var lens = factory
-    .Lens<BrokerQueues>()
+    .Lens<BrokerQueuesSnapshot>()
     .TakeSnapshot();
 
 // Initialize the diagnostic scanner and register the observer
@@ -448,11 +451,6 @@ var scanner = new DiagnosticScanner(config.Diagnostics, new KnowledgeBaseProvide
 // Scan the results of the most recent snapshot taken
 var result = scanner.Scan(lens.History.MostRecent());
 ```
-
-### Gotchas
-
-Registering an API will register all dependent objects so there is no need to include them. So, if you intend on using both the Broker and Snapshot APIs then including the Snapshot API will also register everything in the Broker API. The same can be said for the Diagnostic API, since it is dependent on both the Broker and Snapshot APIs.
-
 
 ## Get It
 From the Package Manager Console in Visual Studio you can run the following PowerShell script to get the latest version of HareDu...

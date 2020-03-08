@@ -15,22 +15,6 @@ namespace HareDu.Core.Configuration
 {
     public interface DiagnosticsConfig
     {
-        uint HighClosureRateWarningThreshold { get; }
-        
-        uint HighCreationRateWarningThreshold { get; }
-        
-        uint QueueHighFlowThreshold { get; }
-        
-        uint QueueLowFlowThreshold { get; }
-        
-        decimal MessageRedeliveryCoefficient { get; }
-
-        decimal SocketUsageCoefficient { get; }
-        
-        decimal RuntimeProcessUsageCoefficient { get; }
-        
-        decimal FileDescriptorUsageWarningCoefficient { get; }
-        
-        decimal ConsumerUtilizationWarningCoefficient { get; }
+        ProbesConfig Probes { get; }
     }
 }

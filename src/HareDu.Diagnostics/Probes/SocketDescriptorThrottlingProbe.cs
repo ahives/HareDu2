@@ -17,7 +17,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -32,59 +31,58 @@ namespace HareDu.Diagnostics.Probes
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public SocketDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public SocketDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+            : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? DiagnosticProbeStatus.Online : DiagnosticProbeStatus.Offline;
+            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
-            DiagnosticProbeResult result;
+            ProbeResult result;
             NodeSnapshot data = snapshot as NodeSnapshot;
 
-            KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.OS.SocketDescriptors.Available);
             
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("OS.Sockets.Available", data.OS.SocketDescriptors.Available.ToString()),
-                new DiagnosticProbeDataImpl("OS.Sockets.Used", data.OS.SocketDescriptors.Used.ToString()),
-                new DiagnosticProbeDataImpl("CalculatedWarningThreshold", warningThreshold.ToString())
+                new ProbeDataImpl("OS.Sockets.Available", data.OS.SocketDescriptors.Available.ToString()),
+                new ProbeDataImpl("OS.Sockets.Used", data.OS.SocketDescriptors.Used.ToString()),
+                new ProbeDataImpl("CalculatedThreshold", warningThreshold.ToString())
             };
 
             if (data.OS.SocketDescriptors.Used < warningThreshold && warningThreshold < data.OS.SocketDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else if (data.OS.SocketDescriptors.Used == data.OS.SocketDescriptors.Available)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);
@@ -93,8 +91,8 @@ namespace HareDu.Diagnostics.Probes
         }
 
         ulong ComputeWarningThreshold(ulong socketsAvailable)
-            => _config.SocketUsageCoefficient >= 1
+            => _config.Probes.SocketUsageThresholdCoefficient >= 1
                 ? socketsAvailable
-                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.SocketUsageCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.Probes.SocketUsageThresholdCoefficient));
     }
 }

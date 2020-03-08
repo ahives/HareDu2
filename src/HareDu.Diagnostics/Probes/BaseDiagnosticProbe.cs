@@ -18,45 +18,45 @@ namespace HareDu.Diagnostics.Probes
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticProbe :
-        IObservable<DiagnosticProbeContext>
+        IObservable<ProbeContext>
     {
-        protected readonly IKnowledgeBaseProvider _knowledgeBaseProvider;
-        protected DiagnosticProbeStatus _status;
-        readonly List<IObserver<DiagnosticProbeContext>> _observers;
+        protected readonly IKnowledgeBaseProvider _kb;
+        protected ProbeStatus _status;
+        readonly List<IObserver<ProbeContext>> _observers;
 
-        protected BaseDiagnosticProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
+        protected BaseDiagnosticProbe(IKnowledgeBaseProvider kb)
         {
-            _knowledgeBaseProvider = knowledgeBaseProvider;
-            _observers = new List<IObserver<DiagnosticProbeContext>>();
+            _kb = kb;
+            _observers = new List<IObserver<ProbeContext>>();
         }
 
-        protected virtual void NotifyObservers(DiagnosticProbeResult result)
+        protected virtual void NotifyObservers(ProbeResult result)
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(new DiagnosticProbeContextImpl(result));
+                observer.OnNext(new ProbeContextImpl(result));
             }
         }
 
-        public IDisposable Subscribe(IObserver<DiagnosticProbeContext> observer)
+        public IDisposable Subscribe(IObserver<ProbeContext> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
 
-            return new UnsubscribeObserver<DiagnosticProbeContext>(_observers, observer);
+            return new UnsubscribeObserver<ProbeContext>(_observers, observer);
         }
 
 
-        class DiagnosticProbeContextImpl :
-            DiagnosticProbeContext
+        class ProbeContextImpl :
+            ProbeContext
         {
-            public DiagnosticProbeContextImpl(DiagnosticProbeResult result)
+            public ProbeContextImpl(ProbeResult result)
             {
                 Result = result;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
-            public DiagnosticProbeResult Result { get; }
+            public ProbeResult Result { get; }
             public DateTimeOffset Timestamp { get; }
         }
         
@@ -82,10 +82,10 @@ namespace HareDu.Diagnostics.Probes
 
 
         protected class HealthyProbeResult :
-            DiagnosticProbeResult
+            ProbeResult
         {
             public HealthyProbeResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
-                ComponentType componentType, List<DiagnosticProbeData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
+                ComponentType componentType, List<ProbeData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
             {
                 ParentComponentIdentifier = parentComponentIdentifier;
                 ComponentIdentifier = componentIdentifier;
@@ -93,7 +93,7 @@ namespace HareDu.Diagnostics.Probes
                 ComponentType = componentType;
                 ProbeData = analyzerData;
                 KnowledgeBaseArticle = knowledgeBaseArticle;
-                Status = DiagnosticStatus.Healthy;
+                Status = DiagnosticProbeResultStatus.Healthy;
                 Timestamp = DateTimeOffset.Now;
             }
 
@@ -101,18 +101,18 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentIdentifier { get; }
             public ComponentType ComponentType { get; }
             public string ProbeIdentifier { get; }
-            public DiagnosticStatus Status { get; }
+            public DiagnosticProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-            public IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
+            public IReadOnlyList<ProbeData> ProbeData { get; }
             public DateTimeOffset Timestamp { get; }
         }
 
 
         protected class UnhealthyProbeResult :
-            DiagnosticProbeResult
+            ProbeResult
         {
             public UnhealthyProbeResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
-                ComponentType componentType, IReadOnlyList<DiagnosticProbeData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
+                ComponentType componentType, IReadOnlyList<ProbeData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
             {
                 ParentComponentIdentifier = parentComponentIdentifier;
                 ComponentIdentifier = componentIdentifier;
@@ -120,26 +120,26 @@ namespace HareDu.Diagnostics.Probes
                 ComponentType = componentType;
                 ProbeData = analyzerData;
                 KnowledgeBaseArticle = knowledgeBaseArticle;
-                Status = DiagnosticStatus.Unhealthy;
+                Status = DiagnosticProbeResultStatus.Unhealthy;
                 Timestamp = DateTimeOffset.Now;
             }
 
             public string ParentComponentIdentifier { get; }
             public string ComponentIdentifier { get; }
             public string ProbeIdentifier { get; }
-            public DiagnosticStatus Status { get; }
+            public DiagnosticProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-            public IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
+            public IReadOnlyList<ProbeData> ProbeData { get; }
             public ComponentType ComponentType { get; }
             public DateTimeOffset Timestamp { get; }
         }
 
 
         protected class WarningProbeResult :
-            DiagnosticProbeResult
+            ProbeResult
         {
             public WarningProbeResult(string parentComponentIdentifier, string componentIdentifier, string analyzerIdentifier,
-                ComponentType componentType, IReadOnlyList<DiagnosticProbeData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
+                ComponentType componentType, IReadOnlyList<ProbeData> analyzerData, KnowledgeBaseArticle knowledgeBaseArticle)
             {
                 ParentComponentIdentifier = parentComponentIdentifier;
                 ComponentIdentifier = componentIdentifier;
@@ -147,7 +147,7 @@ namespace HareDu.Diagnostics.Probes
                 ComponentType = componentType;
                 ProbeData = analyzerData;
                 KnowledgeBaseArticle = knowledgeBaseArticle;
-                Status = DiagnosticStatus.Warning;
+                Status = DiagnosticProbeResultStatus.Warning;
                 Timestamp = DateTimeOffset.Now;
             }
 
@@ -155,18 +155,18 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentIdentifier { get; }
             public ComponentType ComponentType { get; }
             public string ProbeIdentifier { get; }
-            public DiagnosticStatus Status { get; }
+            public DiagnosticProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-            public IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
+            public IReadOnlyList<ProbeData> ProbeData { get; }
             public DateTimeOffset Timestamp { get; }
         }
 
 
-        protected class InconclusiveDiagnosticProbeResult :
-            DiagnosticProbeResult
+        protected class InconclusiveProbeResult :
+            ProbeResult
         {
-            public InconclusiveDiagnosticProbeResult(string parentComponentIdentifier, string componentIdentifier,
-                string analyzerIdentifier, ComponentType componentType, IReadOnlyList<DiagnosticProbeData> analyzerData,
+            public InconclusiveProbeResult(string parentComponentIdentifier, string componentIdentifier,
+                string analyzerIdentifier, ComponentType componentType, IReadOnlyList<ProbeData> analyzerData,
                 KnowledgeBaseArticle knowledgeBaseArticle)
             {
                 ParentComponentIdentifier = parentComponentIdentifier;
@@ -175,11 +175,11 @@ namespace HareDu.Diagnostics.Probes
                 ProbeIdentifier = analyzerIdentifier;
                 KnowledgeBaseArticle = knowledgeBaseArticle;
                 ProbeData = analyzerData;
-                Status = DiagnosticStatus.Inconclusive;
+                Status = DiagnosticProbeResultStatus.Inconclusive;
                 Timestamp = DateTimeOffset.Now;
             }
 
-            public InconclusiveDiagnosticProbeResult(string parentComponentIdentifier, string componentIdentifier,
+            public InconclusiveProbeResult(string parentComponentIdentifier, string componentIdentifier,
                 string analyzerIdentifier, ComponentType componentType)
             {
                 ParentComponentIdentifier = parentComponentIdentifier;
@@ -187,7 +187,7 @@ namespace HareDu.Diagnostics.Probes
                 ComponentType = componentType;
                 ProbeIdentifier = analyzerIdentifier;
                 ProbeData = DiagnosticCache.EmptyProbeData;
-                Status = DiagnosticStatus.Inconclusive;
+                Status = DiagnosticProbeResultStatus.Inconclusive;
                 Timestamp = DateTimeOffset.Now;
             }
 
@@ -195,17 +195,17 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentIdentifier { get; }
             public ComponentType ComponentType { get; }
             public string ProbeIdentifier { get; }
-            public DiagnosticStatus Status { get; }
+            public DiagnosticProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-            public IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
+            public IReadOnlyList<ProbeData> ProbeData { get; }
             public DateTimeOffset Timestamp { get; }
         }
 
 
-        protected class DiagnosticProbeDataImpl :
-            DiagnosticProbeData
+        protected class ProbeDataImpl :
+            ProbeData
         {
-            public DiagnosticProbeDataImpl(string propertyName, string propertyValue)
+            public ProbeDataImpl(string propertyName, string propertyValue)
             {
                 PropertyName = propertyName;
                 PropertyValue = propertyValue;

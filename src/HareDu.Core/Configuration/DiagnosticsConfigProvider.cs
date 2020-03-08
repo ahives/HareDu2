@@ -57,70 +57,91 @@ namespace HareDu.Core.Configuration
             {
                 Settings = new Lazy<DiagnosticsConfig>(
                     () => new DiagnosticsConfigImpl(
-                        _highClosureRateWarningThreshold,
-                        _highCreationRateWarningThreshold,
-                        _queueHighFlowThreshold,
-                        _queueLowFlowThreshold,
-                        _messageRedeliveryCoefficient,
-                        _socketUsageCoefficient,
-                        _runtimeProcessUsageCoefficient,
-                        _fileDescriptorUsageWarningCoefficient,
-                        _consumerUtilizationWarningCoefficient), LazyThreadSafetyMode.PublicationOnly);
+                        new ProbesImpl(
+                            _highClosureRateWarningThreshold,
+                            _highCreationRateWarningThreshold,
+                            _queueHighFlowThreshold,
+                            _queueLowFlowThreshold,
+                            _messageRedeliveryCoefficient,
+                            _socketUsageCoefficient,
+                            _runtimeProcessUsageCoefficient,
+                            _fileDescriptorUsageWarningCoefficient,
+                            _consumerUtilizationWarningCoefficient)), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            
-            class DiagnosticsConfigImpl :
-                DiagnosticsConfig
+            class ProbesImpl :
+                ProbesConfig
             {
-                public DiagnosticsConfigImpl(uint highClosureRateWarningThreshold,
+                public ProbesImpl(uint highClosureRateWarningThreshold,
                     uint highCreationRateWarningThreshold,
                     uint queueHighFlowThreshold,
                     uint queueLowFlowThreshold,
                     decimal messageRedeliveryCoefficient,
                     decimal socketUsageCoefficient,
-                    decimal runtimeProcessUsageCoefficient,
-                    decimal fileDescriptorUsageWarningCoefficient,
+                    decimal runtimeProcessUsageThresholdCoefficient,
+                    decimal fileDescriptorUsageThresholdCoefficient,
                     decimal consumerUtilizationWarningCoefficient)
                 {
-                    HighClosureRateWarningThreshold = highClosureRateWarningThreshold;
-                    HighCreationRateWarningThreshold = highCreationRateWarningThreshold;
+                    HighClosureRateThreshold = highClosureRateWarningThreshold;
+                    HighCreationRateThreshold = highCreationRateWarningThreshold;
                     QueueHighFlowThreshold = queueHighFlowThreshold;
                     QueueLowFlowThreshold = queueLowFlowThreshold;
-                    MessageRedeliveryCoefficient = messageRedeliveryCoefficient;
-                    SocketUsageCoefficient = socketUsageCoefficient;
-                    RuntimeProcessUsageCoefficient = runtimeProcessUsageCoefficient;
-                    FileDescriptorUsageWarningCoefficient = fileDescriptorUsageWarningCoefficient;
-                    ConsumerUtilizationWarningCoefficient = consumerUtilizationWarningCoefficient;
+                    MessageRedeliveryThresholdCoefficient = messageRedeliveryCoefficient;
+                    SocketUsageThresholdCoefficient = socketUsageCoefficient;
+                    RuntimeProcessUsageThresholdCoefficient = runtimeProcessUsageThresholdCoefficient;
+                    FileDescriptorUsageThresholdCoefficient = fileDescriptorUsageThresholdCoefficient;
+                    ConsumerUtilizationThreshold = consumerUtilizationWarningCoefficient;
                 }
 
-                public uint HighClosureRateWarningThreshold { get; }
-                public uint HighCreationRateWarningThreshold { get; }
+                public uint HighClosureRateThreshold { get; }
+                public uint HighCreationRateThreshold { get; }
                 public uint QueueHighFlowThreshold { get; }
                 public uint QueueLowFlowThreshold { get; }
-                public decimal MessageRedeliveryCoefficient { get; }
-                public decimal SocketUsageCoefficient { get; }
-                public decimal RuntimeProcessUsageCoefficient { get; }
-                public decimal FileDescriptorUsageWarningCoefficient { get; }
-                public decimal ConsumerUtilizationWarningCoefficient { get; }
+                public decimal MessageRedeliveryThresholdCoefficient { get; }
+                public decimal SocketUsageThresholdCoefficient { get; }
+                public decimal RuntimeProcessUsageThresholdCoefficient { get; }
+                public decimal FileDescriptorUsageThresholdCoefficient { get; }
+                public decimal ConsumerUtilizationThreshold { get; }
             }
 
-            public void SetHighClosureRateWarningThreshold(uint value) => _highClosureRateWarningThreshold = value;
 
-            public void SetHighCreationRateWarningThreshold(uint value) => _highCreationRateWarningThreshold = value;
+            class DiagnosticsConfigImpl :
+                DiagnosticsConfig
+            {
+                public DiagnosticsConfigImpl(ProbesConfig probes)
+                {
+                    Probes = probes;
+                }
+
+                public ProbesConfig Probes { get; }
+                public uint HighClosureRateThreshold { get; }
+                public uint HighCreationRateThreshold { get; }
+                public uint QueueHighFlowThreshold { get; }
+                public uint QueueLowFlowThreshold { get; }
+                public decimal MessageRedeliveryThresholdCoefficient { get; }
+                public decimal SocketUsageThresholdCoefficient { get; }
+                public decimal RuntimeProcessUsageThresholdCoefficient { get; }
+                public decimal FileDescriptorUsageThresholdCoefficient { get; }
+                public decimal ConsumerUtilizationThreshold { get; }
+            }
+
+            public void SetHighClosureRateThreshold(uint value) => _highClosureRateWarningThreshold = value;
+
+            public void SetHighCreationRateThreshold(uint value) => _highCreationRateWarningThreshold = value;
 
             public void SetQueueHighFlowThreshold(uint value) => _queueHighFlowThreshold = value;
 
             public void SetQueueLowFlowThreshold(uint value) => _queueLowFlowThreshold = value;
 
-            public void SetMessageRedeliveryCoefficient(decimal value) => _messageRedeliveryCoefficient = value;
+            public void SetMessageRedeliveryThresholdCoefficient(decimal value) => _messageRedeliveryCoefficient = value;
 
-            public void SetSocketUsageCoefficient(decimal value) => _socketUsageCoefficient = value;
+            public void SetSocketUsageThresholdCoefficient(decimal value) => _socketUsageCoefficient = value;
 
-            public void SetRuntimeProcessUsageCoefficient(decimal value) => _runtimeProcessUsageCoefficient = value;
+            public void SetRuntimeProcessUsageThresholdCoefficient(decimal value) => _runtimeProcessUsageCoefficient = value;
 
-            public void SetFileDescriptorUsageWarningCoefficient(decimal value) => _fileDescriptorUsageWarningCoefficient = value;
+            public void SetFileDescriptorUsageThresholdCoefficient(decimal value) => _fileDescriptorUsageWarningCoefficient = value;
 
-            public void SetConsumerUtilizationWarningCoefficient(decimal value) => _consumerUtilizationWarningCoefficient = value;
+            public void SetConsumerUtilizationThreshold(decimal value) => _consumerUtilizationWarningCoefficient = value;
         }
     }
 }

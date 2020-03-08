@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
     [TestFixture]
     public class BrokerConnectivityDiagnosticTests
     {
-        IReadOnlyList<DiagnosticProbe> _analyzers;
+        IReadOnlyList<DiagnosticProbe> _probes;
 
         [OneTimeSetUp]
         public void Init()
@@ -37,15 +37,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var configProvider = new YamlFileConfigProvider(validator);
             var knowledgeBaseProvider = new KnowledgeBaseProvider();
             
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
             configProvider.TryGet(path, out HareDuConfig config);
             
-            _analyzers = new List<DiagnosticProbe>
+            _probes = new List<DiagnosticProbe>
             {
                 new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountProbe(knowledgeBaseProvider),
                 new ChannelThrottlingProbe(knowledgeBaseProvider),
                 new ChannelLimitReachedProbe(knowledgeBaseProvider),
                 new BlockedConnectionProbe(knowledgeBaseProvider)
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             
-            var report = new BrokerConnectivityScan(_analyzers)
+            var report = new BrokerConnectivityScan(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(6);
@@ -74,7 +74,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = null;
             
-            var report = new BrokerConnectivityScan(_analyzers)
+            var report = new BrokerConnectivityScan(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

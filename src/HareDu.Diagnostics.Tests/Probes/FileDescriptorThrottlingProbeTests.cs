@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Warning);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
         }
 
@@ -75,7 +75,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Unhealthy);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
         }
 
@@ -93,7 +93,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Healthy);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
         }
 
@@ -103,7 +103,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new FileDescriptorThrottlingProbe(null, knowledgeBaseProvider);
             
-            probe.Status.ShouldBe(DiagnosticProbeStatus.Offline);
+            probe.Status.ShouldBe(ProbeStatus.Offline);
         }
     }
 }

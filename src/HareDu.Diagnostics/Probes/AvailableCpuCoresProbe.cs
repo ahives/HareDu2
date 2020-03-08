@@ -14,9 +14,7 @@
 namespace HareDu.Diagnostics.Probes
 {
     using System.Collections.Generic;
-    using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -29,45 +27,43 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public AvailableCpuCoresProbe(IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public AvailableCpuCoresProbe(IKnowledgeBaseProvider kb)
+            : base(kb)
         {
-            _status = DiagnosticProbeStatus.Online;
+            _status = ProbeStatus.Online;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
-            DiagnosticProbeResult result;
+            ProbeResult result;
             NodeSnapshot data = snapshot as NodeSnapshot;
 
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("AvailableCoresDetected", data.AvailableCoresDetected.ToString())
+                new ProbeDataImpl("AvailableCoresDetected", data.AvailableCoresDetected.ToString())
             };
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
             if (data.AvailableCoresDetected <= 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);

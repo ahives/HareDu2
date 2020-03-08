@@ -55,14 +55,14 @@ namespace HareDu.Diagnostics
             return new SuccessfulScannerResult(diagnostic.Identifier, results);
         }
 
-        public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers)
+        public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)
         {
             _factory.RegisterObservers(observers);
 
             return this;
         }
 
-        public IDiagnosticScanner RegisterObserver(IObserver<DiagnosticProbeContext> observer)
+        public IDiagnosticScanner RegisterObserver(IObserver<ProbeContext> observer)
         {
             _factory.RegisterObserver(observer);
 

@@ -47,36 +47,28 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test(Description = "")]
         public void Verify_probe_yellow_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
-            var configProvider = _container.Resolve<IFileConfigProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var probe = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new UnlimitedPrefetchCountProbe(knowledgeBaseProvider);
 
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(0);
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Warning);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(UnlimitedPrefetchCountProbe).GetIdentifier());
         }
 
         [Test]
         public void Verify_probe_inconclusive_condition_1()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
-            var configProvider = _container.Resolve<IFileConfigProvider>();
-            configProvider.TryGet(path, out HareDuConfig config);
-            
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var probe = new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider);
+            var probe = new UnlimitedPrefetchCountProbe(knowledgeBaseProvider);
             
             ChannelSnapshot snapshot = new FakeChannelSnapshot2(5);
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticStatus.Inconclusive);
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.Inconclusive);
             result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(UnlimitedPrefetchCountProbe).GetIdentifier());
         }
     }

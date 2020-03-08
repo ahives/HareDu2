@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -30,47 +29,45 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Runtime;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public RuntimeProcessLimitProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public RuntimeProcessLimitProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+            : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? DiagnosticProbeStatus.Online : DiagnosticProbeStatus.Offline;
+            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
-            DiagnosticProbeResult result;
+            ProbeResult result;
             BrokerRuntimeSnapshot data = snapshot as BrokerRuntimeSnapshot;
 
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("Processes.Limit", data.Processes.Limit.ToString()),
-                new DiagnosticProbeDataImpl("Processes.Used", data.Processes.Used.ToString())
+                new ProbeDataImpl("Processes.Limit", data.Processes.Limit.ToString()),
+                new ProbeDataImpl("Processes.Used", data.Processes.Used.ToString())
             };
 
-            KnowledgeBaseArticle knowledgeBaseArticle;
-            
             if (data.Processes.Used < data.Processes.Limit)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);

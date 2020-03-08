@@ -24,6 +24,6 @@ namespace HareDu.Diagnostics
     {
         public string Identifier => GetType().GetIdentifier();
 
-        public IReadOnlyList<DiagnosticProbeResult> Scan(T snapshot) => DiagnosticCache.EmptyProbeResults;
+        public IReadOnlyList<ProbeResult> Scan(T snapshot) => DiagnosticCache.EmptyProbeResults;
     }
 }

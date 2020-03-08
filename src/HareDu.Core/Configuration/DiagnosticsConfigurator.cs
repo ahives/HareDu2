@@ -15,22 +15,22 @@ namespace HareDu.Core.Configuration
 {
     public interface DiagnosticsConfigurator
     {
-        void SetHighClosureRateWarningThreshold(uint value);
+        void SetHighClosureRateThreshold(uint value);
         
-        void SetHighCreationRateWarningThreshold(uint value);
+        void SetHighCreationRateThreshold(uint value);
         
         void SetQueueHighFlowThreshold(uint value);
         
         void SetQueueLowFlowThreshold(uint value);
         
-        void SetMessageRedeliveryCoefficient(decimal value);
+        void SetMessageRedeliveryThresholdCoefficient(decimal value);
         
-        void SetSocketUsageCoefficient(decimal value);
+        void SetSocketUsageThresholdCoefficient(decimal value);
         
-        void SetRuntimeProcessUsageCoefficient(decimal value);
+        void SetRuntimeProcessUsageThresholdCoefficient(decimal value);
         
-        void SetFileDescriptorUsageWarningCoefficient(decimal value);
+        void SetFileDescriptorUsageThresholdCoefficient(decimal value);
         
-        void SetConsumerUtilizationWarningCoefficient(decimal value);
+        void SetConsumerUtilizationThreshold(decimal value);
     }
 }

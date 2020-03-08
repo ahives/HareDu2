@@ -11,10 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Internal
+namespace HareDu.Core.Configuration.Internal
 {
     using System;
-    using Configuration;
 
     class DefaultHareDuConfig :
         HareDuConfig
@@ -63,26 +62,47 @@ namespace HareDu.Core.Internal
         {
             public DiagnosticsConfigImpl()
             {
-                SocketUsageCoefficient = 0.50M;
-                MessageRedeliveryCoefficient = 1M;
-                HighClosureRateWarningThreshold = 100;
-                HighCreationRateWarningThreshold = 100;
-                RuntimeProcessUsageCoefficient = 0.7M;
-                FileDescriptorUsageWarningCoefficient = 0.7M;
-                ConsumerUtilizationWarningCoefficient = 0.5M;
-                QueueLowFlowThreshold = 20;
-                QueueHighFlowThreshold = 100;
+                Probes = new ProbesImpl();
             }
 
-            public uint HighClosureRateWarningThreshold { get; }
-            public uint HighCreationRateWarningThreshold { get; }
+            public ProbesConfig Probes { get; }
+            public uint HighClosureRateThreshold { get; }
+            public uint HighCreationRateThreshold { get; }
             public uint QueueHighFlowThreshold { get; }
             public uint QueueLowFlowThreshold { get; }
-            public decimal MessageRedeliveryCoefficient { get; }
-            public decimal SocketUsageCoefficient { get; }
-            public decimal RuntimeProcessUsageCoefficient { get; }
-            public decimal FileDescriptorUsageWarningCoefficient { get; }
-            public decimal ConsumerUtilizationWarningCoefficient { get; }
+            public decimal MessageRedeliveryThresholdCoefficient { get; }
+            public decimal SocketUsageThresholdCoefficient { get; }
+            public decimal RuntimeProcessUsageThresholdCoefficient { get; }
+            public decimal FileDescriptorUsageThresholdCoefficient { get; }
+            public decimal ConsumerUtilizationThreshold { get; }
+
+            
+            class ProbesImpl :
+                ProbesConfig
+            {
+                public ProbesImpl()
+                {
+                    SocketUsageThresholdCoefficient = 0.50M;
+                    MessageRedeliveryThresholdCoefficient = 1M;
+                    HighClosureRateThreshold = 100;
+                    HighCreationRateThreshold = 100;
+                    RuntimeProcessUsageThresholdCoefficient = 0.7M;
+                    FileDescriptorUsageThresholdCoefficient = 0.7M;
+                    ConsumerUtilizationThreshold = 0.5M;
+                    QueueLowFlowThreshold = 20;
+                    QueueHighFlowThreshold = 100;
+                }
+
+                public uint HighClosureRateThreshold { get; }
+                public uint HighCreationRateThreshold { get; }
+                public uint QueueHighFlowThreshold { get; }
+                public uint QueueLowFlowThreshold { get; }
+                public decimal MessageRedeliveryThresholdCoefficient { get; }
+                public decimal SocketUsageThresholdCoefficient { get; }
+                public decimal RuntimeProcessUsageThresholdCoefficient { get; }
+                public decimal FileDescriptorUsageThresholdCoefficient { get; }
+                public decimal ConsumerUtilizationThreshold { get; }
+            }
         }
     }
 }

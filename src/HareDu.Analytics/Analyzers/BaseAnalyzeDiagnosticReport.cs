@@ -35,24 +35,24 @@ namespace HareDu.Analytics.Analyzers
             var summary = (from result in rollup
                     let green = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Healthy)
+                            .Count(x => x == DiagnosticProbeResultStatus.Healthy)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Healthy))
+                        CalcPercentage(result.Value, DiagnosticProbeResultStatus.Healthy))
                     let red = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Unhealthy)
+                            .Count(x => x == DiagnosticProbeResultStatus.Unhealthy)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Unhealthy))
+                        CalcPercentage(result.Value, DiagnosticProbeResultStatus.Unhealthy))
                     let yellow = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Warning)
+                            .Count(x => x == DiagnosticProbeResultStatus.Warning)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Warning))
+                        CalcPercentage(result.Value, DiagnosticProbeResultStatus.Warning))
                     let inconclusive = new AnalyzerResultImpl(
                         result.Value
-                            .Count(x => x == DiagnosticStatus.Inconclusive)
+                            .Count(x => x == DiagnosticProbeResultStatus.Inconclusive)
                             .ConvertTo(),
-                        CalcPercentage(result.Value, DiagnosticStatus.Inconclusive))
+                        CalcPercentage(result.Value, DiagnosticProbeResultStatus.Inconclusive))
                     select new AnalyzerSummaryImpl(result.Key, green, red, yellow, inconclusive))
                 .Cast<AnalyzerSummary>()
                 .ToList();
@@ -62,7 +62,7 @@ namespace HareDu.Analytics.Analyzers
 
         protected abstract IEnumerable<string> GetSupportedDiagnosticAnalyzers();
 
-        protected virtual IEnumerable<DiagnosticProbeResult> ApplyFilter(IReadOnlyList<DiagnosticProbeResult> results)
+        protected virtual IEnumerable<ProbeResult> ApplyFilter(IReadOnlyList<ProbeResult> results)
         {
             foreach (var result in results)
             {
@@ -71,7 +71,7 @@ namespace HareDu.Analytics.Analyzers
             }
         }
         
-        protected virtual decimal CalcPercentage(List<DiagnosticStatus> results, DiagnosticStatus status)
+        protected virtual decimal CalcPercentage(List<DiagnosticProbeResultStatus> results, DiagnosticProbeResultStatus status)
         {
             decimal totalCount = Convert.ToDecimal(results.Count);
             decimal statusCount = Convert.ToDecimal(results.Count(x => x == status));
@@ -79,10 +79,10 @@ namespace HareDu.Analytics.Analyzers
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 
-        protected virtual IDictionary<string, List<DiagnosticStatus>> GetRollup(IEnumerable<DiagnosticProbeResult> results,
-            Func<DiagnosticProbeResult, string> rollupKey)
+        protected virtual IDictionary<string, List<DiagnosticProbeResultStatus>> GetRollup(IEnumerable<ProbeResult> results,
+            Func<ProbeResult, string> rollupKey)
         {
-            var rollup = new Dictionary<string, List<DiagnosticStatus>>();
+            var rollup = new Dictionary<string, List<DiagnosticProbeResultStatus>>();
             
             foreach (var result in results)
             {
@@ -91,7 +91,7 @@ namespace HareDu.Analytics.Analyzers
                 if (rollup.ContainsKey(key))
                     rollup[key].Add(result.Status);
                 else
-                    rollup.Add(key, new List<DiagnosticStatus> {result.Status});
+                    rollup.Add(key, new List<DiagnosticProbeResultStatus> {result.Status});
             }
 
             return rollup;

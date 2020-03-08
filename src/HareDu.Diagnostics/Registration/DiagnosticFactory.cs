@@ -67,7 +67,7 @@ namespace HareDu.Diagnostics.Registration
             return true;
         }
 
-        public void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers)
+        public void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)
         {
             var probes = _probeCache.Values.ToList();
             
@@ -83,7 +83,7 @@ namespace HareDu.Diagnostics.Registration
             }
         }
 
-        public void RegisterObserver(IObserver<DiagnosticProbeContext> observer)
+        public void RegisterObserver(IObserver<ProbeContext> observer)
         {
             if (observer == null)
                 return;

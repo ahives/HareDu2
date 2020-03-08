@@ -17,7 +17,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -31,60 +30,61 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.FaultTolerance;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public RedeliveredMessagesProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public RedeliveredMessagesProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+            : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? DiagnosticProbeStatus.Online : DiagnosticProbeStatus.Offline;
+            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
-            DiagnosticProbeResult result;
+            ProbeResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
             
-            var probeData = new List<DiagnosticProbeData>
-            {
-                new DiagnosticProbeDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
-                new DiagnosticProbeDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
-                new DiagnosticProbeDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString()),
-                new DiagnosticProbeDataImpl("MessageRedeliveryCoefficient", _config.MessageRedeliveryCoefficient.ToString())
-            };
-            
-            KnowledgeBaseArticle knowledgeBaseArticle;
             ulong warningThreshold = ComputeWarningThreshold(data.Messages.Incoming.Total);
             
-            if (data.Messages.Redelivered.Total >= warningThreshold && data.Messages.Redelivered.Total < data.Messages.Incoming.Total && warningThreshold < data.Messages.Incoming.Total)
+            var probeData = new List<ProbeData>
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
+                new ProbeDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),
+                new ProbeDataImpl("Messages.Redelivered.Total", data.Messages.Redelivered.Total.ToString()),
+                new ProbeDataImpl("MessageRedeliveryThresholdCoefficient", _config.Probes.MessageRedeliveryThresholdCoefficient.ToString()),
+                new ProbeDataImpl("CalculatedThreshold", warningThreshold.ToString())
+            };
+            
+            if (data.Messages.Redelivered.Total >= warningThreshold
+                && data.Messages.Redelivered.Total < data.Messages.Incoming.Total
+                && warningThreshold < data.Messages.Incoming.Total)
+            {
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else if (data.Messages.Redelivered.Total >= data.Messages.Incoming.Total)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Unhealthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.Node,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);
@@ -93,8 +93,8 @@ namespace HareDu.Diagnostics.Probes
         }
 
         ulong ComputeWarningThreshold(ulong total)
-            => _config.MessageRedeliveryCoefficient >= 1
+            => _config.Probes.MessageRedeliveryThresholdCoefficient >= 1
                 ? total
-                : Convert.ToUInt64(Math.Ceiling(total * _config.MessageRedeliveryCoefficient));
+                : Convert.ToUInt64(Math.Ceiling(total * _config.Probes.MessageRedeliveryThresholdCoefficient));
     }
 }

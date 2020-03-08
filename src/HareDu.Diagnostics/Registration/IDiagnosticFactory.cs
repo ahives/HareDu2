@@ -24,9 +24,9 @@ namespace HareDu.Diagnostics.Registration
         bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
             where T : Snapshot;
 
-        void RegisterObservers(IReadOnlyList<IObserver<DiagnosticProbeContext>> observers);
+        void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
 
-        void RegisterObserver(IObserver<DiagnosticProbeContext> observer);
+        void RegisterObserver(IObserver<ProbeContext> observer);
 
         bool RegisterProbe<T>(T probe)
             where T : DiagnosticProbe;

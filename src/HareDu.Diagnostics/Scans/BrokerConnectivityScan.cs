@@ -39,12 +39,12 @@ namespace HareDu.Diagnostics.Scans
             _connectivityProbes = probes.Where(IsConnectivityProbe).ToList();
         }
 
-        public IReadOnlyList<DiagnosticProbeResult> Scan(BrokerConnectivitySnapshot snapshot)
+        public IReadOnlyList<ProbeResult> Scan(BrokerConnectivitySnapshot snapshot)
         {
             if (snapshot == null)
                 return DiagnosticCache.EmptyProbeResults;
             
-            var results = new List<DiagnosticProbeResult>();
+            var results = new List<ProbeResult>();
             
             results.AddRange(_connectivityProbes.Select(x => x.Execute(snapshot)));
 
@@ -75,19 +75,19 @@ namespace HareDu.Diagnostics.Scans
 
         bool IsChannelThroughputProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Channel
             && probe.Category != DiagnosticProbeCategory.Connectivity;
 
         bool IsConnectionThroughputProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Connection
             && probe.Category != DiagnosticProbeCategory.Connectivity;
 
         bool IsConnectivityProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && (probe.ComponentType == ComponentType.Connection || probe.ComponentType == ComponentType.Channel)
             && probe.Category == DiagnosticProbeCategory.Connectivity;
     }

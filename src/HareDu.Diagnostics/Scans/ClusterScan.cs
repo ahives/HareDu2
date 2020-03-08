@@ -43,12 +43,12 @@ namespace HareDu.Diagnostics.Scans
             _operatingSystemProbes = probes.Where(IsOperatingSystemProbe).ToList();
         }
 
-        public IReadOnlyList<DiagnosticProbeResult> Scan(ClusterSnapshot snapshot)
+        public IReadOnlyList<ProbeResult> Scan(ClusterSnapshot snapshot)
         {
             if (snapshot == null)
                 return DiagnosticCache.EmptyProbeResults;
             
-            var results = new List<DiagnosticProbeResult>();
+            var results = new List<ProbeResult>();
 
             for (int i = 0; i < snapshot.Nodes.Count; i++)
             {
@@ -75,27 +75,27 @@ namespace HareDu.Diagnostics.Scans
 
         bool IsOperatingSystemProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.OperatingSystem;
 
         bool IsRuntimeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Runtime;
 
         bool IsMemoryProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Memory;
 
         bool IsDiskProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Disk;
 
         bool IsNodeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Node;
     }
 }

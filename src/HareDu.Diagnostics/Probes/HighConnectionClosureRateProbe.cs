@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -30,38 +29,35 @@ namespace HareDu.Diagnostics.Probes
         public string Description => "";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Connectivity;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public HighConnectionClosureRateProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public HighConnectionClosureRateProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+            : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? DiagnosticProbeStatus.Online : DiagnosticProbeStatus.Offline;
+            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
-            DiagnosticProbeResult result;
+            ProbeResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
 
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("ConnectionsClosed.Rate", data.ConnectionsClosed.Rate.ToString()),
-                new DiagnosticProbeDataImpl("HighClosureRateThreshold",
-                    _config.HighClosureRateWarningThreshold.ToString())
+                new ProbeDataImpl("ConnectionsClosed.Rate", data.ConnectionsClosed.Rate.ToString()),
+                new ProbeDataImpl("HighClosureRateThreshold", _config.Probes.HighClosureRateThreshold.ToString())
             };
-
-            KnowledgeBaseArticle knowledgeBaseArticle;
             
-            if (data.ConnectionsClosed.Rate >= _config.HighClosureRateWarningThreshold)
+            if (data.ConnectionsClosed.Rate >= _config.Probes.HighClosureRateThreshold)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
-                result = new WarningProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
+                result = new WarningProbeResult(null, null, Identifier, ComponentType, probeData, article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Healthy, out knowledgeBaseArticle);
-                result = new HealthyProbeResult(null, null, Identifier, ComponentType, probeData, knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                result = new HealthyProbeResult(null, null, Identifier, ComponentType, probeData, article);
             }
 
             NotifyObservers(result);

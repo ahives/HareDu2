@@ -13,10 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    public interface DiagnosticProbeData
+    public enum DiagnosticProbeResultStatus
     {
-        string PropertyName { get; }
-        
-        string PropertyValue { get; }
+        Unhealthy,
+        Healthy,
+        Warning,
+        Inconclusive,
+        NA
     }
 }

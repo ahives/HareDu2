@@ -44,7 +44,7 @@ namespace HareDu.Core.Configuration
         class BrokerConfiguratorImpl :
             BrokerConfigurator
         {
-            string _brokerUrl;
+            string _url;
             TimeSpan _timeout;
             string _username;
             string _password;
@@ -54,10 +54,10 @@ namespace HareDu.Core.Configuration
             public BrokerConfiguratorImpl()
             {
                 Settings = new Lazy<BrokerConfig>(
-                    () => new BrokerConfigImpl(_brokerUrl, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
+                    () => new BrokerConfigImpl(_url, _timeout, _username, _password), LazyThreadSafetyMode.PublicationOnly);
             }
 
-            public void ConnectTo(string url) => _brokerUrl = url;
+            public void ConnectTo(string url) => _url = url;
 
             public void TimeoutAfter(TimeSpan timeout) => _timeout = timeout;
 

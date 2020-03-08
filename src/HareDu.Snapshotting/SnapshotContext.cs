@@ -15,12 +15,12 @@ namespace HareDu.Snapshotting
 {
     using System;
 
-    public interface SnapshotContext<out TSnapshot>
-        where TSnapshot : Snapshot
+    public interface SnapshotContext<out T>
+        where T : Snapshot
     {
         string Identifier { get; }
 
-        TSnapshot Snapshot { get; }
+        T Snapshot { get; }
 
         DateTimeOffset Timestamp { get; }
     }

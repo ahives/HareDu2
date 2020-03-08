@@ -11,18 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.KnowledgeBase
+namespace HareDu.Diagnostics
 {
-    using System.Collections.Generic;
-    using Probes;
-
-    public interface IKnowledgeBaseProvider
+    public enum ProbeStatus
     {
-        bool TryGet(string identifier, DiagnosticProbeResultStatus status, out KnowledgeBaseArticle article);
-        
-        bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles);
-
-        void Add<T>(DiagnosticProbeResultStatus status, string reason, string remediation)
-            where T : DiagnosticProbe;
+        Online,
+        Offline
     }
 }

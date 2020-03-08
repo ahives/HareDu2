@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Internal
+namespace HareDu.Core.Configuration.Internal
 {
     using YamlDotNet.Serialization;
 
@@ -21,6 +21,6 @@ namespace HareDu.Core.Internal
         public RabbitMqBrokerConfigYaml Broker { get; set; }
 
         [YamlMember(Alias = "diagnostics")]
-        public DiagnosticAnalyzerConfigYaml Analyzer { get; set; }
+        public DiagnosticsConfigYaml Diagnostics { get; set; }
     }
 }

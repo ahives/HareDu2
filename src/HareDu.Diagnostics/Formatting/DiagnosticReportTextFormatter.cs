@@ -37,10 +37,10 @@ namespace HareDu.Diagnostics.Formatting
             return builder.ToString();
         }
         
-        void Format(DiagnosticProbeData data, ref StringBuilder builder) =>
+        void Format(ProbeData data, ref StringBuilder builder) =>
             builder.AppendLine($"\t\t{data.PropertyName} => {data.PropertyValue}");
 
-        void Format(DiagnosticProbeResult result, ref StringBuilder builder)
+        void Format(ProbeResult result, ref StringBuilder builder)
         {
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
             builder.AppendLine($"\tComponent Identifier: {result.ComponentIdentifier}");

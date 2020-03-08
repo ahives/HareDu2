@@ -16,7 +16,6 @@ namespace HareDu.Diagnostics.Probes
     using System.Collections.Generic;
     using Core.Configuration;
     using Core.Extensions;
-    using Internal;
     using KnowledgeBase;
     using Snapshotting.Model;
 
@@ -29,45 +28,43 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public DiagnosticProbeStatus Status => _status;
+        public ProbeStatus Status => _status;
 
-        public UnlimitedPrefetchCountProbe(DiagnosticsConfig config, IKnowledgeBaseProvider knowledgeBaseProvider)
-            : base(knowledgeBaseProvider)
+        public UnlimitedPrefetchCountProbe(IKnowledgeBaseProvider kb)
+            : base(kb)
         {
-            _status = DiagnosticProbeStatus.Online;
+            _status = ProbeStatus.Online;
         }
 
-        public DiagnosticProbeResult Execute<T>(T snapshot)
+        public ProbeResult Execute<T>(T snapshot)
         {
             ChannelSnapshot data = snapshot as ChannelSnapshot;
-            DiagnosticProbeResult result;
+            ProbeResult result;
             
-            var probeData = new List<DiagnosticProbeData>
+            var probeData = new List<ProbeData>
             {
-                new DiagnosticProbeDataImpl("PrefetchCount", data.PrefetchCount.ToString())
+                new ProbeDataImpl("PrefetchCount", data.PrefetchCount.ToString())
             };
 
-            KnowledgeBaseArticle knowledgeBaseArticle;
-            
             if (data.PrefetchCount == 0)
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Warning, out knowledgeBaseArticle);
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
             else
             {
-                _knowledgeBaseProvider.TryGet(Identifier, DiagnosticStatus.Inconclusive, out knowledgeBaseArticle);
-                result = new InconclusiveDiagnosticProbeResult(data.ConnectionIdentifier,
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Inconclusive, out var article);
+                result = new InconclusiveProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
                     ComponentType,
                     probeData,
-                    knowledgeBaseArticle);
+                    article);
             }
 
             NotifyObservers(result);

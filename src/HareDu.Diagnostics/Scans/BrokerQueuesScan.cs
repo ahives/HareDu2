@@ -37,12 +37,12 @@ namespace HareDu.Diagnostics.Scans
             _exchangeProbes = probes.Where(IsExchangeProbe).ToList();
         }
 
-        public IReadOnlyList<DiagnosticProbeResult> Scan(BrokerQueuesSnapshot snapshot)
+        public IReadOnlyList<ProbeResult> Scan(BrokerQueuesSnapshot snapshot)
         {
             if (snapshot == null)
                 return DiagnosticCache.EmptyProbeResults;
             
-            var results = new List<DiagnosticProbeResult>();
+            var results = new List<ProbeResult>();
 
             results.AddRange(_exchangeProbes.Select(x => x.Execute(snapshot)));
             
@@ -57,12 +57,12 @@ namespace HareDu.Diagnostics.Scans
 
         bool IsExchangeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Exchange;
 
         bool IsQueueProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == DiagnosticProbeStatus.Online
+            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Queue;
     }
 }

@@ -26,21 +26,21 @@ namespace HareDu.Core.Tests.Configuration
             var validator = new HareDuConfigValidator();
             var provider = new YamlFileConfigProvider(validator);
 
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
             provider.TryGet(path, out var config).ShouldBeTrue();
             config.Broker.Url.ShouldBe("http://localhost:15672");
             config.Broker.Credentials.Username.ShouldBe("guest");
             config.Broker.Credentials.Password.ShouldBe("guest");
-            config.Diagnostics.HighClosureRateWarningThreshold.ShouldBe<uint>(90);
-            config.Diagnostics.HighCreationRateWarningThreshold.ShouldBe<uint>(60);
-            config.Diagnostics.QueueHighFlowThreshold.ShouldBe<uint>(90);
-            config.Diagnostics.QueueLowFlowThreshold.ShouldBe<uint>(10);
-            config.Diagnostics.MessageRedeliveryCoefficient.ShouldBe(0.60M);
-            config.Diagnostics.SocketUsageCoefficient.ShouldBe(0.60M);
-            config.Diagnostics.RuntimeProcessUsageCoefficient.ShouldBe(0.65M);
-            config.Diagnostics.FileDescriptorUsageWarningCoefficient.ShouldBe(0.65M);
-            config.Diagnostics.ConsumerUtilizationWarningCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.Probes.HighClosureRateThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.Probes.HighCreationRateThreshold.ShouldBe<uint>(60);
+            config.Diagnostics.Probes.QueueHighFlowThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.Probes.QueueLowFlowThreshold.ShouldBe<uint>(10);
+            config.Diagnostics.Probes.MessageRedeliveryThresholdCoefficient.ShouldBe(0.60M);
+            config.Diagnostics.Probes.SocketUsageThresholdCoefficient.ShouldBe(0.60M);
+            config.Diagnostics.Probes.RuntimeProcessUsageThresholdCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.Probes.FileDescriptorUsageThresholdCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.Probes.ConsumerUtilizationThreshold.ShouldBe(0.65M);
         }
         
         [Test]
@@ -55,30 +55,31 @@ namespace HareDu.Core.Tests.Configuration
       username: guest
       password: guest
   diagnostics:
-    high-closure-rate-warning-threshold:  90
-    high-creation-rate-warning-threshold: 60
-    queue-high-flow-threshold:  90
-    queue-low-flow-threshold: 10
-    message-redelivery-coefficient: 0.60
-    socket-usage-coefficient: 0.60
-    runtime-process-usage-coefficient:  0.65
-    file-descriptor-usage-warning-coefficient:  0.65
-    consumer-utilization-warning-coefficient: 0.65
+    probes:
+      high-closure-rate-threshold:  90
+      high-creation-rate-threshold: 60
+      queue-high-flow-threshold:  90
+      queue-low-flow-threshold: 10
+      message-redelivery-threshold-coefficient: 0.60
+      socket-usage-threshold-coefficient: 0.60
+      runtime-process-usage-threshold-coefficient:  0.65
+      file-descriptor-usage-threshold-coefficient:  0.65
+      consumer-utilization-threshold: 0.65
 ...";
             
             provider.TryGet(text, out var config).ShouldBeTrue();
             config.Broker.Url.ShouldBe("http://localhost:15672");
             config.Broker.Credentials.Username.ShouldBe("guest");
             config.Broker.Credentials.Password.ShouldBe("guest");
-            config.Diagnostics.HighClosureRateWarningThreshold.ShouldBe<uint>(90);
-            config.Diagnostics.HighCreationRateWarningThreshold.ShouldBe<uint>(60);
-            config.Diagnostics.QueueHighFlowThreshold.ShouldBe<uint>(90);
-            config.Diagnostics.QueueLowFlowThreshold.ShouldBe<uint>(10);
-            config.Diagnostics.MessageRedeliveryCoefficient.ShouldBe(0.60M);
-            config.Diagnostics.SocketUsageCoefficient.ShouldBe(0.60M);
-            config.Diagnostics.RuntimeProcessUsageCoefficient.ShouldBe(0.65M);
-            config.Diagnostics.FileDescriptorUsageWarningCoefficient.ShouldBe(0.65M);
-            config.Diagnostics.ConsumerUtilizationWarningCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.Probes.HighClosureRateThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.Probes.HighCreationRateThreshold.ShouldBe<uint>(60);
+            config.Diagnostics.Probes.QueueHighFlowThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.Probes.QueueLowFlowThreshold.ShouldBe<uint>(10);
+            config.Diagnostics.Probes.MessageRedeliveryThresholdCoefficient.ShouldBe(0.60M);
+            config.Diagnostics.Probes.SocketUsageThresholdCoefficient.ShouldBe(0.60M);
+            config.Diagnostics.Probes.RuntimeProcessUsageThresholdCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.Probes.FileDescriptorUsageThresholdCoefficient.ShouldBe(0.65M);
+            config.Diagnostics.Probes.ConsumerUtilizationThreshold.ShouldBe(0.65M);
         }
     }
 }

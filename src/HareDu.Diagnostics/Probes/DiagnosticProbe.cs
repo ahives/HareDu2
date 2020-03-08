@@ -16,7 +16,7 @@ namespace HareDu.Diagnostics.Probes
     using System;
 
     public interface DiagnosticProbe :
-        IObservable<DiagnosticProbeContext>
+        IObservable<ProbeContext>
     {
         string Identifier { get; }
         
@@ -28,8 +28,8 @@ namespace HareDu.Diagnostics.Probes
         
         DiagnosticProbeCategory Category { get; }
         
-        DiagnosticProbeStatus Status { get; }
+        ProbeStatus Status { get; }
         
-        DiagnosticProbeResult Execute<T>(T snapshot);
+        ProbeResult Execute<T>(T snapshot);
     }
 }

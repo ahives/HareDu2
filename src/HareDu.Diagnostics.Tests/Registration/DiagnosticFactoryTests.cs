@@ -46,7 +46,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var configProvider = _container.Resolve<IFileConfigProvider>();
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
 
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
             configProvider.TryGet(path, out HareDuConfig config);
 
@@ -54,7 +54,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             {
                 new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
                 new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountProbe(config.Diagnostics, knowledgeBaseProvider),
+                new UnlimitedPrefetchCountProbe(knowledgeBaseProvider),
                 new ChannelThrottlingProbe(knowledgeBaseProvider),
                 new ChannelLimitReachedProbe(knowledgeBaseProvider),
                 new BlockedConnectionProbe(knowledgeBaseProvider)
@@ -85,7 +85,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_get_diagnostic()
         {
-            // string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            // string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             //
             // var configProvider = new ConfigurationProvider();
             // configProvider.TryGet(path, out HareDuConfig config);
@@ -125,7 +125,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_get_diagnostic_after_instantiation()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
             var validator = new HareDuConfigValidator();
             var configProvider = new YamlFileConfigProvider(validator);
@@ -143,7 +143,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         {
             public string Identifier => GetType().GetIdentifier();
 
-            public IReadOnlyList<DiagnosticProbeResult> Scan(FakeSnapshot snapshot) =>
+            public IReadOnlyList<ProbeResult> Scan(FakeSnapshot snapshot) =>
                 throw new System.NotImplementedException();
         }
 
@@ -161,15 +161,15 @@ namespace HareDu.Diagnostics.Tests.Registration
             {
             }
 
-            public IDisposable Subscribe(IObserver<DiagnosticProbeContext> observer) => throw new NotImplementedException();
+            public IDisposable Subscribe(IObserver<ProbeContext> observer) => throw new NotImplementedException();
 
             public string Identifier { get; }
             public string Name { get; }
             public string Description { get; }
             public ComponentType ComponentType { get; }
             public DiagnosticProbeCategory Category { get; }
-            public DiagnosticProbeStatus Status { get; }
-            public DiagnosticProbeResult Execute<T>(T snapshot) => throw new NotImplementedException();
+            public ProbeStatus Status { get; }
+            public ProbeResult Execute<T>(T snapshot) => throw new NotImplementedException();
         }
     }
 }

@@ -11,17 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Internal
+namespace HareDu.Core.Configuration.Internal
 {
     using YamlDotNet.Serialization;
 
-    class DiagnosticAnalyzerConfigYaml
+    class DiagnosticProbeConfigYaml
     {
-        [YamlMember(Alias = "high-closure-rate-warning-threshold")]
-        public uint HighClosureRateWarningThreshold { get; set; }
+        [YamlMember(Alias = "high-closure-rate-threshold")]
+        public uint HighClosureRateThreshold { get; set; }
         
-        [YamlMember(Alias = "high-creation-rate-warning-threshold")]
-        public uint HighCreationRateWarningThreshold { get; set; }
+        [YamlMember(Alias = "high-creation-rate-threshold")]
+        public uint HighCreationRateThreshold { get; set; }
         
         [YamlMember(Alias = "queue-high-flow-threshold")]
         public uint QueueHighFlowThreshold { get; set; }
@@ -29,19 +29,19 @@ namespace HareDu.Core.Internal
         [YamlMember(Alias = "queue-low-flow-threshold")]
         public uint QueueLowFlowThreshold { get; set; }
         
-        [YamlMember(Alias = "message-redelivery-coefficient")]
+        [YamlMember(Alias = "message-redelivery-threshold-coefficient")]
         public decimal MessageRedeliveryCoefficient { get; set; }
 
-        [YamlMember(Alias = "socket-usage-coefficient")]
-        public decimal SocketUsageCoefficient { get; set; }
+        [YamlMember(Alias = "socket-usage-threshold-coefficient")]
+        public decimal SocketUsageThresholdCoefficient { get; set; }
         
-        [YamlMember(Alias = "runtime-process-usage-coefficient")]
-        public decimal RuntimeProcessUsageCoefficient { get; set; }
+        [YamlMember(Alias = "runtime-process-usage-threshold-coefficient")]
+        public decimal RuntimeProcessUsageThresholdCoefficient { get; set; }
         
-        [YamlMember(Alias = "file-descriptor-usage-warning-coefficient")]
-        public decimal FileDescriptorUsageWarningCoefficient { get; set; }
+        [YamlMember(Alias = "file-descriptor-usage-threshold-coefficient")]
+        public decimal FileDescriptorUsageThresholdCoefficient { get; set; }
         
-        [YamlMember(Alias = "consumer-utilization-warning-coefficient")]
-        public decimal ConsumerUtilizationWarningCoefficient { get; set; }
+        [YamlMember(Alias = "consumer-utilization-threshold")]
+        public decimal ConsumerUtilizationThreshold { get; set; }
     }
 }

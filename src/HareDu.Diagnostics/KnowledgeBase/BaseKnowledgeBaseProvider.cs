@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.KnowledgeBase
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Extensions;
@@ -33,21 +32,23 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
         protected abstract void Load();
 
-        public bool TryGet(string identifier, DiagnosticStatus diagnosticStatus, out KnowledgeBaseArticle article)
+        public bool TryGet(string identifier, DiagnosticProbeResultStatus status, out KnowledgeBaseArticle article)
         {
             if (_articles.Exists(x => x.Identifier == identifier))
             {
                 try
                 {
-                    article = _articles.Single(x => x.Identifier == identifier && x.DiagnosticStatus == diagnosticStatus);
+                    article = _articles.Single(x => x.Identifier == identifier && x.Status == status);
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
+                    article = new MissingKnowledgeBaseArticle(identifier, status);
+                    return false;
                 }
             }
 
-            article = null;
+            article = new MissingKnowledgeBaseArticle(identifier, status);
             return false;
         }
 
@@ -60,16 +61,18 @@ namespace HareDu.Diagnostics.KnowledgeBase
                     articles = _articles.Where(x => x.Identifier == identifier).ToList();
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
+                    articles = new KnowledgeBaseArticle[] {new MissingKnowledgeBaseArticle(identifier, DiagnosticProbeResultStatus.NA)};
+                    return false;
                 }
             }
 
-            articles = null;
+            articles = new KnowledgeBaseArticle[] {new MissingKnowledgeBaseArticle(identifier, DiagnosticProbeResultStatus.NA)};
             return false;
         }
 
-        public void Add<T>(DiagnosticStatus status, string reason, string remediation)
+        public void Add<T>(DiagnosticProbeResultStatus status, string reason, string remediation)
             where T : DiagnosticProbe
         {
             _articles.Add(new KnowledgeBaseArticleImpl<T>(status, reason, remediation));
@@ -80,23 +83,23 @@ namespace HareDu.Diagnostics.KnowledgeBase
             KnowledgeBaseArticle
             where T : DiagnosticProbe
         {
-            public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason, string remediation)
+            public KnowledgeBaseArticleImpl(DiagnosticProbeResultStatus status, string reason, string remediation)
             {
-                DiagnosticStatus = diagnosticStatus;
+                Status = status;
                 Reason = reason;
                 Remediation = remediation;
                 Identifier = typeof(T).GetIdentifier();
             }
 
-            public KnowledgeBaseArticleImpl(DiagnosticStatus diagnosticStatus, string reason)
+            public KnowledgeBaseArticleImpl(DiagnosticProbeResultStatus status, string reason)
             {
-                DiagnosticStatus = diagnosticStatus;
+                Status = status;
                 Reason = reason;
                 Identifier = typeof(T).GetIdentifier();
             }
 
             public string Identifier { get; }
-            public DiagnosticStatus DiagnosticStatus { get; }
+            public DiagnosticProbeResultStatus Status { get; }
             public string Reason { get; }
             public string Remediation { get; }
         }

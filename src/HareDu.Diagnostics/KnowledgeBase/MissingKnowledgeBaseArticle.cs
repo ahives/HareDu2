@@ -11,28 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Diagnostics.KnowledgeBase
 {
-    using System;
-    using System.Collections.Generic;
-    using KnowledgeBase;
-
-    public interface DiagnosticProbeResult
+    public class MissingKnowledgeBaseArticle :
+        KnowledgeBaseArticle
     {
-        string ParentComponentIdentifier { get; }
-        
-        string ComponentIdentifier { get; }
-        
-        ComponentType ComponentType { get; }
-        
-        string ProbeIdentifier { get; }
-        
-        DiagnosticStatus Status { get; }
-        
-        KnowledgeBaseArticle KnowledgeBaseArticle { get; }
-        
-        IReadOnlyList<DiagnosticProbeData> ProbeData { get; }
-        
-        DateTimeOffset Timestamp { get; }
+        public MissingKnowledgeBaseArticle(string identifier, DiagnosticProbeResultStatus status)
+        {
+            Identifier = identifier;
+            Status = status;
+        }
+
+        public string Identifier { get; }
+        public DiagnosticProbeResultStatus Status { get; }
+        public string Reason => "No KB article Available";
+        public string Remediation => "NA";
     }
 }

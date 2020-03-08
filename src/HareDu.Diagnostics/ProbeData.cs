@@ -11,23 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Internal
+namespace HareDu.Diagnostics
 {
-    using System;
-    using YamlDotNet.Serialization;
-
-    class RabbitMqBrokerConfigYaml
+    public interface ProbeData
     {
-        [YamlMember(Alias = "url")]
-        public string BrokerUrl { get; set; }
+        string PropertyName { get; }
         
-        [YamlMember(Alias = "timeout")]
-        public TimeSpan Timeout { get; set; }
-        
-        [YamlMember(Alias = "username")]
-        public string Username { get; set; }
-        
-        [YamlMember(Alias = "password")]
-        public string Password { get; set; }
+        string PropertyValue { get; }
     }
 }
