@@ -21,7 +21,7 @@ namespace HareDu.Snapshotting
         SnapshotLens<T>
         where T : Snapshot
     {
-        public SnapshotTimeline<T> History => new EmptySnapshotTimeline<T>();
+        public SnapshotHistory<T> History => new EmptySnapshotHistory<T>();
 
         public SnapshotLens<T> TakeSnapshot(CancellationToken cancellationToken = default) => this;
 

@@ -29,19 +29,31 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Connectivity;
-        public ProbeStatus Status => _status;
 
         public HighConnectionCreationRateProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
         public ProbeResult Execute<T>(T snapshot)
         {
             ProbeResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
+
+            if (_config.IsNull())
+            {
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.NA, out var article);
+                result = new NotApplicableProbeResult(null,
+                    null,
+                    Identifier,
+                    ComponentType,
+                    article);
+
+                NotifyObservers(result);
+
+                return result;
+            }
             
             var probeData = new List<ProbeData>
             {

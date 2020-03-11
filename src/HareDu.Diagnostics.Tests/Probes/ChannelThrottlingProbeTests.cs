@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(ChannelThrottlingProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(ChannelThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(ChannelThrottlingProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(ChannelThrottlingProbe).GetIdentifier());
         }
     }
 }

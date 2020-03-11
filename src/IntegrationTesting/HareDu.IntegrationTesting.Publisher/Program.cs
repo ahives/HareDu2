@@ -35,7 +35,7 @@ namespace HareDu.IntegrationTesting.Publisher
 
             bus.Start();
 
-            await Task.WhenAll(Enumerable.Range(0,50000).Select(x => bus.Publish<FakeMessage>(new FakeMessageImpl())));
+            await Task.WhenAll(Enumerable.Range(0,100000).Select(x => bus.Publish<FakeMessage>(new FakeMessageImpl())));
             
             bus.Stop();
         }

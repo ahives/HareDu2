@@ -33,18 +33,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<GlobalParameterInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<GlobalParameterInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/global-parameters";
             
-            ResultList<GlobalParameterInfo> result = await GetAll<GlobalParameterInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<GlobalParameterInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Create(Action<GlobalParameterCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
             
@@ -60,14 +58,12 @@ namespace HareDu.Internal
             string url = $"api/global-parameters/{definition.Name}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
+            return Put(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<GlobalParameterDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -75,14 +71,12 @@ namespace HareDu.Internal
             action(impl);
             
             if (string.IsNullOrWhiteSpace(impl.ParameterName))
-                return new FaultedResult(new List<Error> {new ErrorImpl("The name of the parameter is missing.")},
-                    new DebugInfoImpl(@"api/global-parameters/", null));
+                return Task.FromResult<Result>(new FaultedResult(new List<Error> {new ErrorImpl("The name of the parameter is missing.")},
+                    new DebugInfoImpl(@"api/global-parameters/", null)));
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
         

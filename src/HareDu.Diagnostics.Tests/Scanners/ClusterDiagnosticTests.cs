@@ -62,13 +62,13 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             report.Count.ShouldBe(7);
-            report.Count(x => x.ProbeIdentifier == typeof(RuntimeProcessLimitProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(SocketDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(NetworkPartitionProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(MemoryAlarmProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(DiskAlarmProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(AvailableCpuCoresProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(FileDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(RuntimeProcessLimitProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(SocketDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(NetworkPartitionProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(MemoryAlarmProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(DiskAlarmProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(AvailableCpuCoresProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(FileDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]

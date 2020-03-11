@@ -33,18 +33,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/queues";
             
-            ResultList<QueueInfo> result = await GetAll<QueueInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<QueueInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -60,14 +58,12 @@ namespace HareDu.Internal
             string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
+            return Put(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -81,14 +77,12 @@ namespace HareDu.Internal
                 url = $"{url}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
-        public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -100,14 +94,12 @@ namespace HareDu.Internal
             string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
-        public async Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
+        public Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -123,11 +115,9 @@ namespace HareDu.Internal
             string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/get";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResultList<PeekedMessageInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<ResultList<PeekedMessageInfo>>(new FaultedResultList<PeekedMessageInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            ResultList<PeekedMessageInfo> result = await PostList<PeekedMessageInfo, QueuePeekDefinition>(url, definition, cancellationToken);
-
-            return result;
+            return PostList<PeekedMessageInfo, QueuePeekDefinition>(url, definition, cancellationToken);
         }
 
         

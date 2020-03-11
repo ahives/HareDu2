@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
         }
 
         [Test(Description = "")]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
         }
 
         [Test]
@@ -104,7 +104,12 @@ namespace HareDu.Diagnostics.Tests.Probes
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new RuntimeProcessLimitProbe(null, knowledgeBaseProvider);
             
-            probe.Status.ShouldBe(ProbeStatus.Offline);
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(4, 3, 3.2M);
+
+            var result = probe.Execute(snapshot);
+            
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
+            result.Article.Identifier.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
         }
     }
 }

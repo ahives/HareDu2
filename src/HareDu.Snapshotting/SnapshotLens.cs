@@ -20,7 +20,7 @@ namespace HareDu.Snapshotting
     public interface SnapshotLens<T>
         where T : Snapshot
     {
-        SnapshotTimeline<T> History { get; }
+        SnapshotHistory<T> History { get; }
         
         SnapshotLens<T> TakeSnapshot(CancellationToken cancellationToken = default);
         

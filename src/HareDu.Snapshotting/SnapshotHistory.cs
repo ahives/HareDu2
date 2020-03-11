@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
+// Copyright 2013-2020 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,18 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Extensions
+namespace HareDu.Snapshotting
 {
-    using System.Threading;
+    using System.Collections.Generic;
 
-    public static class AsyncTaskExtensions
+    public interface SnapshotHistory<out T>
+        where T : Snapshot
     {
-        public static void RequestCanceled(this CancellationToken cancellationToken)
-        {
-            if (!cancellationToken.IsCancellationRequested)
-                return;
+        IReadOnlyList<SnapshotResult<T>> Results { get; }
 
-            cancellationToken.ThrowIfCancellationRequested();
-        }
+        void PurgeAll();
+
+        void Purge<U>(SnapshotResult<U> result)
+            where U : Snapshot;
     }
 }

@@ -28,12 +28,10 @@ namespace HareDu.Diagnostics.Probes
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public ProbeStatus Status => _status;
 
         public ChannelLimitReachedProbe(IKnowledgeBaseProvider kb)
             : base(kb)
         {
-            _status = ProbeStatus.Online;
         }
 
         public ProbeResult Execute<T>(T snapshot)

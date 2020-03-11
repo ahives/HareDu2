@@ -35,7 +35,7 @@ namespace HareDu
         /// <param name="action">Describes how the queue will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default);
+        Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete the specified exchange on the target virtual host.

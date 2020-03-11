@@ -28,12 +28,10 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Connectivity;
-        public ProbeStatus Status => _status;
 
         public NetworkPartitionProbe(IKnowledgeBaseProvider kb)
             : base(kb)
         {
-            _status = ProbeStatus.Online;
         }
 
         public ProbeResult Execute<T>(T snapshot)

@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -104,7 +104,12 @@ namespace HareDu.Diagnostics.Tests.Probes
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new SocketDescriptorThrottlingProbe(null, knowledgeBaseProvider);
             
-            probe.Status.ShouldBe(ProbeStatus.Offline);
+            NodeSnapshot snapshot = new FakeNodeSnapshot1(10, 4, 4.2M);
+
+            var result = probe.Execute(snapshot);
+            
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
+            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
     }
 }

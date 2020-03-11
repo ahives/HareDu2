@@ -40,12 +40,12 @@ namespace HareDu.Core
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                var responseMessage = await _client.GetAsync(url, cancellationToken);
+                var response = await _client.GetAsync(url, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResultList<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResultList<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
                 
-                var data = await responseMessage.ToObject<List<T>>();
+                var data = await response.ToObject<List<T>>();
                 
                 return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, null));
             }
@@ -62,12 +62,12 @@ namespace HareDu.Core
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                var responseMessage = await _client.GetAsync(url, cancellationToken);
+                var response = await _client.GetAsync(url, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResult<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
 
-                var data = await responseMessage.ToObject<T>();
+                var data = await response.ToObject<T>();
                 
                 return new SuccessfulResult<T>(data, new DebugInfoImpl(url, null));
             }
@@ -84,10 +84,10 @@ namespace HareDu.Core
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                var responseMessage = await _client.DeleteAsync(url, cancellationToken);
+                var response = await _client.DeleteAsync(url, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
 
                 return new SuccessfulResult(new DebugInfoImpl(url, null));
             }
@@ -109,10 +109,10 @@ namespace HareDu.Core
                 var content = new ByteArrayContent(requestBytes);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var responseMessage = await _client.PutAsync(url, content, cancellationToken);
+                var response = await _client.PutAsync(url, content, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, request));
 
                 return new SuccessfulResult(new DebugInfoImpl(url, request));
             }
@@ -133,10 +133,10 @@ namespace HareDu.Core
                 var content = new ByteArrayContent(requestBytes);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var responseMessage = await _client.PutAsync(url, content, cancellationToken);
+                var response = await _client.PutAsync(url, content, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, request));
 
                 return new SuccessfulResult(new DebugInfoImpl(url, request));
             }
@@ -158,12 +158,12 @@ namespace HareDu.Core
                 var content = new ByteArrayContent(requestBytes);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var responseMessage = await _client.PostAsync(url, content, cancellationToken);
+                var response = await _client.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResult<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, request));
 
-                var data = await responseMessage.ToObject<T>();
+                var data = await response.ToObject<T>().ConfigureAwait(false);
 
                 return new SuccessfulResult<T>(data, new DebugInfoImpl(url, request));
             }
@@ -185,12 +185,12 @@ namespace HareDu.Core
                 var content = new ByteArrayContent(requestBytes);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var responseMessage = await _client.PostAsync(url, content, cancellationToken);
+                var response = await _client.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResultList<T>(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, request));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResultList<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, request));
 
-                var data = await responseMessage.ToObject<List<T>>();
+                var data = await response.ToObject<List<T>>();
 
                 return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, request));
             }
@@ -207,10 +207,10 @@ namespace HareDu.Core
                 if (url.Contains("/%2f"))
                     HandleDotsAndSlashes();
 
-                var responseMessage = await _client.PostAsync(url, null, cancellationToken);
+                var response = await _client.PostAsync(url, null, cancellationToken).ConfigureAwait(false);
                 
-                if (!responseMessage.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(responseMessage.StatusCode) }, new DebugInfoImpl(url, null));
+                if (!response.IsSuccessStatusCode)
+                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
 
                 return new SuccessfulResult(new DebugInfoImpl(url, null));
             }

@@ -29,7 +29,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public SnapshotTimeline<ClusterSnapshot> History => _timeline.Value;
+        public SnapshotHistory<ClusterSnapshot> History => _timeline.Value;
 
         public ClusterImpl(IBrokerObjectFactory factory)
             : base(factory)

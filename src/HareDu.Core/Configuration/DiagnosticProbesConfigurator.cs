@@ -13,7 +13,7 @@
 // limitations under the License.
 namespace HareDu.Core.Configuration
 {
-    public interface DiagnosticsConfigurator
+    public interface DiagnosticProbesConfigurator
     {
         void SetHighClosureRateThreshold(uint value);
         

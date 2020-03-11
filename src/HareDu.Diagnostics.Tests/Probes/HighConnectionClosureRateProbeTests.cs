@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -95,16 +95,19 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
         }
 
         [Test]
         public void Verify_probe_offline()
         {
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
-            var probe = new HighConnectionClosureRateProbe(null, knowledgeBaseProvider);
+            var probe = new HighConnectionClosureRateProbe(null, _container.Resolve<IKnowledgeBaseProvider>());
             
-            probe.Status.ShouldBe(ProbeStatus.Offline);
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 99);
+
+            var result = probe.Execute(snapshot);
+            
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
         }
     }
 }

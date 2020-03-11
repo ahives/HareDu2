@@ -75,19 +75,16 @@ namespace HareDu.Diagnostics.Scans
 
         bool IsChannelThroughputProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Channel
             && probe.Category != DiagnosticProbeCategory.Connectivity;
 
         bool IsConnectionThroughputProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Connection
             && probe.Category != DiagnosticProbeCategory.Connectivity;
 
         bool IsConnectivityProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && (probe.ComponentType == ComponentType.Connection || probe.ComponentType == ComponentType.Channel)
             && probe.Category == DiagnosticProbeCategory.Connectivity;
     }

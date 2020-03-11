@@ -30,7 +30,7 @@ namespace HareDu.Snapshotting.Internal
     {
         readonly List<IDisposable> _observers;
 
-        public SnapshotTimeline<BrokerQueuesSnapshot> History => _timeline.Value;
+        public SnapshotHistory<BrokerQueuesSnapshot> History => _timeline.Value;
 
         public BrokerQueuesImpl(IBrokerObjectFactory factory)
             : base(factory)

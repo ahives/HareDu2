@@ -27,12 +27,10 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Exchange;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Efficiency;
-        public ProbeStatus Status => _status;
 
         public UnroutableMessageProbe(IKnowledgeBaseProvider kb)
             : base(kb)
         {
-            _status = ProbeStatus.Online;
         }
 
         public ProbeResult Execute<T>(T snapshot)

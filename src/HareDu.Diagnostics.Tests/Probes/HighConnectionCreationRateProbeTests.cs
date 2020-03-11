@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionCreationRateProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(HighConnectionCreationRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionCreationRateProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(HighConnectionCreationRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(HighConnectionCreationRateProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(HighConnectionCreationRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -104,7 +104,11 @@ namespace HareDu.Diagnostics.Tests.Probes
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new HighConnectionCreationRateProbe(null, knowledgeBaseProvider);
             
-            probe.Status.ShouldBe(ProbeStatus.Offline);
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot2(99, 100);
+
+            var result = probe.Execute(snapshot);
+            
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
         }
     }
 }

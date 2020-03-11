@@ -20,7 +20,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
     public class FakeBrokerSnapshot1Impl :
         SnapshotLens<FakeHareDuSnapshot1>
     {
-        public SnapshotTimeline<FakeHareDuSnapshot1> History { get; }
+        public SnapshotHistory<FakeHareDuSnapshot1> History { get; }
         public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(out SnapshotResult<FakeHareDuSnapshot1> result, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 

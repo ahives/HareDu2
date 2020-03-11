@@ -30,7 +30,7 @@ namespace HareDu.Analytics.Analyzers
         public virtual IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report)
         {
             var filtered = ApplyFilter(report.Results);
-            var rollup = GetRollup(filtered, x => x.ParentComponentIdentifier);
+            var rollup = GetRollup(filtered, x => x.ParentComponentId);
             
             var summary = (from result in rollup
                     let green = new AnalyzerResultImpl(
@@ -66,7 +66,7 @@ namespace HareDu.Analytics.Analyzers
         {
             foreach (var result in results)
             {
-                if (_supportedAnalyzers.Contains(result.ProbeIdentifier))
+                if (_supportedAnalyzers.Contains(result.ProbeId))
                     yield return result;
             }
         }

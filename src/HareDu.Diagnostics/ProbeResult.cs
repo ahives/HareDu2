@@ -19,17 +19,17 @@ namespace HareDu.Diagnostics
 
     public interface ProbeResult
     {
-        string ParentComponentIdentifier { get; }
+        string ParentComponentId { get; }
         
-        string ComponentIdentifier { get; }
+        string ComponentId { get; }
         
         ComponentType ComponentType { get; }
         
-        string ProbeIdentifier { get; }
+        string ProbeId { get; }
         
         DiagnosticProbeResultStatus Status { get; }
         
-        KnowledgeBaseArticle KnowledgeBaseArticle { get; }
+        KnowledgeBaseArticle Article { get; }
         
         IReadOnlyList<ProbeData> ProbeData { get; }
         

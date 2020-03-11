@@ -29,13 +29,11 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public ProbeStatus Status => _status;
 
         public ConsumerUtilizationProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
         public ProbeResult Execute<T>(T snapshot)

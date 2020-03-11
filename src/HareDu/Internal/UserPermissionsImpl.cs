@@ -33,18 +33,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<UserPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<UserPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/permissions";
             
-            ResultList<UserPermissionsInfo> result = await GetAll<UserPermissionsInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<UserPermissionsInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -60,14 +58,12 @@ namespace HareDu.Internal
             string url = $"api/permissions/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
+            return Put(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -79,11 +75,9 @@ namespace HareDu.Internal
             string url = $"api/permissions/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
         

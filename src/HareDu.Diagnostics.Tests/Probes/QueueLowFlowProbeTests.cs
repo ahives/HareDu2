@@ -59,7 +59,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.KnowledgeBaseArticle.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
+            result.Article.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
         }
 
         [Test]
@@ -86,7 +86,12 @@ namespace HareDu.Diagnostics.Tests.Probes
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new QueueLowFlowProbe(null, knowledgeBaseProvider);
             
-            probe.Status.ShouldBe(ProbeStatus.Offline);
+            QueueSnapshot snapshot = new FakeQueueSnapshot5(100);
+
+            var result = probe.Execute(snapshot);
+            
+            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
+            result.Article.Identifier.ShouldBe(typeof(QueueLowFlowProbe).GetIdentifier());
         }
     }
 }

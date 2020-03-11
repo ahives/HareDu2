@@ -27,12 +27,10 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public ProbeStatus Status => _status;
 
         public BlockedConnectionProbe(IKnowledgeBaseProvider kb)
             : base(kb)
         {
-            _status = ProbeStatus.Online;
         }
 
         public ProbeResult Execute<T>(T snapshot)

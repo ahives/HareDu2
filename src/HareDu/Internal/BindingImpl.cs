@@ -33,18 +33,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/bindings";
             
-            ResultList<BindingInfo> result = await GetAll<BindingInfo>(url, cancellationToken);
-
-            return result; 
+            return GetAll<BindingInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
+        public Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -67,14 +65,12 @@ namespace HareDu.Internal
                 : $"api/bindings/{vhost}/e/{sourceBinding}/q/{destinationBinding}";
 
             if (impl.Errors.Value.Any())
-                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result<BindingInfo>>(new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result<BindingInfo> result = await Post<BindingInfo, BindingDefinition>(url, definition, cancellationToken);
-
-            return result;
+            return Post<BindingInfo, BindingDefinition>(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -94,11 +90,9 @@ namespace HareDu.Internal
                 : $"api/bindings/{vhost}/e/{source}/e/{destination}/{bindingName}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
         

@@ -32,18 +32,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhost-limits";
             
-            ResultList<VirtualHostLimitsInfo> result = await GetAll<VirtualHostLimitsInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<VirtualHostLimitsInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Define(Action<VirtualHostConfigureLimitsAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Define(Action<VirtualHostConfigureLimitsAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -57,14 +55,12 @@ namespace HareDu.Internal
             string url = $"api/vhost-limits/vhost/{impl.VirtualHostName.Value.ToSanitizedName()}";
 
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
+            return Put(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -76,11 +72,9 @@ namespace HareDu.Internal
             string url = $"api/vhost-limits/vhost/{impl.VirtualHostName.Value.ToSanitizedName()}";
 
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
 

@@ -32,18 +32,18 @@ namespace HareDu.IntegrationTesting.Diagnostics.Observers
 
         public void OnNext(ProbeContext value)
         {
-            Console.WriteLine((string) "Probe Identifier: {0}", (object) value.Result.ProbeIdentifier);
+            Console.WriteLine((string) "Probe Identifier: {0}", (object) value.Result.ProbeId);
             Console.WriteLine((string) "Probe: {0}", (object) value.Result);
             Console.WriteLine((string) "Timestamp: {0}", (object) value.Timestamp.ToString());
-            Console.WriteLine((string) "Component Identifier: {0}", (object) value.Result.ComponentIdentifier);
+            Console.WriteLine((string) "Component Identifier: {0}", (object) value.Result.ComponentId);
             Console.WriteLine((string) "Component Type: {0}", (object) value.Result.ComponentType);
             Console.WriteLine((string) "Status: {0}", (object) value.Result.Status);
             Console.WriteLine((string) "Data => {0}", (object) value.Result.ProbeData.ToJsonString());
 
             if (value.Result.Status == DiagnosticProbeResultStatus.Unhealthy)
             {
-                Console.WriteLine((string) "Reason: {0}", (object) value.Result.KnowledgeBaseArticle.Reason);
-                Console.WriteLine((string) "Remediation: {0}", (object) value.Result.KnowledgeBaseArticle.Remediation);
+                Console.WriteLine((string) "Reason: {0}", (object) value.Result.Article.Reason);
+                Console.WriteLine((string) "Remediation: {0}", (object) value.Result.Article.Remediation);
             }
 
             Console.WriteLine();

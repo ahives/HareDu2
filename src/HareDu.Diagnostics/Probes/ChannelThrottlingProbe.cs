@@ -27,12 +27,10 @@ namespace HareDu.Diagnostics.Probes
         public string Description => "Monitors connections to the RabbitMQ broker to determine whether channels are being throttled.";
         public ComponentType ComponentType => ComponentType.Channel;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public ProbeStatus Status => _status;
 
         public ChannelThrottlingProbe(IKnowledgeBaseProvider kb)
             : base(kb)
         {
-            _status = ProbeStatus.Online;
         }
 
         public ProbeResult Execute<T>(T snapshot)

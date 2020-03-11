@@ -28,7 +28,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
     using Snapshotting.Registration;
 
     [TestFixture]
-    public class SnapshotTimelineFlushTests
+    public class SnapshotHistoryExtensionsTests
     {
         IContainer _container;
 

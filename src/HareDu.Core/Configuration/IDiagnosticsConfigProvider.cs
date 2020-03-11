@@ -17,6 +17,6 @@ namespace HareDu.Core.Configuration
 
     public interface IDiagnosticsConfigProvider
     {
-        DiagnosticsConfig Configure(Action<DiagnosticsConfigurator> configurator);
+        DiagnosticsConfig Configure(Action<DiagnosticProbesConfigurator> configurator);
     }
 }

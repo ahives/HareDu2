@@ -30,9 +30,11 @@ namespace HareDu.Diagnostics.KnowledgeBase
             
             _articles.Add(new KnowledgeBaseArticleImpl<QueueHighFlowProbe>(DiagnosticProbeResultStatus.Unhealthy, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueHighFlowProbe>(DiagnosticProbeResultStatus.Healthy, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueHighFlowProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<QueueLowFlowProbe>(DiagnosticProbeResultStatus.Unhealthy, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<QueueLowFlowProbe>(DiagnosticProbeResultStatus.Healthy, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<QueueLowFlowProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<UnroutableMessageProbe>(DiagnosticProbeResultStatus.Unhealthy,
                 "Some messages were published to an exchange but there is no queue bound to the exchange.",
@@ -58,6 +60,8 @@ namespace HareDu.Diagnostics.KnowledgeBase
             _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingProbe>(DiagnosticProbeResultStatus.Warning, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingProbe>(DiagnosticProbeResultStatus.Healthy,
                 "The number of file handles currently in use is below the max number allowed."));
+            _articles.Add(new KnowledgeBaseArticleImpl<FileDescriptorThrottlingProbe>(DiagnosticProbeResultStatus.NA,
+                ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<AvailableCpuCoresProbe>(DiagnosticProbeResultStatus.Unhealthy,
                 "Could not detect any CPU cores or none are available to the RabbitMQ broker.",
@@ -73,6 +77,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 "The number of Erlang runtime processes in use is greater than or equal to the max number available.",
                 ""));
             _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitProbe>(DiagnosticProbeResultStatus.Healthy, "The number of Erlang runtime processes in use is less than the max number available."));
+            _articles.Add(new KnowledgeBaseArticleImpl<RuntimeProcessLimitProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<MemoryAlarmProbe>(DiagnosticProbeResultStatus.Unhealthy,
                 "The threshold was reached for how much RAM can be used by the RabbitMQ Broker.",
@@ -94,6 +99,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 "Either the sensor was not configured correctly or there was no data captured to analyze.",
                 "Check the sensor configuration and the resultant snapshot data."));
             _articles.Add(new KnowledgeBaseArticleImpl<SocketDescriptorThrottlingProbe>(DiagnosticProbeResultStatus.Healthy, "The number of network sockets used is less than the calculated high watermark."));
+            _articles.Add(new KnowledgeBaseArticleImpl<SocketDescriptorThrottlingProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesProbe>(DiagnosticProbeResultStatus.Warning,
                 "The number of redelivered messages is less than or equal to the number of incoming messages and greater than or equal to the number of incoming messages multiplied a configurable coefficient.",
@@ -102,6 +108,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 "The number of redelivered messages is less than or equal to the number of incoming messages.",
                 ""));
             _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesProbe>(DiagnosticProbeResultStatus.Healthy, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<RedeliveredMessagesProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<QueueGrowthProbe>(DiagnosticProbeResultStatus.Warning,
                 "Messages are being published to the queue at a higher rate than are being consumed and acknowledged by consumers.",
@@ -122,9 +129,11 @@ namespace HareDu.Diagnostics.KnowledgeBase
             
             _articles.Add(new KnowledgeBaseArticleImpl<HighConnectionClosureRateProbe>(DiagnosticProbeResultStatus.Warning, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<HighConnectionClosureRateProbe>(DiagnosticProbeResultStatus.Healthy, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<HighConnectionClosureRateProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<HighConnectionCreationRateProbe>(DiagnosticProbeResultStatus.Warning, "", ""));
             _articles.Add(new KnowledgeBaseArticleImpl<HighConnectionCreationRateProbe>(DiagnosticProbeResultStatus.Healthy, ""));
+            _articles.Add(new KnowledgeBaseArticleImpl<HighConnectionCreationRateProbe>(DiagnosticProbeResultStatus.NA, ""));
             
             _articles.Add(new KnowledgeBaseArticleImpl<UnlimitedPrefetchCountProbe>(DiagnosticProbeResultStatus.Warning,
                 "Prefetch count of 0 means unlimited prefetch count, which can translate into high CPU utilization.",

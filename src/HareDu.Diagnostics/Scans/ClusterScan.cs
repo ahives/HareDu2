@@ -75,27 +75,22 @@ namespace HareDu.Diagnostics.Scans
 
         bool IsOperatingSystemProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.OperatingSystem;
 
         bool IsRuntimeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Runtime;
 
         bool IsMemoryProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Memory;
 
         bool IsDiskProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Disk;
 
         bool IsNodeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Node;
     }
 }

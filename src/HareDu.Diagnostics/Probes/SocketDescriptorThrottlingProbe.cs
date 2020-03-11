@@ -31,19 +31,31 @@ namespace HareDu.Diagnostics.Probes
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public ProbeStatus Status => _status;
 
         public SocketDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
         public ProbeResult Execute<T>(T snapshot)
         {
             ProbeResult result;
             NodeSnapshot data = snapshot as NodeSnapshot;
+
+            if (_config.IsNull())
+            {
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.NA, out var article);
+                result = new NotApplicableProbeResult(!data.IsNull() ? data.ClusterIdentifier : null,
+                    !data.IsNull() ? data.Identifier : null,
+                    Identifier,
+                    ComponentType,
+                    article);
+
+                NotifyObservers(result);
+
+                return result;
+            }
 
             ulong warningThreshold = ComputeWarningThreshold(data.OS.SocketDescriptors.Available);
             

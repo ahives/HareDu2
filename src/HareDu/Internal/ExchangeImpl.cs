@@ -33,18 +33,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<ExchangeInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<ExchangeInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = $"api/exchanges";
             
-            ResultList<ExchangeInfo> result = await GetAll<ExchangeInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<ExchangeInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
+        public Task<Result> Create(Action<ExchangeCreateAction> action, CancellationToken cancellationToken = new CancellationToken())
         {
             cancellationToken.RequestCanceled();
 
@@ -60,14 +58,12 @@ namespace HareDu.Internal
             string url = $"api/exchanges/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.ExchangeName.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
+            return Put(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -83,11 +79,9 @@ namespace HareDu.Internal
                 url = $"api/exchanges/{vhost}/{impl.ExchangeName.Value}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
-                return new FaultedResult<ExchangeInfo>(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult<ExchangeInfo>(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
         

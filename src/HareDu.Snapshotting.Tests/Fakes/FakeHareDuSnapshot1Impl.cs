@@ -21,15 +21,15 @@ namespace HareDu.Snapshotting.Tests.Fakes
     public class FakeHareDuSnapshot1Impl :
         SnapshotLens<FakeHareDuSnapshot1>
     {
-        readonly Lazy<SnapshotTimeline<FakeHareDuSnapshot1>> _timeline;
+        readonly Lazy<SnapshotHistory<FakeHareDuSnapshot1>> _timeline;
         readonly List<SnapshotResult<FakeHareDuSnapshot1>> _snapshots;
 
-        public SnapshotTimeline<FakeHareDuSnapshot1> History => _timeline.Value;
+        public SnapshotHistory<FakeHareDuSnapshot1> History => _timeline.Value;
 
         public FakeHareDuSnapshot1Impl()
         {
             _snapshots = new List<SnapshotResult<FakeHareDuSnapshot1>>();
-            _timeline = new Lazy<SnapshotTimeline<FakeHareDuSnapshot1>>(() => new SnapshotTimelineImpl(_snapshots));
+            _timeline = new Lazy<SnapshotHistory<FakeHareDuSnapshot1>>(() => new SnapshotHistoryImpl(_snapshots));
         }
 
         public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default)
@@ -63,10 +63,10 @@ namespace HareDu.Snapshotting.Tests.Fakes
         }
 
 
-        class SnapshotTimelineImpl :
-            SnapshotTimeline<FakeHareDuSnapshot1>
+        class SnapshotHistoryImpl :
+            SnapshotHistory<FakeHareDuSnapshot1>
         {
-            public SnapshotTimelineImpl(List<SnapshotResult<FakeHareDuSnapshot1>> snapshots)
+            public SnapshotHistoryImpl(List<SnapshotResult<FakeHareDuSnapshot1>> snapshots)
             {
                 Results = snapshots;
             }

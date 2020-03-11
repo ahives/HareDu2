@@ -30,19 +30,31 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.FaultTolerance;
-        public ProbeStatus Status => _status;
 
         public RedeliveredMessagesProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
         public ProbeResult Execute<T>(T snapshot)
         {
             ProbeResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
+            
+            if (_config.IsNull())
+            {
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.NA, out var article);
+                result = new NotApplicableProbeResult(!data.IsNull() ? data.Node : string.Empty,
+                    !data.IsNull() ? data.Identifier : string.Empty,
+                    Identifier,
+                    ComponentType,
+                    article);
+
+                NotifyObservers(result);
+
+                return result;
+            }
             
             ulong warningThreshold = ComputeWarningThreshold(data.Messages.Incoming.Total);
             

@@ -24,7 +24,7 @@ namespace HareDu.Snapshotting.Internal
         where T : Snapshot
     {
         protected readonly IBrokerObjectFactory _factory;
-        protected readonly Lazy<SnapshotTimeline<T>> _timeline;
+        protected readonly Lazy<SnapshotHistory<T>> _timeline;
         protected readonly IDictionary<string, SnapshotResult<T>> _snapshots;
         
         readonly List<IObserver<SnapshotContext<T>>> _observers;
@@ -34,7 +34,7 @@ namespace HareDu.Snapshotting.Internal
             _factory = factory;
             _observers = new List<IObserver<SnapshotContext<T>>>();
             _snapshots = new Dictionary<string, SnapshotResult<T>>();
-            _timeline = new Lazy<SnapshotTimeline<T>>(() => new SnapshotTimelineImpl<T>(_snapshots));
+            _timeline = new Lazy<SnapshotHistory<T>>(() => new SnapshotHistoryImpl<T>(_snapshots));
         }
 
         public IDisposable Subscribe(IObserver<SnapshotContext<T>> observer)
@@ -70,15 +70,15 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        class SnapshotTimelineImpl<T> :
-            SnapshotTimeline<T>
+        class SnapshotHistoryImpl<T> :
+            SnapshotHistory<T>
             where T : Snapshot
         {
             readonly IDictionary<string, SnapshotResult<T>> _snapshots;
             
             public IReadOnlyList<SnapshotResult<T>> Results => _snapshots.Values.ToList();
 
-            public SnapshotTimelineImpl(IDictionary<string,SnapshotResult<T>> snapshots)
+            public SnapshotHistoryImpl(IDictionary<string,SnapshotResult<T>> snapshots)
             {
                 _snapshots = snapshots;
             }

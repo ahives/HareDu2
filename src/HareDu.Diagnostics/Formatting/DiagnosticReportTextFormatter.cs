@@ -43,9 +43,9 @@ namespace HareDu.Diagnostics.Formatting
         void Format(ProbeResult result, ref StringBuilder builder)
         {
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
-            builder.AppendLine($"\tComponent Identifier: {result.ComponentIdentifier}");
+            builder.AppendLine($"\tComponent Identifier: {result.ComponentId}");
             builder.AppendLine($"\tComponent Type: {result.ComponentType.ToString()}");
-            builder.AppendLine($"\tProbe Identifier: {result.ProbeIdentifier}");
+            builder.AppendLine($"\tProbe Identifier: {result.ProbeId}");
             builder.AppendLine($"\tStatus: {result.Status.ToString()}");
             builder.AppendLine("\tProbe Data");
             
@@ -57,8 +57,8 @@ namespace HareDu.Diagnostics.Formatting
                 Format(data, ref builder);
             }
 
-            builder.AppendLine($"\tReason: {result.KnowledgeBaseArticle?.Reason}");
-            builder.AppendLine($"\tRemediation: {result.KnowledgeBaseArticle?.Remediation}");
+            builder.AppendLine($"\tReason: {result.Article?.Reason}");
+            builder.AppendLine($"\tRemediation: {result.Article?.Remediation}");
             builder.AppendLine();
         }
     }

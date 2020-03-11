@@ -28,8 +28,6 @@ namespace HareDu.Diagnostics.Probes
         
         DiagnosticProbeCategory Category { get; }
         
-        ProbeStatus Status { get; }
-        
         ProbeResult Execute<T>(T snapshot);
     }
 }

@@ -23,14 +23,14 @@ namespace HareDu.Snapshotting.Extensions
         /// <summary>
         /// Returns the most recent snapshot in the timeline.
         /// </summary>
-        /// <param name="timeline"></param>
+        /// <param name="history"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static SnapshotResult<T> MostRecent<T>(this SnapshotTimeline<T> timeline)
+        public static SnapshotResult<T> MostRecent<T>(this SnapshotHistory<T> history)
             where T : Snapshot
-            => timeline.IsNull() || timeline.Results.IsNull() || !timeline.Results.Any()
+            => history.IsNull() || history.Results.IsNull() || !history.Results.Any()
                 ? new EmptySnapshotResult<T>()
-                : timeline.Results.Last();
+                : history.Results.Last();
 
         /// <summary>
         /// Attempts to save the <see cref="SnapshotResult{T}"/> to disk.

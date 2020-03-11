@@ -15,8 +15,8 @@ namespace HareDu.Snapshotting
 {
     using System.Collections.Generic;
 
-    public class EmptySnapshotTimeline<T> :
-        SnapshotTimeline<T>
+    public class EmptySnapshotHistory<T> :
+        SnapshotHistory<T>
         where T : Snapshot
     {
         public IReadOnlyList<SnapshotResult<T>> Results =>

@@ -31,30 +31,26 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/nodes";
             
-            ResultList<NodeInfo> result = await GetAll<NodeInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<NodeInfo>(url, cancellationToken);
         }
 
-        public async Task<Result<NodeHealthInfo>> GetHealth(string node = null,
+        public Task<Result<NodeHealthInfo>> GetHealth(string node = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = string.IsNullOrWhiteSpace(node) ? "api/healthchecks/node" : $"/api/healthchecks/node/{node}";
 
-            Result<NodeHealthInfo> result = await Get<NodeHealthInfo>(url, cancellationToken);
-
-            return result;
+            return Get<NodeHealthInfo>(url, cancellationToken);
         }
 
-        public async Task<Result<NodeMemoryUsageInfo>> GetMemoryUsage(string node,
+        public Task<Result<NodeMemoryUsageInfo>> GetMemoryUsage(string node,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
@@ -67,11 +63,9 @@ namespace HareDu.Internal
             string url = $"api/nodes/{node}/memory";
             
             if (errors.Any())
-                return new FaultedResult<NodeMemoryUsageInfo>(errors, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result<NodeMemoryUsageInfo>>(new FaultedResult<NodeMemoryUsageInfo>(errors, new DebugInfoImpl(url, null)));
             
-            Result<NodeMemoryUsageInfo> result = await Get<NodeMemoryUsageInfo>(url, cancellationToken);
-
-            return result;
+            return Get<NodeMemoryUsageInfo>(url, cancellationToken);
         }
     }
 }

@@ -15,23 +15,23 @@ namespace HareDu.Snapshotting.Extensions
 {
     using Persistence;
 
-    public static class TimelineExtensions
+    public static class SnapshotHistoryExtensions
     {
-        public static void Flush<T>(this SnapshotTimeline<T> timeline, ISnapshotWriter writer, string path)
+        public static void Flush<T>(this SnapshotHistory<T> history, ISnapshotWriter writer, string path)
             where T : Snapshot
         {
-            for (int i = 0; i < timeline.Results.Count; i++)
+            for (int i = 0; i < history.Results.Count; i++)
             {
-                writer.TrySave(timeline.Results[i], $"snapshot_{timeline.Results[i].Identifier}.json", path);
+                writer.TrySave(history.Results[i], $"snapshot_{history.Results[i].Identifier}.json", path);
             }
         }
 
-        public static void Flush<T>(this SnapshotTimeline<T> timeline, ISnapshotWriter writer, string file, string path)
+        public static void Flush<T>(this SnapshotHistory<T> history, ISnapshotWriter writer, string file, string path)
             where T : Snapshot
         {
-            for (int i = 0; i < timeline.Results.Count; i++)
+            for (int i = 0; i < history.Results.Count; i++)
             {
-                writer.TrySave(timeline.Results[i], $"{file}_{timeline.Results[i].Identifier}.json", path);
+                writer.TrySave(history.Results[i], $"{file}_{history.Results[i].Identifier}.json", path);
             }
         }
     }

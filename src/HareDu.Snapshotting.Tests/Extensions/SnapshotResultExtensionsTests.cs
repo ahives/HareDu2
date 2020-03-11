@@ -37,9 +37,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -48,9 +48,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
         [Test]
         public void Verify_can_retrieve_most_recent_snapshot_2()
         {
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(null);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(null);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
         }
@@ -58,9 +58,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
         [Test]
         public void Verify_can_retrieve_most_recent_snapshot_3()
         {
-            SnapshotTimeline<ClusterSnapshot> timeline = null;
+            SnapshotHistory<ClusterSnapshot> history = null;
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
         }
@@ -72,9 +72,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -112,9 +112,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -158,9 +158,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -195,9 +195,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -235,9 +235,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -255,9 +255,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -274,9 +274,9 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
-            var snapshot = timeline.MostRecent();
+            var snapshot = history.MostRecent();
             
             snapshot.ShouldNotBeNull();
             snapshot.Identifier.ShouldBe(identifier3);
@@ -294,7 +294,7 @@ namespace HareDu.Snapshotting.Tests.Extensions
             string identifier2 = NewId.Next().ToString();
             string identifier3 = NewId.Next().ToString();
             IReadOnlyList<SnapshotResult<ClusterSnapshot>> results = GetResults(identifier1, identifier2, identifier3).ToList();
-            SnapshotTimeline<ClusterSnapshot> timeline = new SnapshotTimelineImpl<ClusterSnapshot>(results);
+            SnapshotHistory<ClusterSnapshot> history = new SnapshotHistoryImpl<ClusterSnapshot>(results);
 
             SnapshotResult<ClusterSnapshot> snapshot = null;
             
@@ -323,11 +323,11 @@ namespace HareDu.Snapshotting.Tests.Extensions
         }
 
         
-        class SnapshotTimelineImpl<T> :
-            SnapshotTimeline<T>
+        class SnapshotHistoryImpl<T> :
+            SnapshotHistory<T>
             where T : Snapshot
         {
-            public SnapshotTimelineImpl(IReadOnlyList<SnapshotResult<T>> results)
+            public SnapshotHistoryImpl(IReadOnlyList<SnapshotResult<T>> results)
             {
                 Results = results;
             }

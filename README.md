@@ -68,15 +68,15 @@ HareDu YAML looks like this...
       password: guest
   diagnostics:
     probes:
-        high-closure-rate-warning-threshold:  100
-        high-creation-rate-warning-threshold: 100
+        high-closure-rate-threshold:  100
+        high-creation-rate-threshold: 100
         queue-high-flow-threshold:  100
         queue-low-flow-threshold: 20
-        message-redelivery-coefficient: 0.50
-        socket-usage-coefficient: 0.60
-        runtime-process-usage-coefficient:  0.65
-        file-descriptor-usage-warning-coefficient:  0.65
-        consumer-utilization-warning-coefficient: 0.50
+        message-redelivery-threshold-coefficient: 0.50
+        socket-usage-threshold-coefficient: 0.60
+        runtime-process-usage-threshold-coefficient:  0.65
+        file-descriptor-usage-threshold-coefficient:  0.65
+        consumer-utilization-threshold: 0.50
 ...
 ```
 There are several ways to configure HareDu. Let's look at the major scenarios.
@@ -305,7 +305,7 @@ var lens = await services.GetService<ISnapshotFactory>()
 ```
 <br>
 
-#### Viewing snapshots
+#### Viewing snapshot history
 
 Snapshots are accessible via the Timeline property on the ```SnapshotFactory```. Getting the most recent snapshot is as easy as calling the ```MostRecent``` extension method off of the ```History``` property on the lens like so...  
 
@@ -325,7 +325,7 @@ var snapshot = factory.History.MostRecent().Snapshot;
 
 #### Registering Observers
 
-When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<T>```. Each time a snapshot is taken (i.e. when the ```Execute``` method is called), all registered observers will be notified with an object of ```SnapshotResult<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Execute``` method or else the registered observers will not receive notifications.
+When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<T>```. Each time a snapshot is taken (i.e. when the ```TakeSnapshot``` method is called), all registered observers will be notified with an object of ```SnapshotResult<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```TakeSnapshot``` method or else the registered observers will not receive notifications.
 
 ```csharp
 var lens = factor
@@ -423,13 +423,13 @@ Below is an example of scanning a ```BrokerQueues``` snapshot.
 ```csharp
 // Define the scanner observer
 public class BrokerQueuesScannerObserver :
-    IObserver<DiagnosticProbeContext>
+    IObserver<ProbeContext>
 {
     public void OnCompleted() => throw new NotImplementedException();
 
     public void OnError(Exception error) => throw new NotImplementedException();
 
-    public void OnNext(DiagnosticProbeContext value) => throw new NotImplementedException();
+    public void OnNext(ProbeContext value) => throw new NotImplementedException();
 }
 
 var provider = new YamlFileConfigProvider();
@@ -479,7 +479,7 @@ If using .NET Core...
    Note: This can be done by either using the HareDu Broker API or by logging in to the RabbitMQ UI and creating a vhost
 2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
    dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Consumer.dll
-3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start publishing messages:
+3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on macOS) and execute the following command to start publishing messages:
     dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Publisher.dll
 
 Note: if you are using JetBrains Rider you can simply configure both projects and run them within the IDE.

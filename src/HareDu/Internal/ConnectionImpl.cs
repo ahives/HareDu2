@@ -35,9 +35,7 @@ namespace HareDu.Internal
 
             string url = "api/connections";
             
-            ResultList<ConnectionInfo> result = await GetAll<ConnectionInfo>(url, cancellationToken);
-
-            return result;
+            return await GetAll<ConnectionInfo>(url, cancellationToken).ConfigureAwait(false);
         }
     }
 }

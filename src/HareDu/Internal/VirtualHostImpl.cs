@@ -32,18 +32,16 @@ namespace HareDu.Internal
         {
         }
 
-        public async Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
+        public Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
             
-            ResultList<VirtualHostInfo> result = await GetAll<VirtualHostInfo>(url, cancellationToken);
-
-            return result;
+            return GetAll<VirtualHostInfo>(url, cancellationToken);
         }
 
-        public async Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -57,14 +55,12 @@ namespace HareDu.Internal
             string url = $"api/vhosts/{impl.VirtualHostName.Value.ToSanitizedName()}";
 
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
-            Result result = await Put(url, definition, cancellationToken);
-
-            return result;
+            return Put(url, definition, cancellationToken);
         }
 
-        public async Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -78,17 +74,15 @@ namespace HareDu.Internal
             string url = $"api/vhosts/{vHost}";
 
             if (impl.Errors.Value.Any())
-                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null)));
 
             if (vHost == "2%f")
-                return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url, null)));
 
-            Result result = await Delete(url, cancellationToken);
-
-            return result;
+            return Delete(url, cancellationToken);
         }
 
-        public async Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default)
+        public Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -106,11 +100,9 @@ namespace HareDu.Internal
                 errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             
             if (errors.Any())
-                return new FaultedResult(errors, new DebugInfoImpl(url, null));
+                return Task.FromResult<Result>(new FaultedResult(errors, new DebugInfoImpl(url, null)));
 
-            Result result = await PostEmpty(url, cancellationToken);
-
-            return result;
+            return PostEmpty(url, cancellationToken);
         }
 
         

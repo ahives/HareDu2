@@ -19,12 +19,12 @@ namespace HareDu.Core.Configuration
     public class DiagnosticsConfigProvider :
         IDiagnosticsConfigProvider
     {
-        public DiagnosticsConfig Configure(Action<DiagnosticsConfigurator> configurator)
+        public DiagnosticsConfig Configure(Action<DiagnosticProbesConfigurator> configurator)
         {
             if (configurator == null)
                 return ConfigCache.Default.Diagnostics;
             
-            var impl = new DiagnosticsConfiguratorImpl();
+            var impl = new DiagnosticProbesConfiguratorImpl();
             configurator(impl);
 
             DiagnosticsConfig config = impl.Settings.Value;
@@ -38,8 +38,8 @@ namespace HareDu.Core.Configuration
         }
 
 
-        class DiagnosticsConfiguratorImpl :
-            DiagnosticsConfigurator
+        class DiagnosticProbesConfiguratorImpl :
+            DiagnosticProbesConfigurator
         {
             uint _highClosureRateWarningThreshold;
             uint _highCreationRateWarningThreshold;
@@ -53,7 +53,7 @@ namespace HareDu.Core.Configuration
             
             public Lazy<DiagnosticsConfig> Settings { get; }
 
-            public DiagnosticsConfiguratorImpl()
+            public DiagnosticProbesConfiguratorImpl()
             {
                 Settings = new Lazy<DiagnosticsConfig>(
                     () => new DiagnosticsConfigImpl(
@@ -72,25 +72,25 @@ namespace HareDu.Core.Configuration
             class ProbesImpl :
                 ProbesConfig
             {
-                public ProbesImpl(uint highClosureRateWarningThreshold,
-                    uint highCreationRateWarningThreshold,
+                public ProbesImpl(uint highClosureRateThreshold,
+                    uint highCreationRateThreshold,
                     uint queueHighFlowThreshold,
                     uint queueLowFlowThreshold,
-                    decimal messageRedeliveryCoefficient,
-                    decimal socketUsageCoefficient,
+                    decimal messageRedeliveryThresholdCoefficient,
+                    decimal socketUsageThresholdCoefficient,
                     decimal runtimeProcessUsageThresholdCoefficient,
                     decimal fileDescriptorUsageThresholdCoefficient,
-                    decimal consumerUtilizationWarningCoefficient)
+                    decimal consumerUtilizationThreshold)
                 {
-                    HighClosureRateThreshold = highClosureRateWarningThreshold;
-                    HighCreationRateThreshold = highCreationRateWarningThreshold;
+                    HighClosureRateThreshold = highClosureRateThreshold;
+                    HighCreationRateThreshold = highCreationRateThreshold;
                     QueueHighFlowThreshold = queueHighFlowThreshold;
                     QueueLowFlowThreshold = queueLowFlowThreshold;
-                    MessageRedeliveryThresholdCoefficient = messageRedeliveryCoefficient;
-                    SocketUsageThresholdCoefficient = socketUsageCoefficient;
+                    MessageRedeliveryThresholdCoefficient = messageRedeliveryThresholdCoefficient;
+                    SocketUsageThresholdCoefficient = socketUsageThresholdCoefficient;
                     RuntimeProcessUsageThresholdCoefficient = runtimeProcessUsageThresholdCoefficient;
                     FileDescriptorUsageThresholdCoefficient = fileDescriptorUsageThresholdCoefficient;
-                    ConsumerUtilizationThreshold = consumerUtilizationWarningCoefficient;
+                    ConsumerUtilizationThreshold = consumerUtilizationThreshold;
                 }
 
                 public uint HighClosureRateThreshold { get; }
@@ -114,15 +114,6 @@ namespace HareDu.Core.Configuration
                 }
 
                 public ProbesConfig Probes { get; }
-                public uint HighClosureRateThreshold { get; }
-                public uint HighCreationRateThreshold { get; }
-                public uint QueueHighFlowThreshold { get; }
-                public uint QueueLowFlowThreshold { get; }
-                public decimal MessageRedeliveryThresholdCoefficient { get; }
-                public decimal SocketUsageThresholdCoefficient { get; }
-                public decimal RuntimeProcessUsageThresholdCoefficient { get; }
-                public decimal FileDescriptorUsageThresholdCoefficient { get; }
-                public decimal ConsumerUtilizationThreshold { get; }
             }
 
             public void SetHighClosureRateThreshold(uint value) => _highClosureRateWarningThreshold = value;

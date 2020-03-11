@@ -57,12 +57,10 @@ namespace HareDu.Diagnostics.Scans
 
         bool IsExchangeProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Exchange;
 
         bool IsQueueProbe(DiagnosticProbe probe) =>
             !probe.IsNull()
-            && probe.Status == ProbeStatus.Online
             && probe.ComponentType == ComponentType.Queue;
     }
 }

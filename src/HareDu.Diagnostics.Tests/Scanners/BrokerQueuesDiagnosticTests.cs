@@ -63,14 +63,14 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             report.Count.ShouldBe(8);
-            report.Count(x => x.ProbeIdentifier == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]

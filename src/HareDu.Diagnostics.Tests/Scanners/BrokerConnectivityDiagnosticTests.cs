@@ -61,12 +61,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
                 .Scan(snapshot);
 
             report.Count.ShouldBe(6);
-            report.Count(x => x.ProbeIdentifier == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeIdentifier == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.ProbeId == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]

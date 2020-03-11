@@ -29,20 +29,32 @@ namespace HareDu.Diagnostics.Probes
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
         public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
-        public ProbeStatus Status => _status;
 
         public QueueLowFlowProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
         {
             _config = config;
-            _status = !_config.IsNull() ? ProbeStatus.Online : ProbeStatus.Offline;
         }
 
         public ProbeResult Execute<T>(T snapshot)
         {
             QueueSnapshot data = snapshot as QueueSnapshot;
             ProbeResult result;
-            
+ 
+            if (_config.IsNull())
+            {
+                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.NA, out var article);
+                result = new NotApplicableProbeResult(null,
+                    null,
+                    Identifier,
+                    ComponentType,
+                    article);
+
+                NotifyObservers(result);
+
+                return result;
+            }
+           
             var probeData = new List<ProbeData>
             {
                 new ProbeDataImpl("Messages.Incoming.Total", data.Messages.Incoming.Total.ToString()),

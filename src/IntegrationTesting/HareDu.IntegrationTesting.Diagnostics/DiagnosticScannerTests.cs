@@ -16,18 +16,22 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using System;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
     using Core;
     using Core.Configuration;
+    using Core.Extensions;
     using CoreIntegration;
     using HareDu.Diagnostics;
     using HareDu.Diagnostics.Formatting;
     using HareDu.Diagnostics.KnowledgeBase;
+    using HareDu.Diagnostics.Probes;
     using HareDu.Diagnostics.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using Prometheus;
     using Registration;
     using Snapshotting;
     using Snapshotting.Extensions;
@@ -46,34 +50,67 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
             var container = builder.Build();
 
-            var resource = container.Resolve<ISnapshotFactory>()
-                // .Lens<BrokerConnectivity>()
-                .Lens<BrokerConnectivitySnapshot>()
-//                .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                // .RegisterObserver(new DefaultConnectivitySnapshotConsoleLogger())
-                .TakeSnapshot();
-            
             var scanner = container.Resolve<IDiagnosticScanner>();
 
-            var snapshot = resource.History.MostRecent().Snapshot;
-            var report = scanner.Scan(snapshot);
+            var lens = container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivitySnapshot>();
+
+            var resource = lens.TakeSnapshot(out var result);
+
+            // var snapshot = resource.History.MostRecent().Snapshot;
+            var report = scanner.Scan(result.Snapshot);
+            // SendToPrometheus(lens, scanner);
 
             var formatter = container.Resolve<IDiagnosticReportFormatter>();
-
+            
             string formattedReport = formatter.Format(report);
-            
+             
             Console.WriteLine(formattedReport);
+        }
+
+        void SendToPrometheus(SnapshotLens<BrokerConnectivitySnapshot> lens, IDiagnosticScanner scanner)
+        {
+            var server = new MetricServer(hostname: "localhost", port: 1234);
+            server.Start();
             
-//            for (int i = 0; i < report.Results.Count; i++)
-//            {
-//                Console.WriteLine("Diagnostic => Channel: {0}, Status: {1}", report.Results[i].ComponentIdentifier, report.Results[i].Status);
-//                
-//                if (report.Results[i].Status == DiagnosticStatus.Red)
-//                {
-//                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Reason);
-//                    Console.WriteLine(report.Results[i].KnowledgeBaseArticle.Remediation);
-//                }
-//            }
+            Gauge gauge = Metrics.CreateGauge("Healthy", "blah, blah, blah");
+            
+            for (int i = 0; i < 60; i++)
+            {
+                var resource = lens.TakeSnapshot(out var result);
+
+                var report = scanner.Scan(result.Snapshot);
+                PublishSummary(report.Results
+                    .FirstOrDefault(x => x.ProbeId == typeof(RedeliveredMessagesProbe).GetIdentifier()), gauge);
+
+                Thread.Sleep(1000);
+            }
+            
+            server.Stop();
+        }
+
+        void PublishSummary(ProbeResult result, Gauge gauge)
+        {
+            if (result.IsNull())
+                return;
+            
+            switch (result.Status)
+            {
+                case DiagnosticProbeResultStatus.Unhealthy:
+                    gauge.Dec();
+                    break;
+                case DiagnosticProbeResultStatus.Healthy:
+                    gauge.Inc();
+                    break;
+                case DiagnosticProbeResultStatus.Warning:
+                    break;
+                case DiagnosticProbeResultStatus.Inconclusive:
+                    break;
+                case DiagnosticProbeResultStatus.NA:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(result), result, null);
+            }
         }
 
         [Test]
