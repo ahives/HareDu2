@@ -13,8 +13,8 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
+    using Core.Extensions;
     using HareDu.Registration;
     using NUnit.Framework;
     using Shouldly;
@@ -24,12 +24,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Test()
+        public void Verify_can_get_system_overview()
         {
             var container = GetContainerBuilder("TestData/SystemOverviewInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<SystemOverview>()
-                .Get();
+                .Get()
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();

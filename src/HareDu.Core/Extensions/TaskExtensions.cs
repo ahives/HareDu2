@@ -24,7 +24,7 @@ namespace HareDu.Core.Extensions
         /// <param name="result"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T Unfold<T>(this Task<T> result)
+        public static T GetResult<T>(this Task<T> result)
             => !result.IsNull() && !result.IsCanceled && !result.IsFaulted
                 ? result.GetAwaiter().GetResult()
                 : default;

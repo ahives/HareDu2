@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
@@ -26,12 +25,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Should_be_able_to_get_all_scoped_parameters()
+        public void Should_be_able_to_get_all_scoped_parameters()
         {
             var container = GetContainerBuilder("TestData/ScopedParameterInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();
@@ -44,10 +44,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_can_create_1()
+        public void Verify_can_create_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<long>(x =>
                 {
@@ -57,7 +57,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -71,10 +72,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_can_create_2()
+        public void Verify_can_create_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -84,7 +85,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -98,10 +100,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_1()
+        public void Verify_cannot_create_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -111,7 +113,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -126,10 +129,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_2()
+        public void Verify_cannot_create_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -138,7 +141,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -153,10 +157,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_3()
+        public void Verify_cannot_create_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -166,7 +170,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component(string.Empty);
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -181,10 +186,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_4()
+        public void Verify_cannot_create_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -193,7 +198,8 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -208,10 +214,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_5()
+        public void Verify_cannot_create_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -221,7 +227,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost(string.Empty);
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -236,10 +243,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_6()
+        public void Verify_cannot_create_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -248,7 +255,8 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.Component("fake_component");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -263,10 +271,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_7()
+        public void Verify_cannot_create_7()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -276,7 +284,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost(string.Empty);
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -291,10 +300,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_8()
+        public void Verify_cannot_create_8()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -304,7 +313,8 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component(string.Empty);
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -319,10 +329,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_9()
+        public void Verify_cannot_create_9()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -330,7 +340,8 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -345,10 +356,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_10()
+        public void Verify_cannot_create_10()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
@@ -356,7 +367,8 @@ namespace HareDu.Tests.BrokerObjects
                     x.Targeting(t =>
                     {
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -371,15 +383,16 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_11()
+        public void Verify_cannot_create_11()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
                     x.Parameter("fake_parameter", "value");
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -394,14 +407,15 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_12()
+        public void Verify_cannot_create_12()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Create<string>(x =>
                 {
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
@@ -416,10 +430,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_can_delete()
+        public void Verify_can_delete()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -429,16 +443,17 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
         }
 
         [Test]
-        public async Task Verify_cannot_delete_1()
+        public void Verify_cannot_delete_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -448,17 +463,18 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_2()
+        public void Verify_cannot_delete_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -467,17 +483,18 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_3()
+        public void Verify_cannot_delete_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -487,17 +504,18 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component(string.Empty);
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_4()
+        public void Verify_cannot_delete_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -506,17 +524,18 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_5()
+        public void Verify_cannot_delete_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -526,17 +545,18 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost(string.Empty);
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_6()
+        public void Verify_cannot_delete_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -545,17 +565,18 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.Component("fake_component");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_7()
+        public void Verify_cannot_delete_7()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -565,17 +586,18 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component(string.Empty);
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_8()
+        public void Verify_cannot_delete_8()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -583,17 +605,18 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.VirtualHost("HareDu");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_9()
+        public void Verify_cannot_delete_9()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -603,17 +626,18 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component("fake_component");
                         t.VirtualHost(string.Empty);
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_10()
+        public void Verify_cannot_delete_10()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -621,17 +645,18 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         t.Component("fake_component");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_11()
+        public void Verify_cannot_delete_11()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -641,34 +666,36 @@ namespace HareDu.Tests.BrokerObjects
                         t.Component(string.Empty);
                         t.VirtualHost(string.Empty);
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_12()
+        public void Verify_cannot_delete_12()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
                     x.Targeting(t =>
                     {
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_13()
+        public void Verify_cannot_delete_13()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
@@ -676,36 +703,39 @@ namespace HareDu.Tests.BrokerObjects
                     x.Targeting(t =>
                     {
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_14()
+        public void Verify_cannot_delete_14()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
                     x.Parameter(string.Empty);
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_15()
+        public void Verify_cannot_delete_15()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<ScopedParameter>()
                 .Delete(x =>
                 {
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);

@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
@@ -26,12 +25,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Should_be_able_to_get_all_vhosts()
+        public void Should_be_able_to_get_all_vhosts()
         {
             var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
             
             result.HasData.ShouldBeTrue();
             result.Data.Count.ShouldBe(3);
@@ -87,10 +87,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_Create_works()
+        public void Verify_Create_works()
         {
             var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Create(x =>
                 {
@@ -99,7 +99,8 @@ namespace HareDu.Tests.BrokerObjects
                     {
                         c.WithTracingEnabled();
                     });
-                });
+                })
+                .GetResult();
             
             result.DebugInfo.ShouldNotBeNull();
             
@@ -109,94 +110,102 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_can_delete()
+        public void Verify_can_delete()
         {
             var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Delete(x => x.VirtualHost("HareDu7"));
+                .Delete(x => x.VirtualHost("HareDu7"))
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
         }
 
         [Test]
-        public async Task Verify_cannot_delete_1()
+        public void Verify_cannot_delete_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Delete(x => x.VirtualHost(string.Empty));
+                .Delete(x => x.VirtualHost(string.Empty))
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_2()
+        public void Verify_cannot_delete_2()
         {
             var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Delete(x => {});
+                .Delete(x => {})
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_can_start_vhost()
+        public void Verify_can_start_vhost()
         {
             var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Startup("FakeVirtualHost", x => x.On("FakeNode"));
+                .Startup("FakeVirtualHost", x => x.On("FakeNode"))
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
         }
 
         [Test]
-        public async Task Verify_cannot_start_vhost_1()
+        public void Verify_cannot_start_vhost_1()
         {
             var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Startup(string.Empty, x => x.On("FakeNode"));
+                .Startup(string.Empty, x => x.On("FakeNode"))
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_start_vhost_2()
+        public void Verify_cannot_start_vhost_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Startup("FakeVirtualHost", x => x.On(string.Empty));
+                .Startup("FakeVirtualHost", x => x.On(string.Empty))
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_start_vhost_3()
+        public void Verify_cannot_start_vhost_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Startup(string.Empty, x => x.On(string.Empty));
+                .Startup(string.Empty, x => x.On(string.Empty))
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_start_vhost_4()
+        public void Verify_cannot_start_vhost_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .Startup(string.Empty, x => {});
+                .Startup(string.Empty, x => {})
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);

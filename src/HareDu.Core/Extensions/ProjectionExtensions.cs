@@ -32,7 +32,7 @@ namespace HareDu.Core.Extensions
             if (source.IsNull() || projector.IsNull())
                 return default;
                 
-            Result<T> result = source.Unfold();
+            Result<T> result = source.GetResult();
 
             return !result.IsNull() && result.HasData ? projector(result) : default;
         }
@@ -66,7 +66,7 @@ namespace HareDu.Core.Extensions
             if (source.IsNull() || projector.IsNull())
                 return default;
                 
-            ResultList<T> result = source.Unfold();
+            ResultList<T> result = source.GetResult();
 
             return !result.IsNull() && result.HasData ? projector(result) : default;
         }

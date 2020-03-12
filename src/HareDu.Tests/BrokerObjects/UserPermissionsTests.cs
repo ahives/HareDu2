@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
@@ -26,12 +25,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Should_be_able_to_get_all_user_permissions()
+        public void Should_be_able_to_get_all_user_permissions()
         {
             var container = GetContainerBuilder("TestData/UserPermissionsInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();
@@ -46,117 +46,124 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_can_delete_user_permissions()
+        public void Verify_can_delete_user_permissions()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User("haredu_user");
                     x.Targeting(t => t.VirtualHost("HareDu5"));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
         }
 
         [Test]
-        public async Task Verify_cannot_delete_user_permissions_1()
+        public void Verify_cannot_delete_user_permissions_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User(string.Empty);
                     x.Targeting(t => t.VirtualHost("HareDu5"));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_user_permissions_2()
+        public void Verify_cannot_delete_user_permissions_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.Targeting(t => t.VirtualHost("HareDu5"));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_user_permissions_3()
+        public void Verify_cannot_delete_user_permissions_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User("haredu_user");
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_user_permissions_4()
+        public void Verify_cannot_delete_user_permissions_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.User("haredu_user");
                     x.Targeting(t => {});
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_user_permissions_5()
+        public void Verify_cannot_delete_user_permissions_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
                     x.Targeting(t => {});
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_user_permissions_6()
+        public void Verify_cannot_delete_user_permissions_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_can_create_user_permissions()
+        public void Verify_can_create_user_permissions()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -168,7 +175,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => t.VirtualHost("HareDu5"));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -181,10 +189,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_1()
+        public void Verify_cannot_create_user_permissions_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -196,7 +204,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => t.VirtualHost("HareDu5"));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -210,10 +219,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_2()
+        public void Verify_cannot_create_user_permissions_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -224,7 +233,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => t.VirtualHost("HareDu5"));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -238,10 +248,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_3()
+        public void Verify_cannot_create_user_permissions_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -253,7 +263,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -267,10 +278,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_4()
+        public void Verify_cannot_create_user_permissions_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -282,7 +293,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => {});
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -296,10 +308,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_5()
+        public void Verify_cannot_create_user_permissions_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -310,7 +322,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingReadPattern(".*");
                         c.UsingWritePattern(".*");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -324,10 +337,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_6()
+        public void Verify_cannot_create_user_permissions_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -339,7 +352,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -353,10 +367,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_7()
+        public void Verify_cannot_create_user_permissions_7()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -368,7 +382,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingWritePattern(".*");
                     });
                     x.Targeting(t => {});
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -382,10 +397,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_8()
+        public void Verify_cannot_create_user_permissions_8()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -396,7 +411,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingReadPattern(".*");
                         c.UsingWritePattern(".*");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -410,10 +426,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_user_permissions_9()
+        public void Verify_cannot_create_user_permissions_9()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -423,7 +439,8 @@ namespace HareDu.Tests.BrokerObjects
                         c.UsingReadPattern(".*");
                         c.UsingWritePattern(".*");
                     });
-                });
+                })
+                .GetResult();
 
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);

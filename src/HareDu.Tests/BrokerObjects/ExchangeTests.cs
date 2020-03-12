@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
@@ -26,12 +25,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Should_be_able_to_get_all_exchanges()
+        public void Should_be_able_to_get_all_exchanges()
         {
             var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();
@@ -49,10 +49,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_can_create_exchange()
+        public void Verify_can_create_exchange()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -68,7 +68,8 @@ namespace HareDu.Tests.BrokerObjects
                         });
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -85,10 +86,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_exchange_1()
+        public void Verify_cannot_create_exchange_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -104,7 +105,8 @@ namespace HareDu.Tests.BrokerObjects
                         });
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -113,10 +115,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_exchange_2()
+        public void Verify_cannot_create_exchange_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -131,7 +133,8 @@ namespace HareDu.Tests.BrokerObjects
                         });
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -140,10 +143,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_exchange_3()
+        public void Verify_cannot_create_exchange_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -159,7 +162,8 @@ namespace HareDu.Tests.BrokerObjects
                         });
                     });
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -168,14 +172,15 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_exchange_4()
+        public void Verify_cannot_create_exchange_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(3);
@@ -184,116 +189,123 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_can_delete_exchange()
+        public void Verify_can_delete_exchange()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange("E3");
                     x.Targeting(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
         }
 
         [Test]
-        public async Task Verify_cannot_delete_exchange_1()
+        public void Verify_cannot_delete_exchange_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange(string.Empty);
                     x.Targeting(t => t.VirtualHost("HareDu"));
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_exchange_2()
+        public void Verify_cannot_delete_exchange_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange("E3");
                     x.Targeting(t => t.VirtualHost(string.Empty));
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_exchange_3()
+        public void Verify_cannot_delete_exchange_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange("E3");
                     x.Targeting(t => {});
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_exchange_4()
+        public void Verify_cannot_delete_exchange_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange(string.Empty);
                     x.Targeting(t => t.VirtualHost(string.Empty));
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_exchange_5()
+        public void Verify_cannot_delete_exchange_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.Exchange(string.Empty);
                     x.Targeting(t => {});
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_exchange_6()
+        public void Verify_cannot_delete_exchange_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
                     x.WithConditions(c => c.IfUnused());
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);

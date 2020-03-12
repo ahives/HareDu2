@@ -27,12 +27,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Should_be_able_to_get_all_global_parameters()
+        public void Should_be_able_to_get_all_global_parameters()
         {
             var container = GetContainerBuilder("TestData/GlobalParameterInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
 
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();
@@ -47,16 +48,17 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_can_create_parameter_1()
+        public void Verify_can_create_parameter_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter("fake_param");
                     x.Value("fake_value");
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -68,10 +70,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_can_create_parameter_2()
+        public void Verify_can_create_parameter_2()
         {
             var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -81,7 +83,8 @@ namespace HareDu.Tests.BrokerObjects
                         arg.Set("arg1", "value1");
                         arg.Set("arg2", 5);
                     });
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -101,16 +104,17 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_1()
+        public void Verify_cannot_create_parameter_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter(string.Empty);
                     x.Value("fake_value");
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -123,15 +127,16 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_2()
+        public void Verify_cannot_create_parameter_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Value("fake_value");
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -144,16 +149,17 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_3()
+        public void Verify_cannot_create_parameter_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter("fake_param");
                     x.Value(string.Empty);
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
@@ -166,16 +172,17 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_4()
+        public void Verify_cannot_create_parameter_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter(string.Empty);
                     x.Value(string.Empty);
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -188,15 +195,16 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_5()
+        public void Verify_cannot_create_parameter_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Parameter(string.Empty);
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -209,15 +217,16 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_6()
+        public void Verify_cannot_create_parameter_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
                     x.Value(string.Empty);
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -230,14 +239,15 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_cannot_create_parameter_7()
+        public void Verify_cannot_create_parameter_7()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
-                });
+                })
+                .GetResult();
              
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
@@ -250,35 +260,38 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_can_delete_parameter()
+        public void Verify_can_delete_parameter()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
-                .Delete(x => x.Parameter("fake_param"));
+                .Delete(x => x.Parameter("fake_param"))
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
         }
         
         [Test]
-        public async Task Verify_cannot_delete_parameter_1()
+        public void Verify_cannot_delete_parameter_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
-                .Delete(x => x.Parameter(string.Empty));
+                .Delete(x => x.Parameter(string.Empty))
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
         
         [Test]
-        public async Task Verify_cannot_delete_parameter_2()
+        public void Verify_cannot_delete_parameter_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
-                .Delete(x => {});
+                .Delete(x => {})
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);

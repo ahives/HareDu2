@@ -15,6 +15,7 @@ namespace HareDu.Tests.BrokerObjects
 {
     using System.Threading.Tasks;
     using Autofac;
+    using Core.Extensions;
     using HareDu.Registration;
     using NUnit.Framework;
     using Shouldly;
@@ -24,12 +25,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Test()
+        public void Verify_can_get_all_consumers()
         {
             var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Consumer>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();

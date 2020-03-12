@@ -61,7 +61,7 @@ namespace HareDu.Core.Extensions
                 return false;
             }
             
-            ResultList<T> result = source.Unfold();
+            ResultList<T> result = source.GetResult();
 
             if (result.IsNull() || result.Data.IsNull() || !result.HasData || result.HasFaulted || index >= result.Data.Count)
             {

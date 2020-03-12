@@ -28,7 +28,7 @@ namespace HareDu.Core.Tests.Extensions
         [Test]
         public void Verify_Unfold_works()
         {
-            var result = Get().Unfold();
+            var result = Get().GetResult();
             
             result.HasData.ShouldBeTrue();
             result.HasFaulted.ShouldBeFalse();

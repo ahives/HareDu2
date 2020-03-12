@@ -30,7 +30,7 @@ namespace HareDu.Core.Tests.Extensions
             Guid id2 = Guid.NewGuid();
             Guid id3 = Guid.NewGuid();
             
-            var result = GetResultListAsync(true, id1, id2, id3).Unfold();
+            var result = GetResultListAsync(true, id1, id2, id3).GetResult();
             
             result.TryGetValue(1, out FakeObject value).ShouldBeTrue();
             value.Id.ShouldBe(id2);
@@ -50,7 +50,7 @@ namespace HareDu.Core.Tests.Extensions
         [Test]
         public void Verify_cannot_get_value_from_result_list()
         {
-            var result = GetResultListAsync(true, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()).Unfold();
+            var result = GetResultListAsync(true, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()).GetResult();
             
             result.TryGetValue(100, out FakeObject value).ShouldBeFalse();
             value.IsNull().ShouldBeTrue();

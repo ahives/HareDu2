@@ -43,7 +43,7 @@ namespace HareDu.Snapshotting.Internal
             var cluster = _factory
                 .Object<SystemOverview>()
                 .Get(cancellationToken)
-                .Unfold();
+                .GetResult();
 
             if (cluster.HasFaulted)
             {
@@ -54,7 +54,7 @@ namespace HareDu.Snapshotting.Internal
             var queues = _factory
                 .Object<Queue>()
                 .GetAll(cancellationToken)
-                .Unfold();
+                .GetResult();
 
             if (queues.HasFaulted)
             {
@@ -81,7 +81,7 @@ namespace HareDu.Snapshotting.Internal
             var cluster = _factory
                 .Object<SystemOverview>()
                 .Get(cancellationToken)
-                .Unfold();
+                .GetResult();
 
             if (cluster.HasFaulted)
             {
@@ -94,7 +94,7 @@ namespace HareDu.Snapshotting.Internal
             var queues = _factory
                 .Object<Queue>()
                 .GetAll(cancellationToken)
-                .Unfold();
+                .GetResult();
 
             if (queues.HasFaulted)
             {

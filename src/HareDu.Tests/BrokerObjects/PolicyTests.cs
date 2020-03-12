@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
@@ -26,12 +25,13 @@ namespace HareDu.Tests.BrokerObjects
         HareDuTesting
     {
         [Test]
-        public async Task Should_be_able_to_get_all_policies()
+        public void Should_be_able_to_get_all_policies()
         {
             var container = GetContainerBuilder("TestData/PolicyInfo.json").Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
-                .GetAll();
+                .GetAll()
+                .GetResult();
 
             result.HasData.ShouldBeTrue();
             result.HasFaulted.ShouldBeFalse();
@@ -49,10 +49,10 @@ namespace HareDu.Tests.BrokerObjects
         }
         
         [Test]
-        public async Task Verify_can_create_policy()
+        public void Verify_can_create_policy()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -69,7 +69,8 @@ namespace HareDu.Tests.BrokerObjects
                         p.ApplyTo("all");
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
@@ -84,10 +85,10 @@ namespace HareDu.Tests.BrokerObjects
          }
 
         [Test]
-        public async Task Verify_cannot_create_policy_1()
+        public void Verify_cannot_create_policy_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -105,7 +106,8 @@ namespace HareDu.Tests.BrokerObjects
                         p.ApplyTo("all");
                     });
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
@@ -122,10 +124,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_policy_2()
+        public void Verify_cannot_create_policy_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -142,7 +144,8 @@ namespace HareDu.Tests.BrokerObjects
                         p.ApplyTo("all");
                     });
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
@@ -159,10 +162,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_policy_3()
+        public void Verify_cannot_create_policy_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -179,7 +182,8 @@ namespace HareDu.Tests.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
@@ -196,10 +200,10 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_cannot_create_policy_4()
+        public void Verify_cannot_create_policy_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Create(x =>
                 {
@@ -215,7 +219,8 @@ namespace HareDu.Tests.BrokerObjects
                         });
                         p.ApplyTo("all");
                     });
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
@@ -232,107 +237,114 @@ namespace HareDu.Tests.BrokerObjects
         }
 
         [Test]
-        public async Task Verify_can_delete_policy()
+        public void Verify_can_delete_policy()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Policy("P4");
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeFalse();
         }
 
         [Test]
-        public async Task Verify_cannot_delete_policy_1()
+        public void Verify_cannot_delete_policy_1()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Policy(string.Empty);
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_policy_2()
+        public void Verify_cannot_delete_policy_2()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Policy("P4");
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_policy_3()
+        public void Verify_cannot_delete_policy_3()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Policy(string.Empty);
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_policy_4()
+        public void Verify_cannot_delete_policy_4()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_policy_5()
+        public void Verify_cannot_delete_policy_5()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
                     x.Policy("P4");
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(1);
         }
 
         [Test]
-        public async Task Verify_cannot_delete_policy_6()
+        public void Verify_cannot_delete_policy_6()
         {
             var container = GetContainerBuilder().Build();
-            var result = await container.Resolve<IBrokerObjectFactory>()
+            var result = container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
                 .Delete(x =>
                 {
-                });
+                })
+                .GetResult();
             
             result.HasFaulted.ShouldBeTrue();
             result.Errors.Count.ShouldBe(2);
