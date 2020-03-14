@@ -25,9 +25,9 @@ namespace HareDu.Diagnostics
         IDiagnosticScanner
     {
         readonly DiagnosticsConfig _config;
-        readonly IDiagnosticFactory _factory;
+        readonly IScannerFactory _factory;
 
-        public DiagnosticScanner(IDiagnosticFactory factory)
+        public DiagnosticScanner(IScannerFactory factory)
         {
             _factory = factory;
         }
@@ -35,24 +35,24 @@ namespace HareDu.Diagnostics
         public DiagnosticScanner(DiagnosticsConfig config)
         {
             _config = config;
-            _factory = new DiagnosticFactory(_config, new KnowledgeBaseProvider());
+            _factory = new ScannerFactory(_config, new KnowledgeBaseProvider());
         }
 
         public DiagnosticScanner(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
             _config = config;
-            _factory = new DiagnosticFactory(_config, kb);
+            _factory = new ScannerFactory(_config, kb);
         }
 
         public ScannerResult Scan<T>(T snapshot)
             where T : Snapshot
         {
-            if (!_factory.TryGet(out DiagnosticScan<T> diagnostic))
+            if (!_factory.TryGet(out DiagnosticScan<T> scanner))
                 return DiagnosticCache.EmptyScannerResult;
             
-            var results = diagnostic.Scan(snapshot);
+            var results = scanner.Scan(snapshot);
             
-            return new SuccessfulScannerResult(diagnostic.Identifier, results);
+            return new SuccessfulScannerResult(scanner.Identifier, results);
         }
 
         public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)

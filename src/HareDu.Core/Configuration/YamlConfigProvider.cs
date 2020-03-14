@@ -28,7 +28,7 @@ namespace HareDu.Core.Configuration
         {
             _validator = validator;
             _deserializer = new DeserializerBuilder()
-                .WithNamingConvention(new HyphenatedNamingConvention())
+                .WithNamingConvention(HyphenatedNamingConvention.Instance)
                 .Build();
         }
 
@@ -36,7 +36,7 @@ namespace HareDu.Core.Configuration
         {
             _validator = new HareDuConfigValidator();
             _deserializer = new DeserializerBuilder()
-                .WithNamingConvention(new HyphenatedNamingConvention())
+                .WithNamingConvention(HyphenatedNamingConvention.Instance)
                 .Build();
         }
 
@@ -110,15 +110,6 @@ namespace HareDu.Core.Configuration
                 }
 
                 public ProbesConfig Probes { get; }
-                public uint HighClosureRateThreshold { get; }
-                public uint HighCreationRateThreshold { get; }
-                public uint QueueHighFlowThreshold { get; }
-                public uint QueueLowFlowThreshold { get; }
-                public decimal MessageRedeliveryThresholdCoefficient { get; }
-                public decimal SocketUsageThresholdCoefficient { get; }
-                public decimal RuntimeProcessUsageThresholdCoefficient { get; }
-                public decimal FileDescriptorUsageThresholdCoefficient { get; }
-                public decimal ConsumerUtilizationThreshold { get; }
 
                 
                 class ProbesConfigImpl :

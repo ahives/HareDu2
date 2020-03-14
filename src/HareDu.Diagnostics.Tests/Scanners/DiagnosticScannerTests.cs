@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityScan).GetIdentifier());
+            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityScanner).GetIdentifier());
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(ClusterScan).GetIdentifier());
+            scanner.ScannerIdentifier.ShouldBe(typeof(ClusterScanner).GetIdentifier());
         }
 
         [Test]
@@ -65,19 +65,19 @@ namespace HareDu.Diagnostics.Tests.Scanners
             var scanner = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesScan).GetIdentifier());
+            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesScanner).GetIdentifier());
         }
 
         [Test]
         public void Verify_does_not_throw_when_scanner_not_found()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
-            IDiagnosticFactory factory = new FakeDiagnosticFactory();
+            IScannerFactory factory = new FakeScannerFactory();
             IDiagnosticScanner scanner = new DiagnosticScanner(factory);
 
             var report = scanner.Scan(snapshot);
             
-            report.ScannerIdentifier.ShouldBe(typeof(NoOpDiagnosticScan<EmptySnapshot>).GetIdentifier());
+            report.ScannerIdentifier.ShouldBe(typeof(NoOpScanner<EmptySnapshot>).GetIdentifier());
             report.ShouldBe(DiagnosticCache.EmptyScannerResult);
         }
     }

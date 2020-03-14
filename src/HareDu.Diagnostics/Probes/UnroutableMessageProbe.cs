@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         public string Name => "Unroutable Message Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Exchange;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Efficiency;
+        public ProbeCategory Category => ProbeCategory.Efficiency;
 
         public UnroutableMessageProbe(IKnowledgeBaseProvider kb)
             : base(kb)
@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.Churn.NotRouted.Total > 0)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.ClusterName,
                     null,
                     Identifier,
@@ -55,7 +55,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.ClusterName,
                     null,
                     Identifier,

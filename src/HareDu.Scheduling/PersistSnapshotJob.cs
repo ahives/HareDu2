@@ -16,29 +16,27 @@ namespace HareDu.Scheduling
     using System.Threading.Tasks;
     using Quartz;
     using Snapshotting;
-    using Snapshotting.Extensions;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
     public class PersistSnapshotJob<T> :
         IJob
-        // where T : SnapshotLens<Snapshot>
         where T : Snapshot
     {
         readonly ISnapshotFactory _factory;
         readonly ISnapshotWriter _writer;
+        readonly SnapshotLens<T> _lens;
 
         public PersistSnapshotJob(ISnapshotFactory factory, ISnapshotWriter writer)
         {
             _factory = factory;
             _writer = writer;
+            _lens = _factory.Lens<T>();
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            // var snapshot = _factory.Lens<T>().TakeSnapshot();
-            var snapshot = _factory.Lens<T>().TakeSnapshot();
-            var result = snapshot.History.MostRecent();
+            _lens.TakeSnapshot(out var result);
 
             _writer.TrySave(result, $"snapshot_{result.Identifier}.json", context.JobDetail.JobDataMap["path"].ToString());
         }

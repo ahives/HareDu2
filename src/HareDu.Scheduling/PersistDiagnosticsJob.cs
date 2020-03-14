@@ -18,32 +18,31 @@ namespace HareDu.Scheduling
     using Diagnostics.Persistence;
     using Quartz;
     using Snapshotting;
-    using Snapshotting.Extensions;
     using Snapshotting.Registration;
 
     public class PersistDiagnosticsJob<T> :
         IJob
-        // where T : SnapshotLens<Snapshot>
         where T : Snapshot
     {
         readonly ISnapshotFactory _factory;
         readonly IDiagnosticScanner _scanner;
         readonly IDiagnosticWriter _writer;
+        readonly SnapshotLens<T> _lens;
 
         public PersistDiagnosticsJob(ISnapshotFactory factory, IDiagnosticScanner scanner, IDiagnosticWriter writer)
         {
             _factory = factory;
             _scanner = scanner;
             _writer = writer;
+            _lens = _factory.Lens<T>();
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            // var snapshot = _factory.Lens<T>().TakeSnapshot();
-            var snapshot = _factory.Lens<T>().TakeSnapshot();
-            var result = _scanner.Scan(snapshot.History.MostRecent().Snapshot);
+            _lens.TakeSnapshot(out var result);
+            var scan = _scanner.Scan(result.Snapshot);
 
-            _writer.TrySave(result, $"diagnostics_{result.Identifier}.json", context.JobDetail.JobDataMap["path"].ToString());
+            _writer.TrySave(scan, $"diagnostics_{scan.Id}.json", context.JobDetail.JobDataMap["path"].ToString());
         }
     }
 }

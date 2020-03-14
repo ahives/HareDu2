@@ -64,7 +64,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_add_new_probes()
         {
-            var factory = _container.Resolve<IDiagnosticFactory>();
+            var factory = _container.Resolve<IScannerFactory>();
             var kb = _container.Resolve<IKnowledgeBaseProvider>();
             int probeCountBefore = factory.GetAvailableProbes().Count;
             var probe = new FakeProbe(5, kb);
@@ -77,7 +77,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_get_available_probes()
         {
-            var probes = _container.Resolve<IDiagnosticFactory>().GetAvailableProbes();
+            var probes = _container.Resolve<IScannerFactory>().GetAvailableProbes();
             
             Console.WriteLine(probes.ToJsonString());
         }
@@ -98,16 +98,16 @@ namespace HareDu.Diagnostics.Tests.Registration
             // diagnosticsRegistrar.RegisterAll();
             //
             // var factory = new ComponentDiagnosticFactory(diagnosticsRegistrar.ObjectCache, diagnosticsRegistrar.Types, _analyzers);
-            var factory = _container.Resolve<IDiagnosticFactory>();
+            var factory = _container.Resolve<IScannerFactory>();
 
             factory.TryGet<BrokerConnectivitySnapshot>(out var diagnostic).ShouldBeTrue();
-            diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityScan).GetIdentifier());
+            diagnostic.Identifier.ShouldBe(typeof(BrokerConnectivityScanner).GetIdentifier());
         }
 
         [Test]
         public void Test()
         {
-            var factory = _container.Resolve<IDiagnosticFactory>();
+            var factory = _container.Resolve<IScannerFactory>();
 
             factory.TryGet<BrokerConnectivitySnapshot>(out _).ShouldBeTrue();
 //            Assert.AreEqual(typeof(BrokerConnectivityDiagnostic).FullName.GenerateIdentifier(), diagnostic.Identifier);
@@ -116,10 +116,10 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_TryGet_does_not_throw()
         {
-            var factory = _container.Resolve<IDiagnosticFactory>();
+            var factory = _container.Resolve<IScannerFactory>();
 
             factory.TryGet<ConnectionSnapshot>(out var diagnostic).ShouldBeFalse();
-            diagnostic.Identifier.ShouldBe(typeof(NoOpDiagnosticScan<ConnectionSnapshot>).GetIdentifier());
+            diagnostic.Identifier.ShouldBe(typeof(NoOpScanner<ConnectionSnapshot>).GetIdentifier());
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             configProvider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new KnowledgeBaseProvider();
-            var factory = new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+            var factory = new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
 
             factory.TryGet<FakeSnapshot>(out _).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
@@ -167,7 +167,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             public string Name { get; }
             public string Description { get; }
             public ComponentType ComponentType { get; }
-            public DiagnosticProbeCategory Category { get; }
+            public ProbeCategory Category { get; }
             public ProbeStatus Status { get; }
             public ProbeResult Execute<T>(T snapshot) => throw new NotImplementedException();
         }

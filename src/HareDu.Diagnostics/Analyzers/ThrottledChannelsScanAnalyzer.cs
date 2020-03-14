@@ -11,13 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Diagnostics;
+    using Core.Extensions;
+    using Probes;
 
-    public interface IDiagnosticReportAnalyzer
+    public class ThrottledChannelsScanAnalyzer :
+        BaseAnalyzeDiagnosticReport,
+        IScanAnalyzer
     {
-        IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report);
+        protected override IEnumerable<string> GetSupportedAnalyzers()
+        {
+            yield return typeof(ChannelThrottlingProbe).GetIdentifier();
+        }
     }
 }

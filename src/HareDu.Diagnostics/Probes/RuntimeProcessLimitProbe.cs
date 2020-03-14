@@ -28,7 +28,7 @@ namespace HareDu.Diagnostics.Probes
         public string Name => "Runtime Process Limit Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Runtime;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
+        public ProbeCategory Category => ProbeCategory.Throughput;
 
         public RuntimeProcessLimitProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (_config.IsNull())
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.NA, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(null,
                     null,
                     Identifier,
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.Processes.Used < data.Processes.Limit)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -73,7 +73,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,

@@ -18,7 +18,7 @@ namespace HareDu.Diagnostics
 
     public interface ScannerResult
     {
-        Guid Identifier { get; }
+        Guid Id { get; }
         
         string ScannerIdentifier { get; }
         

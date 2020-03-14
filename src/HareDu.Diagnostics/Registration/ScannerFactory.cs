@@ -26,8 +26,8 @@ namespace HareDu.Diagnostics.Registration
     /// <summary>
     /// This class should be instantiate once since construction can be expensive.
     /// </summary>
-    public class DiagnosticFactory :
-        IDiagnosticFactory
+    public class ScannerFactory :
+        IScannerFactory
     {
         readonly DiagnosticsConfig _config;
         readonly IKnowledgeBaseProvider _kb;
@@ -35,35 +35,35 @@ namespace HareDu.Diagnostics.Registration
         readonly IDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
 
-        public DiagnosticFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+        public ScannerFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
-            _config = !config.IsNull() ? config : throw new HareDuBrokerObjectInitException();
-            _kb = !kb.IsNull() ? kb : throw new HareDuBrokerObjectInitException();
+            _config = !config.IsNull() ? config : throw new HareDuDiagnosticsInitException();
+            _kb = !kb.IsNull() ? kb : throw new HareDuDiagnosticsInitException();
             _cache = new Dictionary<string, object>();
             _probeCache = new Dictionary<string, DiagnosticProbe>();
             _observers = new List<IDisposable>();
             
             bool registeredProbes = TryRegisterAllProbes();
             if (!registeredProbes)
-                throw new HareDuBrokerObjectInitException();
+                throw new HareDuDiagnosticsInitException();
             
             bool registered = TryRegisterAll();
             if (!registered)
-                throw new HareDuBrokerObjectInitException();
+                throw new HareDuDiagnosticsInitException();
         }
 
-        public bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
+        public bool TryGet<T>(out DiagnosticScan<T> scanner)
             where T : Snapshot
         {
             Type type = typeof(T);
             
             if (type.IsNull() || !_cache.ContainsKey(type.FullName))
             {
-                diagnosticScan = new NoOpDiagnosticScan<T>();
+                scanner = new NoOpScanner<T>();
                 return false;
             }
             
-            diagnosticScan = (DiagnosticScan<T>) _cache[type.FullName];
+            scanner = (DiagnosticScan<T>) _cache[type.FullName];
             return true;
         }
 

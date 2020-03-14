@@ -89,18 +89,18 @@ namespace HareDu.Diagnostics.Probes
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 ComponentType = componentType;
-                ProbeId = probeId;
-                Article = article;
+                Id = probeId;
+                KB = article;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string ParentComponentId { get; }
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
-            public string ProbeId { get; }
-            public DiagnosticProbeResultStatus Status => DiagnosticProbeResultStatus.NA;
-            public KnowledgeBaseArticle Article { get; }
-            public IReadOnlyList<ProbeData> ProbeData => Array.Empty<ProbeData>();
+            public string Id { get; }
+            public ProbeResultStatus Status => ProbeResultStatus.NA;
+            public KnowledgeBaseArticle KB { get; }
+            public IReadOnlyList<ProbeData> Data => Array.Empty<ProbeData>();
             public DateTimeOffset Timestamp { get; }
         }
         
@@ -113,21 +113,21 @@ namespace HareDu.Diagnostics.Probes
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
-                ProbeId = probeId;
+                Id = probeId;
                 ComponentType = componentType;
-                ProbeData = probeData;
-                Article = article;
-                Status = DiagnosticProbeResultStatus.Healthy;
+                Data = probeData;
+                KB = article;
+                Status = ProbeResultStatus.Healthy;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string ParentComponentId { get; }
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
-            public string ProbeId { get; }
-            public DiagnosticProbeResultStatus Status { get; }
-            public KnowledgeBaseArticle Article { get; }
-            public IReadOnlyList<ProbeData> ProbeData { get; }
+            public string Id { get; }
+            public ProbeResultStatus Status { get; }
+            public KnowledgeBaseArticle KB { get; }
+            public IReadOnlyList<ProbeData> Data { get; }
             public DateTimeOffset Timestamp { get; }
         }
 
@@ -140,20 +140,20 @@ namespace HareDu.Diagnostics.Probes
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
-                ProbeId = probeId;
+                Id = probeId;
                 ComponentType = componentType;
-                ProbeData = probeData;
-                Article = article;
-                Status = DiagnosticProbeResultStatus.Unhealthy;
+                Data = probeData;
+                KB = article;
+                Status = ProbeResultStatus.Unhealthy;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string ParentComponentId { get; }
             public string ComponentId { get; }
-            public string ProbeId { get; }
-            public DiagnosticProbeResultStatus Status { get; }
-            public KnowledgeBaseArticle Article { get; }
-            public IReadOnlyList<ProbeData> ProbeData { get; }
+            public string Id { get; }
+            public ProbeResultStatus Status { get; }
+            public KnowledgeBaseArticle KB { get; }
+            public IReadOnlyList<ProbeData> Data { get; }
             public ComponentType ComponentType { get; }
             public DateTimeOffset Timestamp { get; }
         }
@@ -167,21 +167,21 @@ namespace HareDu.Diagnostics.Probes
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
-                ProbeId = probeId;
+                Id = probeId;
                 ComponentType = componentType;
-                ProbeData = probeData;
-                Article = article;
-                Status = DiagnosticProbeResultStatus.Warning;
+                Data = probeData;
+                KB = article;
+                Status = ProbeResultStatus.Warning;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
             public string ParentComponentId { get; }
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
-            public string ProbeId { get; }
-            public DiagnosticProbeResultStatus Status { get; }
-            public KnowledgeBaseArticle Article { get; }
-            public IReadOnlyList<ProbeData> ProbeData { get; }
+            public string Id { get; }
+            public ProbeResultStatus Status { get; }
+            public KnowledgeBaseArticle KB { get; }
+            public IReadOnlyList<ProbeData> Data { get; }
             public DateTimeOffset Timestamp { get; }
         }
 
@@ -196,10 +196,10 @@ namespace HareDu.Diagnostics.Probes
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 ComponentType = componentType;
-                ProbeId = probeId;
-                Article = article;
-                ProbeData = probeData;
-                Status = DiagnosticProbeResultStatus.Inconclusive;
+                Id = probeId;
+                KB = article;
+                Data = probeData;
+                Status = ProbeResultStatus.Inconclusive;
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
@@ -209,19 +209,19 @@ namespace HareDu.Diagnostics.Probes
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 ComponentType = componentType;
-                ProbeId = probeId;
-                ProbeData = DiagnosticCache.EmptyProbeData;
-                Status = DiagnosticProbeResultStatus.Inconclusive;
+                Id = probeId;
+                Data = DiagnosticCache.EmptyProbeData;
+                Status = ProbeResultStatus.Inconclusive;
                 Timestamp = DateTimeOffset.Now;
             }
 
             public string ParentComponentId { get; }
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
-            public string ProbeId { get; }
-            public DiagnosticProbeResultStatus Status { get; }
-            public KnowledgeBaseArticle Article { get; }
-            public IReadOnlyList<ProbeData> ProbeData { get; }
+            public string Id { get; }
+            public ProbeResultStatus Status { get; }
+            public KnowledgeBaseArticle KB { get; }
+            public IReadOnlyList<ProbeData> Data { get; }
             public DateTimeOffset Timestamp { get; }
         }
 

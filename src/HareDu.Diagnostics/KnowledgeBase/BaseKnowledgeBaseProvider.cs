@@ -32,7 +32,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
         protected abstract void Load();
 
-        public bool TryGet(string identifier, DiagnosticProbeResultStatus status, out KnowledgeBaseArticle article)
+        public bool TryGet(string identifier, ProbeResultStatus status, out KnowledgeBaseArticle article)
         {
             if (_articles.Exists(x => x.Identifier == identifier))
             {
@@ -63,16 +63,16 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 }
                 catch
                 {
-                    articles = new KnowledgeBaseArticle[] {new MissingKnowledgeBaseArticle(identifier, DiagnosticProbeResultStatus.NA)};
+                    articles = new KnowledgeBaseArticle[] {new MissingKnowledgeBaseArticle(identifier, ProbeResultStatus.NA)};
                     return false;
                 }
             }
 
-            articles = new KnowledgeBaseArticle[] {new MissingKnowledgeBaseArticle(identifier, DiagnosticProbeResultStatus.NA)};
+            articles = new KnowledgeBaseArticle[] {new MissingKnowledgeBaseArticle(identifier, ProbeResultStatus.NA)};
             return false;
         }
 
-        public void Add<T>(DiagnosticProbeResultStatus status, string reason, string remediation)
+        public void Add<T>(ProbeResultStatus status, string reason, string remediation)
             where T : DiagnosticProbe
         {
             _articles.Add(new KnowledgeBaseArticleImpl<T>(status, reason, remediation));
@@ -83,7 +83,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
             KnowledgeBaseArticle
             where T : DiagnosticProbe
         {
-            public KnowledgeBaseArticleImpl(DiagnosticProbeResultStatus status, string reason, string remediation)
+            public KnowledgeBaseArticleImpl(ProbeResultStatus status, string reason, string remediation)
             {
                 Status = status;
                 Reason = reason;
@@ -91,7 +91,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 Identifier = typeof(T).GetIdentifier();
             }
 
-            public KnowledgeBaseArticleImpl(DiagnosticProbeResultStatus status, string reason)
+            public KnowledgeBaseArticleImpl(ProbeResultStatus status, string reason)
             {
                 Status = status;
                 Reason = reason;
@@ -99,7 +99,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
             }
 
             public string Identifier { get; }
-            public DiagnosticProbeResultStatus Status { get; }
+            public ProbeResultStatus Status { get; }
             public string Reason { get; }
             public string Remediation { get; }
         }

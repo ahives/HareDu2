@@ -11,12 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Diagnostics
 {
-    public interface AnalyzerResult
+    public interface AnalyzerSummary
     {
-        uint Total { get; }
-
-        decimal Percentage { get; }
+        string Id { get; }
+        
+        AnalyzerResult Healthy { get; }
+        
+        AnalyzerResult Unhealthy { get; }
+        
+        AnalyzerResult Warning { get; }
+        
+        AnalyzerResult Inconclusive { get; }
     }
 }

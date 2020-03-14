@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         
         ComponentType ComponentType { get; }
         
-        DiagnosticProbeCategory Category { get; }
+        ProbeCategory Category { get; }
         
         ProbeResult Execute<T>(T snapshot);
     }

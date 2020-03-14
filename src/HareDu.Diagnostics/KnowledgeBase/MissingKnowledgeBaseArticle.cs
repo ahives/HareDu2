@@ -16,14 +16,14 @@ namespace HareDu.Diagnostics.KnowledgeBase
     public class MissingKnowledgeBaseArticle :
         KnowledgeBaseArticle
     {
-        public MissingKnowledgeBaseArticle(string identifier, DiagnosticProbeResultStatus status)
+        public MissingKnowledgeBaseArticle(string identifier, ProbeResultStatus status)
         {
             Identifier = identifier;
             Status = status;
         }
 
         public string Identifier { get; }
-        public DiagnosticProbeResultStatus Status { get; }
+        public ProbeResultStatus Status { get; }
         public string Reason => "No KB article Available";
         public string Remediation => "NA";
     }

@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Formatting
         {
             var builder = new StringBuilder();
 
-            builder.AppendLine($"Report Identifier: {report.Identifier.ToString()}");
+            builder.AppendLine($"Report Identifier: {report.Id.ToString()}");
             builder.AppendLine($"Timestamp: {report.Timestamp.ToString()}");
             builder.AppendLine();
 
@@ -45,11 +45,11 @@ namespace HareDu.Diagnostics.Formatting
             builder.AppendLine($"\tTimestamp: {result.Timestamp.ToString()}");
             builder.AppendLine($"\tComponent Identifier: {result.ComponentId}");
             builder.AppendLine($"\tComponent Type: {result.ComponentType.ToString()}");
-            builder.AppendLine($"\tProbe Identifier: {result.ProbeId}");
+            builder.AppendLine($"\tProbe Identifier: {result.Id}");
             builder.AppendLine($"\tStatus: {result.Status.ToString()}");
             builder.AppendLine("\tProbe Data");
             
-            foreach (var data in result.ProbeData)
+            foreach (var data in result.Data)
             {
                 if (data.IsNull())
                     continue;
@@ -57,8 +57,8 @@ namespace HareDu.Diagnostics.Formatting
                 Format(data, ref builder);
             }
 
-            builder.AppendLine($"\tReason: {result.Article?.Reason}");
-            builder.AppendLine($"\tRemediation: {result.Article?.Remediation}");
+            builder.AppendLine($"\tReason: {result.KB?.Reason}");
+            builder.AppendLine($"\tRemediation: {result.KB?.Remediation}");
             builder.AppendLine();
         }
     }

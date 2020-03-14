@@ -57,16 +57,16 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             
-            var report = new BrokerConnectivityScan(_probes)
+            var report = new BrokerConnectivityScanner(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(6);
-            report.Count(x => x.ProbeId == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = null;
             
-            var report = new BrokerConnectivityScan(_probes)
+            var report = new BrokerConnectivityScanner(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

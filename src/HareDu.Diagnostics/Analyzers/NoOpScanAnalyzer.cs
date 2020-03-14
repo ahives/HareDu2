@@ -11,21 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics.Analyzers
+namespace HareDu.Diagnostics.Analyzers
 {
     using System.Collections.Generic;
-    using Core.Extensions;
-    using Diagnostics;
-    using Diagnostics.Probes;
 
-    public class QueueNoFlowReportAnalyzer :
-        BaseAnalyzeDiagnosticReport,
-        IDiagnosticReportAnalyzer
+    public class NoOpScanAnalyzer :
+        IScanAnalyzer
     {
-        protected override IEnumerable<string> GetSupportedDiagnosticAnalyzers()
-        {
-            yield return typeof(QueueNoFlowProbe).GetIdentifier();
-//            yield return typeof(QueueLowFlowAnalyzer).GetIdentifier();
-        }
+        public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report) => DiagnosticCache.EmptyAnalyzerSummary;
     }
 }

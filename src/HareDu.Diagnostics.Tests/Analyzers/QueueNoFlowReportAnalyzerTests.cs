@@ -15,18 +15,17 @@ namespace HareDu.Analytics.Tests
 {
     using System;
     using System.IO;
-    using Analyzers;
     using Autofac;
-    using AutofacIntegration;
     using Core.Configuration;
-    using Core.Extensions;
     using Diagnostics;
+    using Diagnostics.Analyzers;
+    using Diagnostics.Extensions;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
-    using Fakes;
+    using Diagnostics.Tests.Fakes;
     using NUnit.Framework;
-    using Registration;
+    using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
@@ -43,30 +42,19 @@ namespace HareDu.Analytics.Tests
             builder.Register(x =>
                 {
                     var configProvider = x.Resolve<IFileConfigProvider>();
-                    string path = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
+                    string path = $"{Directory.GetCurrentDirectory()}/haredu_3.yaml";
 
                     configProvider.TryGet(path, out var config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                    return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
                 })
-                .As<IDiagnosticFactory>()
+                .As<IScannerFactory>()
                 .SingleInstance();
 
-            builder.Register(x =>
-                {
-                    var registrar = x.Resolve<IAnalyticsRegistry>();
-                    
-                    registrar.RegisterAll();
-                    
-                    return new DiagnosticReportAnalyzerFactory(registrar.Cache);
-                })
-                .As<IDiagnosticReportAnalyzerFactory>()
-                .SingleInstance();
-
-            builder.RegisterType<AnalyticsRegistry>()
-                .As<IAnalyticsRegistry>()
+            builder.RegisterType<ScanAnalyzerFactory>()
+                .As<IScanAnalyzerFactory>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()
@@ -100,38 +88,40 @@ namespace HareDu.Analytics.Tests
         public void Test1()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
-            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+            IScanAnalyzerFactory factory = _container.Resolve<IScanAnalyzerFactory>();
 
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
-                .Analyze(factory, typeof(QueueNoFlowReportAnalyzer).GetIdentifier());
+                .Analyze(factory, typeof(QueueNoFlowScanAnalyzer).FullName);
             
-            for (int i = 0; i < summary.Count; i++)
-            {
-                Console.WriteLine(summary[i].Identifier);
-                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
-                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
-                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
-                Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
-            }
+            summary.ShouldNotBeNull();
+            summary.Count.ShouldBe(1);
+            summary[0].Healthy.Total.ShouldBe<uint>(3);
+            summary[0].Healthy.Percentage.ShouldBe(37.5M);
+            summary[0].Unhealthy.Total.ShouldBe<uint>(5);
+            summary[0].Unhealthy.Percentage.ShouldBe(62.5M);
+            summary[0].Warning.Total.ShouldBe<uint>(0);
+            summary[0].Warning.Percentage.ShouldBe(0);
+            summary[0].Inconclusive.Total.ShouldBe<uint>(0);
+            summary[0].Inconclusive.Percentage.ShouldBe(0);
         }
         
         [Test]
         public void Test2()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
-            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+            IScanAnalyzerFactory factory = _container.Resolve<IScanAnalyzerFactory>();
 
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
-                .Analyze(factory, typeof(QueueNoFlowReportAnalyzer));
+                .Analyze(factory, typeof(QueueNoFlowScanAnalyzer));
             
             for (int i = 0; i < summary.Count; i++)
             {
-                Console.WriteLine(summary[i].Identifier);
-                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
-                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
-                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine(summary[i].Id);
+                Console.WriteLine($"\t{summary[i].Healthy.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Unhealthy.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Warning.Percentage}% yellow");
                 Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
             }
         }
@@ -140,18 +130,18 @@ namespace HareDu.Analytics.Tests
         public void Test3()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
-            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+            IScanAnalyzerFactory factory = _container.Resolve<IScanAnalyzerFactory>();
 
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
-                .Analyze<QueueNoFlowReportAnalyzer>(factory);
+                .Analyze<QueueNoFlowScanAnalyzer>(factory);
             
             for (int i = 0; i < summary.Count; i++)
             {
-                Console.WriteLine(summary[i].Identifier);
-                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
-                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
-                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine(summary[i].Id);
+                Console.WriteLine($"\t{summary[i].Healthy.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Unhealthy.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Warning.Percentage}% yellow");
                 Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
             }
         }
@@ -160,7 +150,7 @@ namespace HareDu.Analytics.Tests
         public void Test4()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
-            IDiagnosticReportAnalyzer analyzer = new QueueNoFlowReportAnalyzer();
+            IScanAnalyzer analyzer = new QueueNoFlowScanAnalyzer();
             
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
@@ -168,10 +158,10 @@ namespace HareDu.Analytics.Tests
             
             for (int i = 0; i < summary.Count; i++)
             {
-                Console.WriteLine(summary[i].Identifier);
-                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
-                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
-                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine(summary[i].Id);
+                Console.WriteLine($"\t{summary[i].Healthy.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Unhealthy.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Warning.Percentage}% yellow");
                 Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
             }
         }

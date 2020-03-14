@@ -15,7 +15,6 @@ namespace HareDu.AutofacIntegration
 {
     using System.IO;
     using Autofac;
-    using Core;
     using Core.Configuration;
     using Diagnostics;
     using Diagnostics.Formatting;
@@ -37,9 +36,9 @@ namespace HareDu.AutofacIntegration
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                    return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
                 })
-                .As<IDiagnosticFactory>()
+                .As<IScannerFactory>()
                 .SingleInstance();
 
             builder.Register(x =>
@@ -53,7 +52,11 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
+            builder.RegisterType<ScanAnalyzerFactory>()
+                .As<IScanAnalyzerFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotFactory>()
                 .As<ISnapshotFactory>()
                 .SingleInstance();
 

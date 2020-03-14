@@ -18,11 +18,11 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
     public interface IKnowledgeBaseProvider
     {
-        bool TryGet(string identifier, DiagnosticProbeResultStatus status, out KnowledgeBaseArticle article);
+        bool TryGet(string identifier, ProbeResultStatus status, out KnowledgeBaseArticle article);
         
         bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles);
 
-        void Add<T>(DiagnosticProbeResultStatus status, string reason, string remediation)
+        void Add<T>(ProbeResultStatus status, string reason, string remediation)
             where T : DiagnosticProbe;
     }
 }

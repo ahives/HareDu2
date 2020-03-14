@@ -22,8 +22,8 @@ namespace HareDu.Diagnostics
     class EmptyScannerResult :
         ScannerResult
     {
-        public Guid Identifier => NewId.NextGuid();
-        public string ScannerIdentifier => typeof(NoOpDiagnosticScan<EmptySnapshot>).GetIdentifier();
+        public Guid Id => NewId.NextGuid();
+        public string ScannerIdentifier => typeof(NoOpScanner<EmptySnapshot>).GetIdentifier();
         public IReadOnlyList<ProbeResult> Results => new List<ProbeResult>();
         public DateTimeOffset Timestamp => DateTimeOffset.UtcNow;
     }

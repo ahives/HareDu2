@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         public string Name => "Memory Alarm Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Memory;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
+        public ProbeCategory Category => ProbeCategory.Throughput;
 
         public MemoryAlarmProbe(IKnowledgeBaseProvider kb)
             : base(kb)
@@ -47,12 +47,12 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.AlarmInEffect)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,null, Identifier, ComponentType, probeData, article);
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier, null, Identifier, ComponentType, probeData, article);
             }
 

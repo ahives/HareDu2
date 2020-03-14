@@ -59,18 +59,18 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
 
-            var report = new BrokerQueuesScan(_probes)
+            var report = new BrokerQueuesScanner(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(8);
-            report.Count(x => x.ProbeId == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(QueueGrowthProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(MessagePagingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(RedeliveredMessagesProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(ConsumerUtilizationProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(UnroutableMessageProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(QueueLowFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(QueueNoFlowProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(QueueHighFlowProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = null;
             
-            var report = new BrokerQueuesScan(_probes)
+            var report = new BrokerQueuesScanner(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

@@ -11,23 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics.Tests
+namespace HareDu.Diagnostics.Tests.Analyzers
 {
     using System;
     using System.IO;
-    using Analyzers;
     using Autofac;
-    using AutofacIntegration;
     using Core.Configuration;
     using Core.Extensions;
-    using Diagnostics;
-    using Diagnostics.Formatting;
-    using Diagnostics.KnowledgeBase;
+    using Diagnostics.Analyzers;
     using Diagnostics.Registration;
+    using Extensions;
     using Fakes;
-    using Snapshotting.Model;
+    using Formatting;
+    using KnowledgeBase;
     using NUnit.Framework;
-    using Registration;
+    using Snapshotting.Model;
 
     [TestFixture]
     public class ChannelThrottlingReportAnalyzerTests
@@ -43,30 +41,19 @@ namespace HareDu.Analytics.Tests
             builder.Register(x =>
                 {
                     var configProvider = x.Resolve<IFileConfigProvider>();
-                    string path = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
+                    string path = $"{Directory.GetCurrentDirectory()}/haredu_3.yaml";
 
                     configProvider.TryGet(path, out var config);
 
                     var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
 
-                    return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                    return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
                 })
-                .As<IDiagnosticFactory>()
+                .As<IScannerFactory>()
                 .SingleInstance();
 
-            builder.Register(x =>
-                {
-                    var registrar = x.Resolve<IAnalyticsRegistry>();
-                    
-                    registrar.RegisterAll();
-                    
-                    return new DiagnosticReportAnalyzerFactory(registrar.Cache);
-                })
-                .As<IDiagnosticReportAnalyzerFactory>()
-                .SingleInstance();
-
-            builder.RegisterType<AnalyticsRegistry>()
-                .As<IAnalyticsRegistry>()
+            builder.RegisterType<ScanAnalyzerFactory>()
+                .As<IScanAnalyzerFactory>()
                 .SingleInstance();
 
             builder.RegisterType<DiagnosticScanner>()
@@ -99,18 +86,18 @@ namespace HareDu.Analytics.Tests
         [Test]
         public void Test1()
         {
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
-            IDiagnosticReportAnalyzerFactory factory = _container.Resolve<IDiagnosticReportAnalyzerFactory>();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
+            IScanAnalyzerFactory factory = _container.Resolve<IScanAnalyzerFactory>();
 
             var summary = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot)
-                .Analyze(factory, typeof(ThrottledChannelsReportAnalyzer).GetIdentifier());
+                .Analyze(factory, typeof(ThrottledChannelsScanAnalyzer).GetIdentifier());
             
             for (int i = 0; i < summary.Count; i++)
             {
-                Assert.AreEqual(30.0, summary[i].Green.Percentage);
-                Assert.AreEqual(70.0, summary[i].Red.Percentage);
-                Assert.AreEqual(0.0, summary[i].Yellow.Percentage);
+                Assert.AreEqual(30.0, summary[i].Healthy.Percentage);
+                Assert.AreEqual(70.0, summary[i].Unhealthy.Percentage);
+                Assert.AreEqual(0.0, summary[i].Warning.Percentage);
                 Assert.AreEqual(0.0, summary[i].Inconclusive.Percentage);
 //                Console.WriteLine(summary[i].Identifier);
 //                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
@@ -123,20 +110,20 @@ namespace HareDu.Analytics.Tests
         [Test]
         public void Test2()
         {
-            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
+            BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
             
             var report = _container.Resolve<IDiagnosticScanner>()
                 .Scan(snapshot);
 
-            var summary = _container.Resolve<IDiagnosticReportAnalyzer>()
+            var summary = _container.Resolve<IScanAnalyzer>()
                 .Analyze(report);
 
             for (int i = 0; i < summary.Count; i++)
             {
-                Console.WriteLine(summary[i].Identifier);
-                Console.WriteLine($"\t{summary[i].Green.Percentage}% green");
-                Console.WriteLine($"\t{summary[i].Red.Percentage}% red");
-                Console.WriteLine($"\t{summary[i].Yellow.Percentage}% yellow");
+                Console.WriteLine(summary[i].Id);
+                Console.WriteLine($"\t{summary[i].Healthy.Percentage}% green");
+                Console.WriteLine($"\t{summary[i].Unhealthy.Percentage}% red");
+                Console.WriteLine($"\t{summary[i].Warning.Percentage}% yellow");
                 Console.WriteLine($"\t{summary[i].Inconclusive.Percentage}% inconclusive");
             }
         }

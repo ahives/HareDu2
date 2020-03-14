@@ -217,7 +217,7 @@ namespace HareDu.CoreIntegration
 
         static void AddDiagnostics(this IServiceCollection services, string path)
         {
-            services.TryAddSingleton<IDiagnosticFactory>(x =>
+            services.TryAddSingleton<IScannerFactory>(x =>
             {
                 var configProvider = x.GetService<IFileConfigProvider>();
 
@@ -225,8 +225,10 @@ namespace HareDu.CoreIntegration
 
                 var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
                 
-                return new DiagnosticFactory(config.Diagnostics, knowledgeBaseProvider);
+                return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
             });
+            
+            services.TryAddSingleton<IScanAnalyzerFactory, ScanAnalyzerFactory>();
         }
     }
 }

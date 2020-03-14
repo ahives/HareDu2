@@ -11,18 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Diagnostics.Registration
 {
-    public interface AnalyzerSummary
+    using System;
+
+    public interface IScanAnalyzerFactory
     {
-        string Identifier { get; }
+        bool TryGet(string key, out IScanAnalyzer analyzer);
         
-        AnalyzerResult Green { get; }
-        
-        AnalyzerResult Red { get; }
-        
-        AnalyzerResult Yellow { get; }
-        
-        AnalyzerResult Inconclusive { get; }
+        bool TryGet(Type type, out IScanAnalyzer analyzer);
+
+        bool TryGet<T>(out IScanAnalyzer analyzer)
+            where T : IScanAnalyzer;
     }
 }

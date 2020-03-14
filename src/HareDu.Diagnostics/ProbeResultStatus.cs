@@ -11,17 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics
+namespace HareDu.Diagnostics
 {
-    using System;
-
-    public interface IDiagnosticReportAnalyzerFactory
+    public enum ProbeResultStatus
     {
-        bool TryGet(string identifier, out IDiagnosticReportAnalyzer analyzer);
-        
-        bool TryGet(Type type, out IDiagnosticReportAnalyzer analyzer);
-
-        bool TryGet<T>(out IDiagnosticReportAnalyzer analyzer)
-            where T : IDiagnosticReportAnalyzer;
+        Unhealthy,
+        Healthy,
+        Warning,
+        Inconclusive,
+        NA
     }
 }

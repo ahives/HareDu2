@@ -58,17 +58,17 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshot1();
             
-            var report = new ClusterScan(_probes)
+            var report = new ClusterScanner(_probes)
                 .Scan(snapshot);
 
             report.Count.ShouldBe(7);
-            report.Count(x => x.ProbeId == typeof(RuntimeProcessLimitProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(SocketDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(NetworkPartitionProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(MemoryAlarmProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(DiskAlarmProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(AvailableCpuCoresProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.ProbeId == typeof(FileDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(RuntimeProcessLimitProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(SocketDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(NetworkPartitionProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(MemoryAlarmProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(DiskAlarmProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(AvailableCpuCoresProbe).GetIdentifier()).ShouldBe(1);
+            report.Count(x => x.Id == typeof(FileDescriptorThrottlingProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             ClusterSnapshot snapshot = null;
             
-            var report = new ClusterScan(_probes)
+            var report = new ClusterScanner(_probes)
                 .Scan(snapshot);
 
             report.ShouldBeEmpty();

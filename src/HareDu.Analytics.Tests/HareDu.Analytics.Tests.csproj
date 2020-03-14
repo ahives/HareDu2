@@ -23,4 +23,8 @@
       <None Remove="config.yaml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Fakes" />
+    </ItemGroup>
+
 </Project>

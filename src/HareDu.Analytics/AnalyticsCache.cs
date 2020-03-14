@@ -14,6 +14,7 @@
 namespace HareDu.Analytics
 {
     using System.Collections.Generic;
+    using Diagnostics;
 
     public static class AnalyticsCache
     {

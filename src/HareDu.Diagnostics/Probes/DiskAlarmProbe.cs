@@ -26,7 +26,7 @@ namespace HareDu.Diagnostics.Probes
         public string Name => "Disk Alarm Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Disk;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
+        public ProbeCategory Category => ProbeCategory.Throughput;
 
         public DiskAlarmProbe(IKnowledgeBaseProvider kb)
             : base(kb)
@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.AlarmInEffect)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     null,
                     Identifier,
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     null,
                     Identifier,

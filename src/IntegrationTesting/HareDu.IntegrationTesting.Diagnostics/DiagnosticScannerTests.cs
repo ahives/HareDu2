@@ -81,7 +81,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
                 var report = scanner.Scan(result.Snapshot);
                 PublishSummary(report.Results
-                    .FirstOrDefault(x => x.ProbeId == typeof(RedeliveredMessagesProbe).GetIdentifier()), gauge);
+                    .FirstOrDefault(x => x.Id == typeof(RedeliveredMessagesProbe).GetIdentifier()), gauge);
 
                 Thread.Sleep(1000);
             }
@@ -96,17 +96,17 @@ namespace HareDu.IntegrationTesting.Diagnostics
             
             switch (result.Status)
             {
-                case DiagnosticProbeResultStatus.Unhealthy:
+                case ProbeResultStatus.Unhealthy:
                     gauge.Dec();
                     break;
-                case DiagnosticProbeResultStatus.Healthy:
+                case ProbeResultStatus.Healthy:
                     gauge.Inc();
                     break;
-                case DiagnosticProbeResultStatus.Warning:
+                case ProbeResultStatus.Warning:
                     break;
-                case DiagnosticProbeResultStatus.Inconclusive:
+                case ProbeResultStatus.Inconclusive:
                     break;
-                case DiagnosticProbeResultStatus.NA:
+                case ProbeResultStatus.NA:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(result), result, null);
@@ -163,7 +163,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 .TakeSnapshot();
             
             IDiagnosticScanner scanner = new DiagnosticScanner(
-                new DiagnosticFactory(config.Diagnostics, new KnowledgeBaseProvider()));
+                new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider()));
 
             var snapshot = resource.History.MostRecent().Snapshot;
             var report = scanner.Scan(snapshot);
@@ -230,7 +230,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 x.SetHighCreationRateThreshold(60);
             });
             
-            var factory2 = new DiagnosticFactory(config, new KnowledgeBaseProvider());
+            var factory2 = new ScannerFactory(config, new KnowledgeBaseProvider());
             IDiagnosticScanner scanner = new DiagnosticScanner(factory2);
 
             var snapshot = resource.History.MostRecent().Snapshot;

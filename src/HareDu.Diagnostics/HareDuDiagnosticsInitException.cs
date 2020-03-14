@@ -11,18 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics.Registration
+namespace HareDu.Diagnostics
 {
     using System;
-    using System.Collections.Generic;
-    using Diagnostics;
+    using System.Runtime.Serialization;
 
-    public interface IAnalyticsRegistry
+    public class HareDuDiagnosticsInitException :
+        Exception
     {
-        IDictionary<string, IReportAnalyzer> Cache { get; }
-        
-        void RegisterAll();
+        public HareDuDiagnosticsInitException()
+        {
+        }
 
-        void Register(Type type);
+        protected HareDuDiagnosticsInitException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public HareDuDiagnosticsInitException(string message)
+            : base(message)
+        {
+        }
+
+        public HareDuDiagnosticsInitException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }

@@ -1,0 +1,14 @@
+---
+broker:
+  url:  http://localhost:15672
+  username: guest
+  password: guest
+diagnostics:
+  probes:
+    high-closure-rate-threshold: 90
+    high-creation-rate-threshold: 90
+    runtime-process-usage-threshold-coefficient: 0.7
+    file-descriptor-usage-threshold-coefficient: 0.7
+    socket-usage-threshold-coefficient: 0.5
+    message-redelivery-threshold-coefficient: 0.5
+...

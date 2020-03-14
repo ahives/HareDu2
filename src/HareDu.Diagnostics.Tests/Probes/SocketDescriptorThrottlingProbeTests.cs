@@ -58,8 +58,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Warning);
+            result.KB.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test(Description = "When sockets used >= calculated high watermark and calculated high watermark >= max sockets available")]
@@ -76,8 +76,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Unhealthy);
+            result.KB.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -94,8 +94,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Healthy);
+            result.KB.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -108,8 +108,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
-            result.Article.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.NA);
+            result.KB.Identifier.ShouldBe(typeof(SocketDescriptorThrottlingProbe).GetIdentifier());
         }
     }
 }

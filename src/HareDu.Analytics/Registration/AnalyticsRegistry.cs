@@ -23,13 +23,13 @@ namespace HareDu.Analytics.Registration
         IAnalyticsRegistry
     {
         readonly List<Type> _types;
-        readonly IDictionary<string, IDiagnosticReportAnalyzer> _cache;
+        readonly IDictionary<string, IReportAnalyzer> _cache;
 
-        public IDictionary<string, IDiagnosticReportAnalyzer> Cache => _cache;
+        public IDictionary<string, IReportAnalyzer> Cache => _cache;
 
         public AnalyticsRegistry()
         {
-            _cache = new Dictionary<string, IDiagnosticReportAnalyzer>();
+            _cache = new Dictionary<string, IReportAnalyzer>();
             _types = GetTypes();
         }
 
@@ -52,7 +52,7 @@ namespace HareDu.Analytics.Registration
         {
             try
             {
-                var instance = (IDiagnosticReportAnalyzer)Activator.CreateInstance(type);
+                var instance = (IReportAnalyzer)Activator.CreateInstance(type);
             
                 _cache.Add(type.GetIdentifier(), instance);
             }
@@ -69,6 +69,6 @@ namespace HareDu.Analytics.Registration
         bool IsDiagnosticReportAnalyzer(Type type)
             => type.IsClass
                && !type.IsGenericType
-               && type.GetInterfaces().Any(x => x == typeof(IDiagnosticReportAnalyzer));
+               && type.GetInterfaces().Any(x => x == typeof(IReportAnalyzer));
     }
 }

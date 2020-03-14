@@ -13,17 +13,12 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
-    using System.Collections.Generic;
-    using Core.Extensions;
-    using Scans;
-    using Snapshotting;
-
-    public class NoOpDiagnosticScan<T> :
-        DiagnosticScan<T>
-        where T : Snapshot
+    public enum ProbeCategory
     {
-        public string Identifier => GetType().GetIdentifier();
-
-        public IReadOnlyList<ProbeResult> Scan(T snapshot) => DiagnosticCache.EmptyProbeResults;
+        Throughput,
+        Connectivity,
+        Memory,
+        FaultTolerance,
+        Efficiency
     }
 }

@@ -11,10 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics.Analyzers
+namespace HareDu.Analytics
 {
-    public static class DiagnosticReportAnalyzerCache
+    using System;
+    using Diagnostics;
+
+    public interface IReportAnalyzerFactory
     {
-        public static readonly IDiagnosticReportAnalyzer NoOpAnalyzer = new NoOpDiagnosticReportAnalyzer();
+        bool TryGet(string key, out IReportAnalyzer analyzer);
+        
+        bool TryGet(Type type, out IReportAnalyzer analyzer);
+
+        bool TryGet<T>(out IReportAnalyzer analyzer)
+            where T : IReportAnalyzer;
     }
 }

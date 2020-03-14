@@ -11,26 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Registration
+namespace HareDu.Diagnostics.Analyzers
 {
-    using System;
     using System.Collections.Generic;
+    using Core.Extensions;
     using Probes;
-    using Scans;
-    using Snapshotting;
 
-    public interface IDiagnosticFactory
+    public class QueueNoFlowScanAnalyzer :
+        BaseAnalyzeDiagnosticReport,
+        IScanAnalyzer
     {
-        bool TryGet<T>(out DiagnosticScan<T> diagnosticScan)
-            where T : Snapshot;
-
-        void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
-
-        void RegisterObserver(IObserver<ProbeContext> observer);
-
-        bool RegisterProbe<T>(T probe)
-            where T : DiagnosticProbe;
-
-        IReadOnlyList<string> GetAvailableProbes();
+        protected override IEnumerable<string> GetSupportedAnalyzers()
+        {
+            yield return typeof(QueueNoFlowProbe).GetIdentifier();
+//            yield return typeof(QueueLowFlowAnalyzer).GetIdentifier();
+        }
     }
 }

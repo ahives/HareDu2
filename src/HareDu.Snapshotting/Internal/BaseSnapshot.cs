@@ -70,15 +70,15 @@ namespace HareDu.Snapshotting.Internal
         }
 
 
-        class SnapshotHistoryImpl<T> :
-            SnapshotHistory<T>
-            where T : Snapshot
+        class SnapshotHistoryImpl<TSnapshot> :
+            SnapshotHistory<TSnapshot>
+            where TSnapshot : Snapshot
         {
-            readonly IDictionary<string, SnapshotResult<T>> _snapshots;
+            readonly IDictionary<string, SnapshotResult<TSnapshot>> _snapshots;
             
-            public IReadOnlyList<SnapshotResult<T>> Results => _snapshots.Values.ToList();
+            public IReadOnlyList<SnapshotResult<TSnapshot>> Results => _snapshots.Values.ToList();
 
-            public SnapshotHistoryImpl(IDictionary<string,SnapshotResult<T>> snapshots)
+            public SnapshotHistoryImpl(IDictionary<string, SnapshotResult<TSnapshot>> snapshots)
             {
                 _snapshots = snapshots;
             }

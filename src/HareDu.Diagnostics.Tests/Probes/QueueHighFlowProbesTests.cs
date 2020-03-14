@@ -58,8 +58,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Unhealthy);
-            result.Article.Identifier.ShouldBe(typeof(QueueHighFlowProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Unhealthy);
+            result.KB.Identifier.ShouldBe(typeof(QueueHighFlowProbe).GetIdentifier());
         }
 
         [Test]
@@ -76,8 +76,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.Article.Identifier.ShouldBe(typeof(QueueHighFlowProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Healthy);
+            result.KB.Identifier.ShouldBe(typeof(QueueHighFlowProbe).GetIdentifier());
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
+            result.Status.ShouldBe(ProbeResultStatus.NA);
         }
     }
 }

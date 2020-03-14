@@ -30,7 +30,7 @@ namespace HareDu.Diagnostics.Probes
         public string Description =>
             "Checks network to see if the number of sockets currently in use is less than or equal to the number available.";
         public ComponentType ComponentType => ComponentType.Node;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
+        public ProbeCategory Category => ProbeCategory.Throughput;
 
         public SocketDescriptorThrottlingProbe(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
             : base(kb)
@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (_config.IsNull())
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.NA, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(!data.IsNull() ? data.ClusterIdentifier : null,
                     !data.IsNull() ? data.Identifier : null,
                     Identifier,
@@ -68,7 +68,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.OS.SocketDescriptors.Used < warningThreshold && warningThreshold < data.OS.SocketDescriptors.Available)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -78,7 +78,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else if (data.OS.SocketDescriptors.Used == data.OS.SocketDescriptors.Available)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,
@@ -88,7 +88,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.ClusterIdentifier,
                     data.Identifier,
                     Identifier,

@@ -58,8 +58,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.Article.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Warning);
+            result.KB.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -76,8 +76,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Warning);
-            result.Article.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Warning);
+            result.KB.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -94,8 +94,8 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.Healthy);
-            result.Article.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
+            result.Status.ShouldBe(ProbeResultStatus.Healthy);
+            result.KB.Identifier.ShouldBe(typeof(HighConnectionClosureRateProbe).GetIdentifier());
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(DiagnosticProbeResultStatus.NA);
+            result.Status.ShouldBe(ProbeResultStatus.NA);
         }
     }
 }

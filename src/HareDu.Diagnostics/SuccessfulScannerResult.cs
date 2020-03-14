@@ -22,13 +22,13 @@ namespace HareDu.Diagnostics
     {
         public SuccessfulScannerResult(string scannerIdentifier, IReadOnlyList<ProbeResult> results)
         {
-            Identifier = NewId.NextGuid();
+            Id = NewId.NextGuid();
             ScannerIdentifier = scannerIdentifier;
             Results = results;
             Timestamp = DateTimeOffset.Now;
         }
 
-        public Guid Identifier { get; }
+        public Guid Id { get; }
         public string ScannerIdentifier { get; }
         public IReadOnlyList<ProbeResult> Results { get; }
         public DateTimeOffset Timestamp { get; }

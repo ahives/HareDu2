@@ -11,14 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Analytics.Analyzers
+namespace HareDu.Diagnostics.Registration
 {
+    using System;
     using System.Collections.Generic;
-    using Diagnostics;
+    using Probes;
+    using Scans;
+    using Snapshotting;
 
-    public class NoOpDiagnosticReportAnalyzer :
-        IDiagnosticReportAnalyzer
+    public interface IScannerFactory
     {
-        public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report) => AnalyticsCache.EmptyAnalyzerSummary;
+        bool TryGet<T>(out DiagnosticScan<T> scanner)
+            where T : Snapshot;
+
+        void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
+
+        void RegisterObserver(IObserver<ProbeContext> observer);
+
+        bool RegisterProbe<T>(T probe)
+            where T : DiagnosticProbe;
+
+        IReadOnlyList<string> GetAvailableProbes();
     }
 }

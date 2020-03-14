@@ -187,16 +187,16 @@ Note: Initializing BrokerObjectFactory should be a one time activity, therefore,
 var result = obj.GetAll();
 ```
 
-Note: The above code will return a `Task<T>` so if you want to return the unwrapped ```Result```, ```Result<T>``` or ```ResultList``` you need to use an ```await``` or call the HareDu ```Unfold``` extension method.
+Note: The above code will return a `Task<T>` so if you want to return the unwrapped ```Result```, ```Result<T>``` or ```ResultList``` you need to use an ```await``` or call the HareDu ```GetResult``` extension method.
 
 Using the *async/await* pattern...
 ```csharp
 var result = await obj.GetAll();
 ```
 
-Using the HareDu *Unfold* extension method...
+Using the HareDu *GetResult* extension method...
 ```csharp
-var result = obj.GetAll().Unfold();
+var result = obj.GetAll().GetResult();
 ```
 
 The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier. Since HareDu is a fluent API, you can method chain everything together like so...
@@ -227,7 +227,7 @@ var provider = new YamlFileConfigProvider();
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
 var factory = new BrokerObjectFactory(config);
-var result = await factory
+var result = factory
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -247,7 +247,8 @@ var result = await factory
                         t.VirtualHost("HareDu");
                         t.Node("rabbit@localhost");
                     });
-                });
+                })
+                .GetResult();
 ```
 
 ### Snapshot API

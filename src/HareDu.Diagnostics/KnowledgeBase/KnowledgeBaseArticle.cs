@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
     {
         string Identifier { get; }
         
-        DiagnosticProbeResultStatus Status { get; }
+        ProbeResultStatus Status { get; }
         
         string Reason { get; }
         

@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Scans
     using Probes;
     using Snapshotting.Model;
 
-    public class BrokerQueuesScan :
+    public class BrokerQueuesScanner :
         DiagnosticScan<BrokerQueuesSnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
@@ -28,13 +28,17 @@ namespace HareDu.Diagnostics.Scans
         readonly IReadOnlyList<DiagnosticProbe> _queueProbes;
         readonly List<DiagnosticProbe> _exchangeProbes;
 
-        public BrokerQueuesScan(IReadOnlyList<DiagnosticProbe> probes)
+        public BrokerQueuesScanner(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));
             
-            _queueProbes = probes.Where(IsQueueProbe).ToList();
-            _exchangeProbes = probes.Where(IsExchangeProbe).ToList();
+            _queueProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Queue)
+                .ToList();
+            _exchangeProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Exchange)
+                .ToList();
         }
 
         public IReadOnlyList<ProbeResult> Scan(BrokerQueuesSnapshot snapshot)
@@ -54,13 +58,5 @@ namespace HareDu.Diagnostics.Scans
 
             return results;
         }
-
-        bool IsExchangeProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.Exchange;
-
-        bool IsQueueProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.Queue;
     }
 }

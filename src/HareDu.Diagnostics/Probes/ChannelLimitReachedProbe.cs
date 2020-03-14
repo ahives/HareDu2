@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Probes
         public string Name => "Channel Limit Reached Probe";
         public string Description => "Measures actual number of channels to the defined limit on connection";
         public ComponentType ComponentType => ComponentType.Connection;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
+        public ProbeCategory Category => ProbeCategory.Throughput;
 
         public ChannelLimitReachedProbe(IKnowledgeBaseProvider kb)
             : base(kb)
@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Probes
             
             if (Convert.ToUInt64(data.Channels.Count) >= data.OpenChannelsLimit)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
                     Identifier,

@@ -11,14 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics
+namespace HareDu.Core.Extensions
 {
-    public enum DiagnosticProbeResultStatus
+    using System;
+
+    public static class DataConversionExtensions
     {
-        Unhealthy,
-        Healthy,
-        Warning,
-        Inconclusive,
-        NA
+        public static uint ConvertTo(this int value) => Convert.ToUInt32(value);
     }
 }

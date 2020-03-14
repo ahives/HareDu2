@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Scans
     using Probes;
     using Snapshotting.Model;
 
-    public class ClusterScan :
+    public class ClusterScanner :
         DiagnosticScan<ClusterSnapshot>
     {
         public string Identifier => GetType().GetIdentifier();
@@ -29,18 +29,28 @@ namespace HareDu.Diagnostics.Scans
         readonly IReadOnlyList<DiagnosticProbe> _diskProbes;
         readonly IReadOnlyList<DiagnosticProbe> _memoryProbes;
         readonly IReadOnlyList<DiagnosticProbe> _runtimeProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _operatingSystemProbes;
+        readonly IReadOnlyList<DiagnosticProbe> _osProbes;
 
-        public ClusterScan(IReadOnlyList<DiagnosticProbe> probes)
+        public ClusterScanner(IReadOnlyList<DiagnosticProbe> probes)
         {
             if (probes.IsNull())
                 throw new ArgumentNullException(nameof(probes));
             
-            _nodeProbes = probes.Where(IsNodeProbe).ToList();
-            _diskProbes = probes.Where(IsDiskProbe).ToList();
-            _memoryProbes = probes.Where(IsMemoryProbe).ToList();
-            _runtimeProbes = probes.Where(IsRuntimeProbe).ToList();
-            _operatingSystemProbes = probes.Where(IsOperatingSystemProbe).ToList();
+            _nodeProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Node)
+                .ToList();
+            _diskProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Disk)
+                .ToList();
+            _memoryProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Memory)
+                .ToList();
+            _runtimeProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Runtime)
+                .ToList();
+            _osProbes = probes
+                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.OperatingSystem)
+                .ToList();
         }
 
         public IReadOnlyList<ProbeResult> Scan(ClusterSnapshot snapshot)
@@ -67,30 +77,10 @@ namespace HareDu.Diagnostics.Scans
                     results.AddRange(_runtimeProbes.Select(x => x.Execute(snapshot.Nodes[i].Runtime)));
 
                 if (!snapshot.Nodes[i].OS.IsNull())
-                    results.AddRange(_operatingSystemProbes.Select(x => x.Execute(snapshot.Nodes[i].OS)));
+                    results.AddRange(_osProbes.Select(x => x.Execute(snapshot.Nodes[i].OS)));
             }
 
             return results;
         }
-
-        bool IsOperatingSystemProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.OperatingSystem;
-
-        bool IsRuntimeProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.Runtime;
-
-        bool IsMemoryProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.Memory;
-
-        bool IsDiskProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.Disk;
-
-        bool IsNodeProbe(DiagnosticProbe probe) =>
-            !probe.IsNull()
-            && probe.ComponentType == ComponentType.Node;
     }
 }

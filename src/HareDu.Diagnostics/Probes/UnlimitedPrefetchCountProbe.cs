@@ -27,7 +27,7 @@ namespace HareDu.Diagnostics.Probes
         public string Name => "Unlimited Prefetch Count Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Channel;
-        public DiagnosticProbeCategory Category => DiagnosticProbeCategory.Throughput;
+        public ProbeCategory Category => ProbeCategory.Throughput;
 
         public UnlimitedPrefetchCountProbe(IKnowledgeBaseProvider kb)
             : base(kb)
@@ -46,7 +46,7 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.PrefetchCount == 0)
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Warning, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
@@ -56,7 +56,7 @@ namespace HareDu.Diagnostics.Probes
             }
             else
             {
-                _kb.TryGet(Identifier, DiagnosticProbeResultStatus.Inconclusive, out var article);
+                _kb.TryGet(Identifier, ProbeResultStatus.Inconclusive, out var article);
                 result = new InconclusiveProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
                     Identifier,
