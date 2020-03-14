@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "Queue Low Flow Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
@@ -43,10 +43,11 @@ namespace HareDu.Diagnostics.Probes
  
             if (_config.IsNull())
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.NA, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(null,
                     null,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     article);
 
@@ -63,13 +64,25 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Messages.Incoming.Total <= _config.Probes.QueueLowFlowThreshold)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
-                result = new UnhealthyProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, article);
+                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
+                result = new UnhealthyProbeResult(data.Node,
+                    data.Identifier,
+                    Id,
+                    Name,
+                    ComponentType,
+                    probeData,
+                    article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
-                result = new HealthyProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, article);
+                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
+                result = new HealthyProbeResult(data.Node,
+                    data.Identifier,
+                    Id,
+                    Name,
+                    ComponentType,
+                    probeData,
+                    article);
             }
 
             NotifyObservers(result);

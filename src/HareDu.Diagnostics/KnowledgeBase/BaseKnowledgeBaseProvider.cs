@@ -34,11 +34,11 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
         public bool TryGet(string identifier, ProbeResultStatus status, out KnowledgeBaseArticle article)
         {
-            if (_articles.Exists(x => x.Identifier == identifier))
+            if (_articles.Exists(x => x.Id == identifier))
             {
                 try
                 {
-                    article = _articles.Single(x => x.Identifier == identifier && x.Status == status);
+                    article = _articles.Single(x => x.Id == identifier && x.Status == status);
                     return true;
                 }
                 catch
@@ -54,11 +54,11 @@ namespace HareDu.Diagnostics.KnowledgeBase
 
         public bool TryGet(string identifier, out IReadOnlyList<KnowledgeBaseArticle> articles)
         {
-            if (_articles.Exists(x => x.Identifier == identifier))
+            if (_articles.Exists(x => x.Id == identifier))
             {
                 try
                 {
-                    articles = _articles.Where(x => x.Identifier == identifier).ToList();
+                    articles = _articles.Where(x => x.Id == identifier).ToList();
                     return true;
                 }
                 catch
@@ -88,17 +88,17 @@ namespace HareDu.Diagnostics.KnowledgeBase
                 Status = status;
                 Reason = reason;
                 Remediation = remediation;
-                Identifier = typeof(T).GetIdentifier();
+                Id = typeof(T).GetIdentifier();
             }
 
             public KnowledgeBaseArticleImpl(ProbeResultStatus status, string reason)
             {
                 Status = status;
                 Reason = reason;
-                Identifier = typeof(T).GetIdentifier();
+                Id = typeof(T).GetIdentifier();
             }
 
-            public string Identifier { get; }
+            public string Id { get; }
             public ProbeResultStatus Status { get; }
             public string Reason { get; }
             public string Remediation { get; }

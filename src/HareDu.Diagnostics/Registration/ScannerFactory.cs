@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics.Registration
     using Core.Extensions;
     using KnowledgeBase;
     using Probes;
-    using Scans;
+    using Scanners;
     using Snapshotting;
 
     /// <summary>
@@ -37,22 +37,22 @@ namespace HareDu.Diagnostics.Registration
 
         public ScannerFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
-            _config = !config.IsNull() ? config : throw new HareDuDiagnosticsInitException();
-            _kb = !kb.IsNull() ? kb : throw new HareDuDiagnosticsInitException();
+            _config = !config.IsNull() ? config : throw new HareDuDiagnosticsException();
+            _kb = !kb.IsNull() ? kb : throw new HareDuDiagnosticsException();
             _cache = new Dictionary<string, object>();
             _probeCache = new Dictionary<string, DiagnosticProbe>();
             _observers = new List<IDisposable>();
             
             bool registeredProbes = TryRegisterAllProbes();
             if (!registeredProbes)
-                throw new HareDuDiagnosticsInitException();
+                throw new HareDuDiagnosticsException();
             
             bool registered = TryRegisterAll();
             if (!registered)
-                throw new HareDuDiagnosticsInitException();
+                throw new HareDuDiagnosticsException();
         }
 
-        public bool TryGet<T>(out DiagnosticScan<T> scanner)
+        public bool TryGet<T>(out DiagnosticScanner<T> scanner)
             where T : Snapshot
         {
             Type type = typeof(T);
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Registration
                 return false;
             }
             
-            scanner = (DiagnosticScan<T>) _cache[type.FullName];
+            scanner = (DiagnosticScanner<T>) _cache[type.FullName];
             return true;
         }
 
@@ -107,7 +107,8 @@ namespace HareDu.Diagnostics.Registration
             return _probeCache.ContainsKey(typeof(T).FullName);
         }
 
-        public IReadOnlyList<string> GetAvailableProbes() => _probeCache.Keys.ToList();
+        public IReadOnlyList<string> GetAvailableProbes()
+            => _probeCache.Values.Select(x => x.Id).ToList();
 
         protected virtual bool TryRegisterAll()
         {
@@ -165,12 +166,12 @@ namespace HareDu.Diagnostics.Registration
                 if (type.IsNull())
                     continue;
 
-                if (!type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(DiagnosticScan<>)))
+                if (!type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(DiagnosticScanner<>)))
                     continue;
 
                 var genericType = type
                     .GetInterfaces()
-                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(DiagnosticScan<>));
+                    .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(DiagnosticScanner<>));
 
                 if (genericType.IsNull())
                     continue;

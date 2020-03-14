@@ -16,12 +16,12 @@ namespace HareDu.Diagnostics.Registration
     using System;
     using System.Collections.Generic;
     using Probes;
-    using Scans;
+    using Scanners;
     using Snapshotting;
 
     public interface IScannerFactory
     {
-        bool TryGet<T>(out DiagnosticScan<T> scanner)
+        bool TryGet<T>(out DiagnosticScanner<T> scanner)
             where T : Snapshot;
 
         void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);

@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Unhealthy);
-            result.KB.Identifier.ShouldBe(typeof(NetworkPartitionProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(NetworkPartitionProbe).GetIdentifier());
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Healthy);
-            result.KB.Identifier.ShouldBe(typeof(NetworkPartitionProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(NetworkPartitionProbe).GetIdentifier());
         }
     }
 }

@@ -30,13 +30,13 @@ namespace HareDu.Scheduling
         // where T : SnapshotLens<Snapshot>
         where T : Snapshot
     {
-        readonly IDiagnosticScanner _scanner;
+        readonly IScanner _scanner;
         readonly ISnapshotFactory _factory;
         readonly ISnapshotWriter _snapshotWriter;
         readonly IDiagnosticWriter _diagnosticWriter;
 
         public HareDuJobFactory(
-            IDiagnosticScanner scanner,
+            IScanner scanner,
             ISnapshotFactory factory,
             ISnapshotWriter snapshotWriter,
             IDiagnosticWriter diagnosticWriter)
@@ -70,13 +70,13 @@ namespace HareDu.Scheduling
     public class HareDuJobFactory :
         SimpleJobFactory
     {
-        readonly IDiagnosticScanner _scanner;
+        readonly IScanner _scanner;
         readonly ISnapshotFactory _factory;
         readonly ISnapshotWriter _snapshotWriter;
         readonly IDiagnosticWriter _diagnosticWriter;
 
         public HareDuJobFactory(
-            IDiagnosticScanner scanner,
+            IScanner scanner,
             ISnapshotFactory factory,
             ISnapshotWriter snapshotWriter,
             IDiagnosticWriter diagnosticWriter)

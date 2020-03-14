@@ -25,7 +25,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "File Descriptor Throttling Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.OperatingSystem;
@@ -44,10 +44,11 @@ namespace HareDu.Diagnostics.Probes
 
             if (_config.IsNull())
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.NA, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(!data.IsNull() ? data.NodeIdentifier : null,
                     !data.IsNull() ? data.ProcessId : null,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     article);
 
@@ -68,30 +69,33 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.FileDescriptors.Used < warningThreshold && warningThreshold < data.FileDescriptors.Available)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     data.ProcessId,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else if (data.FileDescriptors.Used == data.FileDescriptors.Available)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     data.ProcessId,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Warning, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.NodeIdentifier,
                     data.ProcessId,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);

@@ -25,11 +25,11 @@ namespace HareDu.Scheduling
         where T : Snapshot
     {
         readonly ISnapshotFactory _factory;
-        readonly IDiagnosticScanner _scanner;
+        readonly IScanner _scanner;
         readonly IDiagnosticWriter _writer;
         readonly SnapshotLens<T> _lens;
 
-        public PersistDiagnosticsJob(ISnapshotFactory factory, IDiagnosticScanner scanner, IDiagnosticWriter writer)
+        public PersistDiagnosticsJob(ISnapshotFactory factory, IScanner scanner, IDiagnosticWriter writer)
         {
             _factory = factory;
             _scanner = scanner;

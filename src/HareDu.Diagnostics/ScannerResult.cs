@@ -20,7 +20,7 @@ namespace HareDu.Diagnostics
     {
         Guid Id { get; }
         
-        string ScannerIdentifier { get; }
+        string ScannerId { get; }
         
         IReadOnlyList<ProbeResult> Results { get; }
         

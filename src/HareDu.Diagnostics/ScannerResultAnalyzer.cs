@@ -11,26 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Analyzers
+namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Configuration;
     using Core.Extensions;
+    using KnowledgeBase;
+    using Registration;
 
-    public abstract class BaseAnalyzeDiagnosticReport
+    public class ScannerResultAnalyzer :
+        IScannerResultAnalyzer
     {
-        protected readonly IEnumerable<string> _supported;
+        readonly IScannerFactory _factory;
 
-        protected BaseAnalyzeDiagnosticReport()
+        public ScannerResultAnalyzer(IScannerFactory factory)
         {
-            _supported = GetSupportedAnalyzers();
+            _factory = !factory.IsNull() ? factory : throw new HareDuDiagnosticsException();
         }
 
-        public virtual IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report)
+        public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report)
         {
+            var supported = _factory.GetAvailableProbes();
             var filtered = report.Results
-                .Where(x => _supported.Contains(x.Id))
+                .Where(x => supported.Contains(x.Id))
                 .ToList();
             var rollup = GetRollup(filtered, x => x.ParentComponentId);
             
@@ -62,9 +67,7 @@ namespace HareDu.Diagnostics.Analyzers
             return summary;
         }
 
-        protected abstract IEnumerable<string> GetSupportedAnalyzers();
-        
-        protected virtual decimal CalcPercentage(List<ProbeResultStatus> results, ProbeResultStatus status)
+        decimal CalcPercentage(List<ProbeResultStatus> results, ProbeResultStatus status)
         {
             decimal totalCount = Convert.ToDecimal(results.Count);
             decimal statusCount = Convert.ToDecimal(results.Count(x => x == status));
@@ -72,8 +75,7 @@ namespace HareDu.Diagnostics.Analyzers
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 
-        protected virtual IDictionary<string, List<ProbeResultStatus>> GetRollup(IReadOnlyList<ProbeResult> results,
-            Func<ProbeResult, string> rollupKey)
+        IDictionary<string, List<ProbeResultStatus>> GetRollup(IReadOnlyList<ProbeResult> results, Func<ProbeResult, string> rollupKey)
         {
             var rollup = new Dictionary<string, List<ProbeResultStatus>>();
 

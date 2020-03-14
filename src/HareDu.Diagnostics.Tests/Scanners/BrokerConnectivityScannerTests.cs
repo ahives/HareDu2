@@ -18,15 +18,15 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics.Probes;
+    using Diagnostics.Scanners;
     using Fakes;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Scans;
     using Shouldly;
     using Snapshotting.Model;
 
     [TestFixture]
-    public class BrokerConnectivityDiagnosticTests
+    public class BrokerConnectivityScannerTests
     {
         IReadOnlyList<DiagnosticProbe> _probes;
 
@@ -57,16 +57,16 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
             
-            var report = new BrokerConnectivityScanner(_probes)
+            var result = new BrokerConnectivityScanner(_probes)
                 .Scan(snapshot);
 
-            report.Count.ShouldBe(6);
-            report.Count(x => x.Id == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.Id == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.Id == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.Id == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.Id == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
-            report.Count(x => x.Id == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
+            result.Count.ShouldBe(6);
+            result.Count(x => x.Id == typeof(HighConnectionCreationRateProbe).GetIdentifier()).ShouldBe(1);
+            result.Count(x => x.Id == typeof(HighConnectionClosureRateProbe).GetIdentifier()).ShouldBe(1);
+            result.Count(x => x.Id == typeof(UnlimitedPrefetchCountProbe).GetIdentifier()).ShouldBe(1);
+            result.Count(x => x.Id == typeof(ChannelThrottlingProbe).GetIdentifier()).ShouldBe(1);
+            result.Count(x => x.Id == typeof(ChannelLimitReachedProbe).GetIdentifier()).ShouldBe(1);
+            result.Count(x => x.Id == typeof(BlockedConnectionProbe).GetIdentifier()).ShouldBe(1);
         }
 
         [Test]
@@ -74,10 +74,10 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerConnectivitySnapshot snapshot = null;
             
-            var report = new BrokerConnectivityScanner(_probes)
+            var result = new BrokerConnectivityScanner(_probes)
                 .Scan(snapshot);
 
-            report.ShouldBeEmpty();
+            result.ShouldBeEmpty();
         }
     }
 }

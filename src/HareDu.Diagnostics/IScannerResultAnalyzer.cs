@@ -11,16 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Diagnostics.Scans
+namespace HareDu.Diagnostics
 {
     using System.Collections.Generic;
-    using Snapshotting;
 
-    public interface DiagnosticScan<in T>
-        where T : Snapshot
+    public interface IScannerResultAnalyzer
     {
-        string Identifier { get; }
-
-        IReadOnlyList<ProbeResult> Scan(T snapshot);
+        IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report);
     }
 }

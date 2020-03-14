@@ -203,10 +203,10 @@ namespace HareDu.Internal
             }
 
             
-            class ScopedParameterDefinitionImpl<T> :
-                ScopedParameterDefinition<T>
+            class ScopedParameterDefinitionImpl<U> :
+                ScopedParameterDefinition<U>
             {
-                public ScopedParameterDefinitionImpl(string virtualHost, string component, string name, T value)
+                public ScopedParameterDefinitionImpl(string virtualHost, string component, string name, U value)
                 {
                     VirtualHost = virtualHost;
                     Component = component;
@@ -217,7 +217,7 @@ namespace HareDu.Internal
                 public string VirtualHost { get; }
                 public string Component { get; }
                 public string ParameterName { get; }
-                public T ParameterValue { get; }
+                public U ParameterValue { get; }
             }
         }
     }

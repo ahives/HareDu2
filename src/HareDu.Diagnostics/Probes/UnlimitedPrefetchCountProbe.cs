@@ -23,7 +23,7 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         DiagnosticProbe
     {
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "Unlimited Prefetch Count Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Channel;
@@ -46,20 +46,22 @@ namespace HareDu.Diagnostics.Probes
 
             if (data.PrefetchCount == 0)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Warning, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Inconclusive, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Inconclusive, out var article);
                 result = new InconclusiveProbeResult(data.ConnectionIdentifier,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);

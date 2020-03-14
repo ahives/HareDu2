@@ -16,4 +16,11 @@
       <ProjectReference Include="..\HareDu\HareDu.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Analyzers\ThrottledChannelsScanAnalyzer.cs" />
+      <Compile Remove="Analyzers\QueueNoFlowScanAnalyzer.cs" />
+      <Compile Remove="Analyzers\NoOpScanAnalyzer.cs" />
+      <Compile Remove="Registration\ScanAnalyzerFactory.cs" />
+    </ItemGroup>
+
 </Project>

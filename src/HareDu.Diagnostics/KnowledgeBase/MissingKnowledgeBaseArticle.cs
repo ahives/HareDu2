@@ -18,11 +18,11 @@ namespace HareDu.Diagnostics.KnowledgeBase
     {
         public MissingKnowledgeBaseArticle(string identifier, ProbeResultStatus status)
         {
-            Identifier = identifier;
+            Id = identifier;
             Status = status;
         }
 
-        public string Identifier { get; }
+        public string Id { get; }
         public ProbeResultStatus Status { get; }
         public string Reason => "No KB article Available";
         public string Remediation => "NA";

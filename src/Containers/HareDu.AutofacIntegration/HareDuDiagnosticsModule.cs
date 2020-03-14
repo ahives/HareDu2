@@ -52,8 +52,8 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<ScanAnalyzerFactory>()
-                .As<IScanAnalyzerFactory>()
+            builder.RegisterType<ScannerResultAnalyzer>()
+                .As<IScannerResultAnalyzer>()
                 .SingleInstance();
 
             builder.RegisterType<SnapshotFactory>()
@@ -68,8 +68,8 @@ namespace HareDu.AutofacIntegration
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScanner>()
-                .As<IDiagnosticScanner>()
+            builder.RegisterType<Scanner>()
+                .As<IScanner>()
                 .SingleInstance();
 
             builder.RegisterType<YamlFileConfigProvider>()

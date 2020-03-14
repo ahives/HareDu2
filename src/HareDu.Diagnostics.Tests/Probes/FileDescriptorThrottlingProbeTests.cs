@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Warning);
-            result.KB.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Unhealthy);
-            result.KB.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Healthy);
-            result.KB.Identifier.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(FileDescriptorThrottlingProbe).GetIdentifier());
         }
 
         [Test]

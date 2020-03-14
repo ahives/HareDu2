@@ -27,6 +27,8 @@ namespace HareDu.Diagnostics
         
         string Id { get; }
         
+        string Name { get; }
+        
         ProbeResultStatus Status { get; }
         
         KnowledgeBaseArticle KB { get; }

@@ -17,7 +17,7 @@ namespace HareDu.Diagnostics
     using System.Collections.Generic;
     using Snapshotting;
 
-    public interface IDiagnosticScanner
+    public interface IScanner
     {
         /// <summary>
         /// Executes a list of predefined diagnostic sensors against the snapshot and returns a concatenated report of the results from executing said sensors.
@@ -32,12 +32,12 @@ namespace HareDu.Diagnostics
         /// Registers a list of observers that receives the output in real-time as the each sensor executes.
         /// </summary>
         /// <param name="observers"></param>
-        IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
+        IScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
 
         /// <summary>
         /// Registers an observer that receives the output in real-time as the each sensor executes.
         /// </summary>
         /// <param name="observer"></param>
-        IDiagnosticScanner RegisterObserver(IObserver<ProbeContext> observer);
+        IScanner RegisterObserver(IObserver<ProbeContext> observer);
     }
 }

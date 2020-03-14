@@ -394,9 +394,9 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 Registering objects without IoC containers is pretty simple as well...
 
 ```csharp
-var scanner = new DiagnosticScanner(config.Diagnostics, new KnowledgeBaseProvider());
+var scanner = new Scanner(config.Diagnostics, new KnowledgeBaseProvider());
 ```
-Since the ```DiagnosticScanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```DiagnosticScanner``` as a singleton. This applies to most things in HareDu 2.
+Since the ```Scanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```Scanner``` as a singleton. This applies to most things in HareDu 2.
 
 #### Scanning snapshots
 
@@ -408,7 +408,7 @@ The above code will return a ```ScannerResult``` object, which contains the resu
 
 #### Registering Observers
 
-When setting up ```DiagnosticScanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotContext<T>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotContext<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
+When setting up ```Scanner```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotContext<T>```. Each time a snapshot is taken (i.e. when the ```Scan``` method is called), all registered observers will be notified with an object of ```SnapshotContext<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```Scan``` method or else the registered observers will not receive notifications.
 
 ```csharp
 var result = scanner
@@ -443,14 +443,15 @@ var factory = new SnapshotFactory(config.Broker);
 // Take a snapshot
 var lens = factory
     .Lens<BrokerQueuesSnapshot>()
-    .TakeSnapshot();
+    .TakeSnapshot(out var snapshot);
 
+var scannerFactory = new ScannerFactory( config.Diagnostics, new KnowledgeBaseProvider());
 // Initialize the diagnostic scanner and register the observer
-var scanner = new DiagnosticScanner(config.Diagnostics, new KnowledgeBaseProvider())
+var scanner = new Scanner(scannerFactory)
     .RegisterObserver(new BrokerQueuesScannerObserver());
 
 // Scan the results of the most recent snapshot taken
-var result = scanner.Scan(lens.History.MostRecent());
+var result = scanner.Scan(snapshot);
 ```
 
 ## Get It

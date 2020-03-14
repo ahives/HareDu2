@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         DiagnosticProbe
     {
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "Blocked Connection Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Connection;
@@ -45,20 +45,22 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.State == ConnectionState.Blocked)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);

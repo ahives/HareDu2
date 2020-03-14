@@ -21,9 +21,9 @@ namespace HareDu.Diagnostics.Tests.Registration
     using Core.Extensions;
     using Diagnostics.Probes;
     using Diagnostics.Registration;
+    using Diagnostics.Scanners;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Scans;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
@@ -138,8 +138,8 @@ namespace HareDu.Diagnostics.Tests.Registration
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
-        class FakeDiagnosticScan :
-            DiagnosticScan<FakeSnapshot>
+        class FakeDiagnosticScanner :
+            DiagnosticScanner<FakeSnapshot>
         {
             public string Identifier => GetType().GetIdentifier();
 
@@ -163,7 +163,7 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             public IDisposable Subscribe(IObserver<ProbeContext> observer) => throw new NotImplementedException();
 
-            public string Identifier { get; }
+            public string Id { get; }
             public string Name { get; }
             public string Description { get; }
             public ComponentType ComponentType { get; }

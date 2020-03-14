@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "Consumer Utilization Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
@@ -49,30 +49,33 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.ConsumerUtilization >= _config.Probes.ConsumerUtilizationThreshold && data.ConsumerUtilization < 1.0M)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Warning, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.Node,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else if (data.ConsumerUtilization < _config.Probes.ConsumerUtilizationThreshold)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.Node,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.Node,
                     data.Identifier,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     probeData,
                     article);

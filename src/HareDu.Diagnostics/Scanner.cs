@@ -16,38 +16,26 @@ namespace HareDu.Diagnostics
     using System;
     using System.Collections.Generic;
     using Core.Configuration;
+    using Core.Extensions;
     using KnowledgeBase;
     using Registration;
-    using Scans;
+    using Scanners;
     using Snapshotting;
 
-    public class DiagnosticScanner :
-        IDiagnosticScanner
+    public class Scanner :
+        IScanner
     {
-        readonly DiagnosticsConfig _config;
         readonly IScannerFactory _factory;
 
-        public DiagnosticScanner(IScannerFactory factory)
+        public Scanner(IScannerFactory factory)
         {
-            _factory = factory;
-        }
-
-        public DiagnosticScanner(DiagnosticsConfig config)
-        {
-            _config = config;
-            _factory = new ScannerFactory(_config, new KnowledgeBaseProvider());
-        }
-
-        public DiagnosticScanner(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
-        {
-            _config = config;
-            _factory = new ScannerFactory(_config, kb);
+            _factory = !factory.IsNull() ? factory : throw new HareDuDiagnosticsException();
         }
 
         public ScannerResult Scan<T>(T snapshot)
             where T : Snapshot
         {
-            if (!_factory.TryGet(out DiagnosticScan<T> scanner))
+            if (!_factory.TryGet(out DiagnosticScanner<T> scanner))
                 return DiagnosticCache.EmptyScannerResult;
             
             var results = scanner.Scan(snapshot);
@@ -55,14 +43,14 @@ namespace HareDu.Diagnostics
             return new SuccessfulScannerResult(scanner.Identifier, results);
         }
 
-        public IDiagnosticScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)
+        public IScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)
         {
             _factory.RegisterObservers(observers);
 
             return this;
         }
 
-        public IDiagnosticScanner RegisterObserver(IObserver<ProbeContext> observer)
+        public IScanner RegisterObserver(IObserver<ProbeContext> observer)
         {
             _factory.RegisterObserver(observer);
 

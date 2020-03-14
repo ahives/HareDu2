@@ -18,7 +18,7 @@ namespace HareDu.Diagnostics.Probes
     public interface DiagnosticProbe :
         IObservable<ProbeContext>
     {
-        string Identifier { get; }
+        string Id { get; }
         
         string Name { get; }
         

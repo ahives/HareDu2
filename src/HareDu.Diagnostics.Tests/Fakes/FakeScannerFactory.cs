@@ -17,13 +17,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using System.Collections.Generic;
     using Diagnostics.Probes;
     using Diagnostics.Registration;
-    using Scans;
+    using Diagnostics.Scanners;
     using Snapshotting;
 
     public class FakeScannerFactory :
         IScannerFactory
     {
-        public bool TryGet<T>(out DiagnosticScan<T> scanner)
+        public bool TryGet<T>(out DiagnosticScanner<T> scanner)
             where T : Snapshot
         {
             scanner = new NoOpScanner<T>();

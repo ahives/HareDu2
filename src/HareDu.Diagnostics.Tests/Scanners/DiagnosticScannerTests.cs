@@ -17,9 +17,9 @@ namespace HareDu.Diagnostics.Tests.Scanners
     using AutofacIntegration;
     using Core.Extensions;
     using Diagnostics.Registration;
+    using Diagnostics.Scanners;
     using Fakes;
     using NUnit.Framework;
-    using Scans;
     using Shouldly;
     using Snapshotting.Model;
 
@@ -39,33 +39,33 @@ namespace HareDu.Diagnostics.Tests.Scanners
         }
 
         [Test]
-        public void Verify_can_select_BrokerConnectivityDiagnostic()
+        public void Verify_can_select_broker_connectivity_scanner()
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot1();
-            var scanner = _container.Resolve<IDiagnosticScanner>()
+            var result = _container.Resolve<IScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerConnectivityScanner).GetIdentifier());
+            result.ScannerId.ShouldBe(typeof(BrokerConnectivityScanner).GetIdentifier());
         }
 
         [Test]
-        public void Verify_can_select_ClusterDiagnostic()
+        public void Verify_can_select_cluster_scanner()
         {
             ClusterSnapshot snapshot = new FakeClusterSnapshot1();
-            var scanner = _container.Resolve<IDiagnosticScanner>()
+            var result = _container.Resolve<IScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(ClusterScanner).GetIdentifier());
+            result.ScannerId.ShouldBe(typeof(ClusterScanner).GetIdentifier());
         }
 
         [Test]
-        public void Verify_can_select_BrokerQueuesDiagnostic()
+        public void Verify_can_select_broker_queues_scanner()
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
-            var scanner = _container.Resolve<IDiagnosticScanner>()
+            var result = _container.Resolve<IScanner>()
                 .Scan(snapshot);
             
-            scanner.ScannerIdentifier.ShouldBe(typeof(BrokerQueuesScanner).GetIdentifier());
+            result.ScannerId.ShouldBe(typeof(BrokerQueuesScanner).GetIdentifier());
         }
 
         [Test]
@@ -73,11 +73,11 @@ namespace HareDu.Diagnostics.Tests.Scanners
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot1(1);
             IScannerFactory factory = new FakeScannerFactory();
-            IDiagnosticScanner scanner = new DiagnosticScanner(factory);
+            IScanner result = new Scanner(factory);
 
-            var report = scanner.Scan(snapshot);
+            var report = result.Scan(snapshot);
             
-            report.ScannerIdentifier.ShouldBe(typeof(NoOpScanner<EmptySnapshot>).GetIdentifier());
+            report.ScannerId.ShouldBe(typeof(NoOpScanner<EmptySnapshot>).GetIdentifier());
             report.ShouldBe(DiagnosticCache.EmptyScannerResult);
         }
     }

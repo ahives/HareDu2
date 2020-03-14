@@ -18,7 +18,6 @@ namespace HareDu.Diagnostics.Tests.Analyzers
     using Autofac;
     using Core.Configuration;
     using Core.Extensions;
-    using Diagnostics.Analyzers;
     using Diagnostics.Registration;
     using Extensions;
     using Fakes;
@@ -52,12 +51,12 @@ namespace HareDu.Diagnostics.Tests.Analyzers
                 .As<IScannerFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<ScanAnalyzerFactory>()
-                .As<IScanAnalyzerFactory>()
+            builder.RegisterType<ScannerResultAnalyzer>()
+                .As<IScannerResultAnalyzer>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticScanner>()
-                .As<IDiagnosticScanner>()
+            builder.RegisterType<Scanner>()
+                .As<IScanner>()
                 .SingleInstance();
 
             builder.RegisterType<YamlFileConfigProvider>()
@@ -87,11 +86,10 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         public void Test1()
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
-            IScanAnalyzerFactory factory = _container.Resolve<IScanAnalyzerFactory>();
 
-            var summary = _container.Resolve<IDiagnosticScanner>()
+            var summary = _container.Resolve<IScanner>()
                 .Scan(snapshot)
-                .Analyze(factory, typeof(ThrottledChannelsScanAnalyzer).GetIdentifier());
+                .Analyze(_container.Resolve<IScannerResultAnalyzer>());
             
             for (int i = 0; i < summary.Count; i++)
             {
@@ -112,10 +110,10 @@ namespace HareDu.Diagnostics.Tests.Analyzers
         {
             BrokerConnectivitySnapshot snapshot = new FakeBrokerConnectivitySnapshot3();
             
-            var report = _container.Resolve<IDiagnosticScanner>()
+            var report = _container.Resolve<IScanner>()
                 .Scan(snapshot);
 
-            var summary = _container.Resolve<IScanAnalyzer>()
+            var summary = _container.Resolve<IScannerResultAnalyzer>()
                 .Analyze(report);
 
             for (int i = 0; i < summary.Count; i++)

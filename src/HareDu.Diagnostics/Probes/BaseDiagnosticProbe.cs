@@ -84,12 +84,13 @@ namespace HareDu.Diagnostics.Probes
             ProbeResult
         {
             public NotApplicableProbeResult(string parentComponentId, string componentId,
-                string probeId, ComponentType componentType, KnowledgeBaseArticle article)
+                string probeId, string name, ComponentType componentType, KnowledgeBaseArticle article)
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 ComponentType = componentType;
                 Id = probeId;
+                Name = name;
                 KB = article;
                 Timestamp = DateTimeOffset.UtcNow;
             }
@@ -98,6 +99,7 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
             public string Id { get; }
+            public string Name { get; }
             public ProbeResultStatus Status => ProbeResultStatus.NA;
             public KnowledgeBaseArticle KB { get; }
             public IReadOnlyList<ProbeData> Data => Array.Empty<ProbeData>();
@@ -108,12 +110,13 @@ namespace HareDu.Diagnostics.Probes
         protected class HealthyProbeResult :
             ProbeResult
         {
-            public HealthyProbeResult(string parentComponentId, string componentId, string probeId,
+            public HealthyProbeResult(string parentComponentId, string componentId, string probeId, string name,
                 ComponentType componentType, List<ProbeData> probeData, KnowledgeBaseArticle article)
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 Id = probeId;
+                Name = name;
                 ComponentType = componentType;
                 Data = probeData;
                 KB = article;
@@ -125,6 +128,7 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
             public string Id { get; }
+            public string Name { get; }
             public ProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KB { get; }
             public IReadOnlyList<ProbeData> Data { get; }
@@ -135,12 +139,13 @@ namespace HareDu.Diagnostics.Probes
         protected class UnhealthyProbeResult :
             ProbeResult
         {
-            public UnhealthyProbeResult(string parentComponentId, string componentId, string probeId,
+            public UnhealthyProbeResult(string parentComponentId, string componentId, string probeId, string name,
                 ComponentType componentType, IReadOnlyList<ProbeData> probeData, KnowledgeBaseArticle article)
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 Id = probeId;
+                Name = name;
                 ComponentType = componentType;
                 Data = probeData;
                 KB = article;
@@ -151,6 +156,7 @@ namespace HareDu.Diagnostics.Probes
             public string ParentComponentId { get; }
             public string ComponentId { get; }
             public string Id { get; }
+            public string Name { get; }
             public ProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KB { get; }
             public IReadOnlyList<ProbeData> Data { get; }
@@ -162,12 +168,13 @@ namespace HareDu.Diagnostics.Probes
         protected class WarningProbeResult :
             ProbeResult
         {
-            public WarningProbeResult(string parentComponentId, string componentId, string probeId,
+            public WarningProbeResult(string parentComponentId, string componentId, string probeId, string name,
                 ComponentType componentType, IReadOnlyList<ProbeData> probeData, KnowledgeBaseArticle article)
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 Id = probeId;
+                Name = name;
                 ComponentType = componentType;
                 Data = probeData;
                 KB = article;
@@ -179,6 +186,7 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
             public string Id { get; }
+            public string Name { get; }
             public ProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KB { get; }
             public IReadOnlyList<ProbeData> Data { get; }
@@ -190,13 +198,14 @@ namespace HareDu.Diagnostics.Probes
             ProbeResult
         {
             public InconclusiveProbeResult(string parentComponentId, string componentId,
-                string probeId, ComponentType componentType, IReadOnlyList<ProbeData> probeData,
+                string probeId, string name, ComponentType componentType, IReadOnlyList<ProbeData> probeData,
                 KnowledgeBaseArticle article)
             {
                 ParentComponentId = parentComponentId;
                 ComponentId = componentId;
                 ComponentType = componentType;
                 Id = probeId;
+                Name = name;
                 KB = article;
                 Data = probeData;
                 Status = ProbeResultStatus.Inconclusive;
@@ -219,6 +228,7 @@ namespace HareDu.Diagnostics.Probes
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }
             public string Id { get; }
+            public string Name { get; }
             public ProbeResultStatus Status { get; }
             public KnowledgeBaseArticle KB { get; }
             public IReadOnlyList<ProbeData> Data { get; }

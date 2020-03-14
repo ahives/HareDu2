@@ -20,25 +20,25 @@ namespace HareDu.Diagnostics.Extensions
 
     public static class AnalyzerExtensions
     {
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzerFactory factory, string key)
-            => factory.TryGet(key, out var analyzer)
-                ? analyzer.Analyze(report)
-                : DiagnosticCache.EmptyAnalyzerSummary;
+        // public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzerFactory factory, string key)
+        //     => factory.TryGet(key, out var analyzer)
+        //         ? analyzer.Analyze(report)
+        //         : DiagnosticCache.EmptyAnalyzerSummary;
 
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzer analyzer)
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScannerResultAnalyzer analyzer)
             => !analyzer.IsNull()
                 ? analyzer.Analyze(report)
                 : DiagnosticCache.EmptyAnalyzerSummary;
 
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzerFactory factory, Type type)
-            => factory.TryGet(type, out var analyzer)
-                ? analyzer.Analyze(report)
-                : DiagnosticCache.EmptyAnalyzerSummary;
+        // public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzerFactory factory, Type type)
+        //     => factory.TryGet(type, out var analyzer)
+        //         ? analyzer.Analyze(report)
+        //         : DiagnosticCache.EmptyAnalyzerSummary;
 
-        public static IReadOnlyList<AnalyzerSummary> Analyze<T>(this ScannerResult report, IScanAnalyzerFactory factory)
-            where T : IScanAnalyzer
-            => factory.TryGet<T>(out var analyzer)
-                ? analyzer.Analyze(report)
-                : DiagnosticCache.EmptyAnalyzerSummary;
+        // public static IReadOnlyList<AnalyzerSummary> Analyze<T>(this ScannerResult report, IScanAnalyzerFactory factory)
+        //     where T : IScanAnalyzer
+        //     => factory.TryGet<T>(out var analyzer)
+        //         ? analyzer.Analyze(report)
+        //         : DiagnosticCache.EmptyAnalyzerSummary;
     }
 }

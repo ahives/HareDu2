@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         DiagnosticProbe
     {
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "Queue No Flow Probe";
         public string Description { get; }
         public ComponentType ComponentType => ComponentType.Queue;
@@ -45,13 +45,25 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.Messages.Incoming.Total == 0)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Unhealthy, out var article);
-                result = new UnhealthyProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, article);
+                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
+                result = new UnhealthyProbeResult(data.Node,
+                    data.Identifier,
+                    Id,
+                    Name,
+                    ComponentType,
+                    probeData,
+                    article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
-                result = new HealthyProbeResult(data.Node, data.Identifier, Identifier, ComponentType, probeData, article);
+                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
+                result = new HealthyProbeResult(data.Node,
+                    data.Identifier,
+                    Id,
+                    Name,
+                    ComponentType,
+                    probeData,
+                    article);
             }
 
             NotifyObservers(result);

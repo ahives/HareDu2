@@ -140,7 +140,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
-            services.TryAddSingleton<IDiagnosticScanner, DiagnosticScanner>();
+            services.TryAddSingleton<IScanner, Scanner>();
 
             services.TryAddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
 
@@ -176,7 +176,7 @@ namespace HareDu.CoreIntegration
 
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
-            services.TryAddSingleton<IDiagnosticScanner, DiagnosticScanner>();
+            services.TryAddSingleton<IScanner, Scanner>();
 
             services.TryAddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
 
@@ -228,7 +228,7 @@ namespace HareDu.CoreIntegration
                 return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
             });
             
-            services.TryAddSingleton<IScanAnalyzerFactory, ScanAnalyzerFactory>();
+            services.TryAddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();
         }
     }
 }

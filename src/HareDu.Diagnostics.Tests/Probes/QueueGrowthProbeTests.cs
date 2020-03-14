@@ -51,7 +51,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Warning);
-            result.KB.Identifier.ShouldBe(typeof(QueueGrowthProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(QueueGrowthProbe).GetIdentifier());
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace HareDu.Diagnostics.Tests.Probes
             var result = probe.Execute(snapshot);
             
             result.Status.ShouldBe(ProbeResultStatus.Healthy);
-            result.KB.Identifier.ShouldBe(typeof(QueueGrowthProbe).GetIdentifier());
+            result.KB.Id.ShouldBe(typeof(QueueGrowthProbe).GetIdentifier());
         }
     }
 }

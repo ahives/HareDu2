@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics.Probes
         DiagnosticProbe
     {
         readonly DiagnosticsConfig _config;
-        public string Identifier => GetType().GetIdentifier();
+        public string Id => GetType().GetIdentifier();
         public string Name => "High Connection Closure Rate Probe";
         public string Description => "";
         public ComponentType ComponentType => ComponentType.Connection;
@@ -43,10 +43,11 @@ namespace HareDu.Diagnostics.Probes
 
             if (_config.IsNull())
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.NA, out var article);
+                _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(null,
                     null,
-                    Identifier,
+                    Id,
+                    Name,
                     ComponentType,
                     article);
 
@@ -63,13 +64,25 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.ConnectionsClosed.Rate >= _config.Probes.HighClosureRateThreshold)
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Warning, out var article);
-                result = new WarningProbeResult(null, null, Identifier, ComponentType, probeData, article);
+                _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
+                result = new WarningProbeResult(null,
+                    null,
+                    Id,
+                    Name,
+                    ComponentType,
+                    probeData,
+                    article);
             }
             else
             {
-                _kb.TryGet(Identifier, ProbeResultStatus.Healthy, out var article);
-                result = new HealthyProbeResult(null, null, Identifier, ComponentType, probeData, article);
+                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
+                result = new HealthyProbeResult(null,
+                    null,
+                    Id,
+                    Name,
+                    ComponentType,
+                    probeData,
+                    article);
             }
 
             NotifyObservers(result);

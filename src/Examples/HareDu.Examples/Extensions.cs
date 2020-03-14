@@ -40,7 +40,7 @@ namespace HareDu.Examples
         
                 scheduler.JobFactory =
                     new HareDuJobFactory<T>(
-                        x.GetService<IDiagnosticScanner>(),
+                        x.GetService<IScanner>(),
                         x.GetService<ISnapshotFactory>(),
                         x.GetService<ISnapshotWriter>(),
                         x.GetService<IDiagnosticWriter>());

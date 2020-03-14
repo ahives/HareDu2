@@ -15,7 +15,7 @@ namespace HareDu.Diagnostics.KnowledgeBase
 {
     public interface KnowledgeBaseArticle
     {
-        string Identifier { get; }
+        string Id { get; }
         
         ProbeResultStatus Status { get; }
         
