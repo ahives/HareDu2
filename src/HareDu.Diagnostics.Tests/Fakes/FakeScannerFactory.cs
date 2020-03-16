@@ -41,7 +41,12 @@ namespace HareDu.Diagnostics.Tests.Fakes
         }
 
         public bool RegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
+        public bool RegisterScanner<T>(DiagnosticScanner<T> scanner) where T : Snapshot => throw new NotImplementedException();
 
-        public IReadOnlyList<string> GetAvailableProbes() => throw new NotImplementedException();
+        public IReadOnlyDictionary<string, DiagnosticProbe> GetProbes() => throw new NotImplementedException();
+        public IReadOnlyDictionary<string, object> GetScanners() => throw new NotImplementedException();
+
+        public bool TryRegisterAllProbes() => throw new NotImplementedException();
+        public bool TryRegisterAllScanners() => throw new NotImplementedException();
     }
 }

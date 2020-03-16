@@ -25,8 +25,14 @@ namespace HareDu.Diagnostics
         
         ComponentType ComponentType { get; }
         
+        /// <summary>
+        /// Probe identifier
+        /// </summary>
         string Id { get; }
         
+        /// <summary>
+        /// Probe human readable name
+        /// </summary>
         string Name { get; }
         
         ProbeResultStatus Status { get; }

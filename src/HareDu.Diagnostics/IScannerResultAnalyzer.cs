@@ -13,10 +13,11 @@
 // limitations under the License.
 namespace HareDu.Diagnostics
 {
+    using System;
     using System.Collections.Generic;
 
     public interface IScannerResultAnalyzer
     {
-        IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report);
+        IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report, Func<ProbeResult, string> filterBy);
     }
 }

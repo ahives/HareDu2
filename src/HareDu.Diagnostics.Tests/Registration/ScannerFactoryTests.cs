@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Tests.Registration
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Autofac;
     using AutofacIntegration;
     using Core.Configuration;
@@ -23,13 +24,16 @@ namespace HareDu.Diagnostics.Tests.Registration
     using Diagnostics.Registration;
     using Diagnostics.Scanners;
     using KnowledgeBase;
+    using Moq;
+    using Moq.Protected;
     using NUnit.Framework;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
+    using Snapshotting.Persistence;
 
     [TestFixture]
-    public class DiagnosticFactoryTests
+    public class ScannerFactoryTests
     {
         IReadOnlyList<DiagnosticProbe> _probes;
         IContainer _container;
@@ -59,27 +63,6 @@ namespace HareDu.Diagnostics.Tests.Registration
                 new ChannelLimitReachedProbe(knowledgeBaseProvider),
                 new BlockedConnectionProbe(knowledgeBaseProvider)
             };
-        }
-
-        [Test]
-        public void Verify_can_add_new_probes()
-        {
-            var factory = _container.Resolve<IScannerFactory>();
-            var kb = _container.Resolve<IKnowledgeBaseProvider>();
-            int probeCountBefore = factory.GetAvailableProbes().Count;
-            var probe = new FakeProbe(5, kb);
-
-            factory.RegisterProbe(probe).ShouldBeTrue();
-            
-            factory.GetAvailableProbes().Count.ShouldBe(probeCountBefore + 1);
-        }
-        
-        [Test]
-        public void Verify_can_get_available_probes()
-        {
-            var probes = _container.Resolve<IScannerFactory>().GetAvailableProbes();
-            
-            Console.WriteLine(probes.ToJsonString());
         }
 
         [Test]
@@ -138,6 +121,121 @@ namespace HareDu.Diagnostics.Tests.Registration
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
         }
 
+        [Test]
+        public void Verify_can_add_new_probes()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            
+            var probes1 = factory.GetProbes();
+            
+            probes1.ShouldNotBeNull();
+            probes1.ShouldNotBeEmpty();
+            probes1.Keys.Count().ShouldBe(21);
+
+            bool registered = factory.RegisterProbe(new FakeProbe(5, _container.Resolve<IKnowledgeBaseProvider>()));
+            registered.ShouldBeTrue();
+            
+            var probes2 = factory.GetProbes();
+            
+            probes2.ShouldNotBeNull();
+            probes2.ShouldNotBeEmpty();
+            probes2.Keys.Count().ShouldBe(22);
+        }
+
+        [Test]
+        public void Verify_can_return_all_probes_1()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+
+            var probes = factory.GetProbes();
+            
+            probes.ShouldNotBeNull();
+            probes.ShouldNotBeEmpty();
+            probes.Keys.Count().ShouldBe(21);
+        }
+
+        [Test]
+        public void Verify_can_return_all_probes_2()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+
+            bool registered = factory.TryRegisterAllProbes();
+            var probes = factory.GetProbes();
+            
+            registered.ShouldBeTrue();
+            probes.ShouldNotBeNull();
+            probes.ShouldNotBeEmpty();
+            probes.Keys.Count().ShouldBe(21);
+        }
+
+        [Test]
+        public void Verify_can_return_all_scanners_1()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+
+            var scanners = factory.GetScanners();
+            
+            scanners.ShouldNotBeNull();
+            scanners.ShouldNotBeEmpty();
+            scanners.Keys.Count().ShouldBe(3);
+        }
+
+        [Test]
+        public void Verify_can_return_all_scanners_2()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+
+            bool registered = factory.TryRegisterAllScanners();
+            
+            var scanners = factory.GetScanners();
+            
+            registered.ShouldBeTrue();
+            scanners.ShouldNotBeNull();
+            scanners.ShouldNotBeEmpty();
+            scanners.Keys.Count().ShouldBe(3);
+        }
+
+        [Test]
+        public void Verify_can_register_new_scanner()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            
+            var scanners1 = factory.GetScanners();
+            
+            scanners1.ShouldNotBeNull();
+            scanners1.ShouldNotBeEmpty();
+            scanners1.Keys.Count().ShouldBe(3);
+
+            bool registered = factory.RegisterScanner(new FakeDiagnosticScanner());
+            registered.ShouldBeTrue();
+            registered.ShouldBeTrue();
+            
+            var scanners2 = factory.GetScanners();
+            
+            scanners2.ShouldNotBeNull();
+            scanners2.ShouldNotBeEmpty();
+            scanners2.Keys.Count().ShouldBe(4);
+        }
+
+        
         class FakeDiagnosticScanner :
             DiagnosticScanner<FakeSnapshot>
         {

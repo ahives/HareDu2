@@ -41,7 +41,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_red_condition_1()
+        public void Verify_probe_unhealthy_condition_1()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new ChannelLimitReachedProbe(knowledgeBaseProvider);
@@ -55,7 +55,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_red_condition_2()
+        public void Verify_probe_unhealthy_condition_2()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new ChannelLimitReachedProbe(knowledgeBaseProvider);
@@ -69,7 +69,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_green_condition()
+        public void Verify_probe_healthy_condition()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new ChannelLimitReachedProbe(knowledgeBaseProvider);

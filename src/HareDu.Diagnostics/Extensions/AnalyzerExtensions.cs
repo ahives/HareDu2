@@ -16,29 +16,12 @@ namespace HareDu.Diagnostics.Extensions
     using System;
     using System.Collections.Generic;
     using Core.Extensions;
-    using Registration;
 
     public static class AnalyzerExtensions
     {
-        // public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzerFactory factory, string key)
-        //     => factory.TryGet(key, out var analyzer)
-        //         ? analyzer.Analyze(report)
-        //         : DiagnosticCache.EmptyAnalyzerSummary;
-
-        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScannerResultAnalyzer analyzer)
+        public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScannerResultAnalyzer analyzer, Func<ProbeResult, string> aggregationKey)
             => !analyzer.IsNull()
-                ? analyzer.Analyze(report)
+                ? analyzer.Analyze(report, aggregationKey)
                 : DiagnosticCache.EmptyAnalyzerSummary;
-
-        // public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScanAnalyzerFactory factory, Type type)
-        //     => factory.TryGet(type, out var analyzer)
-        //         ? analyzer.Analyze(report)
-        //         : DiagnosticCache.EmptyAnalyzerSummary;
-
-        // public static IReadOnlyList<AnalyzerSummary> Analyze<T>(this ScannerResult report, IScanAnalyzerFactory factory)
-        //     where T : IScanAnalyzer
-        //     => factory.TryGet<T>(out var analyzer)
-        //         ? analyzer.Analyze(report)
-        //         : DiagnosticCache.EmptyAnalyzerSummary;
     }
 }

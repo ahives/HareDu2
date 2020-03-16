@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_yellow_condition()
+        public void Verify_probe_warning_condition()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
@@ -63,7 +63,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_green_condition()
+        public void Verify_probe_healthy_condition()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var provider = _container.Resolve<IFileConfigProvider>();
@@ -81,7 +81,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_offline()
+        public void Verify_probe_na()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new RedeliveredMessagesProbe(null, knowledgeBaseProvider);

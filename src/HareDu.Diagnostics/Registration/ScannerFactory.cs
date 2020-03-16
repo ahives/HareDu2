@@ -14,6 +14,7 @@
 namespace HareDu.Diagnostics.Registration
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Configuration;
@@ -31,25 +32,25 @@ namespace HareDu.Diagnostics.Registration
     {
         readonly DiagnosticsConfig _config;
         readonly IKnowledgeBaseProvider _kb;
-        readonly IDictionary<string, object> _cache;
-        readonly IDictionary<string, DiagnosticProbe> _probeCache;
+        readonly ConcurrentDictionary<string, object> _scannerCache;
+        readonly ConcurrentDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
 
         public ScannerFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
-            _config = !config.IsNull() ? config : throw new HareDuDiagnosticsException();
-            _kb = !kb.IsNull() ? kb : throw new HareDuDiagnosticsException();
-            _cache = new Dictionary<string, object>();
-            _probeCache = new Dictionary<string, DiagnosticProbe>();
+            _config = !config.IsNull() ? config : throw new HareDuDiagnosticsException($"{nameof(config)} argument missing.");
+            _kb = !kb.IsNull() ? kb : throw new HareDuDiagnosticsException($"{nameof(kb)} argument missing.");
+            _scannerCache = new ConcurrentDictionary<string, object>();
+            _probeCache = new ConcurrentDictionary<string, DiagnosticProbe>();
             _observers = new List<IDisposable>();
             
             bool registeredProbes = TryRegisterAllProbes();
             if (!registeredProbes)
-                throw new HareDuDiagnosticsException();
+                throw new HareDuDiagnosticsException("Could not register diagnostic probes.");
             
-            bool registered = TryRegisterAll();
+            bool registered = TryRegisterAllScanners();
             if (!registered)
-                throw new HareDuDiagnosticsException();
+                throw new HareDuDiagnosticsException("Could not register diagnostic scanners.");
         }
 
         public bool TryGet<T>(out DiagnosticScanner<T> scanner)
@@ -57,13 +58,13 @@ namespace HareDu.Diagnostics.Registration
         {
             Type type = typeof(T);
             
-            if (type.IsNull() || !_cache.ContainsKey(type.FullName))
+            if (type.IsNull() || !_scannerCache.ContainsKey(type.FullName))
             {
                 scanner = new NoOpScanner<T>();
                 return false;
             }
             
-            scanner = (DiagnosticScanner<T>) _cache[type.FullName];
+            scanner = (DiagnosticScanner<T>) _scannerCache[type.FullName];
             return true;
         }
 
@@ -102,42 +103,70 @@ namespace HareDu.Diagnostics.Registration
             if (probe.IsNull())
                 return false;
             
-            _probeCache.Add(typeof(T).FullName, probe);
-
-            return _probeCache.ContainsKey(typeof(T).FullName);
+            return _probeCache.TryAdd(typeof(T).FullName, probe);
         }
 
-        public IReadOnlyList<string> GetAvailableProbes()
-            => _probeCache.Values.Select(x => x.Id).ToList();
-
-        protected virtual bool TryRegisterAll()
+        public bool RegisterScanner<T>(DiagnosticScanner<T> scanner)
+            where T : Snapshot
         {
-            var typeMap = GetTypeMap(GetType());
+            if (scanner.IsNull())
+                return false;
+
+            return _scannerCache.TryAdd(typeof(T).FullName, scanner);
+        }
+
+        public IReadOnlyDictionary<string, DiagnosticProbe> GetProbes() => _probeCache;
+        
+        public IReadOnlyDictionary<string, object> GetScanners() => _scannerCache;
+
+        public bool TryRegisterAllProbes()
+        {
+            var typeMap = GetProbeTypeMap(GetType());
             bool registered = true;
 
             foreach (var type in typeMap)
             {
-                registered = RegisterInstance(type.Value, type.Key) & registered;
+                if (_probeCache.ContainsKey(type.Key))
+                    continue;
+                
+                registered = RegisterProbeInstance(type.Value, type.Key) & registered;
             }
 
             if (!registered)
-                _cache.Clear();
+                _probeCache.Clear();
 
             return registered;
         }
 
-        protected virtual bool RegisterInstance(Type type, string key)
+        public bool TryRegisterAllScanners()
+        {
+            var typeMap = GetScannerTypeMap(GetType());
+            bool registered = true;
+
+            foreach (var type in typeMap)
+            {
+                if (_scannerCache.ContainsKey(type.Key))
+                    continue;
+                
+                registered = RegisterScannerInstance(type.Value, type.Key) & registered;
+            }
+
+            if (!registered)
+                _scannerCache.Clear();
+
+            return registered;
+        }
+
+        protected virtual bool RegisterScannerInstance(Type type, string key)
         {
             try
             {
-                var instance = CreateInstance(type);
+                var instance = CreateScannerInstance(type);
 
                 if (instance.IsNull())
                     return false;
 
-                _cache.Add(key, instance);
-
-                return _cache.ContainsKey(key);
+                return _scannerCache.TryAdd(key, instance);
             }
             catch
             {
@@ -145,14 +174,14 @@ namespace HareDu.Diagnostics.Registration
             }
         }
 
-        protected virtual object CreateInstance(Type type)
+        protected virtual object CreateScannerInstance(Type type)
         {
             var instance = Activator.CreateInstance(type, _probeCache.Values.ToList());
 
             return instance;
         }
         
-        protected virtual IDictionary<string, Type> GetTypeMap(Type findType)
+        protected virtual IDictionary<string, Type> GetScannerTypeMap(Type findType)
         {
             var types = findType
                 .Assembly
@@ -187,22 +216,6 @@ namespace HareDu.Diagnostics.Registration
             return typeMap;
         }
 
-        protected virtual bool TryRegisterAllProbes()
-        {
-            var typeMap = GetProbeTypeMap(GetType());
-            bool registered = true;
-
-            foreach (var type in typeMap)
-            {
-                registered = RegisterProbeInstance(type.Value, type.Key) & registered;
-            }
-
-            if (!registered)
-                _probeCache.Clear();
-
-            return registered;
-        }
-
         protected virtual IDictionary<string, Type> GetProbeTypeMap(Type type)
         {
             var types = type
@@ -233,9 +246,7 @@ namespace HareDu.Diagnostics.Registration
                 if (instance.IsNull())
                     return false;
 
-                _probeCache.Add(key, instance);
-
-                return _probeCache.ContainsKey(key);
+                return _probeCache.TryAdd(key, instance);
             }
             catch
             {

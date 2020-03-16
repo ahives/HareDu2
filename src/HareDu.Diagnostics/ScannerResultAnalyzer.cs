@@ -16,28 +16,14 @@ namespace HareDu.Diagnostics
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Configuration;
     using Core.Extensions;
-    using KnowledgeBase;
-    using Registration;
 
     public class ScannerResultAnalyzer :
         IScannerResultAnalyzer
     {
-        readonly IScannerFactory _factory;
-
-        public ScannerResultAnalyzer(IScannerFactory factory)
+        public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report, Func<ProbeResult, string> filterBy)
         {
-            _factory = !factory.IsNull() ? factory : throw new HareDuDiagnosticsException();
-        }
-
-        public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report)
-        {
-            var supported = _factory.GetAvailableProbes();
-            var filtered = report.Results
-                .Where(x => supported.Contains(x.Id))
-                .ToList();
-            var rollup = GetRollup(filtered, x => x.ParentComponentId);
+            var rollup = GetRollup(report.Results, filterBy);
             
             var summary = (from result in rollup
                     let healthy = new AnalyzerResultImpl(
@@ -75,14 +61,14 @@ namespace HareDu.Diagnostics
             return Convert.ToDecimal(statusCount / totalCount * 100);
         }
 
-        IDictionary<string, List<ProbeResultStatus>> GetRollup(IReadOnlyList<ProbeResult> results, Func<ProbeResult, string> rollupKey)
+        IDictionary<string, List<ProbeResultStatus>> GetRollup(IReadOnlyList<ProbeResult> results, Func<ProbeResult, string> filterBy)
         {
             var rollup = new Dictionary<string, List<ProbeResultStatus>>();
 
             for (int i = 0; i < results.Count; i++)
             {
-                string key = rollupKey(results[i]);
-                
+                string key = filterBy(results[i]);
+
                 if (rollup.ContainsKey(key))
                     rollup[key].Add(results[i].Status);
                 else

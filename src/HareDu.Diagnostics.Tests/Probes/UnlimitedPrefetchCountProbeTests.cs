@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test(Description = "")]
-        public void Verify_probe_yellow_condition()
+        public void Verify_probe_warning_condition()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new UnlimitedPrefetchCountProbe(knowledgeBaseProvider);

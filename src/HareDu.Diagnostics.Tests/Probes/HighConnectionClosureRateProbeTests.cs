@@ -45,7 +45,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_yellow_condition_1()
+        public void Verify_probe_warning_condition_1()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
@@ -63,9 +63,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_yellow_condition_2()
+        public void Verify_probe_warning_condition_2()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
@@ -81,9 +81,9 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_green_condition()
+        public void Verify_probe_healthy_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
@@ -99,7 +99,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_offline()
+        public void Verify_probe_na()
         {
             var probe = new HighConnectionClosureRateProbe(null, _container.Resolve<IKnowledgeBaseProvider>());
             

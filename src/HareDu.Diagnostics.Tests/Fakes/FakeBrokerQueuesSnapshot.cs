@@ -81,6 +81,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
                 Memory = new QueueMemoryDetailsImpl(total);
             }
 
+            
             class QueueMemoryDetailsImpl :
                 QueueMemoryDetails
             {
@@ -89,7 +90,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
                     PagedOut = new PagedOutImpl(total);
                 }
 
-                class PagedOutImpl : PagedOut
+                
+                class PagedOutImpl :
+                    PagedOut
                 {
                     public PagedOutImpl(ulong total)
                     {

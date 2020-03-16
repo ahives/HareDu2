@@ -41,7 +41,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_red_condition()
+        public void Verify_probe_unhealthy_condition()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new BlockedConnectionProbe(knowledgeBaseProvider);
@@ -55,7 +55,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         }
 
         [Test]
-        public void Verify_probe_green_condition()
+        public void Verify_probe_healthy_condition()
         {
             var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
             var probe = new BlockedConnectionProbe(knowledgeBaseProvider);

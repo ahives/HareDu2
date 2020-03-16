@@ -31,6 +31,15 @@ namespace HareDu.Diagnostics.Registration
         bool RegisterProbe<T>(T probe)
             where T : DiagnosticProbe;
 
-        IReadOnlyList<string> GetAvailableProbes();
+        bool RegisterScanner<T>(DiagnosticScanner<T> scanner)
+            where T : Snapshot;
+
+        IReadOnlyDictionary<string, DiagnosticProbe> GetProbes();
+
+        IReadOnlyDictionary<string, object> GetScanners();
+
+        bool TryRegisterAllProbes();
+
+        bool TryRegisterAllScanners();
     }
 }
