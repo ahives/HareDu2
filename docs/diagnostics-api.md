@@ -5,18 +5,6 @@ The Diagnostics API sits atop the Snapshot API, providing a means to scan snapsh
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform diagnostic scans on snapshot data captured from the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-*Autofac*
-```csharp
-builder.RegisterModule<HareDuDiagnosticsModule>();
-```
-
-*.NET Core DI*
-```csharp
-var services = new ServiceCollection()
-    .AddHareDuDiagnostics()
-    .BuildServiceProvider();
-```
-
 Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
 
 <br>

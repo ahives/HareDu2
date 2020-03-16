@@ -25,18 +25,6 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-*Autofac*
-```csharp
-builder.RegisterModule<HareDuModule>();
-```
-
-*.NET Core DI*
-```csharp
-var services = new ServiceCollection()
-    .AddHareDu()
-    .BuildServiceProvider();
-```
-
 Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
 
 <br>

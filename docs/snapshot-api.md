@@ -5,22 +5,6 @@ The Snapshot API sits atop the Broker API and provides a high level rollup of Ra
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to take snapshots metric data on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
 
-*Autofac*
-```csharp
-builder.RegisterModule<HareDuSnapshotModule>();
-```
-
-*.NET Core DI*
-```csharp
-var services = new ServiceCollection()
-    .AddHareDuSnapshot()
-    .BuildServiceProvider();
-```
-
-Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
-
-<br>
-
 #### Taking snapshots
 Once you have registered a ```SnapshotFactory```, it is easy to take a snapshot.
 
@@ -35,23 +19,6 @@ In this code snippet, the lens variable returns a ``SnapshotLens`` for taking sn
 ```csharp
 lens.TakeSnapshot();
 ```
-
-*The above code becomes even simpler using an IoC container. Below is how you would take a snapshot on the first take...*
-
-*Autofac*
-```csharp
-var lens = await container.Resolve<ISnapshotFactory>()
-    .Lens<BrokerQueuesSnapshot>()
-    .TakeSnapshot();
-```
-
-*.NET Core DI*
-```csharp
-var lens = await services.GetService<ISnapshotFactory>()
-    .Lens<BrokerQueuesSnapshot>()
-    .TakeSnapshot();
-```
-<br>
 
 #### Viewing snapshot history
 
