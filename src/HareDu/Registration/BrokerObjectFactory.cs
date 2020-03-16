@@ -14,6 +14,7 @@
 namespace HareDu.Registration
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
@@ -27,12 +28,12 @@ namespace HareDu.Registration
         IBrokerObjectFactory
     {
         readonly HttpClient _client;
-        readonly IDictionary<string, object> _cache;
+        readonly ConcurrentDictionary<string, object> _cache;
 
         public BrokerObjectFactory(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _cache = new Dictionary<string, object>();
+            _cache = new ConcurrentDictionary<string, object>();
             
             bool registered = TryRegisterAll();
             if (!registered)
@@ -42,7 +43,7 @@ namespace HareDu.Registration
         public BrokerObjectFactory(BrokerConfig config)
         {
             _client = GetClient(config);
-            _cache = new Dictionary<string, object>();
+            _cache = new ConcurrentDictionary<string, object>();
             
             bool registered = TryRegisterAll();
             if (!registered)
@@ -74,10 +75,28 @@ namespace HareDu.Registration
         }
 
         public bool IsRegistered(string key) => _cache.ContainsKey(key);
+        
+        public IReadOnlyDictionary<string, object> GetObjects() => _cache;
 
         public void CancelPendingRequest()
         {
             _client.CancelPendingRequests();
+        }
+
+        public bool TryRegisterAll()
+        {
+            var typeMap = GetTypeMap(GetType());
+            bool registered = true;
+
+            foreach (var type in typeMap)
+            {
+                registered = RegisterInstance(type.Value, type.Key) & registered;
+            }
+
+            if (!registered)
+                _cache.Clear();
+
+            return registered;
         }
 
         protected virtual HttpClient GetClient(BrokerConfig config)
@@ -97,22 +116,6 @@ namespace HareDu.Registration
             return client;
         }
 
-        protected virtual bool TryRegisterAll()
-        {
-            var typeMap = GetTypeMap(GetType());
-            bool registered = true;
-
-            foreach (var type in typeMap)
-            {
-                registered = RegisterInstance(type.Value, type.Key) & registered;
-            }
-
-            if (!registered)
-                _cache.Clear();
-
-            return registered;
-        }
-
         protected virtual bool RegisterInstance(Type type, string key, HttpClient client)
         {
             try
@@ -122,9 +125,7 @@ namespace HareDu.Registration
                 if (instance.IsNull())
                     return false;
 
-                _cache.Add(key, instance);
-
-                return _cache.ContainsKey(key);
+                return _cache.TryAdd(key, instance);
             }
             catch
             {
@@ -141,9 +142,7 @@ namespace HareDu.Registration
                 if (instance.IsNull())
                     return false;
 
-                _cache.Add(key, instance);
-
-                return _cache.ContainsKey(key);
+                return _cache.TryAdd(key, instance);
             }
             catch
             {
@@ -154,19 +153,19 @@ namespace HareDu.Registration
         protected virtual IDictionary<string, Type> GetTypeMap(Type findType)
         {
             var types = findType.Assembly.GetTypes();
-            var @interfaces = types
+            var interfaces = types
                 .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && x.IsInterface && !x.IsNull())
                 .ToList();
             var typeMap = new Dictionary<string, Type>();
 
-            for (int i = 0; i < @interfaces.Count; i++)
+            for (int i = 0; i < interfaces.Count; i++)
             {
-                var type = types.Find(x => @interfaces[i].IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+                var type = types.Find(x => interfaces[i].IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
 
                 if (type.IsNull())
                     continue;
                 
-                typeMap.Add(@interfaces[i].FullName, type);
+                typeMap.Add(interfaces[i].FullName, type);
             }
 
             return typeMap;

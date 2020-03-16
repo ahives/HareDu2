@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
+    using System.Collections.Generic;
     using Core;
     using Core.Testing;
     using HareDu.Registration;
@@ -63,10 +64,11 @@ namespace HareDu.Snapshotting.Tests.Fakes
         }
 
         public bool IsRegistered(string key) => throw new System.NotImplementedException();
+        
+        public IReadOnlyDictionary<string, object> GetObjects() => throw new System.NotImplementedException();
 
-        public void CancelPendingRequest()
-        {
-            throw new System.NotImplementedException();
-        }
+        public void CancelPendingRequest() => throw new System.NotImplementedException();
+
+        public bool TryRegisterAll() => throw new System.NotImplementedException();
     }
 }

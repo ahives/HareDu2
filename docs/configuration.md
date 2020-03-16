@@ -18,6 +18,133 @@ Configuring your HareDu-powered application can be as simple as modifying the *h
 | file-descriptor-usage-warning-coefficient |  |
 | consumer-utilization-warning-coefficient |  |
 
+The minimum of using HareDu requires setting up communication with the RabbitMQ broker. To do so, you must
+```yaml
+  broker:
+      url:  http://localhost:15672
+      username: guest
+      password: guest
+      timeout: 00:00:30
+```
+
+The Diagnostics API is configured under the following section
+```yaml
+  diagnostics:
+    probes:
+```
+
+##### Configuring HighConnectionClosureRateProbe
+Defines the maximum acceptable rate of which connections are closed on the RabbitMQ broker to determine whether or not it is considered healthy. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of closed connections is less than this setting then the system is considered to be operating normally.
+
+*YAML*
+```yaml
+high-closure-rate-threshold:  100
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetHighClosureRateThreshold(100));
+```
+
+##### Configuring HighConnectionCreationRateProbe
+Defines the maximum acceptable rate of which connections to the RabbitMQ broker can be made in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally.
+
+*YAML*
+```yaml
+high-creation-rate-threshold: 100
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetHighCreationRateThreshold(100));
+```
+
+
+##### Configuring QueueHighFlowProbe
+Defines the maximum acceptable number of messages that can be published to a queue. If the number of published messages is greater than or equal to this setting then this queue is considered unhealthy
+
+*YAML*
+```yaml
+queue-high-flow-threshold:  100
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetQueueHighFlowThreshold(100));
+```
+
+##### Configuring QueueLowFlowProbe
+
+*YAML*
+```yaml
+queue-low-flow-threshold: 20
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetQueueLowFlowThreshold(20));
+```
+
+##### Configuring RedeliveredMessagesProbe
+
+*YAML*
+```yaml
+message-redelivery-threshold-coefficient: 0.50
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetMessageRedeliveryThresholdCoefficient(0.50M));
+```
+
+##### Configuring SocketDescriptorThrottlingProbe
+
+*YAML*
+```yaml
+socket-usage-threshold-coefficient: 0.60
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetSocketUsageThresholdCoefficient(0.60M));
+```
+
+##### Configuring RuntimeProcessLimitProbe
+
+*YAML*
+```yaml
+runtime-process-usage-threshold-coefficient:  0.65
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetRuntimeProcessUsageThresholdCoefficient(0.65M));
+```
+
+##### Configuring FileDescriptorThrottlingProbe
+
+*YAML*
+```yaml
+file-descriptor-usage-threshold-coefficient:  0.65
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetFileDescriptorUsageThresholdCoefficient(0.65M));
+```
+
+##### Configuring ConsumerUtilizationProbe
+
+*YAML*
+```yaml
+consumer-utilization-threshold: 0.50
+```
+
+*C#*
+```csharp
+var config = provider.Configure(x => x.SetConsumerUtilizationThreshold(0.50M));
+```
+
 HareDu YAML looks like this...
 ```yaml
 ---
@@ -38,6 +165,7 @@ HareDu YAML looks like this...
         consumer-utilization-threshold: 0.50
 ...
 ```
+
 There are several ways to configure HareDu. Let's look at the major scenarios.
 
 #### I just want to configure the Broker/Snapshot API

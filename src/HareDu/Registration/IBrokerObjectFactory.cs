@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Registration
 {
+    using System.Collections.Generic;
     using Core;
 
     public interface IBrokerObjectFactory
@@ -26,11 +27,28 @@ namespace HareDu.Registration
         T Object<T>()
             where T : BrokerObject;
 
+        /// <summary>
+        /// Returns true if the broker object was registered.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         bool IsRegistered(string key);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyDictionary<string, object> GetObjects();
         
         /// <summary>
         /// Cancel pending running thread.
         /// </summary>
         void CancelPendingRequest();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        bool TryRegisterAll();
     }
 }
