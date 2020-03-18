@@ -110,7 +110,13 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        public void OverrideConfig(DiagnosticsConfig config) => _config = config;
+        public void OverrideConfig(DiagnosticsConfig config)
+        {
+            DiagnosticsConfig current = _config;
+            _config = config;
+            
+            NotifyObservers(Id, Name, current, config);
+        }
 
         ulong ComputeThreshold(ulong total)
             => _config.Probes.MessageRedeliveryThresholdCoefficient >= 1

@@ -26,8 +26,12 @@ namespace HareDu.Diagnostics.Registration
             where T : Snapshot;
 
         void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
+        
+        void RegisterObservers(IReadOnlyList<IObserver<ProbeConfigurationContext>> observers);
 
         void RegisterObserver(IObserver<ProbeContext> observer);
+        
+        void RegisterObserver(IObserver<ProbeConfigurationContext> observer);
 
         bool RegisterProbe<T>(T probe)
             where T : DiagnosticProbe;

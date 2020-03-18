@@ -31,15 +31,13 @@ namespace HareDu.Diagnostics.Tests.Fakes
             return false;
         }
 
-        public void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)
-        {
-            throw new NotImplementedException();
-        }
+        public void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers) => throw new NotImplementedException();
 
-        public void RegisterObserver(IObserver<ProbeContext> observer)
-        {
-            throw new NotImplementedException();
-        }
+        public void RegisterObservers(IReadOnlyList<IObserver<ProbeConfigurationContext>> observers) => throw new NotImplementedException();
+
+        public void RegisterObserver(IObserver<ProbeContext> observer) => throw new NotImplementedException();
+
+        public void RegisterObserver(IObserver<ProbeConfigurationContext> observer) => throw new NotImplementedException();
 
         public bool RegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
         public bool RegisterScanner<T>(DiagnosticScanner<T> scanner) where T : Snapshot => throw new NotImplementedException();
@@ -49,9 +47,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public bool TryRegisterAllProbes() => throw new NotImplementedException();
         public bool TryRegisterAllScanners() => throw new NotImplementedException();
-        public void OverrideConfig(DiagnosticsConfig config)
-        {
-            throw new NotImplementedException();
-        }
+        public void OverrideConfig(DiagnosticsConfig config) => throw new NotImplementedException();
     }
 }

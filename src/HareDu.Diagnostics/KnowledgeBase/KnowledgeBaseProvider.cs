@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Diagnostics.KnowledgeBase
 {
-    using Core.Extensions;
     using Probes;
 
     public class KnowledgeBaseProvider :

@@ -17,7 +17,6 @@ namespace HareDu.Diagnostics.Probes
     using Core.Configuration;
     using Core.Extensions;
     using KnowledgeBase;
-    using Registration;
     using Snapshotting.Model;
 
     public class ConsumerUtilizationProbe :
@@ -107,6 +106,12 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        public void OverrideConfig(DiagnosticsConfig config) => _config = config;
+        public void OverrideConfig(DiagnosticsConfig config)
+        {
+            DiagnosticsConfig current = _config;
+            _config = config;
+            
+            NotifyObservers(Id, Name, current, config);
+        }
     }
 }

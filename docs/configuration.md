@@ -217,13 +217,59 @@ The combined YAML configuration looks like this...
 ...
 ```
 
+To access the above YAML configuration you can either read said configuration from a file or text.  
+
+If reading from a file, you need to initialize ```YamlFileConfigProvider```...
+
+*Do it yourself*
+```csharp
+var provider = new YamlFileConfigProvider();
+```
+<br>
+
+*Autofac*
+```csharp
+var provider = _container.Resolve<IFileConfigProvider>();
+```
+<br>
+
+*.NET Core DI*
+```csharp
+var provider = _services.GetService<IFileConfigProvider>();
+```
+<br>
+
+If reading text you need to initialize ```YamlConfigProvider```...
+
+*Do it yourself*
+```csharp
+var provider = new YamlConfigProvider();
+```
+<br>
+
+*Autofac*
+```csharp
+var provider = _container.Resolve<IConfigProvider>();
+```
+<br>
+
+*.NET Core DI*
+```csharp
+var provider = _services.GetService<IConfigProvider>();
+```
+<br>
+
+Depending on whether you are using the configuration or file provider, you would call the appropriate ```TryGet``` method to return the configuration.
+
+<br>
+
 There are several ways to configure HareDu programmatically. Let's look at the major scenarios.
 
 <br>
 
-**Dude, I just want to configure the Broker/Snapshot API**
+**Scenario 1: Dude, I just want to configure the Broker/Snapshot API**
 
-You can either do this explicitly by calling the ```BrokerConfigProvider``` directly like so...
+First, you need to initialize ```BrokerConfigProvider```...
 
 *Do it yourself*
 ```csharp
@@ -244,7 +290,7 @@ var provider = _services.GetService<IBrokerConfigProvider>();
 ```
 <br>
 
-From here you can use the provider to set configuration settings on the Broker API like this...
+From here you can use the initialized provider to set configuration settings on the Broker API like so...
 ```csharp
 var config = provider.Configure(x =>
 {
@@ -253,53 +299,15 @@ var config = provider.Configure(x =>
     x.TimeoutAfter(new TimeSpan(0, 0, 30));
 });
 ```
-
-...or you can simply read YAML configuration. There are two ways to read YAML. Either you can read a YAML configuration file like so...
-```csharp
-var validator = new YourCustomConfigValidator();
-var provider = new YamlFileConfigProvider(validator);
-
-provider.TryGet("haredu.yaml", out HareDuConfig config);
-```
 <br>
 
-...or you can read YAML text like this...
-```csharp
-var validator = new YourCustomConfigValidator();
-var provider = new YamlConfigProvider(validator);
-
-provider.TryGet(yaml, out HareDuConfig config);
-```
-<br>
-
-...or you can always use supported IoC containers like this...
-
-*Autofac*
-```csharp
-var provider = _container.Resolve<IFileConfigProvider>();
-```
-...or
-```csharp
-var provider = _container.Resolve<IConfigProvider>();
-```
-<br>
-
-*.NET Core DI*
-```csharp
-var provider = _services.GetService<IFileConfigProvider>();
-```
-...or
-```csharp
-var provider = _services.GetService<IConfigProvider>();
-```
-
-Depending on whether you are using the configuration or file provider, you would call the appropriate ```TryGet``` method to return the configuration. From here, you need only call ```config.Broker``` to access the broker configuration.  
+From here, you need only call ```config.Broker``` to access the broker configuration.
 
 <br>
 
-**Dude, I just want to configure the Diagnostics API**
+**Scenario 2: Dude, I just want to configure the Diagnostics API**
 
-There are a couple ways to configure the Diagnostics API. Since most of the default diagnostic probes are configurable by passing in settings, we give you a way to codify those settings. The first option is to read the *haredu.yaml* file. The other option is set the configuration explicitly like so...
+First, you need to initialize ```DiagnosticsConfigProvider```...  
 
 *Do it yourself*
 ```csharp
@@ -320,7 +328,7 @@ var provider = _services.GetService<IDiagnosticsConfigProvider>();
 ```
 <br>
 
-From here you can use the provider to set configuration settings on the Diagnostics API like this...
+From here you can use the initialized provider to set configuration settings on the Diagnostics API like this...
 ```csharp
 var config = provider.Configure(x =>
             {
@@ -337,23 +345,22 @@ var config = provider.Configure(x =>
 ```
 <br>
 
-...or you can always use supported IoC containers like this...
+In every one of the above scenarios it is assumed that you will not need to change settings after API objects are initialized. Since the HareDu API is immutable and it is recommended that most API objects be initialized using the Singleton pattern, it becomes somewhat difficult to override this behavior. HareDu got you covered! You can register an observer that will notify you of changes to the original configuration settings.
 
-*Autofac*
+Create a class that implements ```IObserver<T>``` like so...
 ```csharp
-var provider = _container.Resolve<IFileConfigProvider>();
-```
-...or
-```csharp
-var provider = _container.Resolve<IConfigProvider>();
-```
-<br>
+public class ConfigOverrideObserver :
+    IObserver<ProbeConfigurationContext>
+{
+    public void OnCompleted() => throw new NotImplementedException();
 
-*.NET Core DI*
-```csharp
-var provider = _services.GetService<IFileConfigProvider>();
+    public void OnError(Exception error) => throw new NotImplementedException();
+
+    public void OnNext(ProbeConfigurationContext value) => throw new NotImplementedException();
+}
 ```
-...or
+Call the ```RegisterObserver``` method on ```ScannerFactory``` like so...
 ```csharp
-var provider = _services.GetService<IConfigProvider>();
+factory.RegisterObserver(new ConfigOverrideObserver());
 ```
+Done.

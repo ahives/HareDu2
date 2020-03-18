@@ -15,34 +15,79 @@ namespace HareDu.Diagnostics.Probes
 {
     using System;
     using System.Collections.Generic;
+    using Core.Configuration;
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticProbe :
-        IObservable<ProbeContext>
+        IObservable<ProbeContext>,
+        IObservable<ProbeConfigurationContext>
     {
         protected readonly IKnowledgeBaseProvider _kb;
-        readonly List<IObserver<ProbeContext>> _observers;
+        readonly List<IObserver<ProbeContext>> _resultObservers;
+        readonly List<IObserver<ProbeConfigurationContext>> _configObservers;
 
         protected BaseDiagnosticProbe(IKnowledgeBaseProvider kb)
         {
             _kb = kb;
-            _observers = new List<IObserver<ProbeContext>>();
+            _resultObservers = new List<IObserver<ProbeContext>>();
+            _configObservers = new List<IObserver<ProbeConfigurationContext>>();
+        }
+
+        public IDisposable Subscribe(IObserver<ProbeContext> observer)
+        {
+            if (!_resultObservers.Contains(observer))
+                _resultObservers.Add(observer);
+
+            return new UnsubscribeObserver<ProbeContext>(_resultObservers, observer);
+        }
+
+        public IDisposable Subscribe(IObserver<ProbeConfigurationContext> observer)
+        {
+            if (!_configObservers.Contains(observer))
+                _configObservers.Add(observer);
+
+            return new UnsubscribeObserver<ProbeConfigurationContext>(_configObservers, observer);
         }
 
         protected virtual void NotifyObservers(ProbeResult result)
         {
-            foreach (var observer in _observers)
+            foreach (var observer in _resultObservers)
             {
                 observer.OnNext(new ProbeContextImpl(result));
             }
         }
 
-        public IDisposable Subscribe(IObserver<ProbeContext> observer)
+        protected virtual void NotifyObservers(string probeId, string probeName, DiagnosticsConfig current, DiagnosticsConfig @new)
         {
-            if (!_observers.Contains(observer))
-                _observers.Add(observer);
+            foreach (var observer in _configObservers)
+            {
+                observer.OnNext(new ProbeConfigurationContextImpl(probeId, probeName, current, @new));
+            }
+        }
 
-            return new UnsubscribeObserver<ProbeContext>(_observers, observer);
+        protected void GetChangeSet(DiagnosticsConfig current, DiagnosticsConfig @new)
+        {
+            if (current.Probes.ConsumerUtilizationThreshold)
+        }
+
+        
+        class ProbeConfigurationContextImpl :
+            ProbeConfigurationContext
+        {
+            public ProbeConfigurationContextImpl(string probeId, string probeName, DiagnosticsConfig current, DiagnosticsConfig @new)
+            {
+                ProbeId = probeId;
+                ProbeName = probeName;
+                Current = current;
+                New = @new;
+                Timestamp = DateTimeOffset.UtcNow;
+            }
+
+            public string ProbeId { get; }
+            public string ProbeName { get; }
+            public DiagnosticsConfig Current { get; }
+            public DiagnosticsConfig New { get; }
+            public DateTimeOffset Timestamp { get; }
         }
 
 

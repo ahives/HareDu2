@@ -74,7 +74,23 @@ namespace HareDu.Diagnostics.Registration
             
             for (int i = 0; i < observers.Count; i++)
             {
-                if (observers[i] == null)
+                if (observers[i].IsNull())
+                    continue;
+                
+                for (int j = 0; j < probes.Count; j++)
+                {
+                    _observers.Add(probes[j].Subscribe(observers[i]));
+                }
+            }
+        }
+
+        public void RegisterObservers(IReadOnlyList<IObserver<ProbeConfigurationContext>> observers)
+        {
+            var probes = _probeCache.Values.ToList();
+            
+            for (int i = 0; i < observers.Count; i++)
+            {
+                if (observers[i].IsNull())
                     continue;
                 
                 for (int j = 0; j < probes.Count; j++)
@@ -86,7 +102,20 @@ namespace HareDu.Diagnostics.Registration
 
         public void RegisterObserver(IObserver<ProbeContext> observer)
         {
-            if (observer == null)
+            if (observer.IsNull())
+                return;
+            
+            var probes = _probeCache.Values.ToList();
+            
+            for (int j = 0; j < probes.Count; j++)
+            {
+                _observers.Add(probes[j].Subscribe(observer));
+            }
+        }
+
+        public void RegisterObserver(IObserver<ProbeConfigurationContext> observer)
+        {
+            if (observer.IsNull())
                 return;
             
             var probes = _probeCache.Values.ToList();
