@@ -22,9 +22,11 @@ namespace HareDu.Diagnostics.Probes
 
     public class RedeliveredMessagesProbe :
         BaseDiagnosticProbe,
+        IRefreshConfiguration,
         DiagnosticProbe
     {
-        readonly DiagnosticsConfig _config;
+        DiagnosticsConfig _config;
+        
         public string Id => GetType().GetIdentifier();
         public string Name => "Redelivered Messages Probe";
         public string Description { get; }
@@ -107,6 +109,8 @@ namespace HareDu.Diagnostics.Probes
 
             return result;
         }
+
+        public void RefreshConfig(DiagnosticsConfig config) => _config = config;
 
         ulong ComputeThreshold(ulong total)
             => _config.Probes.MessageRedeliveryThresholdCoefficient >= 1

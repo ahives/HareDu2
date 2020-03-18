@@ -21,9 +21,11 @@ namespace HareDu.Diagnostics.Probes
 
     public class HighConnectionClosureRateProbe :
         BaseDiagnosticProbe,
+        IRefreshConfiguration,
         DiagnosticProbe
     {
-        readonly DiagnosticsConfig _config;
+        DiagnosticsConfig _config;
+        
         public string Id => GetType().GetIdentifier();
         public string Name => "High Connection Closure Rate Probe";
         public string Description => "";
@@ -41,7 +43,7 @@ namespace HareDu.Diagnostics.Probes
             ProbeResult result;
             BrokerConnectivitySnapshot data = snapshot as BrokerConnectivitySnapshot;
 
-            if (_config.IsNull())
+            if (_config.IsNull() || _config.Probes.IsNull())
             {
                 _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(null,
@@ -89,5 +91,7 @@ namespace HareDu.Diagnostics.Probes
 
             return result;
         }
+
+        public void RefreshConfig(DiagnosticsConfig config) => _config = config;
     }
 }

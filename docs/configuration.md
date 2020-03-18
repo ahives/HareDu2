@@ -334,7 +334,6 @@ var config = provider.Configure(x =>
                 x.SetHighClosureRateThreshold(90);
                 x.SetHighCreationRateThreshold(60);
             });
-
 ```
 <br>
 

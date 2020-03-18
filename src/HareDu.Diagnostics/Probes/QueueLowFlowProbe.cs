@@ -21,9 +21,11 @@ namespace HareDu.Diagnostics.Probes
 
     public class QueueLowFlowProbe :
         BaseDiagnosticProbe,
+        IRefreshConfiguration,
         DiagnosticProbe
     {
-        readonly DiagnosticsConfig _config;
+        DiagnosticsConfig _config;
+        
         public string Id => GetType().GetIdentifier();
         public string Name => "Queue Low Flow Probe";
         public string Description { get; }
@@ -41,7 +43,7 @@ namespace HareDu.Diagnostics.Probes
             QueueSnapshot data = snapshot as QueueSnapshot;
             ProbeResult result;
  
-            if (_config.IsNull())
+            if (_config.IsNull() || _config.Probes.IsNull())
             {
                 _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(null,
@@ -89,5 +91,7 @@ namespace HareDu.Diagnostics.Probes
 
             return result;
         }
+
+        public void RefreshConfig(DiagnosticsConfig config) => _config = config;
     }
 }

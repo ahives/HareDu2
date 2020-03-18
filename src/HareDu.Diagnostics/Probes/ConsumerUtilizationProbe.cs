@@ -17,13 +17,16 @@ namespace HareDu.Diagnostics.Probes
     using Core.Configuration;
     using Core.Extensions;
     using KnowledgeBase;
+    using Registration;
     using Snapshotting.Model;
 
     public class ConsumerUtilizationProbe :
         BaseDiagnosticProbe,
+        IRefreshConfiguration,
         DiagnosticProbe
     {
-        readonly DiagnosticsConfig _config;
+        DiagnosticsConfig _config;
+        
         public string Id => GetType().GetIdentifier();
         public string Name => "Consumer Utilization Probe";
         public string Description { get; }
@@ -40,6 +43,21 @@ namespace HareDu.Diagnostics.Probes
         {
             ProbeResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
+
+            if (_config.IsNull() || _config.Probes.IsNull())
+            {
+                _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
+                result = new NotApplicableProbeResult(!data.IsNull() ? data.Node : null,
+                    !data.IsNull() ? data.Identifier : null,
+                    Id,
+                    Name,
+                    ComponentType,
+                    article);
+
+                NotifyObservers(result);
+
+                return result;
+            }
 
             var probeData = new List<ProbeData>
             {
@@ -88,5 +106,7 @@ namespace HareDu.Diagnostics.Probes
                 
             return result;
         }
+
+        public void RefreshConfig(DiagnosticsConfig config) => _config = config;
     }
 }

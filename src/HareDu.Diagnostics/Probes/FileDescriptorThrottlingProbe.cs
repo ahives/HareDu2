@@ -22,9 +22,11 @@ namespace HareDu.Diagnostics.Probes
 
     public class FileDescriptorThrottlingProbe :
         BaseDiagnosticProbe,
+        IRefreshConfiguration,
         DiagnosticProbe
     {
-        readonly DiagnosticsConfig _config;
+        DiagnosticsConfig _config;
+        
         public string Id => GetType().GetIdentifier();
         public string Name => "File Descriptor Throttling Probe";
         public string Description { get; }
@@ -105,6 +107,8 @@ namespace HareDu.Diagnostics.Probes
 
             return result;
         }
+
+        public void RefreshConfig(DiagnosticsConfig config) => _config = config;
 
         ulong ComputeThreshold(ulong fileDescriptorsAvailable)
             => _config.Probes.FileDescriptorUsageThresholdCoefficient >= 1

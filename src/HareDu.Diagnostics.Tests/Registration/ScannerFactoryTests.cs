@@ -211,6 +211,40 @@ namespace HareDu.Diagnostics.Tests.Registration
         }
 
         [Test]
+        public void Verify_can_return_all_scanners_3()
+        {
+            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+
+            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+
+            bool registered = factory.TryRegisterAllScanners();
+            var provider = new DiagnosticsConfigProvider();
+
+            var config2 = provider.Configure(x =>
+            {
+                x.SetMessageRedeliveryThresholdCoefficient(0.60M);
+                x.SetSocketUsageThresholdCoefficient(0.60M);
+                x.SetConsumerUtilizationThreshold(0.65M);
+                x.SetQueueHighFlowThreshold(90);
+                x.SetQueueLowFlowThreshold(10);
+                x.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                x.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                x.SetHighClosureRateThreshold(90);
+                x.SetHighCreationRateThreshold(60);
+            });
+            
+            factory.RefreshConfig(config2);
+            
+            // var scanners = factory.GetScanners();
+            //
+            // registered.ShouldBeTrue();
+            // scanners.ShouldNotBeNull();
+            // scanners.ShouldNotBeEmpty();
+            // scanners.Keys.Count().ShouldBe(3);
+        }
+
+        [Test]
         public void Verify_can_register_new_scanner()
         {
             var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());

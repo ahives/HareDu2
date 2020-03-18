@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Registration
 {
     using System;
     using System.Collections.Generic;
+    using Core.Configuration;
     using Probes;
     using Scanners;
     using Snapshotting;
@@ -41,5 +42,7 @@ namespace HareDu.Diagnostics.Registration
         bool TryRegisterAllProbes();
 
         bool TryRegisterAllScanners();
+
+        void RefreshConfig(DiagnosticsConfig config);
     }
 }

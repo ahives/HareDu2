@@ -15,9 +15,7 @@ namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Generic;
-    using Core.Configuration;
     using Core.Extensions;
-    using KnowledgeBase;
     using Registration;
     using Scanners;
     using Snapshotting;

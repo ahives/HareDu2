@@ -30,11 +30,11 @@ namespace HareDu.Diagnostics.Registration
     public class ScannerFactory :
         IScannerFactory
     {
-        readonly DiagnosticsConfig _config;
         readonly IKnowledgeBaseProvider _kb;
         readonly ConcurrentDictionary<string, object> _scannerCache;
         readonly ConcurrentDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
+        DiagnosticsConfig _config;
 
         public ScannerFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
@@ -155,6 +155,17 @@ namespace HareDu.Diagnostics.Registration
                 _scannerCache.Clear();
 
             return registered;
+        }
+
+        public void RefreshConfig(DiagnosticsConfig config)
+        {
+            var probes = _probeCache.Values.ToList();
+            
+            for (int i = 0; i < probes.Count; i++)
+            {
+                if (probes[i] is IRefreshConfiguration)
+                    probes[i].Cast<IRefreshConfiguration>().RefreshConfig(config);
+            }
         }
 
         protected virtual bool RegisterScannerInstance(Type type, string key)

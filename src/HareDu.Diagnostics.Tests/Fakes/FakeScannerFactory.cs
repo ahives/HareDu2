@@ -15,6 +15,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 {
     using System;
     using System.Collections.Generic;
+    using Core.Configuration;
     using Diagnostics.Probes;
     using Diagnostics.Registration;
     using Diagnostics.Scanners;
@@ -48,5 +49,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public bool TryRegisterAllProbes() => throw new NotImplementedException();
         public bool TryRegisterAllScanners() => throw new NotImplementedException();
+        public void RefreshConfig(DiagnosticsConfig config)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
