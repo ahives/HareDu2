@@ -90,6 +90,9 @@ namespace HareDu.Registration
 
             foreach (var type in typeMap)
             {
+                if (_cache.ContainsKey(type.Key))
+                    continue;
+                
                 registered = RegisterInstance(type.Value, type.Key) & registered;
             }
 

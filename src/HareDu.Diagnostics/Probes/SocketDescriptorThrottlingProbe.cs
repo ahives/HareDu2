@@ -43,7 +43,7 @@ namespace HareDu.Diagnostics.Probes
             ProbeResult result;
             NodeSnapshot data = snapshot as NodeSnapshot;
 
-            if (_config.IsNull())
+            if (_config.IsNull() || _config.Probes.IsNull())
             {
                 _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(!data.IsNull() ? data.ClusterIdentifier : null,
@@ -58,7 +58,7 @@ namespace HareDu.Diagnostics.Probes
                 return result;
             }
 
-            ulong warningThreshold = ComputeWarningThreshold(data.OS.SocketDescriptors.Available);
+            ulong warningThreshold = ComputeThreshold(data.OS.SocketDescriptors.Available);
             
             var probeData = new List<ProbeData>
             {
@@ -106,7 +106,7 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        ulong ComputeWarningThreshold(ulong socketsAvailable)
+        ulong ComputeThreshold(ulong socketsAvailable)
             => _config.Probes.SocketUsageThresholdCoefficient >= 1
                 ? socketsAvailable
                 : Convert.ToUInt64(Math.Ceiling(socketsAvailable * _config.Probes.SocketUsageThresholdCoefficient));

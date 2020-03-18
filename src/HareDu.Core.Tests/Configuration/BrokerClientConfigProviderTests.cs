@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Core.Tests.Configuration
 {
+    using System;
     using Core.Configuration;
     using NUnit.Framework;
     using Shouldly;
@@ -30,6 +31,7 @@ namespace HareDu.Core.Tests.Configuration
             {
                 x.ConnectTo("http://localhost:15670");
                 x.UsingCredentials("guest1", "guest1");
+                x.TimeoutAfter(new TimeSpan(0, 0, 30));
             });
             
             settings.Url.ShouldBe("http://localhost:15670");

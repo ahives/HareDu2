@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             ProbeResult result;
             OperatingSystemSnapshot data = snapshot as OperatingSystemSnapshot;
 
-            if (_config.IsNull())
+            if (_config.IsNull() || _config.Probes.IsNull())
             {
                 _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(!data.IsNull() ? data.NodeIdentifier : null,
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Probes
                 return result;
             }
             
-            ulong warningThreshold = ComputeWarningThreshold(data.FileDescriptors.Available);
+            ulong warningThreshold = ComputeThreshold(data.FileDescriptors.Available);
 
             var probeData = new List<ProbeData>
             {
@@ -106,7 +106,7 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        ulong ComputeWarningThreshold(ulong fileDescriptorsAvailable)
+        ulong ComputeThreshold(ulong fileDescriptorsAvailable)
             => _config.Probes.FileDescriptorUsageThresholdCoefficient >= 1
                 ? fileDescriptorsAvailable
                 : Convert.ToUInt64(Math.Ceiling(fileDescriptorsAvailable * _config.Probes.FileDescriptorUsageThresholdCoefficient));

@@ -42,7 +42,7 @@ namespace HareDu.Diagnostics.Probes
             ProbeResult result;
             QueueSnapshot data = snapshot as QueueSnapshot;
             
-            if (_config.IsNull())
+            if (_config.IsNull() || _config.Probes.IsNull())
             {
                 _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(!data.IsNull() ? data.Node : string.Empty,
@@ -57,7 +57,7 @@ namespace HareDu.Diagnostics.Probes
                 return result;
             }
             
-            ulong warningThreshold = ComputeWarningThreshold(data.Messages.Incoming.Total);
+            ulong warningThreshold = ComputeThreshold(data.Messages.Incoming.Total);
             
             var probeData = new List<ProbeData>
             {
@@ -108,7 +108,7 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        ulong ComputeWarningThreshold(ulong total)
+        ulong ComputeThreshold(ulong total)
             => _config.Probes.MessageRedeliveryThresholdCoefficient >= 1
                 ? total
                 : Convert.ToUInt64(Math.Ceiling(total * _config.Probes.MessageRedeliveryThresholdCoefficient));

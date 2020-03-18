@@ -47,7 +47,9 @@ namespace HareDu.Diagnostics.Probes
                 new ProbeDataImpl("ConsumerUtilizationThreshold", _config.Probes.ConsumerUtilizationThreshold.ToString())
             };
             
-            if (data.ConsumerUtilization >= _config.Probes.ConsumerUtilizationThreshold && data.ConsumerUtilization < 1.0M)
+            if (data.ConsumerUtilization >= _config.Probes.ConsumerUtilizationThreshold
+                && data.ConsumerUtilization < 1.0M
+                && _config.Probes.ConsumerUtilizationThreshold <= 1.0M)
             {
                 _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.Node,
@@ -58,7 +60,8 @@ namespace HareDu.Diagnostics.Probes
                     probeData,
                     article);
             }
-            else if (data.ConsumerUtilization < _config.Probes.ConsumerUtilizationThreshold)
+            else if (data.ConsumerUtilization < _config.Probes.ConsumerUtilizationThreshold
+                     && _config.Probes.ConsumerUtilizationThreshold <= 1.0M)
             {
                 _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.Node,
