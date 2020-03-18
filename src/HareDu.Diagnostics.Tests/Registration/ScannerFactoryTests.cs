@@ -234,14 +234,7 @@ namespace HareDu.Diagnostics.Tests.Registration
                 x.SetHighCreationRateThreshold(60);
             });
             
-            factory.RefreshConfig(config2);
-            
-            // var scanners = factory.GetScanners();
-            //
-            // registered.ShouldBeTrue();
-            // scanners.ShouldNotBeNull();
-            // scanners.ShouldNotBeEmpty();
-            // scanners.Keys.Count().ShouldBe(3);
+            factory.OverrideConfig(config2);
         }
 
         [Test]

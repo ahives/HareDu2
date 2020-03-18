@@ -34,7 +34,7 @@ namespace HareDu.Diagnostics.Registration
         readonly ConcurrentDictionary<string, object> _scannerCache;
         readonly ConcurrentDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
-        DiagnosticsConfig _config;
+        readonly DiagnosticsConfig _config;
 
         public ScannerFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
         {
@@ -157,14 +157,14 @@ namespace HareDu.Diagnostics.Registration
             return registered;
         }
 
-        public void RefreshConfig(DiagnosticsConfig config)
+        public void OverrideConfig(DiagnosticsConfig config)
         {
             var probes = _probeCache.Values.ToList();
             
             for (int i = 0; i < probes.Count; i++)
             {
-                if (probes[i] is IRefreshConfiguration)
-                    probes[i].Cast<IRefreshConfiguration>().RefreshConfig(config);
+                if (probes[i] is IOverrideConfiguration)
+                    probes[i].Cast<IOverrideConfiguration>().OverrideConfig(config);
             }
         }
 

@@ -43,6 +43,6 @@ namespace HareDu.Diagnostics.Registration
 
         bool TryRegisterAllScanners();
 
-        void RefreshConfig(DiagnosticsConfig config);
+        void OverrideConfig(DiagnosticsConfig config);
     }
 }

@@ -22,7 +22,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class ConsumerUtilizationProbe :
         BaseDiagnosticProbe,
-        IRefreshConfiguration,
+        IOverrideConfiguration,
         DiagnosticProbe
     {
         DiagnosticsConfig _config;
@@ -107,6 +107,6 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        public void RefreshConfig(DiagnosticsConfig config) => _config = config;
+        public void OverrideConfig(DiagnosticsConfig config) => _config = config;
     }
 }

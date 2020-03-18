@@ -49,7 +49,7 @@ namespace HareDu.Diagnostics.Tests.Fakes
 
         public bool TryRegisterAllProbes() => throw new NotImplementedException();
         public bool TryRegisterAllScanners() => throw new NotImplementedException();
-        public void RefreshConfig(DiagnosticsConfig config)
+        public void OverrideConfig(DiagnosticsConfig config)
         {
             throw new NotImplementedException();
         }

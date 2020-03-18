@@ -13,8 +13,8 @@
 // limitations under the License.
 namespace HareDu.Core.Configuration
 {
-    public interface IRefreshConfiguration
+    public interface IOverrideConfiguration
     {
-        void RefreshConfig(DiagnosticsConfig config);
+        void OverrideConfig(DiagnosticsConfig config);
     }
 }
