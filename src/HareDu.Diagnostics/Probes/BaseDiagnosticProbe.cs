@@ -65,11 +65,6 @@ namespace HareDu.Diagnostics.Probes
             }
         }
 
-        protected void GetChangeSet(DiagnosticsConfig current, DiagnosticsConfig @new)
-        {
-            if (current.Probes.ConsumerUtilizationThreshold)
-        }
-
         
         class ProbeConfigurationContextImpl :
             ProbeConfigurationContext
