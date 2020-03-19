@@ -50,10 +50,8 @@ namespace HareDu.Snapshotting.Tests
         public async Task Verify_can_return_snapshot()
         {
             var camera = _container.Resolve<ISnapshotFactory>()
-                .Lens<ClusterSnapshot>()
-                .TakeSnapshot();
-
-            var result = camera.History.MostRecent();
+                .Lens<ClusterSnapshot>();
+            var result = camera.TakeSnapshot();
 
             camera.History.Results.Count.ShouldBe(1);
             camera.TakeSnapshot();

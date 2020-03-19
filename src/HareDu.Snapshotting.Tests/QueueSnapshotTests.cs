@@ -55,10 +55,9 @@ namespace HareDu.Snapshotting.Tests
         public void Test()
         {
             var lens = _container.Resolve<ISnapshotFactory>()
-                .Lens<BrokerQueuesSnapshot>()
-                .TakeSnapshot();
-
-            var result = lens.History.MostRecent();
+                .Lens<BrokerQueuesSnapshot>();
+            
+            var result = lens.TakeSnapshot();
 
             result.Snapshot.ClusterName.ShouldBe("fake_cluster");
             result.Snapshot.Queues.ShouldNotBeNull();

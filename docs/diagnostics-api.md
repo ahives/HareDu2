@@ -56,18 +56,18 @@ var provider = new YamlFileConfigProvider();
 // Get the API configuration
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
-var factory = new SnapshotFactory(config.Broker);
+var snapshotFactory = new SnapshotFactory(config.Broker);
 
 // Take a snapshot
-var lens = factory
-    .Lens<BrokerQueuesSnapshot>()
-    .TakeSnapshot(out var snapshot);
+var lens = snapshotFactory.Lens<BrokerQueuesSnapshot>();
+var snapshotResult = lens.TakeSnapshot();
 
-var scannerFactory = new ScannerFactory( config.Diagnostics, new KnowledgeBaseProvider());
+var scannerFactory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+
 // Initialize the diagnostic scanner and register the observer
 var scanner = new Scanner(scannerFactory)
     .RegisterObserver(new BrokerQueuesScannerObserver());
 
 // Scan the results of the most recent snapshot taken
-var result = scanner.Scan(snapshot);
+var result = scanner.Scan(snapshotResult.Snapshot);
 ```

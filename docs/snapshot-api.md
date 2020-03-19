@@ -17,15 +17,15 @@ In this code snippet, the lens variable returns a ``SnapshotLens`` for taking sn
 
 **Step 2: Take the snapshot**
 ```csharp
-lens.TakeSnapshot();
+var result = lens.TakeSnapshot();
 ```
 
 #### Viewing snapshot history
 
-Snapshots are accessible via the Timeline property on the ```SnapshotFactory```. Getting the most recent snapshot is as easy as calling the ```MostRecent``` extension method off of the ```History``` property on the lens like so...  
+Snapshots are accessible via ```History```. Getting the most recent snapshot is as easy as calling the ```MostRecent``` extension method off of the ```History``` property on the lens like so...  
 
 ```csharp
-var result = factory.History.MostRecent();
+var result = lens.History.MostRecent();
 ```
 Since ```MostRecent``` returns a ```SnapshotResult<T>``` you can easily get the actual snapshot data by simple calling the ```Snapshot``` property like this...
 
@@ -35,18 +35,18 @@ var snapshot = result.Snapshot;
 ...or more concisely...
 
 ```csharp
-var snapshot = factory.History.MostRecent().Snapshot;
+var snapshot = lens.History.MostRecent().Snapshot;
 ```
 
 #### Registering Observers
 
-When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<T>```. Each time a snapshot is taken (i.e. when the ```TakeSnapshot``` method is called), all registered observers will be notified with an object of ```SnapshotResult<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```TakeSnapshot``` method or else the registered observers will not receive notifications.
+When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<T>```. Each time a snapshot is taken (i.e. when the ```TakeSnapshot``` method is called), all registered observers will be notified with an object of ```SnapshotResult<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```TakeSnapshot``` method.
 
 ```csharp
-var lens = factor
+var lens = factory
     .Lens<BrokerQueuesSnapshot>()
     .RegisterObserver(new SomeCoolObserver())
-    .TakeSnapshot();
+    .RegisterObserver(new SomeOtherCoolObserver());
 ```
 
 #### Putting it altogether
@@ -63,9 +63,9 @@ public class BrokerQueuesObserver :
     public void OnNext(SnapshotContext<BrokerQueuesSnapshot> value) => throw new NotImplementedException();
 }
 
+// Get the API configuration
 var provider = new YamlFileConfigProvider();
 
-// Get the API configuration
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
 // Initialize the snapshot factory
@@ -77,7 +77,5 @@ var lens = factory
     .RegisterObserver(new BrokerQueuesObserver());
 
 // Take a snapshot
-lens.TakeSnapshot();
-
-var result = lens.History.MostRecent();
+var result = lens.TakeSnapshot();
 ```

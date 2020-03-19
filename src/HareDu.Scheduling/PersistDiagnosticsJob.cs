@@ -39,7 +39,7 @@ namespace HareDu.Scheduling
 
         public async Task Execute(IJobExecutionContext context)
         {
-            _lens.TakeSnapshot(out var result);
+            var result = _lens.TakeSnapshot();
             var scan = _scanner.Scan(result.Snapshot);
 
             _writer.TrySave(scan, $"diagnostics_{scan.Id}.json", context.JobDetail.JobDataMap["path"].ToString());

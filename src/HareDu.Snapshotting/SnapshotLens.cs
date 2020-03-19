@@ -22,9 +22,7 @@ namespace HareDu.Snapshotting
     {
         SnapshotHistory<T> History { get; }
         
-        SnapshotLens<T> TakeSnapshot(CancellationToken cancellationToken = default);
-        
-        SnapshotLens<T> TakeSnapshot(out SnapshotResult<T> result, CancellationToken cancellationToken = default);
+        SnapshotResult<T> TakeSnapshot(CancellationToken cancellationToken = default);
 
         SnapshotLens<T> RegisterObserver(IObserver<SnapshotContext<T>> observer);
         

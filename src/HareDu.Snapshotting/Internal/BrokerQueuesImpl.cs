@@ -38,7 +38,7 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public SnapshotLens<BrokerQueuesSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
+        public SnapshotResult<BrokerQueuesSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
         {
             var cluster = _factory
                 .Object<SystemOverview>()
@@ -48,7 +48,8 @@ namespace HareDu.Snapshotting.Internal
             if (cluster.HasFaulted)
             {
                 NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
-                return this;
+                
+                return new EmptySnapshotResult<BrokerQueuesSnapshot>();
             }
 
             var queues = _factory
@@ -59,7 +60,8 @@ namespace HareDu.Snapshotting.Internal
             if (queues.HasFaulted)
             {
                 NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve queue information."));
-                return this;
+                
+                return new EmptySnapshotResult<BrokerQueuesSnapshot>();
             }
             
             BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(
@@ -72,50 +74,7 @@ namespace HareDu.Snapshotting.Internal
             SaveSnapshot(identifier, snapshot, timestamp);
             NotifyObservers(identifier, snapshot, timestamp);
 
-            return this;
-        }
-
-        public SnapshotLens<BrokerQueuesSnapshot> TakeSnapshot(out SnapshotResult<BrokerQueuesSnapshot> result,
-            CancellationToken cancellationToken = default)
-        {
-            var cluster = _factory
-                .Object<SystemOverview>()
-                .Get(cancellationToken)
-                .GetResult();
-
-            if (cluster.HasFaulted)
-            {
-                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve cluster information."));
-                
-                result = new EmptySnapshotResult<BrokerQueuesSnapshot>();
-                return this;
-            }
-
-            var queues = _factory
-                .Object<Queue>()
-                .GetAll(cancellationToken)
-                .GetResult();
-
-            if (queues.HasFaulted)
-            {
-                NotifyObserversOfError(new HareDuSnapshotException("Unable to retrieve queue information."));
-                
-                result = new EmptySnapshotResult<BrokerQueuesSnapshot>();
-                return this;
-            }
-            
-            BrokerQueuesSnapshot snapshot = new BrokerQueuesSnapshotImpl(
-                cluster.Select(x => x.Data),
-                queues.Select(x => x.Data));
-            
-            string identifier = NewId.Next().ToString();
-            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
-
-            SaveSnapshot(identifier, snapshot, timestamp);
-            NotifyObservers(identifier, snapshot, timestamp);
-
-            result = new SnapshotResultImpl(identifier, snapshot, timestamp);
-            return this;
+            return new SnapshotResultImpl(identifier, snapshot, timestamp);
         }
 
         public SnapshotLens<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerQueuesSnapshot>> observer)

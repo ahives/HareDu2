@@ -152,6 +152,8 @@ var config = provider.Configure(x => x.SetSocketUsageThresholdCoefficient(0.60M)
 
 **RuntimeProcessLimitProbe**
 
+Defines the coefficient that will be used to calculate the acceptable number of runtime processes that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the upper limit of available runtime processes. A fractional value less than 1 will result in the calculated threshold being derived from said value times the predefined upper limit of available runtime processes. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
+
 *YAML*
 ```yaml
 runtime-process-usage-threshold-coefficient:  0.65

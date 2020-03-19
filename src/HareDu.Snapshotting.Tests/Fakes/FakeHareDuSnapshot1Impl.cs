@@ -32,24 +32,13 @@ namespace HareDu.Snapshotting.Tests.Fakes
             _timeline = new Lazy<SnapshotHistory<FakeHareDuSnapshot1>>(() => new SnapshotHistoryImpl(_snapshots));
         }
 
-        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default)
+        public SnapshotResult<FakeHareDuSnapshot1> TakeSnapshot(CancellationToken cancellationToken = default)
         {
-            FakeHareDuSnapshot1 snapshot = new FakeHareDuSnapshotImpl();
-
-            _snapshots.Add(new SnapshotResultImpl(snapshot));
-
-            return this;
-        }
-
-        public SnapshotLens<FakeHareDuSnapshot1> TakeSnapshot(out SnapshotResult<FakeHareDuSnapshot1> result,
-            CancellationToken cancellationToken = default)
-        {
-            var snapshot = new SnapshotResultImpl(new FakeHareDuSnapshotImpl());
+            var result = new SnapshotResultImpl(new FakeHareDuSnapshotImpl());
             
-            _snapshots.Add(snapshot);
+            _snapshots.Add(result);
 
-            result = snapshot;
-            return this;
+            return result;
         }
         
         public SnapshotLens<FakeHareDuSnapshot1> RegisterObserver(IObserver<SnapshotContext<FakeHareDuSnapshot1>> observer) => throw new NotImplementedException();
