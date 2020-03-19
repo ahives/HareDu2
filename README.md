@@ -3,13 +3,9 @@
 ![Join the chat at https://gitter.im/HareDu2/Lobby](https://img.shields.io/gitter/room/haredu2/HareDu2?style=flat)
 ![NuGet downloads](https://img.shields.io/nuget/dt/haredu?style=flat)
 
-HareDu is a .NET library for managing and monitoring RabbitMQ clusters using the RabbitMQ RESTful API.
+HareDu is a .NET library for managing and monitoring RabbitMQ clusters.
 
 HareDu is Apache 2.0 licensed.
-
-Docs under construction here
-
-https://ahives.gitbooks.io/haredu2/content/
 
 ### HareDu 2 NuGet Packages
 
@@ -30,12 +26,10 @@ https://ahives.gitbooks.io/haredu2/content/
 
 If you are familiar with HareDu, you should know that HareDu 2 introduces some really cool new functionality. HareDu 2 came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
 1. Increased test coverage
-2. Improved low level administrative APIs
-3. New APIs for diagnostics and snapshotting broker information
-4. Dependency Injection (e.g., Autofac, .NET Core) support for quick API registration
-5. .NET Core support 
+2. Improved low level administrative API (i.e. Broker API)
+3. New APIs - Diagnostics, Snapshot, and IoC Container Integration
+4. .NET Core support 
 
-[Docs](https://github.com/ahives/HareDu2/blob/master/docs/README.md)
 
 ## Get It
 From the Package Manager Console in Visual Studio you can run the following PowerShell script to get the latest version of HareDu...
@@ -61,13 +55,16 @@ https://www.rabbitmq.com/management.html#clustering
 
 If using .NET Core...  
 1. Create a VirtualHost called "TestVirtualHost"
-   Note: This can be done by either using the HareDu Broker API or by logging in to the RabbitMQ UI and creating a vhost
+   Note: This can be done by either using the Broker API or by logging in to the RabbitMQ UI and creating a vhost
 2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
    dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Consumer.dll
 3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on macOS) and execute the following command to start publishing messages:
     dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Publisher.dll
 
 Note: if you are using JetBrains Rider you can simply configure both projects and run them within the IDE.
+
+**Enough with the talking, go check out the docs [here](https://github.com/ahives/HareDu2/blob/master/docs/README.md)**
+
 
 # Dependencies
 .NET Framework 4.6.2 or above/.NET Core 2.1 or above
@@ -85,7 +82,7 @@ If you find that making an API call is failing for reasons unknown, HareDu 2 int
 string debugText = result.ToJsonString();
 ```
 
-That's it. So, the resulting output of calling the ToJsonString extension method might look something like this,
+That's it. So, the resulting output of calling the ```ToJsonString``` extension method might look something like this,
 
 ```json
 {
