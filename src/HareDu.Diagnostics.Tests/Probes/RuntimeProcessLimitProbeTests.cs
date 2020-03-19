@@ -47,7 +47,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test(Description = "")]
         public void Verify_probe_unhealthy_condition_1()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
@@ -65,7 +65,7 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test(Description = "")]
         public void Verify_probe_unhealthy_condition_2()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
@@ -83,7 +83,25 @@ namespace HareDu.Diagnostics.Tests.Probes
         [Test]
         public void Verify_probe_healthy_condition()
         {
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu.yaml";
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
+            var configProvider = _container.Resolve<IFileConfigProvider>();
+            configProvider.TryGet(path, out HareDuConfig config);
+            
+            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var probe = new RuntimeProcessLimitProbe(config.Diagnostics, knowledgeBaseProvider);
+            
+            BrokerRuntimeSnapshot snapshot = new FakeBrokerRuntimeSnapshot1(100, 40, 3.2M);
+
+            var result = probe.Execute(snapshot);
+            
+            result.Status.ShouldBe(ProbeResultStatus.Healthy);
+            result.KB.Id.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
+        }
+
+        [Test]
+        public void Verify_probe_warning_condition()
+        {
+            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             var configProvider = _container.Resolve<IFileConfigProvider>();
             configProvider.TryGet(path, out HareDuConfig config);
             
@@ -94,7 +112,7 @@ namespace HareDu.Diagnostics.Tests.Probes
 
             var result = probe.Execute(snapshot);
             
-            result.Status.ShouldBe(ProbeResultStatus.Healthy);
+            result.Status.ShouldBe(ProbeResultStatus.Warning);
             result.KB.Id.ShouldBe(typeof(RuntimeProcessLimitProbe).GetIdentifier());
         }
 

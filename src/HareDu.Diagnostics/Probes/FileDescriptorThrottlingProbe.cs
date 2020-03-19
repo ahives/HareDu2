@@ -59,17 +59,17 @@ namespace HareDu.Diagnostics.Probes
                 return result;
             }
             
-            ulong warningThreshold = ComputeThreshold(data.FileDescriptors.Available);
+            ulong threshold = ComputeThreshold(data.FileDescriptors.Available);
 
             var probeData = new List<ProbeData>
             {
                 new ProbeDataImpl("FileDescriptors.Available", data.FileDescriptors.Available.ToString()),
                 new ProbeDataImpl("FileDescriptors.Used", data.FileDescriptors.Used.ToString()),
                 new ProbeDataImpl("FileDescriptorUsageThresholdCoefficient", _config.Probes.FileDescriptorUsageThresholdCoefficient.ToString()),
-                new ProbeDataImpl("CalculatedThreshold", warningThreshold.ToString())
+                new ProbeDataImpl("CalculatedThreshold", threshold.ToString())
             };
 
-            if (data.FileDescriptors.Used < warningThreshold && warningThreshold < data.FileDescriptors.Available)
+            if (data.FileDescriptors.Used < threshold && threshold < data.FileDescriptors.Available)
             {
                 _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,

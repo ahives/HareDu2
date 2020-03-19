@@ -44,12 +44,10 @@ namespace HareDu.Diagnostics.Registration
             _probeCache = new ConcurrentDictionary<string, DiagnosticProbe>();
             _observers = new List<IDisposable>();
             
-            bool registeredProbes = TryRegisterAllProbes();
-            if (!registeredProbes)
+            if (!TryRegisterAllProbes())
                 throw new HareDuDiagnosticsException("Could not register diagnostic probes.");
             
-            bool registered = TryRegisterAllScanners();
-            if (!registered)
+            if (!TryRegisterAllScanners())
                 throw new HareDuDiagnosticsException("Could not register diagnostic scanners.");
         }
 

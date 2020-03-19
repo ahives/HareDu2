@@ -364,3 +364,6 @@ Call the ```RegisterObserver``` method on ```ScannerFactory``` like so...
 factory.RegisterObserver(new ConfigOverrideObserver());
 ```
 Done.
+<br>
+
+*Please note that the above functionality currently only works with the Diagnostics API.*
