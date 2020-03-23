@@ -25,7 +25,7 @@ namespace HareDu.Snapshotting.Internal
     using Model;
 
     class BrokerQueuesImpl :
-        BaseSnapshot<BrokerQueuesSnapshot>,
+        BaseSnapshotLens<BrokerQueuesSnapshot>,
         SnapshotLens<BrokerQueuesSnapshot>
     {
         readonly List<IDisposable> _observers;

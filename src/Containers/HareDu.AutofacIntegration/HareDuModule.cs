@@ -27,8 +27,14 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var provider = x.Resolve<IFileConfigProvider>();
+                    string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
 
-                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+                    provider.TryGet(file, out HareDuConfig config);
+
+                    var validator = x.Resolve<IConfigValidator>();
+
+                    if (!validator.Validate(config))
+                        throw new HareDuConfigurationException($"Invalid settings in {file}.");
 
                     return new BrokerObjectFactory(config.Broker);
                 })

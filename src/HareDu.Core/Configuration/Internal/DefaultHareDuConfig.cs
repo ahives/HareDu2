@@ -66,15 +66,6 @@ namespace HareDu.Core.Configuration.Internal
             }
 
             public ProbesConfig Probes { get; }
-            public uint HighClosureRateThreshold { get; }
-            public uint HighCreationRateThreshold { get; }
-            public uint QueueHighFlowThreshold { get; }
-            public uint QueueLowFlowThreshold { get; }
-            public decimal MessageRedeliveryThresholdCoefficient { get; }
-            public decimal SocketUsageThresholdCoefficient { get; }
-            public decimal RuntimeProcessUsageThresholdCoefficient { get; }
-            public decimal FileDescriptorUsageThresholdCoefficient { get; }
-            public decimal ConsumerUtilizationThreshold { get; }
 
             
             class ProbesImpl :
@@ -88,7 +79,7 @@ namespace HareDu.Core.Configuration.Internal
                     HighCreationRateThreshold = 100;
                     RuntimeProcessUsageThresholdCoefficient = 0.7M;
                     FileDescriptorUsageThresholdCoefficient = 0.7M;
-                    ConsumerUtilizationThreshold = 0.5M;
+                    ConsumerUtilizationThreshold = 0.50M;
                     QueueLowFlowThreshold = 20;
                     QueueHighFlowThreshold = 100;
                 }

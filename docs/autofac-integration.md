@@ -1,6 +1,7 @@
 # Autofac Integration
 
-Blah, Blah, Blah
+For those that are interested in quickly building applications with HareDu 2, the best way to do that is by using one of the supported IoC integration packages. In this section we will go over how to use the Autofac Integration package in your applications.
+
 
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.

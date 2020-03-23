@@ -33,13 +33,12 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [OneTimeSetUp]
         public void Init()
         {
-            var validator = new HareDuConfigValidator();
-            var configProvider = new YamlFileConfigProvider(validator);
+            var provider = new YamlFileConfigProvider();
             var knowledgeBaseProvider = new KnowledgeBaseProvider();
             
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
-            configProvider.TryGet(path, out HareDuConfig config);
+            provider.TryGet(path, out HareDuConfig config);
             
             _probes = new List<DiagnosticProbe>
             {

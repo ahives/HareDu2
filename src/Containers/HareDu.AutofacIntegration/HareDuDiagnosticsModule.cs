@@ -15,6 +15,7 @@ namespace HareDu.AutofacIntegration
 {
     using System.IO;
     using Autofac;
+    using Core;
     using Core.Configuration;
     using Diagnostics;
     using Diagnostics.Formatting;
@@ -31,12 +32,16 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var provider = x.Resolve<IFileConfigProvider>();
+                    string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
 
-                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+                    provider.TryGet(file, out HareDuConfig config);
 
-                    var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
+                    var validator = x.Resolve<IConfigValidator>();
 
-                    return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
+                    if (!validator.Validate(config))
+                        throw new HareDuConfigurationException($"Invalid settings in {file}.");
+
+                    return new ScannerFactory(config.Diagnostics, x.Resolve<IKnowledgeBaseProvider>());
                 })
                 .As<IScannerFactory>()
                 .SingleInstance();
@@ -44,8 +49,14 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var provider = x.Resolve<IFileConfigProvider>();
+                    string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
 
-                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+                    provider.TryGet(file, out HareDuConfig config);
+
+                    var validator = x.Resolve<IConfigValidator>();
+
+                    if (!validator.Validate(config))
+                        throw new HareDuConfigurationException($"Invalid settings in {file}.");
 
                     return new BrokerObjectFactory(config.Broker);
                 })

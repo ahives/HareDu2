@@ -15,6 +15,7 @@ namespace HareDu.AutofacIntegration
 {
     using System.IO;
     using Autofac;
+    using Core;
     using Core.Configuration;
     using Registration;
     using Snapshotting.Persistence;
@@ -28,17 +29,23 @@ namespace HareDu.AutofacIntegration
             builder.Register(x =>
                 {
                     var provider = x.Resolve<IFileConfigProvider>();
+                    string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
 
-                    provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+                    provider.TryGet(file, out HareDuConfig config);
 
+                    var validator = x.Resolve<IConfigValidator>();
+
+                    if (!validator.Validate(config))
+                        throw new HareDuConfigurationException($"Invalid settings in {file}.");
+                    
                     return new BrokerObjectFactory(config.Broker);
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
-            builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
-                .As<ISnapshotFactory>()
-                .SingleInstance();
+            builder.RegisterType<SnapshotFactory>()
+                   .As<ISnapshotFactory>()
+                   .SingleInstance();
             
             builder.RegisterType<SnapshotWriter>()
                 .As<ISnapshotWriter>()

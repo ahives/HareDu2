@@ -19,7 +19,7 @@ namespace HareDu.Snapshotting.Internal
     using Core.Extensions;
     using HareDu.Registration;
 
-    public abstract class BaseSnapshot<T> :
+    public abstract class BaseSnapshotLens<T> :
         IObservable<SnapshotContext<T>>
         where T : Snapshot
     {
@@ -29,7 +29,7 @@ namespace HareDu.Snapshotting.Internal
         
         readonly List<IObserver<SnapshotContext<T>>> _observers;
 
-        protected BaseSnapshot(IBrokerObjectFactory factory)
+        protected BaseSnapshotLens(IBrokerObjectFactory factory)
         {
             _factory = factory;
             _observers = new List<IObserver<SnapshotContext<T>>>();

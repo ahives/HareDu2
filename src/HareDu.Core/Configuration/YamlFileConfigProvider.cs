@@ -22,20 +22,10 @@ namespace HareDu.Core.Configuration
     public class YamlFileConfigProvider :
         IFileConfigProvider
     {
-        readonly IConfigValidator _validator;
         readonly IDeserializer _deserializer;
-
-        public YamlFileConfigProvider(IConfigValidator validator)
-        {
-            _validator = validator;
-            _deserializer = new DeserializerBuilder()
-                .WithNamingConvention(HyphenatedNamingConvention.Instance)
-                .Build();
-        }
 
         public YamlFileConfigProvider()
         {
-            _validator = new HareDuConfigValidator();
             _deserializer = new DeserializerBuilder()
                 .WithNamingConvention(HyphenatedNamingConvention.Instance)
                 .Build();
@@ -48,7 +38,7 @@ namespace HareDu.Core.Configuration
                 if (!File.Exists(path))
                 {
                     config = ConfigCache.Default;
-                    return true;
+                    return false;
                 }
 
                 using (var reader = File.OpenText(path))
@@ -56,14 +46,13 @@ namespace HareDu.Core.Configuration
                     var deserializedConfig = _deserializer.Deserialize<HareDuConfigYaml>(reader);
                     
                     config = new HareDuConfigImpl(deserializedConfig);
-
-                    return _validator.Validate(config);
+                    return true;
                 }
             }
             catch (Exception e)
             {
                 config = ConfigCache.Default;
-                return true;
+                return false;
             }
         }
 
@@ -78,7 +67,6 @@ namespace HareDu.Core.Configuration
             }
 
             public BrokerConfig Broker { get; }
-            public bool OverrideAnalyzerConfig { get; }
             public DiagnosticsConfig Diagnostics { get; }
 
             

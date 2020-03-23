@@ -24,8 +24,6 @@ namespace HareDu.Core.Tests.Configuration
         [Test]
         public void Verify_can_programmatically_initialize_client_api()
         {
-            // var configProvider = new ConfigurationProvider();
-            // var provider = new BrokerConfigProvider(configProvider);
             var provider = new BrokerConfigProvider();
             var settings = provider.Configure(x =>
             {
@@ -43,14 +41,12 @@ namespace HareDu.Core.Tests.Configuration
         [Test]
         public void Verify_can_initialize_client_api_via_config_file()
         {
-            // var configProvider = new ConfigurationProvider();
-            // var provider = new BrokerConfigProvider(configProvider);
             var provider = new BrokerConfigProvider();
             var settings = provider.Configure(x =>
             {
             });
             
-            settings.Url.ShouldBe("http://localhost:15672");
+            settings.Url.ShouldBeNull();
             settings.Credentials.ShouldNotBeNull();
             settings.Credentials.Username.ShouldBe("guest");
             settings.Credentials.Password.ShouldBe("guest");

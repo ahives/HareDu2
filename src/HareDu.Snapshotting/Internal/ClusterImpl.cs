@@ -24,7 +24,7 @@ namespace HareDu.Snapshotting.Internal
     using Model;
 
     class ClusterImpl :
-        BaseSnapshot<ClusterSnapshot>,
+        BaseSnapshotLens<ClusterSnapshot>,
         SnapshotLens<ClusterSnapshot>
     {
         readonly List<IDisposable> _observers;

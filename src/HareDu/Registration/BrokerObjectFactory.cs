@@ -35,9 +35,8 @@ namespace HareDu.Registration
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _cache = new ConcurrentDictionary<string, object>();
             
-            bool registered = TryRegisterAll();
-            if (!registered)
-                throw new HareDuBrokerObjectInitException();
+            if (!TryRegisterAll())
+                throw new HareDuBrokerObjectInitException("Could not register broker objects.");
         }
 
         public BrokerObjectFactory(BrokerConfig config)
@@ -45,9 +44,8 @@ namespace HareDu.Registration
             _client = GetClient(config);
             _cache = new ConcurrentDictionary<string, object>();
             
-            bool registered = TryRegisterAll();
-            if (!registered)
-                throw new HareDuBrokerObjectInitException();
+            if (!TryRegisterAll())
+                throw new HareDuBrokerObjectInitException("Could not register broker objects.");
         }
 
         public T Object<T>()

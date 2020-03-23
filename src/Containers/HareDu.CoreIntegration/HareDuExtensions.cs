@@ -34,7 +34,6 @@ namespace HareDu.CoreIntegration
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDu(this IServiceCollection services)
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -56,7 +55,6 @@ namespace HareDu.CoreIntegration
         /// <param name="services"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDu(this IServiceCollection services, string path)
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -88,8 +86,8 @@ namespace HareDu.CoreIntegration
             services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
 
             services.AddBrokerObjectFactory();
-            
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
+
+            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
 
             services.TryAddSingleton<ISnapshotWriter, SnapshotWriter>();
 
@@ -102,7 +100,6 @@ namespace HareDu.CoreIntegration
         /// <param name="services"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuSnapshot(this IServiceCollection services, string path)
         {
             services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
@@ -115,8 +112,8 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory(path);
 
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
-
+            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
+            
             services.TryAddSingleton<ISnapshotWriter, SnapshotWriter>();
 
             return services;
@@ -127,7 +124,6 @@ namespace HareDu.CoreIntegration
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
@@ -148,7 +144,7 @@ namespace HareDu.CoreIntegration
             
             services.AddBrokerObjectFactory(path);
 
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
+            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
 
             services.AddDiagnostics(path);
 
@@ -163,7 +159,6 @@ namespace HareDu.CoreIntegration
         /// <param name="services"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        /// <exception cref="HareDuClientConfigurationException"></exception>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string path)
         {
             services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
@@ -182,7 +177,7 @@ namespace HareDu.CoreIntegration
 
             services.AddBrokerObjectFactory(path);
 
-            services.TryAddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
+            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
 
             services.AddDiagnostics(path);
 
@@ -195,9 +190,15 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
             {
+                string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
                 var provider = x.GetService<IFileConfigProvider>();
 
-                provider.TryGet(path, out HareDuConfig config);
+                provider.TryGet(file, out HareDuConfig config);
+
+                var validator = x.GetService<IConfigValidator>();
+
+                if (!validator.Validate(config))
+                    throw new HareDuConfigurationException($"Invalid settings in {file}.");
 
                 return new BrokerObjectFactory(config.Broker);
             });
@@ -207,9 +208,15 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
             {
+                string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
                 var provider = x.GetService<IFileConfigProvider>();
 
-                provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
+                provider.TryGet(file, out HareDuConfig config);
+
+                var validator = x.GetService<IConfigValidator>();
+
+                if (!validator.Validate(config))
+                    throw new HareDuConfigurationException($"Invalid settings in {file}.");
 
                 return new BrokerObjectFactory(config.Broker);
             });
@@ -219,13 +226,17 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IScannerFactory>(x =>
             {
-                var configProvider = x.GetService<IFileConfigProvider>();
+                string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
+                var provider = x.GetService<IFileConfigProvider>();
 
-                configProvider.TryGet(path, out HareDuConfig config);
+                provider.TryGet(file, out HareDuConfig config);
 
-                var knowledgeBaseProvider = x.GetService<IKnowledgeBaseProvider>();
+                var validator = x.GetService<IConfigValidator>();
+
+                if (!validator.Validate(config))
+                    throw new HareDuConfigurationException($"Invalid settings in {file}.");
                 
-                return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
+                return new ScannerFactory(config.Diagnostics, x.GetService<IKnowledgeBaseProvider>());
             });
             
             services.TryAddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();

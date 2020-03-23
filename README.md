@@ -34,15 +34,21 @@ If you are familiar with HareDu, you should know that HareDu 2 introduces some r
 ## Get It
 From the Package Manager Console in Visual Studio you can run the following PowerShell script to get the latest version of HareDu...
 
-PM> Install-Package HareDu
+```
+Install-Package HareDu
+```
 
 or if you want a specific version of HareDu you can do the following...
 
-PM> Install-Package -Version <version> HareDu
+```
+Install-Package -Version <version> HareDu
+```
 
-Example,
+ex:
 
-PM> Install-Package -Version 2.0.0 HareDu
+```
+Install-Package -Version 2.0.0 HareDu
+```
 
 The above applies for any NuGet package you wish to install.
 

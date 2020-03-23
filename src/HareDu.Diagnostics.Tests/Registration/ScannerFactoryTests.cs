@@ -24,13 +24,10 @@ namespace HareDu.Diagnostics.Tests.Registration
     using Diagnostics.Registration;
     using Diagnostics.Scanners;
     using KnowledgeBase;
-    using Moq;
-    using Moq.Protected;
     using NUnit.Framework;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
-    using Snapshotting.Persistence;
 
     [TestFixture]
     public class ScannerFactoryTests
@@ -109,10 +106,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         public void Verify_can_get_diagnostic_after_instantiation()
         {
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
-            
-            var validator = new HareDuConfigValidator();
-            var configProvider = new YamlFileConfigProvider(validator);
-            configProvider.TryGet(path, out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new KnowledgeBaseProvider();
             var factory = new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
@@ -124,8 +119,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_add_new_probes()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
             
@@ -148,8 +143,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_return_all_probes_1()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
 
@@ -163,8 +158,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_return_all_probes_2()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
 
@@ -180,8 +175,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_return_all_scanners_1()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
 
@@ -195,8 +190,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_return_all_scanners_2()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
 
@@ -213,8 +208,8 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_register_new_scanner()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            var provider = new YamlFileConfigProvider();
+            provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
             
@@ -238,7 +233,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         [Test]
         public void Verify_can_override_config()
         {
-            var configProvider = new YamlFileConfigProvider(new HareDuConfigValidator());
+            var configProvider = new YamlFileConfigProvider();
             configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());

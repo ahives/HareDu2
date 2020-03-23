@@ -15,6 +15,7 @@ namespace HareDu.Core.Configuration
 {
     using System;
     using System.Threading;
+    using Extensions;
 
     public class DiagnosticsConfigProvider :
         IDiagnosticsConfigProvider
@@ -32,10 +33,18 @@ namespace HareDu.Core.Configuration
             return Validate(config) ? config : ConfigCache.Default.Diagnostics;
         }
 
-        bool Validate(DiagnosticsConfig config)
-        {
-            return true;
-        }
+        bool Validate(DiagnosticsConfig config) =>
+            !config.IsNull()
+            && !config.Probes.IsNull()
+            && config.Probes.ConsumerUtilizationThreshold > 0
+            && config.Probes.HighClosureRateThreshold > 0
+            && config.Probes.HighCreationRateThreshold > 0
+            && config.Probes.MessageRedeliveryThresholdCoefficient > 0
+            && config.Probes.QueueHighFlowThreshold > 0
+            && config.Probes.QueueLowFlowThreshold > 0
+            && config.Probes.SocketUsageThresholdCoefficient > 0
+            && config.Probes.FileDescriptorUsageThresholdCoefficient > 0
+            && config.Probes.RuntimeProcessUsageThresholdCoefficient > 0;
 
 
         class DiagnosticProbesConfiguratorImpl :

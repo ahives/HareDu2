@@ -33,9 +33,8 @@ namespace HareDu.Snapshotting.Registration
             _factory = factory;
             _cache = new Dictionary<string, object>();
             
-            bool registered = TryRegisterAll();
-            if (!registered)
-                throw new HareDuBrokerObjectInitException();
+            if (!TryRegisterAll())
+                throw new HareDuSnapshotInitException("Could not register snapshot lenses.");
         }
 
         public SnapshotFactory(BrokerConfig config)
@@ -44,9 +43,8 @@ namespace HareDu.Snapshotting.Registration
             _factory = new BrokerObjectFactory(_config);
             _cache = new Dictionary<string, object>();
             
-            bool registered = TryRegisterAll();
-            if (!registered)
-                throw new HareDuBrokerObjectInitException();
+            if (!TryRegisterAll())
+                throw new HareDuSnapshotInitException("Could not register snapshot lenses.");
         }
 
         public SnapshotLens<T> Lens<T>()
@@ -113,7 +111,7 @@ namespace HareDu.Snapshotting.Registration
 
         protected virtual object CreateInstance(Type type)
         {
-            var instance = type.IsDerivedFrom(typeof(BaseSnapshot<>))
+            var instance = type.IsDerivedFrom(typeof(BaseSnapshotLens<>))
                 ? Activator.CreateInstance(type, _factory)
                 : Activator.CreateInstance(type);
 

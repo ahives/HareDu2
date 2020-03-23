@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
+// Copyright 2013-2020 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,24 +16,23 @@ namespace HareDu.Core
     using System;
     using System.Runtime.Serialization;
 
-    public class HareDuClientConfigurationException :
+    public class HareDuConfigurationException :
         Exception
     {
-        public HareDuClientConfigurationException()
+        public HareDuConfigurationException()
         {
         }
 
-        protected HareDuClientConfigurationException(SerializationInfo info, StreamingContext context)
+        protected HareDuConfigurationException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
 
-        public HareDuClientConfigurationException(string message)
-            : base(message)
+        public HareDuConfigurationException(string message) : base(message)
         {
         }
 
-        public HareDuClientConfigurationException(string message, Exception innerException)
+        public HareDuConfigurationException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

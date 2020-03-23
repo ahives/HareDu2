@@ -21,20 +21,10 @@ namespace HareDu.Core.Configuration
     public class YamlConfigProvider :
         IConfigProvider
     {
-        readonly IConfigValidator _validator;
         readonly IDeserializer _deserializer;
-
-        public YamlConfigProvider(IConfigValidator validator)
-        {
-            _validator = validator;
-            _deserializer = new DeserializerBuilder()
-                .WithNamingConvention(HyphenatedNamingConvention.Instance)
-                .Build();
-        }
 
         public YamlConfigProvider()
         {
-            _validator = new HareDuConfigValidator();
             _deserializer = new DeserializerBuilder()
                 .WithNamingConvention(HyphenatedNamingConvention.Instance)
                 .Build();
@@ -47,13 +37,12 @@ namespace HareDu.Core.Configuration
                 var deserializedConfig = _deserializer.Deserialize<HareDuConfigYaml>(text);
                 
                 config = new HareDuConfigImpl(deserializedConfig);
-
-                return _validator.Validate(config);
+                return true;
             }
             catch (Exception e)
             {
                 config = ConfigCache.Default;
-                return true;
+                return false;
             }
         }
 

@@ -54,10 +54,9 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test1()
         {
-            var validator = new HareDuConfigValidator();
-            var configurationProvider = new YamlFileConfigProvider(validator);
+            var provider = new YamlFileConfigProvider();
             
-            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
+            if (provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
                 var brokerFactory = new BrokerObjectFactory(config.Broker);
                 var factory = new SnapshotFactory(brokerFactory);
@@ -72,10 +71,9 @@ namespace HareDu.IntegrationTesting.Snapshots
         [Test]
         public void Test2()
         {
-            var validator = new HareDuConfigValidator();
-            var configurationProvider = new YamlFileConfigProvider(validator);
+            var provider = new YamlFileConfigProvider();
             
-            if (configurationProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
+            if (provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
                 var brokerFactory = new BrokerObjectFactory(config.Broker);
                 var factory = new SnapshotFactory(brokerFactory);

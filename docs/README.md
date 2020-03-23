@@ -16,6 +16,7 @@ Blah, Blah, Blah
 | HareDu.AutofacIntegration | 4.6.2 | 2.0 |
 | HareDu.CoreIntegration | 4.6.2 | 2.0 |
 
+<br>
 
 ### Fundamentals
 HareDu 2 comes with three major APIs; that is, Broker, Snapshot, and Diagnostics, respectively. To use HareDu, you must have the appropriate RabbitMQ plugins installed and enabled.
