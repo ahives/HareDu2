@@ -15,6 +15,6 @@ namespace HareDu.Core.Configuration
 {
     public interface IConfigValidator
     {
-        bool Validate(HareDuConfig config);
+        bool IsValid(HareDuConfig config);
     }
 }

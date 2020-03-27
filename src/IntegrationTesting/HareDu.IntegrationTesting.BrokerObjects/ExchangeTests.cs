@@ -17,7 +17,6 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
-    using Core;
     using Core.Configuration;
     using Core.Extensions;
     using CoreIntegration;
@@ -34,11 +33,9 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
+            _container = new ContainerBuilder()
+                .AddHareDu()
+                .Build();
         }
 
         [Test]

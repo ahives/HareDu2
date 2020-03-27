@@ -43,9 +43,9 @@ namespace HareDu.Core.Configuration
 
                 using (var reader = File.OpenText(path))
                 {
-                    var deserializedConfig = _deserializer.Deserialize<HareDuConfigYaml>(reader);
+                    var deserialized = _deserializer.Deserialize<HareDuConfigYaml>(reader);
                     
-                    config = new HareDuConfigImpl(deserializedConfig);
+                    config = new HareDuConfigImpl(deserialized);
                     return true;
                 }
             }

@@ -19,25 +19,29 @@ namespace HareDu.AutofacIntegration
     using Core.Configuration;
     using Registration;
 
-    public class HareDuModule :
-        Module
+    public static class HareDuExtensions
     {
-        protected override void Load(ContainerBuilder builder)
+        public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string file)
         {
-            builder.Register(x =>
-                {
-                    var provider = x.Resolve<IFileConfigProvider>();
-                    string file = $"{Directory.GetCurrentDirectory()}/haredu.yaml";
+            HareDuConfig config = GetConfig(file);
+            
+            builder.Register(config);
+            
+            return builder;
+        }
 
-                    provider.TryGet(file, out HareDuConfig config);
+        public static ContainerBuilder AddHareDu(this ContainerBuilder builder)
+        {
+            HareDuConfig config = GetConfig($"{Directory.GetCurrentDirectory()}/haredu.yaml");
+            
+            builder.Register(config);
 
-                    var validator = x.Resolve<IConfigValidator>();
+            return builder;
+        }
 
-                    if (!validator.Validate(config))
-                        throw new HareDuConfigurationException($"Invalid settings in {file}.");
-
-                    return new BrokerObjectFactory(config.Broker);
-                })
+        static void Register(this ContainerBuilder builder, HareDuConfig config)
+        {
+            builder.Register(x => new BrokerObjectFactory(config.Broker))
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
 
@@ -56,8 +60,21 @@ namespace HareDu.AutofacIntegration
             builder.RegisterType<HareDuConfigValidator>()
                 .As<IConfigValidator>()
                 .SingleInstance();
+        }
+
+        static HareDuConfig GetConfig(string file)
+        {
+            IFileConfigProvider provider = new YamlFileConfigProvider();
             
-            base.Load(builder);
+            if (!provider.TryGet(file, out HareDuConfig config))
+                throw new HareDuConfigurationException($"Not able to get settings from {file}.");
+
+            IConfigValidator validator = new HareDuConfigValidator();
+
+            if (!validator.IsValid(config))
+                throw new HareDuConfigurationException($"Invalid settings in {file}.");
+
+            return config;
         }
     }
 }

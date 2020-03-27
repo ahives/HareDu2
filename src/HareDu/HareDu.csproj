@@ -11,9 +11,6 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
 <!--  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">-->
 <!--    <PackageReference Include="System.Threading.Timer" Version="4.3.0" />-->
 <!--    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />-->

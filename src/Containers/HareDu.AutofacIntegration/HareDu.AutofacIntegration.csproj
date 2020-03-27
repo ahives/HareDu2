@@ -16,10 +16,12 @@
 
     <ItemGroup>
       <Compile Remove="HareDuShovelModule.cs" />
-      <Content Include="HareDuShovelModule.cs" />
       <Compile Remove="HareDuSchedulingModule.cs" />
       <Content Include="HareDuSchedulingModule.cs" />
       <Compile Remove="HareDuAnalyticsModule.cs" />
+      <Compile Remove="HareDuSnapshotModule.cs" />
+      <Compile Remove="HareDuDiagnosticsModule.cs" />
+      <Compile Remove="HareDuModule.cs" />
     </ItemGroup>
 
 </Project>

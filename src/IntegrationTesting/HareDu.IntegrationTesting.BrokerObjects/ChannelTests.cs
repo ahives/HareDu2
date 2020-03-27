@@ -29,11 +29,9 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuModule>();
-
-            _container = builder.Build();
+            _container = new ContainerBuilder()
+                .AddHareDu()
+                .Build();
         }
 
         [Test, Explicit]

@@ -11,25 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.Core.Configuration
+namespace HareDu.AutofacIntegration
 {
-    using Extensions;
+    using Autofac;
+    using Snapshotting.Persistence;
+    using Snapshotting.Registration;
 
-    public class HareDuConfigValidator :
-        IConfigValidator
+    public static class HareDuSnapshotExtensions
     {
-        public bool IsValid(HareDuConfig config)
+        public static ContainerBuilder AddHareDuSnapshot(this ContainerBuilder builder)
         {
-            if (config.IsNull() ||
-                config.Broker.Credentials.IsNull() ||
-                string.IsNullOrWhiteSpace(config.Broker.Credentials.Username) ||
-                string.IsNullOrWhiteSpace(config.Broker.Credentials.Password) ||
-                string.IsNullOrWhiteSpace(config.Broker.Url))
-            {
-                return false;
-            }
+            builder.RegisterType<SnapshotFactory>()
+                .As<ISnapshotFactory>()
+                .SingleInstance();
+            
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
+                .SingleInstance();
 
-            return true;
+            return builder;
         }
     }
 }

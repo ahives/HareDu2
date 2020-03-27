@@ -26,11 +26,11 @@ namespace HareDu.Core.Tests.Configuration
         {
             var provider = new BrokerConfigProvider();
             var settings = provider.Configure(x =>
-            {
-                x.ConnectTo("http://localhost:15670");
-                x.UsingCredentials("guest1", "guest1");
-                x.TimeoutAfter(new TimeSpan(0, 0, 30));
-            });
+                                              {
+                                                  x.ConnectTo("http://localhost:15670");
+                                                  x.UsingCredentials("guest1", "guest1");
+                                                  x.TimeoutAfter(new TimeSpan(0, 0, 30));
+                                              });
             
             settings.Url.ShouldBe("http://localhost:15670");
             settings.Credentials.ShouldNotBeNull();
@@ -43,13 +43,12 @@ namespace HareDu.Core.Tests.Configuration
         {
             var provider = new BrokerConfigProvider();
             var settings = provider.Configure(x =>
-            {
-            });
+                                              {
+                                              });
             
-            settings.Url.ShouldBeNull();
-            settings.Credentials.ShouldNotBeNull();
-            settings.Credentials.Username.ShouldBe("guest");
-            settings.Credentials.Password.ShouldBe("guest");
+            settings.Url.ShouldBe(ConfigCache.Default.Broker.Url);
+            settings.Credentials.Username.ShouldBe(ConfigCache.Default.Broker.Credentials.Username);
+            settings.Credentials.Password.ShouldBe(ConfigCache.Default.Broker.Credentials.Password);
         }
     }
 }

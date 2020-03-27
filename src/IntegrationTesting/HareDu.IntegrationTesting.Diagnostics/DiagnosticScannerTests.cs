@@ -42,11 +42,11 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test1()
         {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuDiagnosticsModule>();
-
-            var container = builder.Build();
+            var container = new ContainerBuilder()
+                .AddHareDu()
+                .AddHareDuSnapshot()
+                .AddHareDuDiagnostics()
+                .Build();
 
             var scanner = container.Resolve<IScanner>();
 
@@ -114,7 +114,9 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test2()
         {
             var services = new ServiceCollection()
-                .AddHareDuDiagnostics($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDu()
+                .AddHareDuSnapshot()
+                .AddHareDuDiagnostics()
                 .BuildServiceProvider();
             
             var lens = services.GetService<ISnapshotFactory>()

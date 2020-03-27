@@ -1,4 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
+// Copyright 2013-2020 Albert L. Hives
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,33 +16,39 @@ namespace HareDu.CoreIntegration
     using System.IO;
     using Core;
     using Core.Configuration;
+    using Diagnostics;
+    using Diagnostics.Formatting;
+    using Diagnostics.KnowledgeBase;
+    using Diagnostics.Persistence;
+    using Diagnostics.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Registration;
+    using Snapshotting.Registration;
 
-    public static class HareDuExtensions
+    public static class HareDuDiagnosticsExtensions
     {
         /// <summary>
-        /// Registers all the necessary components to use the low level HareDu Broker Object API.
+        /// Registers all the necessary components to use the HareDu Diagnostics API.
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddHareDu(this IServiceCollection services)
+        public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
             HareDuConfig config = GetConfig($"{Directory.GetCurrentDirectory()}/haredu.yaml");
             
             services.Register(config);
-            
+
             return services;
         }
 
         /// <summary>
-        /// Registers all the necessary components to use the low level HareDu Broker Object API.
+        /// Registers all the necessary components to use the HareDu Diagnostics API.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static IServiceCollection AddHareDu(this IServiceCollection services, string file)
+        public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string file)
         {
             HareDuConfig config = GetConfig(file);
             
@@ -53,16 +59,22 @@ namespace HareDu.CoreIntegration
 
         static void Register(this IServiceCollection services, HareDuConfig config)
         {
-            services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
-            
-            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
-            
-            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
-            
-            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
+            services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
 
-            services.TryAddSingleton<IBrokerObjectFactory>(x =>
-                new BrokerObjectFactory(config.Broker));
+            services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
+
+            services.TryAddSingleton<IScanner, Scanner>();
+
+            services.TryAddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
+
+            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
+
+            services.TryAddSingleton<IScannerFactory>(x =>
+                new ScannerFactory(config.Diagnostics, x.GetService<IKnowledgeBaseProvider>()));
+            
+            services.TryAddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();
+
+            services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
         }
 
         static HareDuConfig GetConfig(string file)

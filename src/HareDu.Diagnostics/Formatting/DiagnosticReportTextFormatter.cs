@@ -46,6 +46,7 @@ namespace HareDu.Diagnostics.Formatting
             builder.AppendLine($"\tComponent Identifier: {result.ComponentId}");
             builder.AppendLine($"\tComponent Type: {result.ComponentType.ToString()}");
             builder.AppendLine($"\tProbe Identifier: {result.Id}");
+            builder.AppendLine($"\tProbe Name: {result.Name}");
             builder.AppendLine($"\tStatus: {result.Status.ToString()}");
             builder.AppendLine("\tProbe Data");
             

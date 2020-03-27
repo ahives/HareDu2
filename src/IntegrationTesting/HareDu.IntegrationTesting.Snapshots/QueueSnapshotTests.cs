@@ -32,11 +32,10 @@ namespace HareDu.IntegrationTesting.Snapshots
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuSnapshotModule>();
-
-            _container = builder.Build();
+            _container = new ContainerBuilder()
+                .AddHareDu()
+                .AddHareDuSnapshot()
+                .Build();
         }
 
         [Test]
@@ -149,7 +148,8 @@ namespace HareDu.IntegrationTesting.Snapshots
         public void Test7()
         {
             var services = new ServiceCollection()
-                .AddHareDuSnapshot($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDuSnapshot()
                 .BuildServiceProvider();
 
             var resource = services.GetService<ISnapshotFactory>()

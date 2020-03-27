@@ -38,27 +38,26 @@ namespace HareDu.Diagnostics.Tests.Registration
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
+            _container = new ContainerBuilder()
+                .AddHareDu()
+                .AddHareDuDiagnostics()
+                .Build();
 
-            builder.RegisterModule<HareDuDiagnosticsModule>();
-
-            _container = builder.Build();
-
-            var configProvider = _container.Resolve<IFileConfigProvider>();
-            var knowledgeBaseProvider = _container.Resolve<IKnowledgeBaseProvider>();
+            var provider = _container.Resolve<IFileConfigProvider>();
+            var kb = _container.Resolve<IKnowledgeBaseProvider>();
 
             string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
-            configProvider.TryGet(path, out HareDuConfig config);
+            provider.TryGet(path, out HareDuConfig config);
 
             _probes = new List<DiagnosticProbe>
             {
-                new HighConnectionCreationRateProbe(config.Diagnostics, knowledgeBaseProvider),
-                new HighConnectionClosureRateProbe(config.Diagnostics, knowledgeBaseProvider),
-                new UnlimitedPrefetchCountProbe(knowledgeBaseProvider),
-                new ChannelThrottlingProbe(knowledgeBaseProvider),
-                new ChannelLimitReachedProbe(knowledgeBaseProvider),
-                new BlockedConnectionProbe(knowledgeBaseProvider)
+                new HighConnectionCreationRateProbe(config.Diagnostics, kb),
+                new HighConnectionClosureRateProbe(config.Diagnostics, kb),
+                new UnlimitedPrefetchCountProbe(kb),
+                new ChannelThrottlingProbe(kb),
+                new ChannelLimitReachedProbe(kb),
+                new BlockedConnectionProbe(kb)
             };
         }
 
@@ -304,8 +303,6 @@ namespace HareDu.Diagnostics.Tests.Registration
                 : base(kb)
             {
             }
-
-            public IDisposable Subscribe(IObserver<ProbeContext> observer) => throw new NotImplementedException();
 
             public string Id { get; }
             public string Name { get; }

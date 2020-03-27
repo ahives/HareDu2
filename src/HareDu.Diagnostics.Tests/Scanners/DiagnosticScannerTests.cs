@@ -31,11 +31,10 @@ namespace HareDu.Diagnostics.Tests.Scanners
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
-
-            builder.RegisterModule<HareDuDiagnosticsModule>();
-            
-            _container = builder.Build();
+            _container = new ContainerBuilder()
+                .AddHareDu()
+                .AddHareDuDiagnostics()
+                .Build();
         }
 
         [Test]

@@ -69,47 +69,6 @@ namespace HareDu.Examples
             
             Console.WriteLine("Stopped");
         }
-
-        static IContainer GetContainer<T>()
-            where T : SnapshotLens<Snapshot>
-        {
-            var builder = new ContainerBuilder();
-
-            builder.RegisterModule<HareDuSnapshotModule>();
-
-            builder.Register(x =>
-                {
-                    var factory = new StdSchedulerFactory();
-                    var scheduler = factory.GetScheduler().ConfigureAwait(false).GetAwaiter().GetResult();
-
-                    // var resource = x.Resolve<ISnapshotFactory>()
-                    //     .Snapshot<T>();
-                    
-                    // var nodes = new[]
-                    // {
-                    //     new Uri("http://localhost:9200")
-                    // };
-                    //
-                    // var pool = new StickyConnectionPool(nodes);
-                    // var client = new ElasticClient(new ConnectionSettings(pool));
-
-                    // scheduler.JobFactory = new CustomJobFactory<T>(resource, client);
-                    
-                    // scheduler.JobFactory = new HareDuJobFactory<T>(x.Resolve<ISnapshotFactory>(), x.Resolve<ISnapshotWriter>());
-
-                    return scheduler;
-                })
-                .As<IScheduler>()
-                .SingleInstance();
-
-            builder.RegisterType<SnapshotWriter>()
-                .As<ISnapshotWriter>()
-                .SingleInstance();
-
-            var container = builder.Build();
-
-            return container;
-        }
         
         class ConsoleLogProvider : ILogProvider
         {

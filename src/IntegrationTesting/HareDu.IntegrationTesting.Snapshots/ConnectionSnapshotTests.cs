@@ -29,11 +29,10 @@ namespace HareDu.IntegrationTesting.Snapshots
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
-            
-            builder.RegisterModule<HareDuSnapshotModule>();
-
-            _container = builder.Build();
+            _container = new ContainerBuilder()
+                .AddHareDu()
+                .AddHareDuSnapshot()
+                .Build();
         }
 
         [Test]
