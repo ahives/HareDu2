@@ -154,7 +154,7 @@ namespace HareDu.Model
         ulong TotalIOReads { get; }
 
         [JsonProperty("io_read_count_details")]
-        Rate IOReadCountDetails { get; }
+        Rate IOReadDetails { get; }
 
         [JsonProperty("io_read_bytes")]
         ulong TotalIOBytesRead { get; }

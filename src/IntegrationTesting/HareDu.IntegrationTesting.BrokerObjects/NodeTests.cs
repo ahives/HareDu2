@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -39,17 +40,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Node>()
-                .GetAll();
-            
-            foreach (var node in result.Select(x => x.Data))
-            {
-                Console.WriteLine((string) "OperatingSystemPid: {0}", (object) node.OperatingSystemProcessId);
-                Console.WriteLine((string) "TotalFileDescriptors: {0}", (object) node.TotalFileDescriptors);
-                Console.WriteLine((string) "MemoryUsedDetailsRate: {0}", (object) node.MemoryUsageDetails.Rate);
-                Console.WriteLine((string) "FileDescriptorUsedDetailsRate: {0}", (object) node.FileDescriptorUsedDetails.Rate);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
         }
 
         [Test]
@@ -63,8 +55,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
             {
                 var info = result.Select(x => x.Data);
                 
-                Console.WriteLine((string) "Reason: {0}", (object) info.Reason);
-                Console.WriteLine((string) "Status: {0}", (object) info.Status);
+                Console.WriteLine($"Reason: {info.Reason}");
+                Console.WriteLine($"Status: {info.Status}");
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }

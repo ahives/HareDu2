@@ -33,6 +33,6 @@ namespace HareDu.Model
         ulong TotalMessages { get; }
 
         [JsonProperty("messages_details")]
-        Rate RateOfMessages { get; }
+        Rate MessageDetails { get; }
     }
 }

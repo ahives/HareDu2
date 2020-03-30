@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -39,18 +40,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Binding>()
-                .GetAll();
-            
-            foreach (var binding in result.Select(x => x.Data))
-            {
-                Console.WriteLine("VirtualHost: {0}", binding.VirtualHost);
-                Console.WriteLine("Source: {0}", binding.Source);
-                Console.WriteLine("Destination: {0}", binding.Destination);
-                Console.WriteLine("DestinationType: {0}", binding.DestinationType);
-                Console.WriteLine("RoutingKey: {0}", binding.RoutingKey);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
             
             Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJsonString());

@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -39,21 +40,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
-                .GetAll();
-            
-            foreach (var item in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", item.VirtualHostName);
-
-                if (item.Limits.TryGetValue("max-connections", out ulong maxConnections))
-                    Console.WriteLine("max-connections: {0}", maxConnections);
-
-                if (item.Limits.TryGetValue("max-queues", out ulong maxQueues))
-                    Console.WriteLine("max-queues: {0}", maxQueues);
-                
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
         }
 
         [Test]

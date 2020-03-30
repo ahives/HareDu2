@@ -29,11 +29,11 @@ namespace HareDu.Snapshotting.Tests.Fakes
             Name = "Queue 1";
             MessageBytesPagedOut = 239939803;
             TotalMessagesPagedOut = 90290398;
-            MessageBytesInRam = 992390933;
+            MessageBytesInRAM = 992390933;
             TotalBytesOfMessagesDeliveredButUnacknowledged = 82830892;
             TotalBytesOfMessagesReadyForDelivery = 892839823;
             TotalBytesOfAllMessages = 82938938723;
-            UnacknowledgedMessagesInRam = 82938982323;
+            UnacknowledgedMessagesInRAM = 82938982323;
             MessagesReadyForDeliveryInRam = 8892388929;
             MessagesInRam = 9883892938;
             Consumers = 773709938;
@@ -62,12 +62,12 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public BackingQueueStatus BackingQueueStatus { get; }
         public DateTimeOffset HeadMessageTimestamp { get; }
         public ulong MessageBytesPersisted { get; }
-        public ulong MessageBytesInRam { get; }
+        public ulong MessageBytesInRAM { get; }
         public ulong TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
         public ulong TotalBytesOfMessagesReadyForDelivery { get; }
         public ulong TotalBytesOfAllMessages { get; }
         public ulong MessagesPersisted { get; }
-        public ulong UnacknowledgedMessagesInRam { get; }
+        public ulong UnacknowledgedMessagesInRAM { get; }
         public ulong MessagesReadyForDeliveryInRam { get; }
         public ulong MessagesInRam { get; }
         public GarbageCollectionDetails GC { get; }

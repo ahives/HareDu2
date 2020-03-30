@@ -85,8 +85,8 @@ namespace HareDu.Tests.BrokerObjects
             result.Data.MessageStats?.DiskWriteDetails?.Rate.ShouldBe(0.0M);
             result.Data.MessageStats?.TotalDiskWrites.ShouldBe<ulong>(200000);
             result.Data.QueueStats.ShouldNotBeNull();
-            result.Data.QueueStats.RateOfMessages.ShouldNotBeNull();
-            result.Data.QueueStats?.RateOfMessages?.Rate.ShouldBe(0.0M);
+            result.Data.QueueStats.MessageDetails.ShouldNotBeNull();
+            result.Data.QueueStats?.MessageDetails?.Rate.ShouldBe(0.0M);
             result.Data.QueueStats?.TotalMessages.ShouldBe<ulong>(3);
             result.Data.QueueStats.RateOfUnacknowledgedDeliveredMessages.ShouldNotBeNull();
             result.Data.QueueStats?.RateOfUnacknowledgedDeliveredMessages?.Rate.ShouldBe(0.0M);

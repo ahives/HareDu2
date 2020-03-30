@@ -182,8 +182,8 @@ namespace HareDu.Snapshotting.Internal
                         {
                             Target = queue.BackingQueueStatus.IsNull() ? 0 : queue.BackingQueueStatus.TargetTotalMessagesInRAM.ToLong();
                             Total = queue.MessagesInRam;
-                            Bytes = queue.MessageBytesInRam;
-                            Unacknowledged = queue.UnacknowledgedMessagesInRam;
+                            Bytes = queue.MessageBytesInRAM;
+                            Unacknowledged = queue.UnacknowledgedMessagesInRAM;
                             Ready = queue.MessagesReadyForDeliveryInRam;
                         }
 
@@ -243,7 +243,7 @@ namespace HareDu.Snapshotting.Internal
                     DeliveredWithoutAck = new QueueDepthImpl(messageStats.TotalMessageDeliveredWithoutAck, messageStats.MessagesDeliveredWithoutAckDetails?.Rate ?? 0);
                     Redelivered = new QueueDepthImpl(messageStats.TotalMessagesRedelivered, messageStats.MessagesRedeliveredDetails?.Rate ?? 0);
                     Acknowledged = new QueueDepthImpl(messageStats.TotalMessagesAcknowledged, messageStats.MessagesAcknowledgedDetails?.Rate ?? 0);
-                    Broker = new QueueDepthImpl(queueStats.TotalMessages, queueStats.RateOfMessages?.Rate ?? 0);
+                    Broker = new QueueDepthImpl(queueStats.TotalMessages, queueStats.MessageDetails?.Rate ?? 0);
                     Ready = new QueueDepthImpl(queueStats.TotalMessagesReadyForDelivery, queueStats.RateOfMessagesReadyForDelivery?.Rate ?? 0);
                     Unacknowledged = new QueueDepthImpl(queueStats.TotalUnacknowledgedDeliveredMessages, queueStats.RateOfUnacknowledgedDeliveredMessages?.Rate ?? 0);
                 }

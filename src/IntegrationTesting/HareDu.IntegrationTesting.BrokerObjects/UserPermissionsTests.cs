@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -39,17 +40,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
-                .GetAll();
-            
-            foreach (var access in result.Select(x => x.Data))
-            {
-                Console.WriteLine("VirtualHost: {0}", access.VirtualHost);
-                Console.WriteLine("Configure: {0}", access.Configure);
-                Console.WriteLine("Read: {0}", access.Read);
-                Console.WriteLine("Write: {0}", access.Write);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
         }
 
         [Test]

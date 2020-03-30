@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -39,17 +40,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<User>()
-                .GetAll();
-
-            foreach (var user in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Username: {0}", user.Username);
-                Console.WriteLine("PasswordHash: {0}", user.PasswordHash);
-                Console.WriteLine("HashingAlgorithm: {0}", user.HashingAlgorithm);
-                Console.WriteLine("Tags: {0}", user.Tags);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
         }
         
         [Test]
@@ -57,17 +49,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<User>()
-                .GetAllWithoutPermissions();
-
-            foreach (var user in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Username: {0}", user.Username);
-                Console.WriteLine("PasswordHash: {0}", user.PasswordHash);
-                Console.WriteLine("HashingAlgorithm: {0}", user.HashingAlgorithm);
-                Console.WriteLine("Tags: {0}", user.Tags);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAllWithoutPermissions()
+                .ScreenDump();
         }
         
         [Test]

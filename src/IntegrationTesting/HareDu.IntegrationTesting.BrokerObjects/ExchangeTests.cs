@@ -20,6 +20,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Core.Configuration;
     using Core.Extensions;
     using CoreIntegration;
+    using Extensions;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Registration;
@@ -43,20 +44,9 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Exchange>()
-                .GetAll();
+                .GetAll()
+                .ScreenDump();
 
-            foreach (var exchange in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", exchange.Name);
-                Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
-                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-                Console.WriteLine("Internal: {0}", exchange.Internal);
-                Console.WriteLine("Durable: {0}", exchange.Durable);
-                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-            
             result.HasFaulted.ShouldBeFalse();
             Console.WriteLine(result.ToJsonString());
         }
@@ -97,19 +87,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
             
             var result = await factory
                 .Object<Exchange>()
-                .GetAll();
-            
-            foreach (var exchange in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", exchange.Name);
-                Console.WriteLine("VirtualHost: {0}", exchange.VirtualHost);
-                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-                Console.WriteLine("Internal: {0}", exchange.Internal);
-                Console.WriteLine("Durable: {0}", exchange.Durable);
-                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
             
             result.HasFaulted.ShouldBeFalse();
             Console.WriteLine(result.ToJsonString());
@@ -122,16 +101,9 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Object<Exchange>()
                 .GetAll();
 
-            foreach (var exchange in result.Where(x => x.Name == "amq.*"))
-            {
-                Console.WriteLine("Name: {0}", exchange.Name);
-                Console.WriteLine("AutoDelete: {0}", exchange.AutoDelete);
-                Console.WriteLine("Internal: {0}", exchange.Internal);
-                Console.WriteLine("Durable: {0}", exchange.Durable);
-                Console.WriteLine("RoutingType: {0}", exchange.RoutingType);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+            result
+                .Where(x => x.Name == "amq.fanout")
+                .ScreenDump();
             
             Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJsonString());

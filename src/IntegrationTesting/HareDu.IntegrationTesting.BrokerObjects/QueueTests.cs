@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -59,16 +60,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
-                .GetAll();
-            
-            foreach (var queue in result.Select(x => x.Data))
-            {
-                Console.WriteLine("Name: {0}", queue.Name);
-                Console.WriteLine("VirtualHost: {0}", queue.VirtualHost);
-                Console.WriteLine("AutoDelete: {0}", queue.AutoDelete);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
 
             Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJsonString());

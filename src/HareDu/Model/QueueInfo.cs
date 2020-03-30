@@ -80,7 +80,7 @@ namespace HareDu.Model
         ulong MessageBytesPersisted { get; }
         
         [JsonProperty("message_bytes_ram")]
-        ulong MessageBytesInRam { get; }
+        ulong MessageBytesInRAM { get; }
         
         [JsonProperty("message_bytes_unacknowledged")]
         ulong TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
@@ -95,7 +95,7 @@ namespace HareDu.Model
         ulong MessagesPersisted { get; }
         
         [JsonProperty("messages_unacknowledged_ram")]
-        ulong UnacknowledgedMessagesInRam { get; }
+        ulong UnacknowledgedMessagesInRAM { get; }
         
         [JsonProperty("messages_ready_ram")]
         ulong MessagesReadyForDeliveryInRam { get; }

@@ -69,14 +69,14 @@ namespace HareDu.Tests.BrokerObjects
             result.Data[5].AutoDelete.ShouldBeFalse();
             result.Data[5].Memory.ShouldBe<ulong>(17628);
             result.Data[5].MessageBytesPersisted.ShouldBe<ulong>(0);
-            result.Data[5].MessageBytesInRam.ShouldBe<ulong>(100);
+            result.Data[5].MessageBytesInRAM.ShouldBe<ulong>(100);
             result.Data[5].MessageBytesPagedOut.ShouldBe<ulong>(10);
             result.Data[5].TotalBytesOfAllMessages.ShouldBe<ulong>(10000);
             result.Data[5].UnacknowledgedMessages.ShouldBe<ulong>(30);
             result.Data[5].ReadyMessages.ShouldBe<ulong>(50);
             result.Data[5].MessagesInRam.ShouldBe<ulong>(50);
             result.Data[5].TotalMessages.ShouldBe<ulong>(6700);
-            result.Data[5].UnacknowledgedMessagesInRam.ShouldBe<ulong>(30000);
+            result.Data[5].UnacknowledgedMessagesInRAM.ShouldBe<ulong>(30000);
             result.Data[5].TotalReductions.ShouldBe(77349645);
             result.Data[5].ReductionRate.ShouldNotBeNull();
             result.Data[5].ReductionRate?.Rate.ShouldBe(0.0M);

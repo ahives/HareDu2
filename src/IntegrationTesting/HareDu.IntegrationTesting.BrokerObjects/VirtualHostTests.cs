@@ -19,6 +19,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using AutofacIntegration;
     using Core;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -40,15 +41,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
-                .GetAll();
-
-            foreach (var vhost in result.Select(x => x.Data))
-            {
-                Console.WriteLine((string) "Name: {0}", (object) vhost.Name);
-                Console.WriteLine((string) "Tracing: {0}", (object) vhost.Tracing);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
         }
 
         [Test]
@@ -71,8 +65,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
 
             foreach (var vhost in result)
             {
-                Console.WriteLine((string) "Name: {0}", (object) vhost.Name);
-                Console.WriteLine((string) "Tracing: {0}", (object) vhost.Tracing);
+                Console.WriteLine("Name: {0}", vhost.Name);
+                Console.WriteLine("Tracing: {0}", vhost.Tracing);
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
@@ -92,7 +86,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                     });
                 });
 
-            Console.WriteLine((string) result.ToJsonString());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test]
@@ -102,7 +96,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Object<VirtualHost>()
                 .Delete(x => x.VirtualHost("HareDu7"));
 
-            Console.WriteLine((string) result.ToJsonString());
+            Console.WriteLine(result.ToJsonString());
         }
 
         [Test]
@@ -112,7 +106,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Object<VirtualHost>()
                 .Startup("", x => x.On(""));
             
-            Console.WriteLine((string) result.ToJsonString());
+            Console.WriteLine(result.ToJsonString());
         }
     }
 }

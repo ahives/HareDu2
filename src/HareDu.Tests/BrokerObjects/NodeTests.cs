@@ -93,8 +93,8 @@ namespace HareDu.Tests.BrokerObjects
             result.Data[0].TotalFileDescriptors.ShouldBe<ulong>(256);
             result.Data[0].NetworkTickTime.ShouldBe(60);
             result.Data[0].TotalIOReads.ShouldBe<ulong>(11);
-            result.Data[0].IOReadCountDetails.ShouldNotBeNull();
-            result.Data[0].IOReadCountDetails?.Rate.ShouldBe(0.0M);
+            result.Data[0].IOReadDetails.ShouldNotBeNull();
+            result.Data[0].IOReadDetails?.Rate.ShouldBe(0.0M);
             result.Data[0].TotalIOWrites.ShouldBe<ulong>(932);
             result.Data[0].IOWriteDetails.ShouldNotBeNull();
             result.Data[0].IOWriteDetails?.Rate.ShouldBe(0.0M);

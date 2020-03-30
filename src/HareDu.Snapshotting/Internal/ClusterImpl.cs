@@ -204,7 +204,7 @@ namespace HareDu.Snapshotting.Internal
                         public IOImpl(NodeInfo node)
                         {
                             Reads = new DiskUsageDetailsImpl(node.TotalIOReads,
-                                node.IOReadCountDetails?.Rate ?? 0,
+                                node.IOReadDetails?.Rate ?? 0,
                                 node.TotalIOBytesRead,
                                 node.IOReadBytesDetails?.Rate ?? 0,
                                 node.AvgIOReadTime,

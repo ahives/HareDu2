@@ -101,7 +101,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong ContextSwitches { get; }
         public Rate ContextSwitchDetails { get; }
         public ulong TotalIOReads { get; }
-        public Rate IOReadCountDetails { get; }
+        public Rate IOReadDetails { get; }
         public ulong TotalIOBytesRead { get; }
         public Rate IOReadBytesDetails { get; }
         public decimal AvgIOReadTime { get; }

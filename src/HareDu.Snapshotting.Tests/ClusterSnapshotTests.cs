@@ -20,9 +20,7 @@ namespace HareDu.Snapshotting.Tests
     using HareDu.Registration;
     using Model;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
-    using Snapshotting.Extensions;
     using Snapshotting.Registration;
 
     [TestFixture]
@@ -49,13 +47,13 @@ namespace HareDu.Snapshotting.Tests
         [Test]
         public async Task Verify_can_return_snapshot()
         {
-            var camera = _container.Resolve<ISnapshotFactory>()
+            var lens = _container.Resolve<ISnapshotFactory>()
                 .Lens<ClusterSnapshot>();
-            var result = camera.TakeSnapshot();
+            var result = lens.TakeSnapshot();
 
-            camera.History.Results.Count.ShouldBe(1);
-            camera.TakeSnapshot();
-            camera.History.Results.Count.ShouldBe(2);
+            lens.History.Results.Count.ShouldBe(1);
+            lens.TakeSnapshot();
+            lens.History.Results.Count.ShouldBe(2);
 
             result.ShouldNotBeNull();
             result.Snapshot.BrokerVersion.ShouldBe("3.7.18");

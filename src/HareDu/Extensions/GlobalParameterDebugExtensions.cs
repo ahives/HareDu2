@@ -11,38 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.IntegrationTesting.BrokerObjects
+namespace HareDu.Extensions
 {
     using System;
     using System.Threading.Tasks;
-    using Autofac;
-    using AutofacIntegration;
+    using Core;
     using Core.Extensions;
-    using Extensions;
     using Model;
-    using NUnit.Framework;
-    using Registration;
 
-    [TestFixture]
-    public class SystemOverviewTests
+    public static class GlobalParameterDebugExtensions
     {
-        IContainer _container;
-
-        [OneTimeSetUp]
-        public void Init()
+        public static Task<ResultList<GlobalParameterInfo>> ScreenDump(this Task<ResultList<GlobalParameterInfo>> result)
         {
-            _container = new ContainerBuilder()
-                .AddHareDu()
-                .Build();
-        }
+            var results = result
+                .GetResult()
+                .Select(x => x.Data);
 
-        [Test, Explicit]
-        public async Task Test()
-        {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<SystemOverview>()
-                .Get()
-                .ScreenDump();
+            foreach (var item in results)
+            {
+                Console.WriteLine($"Name: {item.Name}");
+                Console.WriteLine($"Value: {item.Value}");
+                Console.WriteLine("****************************************************");
+                Console.WriteLine();
+            }
+
+            return result;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Autofac;
     using AutofacIntegration;
     using Core.Extensions;
+    using Extensions;
     using NUnit.Framework;
     using Registration;
 
@@ -39,18 +40,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Policy>()
-                .GetAll();
-
-            foreach (var policy in result.Select(x => x.Data))
-            {
-                Console.WriteLine("AppliedTo: {0}", policy.AppliedTo);
-                Console.WriteLine("Name: {0}", policy.Name);
-                Console.WriteLine("Pattern: {0}", policy.Pattern);
-                Console.WriteLine("Priority: {0}", policy.Priority);
-                Console.WriteLine("VirtualHost: {0}", policy.VirtualHost);
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
+                .GetAll()
+                .ScreenDump();
         }
         
         [Test]

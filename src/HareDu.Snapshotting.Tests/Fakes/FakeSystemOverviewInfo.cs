@@ -56,7 +56,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
                 TotalUnacknowledgedDeliveredMessages = 892387397238;
                 RateOfUnacknowledgedDeliveredMessages = new RateImpl(73.3M);
                 TotalMessages = 9230748297;
-                RateOfMessages = new RateImpl(80.3M);
+                MessageDetails = new RateImpl(80.3M);
             }
 
             public ulong TotalMessagesReadyForDelivery { get; }
@@ -64,7 +64,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             public ulong TotalUnacknowledgedDeliveredMessages { get; }
             public Rate RateOfUnacknowledgedDeliveredMessages { get; }
             public ulong TotalMessages { get; }
-            public Rate RateOfMessages { get; }
+            public Rate MessageDetails { get; }
 
             
             class RateImpl :
