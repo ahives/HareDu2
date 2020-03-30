@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using System.Threading.Tasks;
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;

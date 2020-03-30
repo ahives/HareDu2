@@ -51,8 +51,8 @@ namespace HareDu.Extensions
                 Console.WriteLine($"Peer Host: {item.PeerHost}");
                 Console.WriteLine($"Peer Port: {item.PeerPort}");
                 Console.WriteLine($"Port: {item.Port}");
-                Console.WriteLine($"Octets Received (rate): {item.RateOfPacketBytesReceived?.Rate}");
-                Console.WriteLine($"Octets Sent (rate): {item.RateOfPacketBytesSent?.Rate}");
+                Console.WriteLine($"Octets Received (rate): {item.PacketBytesReceivedDetails?.Rate}");
+                Console.WriteLine($"Octets Sent (rate): {item.PacketBytesSentDetails?.Rate}");
                 Console.WriteLine($"Send Pending: {item.SendPending}");
                 Console.WriteLine("SSL");
                 Console.WriteLine($"\tIs Secure: {item.IsSsl}");
@@ -62,7 +62,7 @@ namespace HareDu.Extensions
                 Console.WriteLine($"\tProtocol: {item.SslProtocol}");
                 Console.WriteLine($"State: {item.State}");
                 Console.WriteLine($"Time Period Peer Certificate Valid: {item.TimePeriodPeerCertificateValid}");
-                Console.WriteLine($"Reductions: {item.TotalReductions} (total), {item.RateOfReduction?.Rate} (rate)");
+                Console.WriteLine($"Reductions: {item.TotalReductions} (total), {item.ReductionDetails?.Rate} (rate)");
                 Console.WriteLine($"Type: {item.Type}");
                 Console.WriteLine($"Virtual Host: {item.VirtualHost}");
                 Console.WriteLine("****************************************************");

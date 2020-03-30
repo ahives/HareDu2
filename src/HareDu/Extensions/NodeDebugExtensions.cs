@@ -187,9 +187,9 @@ namespace HareDu.Extensions
                 Console.WriteLine($"\tWrites: {item.TotalIOWrites} (total), {item.IOWriteDetails.Rate} (rate)");
                 Console.WriteLine("\tBytes");
                 Console.WriteLine($"\t\tReads: {item.TotalIOBytesRead} (total), {item.IOReadBytesDetails.Rate} (rate)");
-                Console.WriteLine($"\t\tWritten: {item.TotalIOBytesWritten} (total), {item.IOWriteBytesDetail.Rate} (rate)");
-                Console.WriteLine($"\tSeeks: {item.IOSeekCount} (total), {item.RateOfIOSeeks.Rate} (rate), {item.AvgIOSeekTimeDetails.Rate} (avg. time)");
-                Console.WriteLine($"\tSyncs: {item.IOSyncCount} (total), {item.RateOfIOSyncs.Rate} (rate), {item.AvgIOSyncTimeDetails.Rate} (avg. time)");
+                Console.WriteLine($"\t\tWritten: {item.TotalIOBytesWritten} (total), {item.IOWriteBytesDetails.Rate} (rate)");
+                Console.WriteLine($"\tSeeks: {item.IOSeekCount} (total), {item.IOSeeksDetails.Rate} (rate), {item.AvgIOSeekTimeDetails.Rate} (avg. time)");
+                Console.WriteLine($"\tSyncs: {item.IOSyncCount} (total), {item.IOSyncsDetails.Rate} (rate), {item.AvgIOSyncTimeDetails.Rate} (avg. time)");
                 Console.WriteLine();
                 
                 Console.WriteLine("File Handles");
@@ -200,6 +200,54 @@ namespace HareDu.Extensions
                 Console.WriteLine("****************************************************");
                 Console.WriteLine();
             }
+
+            return result;
+        }
+
+        public static Task<Result<NodeMemoryUsageInfo>> ScreenDump(this Task<Result<NodeMemoryUsageInfo>> result)
+        {
+            var item = result
+                .GetResult()
+                .Select(x => x.Data);
+
+            Console.WriteLine($"Atom: {item.Memory.Atom}");
+            Console.WriteLine($"Binary: {item.Memory.Binary}");
+            Console.WriteLine($"Metrics: {item.Memory.Metrics}");
+            Console.WriteLine($"Mnesia: {item.Memory.Mnesia}");
+            Console.WriteLine($"Plugins: {item.Memory.Plugins}");
+            Console.WriteLine($"Strategy: {item.Memory.Strategy}");
+            Console.WriteLine($"Allocated Unused: {item.Memory.AllocatedUnused}");
+            Console.WriteLine($"Byte Code: {item.Memory.ByteCode}");
+            Console.WriteLine($"Connection Channels: {item.Memory.ConnectionChannels}");
+            Console.WriteLine($"Connection Other: {item.Memory.ConnectionOther}");
+            Console.WriteLine($"Connection Readers: {item.Memory.ConnectionReaders}");
+            Console.WriteLine($"Connection Writers: {item.Memory.ConnectionWriters}");
+            Console.WriteLine($"Management Database: {item.Memory.ManagementDatabase}");
+            Console.WriteLine($"Message Index: {item.Memory.MessageIndex}");
+            Console.WriteLine($"Other Processes: {item.Memory.OtherProcesses}");
+            Console.WriteLine($"Other System: {item.Memory.OtherSystem}");
+            Console.WriteLine($"Queue Processes: {item.Memory.QueueProcesses}");
+            Console.WriteLine($"Reserved Unallocated: {item.Memory.ReservedUnallocated}");
+            Console.WriteLine($"Queue Slave Processes: {item.Memory.QueueSlaveProcesses}");
+            Console.WriteLine($"Quorum Queue Processes: {item.Memory.QuorumQueueProcesses}");
+            Console.WriteLine($"Other In-memory Storage: {item.Memory.OtherInMemoryStorage}");
+            Console.WriteLine($"Quorum In-memory Storage: {item.Memory.QuorumInMemoryStorage}");
+            Console.WriteLine("Totals");
+            Console.WriteLine($"\tAllocated: {item.Memory?.Total?.Allocated}");
+            Console.WriteLine($"\tErlang: {item.Memory?.Total?.Erlang}");
+            Console.WriteLine($"\tStrategy: {item.Memory?.Total?.Strategy}");
+
+            return result;
+        }
+
+        public static Task<Result<NodeHealthInfo>> ScreenDump(this Task<Result<NodeHealthInfo>> result)
+        {
+            var item = result
+                .GetResult()
+                .Select(x => x.Data);
+
+            Console.WriteLine($"Reason: {item.Reason}");
+            Console.WriteLine($"Status: {item.Status}");
 
             return result;
         }

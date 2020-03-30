@@ -45,22 +45,21 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         }
 
         [Test]
+        public async Task Should_be_able_to_get_all_memory_usage()
+        {
+            var result = await _container.Resolve<IBrokerObjectFactory>()
+                .Object<Node>()
+                .GetMemoryUsage("rabbit@localhost")
+                .ScreenDump();
+        }
+
+        [Test]
         public async Task Verify_can_check_if_named_node_healthy()
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Node>()
-                .GetHealth("rabbit@localhost");
-
-            if (result.HasData)
-            {
-                var info = result.Select(x => x.Data);
-                
-                Console.WriteLine($"Reason: {info.Reason}");
-                Console.WriteLine($"Status: {info.Status}");
-                Console.WriteLine("****************************************************");
-                Console.WriteLine();
-            }
-//            Console.WriteLine(result.DebugInfo.URL);
+                .GetHealth("rabbit@localhost")
+                .ScreenDump();
         }
 
         [Test]

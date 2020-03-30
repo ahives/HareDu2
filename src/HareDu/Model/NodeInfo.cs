@@ -178,7 +178,7 @@ namespace HareDu.Model
         ulong TotalIOBytesWritten { get; }
 
         [JsonProperty("io_write_bytes_details")]
-        Rate IOWriteBytesDetail { get; }
+        Rate IOWriteBytesDetails { get; }
 
         [JsonProperty("io_write_avg_time")]
         decimal AvgTimePerIOWrite { get; }
@@ -190,7 +190,7 @@ namespace HareDu.Model
         ulong IOSyncCount { get; }
 
         [JsonProperty("io_sync_count_details")]
-        Rate RateOfIOSyncs { get; }
+        Rate IOSyncsDetails { get; }
 
         [JsonProperty("io_sync_avg_time")]
         decimal AverageIOSyncTime { get; }
@@ -202,7 +202,7 @@ namespace HareDu.Model
         ulong IOSeekCount { get; }
 
         [JsonProperty("io_seek_count_details")]
-        Rate RateOfIOSeeks { get; }
+        Rate IOSeeksDetails { get; }
 
         [JsonProperty("io_seek_avg_time")]
         decimal AverageIOSeekTime { get; }

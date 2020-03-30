@@ -34,12 +34,12 @@ namespace HareDu.Snapshotting.Tests.Fakes
             State = "blocked";
         }
 
-        public Rate RateOfReduction { get; }
+        public Rate ReductionDetails { get; }
         public string Protocol { get; }
         public ulong TotalReductions { get; }
         public ulong PacketBytesReceived { get; }
-        public Rate RateOfPacketBytesReceived { get; }
-        public Rate RateOfPacketBytesSent { get; }
+        public Rate PacketBytesReceivedDetails { get; }
+        public Rate PacketBytesSentDetails { get; }
         public long ConnectedAt { get; }
         public ulong OpenChannelsLimit { get; }
         public ulong MaxFrameSizeInBytes { get; }

@@ -186,9 +186,9 @@ namespace HareDu.Snapshotting.Internal
                     {
                         MaxFrameSize = connection.MaxFrameSizeInBytes;
                         Sent = new PacketsImpl(connection.PacketsSent, connection.PacketBytesSent,
-                            connection.RateOfPacketBytesSent?.Rate ?? 0);
+                            connection.PacketBytesSentDetails?.Rate ?? 0);
                         Received = new PacketsImpl(connection.PacketsReceived, connection.PacketBytesReceived,
-                            connection.RateOfPacketBytesReceived?.Rate ?? 0);
+                            connection.PacketBytesReceivedDetails?.Rate ?? 0);
                     }
 
                     

@@ -64,7 +64,7 @@ namespace HareDu.Tests.BrokerObjects
             result.Data[1].TotalReductions.ShouldBe<ulong>(19755338);
             result.Data[1].Transactional.ShouldBeFalse();
             result.Data[1].ReductionDetails.ShouldNotBeNull();
-            result.Data[1].ReductionDetails?.Rate.ShouldBe(0.0M);
+            result.Data[1].ReductionDetails.Rate.ShouldBe(0.0M);
             result.Data[1].Name.ShouldBe("127.0.0.0:72368 -> 127.0.0.0:5672 (2)");
             result.Data[1].Node.ShouldBe("rabbit@localhost");
             result.Data[1].User.ShouldBe("guest");

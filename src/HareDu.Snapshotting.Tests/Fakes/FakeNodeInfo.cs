@@ -109,15 +109,15 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong TotalIOWrites { get; }
         public Rate IOWriteDetails { get; }
         public ulong TotalIOBytesWritten { get; }
-        public Rate IOWriteBytesDetail { get; }
+        public Rate IOWriteBytesDetails { get; }
         public decimal AvgTimePerIOWrite { get; }
         public Rate AvgTimePerIOWriteDetails { get; }
         public ulong IOSyncCount { get; }
-        public Rate RateOfIOSyncs { get; }
+        public Rate IOSyncsDetails { get; }
         public decimal AverageIOSyncTime { get; }
         public Rate AvgIOSyncTimeDetails { get; }
         public ulong IOSeekCount { get; }
-        public Rate RateOfIOSeeks { get; }
+        public Rate IOSeeksDetails { get; }
         public decimal AverageIOSeekTime { get; }
         public Rate AvgIOSeekTimeDetails { get; }
         public ulong IOReopenCount { get; }

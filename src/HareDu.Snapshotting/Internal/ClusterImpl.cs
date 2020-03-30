@@ -212,11 +212,11 @@ namespace HareDu.Snapshotting.Internal
                             Writes = new DiskUsageDetailsImpl(node.TotalIOWrites,
                                 node.IOWriteDetails?.Rate ?? 0,
                                 node.TotalIOBytesWritten,
-                                node.IOWriteBytesDetail?.Rate ?? 0,
+                                node.IOWriteBytesDetails?.Rate ?? 0,
                                 node.AvgTimePerIOWrite,
                                 node.AvgTimePerIOWriteDetails?.Rate ?? 0);
                             Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
-                                node.RateOfIOSeeks?.Rate ?? 0,
+                                node.IOSeeksDetails?.Rate ?? 0,
                                 0,
                                 0,
                                 node.AverageIOSeekTime,

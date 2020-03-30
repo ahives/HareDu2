@@ -18,7 +18,7 @@ namespace HareDu.Model
     public interface ConnectionInfo
     {
         [JsonProperty("reductions_details")]
-        Rate RateOfReduction { get; }
+        Rate ReductionDetails { get; }
         
         [JsonProperty("protocol")]
         string Protocol { get; }
@@ -33,7 +33,7 @@ namespace HareDu.Model
         ulong PacketBytesReceived { get; }
 
         [JsonProperty("recv_oct_details")]
-        Rate RateOfPacketBytesReceived { get; }
+        Rate PacketBytesReceivedDetails { get; }
 
         [JsonProperty("send_cnt")]
         ulong PacketsSent { get; }
@@ -42,7 +42,7 @@ namespace HareDu.Model
         ulong PacketBytesSent { get; }
 
         [JsonProperty("send_oct_details")]
-        Rate RateOfPacketBytesSent { get; }
+        Rate PacketBytesSentDetails { get; }
 
         [JsonProperty("connected_at")]
         long ConnectedAt { get; }
