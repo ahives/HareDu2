@@ -52,17 +52,17 @@ namespace HareDu.Snapshotting.Tests.Fakes
             public QueueStatsImpl()
             {
                 TotalMessagesReadyForDelivery = 82937489379;
-                RateOfMessagesReadyForDelivery = new RateImpl(34.4M);
+                MessagesReadyForDeliveryDetails = new RateImpl(34.4M);
                 TotalUnacknowledgedDeliveredMessages = 892387397238;
-                RateOfUnacknowledgedDeliveredMessages = new RateImpl(73.3M);
+                UnacknowledgedDeliveredMessagesDetails = new RateImpl(73.3M);
                 TotalMessages = 9230748297;
                 MessageDetails = new RateImpl(80.3M);
             }
 
             public ulong TotalMessagesReadyForDelivery { get; }
-            public Rate RateOfMessagesReadyForDelivery { get; }
+            public Rate MessagesReadyForDeliveryDetails { get; }
             public ulong TotalUnacknowledgedDeliveredMessages { get; }
-            public Rate RateOfUnacknowledgedDeliveredMessages { get; }
+            public Rate UnacknowledgedDeliveredMessagesDetails { get; }
             public ulong TotalMessages { get; }
             public Rate MessageDetails { get; }
 

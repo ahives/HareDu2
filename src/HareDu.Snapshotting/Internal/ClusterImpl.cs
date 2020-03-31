@@ -206,13 +206,13 @@ namespace HareDu.Snapshotting.Internal
                             Reads = new DiskUsageDetailsImpl(node.TotalIOReads,
                                 node.IOReadDetails?.Rate ?? 0,
                                 node.TotalIOBytesRead,
-                                node.IOReadBytesDetails?.Rate ?? 0,
+                                node.IOBytesReadDetails?.Rate ?? 0,
                                 node.AvgIOReadTime,
                                 node.AvgIOReadTimeDetails?.Rate ?? 0);
                             Writes = new DiskUsageDetailsImpl(node.TotalIOWrites,
                                 node.IOWriteDetails?.Rate ?? 0,
                                 node.TotalIOBytesWritten,
-                                node.IOWriteBytesDetails?.Rate ?? 0,
+                                node.IOBytesWrittenDetails?.Rate ?? 0,
                                 node.AvgTimePerIOWrite,
                                 node.AvgTimePerIOWriteDetails?.Rate ?? 0);
                             Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
@@ -235,8 +235,8 @@ namespace HareDu.Snapshotting.Internal
                         {
                             public FileHandlesImpl(NodeInfo node)
                             {
-                                Recycled = node.IOReopenCount;
-                                Rate = node.RateOfIOReopened?.Rate ?? 0;
+                                Recycled = node.TotalIOReopened;
+                                Rate = node.IOReopenedDetails?.Rate ?? 0;
                             }
 
                             public ulong Recycled { get; }
@@ -394,9 +394,9 @@ namespace HareDu.Snapshotting.Internal
                             public StorageDetailsImpl(NodeInfo node)
                             {
                                 Reads = new MessageStoreDetailsImpl(node.TotalMessageStoreReads,
-                                    node.MessageStoreReadCountDetails?.Rate ?? 0);
+                                    node.MessageStoreReadDetails?.Rate ?? 0);
                                 Writes = new MessageStoreDetailsImpl(node.TotalMessageStoreWrites,
-                                    node.MessageStoreWriteCountDetails?.Rate ?? 0);
+                                    node.MessageStoreWriteDetails?.Rate ?? 0);
                             }
 
                             public MessageStoreDetails Reads { get; }
@@ -424,9 +424,9 @@ namespace HareDu.Snapshotting.Internal
                             public IndexDetailsImpl(NodeInfo node)
                             {
                                 Reads = new IndexUsageDetailsImpl(node.TotalQueueIndexReads,
-                                    node.QueueIndexReadCountDetails?.Rate ?? 0);
+                                    node.QueueIndexReadDetails?.Rate ?? 0);
                                 Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexWrites,
-                                    node.QueueIndexWriteCountDetails?.Rate ?? 0);
+                                    node.QueueIndexWriteDetails?.Rate ?? 0);
                                 Journal = new JournalDetailsImpl(node);
                             }
 
@@ -441,7 +441,7 @@ namespace HareDu.Snapshotting.Internal
                                 public JournalDetailsImpl(NodeInfo node)
                                 {
                                     Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexJournalWrites,
-                                        node.QueueIndexJournalWriteCountDetails?.Rate ?? 0);
+                                        node.QueueIndexJournalWriteDetails?.Rate ?? 0);
                                 }
 
                                 public IndexUsageDetails Writes { get; }
@@ -553,7 +553,7 @@ namespace HareDu.Snapshotting.Internal
                             Used = node.FileDescriptorUsed;
                             UsageRate = node.FileDescriptorUsedDetails?.Rate ?? 0;
                             OpenAttempts = node.TotalOpenFileHandleAttempts;
-                            OpenAttemptRate = node.FileHandleOpenAttemptCountDetails?.Rate ?? 0;
+                            OpenAttemptRate = node.FileHandleOpenAttemptDetails?.Rate ?? 0;
                             AvgTimePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
                             AvgTimeRatePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
                         }

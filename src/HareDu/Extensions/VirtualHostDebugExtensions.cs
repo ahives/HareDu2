@@ -32,12 +32,12 @@ namespace HareDu.Extensions
                 Console.WriteLine($"\tName: {item.Name}");
                 Console.WriteLine($"\tTracing: {item.Tracing}");
                 Console.WriteLine("\tMessages");
-                Console.WriteLine($"\t\tMessages: {item.TotalMessages} (total), {item.RateOfMessages?.Rate} (rate)");
-                Console.WriteLine($"\t\tReady: {item.ReadyMessages} (total), {item.RateOfReadyMessages?.Rate} (rate)");
-                Console.WriteLine($"\t\tUnacknowledged: {item.UnacknowledgedMessages} (total), {item.RateOfUnacknowledgedMessages?.Rate} (rate)");
+                Console.WriteLine($"\t\tMessages: {item.TotalMessages} (total), {item.MessagesDetails?.Rate} (rate)");
+                Console.WriteLine($"\t\tReady: {item.ReadyMessages} (total), {item.ReadyMessagesDetails?.Rate} (rate)");
+                Console.WriteLine($"\t\tUnacknowledged: {item.UnacknowledgedMessages} (total), {item.UnacknowledgedMessagesDetails?.Rate} (rate)");
                 Console.WriteLine("\tPackets");
-                Console.WriteLine($"\t\tSent: {item.PacketBytesSent} (bytes), {item.RateOfPacketBytesSent?.Rate} (rate)");
-                Console.WriteLine($"\t\tReceived: {item.PacketBytesReceived} (bytes), {item.RateOfPacketBytesReceived?.Rate} (rate)");
+                Console.WriteLine($"\t\tSent: {item.PacketBytesSent} (bytes), {item.PacketBytesSentDetails?.Rate} (rate)");
+                Console.WriteLine($"\t\tReceived: {item.PacketBytesReceived} (bytes), {item.PacketBytesReceivedDetails?.Rate} (rate)");
                 Console.WriteLine("\tMessage Stats");
                 Console.WriteLine($"\t\tGets: {item.MessageStats?.TotalMessageGets} (total), {item.MessageStats?.MessageGetDetails?.Rate} (rate)");
                 Console.WriteLine($"\t\tAcknowledged: {item.MessageStats?.TotalMessagesAcknowledged} (total), {item.MessageStats?.MessagesAcknowledgedDetails?.Rate} (rate)");

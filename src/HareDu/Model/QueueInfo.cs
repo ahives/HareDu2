@@ -20,25 +20,25 @@ namespace HareDu.Model
     public interface QueueInfo
     {
         [JsonProperty("messages_details")]
-        Rate MessageRate { get; }
+        Rate MessageDetails { get; }
         
         [JsonProperty("messages")]
         ulong TotalMessages { get; }
         
         [JsonProperty("messages_unacknowledged_details")]
-        Rate UnackedMessageRate { get; }
+        Rate UnacknowledgedMessageDetails { get; }
         
         [JsonProperty("messages_unacknowledged")]
         ulong UnacknowledgedMessages { get; }
         
         [JsonProperty("messages_ready_details")]
-        Rate ReadyMessageRate { get; }
+        Rate ReadyMessageDetails { get; }
         
         [JsonProperty("messages_ready")]
         ulong ReadyMessages { get; }
         
         [JsonProperty("reductions_details")]
-        Rate ReductionRate { get; }
+        Rate ReductionDetails { get; }
         
         [JsonProperty("reductions")]
         long TotalReductions { get; }
@@ -98,10 +98,10 @@ namespace HareDu.Model
         ulong UnacknowledgedMessagesInRAM { get; }
         
         [JsonProperty("messages_ready_ram")]
-        ulong MessagesReadyForDeliveryInRam { get; }
+        ulong MessagesReadyForDeliveryInRAM { get; }
         
         [JsonProperty("messages_ram")]
-        ulong MessagesInRam { get; }
+        ulong MessagesInRAM { get; }
         
         [JsonProperty("garbage_collection")]
         GarbageCollectionDetails GC { get; }

@@ -66,8 +66,8 @@ namespace HareDu.Extensions
             
             Console.WriteLine("Queue Stats");
             Console.WriteLine($"\tMessages: {item.QueueStats?.TotalMessages} (total), {item.QueueStats?.MessageDetails} (rate)");
-            Console.WriteLine($"\tUnacknowledged Delivered: {item.QueueStats?.TotalUnacknowledgedDeliveredMessages} (total), {item.QueueStats?.RateOfUnacknowledgedDeliveredMessages?.Rate} (rate)");
-            Console.WriteLine($"\tReady: {item.QueueStats?.TotalMessagesReadyForDelivery} (total), {item.QueueStats?.RateOfMessagesReadyForDelivery?.Rate} (rate)");
+            Console.WriteLine($"\tUnacknowledged Delivered: {item.QueueStats?.TotalUnacknowledgedDeliveredMessages} (total), {item.QueueStats?.UnacknowledgedDeliveredMessagesDetails?.Rate} (rate)");
+            Console.WriteLine($"\tReady: {item.QueueStats?.TotalMessagesReadyForDelivery} (total), {item.QueueStats?.MessagesReadyForDeliveryDetails?.Rate} (rate)");
             Console.WriteLine();
 
             Console.WriteLine("Listeners");

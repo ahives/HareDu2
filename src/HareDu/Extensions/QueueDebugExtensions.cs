@@ -50,7 +50,7 @@ namespace HareDu.Extensions
                 Console.WriteLine("\t-------------------");
                 Console.WriteLine();
                 Console.WriteLine($"Idle Since: {item.IdleSince}");
-                Console.WriteLine($"Message Rate: {item.MessageRate?.Rate}");
+                Console.WriteLine($"Message Rate: {item.MessageDetails?.Rate}");
                 Console.WriteLine($"Messages Persisted: {item.MessagesPersisted}");
                 Console.WriteLine();
                 Console.WriteLine("Message Stats");
@@ -73,7 +73,7 @@ namespace HareDu.Extensions
                 Console.WriteLine("\t-------------------");
                 Console.WriteLine();
                 Console.WriteLine($"Ready Messages: {item.ReadyMessages}");
-                Console.WriteLine($"Reduction Rate: {item.ReductionRate?.Rate}");
+                Console.WriteLine($"Reduction Rate: {item.ReductionDetails?.Rate}");
                 Console.WriteLine($"Total Messages: {item.TotalMessages}");
                 Console.WriteLine($"Total Reductions: {item.TotalReductions}");
                 Console.WriteLine($"Unacknowledged Messages: {item.UnacknowledgedMessages}");
@@ -93,15 +93,15 @@ namespace HareDu.Extensions
                 Console.WriteLine($"Exclusive Consumer Tag: {item.ExclusiveConsumerTag}");
                 Console.WriteLine($"Head Message Timestamp: {item.HeadMessageTimestamp}");
                 Console.WriteLine($"Message Bytes Persisted: {item.MessageBytesPersisted}");
-                Console.WriteLine($"Messages (RAM): {item.MessagesInRam}");
-                Console.WriteLine($"Ready Message Rate: {item.ReadyMessageRate?.Rate}");
-                Console.WriteLine($"Unacked Message Rate: {item.UnackedMessageRate?.Rate}");
+                Console.WriteLine($"Messages (RAM): {item.MessagesInRAM}");
+                Console.WriteLine($"Ready Message Rate: {item.ReadyMessageDetails?.Rate}");
+                Console.WriteLine($"Unacked Message Rate: {item.UnacknowledgedMessageDetails?.Rate}");
                 Console.WriteLine($"Message Bytes (RAM): {item.MessageBytesInRAM}");
                 Console.WriteLine($"Message Bytes Paged Out: {item.MessageBytesPagedOut}");
                 Console.WriteLine($"Total Messages Paged Out: {item.TotalMessagesPagedOut}");
                 Console.WriteLine($"UnacknowledgedMessages (RAM): {item.UnacknowledgedMessagesInRAM}");
                 Console.WriteLine($"Total Bytes Of All Messages: {item.TotalBytesOfAllMessages}");
-                Console.WriteLine($"Messages Ready for Delivery (RAM): {item.MessagesReadyForDeliveryInRam}");
+                Console.WriteLine($"Messages Ready for Delivery (RAM): {item.MessagesReadyForDeliveryInRAM}");
                 Console.WriteLine($"Total Bytes (Messages Delivered - Unacknowledged): {item.TotalBytesOfMessagesDeliveredButUnacknowledged}");
                 Console.WriteLine($"Total Bytes (Messages Ready for Delivery): {item.TotalBytesOfMessagesReadyForDelivery}");
                 Console.WriteLine("-------------------");

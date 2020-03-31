@@ -21,13 +21,13 @@ namespace HareDu.Model
         ulong TotalMessagesReadyForDelivery { get; }
 
         [JsonProperty("messages_ready_details")]
-        Rate RateOfMessagesReadyForDelivery { get; }
+        Rate MessagesReadyForDeliveryDetails { get; }
         
         [JsonProperty("messages_unacknowledged")]
         ulong TotalUnacknowledgedDeliveredMessages { get; }
 
         [JsonProperty("messages_unacknowledged_details")]
-        Rate RateOfUnacknowledgedDeliveredMessages { get; }
+        Rate UnacknowledgedDeliveredMessagesDetails { get; }
         
         [JsonProperty("messages")]
         ulong TotalMessages { get; }

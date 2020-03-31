@@ -34,21 +34,21 @@ namespace HareDu.Snapshotting.Tests.Fakes
             TotalBytesOfMessagesReadyForDelivery = 892839823;
             TotalBytesOfAllMessages = 82938938723;
             UnacknowledgedMessagesInRAM = 82938982323;
-            MessagesReadyForDeliveryInRam = 8892388929;
-            MessagesInRam = 9883892938;
+            MessagesReadyForDeliveryInRAM = 8892388929;
+            MessagesInRAM = 9883892938;
             Consumers = 773709938;
             ConsumerUtilization = 0.50M;
             Memory = 92990390;
             MessageStats = new QueueMessageStatsImpl();
         }
 
-        public Rate MessageRate { get; }
+        public Rate MessageDetails { get; }
         public ulong TotalMessages { get; }
-        public Rate UnackedMessageRate { get; }
+        public Rate UnacknowledgedMessageDetails { get; }
         public ulong UnacknowledgedMessages { get; }
-        public Rate ReadyMessageRate { get; }
+        public Rate ReadyMessageDetails { get; }
         public ulong ReadyMessages { get; }
-        public Rate ReductionRate { get; }
+        public Rate ReductionDetails { get; }
         public long TotalReductions { get; }
         public IDictionary<string, object> Arguments { get; }
         public bool Exclusive { get; }
@@ -68,8 +68,8 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong TotalBytesOfAllMessages { get; }
         public ulong MessagesPersisted { get; }
         public ulong UnacknowledgedMessagesInRAM { get; }
-        public ulong MessagesReadyForDeliveryInRam { get; }
-        public ulong MessagesInRam { get; }
+        public ulong MessagesReadyForDeliveryInRAM { get; }
+        public ulong MessagesInRAM { get; }
         public GarbageCollectionDetails GC { get; }
         public string State { get; }
         public IList<string> RecoverableSlaves { get; }

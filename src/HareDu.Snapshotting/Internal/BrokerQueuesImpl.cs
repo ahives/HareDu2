@@ -181,10 +181,10 @@ namespace HareDu.Snapshotting.Internal
                         public RAMImpl(QueueInfo queue)
                         {
                             Target = queue.BackingQueueStatus.IsNull() ? 0 : queue.BackingQueueStatus.TargetTotalMessagesInRAM.ToLong();
-                            Total = queue.MessagesInRam;
+                            Total = queue.MessagesInRAM;
                             Bytes = queue.MessageBytesInRAM;
                             Unacknowledged = queue.UnacknowledgedMessagesInRAM;
-                            Ready = queue.MessagesReadyForDeliveryInRam;
+                            Ready = queue.MessagesReadyForDeliveryInRAM;
                         }
 
                         public ulong Target { get; }
@@ -209,9 +209,9 @@ namespace HareDu.Snapshotting.Internal
                         DeliveredWithoutAck = new QueueDepthImpl(queue.MessageStats?.TotalMessageDeliveredWithoutAck ?? 0, queue.MessageStats?.MessagesDeliveredWithoutAckDetails?.Rate ?? 0);
                         Redelivered = new QueueDepthImpl(queue.MessageStats?.TotalMessagesRedelivered ?? 0, queue.MessageStats?.MessagesRedeliveredDetails?.Rate ?? 0);
                         Acknowledged = new QueueDepthImpl(queue.MessageStats?.TotalMessagesAcknowledged ?? 0, queue.MessageStats?.MessagesAcknowledgedDetails?.Rate ?? 0);
-                        Aggregate = new QueueDepthImpl(queue.TotalMessages, queue.MessageRate?.Rate ?? 0);
-                        Ready = new QueueDepthImpl(queue.ReadyMessages, queue.ReadyMessageRate?.Rate ?? 0);
-                        Unacknowledged = new QueueDepthImpl(queue.UnacknowledgedMessages, queue.UnackedMessageRate?.Rate ?? 0);
+                        Aggregate = new QueueDepthImpl(queue.TotalMessages, queue.MessageDetails?.Rate ?? 0);
+                        Ready = new QueueDepthImpl(queue.ReadyMessages, queue.ReadyMessageDetails?.Rate ?? 0);
+                        Unacknowledged = new QueueDepthImpl(queue.UnacknowledgedMessages, queue.UnacknowledgedMessageDetails?.Rate ?? 0);
                     }
 
                     public QueueDepth Incoming { get; }
@@ -244,8 +244,8 @@ namespace HareDu.Snapshotting.Internal
                     Redelivered = new QueueDepthImpl(messageStats.TotalMessagesRedelivered, messageStats.MessagesRedeliveredDetails?.Rate ?? 0);
                     Acknowledged = new QueueDepthImpl(messageStats.TotalMessagesAcknowledged, messageStats.MessagesAcknowledgedDetails?.Rate ?? 0);
                     Broker = new QueueDepthImpl(queueStats.TotalMessages, queueStats.MessageDetails?.Rate ?? 0);
-                    Ready = new QueueDepthImpl(queueStats.TotalMessagesReadyForDelivery, queueStats.RateOfMessagesReadyForDelivery?.Rate ?? 0);
-                    Unacknowledged = new QueueDepthImpl(queueStats.TotalUnacknowledgedDeliveredMessages, queueStats.RateOfUnacknowledgedDeliveredMessages?.Rate ?? 0);
+                    Ready = new QueueDepthImpl(queueStats.TotalMessagesReadyForDelivery, queueStats.MessagesReadyForDeliveryDetails?.Rate ?? 0);
+                    Unacknowledged = new QueueDepthImpl(queueStats.TotalUnacknowledgedDeliveredMessages, queueStats.UnacknowledgedDeliveredMessagesDetails?.Rate ?? 0);
                 }
 
                 public long Persisted { get; }

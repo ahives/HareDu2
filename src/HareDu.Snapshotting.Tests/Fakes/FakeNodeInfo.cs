@@ -103,13 +103,13 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong TotalIOReads { get; }
         public Rate IOReadDetails { get; }
         public ulong TotalIOBytesRead { get; }
-        public Rate IOReadBytesDetails { get; }
+        public Rate IOBytesReadDetails { get; }
         public decimal AvgIOReadTime { get; }
         public Rate AvgIOReadTimeDetails { get; }
         public ulong TotalIOWrites { get; }
         public Rate IOWriteDetails { get; }
         public ulong TotalIOBytesWritten { get; }
-        public Rate IOWriteBytesDetails { get; }
+        public Rate IOBytesWrittenDetails { get; }
         public decimal AvgTimePerIOWrite { get; }
         public Rate AvgTimePerIOWriteDetails { get; }
         public ulong IOSyncCount { get; }
@@ -120,24 +120,24 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public Rate IOSeeksDetails { get; }
         public decimal AverageIOSeekTime { get; }
         public Rate AvgIOSeekTimeDetails { get; }
-        public ulong IOReopenCount { get; }
-        public Rate RateOfIOReopened { get; }
+        public ulong TotalIOReopened { get; }
+        public Rate IOReopenedDetails { get; }
         public ulong TotalMnesiaRamTransactions { get; }
         public Rate MnesiaRAMTransactionCountDetails { get; }
         public ulong TotalMnesiaDiskTransactions { get; }
         public Rate MnesiaDiskTransactionCountDetails { get; }
         public ulong TotalMessageStoreReads { get; }
-        public Rate MessageStoreReadCountDetails { get; }
+        public Rate MessageStoreReadDetails { get; }
         public ulong TotalMessageStoreWrites { get; }
-        public Rate MessageStoreWriteCountDetails { get; }
+        public Rate MessageStoreWriteDetails { get; }
         public ulong TotalQueueIndexJournalWrites { get; }
-        public Rate QueueIndexJournalWriteCountDetails { get; }
+        public Rate QueueIndexJournalWriteDetails { get; }
         public ulong TotalQueueIndexWrites { get; }
-        public Rate QueueIndexWriteCountDetails { get; }
+        public Rate QueueIndexWriteDetails { get; }
         public ulong TotalQueueIndexReads { get; }
-        public Rate QueueIndexReadCountDetails { get; }
+        public Rate QueueIndexReadDetails { get; }
         public ulong TotalOpenFileHandleAttempts { get; }
-        public Rate FileHandleOpenAttemptCountDetails { get; }
+        public Rate FileHandleOpenAttemptDetails { get; }
         public decimal OpenFileHandleAttemptsAvgTime { get; }
         public Rate FileHandleOpenAttemptAvgTimeDetails { get; }
         public GarbageCollectionMetrics GarbageCollectionMetrics { get; }

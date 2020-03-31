@@ -160,7 +160,7 @@ namespace HareDu.Model
         ulong TotalIOBytesRead { get; }
 
         [JsonProperty("io_read_bytes_details")]
-        Rate IOReadBytesDetails { get; }
+        Rate IOBytesReadDetails { get; }
 
         [JsonProperty("io_read_avg_time")]
         decimal AvgIOReadTime { get; }
@@ -178,7 +178,7 @@ namespace HareDu.Model
         ulong TotalIOBytesWritten { get; }
 
         [JsonProperty("io_write_bytes_details")]
-        Rate IOWriteBytesDetails { get; }
+        Rate IOBytesWrittenDetails { get; }
 
         [JsonProperty("io_write_avg_time")]
         decimal AvgTimePerIOWrite { get; }
@@ -211,10 +211,10 @@ namespace HareDu.Model
         Rate AvgIOSeekTimeDetails { get; }
 
         [JsonProperty("io_reopen_count")]
-        ulong IOReopenCount { get; }
+        ulong TotalIOReopened { get; }
 
         [JsonProperty("io_reopen_count_details")]
-        Rate RateOfIOReopened { get; }
+        Rate IOReopenedDetails { get; }
 
         [JsonProperty("mnesia_ram_tx_count")]
         ulong TotalMnesiaRamTransactions { get; }
@@ -232,37 +232,37 @@ namespace HareDu.Model
         ulong TotalMessageStoreReads { get; }
 
         [JsonProperty("msg_store_read_count_details")]
-        Rate MessageStoreReadCountDetails { get; }
+        Rate MessageStoreReadDetails { get; }
 
         [JsonProperty("msg_store_write_count")]
         ulong TotalMessageStoreWrites { get; }
 
         [JsonProperty("msg_store_write_count_details")]
-        Rate MessageStoreWriteCountDetails { get; }
+        Rate MessageStoreWriteDetails { get; }
 
         [JsonProperty("queue_index_journal_write_count")]
         ulong TotalQueueIndexJournalWrites { get; }
 
         [JsonProperty("queue_index_journal_write_count_details")]
-        Rate QueueIndexJournalWriteCountDetails { get; }
+        Rate QueueIndexJournalWriteDetails { get; }
 
         [JsonProperty("queue_index_write_count")]
         ulong TotalQueueIndexWrites { get; }
 
         [JsonProperty("queue_index_write_count_details")]
-        Rate QueueIndexWriteCountDetails { get; }
+        Rate QueueIndexWriteDetails { get; }
 
         [JsonProperty("queue_index_read_count")]
         ulong TotalQueueIndexReads { get; }
 
         [JsonProperty("queue_index_read_count_details")]
-        Rate QueueIndexReadCountDetails { get; }
+        Rate QueueIndexReadDetails { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count")]
         ulong TotalOpenFileHandleAttempts { get; }
 
         [JsonProperty("io_file_handle_open_attempt_count_details")]
-        Rate FileHandleOpenAttemptCountDetails { get; }
+        Rate FileHandleOpenAttemptDetails { get; }
 
         [JsonProperty("io_file_handle_open_attempt_avg_time")]
         decimal OpenFileHandleAttemptsAvgTime { get; }

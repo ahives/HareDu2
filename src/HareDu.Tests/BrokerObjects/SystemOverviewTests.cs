@@ -88,11 +88,11 @@ namespace HareDu.Tests.BrokerObjects
             result.Data.QueueStats.MessageDetails.ShouldNotBeNull();
             result.Data.QueueStats?.MessageDetails?.Rate.ShouldBe(0.0M);
             result.Data.QueueStats?.TotalMessages.ShouldBe<ulong>(3);
-            result.Data.QueueStats.RateOfUnacknowledgedDeliveredMessages.ShouldNotBeNull();
-            result.Data.QueueStats?.RateOfUnacknowledgedDeliveredMessages?.Rate.ShouldBe(0.0M);
+            result.Data.QueueStats.UnacknowledgedDeliveredMessagesDetails.ShouldNotBeNull();
+            result.Data.QueueStats?.UnacknowledgedDeliveredMessagesDetails?.Rate.ShouldBe(0.0M);
             result.Data.QueueStats?.TotalUnacknowledgedDeliveredMessages.ShouldBe<ulong>(0);
-            result.Data.QueueStats.RateOfMessagesReadyForDelivery.ShouldNotBeNull();
-            result.Data.QueueStats?.RateOfMessagesReadyForDelivery?.Rate.ShouldBe(0.0M);
+            result.Data.QueueStats.MessagesReadyForDeliveryDetails.ShouldNotBeNull();
+            result.Data.QueueStats?.MessagesReadyForDeliveryDetails?.Rate.ShouldBe(0.0M);
             result.Data.QueueStats?.TotalMessagesReadyForDelivery.ShouldBe<ulong>(3);
             result.Data.ChurnRates.ShouldNotBeNull();
             result.Data.ChurnRates.ClosedChannelDetails.ShouldNotBeNull();

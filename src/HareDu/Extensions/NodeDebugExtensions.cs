@@ -168,8 +168,8 @@ namespace HareDu.Extensions
                 Console.WriteLine($"Sockets Used: {item.SocketsUsed} (total), {item.TotalSocketsAvailable} (rate)");
                 
                 Console.WriteLine("Message Store");
-                Console.WriteLine($"\tReads: {item.TotalMessageStoreReads} (total), {item.MessageStoreReadCountDetails.Rate} (rate)");
-                Console.WriteLine($"\tWrites: {item.TotalMessageStoreWrites} (total), {item.MessageStoreWriteCountDetails.Rate} (rate)");
+                Console.WriteLine($"\tReads: {item.TotalMessageStoreReads} (total), {item.MessageStoreReadDetails.Rate} (rate)");
+                Console.WriteLine($"\tWrites: {item.TotalMessageStoreWrites} (total), {item.MessageStoreWriteDetails.Rate} (rate)");
                 Console.WriteLine();
 
                 Console.WriteLine("Mnesia Transactions");
@@ -178,22 +178,22 @@ namespace HareDu.Extensions
                 Console.WriteLine();
                 
                 Console.WriteLine("Queue Index");
-                Console.WriteLine($"\tReads: {item.TotalQueueIndexReads} (total), {item.QueueIndexReadCountDetails.Rate} (rate)");
-                Console.WriteLine($"\tWrites: {item.TotalQueueIndexWrites} (total), {item.QueueIndexWriteCountDetails.Rate} (rate), {item.QueueIndexJournalWriteCountDetails.Rate} (journal)");
+                Console.WriteLine($"\tReads: {item.TotalQueueIndexReads} (total), {item.QueueIndexReadDetails.Rate} (rate)");
+                Console.WriteLine($"\tWrites: {item.TotalQueueIndexWrites} (total), {item.QueueIndexWriteDetails.Rate} (rate), {item.QueueIndexJournalWriteDetails.Rate} (journal)");
                 Console.WriteLine();
 
                 Console.WriteLine("IO");
                 Console.WriteLine($"\tReads: {item.TotalIOReads} (total), {item.IOReadDetails.Rate} (rate)");
                 Console.WriteLine($"\tWrites: {item.TotalIOWrites} (total), {item.IOWriteDetails.Rate} (rate)");
                 Console.WriteLine("\tBytes");
-                Console.WriteLine($"\t\tReads: {item.TotalIOBytesRead} (total), {item.IOReadBytesDetails.Rate} (rate)");
-                Console.WriteLine($"\t\tWritten: {item.TotalIOBytesWritten} (total), {item.IOWriteBytesDetails.Rate} (rate)");
+                Console.WriteLine($"\t\tReads: {item.TotalIOBytesRead} (total), {item.IOBytesReadDetails.Rate} (rate)");
+                Console.WriteLine($"\t\tWritten: {item.TotalIOBytesWritten} (total), {item.IOBytesWrittenDetails.Rate} (rate)");
                 Console.WriteLine($"\tSeeks: {item.IOSeekCount} (total), {item.IOSeeksDetails.Rate} (rate), {item.AvgIOSeekTimeDetails.Rate} (avg. time)");
                 Console.WriteLine($"\tSyncs: {item.IOSyncCount} (total), {item.IOSyncsDetails.Rate} (rate), {item.AvgIOSyncTimeDetails.Rate} (avg. time)");
                 Console.WriteLine();
                 
                 Console.WriteLine("File Handles");
-                Console.WriteLine($"\tOpen Attempts: {item.TotalOpenFileHandleAttempts} (total), {item.FileHandleOpenAttemptCountDetails.Rate} (rate), {item.FileHandleOpenAttemptAvgTimeDetails.Rate} (avg. time)");
+                Console.WriteLine($"\tOpen Attempts: {item.TotalOpenFileHandleAttempts} (total), {item.FileHandleOpenAttemptDetails.Rate} (rate), {item.FileHandleOpenAttemptAvgTimeDetails.Rate} (avg. time)");
                 Console.WriteLine();
                 
                 Console.WriteLine($"Total Journal Writes: {item.TotalQueueIndexJournalWrites}");

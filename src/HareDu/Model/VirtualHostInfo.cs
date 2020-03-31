@@ -34,28 +34,28 @@ namespace HareDu.Model
         ulong PacketBytesReceived { get; }
 
         [JsonProperty("recv_oct_details")]
-        Rate RateOfPacketBytesReceived { get; }
+        Rate PacketBytesReceivedDetails { get; }
 
         [JsonProperty("send_oct")]
         ulong PacketBytesSent { get; }
 
         [JsonProperty("send_oct_details")]
-        Rate RateOfPacketBytesSent { get; }
+        Rate PacketBytesSentDetails { get; }
         
         [JsonProperty("messages_details")]
-        Rate RateOfMessages { get; }
+        Rate MessagesDetails { get; }
         
         [JsonProperty("messages")]
         ulong TotalMessages { get; }
         
         [JsonProperty("messages_unacknowledged_details")]
-        Rate RateOfUnacknowledgedMessages { get; }
+        Rate UnacknowledgedMessagesDetails { get; }
         
         [JsonProperty("messages_unacknowledged")]
         ulong UnacknowledgedMessages { get; }
         
         [JsonProperty("messages_ready_details")]
-        Rate RateOfReadyMessages { get; }
+        Rate ReadyMessagesDetails { get; }
         
         [JsonProperty("messages_ready")]
         ulong ReadyMessages { get; }
