@@ -30,6 +30,8 @@ namespace HareDu.Registration
         readonly HttpClient _client;
         readonly ConcurrentDictionary<string, object> _cache;
 
+        public HareDuConfig Config { get; }
+
         public BrokerObjectFactory(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -39,8 +41,10 @@ namespace HareDu.Registration
                 throw new HareDuBrokerObjectInitException("Could not register broker objects.");
         }
 
-        public BrokerObjectFactory(BrokerConfig config)
+        public BrokerObjectFactory(HareDuConfig config)
         {
+            Config = config;
+            
             _client = GetClient(config);
             _cache = new ConcurrentDictionary<string, object>();
             
@@ -100,19 +104,19 @@ namespace HareDu.Registration
             return registered;
         }
 
-        protected virtual HttpClient GetClient(BrokerConfig config)
+        protected virtual HttpClient GetClient(HareDuConfig config)
         {
-            var uri = new Uri($"{config.Url}/");
+            var uri = new Uri($"{config.Broker.Url}/");
             var handler = new HttpClientHandler
             {
-                Credentials = new NetworkCredential(config.Credentials.Username, config.Credentials.Password)
+                Credentials = new NetworkCredential(config.Broker.Credentials.Username, config.Broker.Credentials.Password)
             };
             
             var client = new HttpClient(handler){BaseAddress = uri};
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (config.Timeout != TimeSpan.Zero)
-                client.Timeout = config.Timeout;
+            if (config.Broker.Timeout != TimeSpan.Zero)
+                client.Timeout = config.Broker.Timeout;
 
             return client;
         }

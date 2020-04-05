@@ -15,6 +15,7 @@ namespace HareDu.CoreIntegration
 {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Registration;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
@@ -27,7 +28,8 @@ namespace HareDu.CoreIntegration
         /// <returns></returns>
         public static IServiceCollection AddHareDuSnapshot(this IServiceCollection services)
         {
-            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
+            services.TryAddSingleton<ISnapshotFactory>(x =>
+                new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
             
             services.TryAddSingleton<ISnapshotWriter, SnapshotWriter>();
             

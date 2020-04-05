@@ -43,6 +43,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test1()
         {
             var container = new ContainerBuilder()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
                 .AddHareDuSnapshot()
                 .AddHareDuDiagnostics()
@@ -114,6 +115,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test2()
         {
             var services = new ServiceCollection()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
                 .AddHareDuSnapshot()
                 .AddHareDuDiagnostics()
@@ -151,13 +153,13 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-            var factory = new SnapshotFactory(new BrokerObjectFactory(config.Broker));
+            var factory = new SnapshotFactory(new BrokerObjectFactory(config));
 
             var lens = factory.Lens<BrokerConnectivitySnapshot>();
             var result = lens.TakeSnapshot();
             
             IScanner scanner = new Scanner(
-                new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider()));
+                new ScannerFactory(config, new KnowledgeBaseProvider()));
 
             var report = scanner.Scan(result.Snapshot);
 
@@ -174,11 +176,11 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
 
-            var factory = new SnapshotFactory(config.Broker);
+            var factory = new SnapshotFactory(config);
             var lens = factory.Lens<BrokerConnectivitySnapshot>();
             var result = lens.TakeSnapshot();
 
-            var scannerFactory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var scannerFactory = new ScannerFactory(config, new KnowledgeBaseProvider());
             IScanner scanner = new Scanner(scannerFactory);
 
             var report = scanner.Scan(result.Snapshot);
@@ -193,12 +195,39 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test5()
         {
-            var provider1 = new BrokerConfigProvider();
-            var config1 = provider1.Configure(x =>
+            // var provider1 = new BrokerConfigProvider();
+            // var config1 = provider1.Configure(x =>
+            // {
+            //     x.ConnectTo("http://localhost:15672");
+            //     x.UsingCredentials("guest", "guest");
+            // });
+            var provider = new HareDuConfigProvider();
+
+            var config1 = provider.Configure(x =>
             {
-                x.ConnectTo("http://localhost:15672");
-                x.UsingCredentials("guest", "guest");
+                x.Broker(y =>
+                {
+                    y.ConnectTo("http://localhost:15672");
+                    y.UsingCredentials("guest", "guest");
+                });
+
+                x.Diagnostics(y =>
+                {
+                    y.Probes(z =>
+                    {
+                        z.SetMessageRedeliveryThresholdCoefficient(0.60M);
+                        z.SetSocketUsageThresholdCoefficient(0.60M);
+                        z.SetConsumerUtilizationThreshold(0.65M);
+                        z.SetQueueHighFlowThreshold(90);
+                        z.SetQueueLowFlowThreshold(10);
+                        z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                        z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                        z.SetHighClosureRateThreshold(90);
+                        z.SetHighCreationRateThreshold(60);
+                    });
+                });
             });
+            
             var factory1 = new SnapshotFactory(config1);
             var lens = factory1.Lens<BrokerConnectivitySnapshot>();
 
@@ -219,7 +248,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 x.SetHighCreationRateThreshold(60);
             });
             
-            var factory2 = new ScannerFactory(config, new KnowledgeBaseProvider());
+            var factory2 = new ScannerFactory(config1, new KnowledgeBaseProvider());
             IScanner scanner = new Scanner(factory2);
 
             var report = scanner.Scan(result.Snapshot);

@@ -31,6 +31,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         public void Init()
         {
             _container = new ContainerBuilder()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
                 .Build();
         }

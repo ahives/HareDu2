@@ -15,6 +15,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System.Collections.Generic;
     using Core;
+    using Core.Configuration;
     using Core.Testing;
     using HareDu.Registration;
 
@@ -22,6 +23,8 @@ namespace HareDu.Snapshotting.Tests.Fakes
         IBrokerObjectFactory,
         HareDuTestingFake
     {
+        public HareDuConfig Config { get; }
+
         public T Object<T>()
             where T : BrokerObject
         {

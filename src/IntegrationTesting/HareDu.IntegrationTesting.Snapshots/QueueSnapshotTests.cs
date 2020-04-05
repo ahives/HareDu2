@@ -57,7 +57,7 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
-                var brokerFactory = new BrokerObjectFactory(config.Broker);
+                var brokerFactory = new BrokerObjectFactory(config);
                 var factory = new SnapshotFactory(brokerFactory);
 
                 var lens = factory
@@ -74,7 +74,7 @@ namespace HareDu.IntegrationTesting.Snapshots
             
             if (provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml", out HareDuConfig config))
             {
-                var brokerFactory = new BrokerObjectFactory(config.Broker);
+                var brokerFactory = new BrokerObjectFactory(config);
                 var factory = new SnapshotFactory(brokerFactory);
 
                 var lens = factory
@@ -148,7 +148,8 @@ namespace HareDu.IntegrationTesting.Snapshots
         public void Test7()
         {
             var services = new ServiceCollection()
-                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDu()
                 .AddHareDuSnapshot()
                 .BuildServiceProvider();
 

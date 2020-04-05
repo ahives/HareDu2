@@ -17,6 +17,7 @@ namespace HareDu.Analytics.Tests
     using System.IO;
     using System.Linq;
     using Autofac;
+    using AutofacIntegration;
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
@@ -38,51 +39,55 @@ namespace HareDu.Analytics.Tests
         [OneTimeSetUp]
         public void Init()
         {
-            var builder = new ContainerBuilder();
+            _container = new ContainerBuilder()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDu()
+                .AddHareDuDiagnostics()
+                .Build();
 
-            builder.Register(x =>
-                {
-                    var configProvider = x.Resolve<IFileConfigProvider>();
-                    string path = $"{Directory.GetCurrentDirectory()}/haredu_3.yaml";
-
-                    configProvider.TryGet(path, out var config);
-
-                    var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
-
-                    return new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
-                })
-                .As<IScannerFactory>()
-                .SingleInstance();
-
-            builder.RegisterType<ScannerResultAnalyzer>()
-                .As<IScannerResultAnalyzer>()
-                .SingleInstance();
-
-            builder.RegisterType<Scanner>()
-                .As<IScanner>()
-                .SingleInstance();
-
-            builder.RegisterType<YamlFileConfigProvider>()
-                .As<IFileConfigProvider>()
-                .SingleInstance();
-
-            builder.RegisterType<YamlConfigProvider>()
-                .As<IConfigProvider>()
-                .SingleInstance();
-
-            builder.RegisterType<HareDuConfigValidator>()
-                .As<IConfigValidator>()
-                .SingleInstance();
-
-            builder.RegisterType<DiagnosticReportTextFormatter>()
-                .As<IDiagnosticReportFormatter>()
-                .SingleInstance();
-
-            builder.RegisterType<KnowledgeBaseProvider>()
-                .As<IKnowledgeBaseProvider>()
-                .SingleInstance();
-            
-            _container = builder.Build();
+            // builder.Register(x =>
+            //     {
+            //         var configProvider = x.Resolve<IFileConfigProvider>();
+            //         string path = $"{Directory.GetCurrentDirectory()}/haredu_3.yaml";
+            //
+            //         configProvider.TryGet(path, out var config);
+            //
+            //         var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
+            //
+            //         return new ScannerFactory(config, knowledgeBaseProvider);
+            //     })
+            //     .As<IScannerFactory>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<ScannerResultAnalyzer>()
+            //     .As<IScannerResultAnalyzer>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<Scanner>()
+            //     .As<IScanner>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<YamlFileConfigProvider>()
+            //     .As<IFileConfigProvider>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<YamlConfigProvider>()
+            //     .As<IConfigProvider>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<HareDuConfigValidator>()
+            //     .As<IConfigValidator>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<DiagnosticReportTextFormatter>()
+            //     .As<IDiagnosticReportFormatter>()
+            //     .SingleInstance();
+            //
+            // builder.RegisterType<KnowledgeBaseProvider>()
+            //     .As<IKnowledgeBaseProvider>()
+            //     .SingleInstance();
+            //
+            // _container = builder.Build();
         }
         
         [Test]
@@ -102,10 +107,10 @@ namespace HareDu.Analytics.Tests
             var queueSummary = summary
                 .SingleOrDefault(x => x.Id == "Queue");
             queueSummary.ShouldNotBeNull();
-            queueSummary.Healthy.Total.ShouldBe<uint>(24);
-            Decimal.Round(queueSummary.Healthy.Percentage, 2).ShouldBe(42.86M);
-            queueSummary.Unhealthy.Total.ShouldBe<uint>(32);
-            Decimal.Round(queueSummary.Unhealthy.Percentage, 2).ShouldBe(57.14M);
+            queueSummary.Healthy.Total.ShouldBe<uint>(26);
+            Decimal.Round(queueSummary.Healthy.Percentage, 2).ShouldBe(46.43M);
+            queueSummary.Unhealthy.Total.ShouldBe<uint>(30);
+            Decimal.Round(queueSummary.Unhealthy.Percentage, 2).ShouldBe(53.57M);
             queueSummary.Warning.Total.ShouldBe<uint>(0);
             queueSummary.Warning.Percentage.ShouldBe(0);
             queueSummary.Inconclusive.Total.ShouldBe<uint>(0);
@@ -156,10 +161,10 @@ namespace HareDu.Analytics.Tests
             var nodeSummary = summary
                 .SingleOrDefault(x => x.Id == "Node0");
             nodeSummary.ShouldNotBeNull();
-            nodeSummary.Healthy.Total.ShouldBe<uint>(24);
-            Decimal.Round(nodeSummary.Healthy.Percentage, 2).ShouldBe(42.86M);
-            nodeSummary.Unhealthy.Total.ShouldBe<uint>(32);
-            Decimal.Round(nodeSummary.Unhealthy.Percentage, 2).ShouldBe(57.14M);
+            nodeSummary.Healthy.Total.ShouldBe<uint>(26);
+            Decimal.Round(nodeSummary.Healthy.Percentage, 2).ShouldBe(46.43M);
+            nodeSummary.Unhealthy.Total.ShouldBe<uint>(30);
+            Decimal.Round(nodeSummary.Unhealthy.Percentage, 2).ShouldBe(53.57M);
             nodeSummary.Warning.Total.ShouldBe<uint>(0);
             nodeSummary.Warning.Percentage.ShouldBe(0);
             nodeSummary.Inconclusive.Total.ShouldBe<uint>(0);
@@ -252,10 +257,10 @@ namespace HareDu.Analytics.Tests
             var lowFlowQueueSummary = summary
                 .SingleOrDefault(x => x.Id == typeof(QueueLowFlowProbe).GetIdentifier());
             lowFlowQueueSummary.ShouldNotBeNull();
-            lowFlowQueueSummary.Healthy.Total.ShouldBe<uint>(1);
-            lowFlowQueueSummary.Healthy.Percentage.ShouldBe(12.5M);
-            lowFlowQueueSummary.Unhealthy.Total.ShouldBe<uint>(7);
-            lowFlowQueueSummary.Unhealthy.Percentage.ShouldBe(87.5M);
+            lowFlowQueueSummary.Healthy.Total.ShouldBe<uint>(3);
+            lowFlowQueueSummary.Healthy.Percentage.ShouldBe(37.5M);
+            lowFlowQueueSummary.Unhealthy.Total.ShouldBe<uint>(5);
+            lowFlowQueueSummary.Unhealthy.Percentage.ShouldBe(62.5M);
             lowFlowQueueSummary.Warning.Total.ShouldBe<uint>(0);
             lowFlowQueueSummary.Warning.Percentage.ShouldBe(0);
             lowFlowQueueSummary.Inconclusive.Total.ShouldBe<uint>(0);

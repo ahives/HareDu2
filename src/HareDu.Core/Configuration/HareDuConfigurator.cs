@@ -11,21 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace HareDu.AutofacIntegration
+namespace HareDu.Core.Configuration
 {
-    using Autofac;
-    using Core.Configuration;
-    using Registration;
+    using System;
 
-    public static class HareDuExtensions
+    public interface HareDuConfigurator
     {
-        public static ContainerBuilder AddHareDu(this ContainerBuilder builder)
-        {
-            builder.Register(x => new BrokerObjectFactory(x.Resolve<HareDuConfig>()))
-                .As<IBrokerObjectFactory>()
-                .SingleInstance();
-
-            return builder;
-        }
+        void Diagnostics(Action<DiagnosticsConfigurator> configurator);
+        
+        void Broker(Action<BrokerConfigurator> configurator);
     }
 }

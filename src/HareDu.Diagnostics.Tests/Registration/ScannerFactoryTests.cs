@@ -39,6 +39,7 @@ namespace HareDu.Diagnostics.Tests.Registration
         public void Init()
         {
             _container = new ContainerBuilder()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
                 .AddHareDuDiagnostics()
                 .Build();
@@ -109,7 +110,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             provider.TryGet(path, out HareDuConfig config);
             
             var knowledgeBaseProvider = new KnowledgeBaseProvider();
-            var factory = new ScannerFactory(config.Diagnostics, knowledgeBaseProvider);
+            var factory = new ScannerFactory(config, knowledgeBaseProvider);
 
             factory.TryGet<FakeSnapshot>(out _).ShouldBeFalse();
 //            Assert.AreEqual(typeof(DoNothingDiagnostic<ConnectionSnapshot>).FullName.GenerateIdentifier(), diagnostic.Identifier);
@@ -121,7 +122,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
             
             var probes1 = factory.GetProbes();
             
@@ -145,7 +146,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
             var probes = factory.GetProbes();
             
@@ -160,7 +161,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
             bool registered = factory.TryRegisterAllProbes();
             var probes = factory.GetProbes();
@@ -177,7 +178,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
             var scanners = factory.GetScanners();
             
@@ -192,7 +193,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
             bool registered = factory.TryRegisterAllScanners();
             
@@ -210,7 +211,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
             
             var scanners1 = factory.GetScanners();
             
@@ -235,7 +236,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             var configProvider = new YamlFileConfigProvider();
             configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
-            var factory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
             factory.RegisterObserver(new ConfigOverrideObserver());
             

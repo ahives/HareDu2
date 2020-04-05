@@ -34,9 +34,9 @@ namespace HareDu.Diagnostics.Registration
         readonly ConcurrentDictionary<string, object> _scannerCache;
         readonly ConcurrentDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
-        readonly DiagnosticsConfig _config;
+        readonly HareDuConfig _config;
 
-        public ScannerFactory(DiagnosticsConfig config, IKnowledgeBaseProvider kb)
+        public ScannerFactory(HareDuConfig config, IKnowledgeBaseProvider kb)
         {
             _config = !config.IsNull() ? config : throw new HareDuDiagnosticsException($"{nameof(config)} argument missing.");
             _kb = !kb.IsNull() ? kb : throw new HareDuDiagnosticsException($"{nameof(kb)} argument missing.");
@@ -296,7 +296,7 @@ namespace HareDu.Diagnostics.Registration
         {
             var instance = type.GetConstructors()[0].GetParameters()[0].ParameterType == typeof(DiagnosticsConfig)
                            && type.GetConstructors()[0].GetParameters()[1].ParameterType == typeof(IKnowledgeBaseProvider)
-                ? (DiagnosticProbe) Activator.CreateInstance(type, _config, _kb)
+                ? (DiagnosticProbe) Activator.CreateInstance(type, _config.Diagnostics, _kb)
                 : (DiagnosticProbe) Activator.CreateInstance(type, _kb);
             
             return instance;

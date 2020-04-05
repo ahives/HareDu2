@@ -25,7 +25,7 @@ namespace HareDu.Core.Configuration
             if (configurator == null)
                 return ConfigCache.Default.Diagnostics;
             
-            var impl = new DiagnosticProbesConfiguratorImpl();
+            var impl = new DiagnosticsConfiguratorImpl();
             configurator(impl);
 
             DiagnosticsConfig config = impl.Settings.Value;
@@ -47,7 +47,7 @@ namespace HareDu.Core.Configuration
             && config.Probes.RuntimeProcessUsageThresholdCoefficient > 0;
 
 
-        class DiagnosticProbesConfiguratorImpl :
+        class DiagnosticsConfiguratorImpl :
             DiagnosticProbesConfigurator
         {
             uint _highClosureRateWarningThreshold;
@@ -62,7 +62,7 @@ namespace HareDu.Core.Configuration
             
             public Lazy<DiagnosticsConfig> Settings { get; }
 
-            public DiagnosticProbesConfiguratorImpl()
+            public DiagnosticsConfiguratorImpl()
             {
                 Settings = new Lazy<DiagnosticsConfig>(
                     () => new DiagnosticsConfigImpl(
@@ -78,6 +78,7 @@ namespace HareDu.Core.Configuration
                             _consumerUtilizationWarningCoefficient)), LazyThreadSafetyMode.PublicationOnly);
             }
 
+            
             class ProbesImpl :
                 ProbesConfig
             {

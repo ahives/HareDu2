@@ -24,7 +24,7 @@ namespace HareDu.Snapshotting.Registration
     public class SnapshotFactory :
         ISnapshotFactory
     {
-        readonly BrokerConfig _config;
+        readonly HareDuConfig _config;
         readonly IBrokerObjectFactory _factory;
         readonly IDictionary<string, object> _cache;
 
@@ -37,7 +37,7 @@ namespace HareDu.Snapshotting.Registration
                 throw new HareDuSnapshotInitException("Could not register snapshot lenses.");
         }
 
-        public SnapshotFactory(BrokerConfig config)
+        public SnapshotFactory(HareDuConfig config)
         {
             _config = config;
             _factory = new BrokerObjectFactory(_config);

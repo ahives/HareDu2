@@ -13,8 +13,6 @@
 // limitations under the License.
 namespace HareDu.CoreIntegration
 {
-    using System.IO;
-    using Core;
     using Core.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -29,55 +27,10 @@ namespace HareDu.CoreIntegration
         /// <returns></returns>
         public static IServiceCollection AddHareDu(this IServiceCollection services)
         {
-            HareDuConfig config = GetConfig($"{Directory.GetCurrentDirectory()}/haredu.yaml");
-            
-            services.Register(config);
-            
-            return services;
-        }
-
-        /// <summary>
-        /// Registers all the necessary components to use the low level HareDu Broker Object API.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddHareDu(this IServiceCollection services, string file)
-        {
-            HareDuConfig config = GetConfig(file);
-            
-            services.Register(config);
-            
-            return services;
-        }
-
-        static void Register(this IServiceCollection services, HareDuConfig config)
-        {
-            services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
-            
-            services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
-            
-            services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();
-            
-            services.TryAddSingleton<IConfigValidator, HareDuConfigValidator>();
-
             services.TryAddSingleton<IBrokerObjectFactory>(x =>
-                new BrokerObjectFactory(config.Broker));
-        }
-
-        static HareDuConfig GetConfig(string file)
-        {
-            IFileConfigProvider provider = new YamlFileConfigProvider();
+                new BrokerObjectFactory(x.GetService<HareDuConfig>()));
             
-            if (!provider.TryGet(file, out HareDuConfig config))
-                throw new HareDuConfigurationException($"Not able to get settings from {file}.");
-
-            IConfigValidator validator = new HareDuConfigValidator();
-
-            if (!validator.IsValid(config))
-                throw new HareDuConfigurationException($"Invalid settings in {file}.");
-
-            return config;
+            return services;
         }
     }
 }

@@ -55,6 +55,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         public async Task Should_be_able_to_get_all_exchanges_2()
         {
             var services = new ServiceCollection()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
                 .BuildServiceProvider();
             
@@ -81,7 +82,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [Test]
         public async Task Should_be_able_to_get_all_exchanges_3()
         {
-            var provider = new BrokerConfigProvider();
+            // var provider = new BrokerConfigProvider();
+            var provider = new HareDuConfigProvider();
             var config = provider.Configure(x => { });
             var factory = new BrokerObjectFactory(config);
             

@@ -13,9 +13,6 @@
 // limitations under the License.
 namespace HareDu.CoreIntegration
 {
-    using System.IO;
-    using Core;
-    using Core.Configuration;
     using Diagnostics;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
@@ -23,8 +20,6 @@ namespace HareDu.CoreIntegration
     using Diagnostics.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
-    using Registration;
-    using Snapshotting.Registration;
 
     public static class HareDuDiagnosticsExtensions
     {
@@ -35,61 +30,19 @@ namespace HareDu.CoreIntegration
         /// <returns></returns>
         public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services)
         {
-            HareDuConfig config = GetConfig($"{Directory.GetCurrentDirectory()}/haredu.yaml");
-            
-            services.Register(config);
-
-            return services;
-        }
-
-        /// <summary>
-        /// Registers all the necessary components to use the HareDu Diagnostics API.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddHareDuDiagnostics(this IServiceCollection services, string file)
-        {
-            HareDuConfig config = GetConfig(file);
-            
-            services.Register(config);
-            
-            return services;
-        }
-
-        static void Register(this IServiceCollection services, HareDuConfig config)
-        {
-            services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
-
             services.TryAddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
 
             services.TryAddSingleton<IScanner, Scanner>();
 
             services.TryAddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
-
-            services.TryAddSingleton<ISnapshotFactory, SnapshotFactory>();
-
-            services.TryAddSingleton<IScannerFactory>(x =>
-                new ScannerFactory(config.Diagnostics, x.GetService<IKnowledgeBaseProvider>()));
+            
+            services.TryAddSingleton<IScannerFactory, ScannerFactory>();
             
             services.TryAddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();
 
             services.TryAddSingleton<IDiagnosticWriter, DiagnosticWriter>();
-        }
 
-        static HareDuConfig GetConfig(string file)
-        {
-            IFileConfigProvider provider = new YamlFileConfigProvider();
-            
-            if (!provider.TryGet(file, out HareDuConfig config))
-                throw new HareDuConfigurationException($"Not able to get settings from {file}.");
-
-            IConfigValidator validator = new HareDuConfigValidator();
-
-            if (!validator.IsValid(config))
-                throw new HareDuConfigurationException($"Invalid settings in {file}.");
-
-            return config;
+            return services;
         }
     }
 }

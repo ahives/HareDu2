@@ -13,39 +13,21 @@
 // limitations under the License.
 namespace HareDu.AutofacIntegration
 {
-    using System.IO;
     using Autofac;
-    using Core;
     using Core.Configuration;
     using Diagnostics;
     using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
 
+    /// <summary>
+    /// Registers all the necessary components to use the HareDu Diagnostics API.
+    /// </summary>
     public static class HareDuDiagnosticsExtensions
     {
-        public static ContainerBuilder AddHareDuDiagnostics(this ContainerBuilder builder, string file)
-        {
-            HareDuConfig config = GetConfig(file);
-            
-            builder.Register(config);
-            
-            return builder;
-        }
-
         public static ContainerBuilder AddHareDuDiagnostics(this ContainerBuilder builder)
         {
-            HareDuConfig config = GetConfig($"{Directory.GetCurrentDirectory()}/haredu.yaml");
-            
-            builder.Register(config);
-
-            return builder;
-        }
-
-        static void Register(this ContainerBuilder builder, HareDuConfig config)
-        {
-            builder.Register(x =>
-                    new ScannerFactory(config.Diagnostics, x.Resolve<IKnowledgeBaseProvider>()))
+            builder.RegisterType<ScannerFactory>()
                 .As<IScannerFactory>()
                 .SingleInstance();
 
@@ -68,21 +50,8 @@ namespace HareDu.AutofacIntegration
             builder.RegisterType<KnowledgeBaseProvider>()
                 .As<IKnowledgeBaseProvider>()
                 .SingleInstance();
-        }
 
-        static HareDuConfig GetConfig(string file)
-        {
-            IFileConfigProvider provider = new YamlFileConfigProvider();
-            
-            if (!provider.TryGet(file, out HareDuConfig config))
-                throw new HareDuConfigurationException($"Not able to get settings from {file}.");
-
-            IConfigValidator validator = new HareDuConfigValidator();
-
-            if (!validator.IsValid(config))
-                throw new HareDuConfigurationException($"Invalid settings in {file}.");
-
-            return config;
+            return builder;
         }
     }
 }
