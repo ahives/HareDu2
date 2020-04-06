@@ -29,27 +29,27 @@ namespace HareDu.Tests
 
     public class HareDuTesting
     {
-        protected ContainerBuilder GetContainerBuilder(string path)
+        protected ContainerBuilder GetContainerBuilder(string file)
         {
             var builder = new ContainerBuilder();
-
+            
             builder.Register(x =>
                 {
-                    string data = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{path}");
+                    string data = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{file}");
                     
                     return new BrokerObjectFactory(GetClient(data));
                 })
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
-
+            
             builder.RegisterType<BrokerConfigProvider>()
                 .As<IBrokerConfigProvider>()
                 .SingleInstance();
-
+            
             builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
                 .SingleInstance();
-
+            
             return builder;
         }
 

@@ -73,7 +73,7 @@ namespace HareDu.Core.Configuration
             class BrokerConfigImpl :
                 BrokerConfig
             {
-                public BrokerConfigImpl(RabbitMqBrokerConfigYaml config)
+                public BrokerConfigImpl(BrokerConfigYaml config)
                 {
                     Url = config.BrokerUrl;
                     Timeout = config.Timeout;

@@ -1,4 +1,5 @@
 # Configuration
+
 Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API, which all other APIs are built on top of. The section called *diagnostics* has the configuration needed to configure the Diagnostics API.
 
 The minimum required configuration to use HareDu requires setting up communication with the RabbitMQ broker. To do so, you must have the following:
@@ -13,7 +14,15 @@ url:  http://localhost:15672
 ```
 *C#*
 ```csharp
-var config = provider.Configure(x => x.ConnectTo("http://localhost:15672"));
+var config = provider.Configure(x =>
+{
+    x.Broker(y =>
+    {
+        y.ConnectTo("http://localhost:15672");
+            ...
+    });
+    ...
+}
 ```
 <br>
 
@@ -28,7 +37,15 @@ password: guest
 ```
 *C#*
 ```csharp
-var config = provider.Configure(x => x.UsingCredentials("guest", "guest"));
+var config = provider.Configure(x =>
+{
+    x.Broker(y =>
+    {
+            ...
+        y.UsingCredentials("guest", "guest");
+    });
+    ...
+}
 ```
 <br>
 
@@ -42,7 +59,15 @@ timeout: 00:00:30
 ```
 *C#*
 ```csharp
-var config = provider.Configure(x => x.TimeoutAfter(new TimeSpan(0, 0, 30)));
+var config = provider.Configure(x =>
+{
+    x.Broker(y =>
+    {
+        y.TimeoutAfter(new TimeSpan(0, 0, 30));
+            ...
+    });
+    ...
+}
 ```
 
 <br>
@@ -70,7 +95,19 @@ high-closure-rate-threshold:  100
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetHighClosureRateThreshold(100));
+var config = provider.Configure(x =>
+{
+    ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetHighClosureRateThreshold(100);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -85,7 +122,19 @@ high-creation-rate-threshold: 100
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetHighCreationRateThreshold(100));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetHighCreationRateThreshold(100);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -100,7 +149,20 @@ queue-high-flow-threshold:  100
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetQueueHighFlowThreshold(100));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetQueueHighFlowThreshold(100);
+                ...
+        });
+    });
+});
+
 ```
 <br>
 
@@ -115,7 +177,19 @@ queue-low-flow-threshold: 20
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetQueueLowFlowThreshold(20));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetQueueLowFlowThreshold(20);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -130,7 +204,19 @@ message-redelivery-threshold-coefficient: 0.50
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetMessageRedeliveryThresholdCoefficient(0.50M));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetMessageRedeliveryThresholdCoefficient(0.50M);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -145,7 +231,19 @@ socket-usage-threshold-coefficient: 0.60
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetSocketUsageThresholdCoefficient(0.60M));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetSocketUsageThresholdCoefficient(0.60M);
+                ...
+        });
+    });
+});
 ```
 
 <br>
@@ -161,7 +259,19 @@ runtime-process-usage-threshold-coefficient:  0.65
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetRuntimeProcessUsageThresholdCoefficient(0.65M));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -176,7 +286,19 @@ file-descriptor-usage-threshold-coefficient:  0.65
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetFileDescriptorUsageThresholdCoefficient(0.65M));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -191,7 +313,19 @@ consumer-utilization-threshold: 0.50
 
 *C#*
 ```csharp
-var config = provider.Configure(x => x.SetConsumerUtilizationThreshold(0.50M));
+var config = provider.Configure(x =>
+{
+        ...
+    
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetConsumerUtilizationThreshold(0.50M);
+                ...
+        });
+    });
+});
 ```
 <br>
 
@@ -269,87 +403,63 @@ There are several ways to configure HareDu programmatically. Let's look at the m
 
 <br>
 
-**Scenario 1: Dude, I just want to configure the Broker/Snapshot API**
+**Dude, I don't care about YAML**
 
-First, you need to initialize ```BrokerConfigProvider```...
+First, you need to initialize ```HareDuConfigProvider```...
 
 *Do it yourself*
 ```csharp
-var provider = new BrokerConfigProvider();
+var provider = new HareDuConfigProvider();
 ```
-<br>
 
 *Autofac*
-
 ```csharp
-var provider = _container.Resolve<IBrokerConfigProvider>();
+var provider = _container.Resolve<IHareDuConfigProvider>();
 ```
-<br>
 
 *.NET Core DI*
 ```csharp
-var provider = _services.GetService<IBrokerConfigProvider>();
+var provider = _services.GetService<IHareDuConfigProvider>();
 ```
 <br>
 
-From here you can use the initialized provider to set configuration settings on the Broker API like so...
+From here you can use the initialized provider to set configuration settings on all the HareDu APIs like so...
 ```csharp
 var config = provider.Configure(x =>
 {
-    x.ConnectTo("http://localhost:15672");
-    x.UsingCredentials("guest", "guest");
-    x.TimeoutAfter(new TimeSpan(0, 0, 30));
+    x.Broker(y =>
+    {
+        y.ConnectTo("http://localhost:15672");
+        y.UsingCredentials("guest", "guest");
+        y.TimeoutAfter(new TimeSpan(0, 0, 30));
+    });
+
+    x.Diagnostics(y =>
+    {
+        y.Probes(z =>
+        {
+            z.SetMessageRedeliveryThresholdCoefficient(0.60M);
+            z.SetSocketUsageThresholdCoefficient(0.60M);
+            z.SetConsumerUtilizationThreshold(0.65M);
+            z.SetQueueHighFlowThreshold(90);
+            z.SetQueueLowFlowThreshold(10);
+            z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+            z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+            z.SetHighClosureRateThreshold(90);
+            z.SetHighCreationRateThreshold(60);
+        });
+    });
 });
 ```
 <br>
 
-From here, you need only call ```config.Broker``` to access the broker configuration.
+From here, you need only call ```config.Broker``` or ```config.Diagnostics``` to access configuration data.
 
-<br>
+It is assumed that you will not need to change settings after API objects are initialized. HareDu is an immutable API so it is recommended that most API objects be initialized using the Singleton pattern. Because of this, it can be difficult to update configuration. Don't worry, HareDu got you covered! HareDu, not only allows you to safely update configuration after initialization, it also allows you to register observers that will notify you of changes to the original configuration settings.
 
-**Scenario 2: Dude, I just want to configure the Diagnostics API**
+Updating configuration is as easy as calling the appropriate ```UpdateConfiguration``` method on the corresponding object.
 
-First, you need to initialize ```DiagnosticsConfigProvider```...  
-
-*Do it yourself*
-```csharp
-var provider = new DiagnosticsConfigProvider();
-```
-<br>
-
-*Autofac*
-
-```csharp
-var provider = _container.Resolve<IDiagnosticsConfigProvider>();
-```
-<br>
-
-*.NET Core DI*
-```csharp
-var provider = _services.GetService<IDiagnosticsConfigProvider>();
-```
-<br>
-
-From here you can use the initialized provider to set configuration settings on the Diagnostics API like this...
-```csharp
-var config = provider.Configure(x =>
-            {
-                x.SetMessageRedeliveryThresholdCoefficient(0.60M);
-                x.SetSocketUsageThresholdCoefficient(0.60M);
-                x.SetConsumerUtilizationThreshold(0.65M);
-                x.SetQueueHighFlowThreshold(90);
-                x.SetQueueLowFlowThreshold(10);
-                x.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
-                x.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-                x.SetHighClosureRateThreshold(90);
-                x.SetHighCreationRateThreshold(60);
-            });
-```
-<br>
-
-In every one of the above scenarios it is assumed that you will not need to change settings after API objects are initialized. Since the HareDu API is immutable and it is recommended that most API objects be initialized using the Singleton pattern, it becomes somewhat difficult to override this behavior. HareDu got you covered! You can register an observer that will notify you of changes to the original configuration settings.
-
-Create a class that implements ```IObserver<T>``` like so...
+Next, create a class that implements ```IObserver<T>``` like so...
 ```csharp
 public class ConfigOverrideObserver :
     IObserver<ProbeConfigurationContext>

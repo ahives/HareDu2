@@ -34,7 +34,11 @@ namespace HareDu.Diagnostics.Registration
         readonly ConcurrentDictionary<string, object> _scannerCache;
         readonly ConcurrentDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
-        readonly HareDuConfig _config;
+        HareDuConfig _config;
+
+        public IReadOnlyDictionary<string, DiagnosticProbe> Probes => _probeCache;
+
+        public IReadOnlyDictionary<string, object> Scanners => _scannerCache;
 
         public ScannerFactory(HareDuConfig config, IKnowledgeBaseProvider kb)
         {
@@ -142,10 +146,6 @@ namespace HareDu.Diagnostics.Registration
             return _scannerCache.TryAdd(typeof(T).FullName, scanner);
         }
 
-        public IReadOnlyDictionary<string, DiagnosticProbe> GetProbes() => _probeCache;
-        
-        public IReadOnlyDictionary<string, object> GetScanners() => _scannerCache;
-
         public bool TryRegisterAllProbes()
         {
             var typeMap = GetProbeTypeMap(GetType());
@@ -184,14 +184,16 @@ namespace HareDu.Diagnostics.Registration
             return registered;
         }
 
-        public void OverrideConfig(DiagnosticsConfig config)
+        public void UpdateConfiguration(HareDuConfig config)
         {
+            _config = config;
+            
             var probes = _probeCache.Values.ToList();
             
             for (int i = 0; i < probes.Count; i++)
             {
-                if (probes[i] is IOverrideConfiguration)
-                    probes[i].Cast<IOverrideConfiguration>().OverrideConfig(config);
+                if (probes[i] is IUpdateProbeConfiguration)
+                    probes[i].Cast<IUpdateProbeConfiguration>().UpdateConfiguration(config.Diagnostics);
             }
         }
 

@@ -13,10 +13,8 @@
 // limitations under the License.
 namespace HareDu.Core.Configuration
 {
-    using System;
-
-    public interface IDiagnosticsConfigProvider
+    public interface IUpdateProbeConfiguration
     {
-        DiagnosticsConfig Configure(Action<DiagnosticProbesConfigurator> configurator);
+        void UpdateConfiguration(DiagnosticsConfig config);
     }
 }

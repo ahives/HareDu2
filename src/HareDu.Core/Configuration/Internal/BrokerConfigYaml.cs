@@ -16,7 +16,7 @@ namespace HareDu.Core.Configuration.Internal
     using System;
     using YamlDotNet.Serialization;
 
-    class RabbitMqBrokerConfigYaml
+    class BrokerConfigYaml
     {
         [YamlMember(Alias = "url")]
         public string BrokerUrl { get; set; }

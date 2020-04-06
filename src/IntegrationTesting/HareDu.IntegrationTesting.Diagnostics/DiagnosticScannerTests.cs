@@ -195,12 +195,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
         [Test]
         public async Task Test5()
         {
-            // var provider1 = new BrokerConfigProvider();
-            // var config1 = provider1.Configure(x =>
-            // {
-            //     x.ConnectTo("http://localhost:15672");
-            //     x.UsingCredentials("guest", "guest");
-            // });
             var provider = new HareDuConfigProvider();
 
             var config1 = provider.Configure(x =>

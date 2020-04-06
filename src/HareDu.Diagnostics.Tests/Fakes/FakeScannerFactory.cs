@@ -24,6 +24,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeScannerFactory :
         IScannerFactory
     {
+        public IReadOnlyDictionary<string, DiagnosticProbe> Probes { get; }
+        public IReadOnlyDictionary<string, object> Scanners { get; }
+
         public bool TryGet<T>(out DiagnosticScanner<T> scanner)
             where T : Snapshot
         {
@@ -42,11 +45,8 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public bool RegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
         public bool RegisterScanner<T>(DiagnosticScanner<T> scanner) where T : Snapshot => throw new NotImplementedException();
 
-        public IReadOnlyDictionary<string, DiagnosticProbe> GetProbes() => throw new NotImplementedException();
-        public IReadOnlyDictionary<string, object> GetScanners() => throw new NotImplementedException();
-
         public bool TryRegisterAllProbes() => throw new NotImplementedException();
         public bool TryRegisterAllScanners() => throw new NotImplementedException();
-        public void OverrideConfig(DiagnosticsConfig config) => throw new NotImplementedException();
+        public void UpdateConfiguration(HareDuConfig config) => throw new NotImplementedException();
     }
 }

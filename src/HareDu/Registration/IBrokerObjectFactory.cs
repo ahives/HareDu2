@@ -19,8 +19,6 @@ namespace HareDu.Registration
 
     public interface IBrokerObjectFactory
     {
-        HareDuConfig Config { get; }
-        
         /// <summary>
         /// Creates a new instance of object implemented by T, which encapsulates a group of resources (e.g. Virtual Host, Exchange, Queue, User, etc.)
         /// that are exposed by the RabbitMQ server via its REST API.

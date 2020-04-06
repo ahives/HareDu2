@@ -18,7 +18,7 @@ namespace HareDu.Core.Configuration.Internal
     class HareDuConfigYaml
     {
         [YamlMember(Alias = "broker")]
-        public RabbitMqBrokerConfigYaml Broker { get; set; }
+        public BrokerConfigYaml Broker { get; set; }
 
         [YamlMember(Alias = "diagnostics")]
         public DiagnosticsConfigYaml Diagnostics { get; set; }

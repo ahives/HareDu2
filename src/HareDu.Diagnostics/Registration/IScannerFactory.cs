@@ -22,6 +22,10 @@ namespace HareDu.Diagnostics.Registration
 
     public interface IScannerFactory
     {
+        IReadOnlyDictionary<string, DiagnosticProbe> Probes { get; }
+        
+        IReadOnlyDictionary<string, object> Scanners { get; }
+        
         bool TryGet<T>(out DiagnosticScanner<T> scanner)
             where T : Snapshot;
 
@@ -39,14 +43,10 @@ namespace HareDu.Diagnostics.Registration
         bool RegisterScanner<T>(DiagnosticScanner<T> scanner)
             where T : Snapshot;
 
-        IReadOnlyDictionary<string, DiagnosticProbe> GetProbes();
-
-        IReadOnlyDictionary<string, object> GetScanners();
-
         bool TryRegisterAllProbes();
 
         bool TryRegisterAllScanners();
 
-        void OverrideConfig(DiagnosticsConfig config);
+        void UpdateConfiguration(HareDuConfig config);
     }
 }

@@ -124,20 +124,16 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
             
-            var probes1 = factory.GetProbes();
-            
-            probes1.ShouldNotBeNull();
-            probes1.ShouldNotBeEmpty();
-            probes1.Keys.Count().ShouldBe(21);
+            factory.Probes.ShouldNotBeNull();
+            factory.Probes.ShouldNotBeEmpty();
+            factory.Probes.Keys.Count().ShouldBe(21);
 
             bool registered = factory.RegisterProbe(new FakeProbe(5, _container.Resolve<IKnowledgeBaseProvider>()));
             registered.ShouldBeTrue();
             
-            var probes2 = factory.GetProbes();
-            
-            probes2.ShouldNotBeNull();
-            probes2.ShouldNotBeEmpty();
-            probes2.Keys.Count().ShouldBe(22);
+            factory.Probes.ShouldNotBeNull();
+            factory.Probes.ShouldNotBeEmpty();
+            factory.Probes.Keys.Count().ShouldBe(22);
         }
 
         [Test]
@@ -147,12 +143,10 @@ namespace HareDu.Diagnostics.Tests.Registration
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
-
-            var probes = factory.GetProbes();
             
-            probes.ShouldNotBeNull();
-            probes.ShouldNotBeEmpty();
-            probes.Keys.Count().ShouldBe(21);
+            factory.Probes.ShouldNotBeNull();
+            factory.Probes.ShouldNotBeEmpty();
+            factory.Probes.Keys.Count().ShouldBe(21);
         }
 
         [Test]
@@ -164,12 +158,11 @@ namespace HareDu.Diagnostics.Tests.Registration
             var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
             bool registered = factory.TryRegisterAllProbes();
-            var probes = factory.GetProbes();
             
             registered.ShouldBeTrue();
-            probes.ShouldNotBeNull();
-            probes.ShouldNotBeEmpty();
-            probes.Keys.Count().ShouldBe(21);
+            factory.Probes.ShouldNotBeNull();
+            factory.Probes.ShouldNotBeEmpty();
+            factory.Probes.Keys.Count().ShouldBe(21);
         }
 
         [Test]
@@ -179,12 +172,10 @@ namespace HareDu.Diagnostics.Tests.Registration
             provider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
 
             var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
-
-            var scanners = factory.GetScanners();
             
-            scanners.ShouldNotBeNull();
-            scanners.ShouldNotBeEmpty();
-            scanners.Keys.Count().ShouldBe(3);
+            factory.Scanners.ShouldNotBeNull();
+            factory.Scanners.ShouldNotBeEmpty();
+            factory.Scanners.Keys.Count().ShouldBe(3);
         }
 
         [Test]
@@ -197,12 +188,10 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             bool registered = factory.TryRegisterAllScanners();
             
-            var scanners = factory.GetScanners();
-            
             registered.ShouldBeTrue();
-            scanners.ShouldNotBeNull();
-            scanners.ShouldNotBeEmpty();
-            scanners.Keys.Count().ShouldBe(3);
+            factory.Scanners.ShouldNotBeNull();
+            factory.Scanners.ShouldNotBeEmpty();
+            factory.Scanners.Keys.Count().ShouldBe(3);
         }
 
         [Test]
@@ -213,49 +202,57 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
             
-            var scanners1 = factory.GetScanners();
-            
-            scanners1.ShouldNotBeNull();
-            scanners1.ShouldNotBeEmpty();
-            scanners1.Keys.Count().ShouldBe(3);
+            factory.Scanners.ShouldNotBeNull();
+            factory.Scanners.ShouldNotBeEmpty();
+            factory.Scanners.Keys.Count().ShouldBe(3);
 
             bool registered = factory.RegisterScanner(new FakeDiagnosticScanner());
             registered.ShouldBeTrue();
             registered.ShouldBeTrue();
             
-            var scanners2 = factory.GetScanners();
-            
-            scanners2.ShouldNotBeNull();
-            scanners2.ShouldNotBeEmpty();
-            scanners2.Keys.Count().ShouldBe(4);
+            factory.Scanners.ShouldNotBeNull();
+            factory.Scanners.ShouldNotBeEmpty();
+            factory.Scanners.Keys.Count().ShouldBe(4);
         }
 
         [Test]
         public void Verify_can_override_config()
         {
             var configProvider = new YamlFileConfigProvider();
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config);
+            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config1);
 
-            var factory = new ScannerFactory(config, new KnowledgeBaseProvider());
+            var factory = new ScannerFactory(config1, new KnowledgeBaseProvider());
 
             factory.RegisterObserver(new ConfigOverrideObserver());
-            
-            var provider = new DiagnosticsConfigProvider();
+
+            var provider = new HareDuConfigProvider();
 
             var config2 = provider.Configure(x =>
             {
-                x.SetMessageRedeliveryThresholdCoefficient(0.60M);
-                x.SetSocketUsageThresholdCoefficient(0.60M);
-                x.SetConsumerUtilizationThreshold(0.65M);
-                x.SetQueueHighFlowThreshold(90);
-                x.SetQueueLowFlowThreshold(10);
-                x.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
-                x.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-                x.SetHighClosureRateThreshold(90);
-                x.SetHighCreationRateThreshold(60);
+                x.Broker(y =>
+                {
+                    y.ConnectTo("http://localhost:15672");
+                    y.UsingCredentials("guest", "guest");
+                });
+
+                x.Diagnostics(y =>
+                {
+                    y.Probes(z =>
+                    {
+                        z.SetMessageRedeliveryThresholdCoefficient(0.60M);
+                        z.SetSocketUsageThresholdCoefficient(0.60M);
+                        z.SetConsumerUtilizationThreshold(0.65M);
+                        z.SetQueueHighFlowThreshold(90);
+                        z.SetQueueLowFlowThreshold(10);
+                        z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                        z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                        z.SetHighClosureRateThreshold(90);
+                        z.SetHighCreationRateThreshold(60);
+                    });
+                });
             });
             
-            factory.OverrideConfig(config2);
+            factory.UpdateConfiguration(config2);
         }
 
         

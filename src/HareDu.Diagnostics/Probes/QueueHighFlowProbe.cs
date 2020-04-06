@@ -21,7 +21,7 @@ namespace HareDu.Diagnostics.Probes
 
     public class QueueHighFlowProbe :
         BaseDiagnosticProbe,
-        IOverrideConfiguration,
+        IUpdateProbeConfiguration,
         DiagnosticProbe
     {
         DiagnosticsConfig _config;
@@ -92,7 +92,7 @@ namespace HareDu.Diagnostics.Probes
             return result;
         }
 
-        public void OverrideConfig(DiagnosticsConfig config)
+        public void UpdateConfiguration(DiagnosticsConfig config)
         {
             DiagnosticsConfig current = _config;
             _config = config;

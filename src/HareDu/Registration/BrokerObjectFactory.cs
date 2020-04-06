@@ -30,8 +30,6 @@ namespace HareDu.Registration
         readonly HttpClient _client;
         readonly ConcurrentDictionary<string, object> _cache;
 
-        public HareDuConfig Config { get; }
-
         public BrokerObjectFactory(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -43,8 +41,6 @@ namespace HareDu.Registration
 
         public BrokerObjectFactory(HareDuConfig config)
         {
-            Config = config;
-            
             _client = GetClient(config);
             _cache = new ConcurrentDictionary<string, object>();
             
