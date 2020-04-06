@@ -39,10 +39,6 @@ namespace HareDu.CoreIntegration
         {
             services.TryAddSingleton<IHareDuConfigProvider, HareDuConfigProvider>();
             
-            services.TryAddSingleton<IDiagnosticsConfigProvider, DiagnosticsConfigProvider>();
-
-            services.TryAddSingleton<IBrokerConfigProvider, BrokerConfigProvider>();
-            
             services.TryAddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
             
             services.TryAddSingleton<IConfigProvider, YamlConfigProvider>();

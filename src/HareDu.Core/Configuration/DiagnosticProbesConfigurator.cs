@@ -15,9 +15,9 @@ namespace HareDu.Core.Configuration
 {
     public interface DiagnosticProbesConfigurator
     {
-        void SetHighClosureRateThreshold(uint value);
+        void SetHighConnectionClosureRateThreshold(uint value);
         
-        void SetHighCreationRateThreshold(uint value);
+        void SetHighConnectionCreationRateThreshold(uint value);
         
         void SetQueueHighFlowThreshold(uint value);
         

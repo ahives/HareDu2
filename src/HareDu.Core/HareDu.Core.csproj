@@ -32,4 +32,10 @@
         <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
         <PackageReference Include="YamlDotNet" Version="8.0.0" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Configuration\IBrokerConfigProvider.cs" />
+      <Compile Remove="Configuration\BrokerConfigProvider.cs" />
+      <Compile Remove="Configuration\DiagnosticsConfigProvider.cs" />
+      <Compile Remove="Configuration\IDiagnosticsConfigProvider.cs" />
+    </ItemGroup>
 </Project>

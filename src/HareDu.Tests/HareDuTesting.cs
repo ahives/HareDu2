@@ -42,10 +42,6 @@ namespace HareDu.Tests
                 .As<IBrokerObjectFactory>()
                 .SingleInstance();
             
-            builder.RegisterType<BrokerConfigProvider>()
-                .As<IBrokerConfigProvider>()
-                .SingleInstance();
-            
             builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>()
                 .SingleInstance();
@@ -59,10 +55,6 @@ namespace HareDu.Tests
 
             builder.Register(x => new BrokerObjectFactory(GetClient(string.Empty)))
                 .As<IBrokerObjectFactory>()
-                .SingleInstance();
-
-            builder.RegisterType<BrokerConfigProvider>()
-                .As<IBrokerConfigProvider>()
                 .SingleInstance();
 
             builder.RegisterType<YamlFileConfigProvider>()

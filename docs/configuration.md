@@ -90,7 +90,7 @@ Defines the maximum acceptable rate of which connections are closed on the Rabbi
 
 *YAML*
 ```yaml
-high-closure-rate-threshold:  100
+high-connection-closure-rate-threshold:  100
 ```
 
 *C#*
@@ -103,7 +103,7 @@ var config = provider.Configure(x =>
     {
         y.Probes(z =>
         {
-            z.SetHighClosureRateThreshold(100);
+            z.SetHighConnectionClosureRateThreshold(100);
                 ...
         });
     });
@@ -117,7 +117,7 @@ Defines the maximum acceptable rate of which connections to the RabbitMQ broker 
 
 *YAML*
 ```yaml
-high-creation-rate-threshold: 100
+high-connection-creation-rate-threshold: 100
 ```
 
 *C#*
@@ -130,7 +130,7 @@ var config = provider.Configure(x =>
     {
         y.Probes(z =>
         {
-            z.SetHighCreationRateThreshold(100);
+            z.SetHighConnectionCreationRateThreshold(100);
                 ...
         });
     });
@@ -341,8 +341,8 @@ The combined YAML configuration looks like this...
       timeout: 00:00:30
   diagnostics:
     probes:
-        high-closure-rate-threshold:  100
-        high-creation-rate-threshold: 100
+        high-connection-closure-rate-threshold:  100
+        high-connection-creation-rate-threshold: 100
         queue-high-flow-threshold:  100
         queue-low-flow-threshold: 20
         message-redelivery-threshold-coefficient: 0.50
@@ -445,8 +445,8 @@ var config = provider.Configure(x =>
             z.SetQueueLowFlowThreshold(10);
             z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
             z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-            z.SetHighClosureRateThreshold(90);
-            z.SetHighCreationRateThreshold(60);
+            z.SetHighConnectionClosureRateThreshold(90);
+            z.SetHighConnectionCreationRateThreshold(60);
         });
     });
 });

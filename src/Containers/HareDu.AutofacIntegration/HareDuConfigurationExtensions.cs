@@ -39,12 +39,6 @@ namespace HareDu.AutofacIntegration
             builder.RegisterType<HareDuConfigProvider>()
                 .As<IHareDuConfigProvider>();
             
-            builder.RegisterType<DiagnosticsConfigProvider>()
-                .As<IDiagnosticsConfigProvider>();
-
-            builder.RegisterType<BrokerConfigProvider>()
-                .As<IBrokerConfigProvider>();
-            
             builder.RegisterType<YamlFileConfigProvider>()
                 .As<IFileConfigProvider>();
             

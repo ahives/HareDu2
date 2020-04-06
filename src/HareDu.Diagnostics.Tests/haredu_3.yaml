@@ -5,8 +5,8 @@ broker:
   password: guest
 diagnostics:
   probes:
-    high-closure-rate-threshold: 90
-    high-creation-rate-threshold: 90
+    high-connection-closure-rate-threshold: 90
+    high-connection-creation-rate-threshold: 90
     runtime-process-usage-threshold-coefficient: 0.7
     file-descriptor-usage-threshold-coefficient: 0.7
     socket-usage-threshold-coefficient: 0.5

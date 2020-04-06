@@ -75,8 +75,8 @@ namespace HareDu.Core.Configuration.Internal
                 {
                     SocketUsageThresholdCoefficient = 0.50M;
                     MessageRedeliveryThresholdCoefficient = 1M;
-                    HighClosureRateThreshold = 100;
-                    HighCreationRateThreshold = 100;
+                    HighConnectionClosureRateThreshold = 100;
+                    HighConnectionCreationRateThreshold = 100;
                     RuntimeProcessUsageThresholdCoefficient = 0.7M;
                     FileDescriptorUsageThresholdCoefficient = 0.7M;
                     ConsumerUtilizationThreshold = 0.50M;
@@ -84,8 +84,8 @@ namespace HareDu.Core.Configuration.Internal
                     QueueHighFlowThreshold = 100;
                 }
 
-                public uint HighClosureRateThreshold { get; }
-                public uint HighCreationRateThreshold { get; }
+                public uint HighConnectionClosureRateThreshold { get; }
+                public uint HighConnectionCreationRateThreshold { get; }
                 public uint QueueHighFlowThreshold { get; }
                 public uint QueueLowFlowThreshold { get; }
                 public decimal MessageRedeliveryThresholdCoefficient { get; }

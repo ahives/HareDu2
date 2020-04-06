@@ -116,8 +116,8 @@ namespace HareDu.Core.Configuration
                 {
                     public ProbesConfigImpl(DiagnosticProbeConfigYaml config)
                     {
-                        HighClosureRateThreshold = config.HighClosureRateThreshold;
-                        HighCreationRateThreshold = config.HighCreationRateThreshold;
+                        HighConnectionClosureRateThreshold = config.HighConnectionClosureRateThreshold;
+                        HighConnectionCreationRateThreshold = config.HighConnectionCreationRateThreshold;
                         QueueHighFlowThreshold = config.QueueHighFlowThreshold;
                         QueueLowFlowThreshold = config.QueueLowFlowThreshold;
                         MessageRedeliveryThresholdCoefficient = config.MessageRedeliveryCoefficient;
@@ -127,8 +127,8 @@ namespace HareDu.Core.Configuration
                         ConsumerUtilizationThreshold = config.ConsumerUtilizationThreshold;
                     }
 
-                    public uint HighClosureRateThreshold { get; }
-                    public uint HighCreationRateThreshold { get; }
+                    public uint HighConnectionClosureRateThreshold { get; }
+                    public uint HighConnectionCreationRateThreshold { get; }
                     public uint QueueHighFlowThreshold { get; }
                     public uint QueueLowFlowThreshold { get; }
                     public decimal MessageRedeliveryThresholdCoefficient { get; }

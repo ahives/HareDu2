@@ -17,11 +17,11 @@ namespace HareDu.Core.Configuration.Internal
 
     class DiagnosticProbeConfigYaml
     {
-        [YamlMember(Alias = "high-closure-rate-threshold")]
-        public uint HighClosureRateThreshold { get; set; }
+        [YamlMember(Alias = "high-connection-closure-rate-threshold")]
+        public uint HighConnectionClosureRateThreshold { get; set; }
         
-        [YamlMember(Alias = "high-creation-rate-threshold")]
-        public uint HighCreationRateThreshold { get; set; }
+        [YamlMember(Alias = "high-connection-creation-rate-threshold")]
+        public uint HighConnectionCreationRateThreshold { get; set; }
         
         [YamlMember(Alias = "queue-high-flow-threshold")]
         public uint QueueHighFlowThreshold { get; set; }

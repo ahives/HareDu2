@@ -39,8 +39,8 @@ namespace HareDu.Core.Configuration
             !config.IsNull()
             && !config.Probes.IsNull()
             && config.Probes.ConsumerUtilizationThreshold > 0
-            && config.Probes.HighClosureRateThreshold > 0
-            && config.Probes.HighCreationRateThreshold > 0
+            && config.Probes.HighConnectionClosureRateThreshold > 0
+            && config.Probes.HighConnectionCreationRateThreshold > 0
             && config.Probes.MessageRedeliveryThresholdCoefficient > 0
             && config.Probes.QueueHighFlowThreshold > 0
             && config.Probes.QueueLowFlowThreshold > 0
@@ -202,9 +202,9 @@ namespace HareDu.Core.Configuration
                             _consumerUtilizationWarningCoefficient), LazyThreadSafetyMode.PublicationOnly);
                 }
 
-                public void SetHighClosureRateThreshold(uint value) => _highClosureRateWarningThreshold = value;
+                public void SetHighConnectionClosureRateThreshold(uint value) => _highClosureRateWarningThreshold = value;
 
-                public void SetHighCreationRateThreshold(uint value) => _highCreationRateWarningThreshold = value;
+                public void SetHighConnectionCreationRateThreshold(uint value) => _highCreationRateWarningThreshold = value;
 
                 public void SetQueueHighFlowThreshold(uint value) => _queueHighFlowThreshold = value;
 
@@ -238,8 +238,8 @@ namespace HareDu.Core.Configuration
                         decimal fileDescriptorUsageThresholdCoefficient,
                         decimal consumerUtilizationThreshold)
                     {
-                        HighClosureRateThreshold = highClosureRateThreshold;
-                        HighCreationRateThreshold = highCreationRateThreshold;
+                        HighConnectionClosureRateThreshold = highClosureRateThreshold;
+                        HighConnectionCreationRateThreshold = highCreationRateThreshold;
                         QueueHighFlowThreshold = queueHighFlowThreshold;
                         QueueLowFlowThreshold = queueLowFlowThreshold;
                         MessageRedeliveryThresholdCoefficient = messageRedeliveryThresholdCoefficient;
@@ -249,8 +249,8 @@ namespace HareDu.Core.Configuration
                         ConsumerUtilizationThreshold = consumerUtilizationThreshold;
                     }
 
-                    public uint HighClosureRateThreshold { get; }
-                    public uint HighCreationRateThreshold { get; }
+                    public uint HighConnectionClosureRateThreshold { get; }
+                    public uint HighConnectionCreationRateThreshold { get; }
                     public uint QueueHighFlowThreshold { get; }
                     public uint QueueLowFlowThreshold { get; }
                     public decimal MessageRedeliveryThresholdCoefficient { get; }

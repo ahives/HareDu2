@@ -15,9 +15,9 @@ namespace HareDu.Core.Configuration
 {
     public interface ProbesConfig
     {
-        uint HighClosureRateThreshold { get; }
+        uint HighConnectionClosureRateThreshold { get; }
         
-        uint HighCreationRateThreshold { get; }
+        uint HighConnectionCreationRateThreshold { get; }
         
         uint QueueHighFlowThreshold { get; }
         

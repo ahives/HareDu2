@@ -216,8 +216,8 @@ namespace HareDu.IntegrationTesting.Diagnostics
                         z.SetQueueLowFlowThreshold(10);
                         z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
                         z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-                        z.SetHighClosureRateThreshold(90);
-                        z.SetHighCreationRateThreshold(60);
+                        z.SetHighConnectionClosureRateThreshold(90);
+                        z.SetHighConnectionCreationRateThreshold(60);
                     });
                 });
             });
@@ -226,21 +226,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var lens = factory1.Lens<BrokerConnectivitySnapshot>();
 
             var result = lens.TakeSnapshot();
-
-            var provider2 = new DiagnosticsConfigProvider();
-
-            var config = provider2.Configure(x =>
-            {
-                x.SetMessageRedeliveryThresholdCoefficient(0.60M);
-                x.SetSocketUsageThresholdCoefficient(0.60M);
-                x.SetConsumerUtilizationThreshold(0.65M);
-                x.SetQueueHighFlowThreshold(90);
-                x.SetQueueLowFlowThreshold(10);
-                x.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
-                x.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-                x.SetHighClosureRateThreshold(90);
-                x.SetHighCreationRateThreshold(60);
-            });
             
             var factory2 = new ScannerFactory(config1, new KnowledgeBaseProvider());
             IScanner scanner = new Scanner(factory2);

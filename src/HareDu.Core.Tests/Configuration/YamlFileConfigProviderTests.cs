@@ -18,8 +18,8 @@ namespace HareDu.Core.Tests.Configuration
             config.Broker.Url.ShouldBe("http://localhost:15672");
             config.Broker.Credentials.Username.ShouldBe("guest");
             config.Broker.Credentials.Password.ShouldBe("guest");
-            config.Diagnostics.Probes.HighClosureRateThreshold.ShouldBe<uint>(90);
-            config.Diagnostics.Probes.HighCreationRateThreshold.ShouldBe<uint>(60);
+            config.Diagnostics.Probes.HighConnectionClosureRateThreshold.ShouldBe<uint>(90);
+            config.Diagnostics.Probes.HighConnectionCreationRateThreshold.ShouldBe<uint>(60);
             config.Diagnostics.Probes.QueueHighFlowThreshold.ShouldBe<uint>(90);
             config.Diagnostics.Probes.QueueLowFlowThreshold.ShouldBe<uint>(10);
             config.Diagnostics.Probes.MessageRedeliveryThresholdCoefficient.ShouldBe(0.60M);
@@ -40,8 +40,8 @@ namespace HareDu.Core.Tests.Configuration
             config.Broker.Url.ShouldBe("http://localhost:15672");
             config.Broker.Credentials.Username.ShouldBe("guest");
             config.Broker.Credentials.Password.ShouldBe("guest");
-            config.Diagnostics.Probes.HighClosureRateThreshold.ShouldBe<uint>(100);
-            config.Diagnostics.Probes.HighCreationRateThreshold.ShouldBe<uint>(100);
+            config.Diagnostics.Probes.HighConnectionClosureRateThreshold.ShouldBe<uint>(100);
+            config.Diagnostics.Probes.HighConnectionCreationRateThreshold.ShouldBe<uint>(100);
             config.Diagnostics.Probes.QueueHighFlowThreshold.ShouldBe<uint>(100);
             config.Diagnostics.Probes.QueueLowFlowThreshold.ShouldBe<uint>(20);
             config.Diagnostics.Probes.MessageRedeliveryThresholdCoefficient.ShouldBe(1M);

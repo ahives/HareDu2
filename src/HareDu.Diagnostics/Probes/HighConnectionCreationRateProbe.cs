@@ -61,10 +61,10 @@ namespace HareDu.Diagnostics.Probes
             var probeData = new List<ProbeData>
             {
                 new ProbeDataImpl("ConnectionsCreated.Rate", data.ConnectionsCreated.Rate.ToString()),
-                new ProbeDataImpl("HighCreationRateThreshold", _config.Probes.HighCreationRateThreshold.ToString())
+                new ProbeDataImpl("HighConnectionCreationRateThreshold", _config.Probes.HighConnectionCreationRateThreshold.ToString())
             };
             
-            if (data.ConnectionsCreated.Rate >= _config.Probes.HighCreationRateThreshold)
+            if (data.ConnectionsCreated.Rate >= _config.Probes.HighConnectionCreationRateThreshold)
             {
                 _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(null,

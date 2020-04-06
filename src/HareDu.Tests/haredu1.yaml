@@ -5,8 +5,8 @@ broker:
   password: guest
 diagnostics:
   probes:
-    high-closure-rate-threshold:  100
-    high-creation-rate-threshold: 100
+    high-connection-closure-rate-threshold:  100
+    high-connection-creation-rate-threshold: 100
     queue-high-flow-threshold:  100
     queue-low-flow-threshold: 20
     message-redelivery-threshold-coefficient: 0.50

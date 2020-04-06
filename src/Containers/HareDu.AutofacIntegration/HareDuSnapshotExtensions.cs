@@ -14,6 +14,7 @@
 namespace HareDu.AutofacIntegration
 {
     using Autofac;
+    using Registration;
     using Snapshotting.Persistence;
     using Snapshotting.Registration;
 
@@ -21,7 +22,7 @@ namespace HareDu.AutofacIntegration
     {
         public static ContainerBuilder AddHareDuSnapshot(this ContainerBuilder builder)
         {
-            builder.RegisterType<SnapshotFactory>()
+            builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
                 .As<ISnapshotFactory>()
                 .SingleInstance();
             

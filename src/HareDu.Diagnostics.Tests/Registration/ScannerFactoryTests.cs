@@ -246,8 +246,8 @@ namespace HareDu.Diagnostics.Tests.Registration
                         z.SetQueueLowFlowThreshold(10);
                         z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
                         z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-                        z.SetHighClosureRateThreshold(90);
-                        z.SetHighCreationRateThreshold(60);
+                        z.SetHighConnectionClosureRateThreshold(90);
+                        z.SetHighConnectionCreationRateThreshold(60);
                     });
                 });
             });
@@ -265,8 +265,8 @@ namespace HareDu.Diagnostics.Tests.Registration
 
             public void OnNext(ProbeConfigurationContext value)
             {
-                value.Current.Probes.HighCreationRateThreshold.ShouldNotBe(value.New.Probes.HighCreationRateThreshold);
-                value.Current.Probes.HighClosureRateThreshold.ShouldNotBe(value.New.Probes.HighClosureRateThreshold);
+                value.Current.Probes.HighConnectionCreationRateThreshold.ShouldNotBe(value.New.Probes.HighConnectionCreationRateThreshold);
+                value.Current.Probes.HighConnectionClosureRateThreshold.ShouldNotBe(value.New.Probes.HighConnectionClosureRateThreshold);
                 value.Current.Probes.ConsumerUtilizationThreshold.ShouldNotBe(value.New.Probes.ConsumerUtilizationThreshold);
                 value.Current.Probes.MessageRedeliveryThresholdCoefficient.ShouldNotBe(value.New.Probes.MessageRedeliveryThresholdCoefficient);
                 value.Current.Probes.QueueHighFlowThreshold.ShouldNotBe(value.New.Probes.QueueHighFlowThreshold);

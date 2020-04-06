@@ -35,10 +35,6 @@ namespace HareDu.AutofacIntegration
                 .As<IScannerResultAnalyzer>()
                 .SingleInstance();
 
-            builder.RegisterType<DiagnosticsConfigProvider>()
-                .As<IDiagnosticsConfigProvider>()
-                .SingleInstance();
-
             builder.RegisterType<Scanner>()
                 .As<IScanner>()
                 .SingleInstance();
