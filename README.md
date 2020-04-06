@@ -12,14 +12,14 @@ HareDu is Apache 2.0 licensed.
 | Package Name | Framework | .NET Standard |
 |---| --- | --- |
 | **Main** |  |  |
-| HareDu.Core | 4.6.2 | 2.0 |
+| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | NA | 2.0 |
 | **API** |  |  |
-| HareDu | 4.6.2 | 2.0 |
-| HareDu.Snapshotting | 4.6.2 | 2.0 |
-| HareDu.Diagnostics | 4.6.2 | 2.0 |
+| [HareDu](https://www.nuget.org/packages/HareDu/) | NA | 2.0 |
+| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | NA | 2.0 |
+| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | NA | 2.0 |
 | **Containers** | | |
-| HareDu.AutofacIntegration | 4.6.2 | 2.0 |
-| HareDu.CoreIntegration | 4.6.2 | 2.0 |
+| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | NA | 2.0 |
+| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | NA | 2.0 |
 
 
 # Why HareDu 2?
@@ -28,7 +28,7 @@ If you are familiar with HareDu, you should know that HareDu 2 introduces some r
 1. Increased test coverage
 2. Improved low level administrative API (i.e. Broker API)
 3. New APIs - Diagnostics, Snapshot, and IoC Container Integration
-4. .NET Core support 
+4. .NET Core support
 
 
 ## Get It
@@ -73,7 +73,7 @@ Note: if you are using JetBrains Rider you can simply configure both projects an
 
 
 # Dependencies
-.NET Framework 4.6.2 or above/.NET Core 2.1 or above
+.NET Core 2.1 or above
 
 JSON.NET 12.0.2 or above
 
@@ -111,5 +111,5 @@ That's it. So, the resulting output of calling the ```ToJsonString``` extension 
 | Operating System | macOS Catalina 10.15.3 |
 | RabbitMQ | 3.7.x, 3.8.2 |
 | Erlang OTP | 22.0.4 (x64) |
-| .NET Runtime | Framework 4.6.2, Core 2.1 |
+| .NET Runtime | Core 2.1 |
 

@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net462;netcoreapp2.1</TargetFrameworks>
         <DebugType>portable</DebugType>
-        <LangVersion>7.1</LangVersion>
+        <LangVersion>7.2</LangVersion>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

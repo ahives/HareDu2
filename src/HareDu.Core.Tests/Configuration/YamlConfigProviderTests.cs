@@ -32,8 +32,8 @@ namespace HareDu.Core.Tests.Configuration
       password: guest
   diagnostics:
     probes:
-      high-closure-rate-threshold:  90
-      high-creation-rate-threshold: 60
+      high-connection-closure-rate-threshold:  90
+      high-connection-creation-rate-threshold: 60
       queue-high-flow-threshold:  90
       queue-low-flow-threshold: 10
       message-redelivery-threshold-coefficient: 0.60

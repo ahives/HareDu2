@@ -16,8 +16,8 @@ namespace HareDu.Core.Tests.Configuration
             {
                 x.Broker(y =>
                 {
-                    y.ConnectTo("http://localhost:15672");
-                    y.UsingCredentials("guest", "guest");
+                    y.ConnectTo("http://localhost:15670");
+                    y.UsingCredentials("guest1", "guest1");
                 });
 
                 x.Diagnostics(y =>
