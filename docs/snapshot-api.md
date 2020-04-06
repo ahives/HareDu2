@@ -10,8 +10,8 @@ Once you have registered a ```SnapshotFactory```, it is easy to take a snapshot.
 
 **Step 1: Define what type of snapshot you want to take**
 ```csharp
-var factory = new SnapshotFactory(new BrokerObjectFactory(config));
-var lens = factory.Lens<BrokerQueuesSnapshot>();
+var lens = new SnapshotFactory(config)
+    .Lens<BrokerQueuesSnapshot>();
 ```
 In this code snippet, the lens variable returns a ``SnapshotLens`` for taking snapshots of type ```BrokerQueuesSnapshot```.
 
@@ -43,7 +43,7 @@ var snapshot = lens.History.MostRecent().Snapshot;
 When setting up ```SnapshotFactory```, you can register observers. These observers should implement ```IObserver<T>``` where ```T``` is ```SnapshotResult<T>```. Each time a snapshot is taken (i.e. when the ```TakeSnapshot``` method is called), all registered observers will be notified with an object of ```SnapshotResult<T>```. Registering an observer is easy enough (see code snippet below) but be sure to do so before calling the ```TakeSnapshot``` method.
 
 ```csharp
-var lens = factory
+var lens = new SnapshotFactory(config)
     .Lens<BrokerQueuesSnapshot>()
     .RegisterObserver(new SomeCoolObserver())
     .RegisterObserver(new SomeOtherCoolObserver());
@@ -69,7 +69,7 @@ var provider = new YamlFileConfigProvider();
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
 // Initialize the snapshot factory
-var factory = new SnapshotFactory(config.Broker);
+var factory = new SnapshotFactory(config);
 
 // Select a snapshot lens and optionally register observers on the lens
 var lens = factory

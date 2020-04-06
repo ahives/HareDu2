@@ -12,7 +12,7 @@ Note: The IoC container code that comes with HareDu currently defaults to file b
 Registering objects without IoC containers is pretty simple as well...
 
 ```csharp
-var scanner = new Scanner(config.Diagnostics, new KnowledgeBaseProvider());
+var scanner = new Scanner(factory);
 ```
 Since the ```Scanner``` should only be initialized once in your application, therefore, you should use the Singleton pattern. Please note that the IoC integrations registers ```Scanner``` as a singleton. This applies to most things in HareDu 2.
 
@@ -56,13 +56,13 @@ var provider = new YamlFileConfigProvider();
 // Get the API configuration
 provider.TryGet("haredu.yaml", out HareDuConfig config);
 
-var snapshotFactory = new SnapshotFactory(config.Broker);
+var snapshotFactory = new SnapshotFactory(config);
 
 // Take a snapshot
 var lens = snapshotFactory.Lens<BrokerQueuesSnapshot>();
 var snapshotResult = lens.TakeSnapshot();
 
-var scannerFactory = new ScannerFactory(config.Diagnostics, new KnowledgeBaseProvider());
+var scannerFactory = new ScannerFactory(config, new KnowledgeBaseProvider());
 
 // Initialize the diagnostic scanner and register the observer
 var scanner = new Scanner(scannerFactory)
