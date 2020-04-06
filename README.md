@@ -9,17 +9,16 @@ HareDu is Apache 2.0 licensed.
 
 ### HareDu 2 NuGet Packages
 
-| Package Name | Framework | .NET Standard |
+| Package Name |  | .NET Standard |
 |---| --- | --- |
-| **Main** |  |  |
-| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | NA | 2.0 |
 | **API** |  |  |
-| [HareDu](https://www.nuget.org/packages/HareDu/) | NA | 2.0 |
-| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | NA | 2.0 |
-| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | NA | 2.0 |
+| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | Configuration API | 2.0 |
+| [HareDu](https://www.nuget.org/packages/HareDu/) | Broker API | 2.0 |
+| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | Snapshot API | 2.0 |
+| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | Diagnostics API | 2.0 |
 | **Containers** | | |
-| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | NA | 2.0 |
-| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | NA | 2.0 |
+| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | Autofac Integration API | 2.0 |
+| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | .NET Core DI Integration API| 2.0 |
 
 
 # Why HareDu 2?
@@ -56,15 +55,12 @@ The above applies for any NuGet package you wish to install.
 
 Under the "IntegrationTesting" solution folder you will find two projects of note, HareDu.IntegrationTesting.Publisher and HareDu.IntegrationTesting.Consumer, respectively. These projects use the popular OSS project MassTransit to interact with the RabbitMQ broker for sending and receiving messages. Follow the below steps in order to test the Diagnostic API.
 
-Ensure that your RabbitMQ broker has the proper plugins enabled by following the below documentation.
-https://www.rabbitmq.com/management.html#clustering
-
-If using .NET Core...  
-1. Create a VirtualHost called "TestVirtualHost"
+1. Ensure that your RabbitMQ broker has the proper plugins enabled by following the [RabbitMQ documentation](https://www.rabbitmq.com/management.html#clustering) .
+2. Create a VirtualHost called "TestVirtualHost"
    Note: This can be done by either using the Broker API or by logging in to the RabbitMQ UI and creating a vhost
-2. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
+3. Bring up a command prompt (e.g., Terminal on MacOS) and execute the following command to start a consumer:
    dotnet ~/<your_path_here>/HareDu2/src/Consumer/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Consumer.dll
-3. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on macOS) and execute the following command to start publishing messages:
+4. Once the consumer(s) have been started, bring up a command prompt (e.g., Terminal on macOS) and execute the following command to start publishing messages:
     dotnet ~/<your_path_here>/HareDu2/src/Publisher/bin/Debug/netcoreapp2.1/HareDu.IntegrationTesting.Publisher.dll
 
 Note: if you are using JetBrains Rider you can simply configure both projects and run them within the IDE.
