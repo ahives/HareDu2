@@ -92,8 +92,8 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                     x.Targeting(l => l.VirtualHost("HareDu"));
                     x.When(c =>
                     {
-//                        c.HasNoConsumers();
-//                        c.IsEmpty();
+                        // c.HasNoConsumers();
+                        // c.IsEmpty();
                     });
                 });
 

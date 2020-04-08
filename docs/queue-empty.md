@@ -1,6 +1,6 @@
 # Purging Queues
 
-The Broker API allows you to purge queues without deleting them. To do so is pretty simple with HareDu. You can do it yourself or the IoC way.
+The Broker API allows you to purge queues without deleting them. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
 
 **Do It Yourself**
 
