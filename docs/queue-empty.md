@@ -5,7 +5,7 @@ The Broker API allows you to purge queues without deleting them. To do so is pre
 **Do It Yourself**
 
 ```csharp
-var result = new BrokerObjectFactory(config)
+var result = await new BrokerObjectFactory(config)
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -19,7 +19,7 @@ var result = new BrokerObjectFactory(config)
 **Autofac**
 
 ```csharp
-var result = _container.Resolve<IBrokerObjectFactory>()
+var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -32,7 +32,7 @@ var result = _container.Resolve<IBrokerObjectFactory>()
 **.NET Core DI**
 
 ```csharp
-var result = _services.GetService<IBrokerObjectFactory>()
+var result = await _services.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {

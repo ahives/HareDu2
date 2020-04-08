@@ -5,7 +5,7 @@ The Broker API allows you to safely look at (i.e. peek) messages on a queue and 
 **Do It Yourself**
 
 ```csharp
-var result = new BrokerObjectFactory(config)
+var result = await new BrokerObjectFactory(config)
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -26,7 +26,7 @@ var result = new BrokerObjectFactory(config)
 **Autofac**
 
 ```csharp
-var result = _container.Resolve<IBrokerObjectFactory>()
+var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -46,7 +46,7 @@ var result = _container.Resolve<IBrokerObjectFactory>()
 **.NET Core DI**
 
 ```csharp
-var result = _services.GetService<IBrokerObjectFactory>()
+var result = await _services.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {

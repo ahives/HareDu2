@@ -5,7 +5,7 @@ The Broker API allows you to delete a queue from the RabbitMQ broker. To do so i
 **Do It Yourself**
 
 ```csharp
-var result = new BrokerObjectFactory(config)
+var result = await new BrokerObjectFactory(config)
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -18,7 +18,7 @@ var result = new BrokerObjectFactory(config)
 **Autofac**
 
 ```csharp
-var result = _container.Resolve<IBrokerObjectFactory>()
+var result = await _container.Resolve<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -31,7 +31,7 @@ var result = _container.Resolve<IBrokerObjectFactory>()
 **.NET Core DI**
 
 ```csharp
-var result = _services.GetService<IBrokerObjectFactory>()
+var result = await _services.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
