@@ -12,7 +12,7 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 | **GlobalParameter** | GetAll, Create, Delete |
 | **Node** | GetAll, GetHealth, GetMemoryUsage |
 | **Policy** | GetAll, Create, Delete |
-| **Queue** | GetAll, Create, Delete, Empty, Peek |
+| **Queue** | GetAll, Create, Delete, [Empty](https://github.com/ahives/HareDu2/blob/master/docs/queue-empty.md) , Peek |
 | **ScopedParameter** | GetAll, Create, Delete |
 | **Server**  | Get, GetHealth |
 | **SystemOverview** | Get |

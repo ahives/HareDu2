@@ -1,6 +1,6 @@
 # HareDu 2
 
-Blah, Blah, Blah
+HareDu 2 comes with four major APIs; that is, Broker, Snapshot, Diagnostics, and Configuration, respectively.
 
 ### HareDu 2 NuGet Packages
 
@@ -18,7 +18,7 @@ Blah, Blah, Blah
 <br>
 
 ### Fundamentals
-HareDu 2 comes with three major APIs; that is, Broker, Snapshot, Diagnostics, and Configuration, respectively. To use HareDu, you must have the appropriate RabbitMQ plugins installed and enabled.
+To use HareDu, you must have the appropriate RabbitMQ plugins installed and enabled.
 
 - [Broker API](https://github.com/ahives/HareDu2/blob/master/docs/broker-api.md)
 - [Snapshot API](https://github.com/ahives/HareDu2/blob/master/docs/snapshot-api.md)
