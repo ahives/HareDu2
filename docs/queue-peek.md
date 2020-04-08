@@ -1,6 +1,6 @@
 # Purging Queues
 
-The Broker API allows you to safely look at (i.e. peek) messages on a queue and put them back. To do so is pretty simple with HareDum 2. You can do it yourself or the IoC way. In either case you need only configure the peek action per your requirements and leave the rest up to the API.
+The Broker API allows you to safely look at (i.e. peek) messages on a queue and put them back. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way. In either case you need only configure the peek action per your requirements and leave the rest up to the API.
 
 **Do It Yourself**
 

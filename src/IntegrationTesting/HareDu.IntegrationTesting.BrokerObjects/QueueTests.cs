@@ -49,7 +49,14 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                     x.Configure(c =>
                     {
                         c.IsDurable();
-                        c.HasArguments(arg => { arg.SetQueueExpiration(1000); });
+                        c.HasArguments(arg =>
+                        {
+                            arg.SetQueueExpiration(1000);
+                            arg.SetAlternateExchange("your_alternate_exchange_name");
+                            arg.SetDeadLetterExchange("your_deadletter_exchange_name");
+                            arg.SetPerQueuedMessageExpiration(1000);
+                            arg.SetDeadLetterExchangeRoutingKey("your_routing_key");
+                        });
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });

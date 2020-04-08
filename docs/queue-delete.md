@@ -1,6 +1,6 @@
 # Deleting Queues
 
-The Broker API allows you to delete a queue from the RabbitMQ broker. To do so is pretty simple with HareDum 2. You can do it yourself or the IoC way.
+The Broker API allows you to delete a queue from the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
 
 **Do It Yourself**
 
