@@ -2,13 +2,13 @@
 
 The Broker API is the lowest level API because it interacts directly with the RabbitMQ broker. With this API you can administer the broker and perform the below operations on each broker object:
 
-| Broker Object  | Operations |
+| Broker Object | Operations |
 |---| --- |
 | **Binding** | GetAll, Create, Delete |
 | **Channel** | GetAll |
 | **Connection** | GetAll |
 | **Consumer** | GetAll |
-| **Exchange** | GetAll, Create, Delete |
+| **Exchange** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/exchange-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/exchange-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/exchange-delete.md) |
 | **GlobalParameter** | GetAll, Create, Delete |
 | **Node** | GetAll, GetHealth, GetMemoryUsage |
 | **Policy** | GetAll, Create, Delete |

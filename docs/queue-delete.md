@@ -53,8 +53,7 @@ Since deleting a queue will also purge the queue of all messages as well, HareDu
         c.HasNoConsumers();
         c.IsEmpty();
     });
-});
-
+})
 ```
 <br>
 

@@ -198,7 +198,7 @@ namespace HareDu.Tests.BrokerObjects
                 {
                     x.Exchange("E3");
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             
@@ -215,7 +215,7 @@ namespace HareDu.Tests.BrokerObjects
                 {
                     x.Exchange(string.Empty);
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             
@@ -233,7 +233,7 @@ namespace HareDu.Tests.BrokerObjects
                 {
                     x.Exchange("E3");
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             
@@ -251,7 +251,7 @@ namespace HareDu.Tests.BrokerObjects
                 {
                     x.Exchange("E3");
                     x.Targeting(t => {});
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             
@@ -269,7 +269,7 @@ namespace HareDu.Tests.BrokerObjects
                 {
                     x.Exchange(string.Empty);
                     x.Targeting(t => t.VirtualHost(string.Empty));
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             
@@ -287,7 +287,7 @@ namespace HareDu.Tests.BrokerObjects
                 {
                     x.Exchange(string.Empty);
                     x.Targeting(t => {});
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             
@@ -303,7 +303,7 @@ namespace HareDu.Tests.BrokerObjects
                 .Object<Exchange>()
                 .Delete(x =>
                 {
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 })
                 .GetResult();
             

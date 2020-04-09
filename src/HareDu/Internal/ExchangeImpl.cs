@@ -110,7 +110,7 @@ namespace HareDu.Internal
 
             public void Exchange(string name) => _exchange = name;
 
-            public void WithConditions(Action<ExchangeDeleteCondition> condition)
+            public void When(Action<ExchangeDeleteCondition> condition)
             {
                 var impl = new ExchangeDeleteConditionImpl();
                 condition(impl);
@@ -154,7 +154,7 @@ namespace HareDu.Internal
             {
                 public bool DeleteIfUnused { get; private set; }
 
-                public void IfUnused() => DeleteIfUnused = true;
+                public void Unused() => DeleteIfUnused = true;
             }
         }
 

@@ -118,21 +118,21 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Object<Exchange>()
                 .Create(x =>
                 {
-                    x.Exchange("E5");
+                    x.Exchange("A2");
                     x.Configure(c =>
                     {
                         c.IsDurable();
                         c.IsForInternalUse();
                         c.HasRoutingType(ExchangeRoutingType.Fanout);
-//                        c.HasArguments(arg =>
-//                        {
-//                            arg.Set("", "");
-//                        });
+                        c.HasArguments(arg =>
+                        {
+                            arg.Set("arg1", "blah");
+                        });
                     });
                     x.Targeting(t => t.VirtualHost("HareDu"));
                 });
             
-            Assert.IsFalse(result.HasFaulted);
+            // Assert.IsFalse(result.HasFaulted);
             Console.WriteLine(result.ToJsonString());
         }
 
@@ -145,7 +145,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 {
                     x.Exchange("E3");
                     x.Targeting(t => t.VirtualHost("HareDu"));
-                    x.WithConditions(c => c.IfUnused());
+                    x.When(c => c.Unused());
                 });
             
 //            Assert.IsFalse(result.HasFaulted);

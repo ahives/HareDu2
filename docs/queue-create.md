@@ -41,16 +41,10 @@ var result = await _services.GetService<IBrokerObjectFactory>()
 ```
 <br>
 
-RabbitMQ supports the concept of [durability](https://www.rabbitmq.com/queues.html) , which means that if the broker restarts the queues will survive. To configure a queue to be durable during creation, add the ```IsDurable``` method within ```Configure``` like so...
+RabbitMQ supports the concept of [durability](https://www.rabbitmq.com/queues.html), which means that if the broker restarts the queues will survive. To configure a queue to be durable during creation, add the ```IsDurable``` method within ```Configure``` like so...
 
 ```csharp
-.Create(x =>
-{
-    x.Configure(c =>
-    {
-        c.IsDurable();
-    });
-});
+c.IsDurable();
 ```
 <br>
 
@@ -69,16 +63,13 @@ HareDu 2 supports the below RabbitMQ arguments during queue creation.
 The addition of the below code to ```Configure``` will set the above RabbitMQ arguments.
 
 ```csharp
-x.Configure(c =>
+c.HasArguments(arg =>
 {
-    c.HasArguments(arg =>
-    {
-        arg.SetQueueExpiration(1000);
-        arg.SetAlternateExchange("your_alternate_exchange_name");
-        arg.SetDeadLetterExchange("your_deadletter_exchange_name");
-        arg.SetPerQueuedMessageExpiration(1000);
-        arg.SetDeadLetterExchangeRoutingKey("your_routing_key");
-    });
+    arg.SetQueueExpiration(1000);
+    arg.SetAlternateExchange("your_alternate_exchange_name");
+    arg.SetDeadLetterExchange("your_deadletter_exchange_name");
+    arg.SetPerQueuedMessageExpiration(1000);
+    arg.SetDeadLetterExchangeRoutingKey("your_routing_key");
 });
 ```
 <br>

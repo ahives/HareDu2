@@ -33,6 +33,6 @@ namespace HareDu
         /// Specify the conditions for which the exchange can be deleted.
         /// </summary>
         /// <param name="condition"></param>
-        void WithConditions(Action<ExchangeDeleteCondition> condition);
+        void When(Action<ExchangeDeleteCondition> condition);
     }
 }
