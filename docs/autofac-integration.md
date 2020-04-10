@@ -40,7 +40,7 @@ var container = new ContainerBuilder()
                 .Build();
 ```
 
-Using the above code, you now can call the broker factory object like so...
+Using the above code, you now can call the snapshot factory object like so...
 
 ```csharp
 var factory = container.Resolve<ISnapshotFactory>();
@@ -62,7 +62,7 @@ var container = new ContainerBuilder()
                 .Build();
 ```
 
-Using the above code, you now can call the broker factory object like so...
+Using the above code, you now can call the diagnostic scanner object like so...
 
 ```csharp
 var scanner = container.Resolve<IScanner>();
