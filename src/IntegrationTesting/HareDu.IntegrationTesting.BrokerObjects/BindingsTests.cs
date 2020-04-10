@@ -57,9 +57,9 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 {
                     x.Binding(b =>
                     {
-                        b.Source("E2");
-                        b.Destination("Q1");
-                        b.Type(BindingType.Exchange);
+                        b.Source("A1");
+                        b.Destination("Queue2");
+                        b.Type(BindingType.Queue);
                     });
                     x.Configure(c =>
                     {

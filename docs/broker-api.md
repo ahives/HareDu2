@@ -4,7 +4,7 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 
 | Broker Object | Operations |
 |---| --- |
-| **Binding** | GetAll, Create, Delete |
+| **Binding** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/binding-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/binding-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/binding-delete.md) |
 | **Channel** | GetAll |
 | **Connection** | GetAll |
 | **Consumer** | GetAll |

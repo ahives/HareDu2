@@ -65,7 +65,8 @@ namespace HareDu.Internal
                 : $"api/bindings/{vhost}/e/{sourceBinding}/q/{destinationBinding}";
 
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result<BindingInfo>>(new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
+                return Task.FromResult<Result<BindingInfo>>(
+                    new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
 
             return Post<BindingInfo, BindingDefinition>(url, definition, cancellationToken);
         }

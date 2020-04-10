@@ -74,6 +74,32 @@ c.HasArguments(arg =>
 ```
 <br>
 
+A complete example would look something like this...
+
+```csharp
+var result = await _container.Resolve<IBrokerObjectFactory>()
+    .Object<Queue>()
+    .Create(x =>
+    {
+        x.Queue("your_queue");
+        x.Configure(c =>
+        {
+            c.IsDurable();
+            c.HasArguments(arg =>
+            {
+                arg.SetQueueExpiration(1000);
+                arg.SetAlternateExchange("your_alternate_exchange_name");
+                arg.SetDeadLetterExchange("your_deadletter_exchange_name");
+                arg.SetPerQueuedMessageExpiration(1000);
+                arg.SetDeadLetterExchangeRoutingKey("your_routing_key");
+            });
+        });
+        x.Targeting(t => t.VirtualHost("your_vhost"));
+    });
+```
+
+<br>
+
 *Please note that subsequent calls to any of the above methods will result in overriding the argument.*
 
 <br>

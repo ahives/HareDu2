@@ -87,21 +87,37 @@ There are situations where you wish to create exchanges that are bound to other 
 HareDu 2 supports adding adhoc arguments to exchanges during creation. The addition of the below code to ```Configure``` will set the above RabbitMQ arguments.
 
 ```csharp
-.Create(x =>
+c.HasArguments(arg =>
 {
-    x.Exchange("your_exchange");
-    x.Configure(c =>
-    {
-        c.HasRoutingType(ExchangeRoutingType.Fanout);
-        c.HasArguments(arg =>
-        {
-            arg.Set("your_arg", "your_value");
-        });
-    });
-    x.Targeting(t => t.VirtualHost("your_vhost"));
-})
+    arg.Set("your_arg", "your_value");
+});
 ```
 <br>
+
+A complete example would look something like this...
+
+```csharp
+var result = await _container.Resolve<IBrokerObjectFactory>()
+    .Object<Exchange>()
+    .Create(x =>
+    {
+        x.Exchange("your_exchange");
+        x.Configure(c =>
+        {
+            c.IsDurable();
+            c.IsForInternalUse();
+            c.HasRoutingType(ExchangeRoutingType.Fanout);
+            c.HasArguments(arg =>
+            {
+                arg.Set("your_arg", "your_value");
+            });
+        });
+        x.Targeting(t => t.VirtualHost("your_vhost"));
+    });
+```
+
+<br>
+
 
 *Please note that subsequent calls to any of the above methods will result in overriding the argument.*
 
