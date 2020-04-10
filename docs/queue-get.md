@@ -1,4 +1,4 @@
-# Getting Queues
+# Get Queues
 
 The Broker API allows you to get all queues on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
 
