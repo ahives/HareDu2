@@ -32,7 +32,7 @@ namespace HareDu.Extensions
                 Console.WriteLine($"\tProtocol: {listener.Protocol}");
                 Console.WriteLine($"\tIP Address: {listener.IPAddress}");
 
-                Console.WriteLine("Socket Options");
+                Console.WriteLine("\tSocket Options");
                 foreach (var option in listener.SocketOptions)
                 {
                     Console.WriteLine($"\t\tBacklog: {option.Backlog}");
