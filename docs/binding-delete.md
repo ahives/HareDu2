@@ -1,4 +1,4 @@
-# Deleting Bingings
+# Deleting Bindings
 
 The Broker API allows you to delete a binding from a RabbitMQ broker object (e.g., exchanges and/or queues). To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
 

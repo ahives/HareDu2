@@ -17,11 +17,13 @@ namespace HareDu.Internal
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using Model;
+    using YamlDotNet.Serialization.TypeResolvers;
 
     class VirtualHostImpl :
         BaseBrokerObject,
@@ -165,6 +167,8 @@ namespace HareDu.Internal
         {
             bool _tracing;
             string _vhost;
+            string _description;
+            string _tags;
             readonly List<Error> _errors;
 
             public Lazy<VirtualHostDefinition> Definition { get; }
@@ -177,18 +181,20 @@ namespace HareDu.Internal
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<VirtualHostDefinition>(
-                    () => new VirtualHostDefinitionImpl(_tracing), LazyThreadSafetyMode.PublicationOnly);
+                    () => new VirtualHostDefinitionImpl(_tracing, _description, _tags), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void VirtualHost(string name) => _vhost = name;
 
-            public void Configure(Action<VirtualHostConfiguration> configuration)
+            public void Configure(Action<VirtualHostConfigurator> configurator)
             {
-                var impl = new VirtualHostConfigurationImpl();
-                configuration(impl);
+                var impl = new VirtualHostConfiguratorImpl();
+                configurator(impl);
 
                 _tracing = impl.Tracing;
+                _description = impl.VirtualHostDescription;
+                _tags = impl.VirtualHostTags;
             }
 
             public void Validate()
@@ -202,20 +208,61 @@ namespace HareDu.Internal
                 VirtualHostDefinition
             {
                 public bool Tracing { get; }
+                public string Description { get; }
+                public string Tags { get; }
 
-                public VirtualHostDefinitionImpl(bool tracing)
+                public VirtualHostDefinitionImpl(bool tracing, string description, string tags)
                 {
                     Tracing = tracing;
+                    Description = description;
+                    Tags = tags;
                 }
             }
 
             
-            class VirtualHostConfigurationImpl :
-                VirtualHostConfiguration
+            class VirtualHostConfiguratorImpl :
+                VirtualHostConfigurator
             {
                 public bool Tracing { get; private set; }
+                public string VirtualHostDescription { get; private set; }
+                public string VirtualHostTags { get; private set; }
 
                 public void WithTracingEnabled() => Tracing = true;
+                public void Description(string description) => VirtualHostDescription = description;
+                
+                public void Tags(Action<VirtualHostTagConfigurator> configurator)
+                {
+                    var impl = new VirtualHostTagConfiguratorImpl();
+                    configurator(impl);
+
+                    StringBuilder builder = new StringBuilder();
+                    
+                    impl.Tags.ForEach(x => builder.AppendFormat("{0},", x));
+
+                    VirtualHostTags = builder.ToString().TrimEnd(',');
+                }
+
+                
+                class VirtualHostTagConfiguratorImpl :
+                    VirtualHostTagConfigurator
+                {
+                    readonly List<string> _tags;
+
+                    public List<string> Tags => _tags;
+
+                    public VirtualHostTagConfiguratorImpl()
+                    {
+                        _tags = new List<string>();
+                    }
+                    
+                    public void Add(string tag)
+                    {
+                        if (_tags.Contains(tag))
+                            return;
+                        
+                        _tags.Add(tag);
+                    }
+                }
             }
         }
     }

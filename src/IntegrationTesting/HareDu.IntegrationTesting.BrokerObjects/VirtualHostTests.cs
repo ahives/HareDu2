@@ -80,10 +80,16 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .Object<VirtualHost>()
                 .Create(x =>
                 {
-                    x.VirtualHost("HareDu7");
+                    x.VirtualHost("HareDu9");
                     x.Configure(c =>
                     {
                         c.WithTracingEnabled();
+                        c.Description("My test vhost.");
+                        c.Tags(t =>
+                        {
+                            t.Add("accounts");
+                            t.Add("production");
+                        });
                     });
                 });
 

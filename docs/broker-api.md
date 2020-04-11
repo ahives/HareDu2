@@ -19,8 +19,8 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 | **TopicPermissions** | GetAll, Create, Delete |
 | **User** | GetAll, GetAllWithoutPermissions, Create, Delete |
 | **UserPermissions** | GetAll, Create, Delete |
-| **VirtualHost** | GetAll, Create, Delete, Startup |
-| **VirtualHostLimits** | GetAll, Define, Delete |
+| **VirtualHost** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/vhost-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/vhost-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/vhost-delete.md), [Startup](https://github.com/ahives/HareDu2/blob/master/docs/vhost-startup.md) |
+| **VirtualHostLimits** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/vhost-limits-get.md), [Define](https://github.com/ahives/HareDu2/blob/master/docs/vhost-limits-define.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/vhost-limits-delete.md) |
 
 #### Registering API objects
 The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
