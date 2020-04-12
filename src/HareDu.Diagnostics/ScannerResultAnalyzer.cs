@@ -17,10 +17,21 @@ namespace HareDu.Diagnostics
     using System.Collections.Generic;
     using System.Linq;
     using Core.Extensions;
+    using MassTransit;
 
     public class ScannerResultAnalyzer :
-        IScannerResultAnalyzer
+        IScannerResultAnalyzer,
+        IObservable<AnalyzerContext>
     {
+        readonly IList<IDisposable> _disposableObservers;
+        readonly List<IObserver<AnalyzerContext>> _observers;
+
+        public ScannerResultAnalyzer()
+        {
+            _observers = new List<IObserver<AnalyzerContext>>();
+            _disposableObservers = new List<IDisposable>();
+        }
+
         public IReadOnlyList<AnalyzerSummary> Analyze(ScannerResult report, Func<ProbeResult, string> filterBy)
         {
             var rollup = GetRollup(report.Results, filterBy);
@@ -50,7 +61,32 @@ namespace HareDu.Diagnostics
                 .Cast<AnalyzerSummary>()
                 .ToList();
 
+            NotifyObservers(summary);
+            
             return summary;
+        }
+
+        public IScannerResultAnalyzer RegisterObserver(IObserver<AnalyzerContext> observer)
+        {
+            _disposableObservers.Add(Subscribe(observer));
+
+            return this;
+        }
+
+        public IDisposable Subscribe(IObserver<AnalyzerContext> observer)
+        {
+            if (!_observers.Contains(observer))
+                _observers.Add(observer);
+
+            return new UnsubscribeObserver(_observers, observer);
+        }
+
+        void NotifyObservers(List<AnalyzerSummary> result)
+        {
+            foreach (var observer in _observers)
+            {
+                observer.OnNext(new AnalyzerContextImpl(result));
+            }
         }
 
         decimal CalcPercentage(List<ProbeResultStatus> results, ProbeResultStatus status)
@@ -76,6 +112,42 @@ namespace HareDu.Diagnostics
             }
 
             return rollup;
+        }
+
+        
+        class AnalyzerContextImpl :
+            AnalyzerContext
+        {
+            public AnalyzerContextImpl(List<AnalyzerSummary> summary)
+            {
+                Summary = summary;
+                Id = NewId.NextGuid();
+                Timestamp = DateTimeOffset.UtcNow;
+            }
+
+            public Guid Id { get; }
+            public IReadOnlyList<AnalyzerSummary> Summary { get; }
+            public DateTimeOffset Timestamp { get; }
+        }
+
+
+        class UnsubscribeObserver :
+            IDisposable
+        {
+            readonly List<IObserver<AnalyzerContext>> _observers;
+            readonly IObserver<AnalyzerContext> _observer;
+
+            public UnsubscribeObserver(List<IObserver<AnalyzerContext>> observers, IObserver<AnalyzerContext> observer)
+            {
+                _observers = observers;
+                _observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (!_observer.IsNull() && _observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
 
 

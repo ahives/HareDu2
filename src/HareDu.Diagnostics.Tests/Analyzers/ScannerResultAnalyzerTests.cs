@@ -14,18 +14,13 @@
 namespace HareDu.Analytics.Tests
 {
     using System;
-    using System.IO;
     using System.Linq;
     using Autofac;
     using AutofacIntegration;
-    using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
     using Diagnostics.Extensions;
-    using Diagnostics.Formatting;
-    using Diagnostics.KnowledgeBase;
     using Diagnostics.Probes;
-    using Diagnostics.Registration;
     using Diagnostics.Tests.Fakes;
     using NUnit.Framework;
     using Shouldly;
@@ -44,50 +39,19 @@ namespace HareDu.Analytics.Tests
                 .AddHareDu()
                 .AddHareDuDiagnostics()
                 .Build();
+        }
 
-            // builder.Register(x =>
-            //     {
-            //         var configProvider = x.Resolve<IFileConfigProvider>();
-            //         string path = $"{Directory.GetCurrentDirectory()}/haredu_3.yaml";
-            //
-            //         configProvider.TryGet(path, out var config);
-            //
-            //         var knowledgeBaseProvider = x.Resolve<IKnowledgeBaseProvider>();
-            //
-            //         return new ScannerFactory(config, knowledgeBaseProvider);
-            //     })
-            //     .As<IScannerFactory>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<ScannerResultAnalyzer>()
-            //     .As<IScannerResultAnalyzer>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<Scanner>()
-            //     .As<IScanner>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<YamlFileConfigProvider>()
-            //     .As<IFileConfigProvider>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<YamlConfigProvider>()
-            //     .As<IConfigProvider>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<HareDuConfigValidator>()
-            //     .As<IConfigValidator>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<DiagnosticReportTextFormatter>()
-            //     .As<IDiagnosticReportFormatter>()
-            //     .SingleInstance();
-            //
-            // builder.RegisterType<KnowledgeBaseProvider>()
-            //     .As<IKnowledgeBaseProvider>()
-            //     .SingleInstance();
-            //
-            // _container = builder.Build();
+        [Test]
+        public void Verify_can_observe_analysis()
+        {
+            BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
+
+            var analyzer = _container.Resolve<IScannerResultAnalyzer>()
+                .RegisterObserver(new FakeScannerAnalyzerObserver());
+            
+            var summary = _container.Resolve<IScanner>()
+                .Scan(snapshot)
+                .Analyze(analyzer, x => x.ComponentType.ToString());
         }
         
         [Test]
@@ -95,9 +59,10 @@ namespace HareDu.Analytics.Tests
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
 
+            var analyzer = _container.Resolve<IScannerResultAnalyzer>();
             var summary = _container.Resolve<IScanner>()
                 .Scan(snapshot)
-                .Analyze(_container.Resolve<IScannerResultAnalyzer>(), x => x.ComponentType.ToString());
+                .Analyze(analyzer, x => x.ComponentType.ToString());
             
             summary.ShouldNotBeNull();
             summary.Count.ShouldBe(2);

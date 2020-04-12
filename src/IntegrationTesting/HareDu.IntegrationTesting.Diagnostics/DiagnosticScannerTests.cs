@@ -16,6 +16,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using System;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
@@ -30,6 +31,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using HareDu.Diagnostics.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using Observers;
     using Prometheus;
     using Registration;
     using Snapshotting;
@@ -53,11 +55,10 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
             var lens = container.Resolve<ISnapshotFactory>()
                 .Lens<BrokerConnectivitySnapshot>();
-
+            
             var result = lens.TakeSnapshot();
-
+            
             var report = scanner.Scan(result.Snapshot);
-            // SendToPrometheus(lens, scanner);
 
             var formatter = container.Resolve<IDiagnosticReportFormatter>();
             
@@ -66,14 +67,40 @@ namespace HareDu.IntegrationTesting.Diagnostics
             Console.WriteLine(formattedReport);
         }
 
-        void SendToPrometheus(SnapshotLens<BrokerConnectivitySnapshot> lens, IScanner scanner)
+        [Test]
+        public async Task Test2()
         {
+            var container = new ContainerBuilder()
+                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
+                .AddHareDu()
+                .AddHareDuSnapshot()
+                .AddHareDuDiagnostics()
+                .Build();
+
+            var scanner = container.Resolve<IScanner>();
+
+            var lens = container.Resolve<ISnapshotFactory>()
+                .Lens<BrokerConnectivitySnapshot>();
+
+            await SendToPrometheus(lens, scanner);
+        }
+
+        async Task SendToPrometheus(SnapshotLens<BrokerConnectivitySnapshot> lens, IScanner scanner)
+        {
+            // var pusher = new MetricPusher(new MetricPusherOptions
+            // {
+            //     Endpoint = "https://pushgateway.example.org:9091/metrics",
+            //     Job = "HareDuDiagnostics"
+            // });
+            //
+            // pusher.Start();
             var server = new MetricServer(hostname: "localhost", port: 1234);
             server.Start();
             
-            Gauge gauge = Metrics.CreateGauge("Healthy", "blah, blah, blah");
-            
-            for (int i = 0; i < 60; i++)
+            Gauge gauge = Metrics.CreateGauge("Healthy", "blah, blah, blah",
+                new GaugeConfiguration());
+            scanner.RegisterObserver(new DefaultDiagnosticConsoleLogger());
+            for (int i = 0; i < 10; i++)
             {
                 var result = lens.TakeSnapshot();
 
@@ -81,10 +108,20 @@ namespace HareDu.IntegrationTesting.Diagnostics
                 PublishSummary(report.Results
                     .FirstOrDefault(x => x.Id == typeof(RedeliveredMessagesProbe).GetIdentifier()), gauge);
 
-                Thread.Sleep(1000);
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
+            
+            using (var stream = new MemoryStream())
+            {
+                await Metrics.DefaultRegistry.CollectAndExportAsTextAsync(stream);
+
+                var text = Encoding.UTF8.GetString(stream.ToArray());
+
+                Console.WriteLine(text);
             }
             
             server.Stop();
+            // pusher.Stop();
         }
 
         void PublishSummary(ProbeResult result, Gauge gauge)
@@ -112,7 +149,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         }
 
         [Test]
-        public async Task Test2()
+        public async Task Test3()
         {
             var services = new ServiceCollection()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
@@ -148,7 +185,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         }
         
         [Test]
-        public async Task Test3()
+        public async Task Test4()
         {
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
@@ -171,7 +208,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         }
         
         [Test]
-        public async Task Test4()
+        public async Task Test5()
         {
             var provider = new YamlFileConfigProvider();
             provider.TryGet($"{Directory.GetCurrentDirectory()}/haredu.yaml", out HareDuConfig config);
@@ -193,7 +230,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         }
         
         [Test]
-        public async Task Test5()
+        public async Task Test6()
         {
             var provider = new HareDuConfigProvider();
 

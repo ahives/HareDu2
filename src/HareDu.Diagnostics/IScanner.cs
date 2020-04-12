@@ -29,13 +29,13 @@ namespace HareDu.Diagnostics
             where T : Snapshot;
         
         /// <summary>
-        /// Registers a list of observers that receives the output in real-time as the each sensor executes.
+        /// Registers a list of observers that receives the output in real-time as each sensor executes.
         /// </summary>
         /// <param name="observers"></param>
         IScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers);
 
         /// <summary>
-        /// Registers an observer that receives the output in real-time as the each sensor executes.
+        /// Registers an observer that receives the output in real-time as the sensor executes.
         /// </summary>
         /// <param name="observer"></param>
         IScanner RegisterObserver(IObserver<ProbeContext> observer);
