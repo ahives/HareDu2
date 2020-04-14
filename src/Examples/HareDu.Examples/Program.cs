@@ -21,9 +21,13 @@ namespace HareDu.Examples
     using Autofac;
     using AutofacIntegration;
     using CoreIntegration;
+    using Diagnostics;
+    using Diagnostics.Extensions;
     using Elasticsearch.Net;
     using Microsoft.Extensions.DependencyInjection;
     using Nest;
+    using Prometheus;
+    using PrometheusIntegration;
     using Quartz;
     using Quartz.Impl;
     using Quartz.Logging;
@@ -31,6 +35,7 @@ namespace HareDu.Examples
     using Snapshotting;
     using Snapshotting.Model;
     using Snapshotting.Persistence;
+    using Snapshotting.Registration;
     using ITrigger = Quartz.ITrigger;
     using LogLevel = Quartz.Logging.LogLevel;
     using Snapshot = Snapshotting.Snapshot;
@@ -40,6 +45,8 @@ namespace HareDu.Examples
         static async Task Main(string[] args)
         {
             var services = new ServiceCollection()
+                .AddHareDuConfiguration($"{Directory.GetCurrentDirectory()}/haredu.yaml")
+                .AddHareDu()
                 .AddHareDuSnapshot()
                 .AddHareDuDiagnostics()
                 // .AddHareDuScheduling<BrokerConnectivity>();
@@ -47,27 +54,50 @@ namespace HareDu.Examples
 
             var provider = services.BuildServiceProvider();
 
-            IScheduler scheduler = provider.GetService<IScheduler>();
-            IHareDuScheduler hareDuScheduler = provider.GetService<IHareDuScheduler>();
-            
-            IDictionary<string, object> details = new Dictionary<string, object>();
+            // IScheduler scheduler = provider.GetService<IScheduler>();
+            // IHareDuScheduler hareDuScheduler = provider.GetService<IHareDuScheduler>();
+            //
+            // IDictionary<string, object> details = new Dictionary<string, object>();
 
             // details["path"] = $"{Directory.GetCurrentDirectory()}/snapshots";
-            details["path"] = $"{Directory.GetCurrentDirectory()}/diagnostics";
+            // details["path"] = $"{Directory.GetCurrentDirectory()}/diagnostics";
 
             // await hareDuScheduler.Schedule<PersistSnapshotJob<BrokerQueues>>("persist-snapshot", details);
             // await hareDuScheduler.Schedule<PersistDiagnosticsJob<BrokerConnectivity>>("persist-diagnostic", details);
-            await hareDuScheduler.Schedule<PersistDiagnosticsJob<BrokerConnectivitySnapshot>>("persist-diagnostic", details);
             
-            Console.WriteLine("Starting");
+            // await hareDuScheduler.Schedule<PersistDiagnosticsJob<BrokerConnectivitySnapshot>>("persist-diagnostic", details);
+            //
+            // Console.WriteLine("Starting");
+            //
+            // await scheduler.Start();
+            //
+            // Thread.Sleep(60000);
+            //
+            // await scheduler.Shutdown(true);
+            //
+            // Console.WriteLine("Stopped");
+            
+            var scanner = provider.GetService<IScanner>();
+            
+            var analyzer = provider.GetService<IScannerResultAnalyzer>()
+                .RegisterObserver(new ScannerResultAnalyzerObserver());
 
-            await scheduler.Start();
+            var result = provider.GetService<ISnapshotFactory>()
+                .Lens<BrokerConnectivitySnapshot>()
+                .TakeSnapshot();
 
-            Thread.Sleep(60000);
+            var metricServer = new KestrelMetricServer(port: 1234);
+            metricServer.Start();
             
-            await scheduler.Shutdown(true);
+            PrometheusMetricsConfigurator.Configure();
+
+            var report = scanner
+                .Scan(result.Snapshot)
+                .Analyze(analyzer, x => x.Id);
             
-            Console.WriteLine("Stopped");
+            // Thread.Sleep(TimeSpan.FromMinutes(1));
+            
+            metricServer.Stop();
         }
         
         class ConsoleLogProvider : ILogProvider

@@ -46,12 +46,13 @@ namespace HareDu.Analytics.Tests
         {
             BrokerQueuesSnapshot snapshot = new FakeBrokerQueuesSnapshot();
 
-            var analyzer = _container.Resolve<IScannerResultAnalyzer>()
-                .RegisterObserver(new FakeScannerAnalyzerObserver());
+            var analyzer = _container.Resolve<IScannerResultAnalyzer>();
+                // .RegisterObserver(new FakeScannerAnalyzerObserver());
             
             var summary = _container.Resolve<IScanner>()
                 .Scan(snapshot)
-                .Analyze(analyzer, x => x.ComponentType.ToString());
+                .Analyze(analyzer, x => x.ComponentType.ToString())
+                .ScreenDump();
         }
         
         [Test]

@@ -37,7 +37,7 @@ namespace HareDu.Internal
         {
             cancellationToken.RequestCanceled();
 
-            string url = $"api/bindings";
+            string url = "api/bindings";
             
             return GetAll<BindingInfo>(url, cancellationToken);
         }

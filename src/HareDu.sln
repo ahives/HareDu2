@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.CoreIntegration", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Scheduling", "HareDu.Scheduling\HareDu.Scheduling.csproj", "{DFACE82B-B8EF-4984-AA3F-FFF799207BEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.PrometheusIntegration", "HareDu.PrometheusIntegration\HareDu.PrometheusIntegration.csproj", "{174D97B7-34A0-4828-9C4E-D2A07F5BC2FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{DFACE82B-B8EF-4984-AA3F-FFF799207BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFACE82B-B8EF-4984-AA3F-FFF799207BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFACE82B-B8EF-4984-AA3F-FFF799207BEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{174D97B7-34A0-4828-9C4E-D2A07F5BC2FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{174D97B7-34A0-4828-9C4E-D2A07F5BC2FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{174D97B7-34A0-4828-9C4E-D2A07F5BC2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{174D97B7-34A0-4828-9C4E-D2A07F5BC2FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
