@@ -13,6 +13,7 @@
 // limitations under the License.
 namespace HareDu.Core.Extensions
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public static class ValueExtensions
@@ -24,6 +25,37 @@ namespace HareDu.Core.Extensions
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static bool IsNull<T>(this T value) => value == null;
+        
+        /// <summary>
+        /// Returns true if the value is not null, otherwise, returns false.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsNotNull<T>(this T value) => !IsNull(value);
+
+        /// <summary>
+        /// Returns true if all the values in the specified list is not equal to null, empty, or whitespace, otherwise, false.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static bool IsEmpty(this IList<string> values)
+        {
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(values[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true if at least one value in the specified list is not equal to null, empty, or whitespace, otherwise, false.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static bool IsNotEmpty(this IList<string> values) => !IsEmpty(values);
 
         /// <summary>
         /// 

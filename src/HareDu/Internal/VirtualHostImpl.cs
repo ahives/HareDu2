@@ -76,10 +76,10 @@ namespace HareDu.Internal
             string url = $"api/vhosts/{vHost}";
 
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
 
             if (vHost == "2%f")
-                return Task.FromResult<Result>(new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
         }
@@ -102,7 +102,7 @@ namespace HareDu.Internal
                 errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             
             if (errors.Any())
-                return Task.FromResult<Result>(new FaultedResult(errors, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult(errors, new DebugInfoImpl(url)));
 
             return PostEmpty(url, cancellationToken);
         }

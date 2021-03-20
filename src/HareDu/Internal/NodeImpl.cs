@@ -63,7 +63,7 @@ namespace HareDu.Internal
             string url = $"api/nodes/{node}/memory";
             
             if (errors.Any())
-                return Task.FromResult<Result<NodeMemoryUsageInfo>>(new FaultedResult<NodeMemoryUsageInfo>(errors, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result<NodeMemoryUsageInfo>>(new FaultedResult<NodeMemoryUsageInfo>(errors, new DebugInfoImpl(url)));
             
             return Get<NodeMemoryUsageInfo>(url, cancellationToken);
         }

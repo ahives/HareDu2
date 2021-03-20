@@ -16,6 +16,7 @@ namespace HareDu.Tests.Extensions
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Shouldly;
 
@@ -26,8 +27,8 @@ namespace HareDu.Tests.Extensions
         [Test]
         public void Verify_Where_works()
         {
-            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
-            var vhosts = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").BuildServiceProvider();
+            var vhosts = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Where(x => x.Name == "TestVirtualHost");
@@ -85,8 +86,8 @@ namespace HareDu.Tests.Extensions
         [Test]
         public void Verify_Select_works()
         {
-            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .Select(x => x.Data);

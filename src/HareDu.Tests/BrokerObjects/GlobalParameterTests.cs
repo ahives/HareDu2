@@ -17,6 +17,7 @@ namespace HareDu.Tests.BrokerObjects
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -28,8 +29,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_global_parameters()
         {
-            var container = GetContainerBuilder("TestData/GlobalParameterInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/GlobalParameterInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .GetAll()
                 .GetResult();
@@ -49,8 +50,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_parameter_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -71,8 +72,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_parameter_2()
         {
-            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ExchangeInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -105,8 +106,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -128,8 +129,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -150,8 +151,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -173,8 +174,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -196,8 +197,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -218,8 +219,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -240,8 +241,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_parameter_7()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Create(x =>
                 {
@@ -261,8 +262,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_parameter()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Delete(x => x.Parameter("fake_param"))
                 .GetResult();
@@ -273,8 +274,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_parameter_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Delete(x => x.Parameter(string.Empty))
                 .GetResult();
@@ -286,8 +287,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_parameter_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<GlobalParameter>()
                 .Delete(x => {})
                 .GetResult();

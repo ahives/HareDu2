@@ -16,6 +16,7 @@ namespace HareDu.Tests.BrokerObjects
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -27,8 +28,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_exchanges()
         {
-            var container = GetContainerBuilder("TestData/ExchangeInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ExchangeInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .GetAll()
                 .GetResult();
@@ -51,8 +52,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_exchange()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -88,8 +89,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_exchange_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -117,8 +118,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_exchange_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -145,8 +146,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_exchange_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -174,8 +175,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_exchange_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Create(x =>
                 {
@@ -191,8 +192,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_exchange()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
@@ -208,8 +209,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_exchange_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
@@ -226,8 +227,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_exchange_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
@@ -244,8 +245,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_exchange_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
@@ -262,8 +263,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_exchange_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
@@ -280,8 +281,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_exchange_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {
@@ -298,8 +299,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_exchange_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Exchange>()
                 .Delete(x =>
                 {

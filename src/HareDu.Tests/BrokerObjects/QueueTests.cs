@@ -18,6 +18,7 @@ namespace HareDu.Tests.BrokerObjects
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -29,8 +30,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_queues()
         {
-            var container = GetContainerBuilder("TestData/QueueInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/QueueInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .GetAll()
                 .GetResult();
@@ -93,8 +94,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_peek_messages()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -144,8 +145,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_1()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -178,8 +179,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_2()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -211,8 +212,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_3()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -245,8 +246,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_4()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -279,8 +280,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_5()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -312,8 +313,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_6()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -346,8 +347,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_7()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -379,8 +380,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_8()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -411,8 +412,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_9()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -445,8 +446,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_10()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -478,8 +479,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_11()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -512,8 +513,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_12()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -544,8 +545,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_13()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -575,8 +576,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_14()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -600,8 +601,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_peek_messages_15()
         {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Peek(x =>
                 {
@@ -663,8 +664,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_queue()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -704,8 +705,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_queue_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -744,8 +745,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_queue_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -783,8 +784,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_queue_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -823,8 +824,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_queue_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -862,8 +863,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_queue_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -900,8 +901,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_queue_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -938,8 +939,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_override_arguments()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
                 {
@@ -976,8 +977,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_queue()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -998,8 +999,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1019,8 +1020,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1039,8 +1040,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1060,8 +1061,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1081,8 +1082,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1101,8 +1102,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1122,8 +1123,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_queue_()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Delete(x =>
                 {
@@ -1141,8 +1142,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_empty_queue()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1157,8 +1158,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1174,8 +1175,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1190,8 +1191,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1207,8 +1208,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1224,8 +1225,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1240,8 +1241,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1256,8 +1257,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_7()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {
@@ -1273,8 +1274,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_empty_queue_8()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Empty(x =>
                 {

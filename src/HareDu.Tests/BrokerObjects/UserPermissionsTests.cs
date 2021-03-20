@@ -13,9 +13,9 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -27,8 +27,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_user_permissions()
         {
-            var container = GetContainerBuilder("TestData/UserPermissionsInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/UserPermissionsInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .GetAll()
                 .GetResult();
@@ -48,8 +48,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_user_permissions()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -64,8 +64,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_user_permissions_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -81,8 +81,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_user_permissions_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -97,8 +97,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_user_permissions_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -114,8 +114,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_user_permissions_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -131,8 +131,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_user_permissions_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -147,8 +147,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_user_permissions_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Delete(x =>
                 {
@@ -162,8 +162,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_user_permissions()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -191,8 +191,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -221,8 +221,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -250,8 +250,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -280,8 +280,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -310,8 +310,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -339,8 +339,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -369,8 +369,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_7()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -399,8 +399,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_8()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {
@@ -428,8 +428,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_user_permissions_9()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<UserPermissions>()
                 .Create(x =>
                 {

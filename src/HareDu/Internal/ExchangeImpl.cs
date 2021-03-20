@@ -79,7 +79,7 @@ namespace HareDu.Internal
                 url = $"api/exchanges/{vhost}/{impl.ExchangeName.Value}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult<ExchangeInfo>(impl.Errors.Value, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult<ExchangeInfo>(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
         }

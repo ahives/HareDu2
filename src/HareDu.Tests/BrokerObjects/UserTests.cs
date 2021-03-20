@@ -17,6 +17,7 @@ namespace HareDu.Tests.BrokerObjects
     using Core.Extensions;
     using HareDu.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -28,8 +29,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_get_all_users()
         {
-            var container = GetContainerBuilder("TestData/UserInfo1.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/UserInfo1.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .GetAll()
                 .GetResult();
@@ -48,8 +49,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_get_all_users_without_permissions()
         {
-            var container = GetContainerBuilder("TestData/UserInfo2.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/UserInfo2.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .GetAllWithoutPermissions()
                 .GetResult();
@@ -68,8 +69,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -98,8 +99,8 @@ namespace HareDu.Tests.BrokerObjects
         {
             string passwordHash = "gkgfjjhfjh".ComputePasswordHash();
             
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -125,8 +126,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_create_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -154,8 +155,8 @@ namespace HareDu.Tests.BrokerObjects
         {
             string passwordHash = "gkgfjjhfjh".ComputePasswordHash();
             
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -182,8 +183,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -211,8 +212,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -240,8 +241,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -267,8 +268,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -296,8 +297,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_create_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Create(x =>
                 {
@@ -324,8 +325,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Delete(x => x.User("fake_user"))
                 .GetResult();
@@ -336,8 +337,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Delete(x => x.User(string.Empty))
                 .GetResult();
@@ -349,8 +350,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<User>()
                 .Delete(x => {})
                 .GetResult();

@@ -1,17 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Core
+﻿namespace HareDu.Core
 {
     using System;
     using System.Collections.Generic;
@@ -43,11 +30,11 @@ namespace HareDu.Core
                 var response = await _client.GetAsync(url, cancellationToken).ConfigureAwait(false);
                 
                 if (!response.IsSuccessStatusCode)
-                    return new FaultedResultList<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
+                    return new FaultedResultList<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url));
                 
                 var data = await response.ToObject<List<T>>();
                 
-                return new SuccessfulResultList<T>(data, new DebugInfoImpl(url, null));
+                return new SuccessfulResultList<T>(data, new DebugInfoImpl(url));
             }
             catch (MissingMethodException)
             {
@@ -65,11 +52,11 @@ namespace HareDu.Core
                 var response = await _client.GetAsync(url, cancellationToken).ConfigureAwait(false);
                 
                 if (!response.IsSuccessStatusCode)
-                    return new FaultedResult<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
+                    return new FaultedResult<T>(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url));
 
                 var data = await response.ToObject<T>();
                 
-                return new SuccessfulResult<T>(data, new DebugInfoImpl(url, null));
+                return new SuccessfulResult<T>(data, new DebugInfoImpl(url));
             }
             catch (MissingMethodException)
             {
@@ -87,9 +74,9 @@ namespace HareDu.Core
                 var response = await _client.DeleteAsync(url, cancellationToken).ConfigureAwait(false);
                 
                 if (!response.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
+                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url));
 
-                return new SuccessfulResult(new DebugInfoImpl(url, null));
+                return new SuccessfulResult(new DebugInfoImpl(url));
             }
             catch (MissingMethodException)
             {
@@ -210,9 +197,9 @@ namespace HareDu.Core
                 var response = await _client.PostAsync(url, null, cancellationToken).ConfigureAwait(false);
                 
                 if (!response.IsSuccessStatusCode)
-                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url, null));
+                    return new FaultedResult(new List<Error> { GetError(response.StatusCode) }, new DebugInfoImpl(url));
 
-                return new SuccessfulResult(new DebugInfoImpl(url, null));
+                return new SuccessfulResult(new DebugInfoImpl(url));
             }
             catch (MissingMethodException)
             {
@@ -274,9 +261,31 @@ namespace HareDu.Core
                 URL = url;
                 Request = request;
             }
+            
+            public DebugInfoImpl(string url)
+            {
+                URL = url;
+            }
+            
+            public DebugInfoImpl(string url, string request, List<Error> errors)
+            {
+                URL = url;
+                Request = request;
+                Errors = errors;
+            }
+            
+            public DebugInfoImpl(string url, List<Error> errors)
+            {
+                URL = url;
+                Errors = errors;
+            }
 
             public string URL { get; }
             public string Request { get; }
+            public string Exception { get; }
+            public string StackTrace { get; }
+            public string Response { get; }
+            public IReadOnlyList<Error> Errors { get; }
         }
 
 

@@ -13,9 +13,9 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -27,8 +27,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_vhosts()
         {
-            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .GetAll()
                 .GetResult();
@@ -89,8 +89,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_Create_works()
         {
-            var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ConsumerInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Create(x =>
                 {
@@ -112,8 +112,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete()
         {
-            var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ConsumerInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Delete(x => x.VirtualHost("HareDu7"))
                 .GetResult();
@@ -124,8 +124,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Delete(x => x.VirtualHost(string.Empty))
                 .GetResult();
@@ -137,8 +137,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_2()
         {
-            var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ConsumerInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Delete(x => {})
                 .GetResult();
@@ -150,8 +150,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_start_vhost()
         {
-            var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ConsumerInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Startup("FakeVirtualHost", x => x.On("FakeNode"))
                 .GetResult();
@@ -162,8 +162,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_start_vhost_1()
         {
-            var container = GetContainerBuilder("TestData/ConsumerInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/ConsumerInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Startup(string.Empty, x => x.On("FakeNode"))
                 .GetResult();
@@ -175,8 +175,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_start_vhost_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Startup("FakeVirtualHost", x => x.On(string.Empty))
                 .GetResult();
@@ -188,8 +188,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_start_vhost_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Startup(string.Empty, x => x.On(string.Empty))
                 .GetResult();
@@ -201,8 +201,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_start_vhost_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHost>()
                 .Startup(string.Empty, x => {})
                 .GetResult();

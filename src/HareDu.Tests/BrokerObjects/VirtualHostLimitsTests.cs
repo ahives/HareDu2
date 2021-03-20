@@ -13,9 +13,9 @@
 // limitations under the License.
 namespace HareDu.Tests.BrokerObjects
 {
-    using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Shouldly;
 
@@ -26,8 +26,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_get_all_limits()
         {
-            var container = GetContainerBuilder("TestData/VirtualHostLimitsInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/VirtualHostLimitsInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .GetAll()
                 .GetResult();
@@ -45,8 +45,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_define_limits()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -71,8 +71,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_define_limits_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -98,8 +98,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_define_limits_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -123,8 +123,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_define_limits_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -148,8 +148,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_define_limits_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -167,8 +167,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_define_limits_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -183,8 +183,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_define_limits_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Define(x =>
                 {
@@ -198,8 +198,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_limits()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Delete(x => x.For("HareDu3"))
                 .GetResult();
@@ -210,8 +210,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_limits_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Delete(x => x.For(string.Empty))
                 .GetResult();
@@ -223,8 +223,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_limits_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<VirtualHostLimits>()
                 .Delete(x => {})
                 .GetResult();

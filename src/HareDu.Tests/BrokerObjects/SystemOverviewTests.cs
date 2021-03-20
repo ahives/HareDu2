@@ -16,6 +16,7 @@ namespace HareDu.Tests.BrokerObjects
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Shouldly;
 
@@ -26,8 +27,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_get_system_overview()
         {
-            var container = GetContainerBuilder("TestData/SystemOverviewInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/SystemOverviewInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<SystemOverview>()
                 .Get()
                 .GetResult();

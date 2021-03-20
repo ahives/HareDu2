@@ -16,6 +16,7 @@ namespace HareDu.Tests.BrokerObjects
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
     using Shouldly;
@@ -27,8 +28,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_bindings()
         {
-            var container = GetContainerBuilder("TestData/BindingInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/BindingInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .GetAll()
                 .GetResult();
@@ -42,8 +43,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_add_arguments()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -77,8 +78,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -107,8 +108,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -137,8 +138,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -167,8 +168,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -197,8 +198,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -227,8 +228,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -256,8 +257,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_7()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -285,8 +286,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_8()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -313,8 +314,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_9()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -342,8 +343,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_add_arguments_10()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Create(x =>
                 {
@@ -398,8 +399,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_delete_binding()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -422,8 +423,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_1()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -445,8 +446,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_2()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -468,8 +469,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_3()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -491,8 +492,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_4()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -514,8 +515,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_5()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -537,8 +538,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_6()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -560,8 +561,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_7()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -582,8 +583,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_8()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {
@@ -598,8 +599,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_cannot_delete_binding_9()
         {
-            var container = GetContainerBuilder().Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder().BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Binding>()
                 .Delete(x =>
                 {

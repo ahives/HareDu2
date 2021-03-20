@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.Scheduling", "HareDu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HareDu.PrometheusIntegration", "HareDu.PrometheusIntegration\HareDu.PrometheusIntegration.csproj", "{174D97B7-34A0-4828-9C4E-D2A07F5BC2FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{50179AC8-44E5-4AEA-8A77-C33AC5EFA922}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -23,45 +23,34 @@ namespace HareDu.Tests
     using Autofac;
     using Core.Configuration;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Moq.Protected;
     using NUnit.Framework;
 
     public class HareDuTesting
     {
-        protected ContainerBuilder GetContainerBuilder(string file)
+        protected ServiceCollection GetContainerBuilder(string file)
         {
-            var builder = new ContainerBuilder();
-            
-            builder.Register(x =>
-                {
-                    string data = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{file}");
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IBrokerObjectFactory>(x =>
+            {
+                string data = File.ReadAllText($"{TestContext.CurrentContext.TestDirectory}/{file}");
                     
-                    return new BrokerObjectFactory(GetClient(data));
-                })
-                .As<IBrokerObjectFactory>()
-                .SingleInstance();
+                return new BrokerObjectFactory(GetClient(data));
+            });
             
-            builder.RegisterType<YamlFileConfigProvider>()
-                .As<IFileConfigProvider>()
-                .SingleInstance();
-            
-            return builder;
+            return services;
         }
 
-        protected ContainerBuilder GetContainerBuilder()
+        protected ServiceCollection GetContainerBuilder()
         {
-            var builder = new ContainerBuilder();
+            var services = new ServiceCollection();
 
-            builder.Register(x => new BrokerObjectFactory(GetClient(string.Empty)))
-                .As<IBrokerObjectFactory>()
-                .SingleInstance();
+            services.AddSingleton<IBrokerObjectFactory>(x => new BrokerObjectFactory(GetClient(string.Empty)));
 
-            builder.RegisterType<YamlFileConfigProvider>()
-                .As<IFileConfigProvider>()
-                .SingleInstance();
-
-            return builder;
+            return services;
         }
         
         protected HttpClient GetClient(string data)

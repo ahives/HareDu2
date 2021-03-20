@@ -72,7 +72,7 @@ namespace HareDu.Internal
             
             if (string.IsNullOrWhiteSpace(impl.ParameterName))
                 return Task.FromResult<Result>(new FaultedResult(new List<Error> {new ErrorImpl("The name of the parameter is missing.")},
-                    new DebugInfoImpl(@"api/global-parameters/", null)));
+                    new DebugInfoImpl(@"api/global-parameters/")));
 
             string url = $"api/global-parameters/{impl.ParameterName}";
 

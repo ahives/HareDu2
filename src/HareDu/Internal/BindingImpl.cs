@@ -91,7 +91,7 @@ namespace HareDu.Internal
                 : $"api/bindings/{vhost}/e/{source}/e/{destination}/{bindingName}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
         }

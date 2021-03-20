@@ -16,6 +16,7 @@ namespace HareDu.Tests.BrokerObjects
     using Autofac;
     using Core.Extensions;
     using HareDu.Registration;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Shouldly;
 
@@ -26,8 +27,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Should_be_able_to_get_all_nodes()
         {
-            var container = GetContainerBuilder("TestData/NodeInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/NodeInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetAll()
                 .GetResult();
@@ -170,8 +171,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_will_return_node_memory_usage()
         {
-            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetMemoryUsage("haredu@localhost")
                 .GetResult();
@@ -209,8 +210,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_will_not_return_node_memory_usage_when_node_missing_1()
         {
-            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetMemoryUsage(string.Empty)
                 .GetResult();
@@ -222,8 +223,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_will_not_return_node_memory_usage_when_node_missing_2()
         {
-            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetMemoryUsage(null)
                 .GetResult();
@@ -235,8 +236,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_will_not_return_node_memory_usage_when_node_missing_3()
         {
-            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/MemoryUsageInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetMemoryUsage("   ")
                 .GetResult();
@@ -248,8 +249,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_check_if_named_node_healthy()
         {
-            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetHealth("rabbit@localhost")
                 .GetResult();
@@ -262,8 +263,8 @@ namespace HareDu.Tests.BrokerObjects
         [Test]
         public void Verify_can_check_if_node_healthy()
         {
-            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").Build();
-            var result = container.Resolve<IBrokerObjectFactory>()
+            var container = GetContainerBuilder("TestData/NodeHealthInfo.json").BuildServiceProvider();
+            var result = container.GetService<IBrokerObjectFactory>()
                 .Object<Node>()
                 .GetHealth()
                 .GetResult();

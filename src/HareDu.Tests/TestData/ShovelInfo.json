@@ -1,0 +1,10 @@
+[
+  {
+    "node": "rabbit@localhost",
+    "timestamp": "2021-03-11 10:15:58",
+    "name": "test-shovel",
+    "vhost": "TestHareDu",
+    "type": "dynamic",
+    "state": "starting"
+  }
+]

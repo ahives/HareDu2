@@ -77,7 +77,7 @@ namespace HareDu.Internal
                 url = $"{url}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
         }
@@ -94,7 +94,7 @@ namespace HareDu.Internal
             string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url, null)));
+                return Task.FromResult<Result>(new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
         }
