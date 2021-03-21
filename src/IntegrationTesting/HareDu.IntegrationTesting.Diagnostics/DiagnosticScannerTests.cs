@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.IntegrationTesting.Diagnostics
 {
     using System;
@@ -56,7 +43,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var lens = container.Resolve<ISnapshotFactory>()
                 .Lens<BrokerConnectivitySnapshot>();
             
-            var result = lens.TakeSnapshot();
+            var result = await lens.TakeSnapshot();
             
             var report = scanner.Scan(result.Snapshot);
 
@@ -102,7 +89,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             scanner.RegisterObserver(new DefaultDiagnosticConsoleLogger());
             for (int i = 0; i < 10; i++)
             {
-                var result = lens.TakeSnapshot();
+                var result = await lens.TakeSnapshot();
 
                 var report = scanner.Scan(result.Snapshot);
                 PublishSummary(report.Results
@@ -160,7 +147,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             
             var lens = services.GetService<ISnapshotFactory>()
                 .Lens<BrokerConnectivitySnapshot>();
-            var result = lens.TakeSnapshot();
+            var result = await lens.TakeSnapshot();
             
             var scanner = services.GetService<IScanner>();
 
@@ -193,7 +180,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var factory = new SnapshotFactory(new BrokerObjectFactory(config));
 
             var lens = factory.Lens<BrokerConnectivitySnapshot>();
-            var result = lens.TakeSnapshot();
+            var result = await lens.TakeSnapshot();
             
             IScanner scanner = new Scanner(
                 new ScannerFactory(config, new KnowledgeBaseProvider()));
@@ -215,7 +202,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
 
             var factory = new SnapshotFactory(config);
             var lens = factory.Lens<BrokerConnectivitySnapshot>();
-            var result = lens.TakeSnapshot();
+            var result = await lens.TakeSnapshot();
 
             var scannerFactory = new ScannerFactory(config, new KnowledgeBaseProvider());
             IScanner scanner = new Scanner(scannerFactory);
@@ -262,7 +249,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
             var factory1 = new SnapshotFactory(config1);
             var lens = factory1.Lens<BrokerConnectivitySnapshot>();
 
-            var result = lens.TakeSnapshot();
+            var result = await lens.TakeSnapshot();
             
             var factory2 = new ScannerFactory(config1, new KnowledgeBaseProvider());
             IScanner scanner = new Scanner(factory2);

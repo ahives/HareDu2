@@ -47,6 +47,22 @@
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="data"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IReadOnlyList<T> GetDataOrEmpty<T>(this List<T> data) => data.IsNull() ? new List<T>() : data;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetDataOrDefault<T>(this T data) => data.IsNull() ? default : data;
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="source"></param>
         /// <param name="index"></param>
         /// <param name="value"></param>

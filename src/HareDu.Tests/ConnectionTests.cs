@@ -43,14 +43,14 @@ namespace HareDu.Tests
             result.Data[0].PacketsReceived.ShouldBe<ulong>(4);
             result.Data[0].PacketBytesReceived.ShouldBe<ulong>(748);
             result.Data[0].PacketBytesReceivedDetails.ShouldNotBeNull();
-            result.Data[0].PacketBytesReceivedDetails?.Rate.ShouldBe(0.0M);
+            result.Data[0].PacketBytesReceivedDetails?.Value.ShouldBe(0.0M);
             result.Data[0].PacketsSent.ShouldBe<ulong>(3);
             result.Data[0].PacketBytesSent.ShouldBe<ulong>(542);
             result.Data[0].PacketBytesSentDetails.ShouldNotBeNull();
-            result.Data[0].PacketBytesSentDetails?.Rate.ShouldBe(0.0M);
+            result.Data[0].PacketBytesSentDetails?.Value.ShouldBe(0.0M);
             result.Data[0].TotalReductions.ShouldBe<ulong>(5956);
             result.Data[0].ReductionDetails.ShouldNotBeNull();
-            result.Data[0].ReductionDetails?.Rate.ShouldBe(0.0M);
+            result.Data[0].ReductionDetails?.Value.ShouldBe(0.0M);
             result.Data[0].SendPending.ShouldBe<ulong>(0);
             result.Data[0].IsSsl.ShouldBeFalse();
             result.Data[0].User.ShouldBe("guest");

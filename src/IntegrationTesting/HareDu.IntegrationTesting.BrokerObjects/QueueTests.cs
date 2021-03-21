@@ -23,6 +23,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Model;
     using NUnit.Framework;
     using Registration;
+    using Serialization;
 
     [TestFixture]
     public class QueueTests
@@ -62,7 +63,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 });
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
 
         [Test]
@@ -74,7 +75,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .ScreenDump();
 
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
 
         [Test]
@@ -85,7 +86,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .GetAll();
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
 
         [Test]
@@ -105,7 +106,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 });
 
 //            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
 
         [Test]
@@ -127,7 +128,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 });
             
 //            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
 
         [Test]
@@ -142,7 +143,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 });
             
             Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
     }
 }

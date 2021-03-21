@@ -1,58 +1,77 @@
 namespace HareDu.Model
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
+    using Serialization.Converters;
 
     public interface ShovelRequestParams
     {
-        [JsonProperty("src-protocol")]
-        string SourceProtocol { get; }
+        [JsonPropertyName("src-protocol")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        ShovelProtocolType SourceProtocol { get; }
         
-        [JsonProperty("src-uri")]
+        [JsonPropertyName("src-uri")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string SourceUri { get; }
         
-        [JsonProperty("src-queue")]
+        [JsonPropertyName("src-queue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string SourceQueue { get; }
 
-        [JsonProperty("dest-protocol")]
-        string DestinationProtocol { get; }
+        [JsonPropertyName("dest-protocol")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        ShovelProtocolType DestinationProtocol { get; }
         
-        [JsonProperty("dest-uri")]
+        [JsonPropertyName("dest-uri")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string DestinationUri { get; }
         
-        [JsonProperty("dest-queue")]
+        [JsonPropertyName("dest-queue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string DestinationQueue { get; }
         
-        [JsonProperty("reconnect-delay")]
+        [JsonPropertyName("reconnect-delay")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         int ReconnectDelay { get; }
         
-        [JsonProperty("ack-mode")]
-        string AcknowledgeMode { get; }
+        [JsonPropertyName("ack-mode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        [JsonConverter(typeof(AckModeEnumConverter))]
+        AckMode AcknowledgeMode { get; }
         
-        [JsonProperty("src-delete-after")]
+        [JsonPropertyName("src-delete-after")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         object SourceDeleteAfter { get; }
         
-        [JsonProperty("src-prefetch-count")]
+        [JsonPropertyName("src-prefetch-count")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         ulong SourcePrefetchCount { get; }
         
-        [JsonProperty("src-exchange")]
-        string SourceExchange { get; }
+        [JsonPropertyName("src-exchange")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string SourceExchange { get; }
         
-        [JsonProperty("src-exchange-key")]
+        [JsonPropertyName("src-exchange-key")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string SourceExchangeRoutingKey { get; }
         
-        [JsonProperty("dest-exchange")]
+        [JsonPropertyName("dest-exchange")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string DestinationExchange { get; }
         
-        [JsonProperty("dest-exchange-key")]
+        [JsonPropertyName("dest-exchange-key")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string DestinationExchangeKey { get; }
         
-        [JsonProperty("dest-publish-properties")]
+        [JsonPropertyName("dest-publish-properties")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         string DestinationPublishProperties { get; }
         
-        [JsonProperty("dest-add-forward-headers")]
+        [JsonPropertyName("dest-add-forward-headers")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         bool DestinationAddForwardHeaders { get; }
         
-        [JsonProperty("dest-add-timestamp-header")]
+        [JsonPropertyName("dest-add-timestamp-header")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         bool DestinationAddTimestampHeader { get; }
     }
 }

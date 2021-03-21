@@ -1,54 +1,41 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Model
+﻿namespace HareDu.Model
 {
     using System.Collections.Generic;
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public interface ServerInfo
     {
-        [JsonProperty("rabbit_version")]
+        [JsonPropertyName("rabbit_version")]
         string RabbitMqVersion { get; }
         
-        [JsonProperty("users")]
+        [JsonPropertyName("users")]
         IList<UserInfo> Users { get; }
         
-        [JsonProperty("vhosts")]
+        [JsonPropertyName("vhosts")]
         IList<VirtualHostInfo> VirtualHosts { get; }
         
-        [JsonProperty("permissions")]
+        [JsonPropertyName("permissions")]
         IList<UserPermissionsInfo> Permissions { get; }
         
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         IList<PolicyInfo> Policies { get; }
         
-        [JsonProperty("parameters")]
+        [JsonPropertyName("parameters")]
         IList<ScopedParameterInfo> Parameters { get; }
         
-        [JsonProperty("global_parameters")]
+        [JsonPropertyName("global_parameters")]
         IList<GlobalParameterInfo> GlobalParameters { get; }
         
-        [JsonProperty("queues")]
+        [JsonPropertyName("queues")]
         IList<QueueInfo> Queues { get; }
         
-        [JsonProperty("exchanges")]
+        [JsonPropertyName("exchanges")]
         IList<ExchangeInfo> Exchanges { get; }
         
-        [JsonProperty("bindings")]
+        [JsonPropertyName("bindings")]
         IList<BindingInfo> Bindings { get; }
         
-        [JsonProperty("topic_permissions")]
+        [JsonPropertyName("topic_permissions")]
         IList<TopicPermissionsInfo> TopicPermissions { get; }
     }
 }

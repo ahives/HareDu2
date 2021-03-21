@@ -10,7 +10,9 @@ namespace HareDu.Internal
     using Core;
     using Core.Extensions;
     using Extensions;
+    using HareDu.Model;
     using Model;
+    using Serialization;
 
     public class ShovelImpl :
         BaseBrokerObject,
@@ -26,8 +28,12 @@ namespace HareDu.Internal
             cancellationToken.RequestCanceled();
 
             string url = "api/shovels";
-            
-            return await GetAll<ShovelInfo>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<ShovelInfoImpl> result = await GetAll<ShovelInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<ShovelInfo> MapResult(ResultList<ShovelInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
         public async Task<Result> Create(string shovel, string uri, string vhost,
@@ -66,7 +72,7 @@ namespace HareDu.Internal
             string url = $"api/parameters/shovel/{vhost.ToSanitizedName()}/{shovel}";
 
             if (errors.Any())
-                return new FaultedResult(errors, new DebugInfoImpl(url, request.ToJsonString(), errors));
+                return new FaultedResult(errors, new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
 
             return await Put(url, request, cancellationToken).ConfigureAwait(false);
         }
@@ -89,6 +95,33 @@ namespace HareDu.Internal
                 return new FaultedResult(errors, new DebugInfoImpl(url, errors));
 
             return await Delete(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        
+        class ResultListCopy :
+            ResultList<ShovelInfo>
+        {
+            public ResultListCopy(ResultList<ShovelInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<ShovelInfo>();
+                foreach (var item in result.Data)
+                    data.Add(item);
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<ShovelInfo> Data { get; }
+            public bool HasData { get; }
         }
 
 
@@ -263,16 +296,16 @@ namespace HareDu.Internal
                         bool destinationAddForwardHeaders,
                         bool destinationAddTimestampHeader)
                     {
-                        AcknowledgeMode = acknowledgeMode.IsNotNull() ? acknowledgeMode.ConvertTo() : AckMode.OnConfirm.ConvertTo();
+                        AcknowledgeMode = acknowledgeMode ?? AckMode.OnConfirm;
                         ReconnectDelay = reconnectDelay;
-                        SourceProtocol = sourceProtocol.ConvertTo();
+                        SourceProtocol = sourceProtocol;
                         SourceUri = uri;
                         SourceQueue = sourceQueue;
                         SourceExchange = sourceExchangeName;
                         SourceExchangeRoutingKey = sourceExchangeRoutingKey;
                         SourcePrefetchCount = sourcePrefetchCount;
                         SourceDeleteAfter = deleteShovelAfter;
-                        DestinationProtocol = destinationProtocol.ConvertTo();
+                        DestinationProtocol = destinationProtocol;
                         DestinationExchange = destinationExchangeName;
                         DestinationExchangeKey = destinationExchangeRoutingKey;
                         DestinationUri = uri;
@@ -281,14 +314,14 @@ namespace HareDu.Internal
                         DestinationAddTimestampHeader = destinationAddTimestampHeader;
                     }
 
-                    public string SourceProtocol { get; }
+                    public ShovelProtocolType SourceProtocol { get; }
                     public string SourceUri { get; }
                     public string SourceQueue { get; }
-                    public string DestinationProtocol { get; }
+                    public ShovelProtocolType DestinationProtocol { get; }
                     public string DestinationUri { get; }
                     public string DestinationQueue { get; }
                     public int ReconnectDelay { get; }
-                    public string AcknowledgeMode { get; }
+                    public AckMode AcknowledgeMode { get; }
                     public object SourceDeleteAfter { get; }
                     public ulong SourcePrefetchCount { get; }
                     public string SourceExchange { get; }

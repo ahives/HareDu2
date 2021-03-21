@@ -1,10 +1,12 @@
 namespace HareDu.Tests
 {
     using Core.Extensions;
+    using HareDu.Extensions;
     using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
+    using Serialization;
     using Shouldly;
 
     [TestFixture]
@@ -26,20 +28,20 @@ namespace HareDu.Tests
             result.Data[2].Name.ShouldBe("TestVirtualHost");
             result.Data[2].PacketBytesReceived.ShouldBe<ulong>(301363575);
             result.Data[2].PacketBytesReceivedDetails.ShouldNotBeNull();
-            result.Data[2].PacketBytesReceivedDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].PacketBytesReceivedDetails?.Value.ShouldBe(0.0M);
             result.Data[2].PacketBytesSent.ShouldBe<ulong>(368933935);
             result.Data[2].PacketBytesSentDetails.ShouldNotBeNull();
-            result.Data[2].PacketBytesSentDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].PacketBytesSentDetails?.Value.ShouldBe(0.0M);
             result.Data[2].TotalMessages.ShouldBe<ulong>(0);
             result.Data[2].MessagesDetails.ShouldNotBeNull();
-            result.Data[2].MessagesDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessagesDetails?.Value.ShouldBe(0.0M);
             result.Data[2].ReadyMessages.ShouldBe<ulong>(0);
             result.Data[2].ReadyMessagesDetails.ShouldNotBeNull();
-            result.Data[2].ReadyMessagesDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].ReadyMessagesDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats.ShouldNotBeNull();
             result.Data[2].MessageStats?.TotalMessageGets.ShouldBe<ulong>(3);
             result.Data[2].MessageStats?.MessageGetDetails.ShouldNotBeNull();
-            result.Data[2].MessageStats?.MessageGetDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessageGetDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats.ShouldNotBeNull();
             result.Data[2].MessageStats?.MessagesConfirmedDetails.ShouldNotBeNull();
             result.Data[2].MessageStats?.MessagesPublishedDetails.ShouldNotBeNull();
@@ -52,25 +54,25 @@ namespace HareDu.Tests
             result.Data[2].MessageStats?.MessageGetsWithoutAckDetails.ShouldNotBeNull();
             result.Data[2].MessageStats?.MessagesRedeliveredDetails.ShouldNotBeNull();
             result.Data[2].MessageStats?.TotalMessagesConfirmed.ShouldBe<ulong>(300000);
-            result.Data[2].MessageStats?.MessagesConfirmedDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessagesConfirmedDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessagesPublished.ShouldBe<ulong>(300000);
-            result.Data[2].MessageStats?.MessagesPublishedDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessagesPublishedDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalUnroutableMessages.ShouldBe<ulong>(0);
-            result.Data[2].MessageStats?.UnroutableMessagesDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.UnroutableMessagesDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessagesAcknowledged.ShouldBe<ulong>(300000);
-            result.Data[2].MessageStats?.MessagesAcknowledgedDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessagesAcknowledgedDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessagesDelivered.ShouldBe<ulong>(300000);
-            result.Data[2].MessageStats?.MessageDeliveryDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessageDeliveryDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessageDeliveryGets.ShouldBe<ulong>(300003);
-            result.Data[2].MessageStats?.MessageDeliveryGetDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessageDeliveryGetDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessageDeliveredWithoutAck.ShouldBe<ulong>(0);
-            result.Data[2].MessageStats?.MessagesDeliveredWithoutAckDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessagesDeliveredWithoutAckDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessageGets.ShouldBe<ulong>(3);
-            result.Data[2].MessageStats?.MessageGetDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessageGetDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessageGetsWithoutAck.ShouldBe<ulong>(0);
-            result.Data[2].MessageStats?.MessageGetsWithoutAckDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessageGetsWithoutAckDetails?.Value.ShouldBe(0.0M);
             result.Data[2].MessageStats?.TotalMessagesRedelivered.ShouldBe<ulong>(3);
-            result.Data[2].MessageStats?.MessagesRedeliveredDetails?.Rate.ShouldBe(0.0M);
+            result.Data[2].MessageStats?.MessagesRedeliveredDetails?.Value.ShouldBe(0.0M);
         }
 
         [Test]
@@ -91,7 +93,7 @@ namespace HareDu.Tests
             
             result.DebugInfo.ShouldNotBeNull();
             
-            VirtualHostDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostDefinition>();
+            VirtualHostDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostDefinition>(Deserializer.Options);
 
             definition.Tracing.ShouldBeTrue();
         }

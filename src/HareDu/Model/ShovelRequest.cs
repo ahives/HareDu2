@@ -1,10 +1,10 @@
 namespace HareDu.Model
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public interface ShovelRequest
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         ShovelRequestParams Value { get; }
     }
 }

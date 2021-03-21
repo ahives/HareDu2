@@ -76,7 +76,7 @@ namespace HareDu.Extensions
             
             var shovels = result
                 .Select(x => x.Data)
-                .Where(x => x.VirtualHost == vhost && x.Type == ShovelType.Dynamic.ConvertTo())
+                .Where(x => x.VirtualHost == vhost && x.Type == ShovelType.Dynamic)
                 .ToList();
 
             var results = new List<Result>();

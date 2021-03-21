@@ -1,136 +1,123 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Model
+﻿namespace HareDu.Model
 {
     using System;
     using System.Collections.Generic;
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public interface QueueInfo
     {
-        [JsonProperty("messages_details")]
+        [JsonPropertyName("messages_details")]
         Rate MessageDetails { get; }
         
-        [JsonProperty("messages")]
+        [JsonPropertyName("messages")]
         ulong TotalMessages { get; }
         
-        [JsonProperty("messages_unacknowledged_details")]
+        [JsonPropertyName("messages_unacknowledged_details")]
         Rate UnacknowledgedMessageDetails { get; }
         
-        [JsonProperty("messages_unacknowledged")]
+        [JsonPropertyName("messages_unacknowledged")]
         ulong UnacknowledgedMessages { get; }
         
-        [JsonProperty("messages_ready_details")]
+        [JsonPropertyName("messages_ready_details")]
         Rate ReadyMessageDetails { get; }
         
-        [JsonProperty("messages_ready")]
+        [JsonPropertyName("messages_ready")]
         ulong ReadyMessages { get; }
         
-        [JsonProperty("reductions_details")]
+        [JsonPropertyName("reductions_details")]
         Rate ReductionDetails { get; }
         
-        [JsonProperty("reductions")]
+        [JsonPropertyName("reductions")]
         long TotalReductions { get; }
         
-        [JsonProperty("arguments")]
+        [JsonPropertyName("arguments")]
         IDictionary<string, object> Arguments { get; }
         
-        [JsonProperty("exclusive")]
+        [JsonPropertyName("exclusive")]
         bool Exclusive { get; }
         
-        [JsonProperty("auto_delete")]
+        [JsonPropertyName("auto_delete")]
         bool AutoDelete { get; }
         
-        [JsonProperty("durable")]
+        [JsonPropertyName("durable")]
         bool Durable { get; }
         
-        [JsonProperty("vhost")]
+        [JsonPropertyName("vhost")]
         string VirtualHost { get; }
         
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         string Name { get; }
         
-        [JsonProperty("node")]
+        [JsonPropertyName("node")]
         string Node { get; }
         
-        [JsonProperty("message_bytes_paged_out")]
+        [JsonPropertyName("message_bytes_paged_out")]
         ulong MessageBytesPagedOut { get; }
         
-        [JsonProperty("messages_paged_out")]
+        [JsonPropertyName("messages_paged_out")]
         ulong TotalMessagesPagedOut { get; }
         
-        [JsonProperty("backing_queue_status")]
+        [JsonPropertyName("backing_queue_status")]
         BackingQueueStatus BackingQueueStatus { get; }
         
-        [JsonProperty("head_message_timestamp")]
+        [JsonPropertyName("head_message_timestamp")]
         DateTimeOffset HeadMessageTimestamp { get; }
         
-        [JsonProperty("message_bytes_persistent")]
+        [JsonPropertyName("message_bytes_persistent")]
         ulong MessageBytesPersisted { get; }
         
-        [JsonProperty("message_bytes_ram")]
+        [JsonPropertyName("message_bytes_ram")]
         ulong MessageBytesInRAM { get; }
         
-        [JsonProperty("message_bytes_unacknowledged")]
+        [JsonPropertyName("message_bytes_unacknowledged")]
         ulong TotalBytesOfMessagesDeliveredButUnacknowledged { get; }
         
-        [JsonProperty("message_bytes_ready")]
+        [JsonPropertyName("message_bytes_ready")]
         ulong TotalBytesOfMessagesReadyForDelivery { get; }
         
-        [JsonProperty("message_bytes")]
+        [JsonPropertyName("message_bytes")]
         ulong TotalBytesOfAllMessages { get; }
         
-        [JsonProperty("messages_persistent")]
+        [JsonPropertyName("messages_persistent")]
         ulong MessagesPersisted { get; }
         
-        [JsonProperty("messages_unacknowledged_ram")]
+        [JsonPropertyName("messages_unacknowledged_ram")]
         ulong UnacknowledgedMessagesInRAM { get; }
         
-        [JsonProperty("messages_ready_ram")]
+        [JsonPropertyName("messages_ready_ram")]
         ulong MessagesReadyForDeliveryInRAM { get; }
         
-        [JsonProperty("messages_ram")]
+        [JsonPropertyName("messages_ram")]
         ulong MessagesInRAM { get; }
         
-        [JsonProperty("garbage_collection")]
+        [JsonPropertyName("garbage_collection")]
         GarbageCollectionDetails GC { get; }
         
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         string State { get; }
         
-        [JsonProperty("recoverable_slaves")]
+        [JsonPropertyName("recoverable_slaves")]
         IList<string> RecoverableSlaves { get; }
         
-        [JsonProperty("consumers")]
+        [JsonPropertyName("consumers")]
         ulong Consumers { get; }
         
-        [JsonProperty("exclusive_consumer_tag")]
+        [JsonPropertyName("exclusive_consumer_tag")]
         string ExclusiveConsumerTag { get; }
         
-        [JsonProperty("policy")]
+        [JsonPropertyName("policy")]
         string Policy { get; }
         
-        [JsonProperty("consumer_utilisation")]
+        [JsonPropertyName("consumer_utilisation")]
         decimal ConsumerUtilization { get; }
         
-        [JsonProperty("idle_since")]
+        [JsonPropertyName("idle_since")]
         DateTimeOffset IdleSince { get; }
         
-        [JsonProperty("memory")]
+        [JsonPropertyName("memory")]
         ulong Memory { get; }
         
-        [JsonProperty("message_stats")]
+        [JsonPropertyName("message_stats")]
         QueueMessageStats MessageStats { get; }
     }
 }

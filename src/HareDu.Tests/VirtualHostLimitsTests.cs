@@ -1,9 +1,11 @@
 namespace HareDu.Tests
 {
     using Core.Extensions;
+    using HareDu.Extensions;
     using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using Serialization;
     using Shouldly;
 
     [TestFixture]
@@ -49,7 +51,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>(Deserializer.Options);
             
             definition.MaxConnectionLimit.ShouldBe<ulong>(1000);
             definition.MaxQueueLimit.ShouldBe<ulong>(100);
@@ -76,7 +78,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>(Deserializer.Options);
             
             definition.MaxConnectionLimit.ShouldBe<ulong>(1000);
             definition.MaxQueueLimit.ShouldBe<ulong>(100);
@@ -102,7 +104,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>(Deserializer.Options);
             
             definition.MaxConnectionLimit.ShouldBe<ulong>(1000);
         }
@@ -127,7 +129,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>();
+            VirtualHostLimitsDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostLimitsDefinition>(Deserializer.Options);
             
             definition.MaxQueueLimit.ShouldBe<ulong>(100);
         }

@@ -21,6 +21,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     using Extensions;
     using NUnit.Framework;
     using Registration;
+    using Serialization;
 
     [TestFixture]
     public class TopicPermissionsTest
@@ -44,7 +45,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                 .GetAll()
                 .ScreenDump();
 
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
         
         [Test]
@@ -83,7 +84,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                     });
                 });
 
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
 
         [Test]
@@ -97,7 +98,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
                     x.VirtualHost("HareDu7");
                 });
             
-            Console.WriteLine(result.ToJsonString());
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
         }
     }
 }

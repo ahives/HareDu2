@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Extensions
 {
     using System.Collections.Generic;
@@ -77,31 +64,31 @@ namespace HareDu.Snapshotting.Extensions
                 {
                     Incoming = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessagesPublished ?? 0,
-                        channel.OperationStats?.MessagesPublishedDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessagesPublishedDetails?.Value ?? 0.0M);
                     Gets = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessageGets ?? 0,
-                        channel.OperationStats?.MessageGetDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessageGetDetails?.Value ?? 0.0M);
                     GetsWithoutAck = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessageGetsWithoutAck ?? 0,
-                        channel.OperationStats?.MessageGetsWithoutAckDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessageGetsWithoutAckDetails?.Value ?? 0.0M);
                     Delivered = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessagesDelivered ?? 0,
-                        channel.OperationStats?.MessageDeliveryDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessageDeliveryDetails?.Value ?? 0.0M);
                     DeliveredWithoutAck = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessageDeliveredWithoutAck ?? 0,
-                        channel.OperationStats?.MessagesDeliveredWithoutAckDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessagesDeliveredWithoutAckDetails?.Value ?? 0.0M);
                     DeliveredGets = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessageDeliveryGets ?? 0,
-                        channel.OperationStats?.MessageDeliveryGetDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessageDeliveryGetDetails?.Value ?? 0.0M);
                     Redelivered = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessagesRedelivered ?? 0,
-                        channel.OperationStats?.MessagesRedeliveredDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessagesRedeliveredDetails?.Value ?? 0.0M);
                     Acknowledged = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessagesAcknowledged ?? 0,
-                        channel.OperationStats?.MessagesAcknowledgedDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessagesAcknowledgedDetails?.Value ?? 0.0M);
                     NotRouted = new QueueOperationImpl(
                         channel.OperationStats?.TotalMessagesNotRouted ?? 0,
-                        channel.OperationStats?.MessagesNotRoutedDetails?.Rate ?? 0.0M);
+                        channel.OperationStats?.MessagesNotRoutedDetails?.Value ?? 0.0M);
                 }
 
                 public QueueOperation Incoming { get; }

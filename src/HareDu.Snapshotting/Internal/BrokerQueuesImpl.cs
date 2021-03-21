@@ -1,22 +1,10 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Core.Extensions;
     using HareDu.Extensions;
     using HareDu.Model;
@@ -38,12 +26,11 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public SnapshotResult<BrokerQueuesSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
+        public async Task<SnapshotResult<BrokerQueuesSnapshot>> TakeSnapshot(CancellationToken cancellationToken = default)
         {
-            var cluster = _factory
-                .Object<SystemOverview>()
-                .Get(cancellationToken)
-                .GetResult();
+            var cluster = await _factory
+                .GetBrokerSystemOverview(cancellationToken)
+                .ConfigureAwait(false);
 
             if (cluster.HasFaulted)
             {
@@ -201,17 +188,17 @@ namespace HareDu.Snapshotting.Internal
                 {
                     public QueueChurnMetricsImpl(QueueInfo queue)
                     {
-                        Incoming = new QueueDepthImpl(queue.MessageStats?.TotalMessagesPublished ?? 0, queue.MessageStats?.MessagesPublishedDetails?.Rate ?? 0);
-                        Gets = new QueueDepthImpl(queue.MessageStats?.TotalMessageGets ?? 0, queue.MessageStats?.MessageGetDetails?.Rate ?? 0);
-                        GetsWithoutAck = new QueueDepthImpl(queue.MessageStats?.TotalMessageGetsWithoutAck ?? 0, queue.MessageStats?.MessageGetsWithoutAckDetails?.Rate ?? 0);
-                        DeliveredGets = new QueueDepthImpl(queue.MessageStats?.TotalMessageDeliveryGets ?? 0, queue.MessageStats?.MessageDeliveryGetDetails?.Rate ?? 0);
-                        Delivered = new QueueDepthImpl(queue.MessageStats?.TotalMessagesDelivered ?? 0, queue.MessageStats?.MessageDeliveryDetails?.Rate ?? 0);
-                        DeliveredWithoutAck = new QueueDepthImpl(queue.MessageStats?.TotalMessageDeliveredWithoutAck ?? 0, queue.MessageStats?.MessagesDeliveredWithoutAckDetails?.Rate ?? 0);
-                        Redelivered = new QueueDepthImpl(queue.MessageStats?.TotalMessagesRedelivered ?? 0, queue.MessageStats?.MessagesRedeliveredDetails?.Rate ?? 0);
-                        Acknowledged = new QueueDepthImpl(queue.MessageStats?.TotalMessagesAcknowledged ?? 0, queue.MessageStats?.MessagesAcknowledgedDetails?.Rate ?? 0);
-                        Aggregate = new QueueDepthImpl(queue.TotalMessages, queue.MessageDetails?.Rate ?? 0);
-                        Ready = new QueueDepthImpl(queue.ReadyMessages, queue.ReadyMessageDetails?.Rate ?? 0);
-                        Unacknowledged = new QueueDepthImpl(queue.UnacknowledgedMessages, queue.UnacknowledgedMessageDetails?.Rate ?? 0);
+                        Incoming = new QueueDepthImpl(queue.MessageStats?.TotalMessagesPublished ?? 0, queue.MessageStats?.MessagesPublishedDetails?.Value ?? 0);
+                        Gets = new QueueDepthImpl(queue.MessageStats?.TotalMessageGets ?? 0, queue.MessageStats?.MessageGetDetails?.Value ?? 0);
+                        GetsWithoutAck = new QueueDepthImpl(queue.MessageStats?.TotalMessageGetsWithoutAck ?? 0, queue.MessageStats?.MessageGetsWithoutAckDetails?.Value ?? 0);
+                        DeliveredGets = new QueueDepthImpl(queue.MessageStats?.TotalMessageDeliveryGets ?? 0, queue.MessageStats?.MessageDeliveryGetDetails?.Value ?? 0);
+                        Delivered = new QueueDepthImpl(queue.MessageStats?.TotalMessagesDelivered ?? 0, queue.MessageStats?.MessageDeliveryDetails?.Value ?? 0);
+                        DeliveredWithoutAck = new QueueDepthImpl(queue.MessageStats?.TotalMessageDeliveredWithoutAck ?? 0, queue.MessageStats?.MessagesDeliveredWithoutAckDetails?.Value ?? 0);
+                        Redelivered = new QueueDepthImpl(queue.MessageStats?.TotalMessagesRedelivered ?? 0, queue.MessageStats?.MessagesRedeliveredDetails?.Value ?? 0);
+                        Acknowledged = new QueueDepthImpl(queue.MessageStats?.TotalMessagesAcknowledged ?? 0, queue.MessageStats?.MessagesAcknowledgedDetails?.Value ?? 0);
+                        Aggregate = new QueueDepthImpl(queue.TotalMessages, queue.MessageDetails?.Value ?? 0);
+                        Ready = new QueueDepthImpl(queue.ReadyMessages, queue.ReadyMessageDetails?.Value ?? 0);
+                        Unacknowledged = new QueueDepthImpl(queue.UnacknowledgedMessages, queue.UnacknowledgedMessageDetails?.Value ?? 0);
                     }
 
                     public QueueDepth Incoming { get; }
@@ -234,18 +221,18 @@ namespace HareDu.Snapshotting.Internal
             {
                 public BrokerQueueChurnMetricsImpl(MessageStats messageStats, QueueStats queueStats)
                 {
-                    Incoming = new QueueDepthImpl(messageStats.TotalMessagesPublished, messageStats.MessagesPublishedDetails?.Rate ?? 0);
-                    NotRouted = new QueueDepthImpl(messageStats.TotalUnroutableMessages, messageStats.UnroutableMessagesDetails?.Rate ?? 0);
-                    Gets = new QueueDepthImpl(messageStats.TotalMessageGets, messageStats.MessageGetDetails?.Rate ?? 0);
-                    GetsWithoutAck = new QueueDepthImpl(messageStats.TotalMessageGetsWithoutAck, messageStats.MessageGetsWithoutAckDetails?.Rate ?? 0);
-                    DeliveredGets = new QueueDepthImpl(messageStats.TotalMessageDeliveryGets, messageStats.MessageDeliveryGetDetails?.Rate ?? 0);
-                    Delivered = new QueueDepthImpl(messageStats.TotalMessagesDelivered, messageStats.MessageDeliveryDetails?.Rate ?? 0);
-                    DeliveredWithoutAck = new QueueDepthImpl(messageStats.TotalMessageDeliveredWithoutAck, messageStats.MessagesDeliveredWithoutAckDetails?.Rate ?? 0);
-                    Redelivered = new QueueDepthImpl(messageStats.TotalMessagesRedelivered, messageStats.MessagesRedeliveredDetails?.Rate ?? 0);
-                    Acknowledged = new QueueDepthImpl(messageStats.TotalMessagesAcknowledged, messageStats.MessagesAcknowledgedDetails?.Rate ?? 0);
-                    Broker = new QueueDepthImpl(queueStats.TotalMessages, queueStats.MessageDetails?.Rate ?? 0);
-                    Ready = new QueueDepthImpl(queueStats.TotalMessagesReadyForDelivery, queueStats.MessagesReadyForDeliveryDetails?.Rate ?? 0);
-                    Unacknowledged = new QueueDepthImpl(queueStats.TotalUnacknowledgedDeliveredMessages, queueStats.UnacknowledgedDeliveredMessagesDetails?.Rate ?? 0);
+                    Incoming = new QueueDepthImpl(messageStats.TotalMessagesPublished, messageStats.MessagesPublishedDetails?.Value ?? 0);
+                    NotRouted = new QueueDepthImpl(messageStats.TotalUnroutableMessages, messageStats.UnroutableMessagesDetails?.Value ?? 0);
+                    Gets = new QueueDepthImpl(messageStats.TotalMessageGets, messageStats.MessageGetDetails?.Value ?? 0);
+                    GetsWithoutAck = new QueueDepthImpl(messageStats.TotalMessageGetsWithoutAck, messageStats.MessageGetsWithoutAckDetails?.Value ?? 0);
+                    DeliveredGets = new QueueDepthImpl(messageStats.TotalMessageDeliveryGets, messageStats.MessageDeliveryGetDetails?.Value ?? 0);
+                    Delivered = new QueueDepthImpl(messageStats.TotalMessagesDelivered, messageStats.MessageDeliveryDetails?.Value ?? 0);
+                    DeliveredWithoutAck = new QueueDepthImpl(messageStats.TotalMessageDeliveredWithoutAck, messageStats.MessagesDeliveredWithoutAckDetails?.Value ?? 0);
+                    Redelivered = new QueueDepthImpl(messageStats.TotalMessagesRedelivered, messageStats.MessagesRedeliveredDetails?.Value ?? 0);
+                    Acknowledged = new QueueDepthImpl(messageStats.TotalMessagesAcknowledged, messageStats.MessagesAcknowledgedDetails?.Value ?? 0);
+                    Broker = new QueueDepthImpl(queueStats.TotalMessages, queueStats.MessageDetails?.Value ?? 0);
+                    Ready = new QueueDepthImpl(queueStats.TotalMessagesReadyForDelivery, queueStats.MessagesReadyForDeliveryDetails?.Value ?? 0);
+                    Unacknowledged = new QueueDepthImpl(queueStats.TotalUnacknowledgedDeliveredMessages, queueStats.UnacknowledgedDeliveredMessagesDetails?.Value ?? 0);
                 }
 
                 public long Persisted { get; }

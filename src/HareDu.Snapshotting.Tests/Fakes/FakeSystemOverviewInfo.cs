@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System.Collections.Generic;
@@ -31,16 +18,21 @@ namespace HareDu.Snapshotting.Tests.Fakes
 
         public string ManagementVersion { get; }
         public string RatesMode { get; }
+        public SampleRetentionPolicies SampleRetentionPolicies { get; }
         public IList<ExchangeType> ExchangeTypes { get; }
+        public string ProductVersion { get; }
+        public string ProductName { get; }
         public string RabbitMqVersion { get; }
         public string ClusterName { get; }
         public string ErlangVersion { get; }
         public string ErlangFullVersion { get; }
+        public bool DisableStats { get; }
+        public bool EnableQueueTotals { get; }
         public MessageStats MessageStats { get; }
         public ChurnRates ChurnRates { get; }
         public QueueStats QueueStats { get; }
         public ClusterObjectTotals ObjectTotals { get; }
-        public long StatsDatabaseEventQueue { get; }
+        public ulong StatsDatabaseEventQueue { get; }
         public string Node { get; }
         public IList<Listener> Listeners { get; }
         public IList<NodeContext> Contexts { get; }
@@ -72,10 +64,10 @@ namespace HareDu.Snapshotting.Tests.Fakes
             {
                 public RateImpl(decimal rate)
                 {
-                    Rate = rate;
+                    Value = rate;
                 }
 
-                public decimal Rate { get; }
+                public decimal Value { get; }
             }
         }
 
@@ -140,10 +132,10 @@ namespace HareDu.Snapshotting.Tests.Fakes
             {
                 public RateImpl(decimal rate)
                 {
-                    Rate = rate;
+                    Value = rate;
                 }
 
-                public decimal Rate { get; }
+                public decimal Value { get; }
             }
         }
     }

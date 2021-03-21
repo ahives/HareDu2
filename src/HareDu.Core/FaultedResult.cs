@@ -19,6 +19,12 @@
             Timestamp = DateTimeOffset.UtcNow;
         }
 
+        public FaultedResult(DebugInfo debugInfo)
+        {
+            DebugInfo = debugInfo;
+            Timestamp = DateTimeOffset.UtcNow;
+        }
+
         public DateTimeOffset Timestamp { get; }
         public DebugInfo DebugInfo { get; }
         public IReadOnlyList<Error> Errors { get; }
@@ -38,6 +44,12 @@
         {
             DebugInfo = debugInfo;
             Errors = errors;
+            Timestamp = DateTimeOffset.UtcNow;
+        }
+
+        public FaultedResult(DebugInfo debugInfo)
+        {
+            DebugInfo = debugInfo;
             Timestamp = DateTimeOffset.UtcNow;
         }
 

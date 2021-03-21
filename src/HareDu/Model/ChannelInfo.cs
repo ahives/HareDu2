@@ -1,147 +1,134 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Model
+﻿namespace HareDu.Model
 {
     using System;
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public interface ChannelInfo
     {
-        [JsonProperty("reductions_details")]
+        [JsonPropertyName("reductions_details")]
         Rate ReductionDetails { get; }
 
-        [JsonProperty("reductions")]
+        [JsonPropertyName("reductions")]
         ulong TotalReductions { get; }
 
-        [JsonProperty("vhost")]
+        [JsonPropertyName("vhost")]
         string VirtualHost { get; }
 
-        [JsonProperty("node")]
+        [JsonPropertyName("node")]
         string Node { get; }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         string User { get; }
 
-        [JsonProperty("user_who_performed_action")]
+        [JsonPropertyName("user_who_performed_action")]
         string UserWhoPerformedAction { get; }
 
-        [JsonProperty("connected_at")]
+        [JsonPropertyName("connected_at")]
         long ConnectedAt { get; }
 
-        [JsonProperty("frame_max")]
+        [JsonPropertyName("frame_max")]
         ulong FrameMax { get; }
 
-        [JsonProperty("timeout")]
+        [JsonPropertyName("timeout")]
         long Timeout { get; }
 
-        [JsonProperty("number")]
+        [JsonPropertyName("number")]
         ulong Number { get; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         string Name { get; }
 
-        [JsonProperty("protocol")]
+        [JsonPropertyName("protocol")]
         string Protocol { get; }
 
-        [JsonProperty("ssl_hash")]
+        [JsonPropertyName("ssl_hash")]
         string SslHash { get; }
 
-        [JsonProperty("ssl_cipher")]
+        [JsonPropertyName("ssl_cipher")]
         string SslCipher { get; }
 
-        [JsonProperty("ssl_key_exchange")]
+        [JsonPropertyName("ssl_key_exchange")]
         string SslKeyExchange { get; }
 
-        [JsonProperty("ssl_protocol")]
+        [JsonPropertyName("ssl_protocol")]
         string SslProtocol { get; }
 
-        [JsonProperty("auth_mechanism")]
+        [JsonPropertyName("auth_mechanism")]
         string AuthenticationMechanism { get; }
 
-        [JsonProperty("peer_cert_validity")]
+        [JsonPropertyName("peer_cert_validity")]
         string PeerCertificateValidity { get; }
 
-        [JsonProperty("peer_cert_issuer")]
+        [JsonPropertyName("peer_cert_issuer")]
         string PeerCertificateIssuer { get; }
 
-        [JsonProperty("peer_cert_subject")]
+        [JsonPropertyName("peer_cert_subject")]
         string PeerCertificateSubject { get; }
 
-        [JsonProperty("ssl")]
+        [JsonPropertyName("ssl")]
         bool Ssl { get; }
 
-        [JsonProperty("peer_host")]
+        [JsonPropertyName("peer_host")]
         string PeerHost { get; }
 
-        [JsonProperty("host")]
+        [JsonPropertyName("host")]
         string Host { get; }
 
-        [JsonProperty("peer_port")]
+        [JsonPropertyName("peer_port")]
         long PeerPort { get; }
 
-        [JsonProperty("port")]
+        [JsonPropertyName("port")]
         long Port { get; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         string Type { get; }
 
-        [JsonProperty("connection_details")]
+        [JsonPropertyName("connection_details")]
         ConnectionDetails ConnectionDetails { get; }
 
-        [JsonProperty("garbage_collection")]
+        [JsonPropertyName("garbage_collection")]
         GarbageCollectionDetails GarbageCollectionDetails { get; }
 
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         string State { get; }
 
-        [JsonProperty("channels")]
+        [JsonPropertyName("channels")]
         long TotalChannels { get; }
 
-        [JsonProperty("send_pend")]
+        [JsonPropertyName("send_pend")]
         long SentPending { get; }
 
-        [JsonProperty("global_prefetch_count")]
+        [JsonPropertyName("global_prefetch_count")]
         uint GlobalPrefetchCount { get; }
 
-        [JsonProperty("prefetch_count")]
+        [JsonPropertyName("prefetch_count")]
         uint PrefetchCount { get; }
 
-        [JsonProperty("acks_uncommitted")]
+        [JsonPropertyName("acks_uncommitted")]
         ulong UncommittedAcknowledgements { get; }
 
-        [JsonProperty("messages_uncommitted")]
+        [JsonPropertyName("messages_uncommitted")]
         ulong UncommittedMessages { get; }
 
-        [JsonProperty("messages_unconfirmed")]
+        [JsonPropertyName("messages_unconfirmed")]
         ulong UnconfirmedMessages { get; }
 
-        [JsonProperty("messages_unacknowledged")]
+        [JsonPropertyName("messages_unacknowledged")]
         ulong UnacknowledgedMessages { get; }
 
-        [JsonProperty("consumer_count")]
+        [JsonPropertyName("consumer_count")]
         ulong TotalConsumers { get; }
 
-        [JsonProperty("confirm")]
+        [JsonPropertyName("confirm")]
         bool Confirm { get; }
 
-        [JsonProperty("transactional")]
+        [JsonPropertyName("transactional")]
         bool Transactional { get; }
 
-        [JsonProperty("idle_since")]
+        [JsonPropertyName("idle_since")]
         DateTimeOffset IdleSince { get; }
         
-        [JsonProperty("message_stats")]
+        [JsonPropertyName("message_stats")]
         ChannelOperationStats OperationStats { get; }
     }
 }

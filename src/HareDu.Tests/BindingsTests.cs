@@ -1,10 +1,12 @@
 namespace HareDu.Tests
 {
     using Core.Extensions;
+    using HareDu.Extensions;
     using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
+    using Serialization;
     using Shouldly;
 
     [TestFixture]
@@ -55,7 +57,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            BindingDefinition definition = result.DebugInfo.Request.ToObject<BindingDefinition>();
+            BindingDefinition definition = result.DebugInfo.Request.ToObject<BindingDefinition>(Deserializer.Options);
             
             definition.RoutingKey.ShouldBe("*.");
             definition.Arguments["arg1"].ShouldBe("value1");

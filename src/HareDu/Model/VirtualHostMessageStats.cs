@@ -1,80 +1,67 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Model
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public interface VirtualHostMessageStats
     {
-        [JsonProperty("publish")]
+        [JsonPropertyName("publish")]
         ulong TotalMessagesPublished { get; }
 
-        [JsonProperty("publish_details")]
+        [JsonPropertyName("publish_details")]
         Rate MessagesPublishedDetails { get; }
         
-        [JsonProperty("confirm")]
+        [JsonPropertyName("confirm")]
         ulong TotalMessagesConfirmed { get; }
 
-        [JsonProperty("confirm_details")]
+        [JsonPropertyName("confirm_details")]
         Rate MessagesConfirmedDetails { get; }
         
-        [JsonProperty("return_unroutable")]
+        [JsonPropertyName("return_unroutable")]
         ulong TotalUnroutableMessages { get; }
 
-        [JsonProperty("return_unroutable_details")]
+        [JsonPropertyName("return_unroutable_details")]
         Rate UnroutableMessagesDetails { get; }
         
-        [JsonProperty("get")]
+        [JsonPropertyName("get")]
         ulong TotalMessageGets { get; }
 
-        [JsonProperty("get_details")]
+        [JsonPropertyName("get_details")]
         Rate MessageGetDetails { get; }
         
-        [JsonProperty("get_no_ack")]
+        [JsonPropertyName("get_no_ack")]
         ulong TotalMessageGetsWithoutAck { get; }
 
-        [JsonProperty("get_no_ack_details")]
+        [JsonPropertyName("get_no_ack_details")]
         Rate MessageGetsWithoutAckDetails { get; }
         
-        [JsonProperty("deliver")]
+        [JsonPropertyName("deliver")]
         ulong TotalMessagesDelivered { get; }
 
-        [JsonProperty("deliver_details")]
+        [JsonPropertyName("deliver_details")]
         Rate MessageDeliveryDetails { get; }
         
-        [JsonProperty("deliver_no_ack")]
+        [JsonPropertyName("deliver_no_ack")]
         ulong TotalMessageDeliveredWithoutAck { get; }
 
-        [JsonProperty("deliver_no_ack_details")]
+        [JsonPropertyName("deliver_no_ack_details")]
         Rate MessagesDeliveredWithoutAckDetails { get; }
         
-        [JsonProperty("redeliver")]
+        [JsonPropertyName("redeliver")]
         ulong TotalMessagesRedelivered { get; }
 
-        [JsonProperty("redeliver_details")]
+        [JsonPropertyName("redeliver_details")]
         Rate MessagesRedeliveredDetails { get; }
         
-        [JsonProperty("ack")]
+        [JsonPropertyName("ack")]
         ulong TotalMessagesAcknowledged { get; }
 
-        [JsonProperty("ack_details")]
+        [JsonPropertyName("ack_details")]
         Rate MessagesAcknowledgedDetails { get; }
         
-        [JsonProperty("deliver_get")]
+        [JsonPropertyName("deliver_get")]
         ulong TotalMessageDeliveryGets { get; }
 
-        [JsonProperty("deliver_get_details")]
+        [JsonPropertyName("deliver_get_details")]
         Rate MessageDeliveryGetDetails { get; }
     }
 }

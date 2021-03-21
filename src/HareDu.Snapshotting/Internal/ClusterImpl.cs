@@ -1,23 +1,12 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Core.Extensions;
+    using HareDu.Extensions;
     using HareDu.Model;
     using HareDu.Registration;
     using MassTransit;
@@ -37,12 +26,11 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public SnapshotResult<ClusterSnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
+        public async Task<SnapshotResult<ClusterSnapshot>> TakeSnapshot(CancellationToken cancellationToken = default)
         {
-            var cluster = _factory
-                .Object<SystemOverview>()
-                .Get(cancellationToken)
-                .GetResult();
+            var cluster = await _factory
+                .GetBrokerSystemOverview(cancellationToken)
+                .ConfigureAwait(false);
 
             if (cluster.HasFaulted)
             {
@@ -51,10 +39,9 @@ namespace HareDu.Snapshotting.Internal
                 return new EmptySnapshotResult<ClusterSnapshot>();
             }
 
-            var nodes = _factory
-                .Object<Node>()
-                .GetAll(cancellationToken)
-                .GetResult();
+            var nodes = await _factory
+                .GetAllNodes(cancellationToken)
+                .ConfigureAwait(false);
 
             if (nodes.HasFaulted)
             {
@@ -79,9 +66,7 @@ namespace HareDu.Snapshotting.Internal
         public SnapshotLens<ClusterSnapshot> RegisterObserver(IObserver<SnapshotContext<ClusterSnapshot>> observer)
         {
             if (observer != null)
-            {
                 _observers.Add(Subscribe(observer));
-            }
 
             return this;
         }
@@ -93,9 +78,7 @@ namespace HareDu.Snapshotting.Internal
                 return this;
             
             for (int i = 0; i < observers.Count; i++)
-            {
                 _observers.Add(Subscribe(observers[i]));
-            }
 
             return this;
         }
@@ -166,7 +149,7 @@ namespace HareDu.Snapshotting.Internal
                     {
                         NodeIdentifier = node.Name;
                         Used = node.MemoryUsed;
-                        UsageRate = node.MemoryUsageDetails?.Rate ?? 0;
+                        UsageRate = node.MemoryUsageDetails?.Value ?? 0;
                         Limit = node.MemoryLimit;
                         AlarmInEffect = node.MemoryAlarm;
                     }
@@ -204,23 +187,23 @@ namespace HareDu.Snapshotting.Internal
                         public IOImpl(NodeInfo node)
                         {
                             Reads = new DiskUsageDetailsImpl(node.TotalIOReads,
-                                node.IOReadDetails?.Rate ?? 0,
+                                node.IOReadDetails?.Value ?? 0,
                                 node.TotalIOBytesRead,
-                                node.IOBytesReadDetails?.Rate ?? 0,
+                                node.IOBytesReadDetails?.Value ?? 0,
                                 node.AvgIOReadTime,
-                                node.AvgIOReadTimeDetails?.Rate ?? 0);
+                                node.AvgIOReadTimeDetails?.Value ?? 0);
                             Writes = new DiskUsageDetailsImpl(node.TotalIOWrites,
-                                node.IOWriteDetails?.Rate ?? 0,
+                                node.IOWriteDetails?.Value ?? 0,
                                 node.TotalIOBytesWritten,
-                                node.IOBytesWrittenDetails?.Rate ?? 0,
+                                node.IOBytesWrittenDetails?.Value ?? 0,
                                 node.AvgTimePerIOWrite,
-                                node.AvgTimePerIOWriteDetails?.Rate ?? 0);
+                                node.AvgTimePerIOWriteDetails?.Value ?? 0);
                             Seeks = new DiskUsageDetailsImpl(node.IOSeekCount,
-                                node.IOSeeksDetails?.Rate ?? 0,
+                                node.IOSeeksDetails?.Value ?? 0,
                                 0,
                                 0,
                                 node.AverageIOSeekTime,
-                                node.AvgIOSeekTimeDetails?.Rate ?? 0);
+                                node.AvgIOSeekTimeDetails?.Value ?? 0);
                             FileHandles = new FileHandlesImpl(node);
                         }
 
@@ -236,7 +219,7 @@ namespace HareDu.Snapshotting.Internal
                             public FileHandlesImpl(NodeInfo node)
                             {
                                 Recycled = node.TotalIOReopened;
-                                Rate = node.IOReopenedDetails?.Rate ?? 0;
+                                Rate = node.IOReopenedDetails?.Value ?? 0;
                             }
 
                             public ulong Recycled { get; }
@@ -298,7 +281,7 @@ namespace HareDu.Snapshotting.Internal
                         public DiskCapacityDetailsImpl(NodeInfo node)
                         {
                             Available = node.FreeDiskSpace;
-                            Rate = node.FreeDiskSpaceDetails?.Rate ?? 0;
+                            Rate = node.FreeDiskSpaceDetails?.Value ?? 0;
                         }
 
                         public ulong Available { get; }
@@ -313,7 +296,7 @@ namespace HareDu.Snapshotting.Internal
                     public ContextSwitchDetailsImpl(NodeInfo node)
                     {
                         Total = node.ContextSwitches;
-                        Rate = node.ContextSwitchDetails?.Rate ?? 0;
+                        Rate = node.ContextSwitchDetails?.Value ?? 0;
                     }
 
                     public ulong Total { get; }
@@ -329,7 +312,7 @@ namespace HareDu.Snapshotting.Internal
                         ClusterIdentifier = systemOverview.ClusterName;
                         Identifier = node.Name;
                         Version = systemOverview.ErlangVersion;
-                        Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Rate ?? 0);
+                        Processes = new RuntimeProcessChurnMetricsImpl(node.TotalProcesses, node.ProcessesUsed, node.ProcessUsageDetails?.Value ?? 0);
                         Database = new RuntimeDatabaseImpl(node);
                         GC = new GarbageCollectionImpl(node);
                     }
@@ -347,10 +330,10 @@ namespace HareDu.Snapshotting.Internal
                     {
                         public GarbageCollectionImpl(NodeInfo node)
                         {
-                            ChannelsClosed = new CollectedGarbageImpl(node.TotalChannelsClosed, node.ClosedChannelDetails?.Rate ?? 0);
-                            ConnectionsClosed = new CollectedGarbageImpl(node.TotalConnectionsClosed, node.ClosedConnectionDetails?.Rate ?? 0);
-                            QueuesDeleted = new CollectedGarbageImpl(node.TotalQueuesDeleted, node.DeletedQueueDetails?.Rate ?? 0);
-                            ReclaimedBytes = new CollectedGarbageImpl(node.BytesReclaimedByGarbageCollector, node.ReclaimedBytesFromGCDetails?.Rate ?? 0);
+                            ChannelsClosed = new CollectedGarbageImpl(node.TotalChannelsClosed, node.ClosedChannelDetails?.Value ?? 0);
+                            ConnectionsClosed = new CollectedGarbageImpl(node.TotalConnectionsClosed, node.ClosedConnectionDetails?.Value ?? 0);
+                            QueuesDeleted = new CollectedGarbageImpl(node.TotalQueuesDeleted, node.DeletedQueueDetails?.Value ?? 0);
+                            ReclaimedBytes = new CollectedGarbageImpl(node.BytesReclaimedByGarbageCollector, node.ReclaimedBytesFromGCDetails?.Value ?? 0);
                         }
 
                         class CollectedGarbageImpl :
@@ -394,9 +377,9 @@ namespace HareDu.Snapshotting.Internal
                             public StorageDetailsImpl(NodeInfo node)
                             {
                                 Reads = new MessageStoreDetailsImpl(node.TotalMessageStoreReads,
-                                    node.MessageStoreReadDetails?.Rate ?? 0);
+                                    node.MessageStoreReadDetails?.Value ?? 0);
                                 Writes = new MessageStoreDetailsImpl(node.TotalMessageStoreWrites,
-                                    node.MessageStoreWriteDetails?.Rate ?? 0);
+                                    node.MessageStoreWriteDetails?.Value ?? 0);
                             }
 
                             public MessageStoreDetails Reads { get; }
@@ -424,9 +407,9 @@ namespace HareDu.Snapshotting.Internal
                             public IndexDetailsImpl(NodeInfo node)
                             {
                                 Reads = new IndexUsageDetailsImpl(node.TotalQueueIndexReads,
-                                    node.QueueIndexReadDetails?.Rate ?? 0);
+                                    node.QueueIndexReadDetails?.Value ?? 0);
                                 Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexWrites,
-                                    node.QueueIndexWriteDetails?.Rate ?? 0);
+                                    node.QueueIndexWriteDetails?.Value ?? 0);
                                 Journal = new JournalDetailsImpl(node);
                             }
 
@@ -441,7 +424,7 @@ namespace HareDu.Snapshotting.Internal
                                 public JournalDetailsImpl(NodeInfo node)
                                 {
                                     Writes = new IndexUsageDetailsImpl(node.TotalQueueIndexJournalWrites,
-                                        node.QueueIndexJournalWriteDetails?.Rate ?? 0);
+                                        node.QueueIndexJournalWriteDetails?.Value ?? 0);
                                 }
 
                                 public IndexUsageDetails Writes { get; }
@@ -469,9 +452,9 @@ namespace HareDu.Snapshotting.Internal
                             public TransactionDetailsImpl(NodeInfo node)
                             {
                                 RAM = new PersistenceDetailsImpl(node.TotalMnesiaRamTransactions,
-                                    node.MnesiaRAMTransactionCountDetails?.Rate ?? 0);
+                                    node.MnesiaRAMTransactionCountDetails?.Value ?? 0);
                                 Disk = new PersistenceDetailsImpl(node.TotalMnesiaDiskTransactions,
-                                    node.MnesiaDiskTransactionCountDetails?.Rate ?? 0);
+                                    node.MnesiaDiskTransactionCountDetails?.Value ?? 0);
                             }
 
                             public PersistenceDetails RAM { get; }
@@ -535,7 +518,7 @@ namespace HareDu.Snapshotting.Internal
                         {
                             Available = node.TotalSocketsAvailable;
                             Used = node.SocketsUsed;
-                            UsageRate = node.SocketsUsedDetails?.Rate ?? 0;
+                            UsageRate = node.SocketsUsedDetails?.Value ?? 0;
                         }
 
                         public ulong Available { get; }
@@ -551,11 +534,11 @@ namespace HareDu.Snapshotting.Internal
                         {
                             Available = node.TotalFileDescriptors;
                             Used = node.FileDescriptorUsed;
-                            UsageRate = node.FileDescriptorUsedDetails?.Rate ?? 0;
+                            UsageRate = node.FileDescriptorUsedDetails?.Value ?? 0;
                             OpenAttempts = node.TotalOpenFileHandleAttempts;
-                            OpenAttemptRate = node.FileHandleOpenAttemptDetails?.Rate ?? 0;
-                            AvgTimePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
-                            AvgTimeRatePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Rate ?? 0;
+                            OpenAttemptRate = node.FileHandleOpenAttemptDetails?.Value ?? 0;
+                            AvgTimePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Value ?? 0;
+                            AvgTimeRatePerOpenAttempt = node.FileHandleOpenAttemptAvgTimeDetails?.Value ?? 0;
                         }
 
                         public ulong Available { get; }

@@ -32,7 +32,7 @@ namespace HareDu.Tests
             result.Data[0].Number.ShouldBe<ulong>(1);
             result.Data[0].TotalReductions.ShouldBe<ulong>(6149);
             result.Data[0].ReductionDetails.ShouldNotBeNull();
-            result.Data[0].ReductionDetails?.Rate.ShouldBe(0.0M);
+            result.Data[0].ReductionDetails?.Value.ShouldBe(0.0M);
             result.Data[0].ConnectionDetails.ShouldNotBeNull();
             result.Data[0].ConnectionDetails?.Name.ShouldBe("127.0.0.0:72368 -> 127.0.0.0:5672");
             result.Data[0].ConnectionDetails?.PeerHost.ShouldBe("127.0.0.0");
@@ -51,7 +51,7 @@ namespace HareDu.Tests
             result.Data[1].TotalReductions.ShouldBe<ulong>(19755338);
             result.Data[1].Transactional.ShouldBeFalse();
             result.Data[1].ReductionDetails.ShouldNotBeNull();
-            result.Data[1].ReductionDetails.Rate.ShouldBe(0.0M);
+            result.Data[1].ReductionDetails.Value.ShouldBe(0.0M);
             result.Data[1].Name.ShouldBe("127.0.0.0:72368 -> 127.0.0.0:5672 (2)");
             result.Data[1].Node.ShouldBe("rabbit@localhost");
             result.Data[1].User.ShouldBe("guest");
@@ -83,16 +83,16 @@ namespace HareDu.Tests
             result.Data[1].OperationStats.TotalMessageGets.ShouldBe<ulong>(0);
             result.Data[1].OperationStats.TotalMessageGetsWithoutAck.ShouldBe<ulong>(0);
             result.Data[1].OperationStats.TotalMessagesRedelivered.ShouldBe<ulong>(3);
-            result.Data[1].OperationStats.MessagesConfirmedDetails?.Rate.ShouldBe(0.0M);
-            result.Data[1].OperationStats.MessagesNotRoutedDetails?.Rate.ShouldBe(0.0M);
-            result.Data[1].OperationStats.MessagesPublishedDetails?.Rate.ShouldBe(0.0M);
-            result.Data[1].OperationStats.MessageDeliveryGetDetails?.Rate.ShouldBe(1463.8M);
-            result.Data[1].OperationStats.MessageDeliveryDetails?.Rate.ShouldBe(1463.8M);
-            result.Data[1].OperationStats.MessagesAcknowledgedDetails?.Rate.ShouldBe(1473.0M);
-            result.Data[1].OperationStats.MessagesDeliveredWithoutAckDetails?.Rate.ShouldBe(0.0M);
-            result.Data[1].OperationStats.MessageGetDetails?.Rate.ShouldBe(0.0M);
-            result.Data[1].OperationStats.MessageGetsWithoutAckDetails?.Rate.ShouldBe(0.0M);
-            result.Data[1].OperationStats.MessagesRedeliveredDetails?.Rate.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessagesConfirmedDetails?.Value.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessagesNotRoutedDetails?.Value.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessagesPublishedDetails?.Value.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessageDeliveryGetDetails?.Value.ShouldBe(1463.8M);
+            result.Data[1].OperationStats.MessageDeliveryDetails?.Value.ShouldBe(1463.8M);
+            result.Data[1].OperationStats.MessagesAcknowledgedDetails?.Value.ShouldBe(1473.0M);
+            result.Data[1].OperationStats.MessagesDeliveredWithoutAckDetails?.Value.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessageGetDetails?.Value.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessageGetsWithoutAckDetails?.Value.ShouldBe(0.0M);
+            result.Data[1].OperationStats.MessagesRedeliveredDetails?.Value.ShouldBe(0.0M);
         }
     }
 }

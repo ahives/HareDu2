@@ -2,10 +2,12 @@ namespace HareDu.Tests
 {
     using System;
     using Core.Extensions;
+    using HareDu.Extensions;
     using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
+    using Serialization;
     using Shouldly;
 
     [TestFixture]
@@ -27,28 +29,28 @@ namespace HareDu.Tests
             result.Data[5].MessageStats.ShouldNotBeNull();
             result.Data[5].MessageStats.TotalMessageGets.ShouldBe<ulong>(0);
             result.Data[5].MessageStats.MessageGetDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessageGetDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessageGetDetails.Value.ShouldBe(0.0M);
             result.Data[5].MessageStats.TotalMessagesAcknowledged.ShouldBe<ulong>(50000);
             result.Data[5].MessageStats.MessagesAcknowledgedDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessagesAcknowledgedDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessagesAcknowledgedDetails.Value.ShouldBe(0.0M);
             result.Data[5].MessageStats.TotalMessagesDelivered.ShouldBe<ulong>(50000);
             result.Data[5].MessageStats.MessageDeliveryDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessageDeliveryDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessageDeliveryDetails.Value.ShouldBe(0.0M);
             result.Data[5].MessageStats.TotalMessagesPublished.ShouldBe<ulong>(50000);
             result.Data[5].MessageStats.MessagesPublishedDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessagesPublishedDetails.Rate.ShouldBe(1000.0M);
+            result.Data[5].MessageStats.MessagesPublishedDetails.Value.ShouldBe(1000.0M);
             result.Data[5].MessageStats.TotalMessagesRedelivered.ShouldBe<ulong>(0);
             result.Data[5].MessageStats.MessagesRedeliveredDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessagesRedeliveredDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessagesRedeliveredDetails.Value.ShouldBe(0.0M);
             result.Data[5].MessageStats.TotalMessageDeliveryGets.ShouldBe<ulong>(50000);
             result.Data[5].MessageStats.MessageDeliveryGetDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessageDeliveryGetDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessageDeliveryGetDetails.Value.ShouldBe(0.0M);
             result.Data[5].MessageStats.TotalMessageDeliveredWithoutAck.ShouldBe<ulong>(0);
             result.Data[5].MessageStats.MessagesDeliveredWithoutAckDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessagesDeliveredWithoutAckDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessagesDeliveredWithoutAckDetails.Value.ShouldBe(0.0M);
             result.Data[5].MessageStats.TotalMessageGetsWithoutAck.ShouldBe<ulong>(0);
             result.Data[5].MessageStats.MessageGetsWithoutAckDetails.ShouldNotBeNull();
-            result.Data[5].MessageStats.MessageGetsWithoutAckDetails.Rate.ShouldBe(0.0M);
+            result.Data[5].MessageStats.MessageGetsWithoutAckDetails.Value.ShouldBe(0.0M);
             result.Data[5].Consumers.ShouldBe<ulong>(1);
             result.Data[5].Durable.ShouldBeTrue();
             result.Data[5].Exclusive.ShouldBeFalse();
@@ -65,10 +67,10 @@ namespace HareDu.Tests
             result.Data[5].UnacknowledgedMessagesInRAM.ShouldBe<ulong>(30000);
             result.Data[5].TotalReductions.ShouldBe(77349645);
             result.Data[5].ReductionDetails.ShouldNotBeNull();
-            result.Data[5].ReductionDetails?.Rate.ShouldBe(0.0M);
-            result.Data[5].UnacknowledgedMessageDetails?.Rate.ShouldBe(0.0M);
-            result.Data[5].ReadyMessageDetails?.Rate.ShouldBe(0.0M);
-            result.Data[5].MessageDetails?.Rate.ShouldBe(0.0M);
+            result.Data[5].ReductionDetails?.Value.ShouldBe(0.0M);
+            result.Data[5].UnacknowledgedMessageDetails?.Value.ShouldBe(0.0M);
+            result.Data[5].ReadyMessageDetails?.Value.ShouldBe(0.0M);
+            result.Data[5].MessageDetails?.Value.ShouldBe(0.0M);
             result.Data[5].Name.ShouldBe("consumer_queue");
             result.Data[5].Node.ShouldBe("rabbit@localhost");
             result.Data[5].IdleSince.ShouldBe(DateTimeOffset.Parse("2019-11-09 11:57:45"));
@@ -116,7 +118,7 @@ namespace HareDu.Tests
             result.Data[0]?.Properties?.Headers.ShouldNotBeNull();
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -153,7 +155,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -186,7 +188,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -220,7 +222,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -254,7 +256,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -287,7 +289,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -321,7 +323,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -354,7 +356,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -386,7 +388,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(1);
@@ -420,7 +422,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(0);
@@ -453,7 +455,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(0);
@@ -487,7 +489,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(0);
@@ -519,7 +521,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(0);
@@ -550,7 +552,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(3);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBe("auto");
             definition.Take.ShouldBe<uint>(0);
@@ -575,7 +577,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(4);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBeNullOrEmpty();
             definition.Take.ShouldBe<uint>(0);
@@ -606,7 +608,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(3);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
+            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
             
             definition.Encoding.ShouldBeNullOrEmpty();
             definition.Take.ShouldBe<uint>(0);
@@ -676,7 +678,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -718,7 +720,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -757,7 +759,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -797,7 +799,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -836,7 +838,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -874,7 +876,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -912,7 +914,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
             definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
@@ -951,7 +953,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
             definition.Arguments["x-expires"].Cast<long>().ShouldBe(980);
             definition.Durable.ShouldBeTrue();

@@ -1,89 +1,76 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Model
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public interface MemoryInfo
     {
-        [JsonProperty("connection_readers")]
+        [JsonPropertyName("connection_readers")]
         long ConnectionReaders { get; }
         
-        [JsonProperty("connection_writers")]
+        [JsonPropertyName("connection_writers")]
         long ConnectionWriters { get; }
         
-        [JsonProperty("connection_channels")]
+        [JsonPropertyName("connection_channels")]
         long ConnectionChannels { get; }
         
-        [JsonProperty("connection_other")]
+        [JsonPropertyName("connection_other")]
         long ConnectionOther { get; }
         
-        [JsonProperty("queue_procs")]
+        [JsonPropertyName("queue_procs")]
         long QueueProcesses { get; }
         
-        [JsonProperty("queue_slave_procs")]
+        [JsonPropertyName("queue_slave_procs")]
         long QueueSlaveProcesses { get; }
         
-        [JsonProperty("plugins")]
+        [JsonPropertyName("plugins")]
         long Plugins { get; }
         
-        [JsonProperty("other_proc")]
+        [JsonPropertyName("other_proc")]
         long OtherProcesses { get; }
         
-        [JsonProperty("metrics")]
+        [JsonPropertyName("metrics")]
         long Metrics { get; }
         
-        [JsonProperty("mgmt_db")]
+        [JsonPropertyName("mgmt_db")]
         long ManagementDatabase { get; }
         
-        [JsonProperty("mnesia")]
+        [JsonPropertyName("mnesia")]
         long Mnesia { get; }
         
-        [JsonProperty("other_ets")]
+        [JsonPropertyName("other_ets")]
         long OtherInMemoryStorage { get; }
         
-        [JsonProperty("binary")]
+        [JsonPropertyName("binary")]
         long Binary { get; }
         
-        [JsonProperty("msg_index")]
+        [JsonPropertyName("msg_index")]
         long MessageIndex { get; }
         
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         long ByteCode { get; }
         
-        [JsonProperty("atom")]
+        [JsonPropertyName("atom")]
         long Atom { get; }
         
-        [JsonProperty("other_system")]
+        [JsonPropertyName("other_system")]
         long OtherSystem { get; }
         
-        [JsonProperty("allocated_unused")]
+        [JsonPropertyName("allocated_unused")]
         long AllocatedUnused { get; }
         
-        [JsonProperty("reserved_unallocated")]
+        [JsonPropertyName("reserved_unallocated")]
         long ReservedUnallocated { get; }
         
-        [JsonProperty("strategy")]
+        [JsonPropertyName("strategy")]
         string Strategy { get; }
         
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         TotalMemoryInfo Total { get; }
         
-        [JsonProperty("quorum_queue_procs")]
+        [JsonPropertyName("quorum_queue_procs")]
         long QuorumQueueProcesses { get; }
         
-        [JsonProperty("quorum_ets")]
+        [JsonPropertyName("quorum_ets")]
         long QuorumInMemoryStorage { get; }
     }
 }

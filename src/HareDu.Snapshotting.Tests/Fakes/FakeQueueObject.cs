@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System;
@@ -41,5 +28,15 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
         public async Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+
+        public async Task<Result> Create(string queue, string vhost, string node, Action<QueueConfigurator> configurator = null,
+            CancellationToken cancellationToken = default) =>
+            throw new NotImplementedException();
+
+        public async Task<Result> Delete(string queue, string vhost, Action<QueueDeletionConfigurator> configurator = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+
+        public async Task<Result> Empty(string queue, string vhost, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+
+        public async Task<Result> Sync(string queue, string vhost, QueueSyncAction syncAction, CancellationToken cancellationToken = default) => throw new NotImplementedException();
     }
 }

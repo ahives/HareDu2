@@ -1,7 +1,6 @@
 ﻿namespace HareDu.Extensions
 {
     using System;
-    using Model;
 
     public static class ConverterExtensions
     {
@@ -56,54 +55,6 @@
                     
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-            }
-        }
-
-        public static string ConvertTo(this ShovelProtocolType protocol)
-        {
-            switch (protocol)
-            {
-                case ShovelProtocolType.Amqp091:
-                    return "amqp091";
-                    
-                case ShovelProtocolType.Amqp10:
-                    return "amqp10";
-                    
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(protocol), protocol, null);
-            }
-        }
-
-        public static string ConvertTo(this ShovelType shovelType)
-        {
-            switch (shovelType)
-            {
-                case ShovelType.Dynamic:
-                    return "dynamic";
-                    
-                case ShovelType.Static:
-                    return "static";
-                    
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(shovelType), shovelType, null);
-            }
-        }
-
-        public static string ConvertTo(this ShovelState shovelState)
-        {
-            switch (shovelState)
-            {
-                case ShovelState.Running:
-                    return "running";
-                    
-                case ShovelState.Starting:
-                    return "starting";
-                    
-                case ShovelState.Terminated:
-                    return "terminated";
-                    
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(shovelState), shovelState, null);
             }
         }
 

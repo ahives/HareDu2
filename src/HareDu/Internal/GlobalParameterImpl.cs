@@ -1,17 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Internal
+﻿namespace HareDu.Internal
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +9,9 @@ namespace HareDu.Internal
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
-    using Model;
+    using Extensions;
+    using HareDu.Model;
+    using Serialization;
 
     class GlobalParameterImpl :
         BaseBrokerObject,
@@ -58,7 +47,7 @@ namespace HareDu.Internal
             string url = $"api/global-parameters/{definition.Name}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString())));
+                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
 
             return Put(url, definition, cancellationToken);
         }

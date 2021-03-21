@@ -1,24 +1,13 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Internal
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Core.Extensions;
     using Extensions;
+    using HareDu.Extensions;
     using HareDu.Model;
     using HareDu.Registration;
     using MassTransit;
@@ -38,12 +27,11 @@ namespace HareDu.Snapshotting.Internal
             _observers = new List<IDisposable>();
         }
 
-        public SnapshotResult<BrokerConnectivitySnapshot> TakeSnapshot(CancellationToken cancellationToken = default)
+        public async Task<SnapshotResult<BrokerConnectivitySnapshot>> TakeSnapshot(CancellationToken cancellationToken = default)
         {
-            var cluster = _factory
-                .Object<SystemOverview>()
-                .Get(cancellationToken)
-                .GetResult();
+            var cluster = await _factory
+                .GetBrokerSystemOverview(cancellationToken)
+                .ConfigureAwait(false);
 
             if (cluster.HasFaulted)
             {
@@ -123,10 +111,10 @@ namespace HareDu.Snapshotting.Internal
             {
                 ClusterName = systemOverview.ClusterName;
                 BrokerVersion = systemOverview.RabbitMqVersion;
-                ChannelsClosed = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalChannelsClosed ?? 0, systemOverview.ChurnRates?.ClosedChannelDetails?.Rate ?? 0);
-                ChannelsCreated = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalChannelsCreated ?? 0, systemOverview.ChurnRates?.CreatedChannelDetails?.Rate ?? 0);
-                ConnectionsCreated = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalConnectionsCreated ?? 0, systemOverview.ChurnRates?.CreatedConnectionDetails?.Rate ?? 0);
-                ConnectionsClosed = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalConnectionsClosed ?? 0, systemOverview.ChurnRates?.ClosedConnectionDetails?.Rate ?? 0);
+                ChannelsClosed = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalChannelsClosed ?? 0, systemOverview.ChurnRates?.ClosedChannelDetails?.Value ?? 0);
+                ChannelsCreated = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalChannelsCreated ?? 0, systemOverview.ChurnRates?.CreatedChannelDetails?.Value ?? 0);
+                ConnectionsCreated = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalConnectionsCreated ?? 0, systemOverview.ChurnRates?.CreatedConnectionDetails?.Value ?? 0);
+                ConnectionsClosed = new ChurnMetricsImpl(systemOverview.ChurnRates?.TotalConnectionsClosed ?? 0, systemOverview.ChurnRates?.ClosedConnectionDetails?.Value ?? 0);
                 Connections = connections
                     .Select(x => new ConnectionSnapshotImpl(x, channels.FilterByConnection(x.Name)))
                     .Cast<ConnectionSnapshot>()
@@ -186,9 +174,9 @@ namespace HareDu.Snapshotting.Internal
                     {
                         MaxFrameSize = connection.MaxFrameSizeInBytes;
                         Sent = new PacketsImpl(connection.PacketsSent, connection.PacketBytesSent,
-                            connection.PacketBytesSentDetails?.Rate ?? 0);
+                            connection.PacketBytesSentDetails?.Value ?? 0);
                         Received = new PacketsImpl(connection.PacketsReceived, connection.PacketBytesReceived,
-                            connection.PacketBytesReceivedDetails?.Rate ?? 0);
+                            connection.PacketBytesReceivedDetails?.Value ?? 0);
                     }
 
                     
