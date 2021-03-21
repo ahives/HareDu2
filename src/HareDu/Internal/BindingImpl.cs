@@ -23,23 +23,27 @@
         {
         }
 
-        public Task<ResultList<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<BindingInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/bindings";
-            
-            return GetAll<BindingInfo>(url, cancellationToken);
+
+            ResultList<BindingInfoImpl> result = await GetAll<BindingInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<BindingInfo> MapResult(ResultList<BindingInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result<BindingInfo>> Create(Action<BindingCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             var impl = new BindingCreateActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
             
             BindingDefinition definition = impl.Definition.Value;
 
@@ -55,10 +59,9 @@
                 : $"api/bindings/{vhost}/e/{sourceBinding}/q/{destinationBinding}";
 
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result<BindingInfo>>(
-                    new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
+                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options)));
 
-            return Post<BindingInfo, BindingDefinition>(url, definition, cancellationToken);
+            return await Post<BindingInfo, BindingDefinition>(url, definition, cancellationToken);
         }
 
         public Task<Result> Delete(Action<BindingDeleteAction> action, CancellationToken cancellationToken = default)
@@ -68,7 +71,7 @@
             var impl = new BindingDeleteActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             string destination = impl.BindingDestination.Value;
             string vhost = impl.VirtualHost.Value.ToSanitizedName();
@@ -84,6 +87,162 @@
                 return Task.FromResult<Result>(new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
+        }
+
+        public async Task<Result<BindingInfo>> Create(string sourceBinding, string destinationBinding, BindingType bindingType, string vhost,
+            string bindingKey = null, Action<BindingConfigurator> configurator = null, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new BindingConfiguratorImpl();
+            configurator?.Invoke(impl);
+
+            impl.Validate();
+
+            BindingRequest request = new BindingRequest(bindingKey, impl.Arguments.Value);
+
+            Debug.Assert(request != null);
+
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
+            
+            if (string.IsNullOrWhiteSpace(sourceBinding))
+                errors.Add(new ErrorImpl("The name of the source binding (queue/exchange) is missing."));
+
+            if (string.IsNullOrWhiteSpace(destinationBinding))
+                errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            string virtualHost = vhost.ToSanitizedName();
+
+            string url = bindingType == BindingType.Exchange
+                ? $"api/bindings/{virtualHost}/e/{sourceBinding}/e/{destinationBinding}"
+                : $"api/bindings/{virtualHost}/e/{sourceBinding}/q/{destinationBinding}";
+
+            if (errors.Any())
+                return new FaultedResult<BindingInfo>(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+
+            Result<BindingInfoImpl> result = await PostRequest<BindingInfoImpl, BindingRequest>(url, request, cancellationToken).ConfigureAwait(false);
+
+            Result<BindingInfo> MapResult(Result<BindingInfoImpl> result) => new ResultCopy(result);
+
+            return MapResult(result);
+        }
+
+        public async Task<Result> Delete(string sourceBinding, string destinationBinding, string propertiesKey,
+            string vhost, BindingType bindingType, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var errors = new List<Error>();
+            
+            if (string.IsNullOrWhiteSpace(sourceBinding))
+                errors.Add(new ErrorImpl("The name of the source binding (queue/exchange) is missing."));
+
+            if (string.IsNullOrWhiteSpace(destinationBinding))
+                errors.Add(new ErrorImpl("The name of the destination binding (queue/exchange) is missing."));
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            string virtualHost = vhost.ToSanitizedName();
+
+            string Normalize(string value) => string.IsNullOrWhiteSpace(value) ? string.Empty : value;
+            
+            string url = bindingType == BindingType.Queue
+                ? $"api/bindings/{virtualHost}/e/{sourceBinding}/q/{destinationBinding}/{Normalize(propertiesKey)}"
+                : $"api/bindings/{virtualHost}/e/{sourceBinding}/e/{destinationBinding}/{Normalize(propertiesKey)}";
+            
+            if (errors.Any())
+                return new FaultedResult<BindingInfo>(new DebugInfoImpl(url, errors));
+
+            return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        
+        class ResultListCopy :
+            ResultList<BindingInfo>
+        {
+            public ResultListCopy(ResultList<BindingInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<BindingInfo>();
+                foreach (var item in result.Data)
+                    data.Add(item);
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<BindingInfo> Data { get; }
+            public bool HasData { get; }
+        }
+
+        
+        class ResultCopy :
+            Result<BindingInfo>
+        {
+            public ResultCopy(Result<BindingInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+                Data = result.Data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public BindingInfo Data { get; }
+            public bool HasData { get; }
+        }
+
+
+        class BindingConfiguratorImpl :
+            BindingConfigurator
+        {
+            readonly IDictionary<string, ArgumentValue<object>> _arguments;
+            readonly List<Error> _errors;
+
+            public Lazy<IDictionary<string, object>> Arguments { get; }
+            public Lazy<List<Error>> Errors { get; }
+
+            public BindingConfiguratorImpl()
+            {
+                _errors = new List<Error>();
+                _arguments = new Dictionary<string, ArgumentValue<object>>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
+                Arguments = new Lazy<IDictionary<string, object>>(() => _arguments.GetArgumentsOrNull(), LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void Validate()
+            {
+                _errors.AddRange(_arguments
+                    .Select(x => x.Value?.Error)
+                    .Where(error => error.IsNotNull())
+                    .ToList());
+            }
+
+            public void Add<T>(string arg, T value) =>
+                _arguments.Add(arg.Trim(),
+                    _arguments.ContainsKey(arg)
+                        ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
+                        : new ArgumentValue<object>(value));
         }
 
         
@@ -130,7 +289,7 @@
                 _bindingSource = impl.BindingSource;
                 _bindingDestination = impl.DestinationSource;
 
-                impl.Verify();
+                impl.Validate();
                 
                 _errors.AddRange(impl.Errors.Value);
             }
@@ -148,7 +307,7 @@
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
                 if (!_bindingCalled)
                 {
@@ -215,7 +374,7 @@
 
                 public void Type(BindingType bindingType) => BindingType = bindingType;
 
-                public void Verify()
+                public void Validate()
                 {
                     if (!_nameCalled)
                         _errors.Add(new ErrorImpl("The name of the binding is missing."));
@@ -252,7 +411,9 @@
                 _errors = new List<Error>();
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<BindingDefinition>(() => new BindingDefinitionImpl(_routingKey, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                Definition = new Lazy<BindingDefinition>(() =>
+                    new BindingDefinition(_routingKey, _arguments.ToDictionary(x => x.Key, x => x.Value.Value)),
+                    LazyThreadSafetyMode.PublicationOnly);
                 SourceBinding = new Lazy<string>(() => _sourceBinding, LazyThreadSafetyMode.PublicationOnly);
                 DestinationBinding = new Lazy<string>(() => _destinationBinding, LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
@@ -304,7 +465,7 @@
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
                 if (!_bindingCalled)
                 {
@@ -376,24 +537,6 @@
                             ? new ArgumentValue<object>(value, $"Argument '{arg}' has already been set")
                             : new ArgumentValue<object>(value));
                 }
-            }
-
-
-            class BindingDefinitionImpl :
-                BindingDefinition
-            {
-                public BindingDefinitionImpl(string routingKey, IDictionary<string, ArgumentValue<object>> arguments)
-                {
-                    RoutingKey = routingKey;
-
-                    if (arguments.IsNull())
-                        return;
-                    
-                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
-                }
-
-                public string RoutingKey { get; }
-                public IDictionary<string, object> Arguments { get; }
             }
         }
     }

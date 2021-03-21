@@ -3,12 +3,18 @@
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
-    public interface BindingDefinition
+    public class BindingDefinition
     {
+        public BindingDefinition(string routingKey, IDictionary<string, object> arguments)
+        {
+            RoutingKey = routingKey;
+            Arguments = arguments;
+        }
+
         [JsonPropertyName("routing_key")]
-        string RoutingKey { get; }
+        public string RoutingKey { get; }
         
         [JsonPropertyName("arguments")]
-        IDictionary<string, object> Arguments { get; }
+        public IDictionary<string, object> Arguments { get; }
     }
 }
