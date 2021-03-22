@@ -176,7 +176,7 @@
 
                 var data = new List<BindingInfo>();
                 foreach (var item in result.Data)
-                    data.Add(item);
+                    data.Add(new InternalBindingInfo(item));
 
                 Data = data;
             }
@@ -200,7 +200,7 @@
                 Errors = result.Errors;
                 HasFaulted = result.HasFaulted;
                 HasData = result.HasData;
-                Data = result.Data;
+                Data = result.Data.IsNotNull() ? new InternalBindingInfo(result.Data) : default;
             }
 
             public DateTimeOffset Timestamp { get; }

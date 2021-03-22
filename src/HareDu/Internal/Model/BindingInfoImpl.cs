@@ -2,10 +2,8 @@ namespace HareDu.Internal.Model
 {
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
-    using HareDu.Model;
 
-    class BindingInfoImpl :
-        BindingInfo
+    class BindingInfoImpl
     {
         [JsonPropertyName("source")]
         public string Source { get; set; }
