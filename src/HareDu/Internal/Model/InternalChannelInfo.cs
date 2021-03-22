@@ -36,7 +36,7 @@ namespace HareDu.Internal.Model
             Port = item.Port;
             Type = item.Type;
             ConnectionDetails = item.ConnectionDetails.IsNotNull() ? new InternalConnectionDetailsImpl(item.ConnectionDetails) : default;
-            GarbageCollectionDetails = item.GarbageCollectionDetails.IsNotNull() ? new InternalGarbageCollectionDetailsImpl(item.GarbageCollectionDetails) : default;
+            GarbageCollectionDetails = item.GarbageCollectionDetails.IsNotNull() ? new InternalGarbageCollectionDetails(item.GarbageCollectionDetails) : default;
             State = item.State;
             TotalChannels = item.TotalChannels;
             SentPending = item.SentPending;

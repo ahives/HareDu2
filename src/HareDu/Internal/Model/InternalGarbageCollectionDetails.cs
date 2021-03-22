@@ -2,10 +2,10 @@ namespace HareDu.Internal.Model
 {
     using HareDu.Model;
 
-    class InternalGarbageCollectionDetailsImpl :
+    class InternalGarbageCollectionDetails :
         GarbageCollectionDetails
     {
-        public InternalGarbageCollectionDetailsImpl(GarbageCollectionDetailsImpl item)
+        public InternalGarbageCollectionDetails(GarbageCollectionDetailsImpl item)
         {
             MinorGarbageCollection = item.MinorGarbageCollection;
             FullSweepAfter = item.FullSweepAfter;
