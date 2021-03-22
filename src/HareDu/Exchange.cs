@@ -1,17 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu
+﻿namespace HareDu
 {
     using System;
     using System.Threading;
@@ -44,5 +31,69 @@ namespace HareDu
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
         Task<Result> Delete(Action<ExchangeDeleteAction> action, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Creates the specified exchange on the target RabbitMQ virtual host.
+        /// </summary>
+        /// <param name="exchange">Name of the RabbitMQ exchange.</param>
+        /// <param name="vhost">Name of the RabbitMQ virtual host.</param>
+        /// <param name="configurator">Describes how the queue will be created.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
+        Task<Result> Create(string exchange, string vhost, Action<ExchangeConfigurator> configurator = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes the specified exchange on the target RabbitMQ virtual host.
+        /// </summary>
+        /// <param name="exchange">Name of the RabbitMQ exchange.</param>
+        /// <param name="vhost">Name of the RabbitMQ virtual host.</param>
+        /// <param name="configurator">Describes how the queue will be deleted.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
+        Task<Result> Delete(string exchange, string vhost, Action<ExchangeDeletionConfigurator> configurator = null, CancellationToken cancellationToken = default);
+    }
+
+    public interface ExchangeDeletionConfigurator
+    {
+        /// <summary>
+        /// Specify the conditions for which the exchange can be deleted.
+        /// </summary>
+        /// <param name="condition"></param>
+        void WhenUnused();
+    }
+
+    public interface ExchangeConfigurator
+    {
+        /// <summary>
+        /// Specify the message routing type (e.g. fanout, direct, topic, etc.).
+        /// </summary>
+        /// <param name="routingType"></param>
+        void HasRoutingType(ExchangeRoutingType routingType);
+
+        /// <summary>
+        /// Specify that the exchange is durable.
+        /// </summary>
+        void IsDurable();
+
+        /// <summary>
+        /// Specify that the exchange is for internal use only.
+        /// </summary>
+        void IsForInternalUse();
+
+        /// <summary>
+        /// Specify user-defined arguments used to configure the exchange.
+        /// </summary>
+        /// <param name="arguments"></param>
+        void HasArguments(Action<ExchangeArgumentConfigurator> arguments);
+
+        /// <summary>
+        /// Specify that the exchange will be deleted when there are no consumers.
+        /// </summary>
+        void AutoDeleteWhenNotInUse();
+    }
+
+    public interface ExchangeArgumentConfigurator
+    {
+        void Add<T>(string arg, T value);
     }
 }

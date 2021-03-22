@@ -17,7 +17,6 @@ namespace HareDu.Serialization
                     new CustomLongConverter(),
                     new CustomStringConverter(),
                     new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-                    // new ShovelInfoConverter()
                 }
             };
     }

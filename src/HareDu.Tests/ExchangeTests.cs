@@ -1,5 +1,6 @@
 namespace HareDu.Tests
 {
+    using System;
     using Core.Extensions;
     using HareDu.Extensions;
     using HareDu.Registration;
@@ -30,11 +31,11 @@ namespace HareDu.Tests
             result.Data[1].Internal.ShouldBeFalse();
             result.Data[1].AutoDelete.ShouldBeFalse();
             result.Data[1].Name.ShouldBe("E2");
-            result.Data[1].RoutingType.ShouldBe("direct");
+            result.Data[1].RoutingType.ShouldBe(ExchangeRoutingType.Direct);
             result.Data[1].VirtualHost.ShouldBe("HareDu");
             result.Data[1].Arguments.ShouldNotBeNull();
             result.Data[1].Arguments.Count.ShouldBe(1);
-            result.Data[1].Arguments["alternate-exchange"].ShouldBe("exchange");
+            result.Data[1].Arguments["alternate-exchange"].ToString().ShouldBe("exchange");
         }
 
         [Test]
@@ -60,18 +61,20 @@ namespace HareDu.Tests
                 })
                 .GetResult();
             
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
+            
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
             
             ExchangeDefinition definition = result.DebugInfo.Request.ToObject<ExchangeDefinition>(Deserializer.Options);
 
             result.DebugInfo.URL.ShouldBe("api/exchanges/HareDu/fake_exchange");
-            definition.RoutingType.ShouldBe("fanout");
+            definition.RoutingType.ShouldBe(ExchangeRoutingType.Fanout);
             definition.Durable.ShouldBeTrue();
             definition.Internal.ShouldBeTrue();
             definition.AutoDelete.ShouldBeFalse();
             definition.Arguments.Count.ShouldBe(1);
-            definition.Arguments["fake_arg"].ShouldBe("8238b");
+            definition.Arguments["fake_arg"].ToString().ShouldBe("8238b");
         }
 
         [Test]
