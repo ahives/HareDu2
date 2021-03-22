@@ -1,11 +1,10 @@
-namespace HareDu.IntegrationTesting.BrokerObjects
+namespace HareDu.IntegrationTests
 {
     using System;
     using System.Threading.Tasks;
-    using Autofac;
-    using AutofacIntegration;
-    using Core.Extensions;
+    using CoreIntegration;
     using Extensions;
+    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Registration;
     using Serialization;
@@ -13,21 +12,27 @@ namespace HareDu.IntegrationTesting.BrokerObjects
     [TestFixture]
     public class ChannelTests
     {
-        IContainer _container;
+        ServiceProvider _services;
 
         [OneTimeSetUp]
         public void Init()
         {
-            _container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
-                .Build();
+            _services = new ServiceCollection()
+                .AddHareDu(x =>
+                {
+                    x.Broker(b =>
+                    {
+                        b.ConnectTo("http://localhost:15672");
+                        b.UsingCredentials("guest", "guest");
+                    });
+                })
+                .BuildServiceProvider();
         }
 
         [Test, Explicit]
         public async Task Test()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var result = await _services.GetService<IBrokerObjectFactory>()
                 .Object<Channel>()
                 .GetAll()
                 .ScreenDump();
@@ -39,7 +44,7 @@ namespace HareDu.IntegrationTesting.BrokerObjects
         [Test, Explicit]
         public async Task Should_be_able_to_get_all_channels()
         {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
+            var result = await _services.GetService<IBrokerObjectFactory>()
                 .Object<Channel>()
                 .GetAll()
                 .ScreenDump();

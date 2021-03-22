@@ -1,4 +1,4 @@
-namespace HareDu.IntegrationTesting.BrokerObjects
+namespace HareDu.IntegrationTests
 {
     using System.Threading.Tasks;
     using Autofac;
