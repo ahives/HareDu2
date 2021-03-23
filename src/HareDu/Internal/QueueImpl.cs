@@ -11,6 +11,7 @@
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     class QueueImpl :
@@ -22,16 +23,20 @@
         {
         }
 
-        public Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/queues";
-            
-            return GetAll<QueueInfo>(url, cancellationToken);
+
+            ResultList<QueueInfoImpl> result = await GetAll<QueueInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<QueueInfo> MapResult(ResultList<QueueInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -47,12 +52,12 @@
             string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options)));
 
-            return Put(url, definition, cancellationToken);
+            return await Put(url, definition, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -66,9 +71,9 @@
                 url = $"{url}?{impl.Query.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url));
 
-            return Delete(url, cancellationToken);
+            return await Delete(url, cancellationToken).ConfigureAwait(false);
         }
 
         public Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
@@ -86,27 +91,6 @@
                 return Task.FromResult<Result>(new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
-        }
-
-        public Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.RequestCanceled();
-
-            var impl = new QueuePeekActionImpl();
-            action(impl);
-
-            impl.Validate();
-
-            QueuePeekDefinition definition = impl.Definition.Value;
-
-            Debug.Assert(definition != null);
-
-            string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/get";
-            
-            if (impl.Errors.Value.Any())
-                return Task.FromResult<ResultList<PeekedMessageInfo>>(new FaultedResultList<PeekedMessageInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
-
-            return PostList<PeekedMessageInfo, QueuePeekDefinition>(url, definition, cancellationToken);
         }
 
         public async Task<Result> Create(string queue, string vhost, string node, Action<QueueConfigurator> configurator = null,
@@ -187,12 +171,11 @@
             return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<Result> Sync(string queue, string vhost, QueueSyncAction syncAction,
-            CancellationToken cancellationToken = default)
+        public async Task<Result> Sync(string queue, string vhost, QueueSyncAction syncAction, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            QueueSyncRequest request = new QueueSyncRequestImpl(syncAction);
+            QueueSyncRequest request = new QueueSyncRequest(syncAction);
 
             Debug.Assert(request != null);
             
@@ -213,15 +196,30 @@
         }
 
         
-        class QueueSyncRequestImpl :
-            QueueSyncRequest
+        class ResultListCopy :
+            ResultList<QueueInfo>
         {
-            public QueueSyncRequestImpl(QueueSyncAction action)
+            public ResultListCopy(ResultList<QueueInfoImpl> result)
             {
-                Action = action;
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<QueueInfo>();
+                foreach (QueueInfoImpl item in result.Data)
+                    data.Add(new InternalQueueInfo(item));
+
+                Data = data;
             }
 
-            public QueueSyncAction Action { get; }
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<QueueInfo> Data { get; }
+            public bool HasData { get; }
         }
 
 
@@ -271,7 +269,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<QueueRequest>(
-                    () => new QueueRequestImpl(node, _durable, _autoDelete, _arguments.GetArgumentsOrNull()), LazyThreadSafetyMode.PublicationOnly);
+                    () => new QueueRequest(node, _durable, _autoDelete, _arguments.GetArgumentsOrNull()), LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void IsDurable() => _durable = true;
@@ -290,24 +288,6 @@
             {
                 if (_arguments.IsNotNull())
                     _errors.AddRange(_arguments.Select(x => x.Value?.Error).Where(error => error.IsNotNull()).ToList());
-            }
-
-            
-            class QueueRequestImpl :
-                QueueRequest
-            {
-                public QueueRequestImpl(string node, bool durable, bool autoDelete, IDictionary<string, object> arguments)
-                {
-                    Node = node;
-                    Durable = durable;
-                    AutoDelete = autoDelete;
-                    Arguments = arguments;
-                }
-
-                public string Node { get; }
-                public bool Durable { get; }
-                public bool AutoDelete { get; }
-                public IDictionary<string, object> Arguments { get; }
             }
 
             
@@ -343,151 +323,6 @@
                     else
                         Arguments.Add(normalizedArg, new ArgumentValue<object>(value, errorMsg));
                 }
-            }
-        }
-
-        
-        class QueuePeekActionImpl :
-            QueuePeekAction
-        {
-            string _vhost;
-            string _queue;
-            uint _take;
-            string _encoding;
-            ulong _truncateIfAbove;
-            string _requeueMode;
-            readonly List<Error> _errors;
-
-            public Lazy<QueuePeekDefinition> Definition { get; }
-            public Lazy<string> QueueName { get; }
-            public Lazy<string> VirtualHost { get; }
-            public Lazy<List<Error>> Errors { get; }
-
-            public QueuePeekActionImpl()
-            {
-                _errors = new List<Error>();
-                
-                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
-                Definition = new Lazy<QueuePeekDefinition>(
-                    () => new QueuePeekDefinitionImpl(_take, _requeueMode, _encoding, _truncateIfAbove), LazyThreadSafetyMode.PublicationOnly);
-                VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
-                QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
-            }
-
-            public void Queue(string name) => _queue = name;
-
-            public void Configure(Action<QueuePeekConfiguration> configuration)
-            {
-                var impl = new QueuePeekConfigurationImpl();
-                configuration(impl);
-
-                _take = impl.TakeAmount;
-                _requeueMode = impl.RequeueMode;
-                _encoding = impl.MessageEncoding;
-                _truncateIfAbove = impl.TruncateMessageThresholdInBytes;
-            }
-
-            public void Targeting(Action<QueuePeekTarget> target)
-            {
-                var impl = new QueuePeekTargetImpl();
-                target(impl);
-
-                _vhost = impl.VirtualHostName;
-            }
-
-            public void Validate()
-            {
-                if (string.IsNullOrWhiteSpace(_queue))
-                    _errors.Add(new ErrorImpl("The name of the queue is missing."));
-            
-                if (_take < 1)
-                    _errors.Add(new ErrorImpl("Must be set a value greater than 1."));
-
-                if (string.IsNullOrWhiteSpace(_encoding))
-                    _errors.Add(new ErrorImpl("Encoding must be set to auto or base64."));
-            
-                if (string.IsNullOrWhiteSpace(_vhost))
-                    _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-
-            
-            class QueuePeekDefinitionImpl :
-                QueuePeekDefinition
-            {
-                public QueuePeekDefinitionImpl(uint take, string requeueMode, string encoding, ulong truncateMessageThreshold)
-                {
-                    Take = take;
-                    Encoding = encoding;
-                    RequeueMode = requeueMode;
-                    TruncateMessageThreshold = truncateMessageThreshold;
-                }
-
-                public uint Take { get; }
-                public string Encoding { get; }
-                public ulong TruncateMessageThreshold { get; }
-                public string RequeueMode { get; }
-            }
-
-            
-            class QueuePeekConfigurationImpl :
-                QueuePeekConfiguration
-            {
-                public uint TakeAmount { get; private set; }
-                public string RequeueMode { get; private set; }
-                public string MessageEncoding { get; private set; }
-                public ulong TruncateMessageThresholdInBytes { get; private set; }
-
-                public void Take(uint count) => TakeAmount = count;
-
-                public void Encoding(MessageEncoding encoding)
-                {
-                    switch (encoding)
-                    {
-                        case HareDu.MessageEncoding.Auto:
-                            MessageEncoding = "auto";
-                            break;
-                            
-                        case HareDu.MessageEncoding.Base64:
-                            MessageEncoding = "base64";
-                            break;
-                            
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(encoding), encoding, null);
-                    }
-                }
-
-                public void TruncateIfAbove(uint bytes) => TruncateMessageThresholdInBytes = bytes;
-                
-                public void AckMode(RequeueMode mode)
-                {
-                    switch (mode)
-                    {
-                        case HareDu.RequeueMode.DoNotAckRequeue:
-                            RequeueMode = "ack_requeue_false";
-                            break;
-                
-                        case HareDu.RequeueMode.RejectRequeue:
-                            RequeueMode = "reject_requeue_true";
-                            break;
-                
-                        case HareDu.RequeueMode.DoNotRejectRequeue:
-                            RequeueMode = "reject_requeue_false";
-                            break;
-
-                        default:
-                            RequeueMode = "ack_requeue_true";
-                            break;
-                    }
-                }
-            }
-
-            
-            class QueuePeekTargetImpl :
-                QueuePeekTarget
-            {
-                public string VirtualHostName { get; private set; }
-                
-                public void VirtualHost(string name) => VirtualHostName = name;
             }
         }
 
@@ -645,7 +480,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<QueueDefinition>(
-                    () => new QueueDefinitionImpl(_durable, _autoDelete, _node, _arguments), LazyThreadSafetyMode.PublicationOnly);
+                    () => new QueueDefinition(_node, _durable, _autoDelete, _arguments.ToDictionary(x => x.Key, x => x.Value.Value)), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 QueueName = new Lazy<string>(() => _queue, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -765,31 +600,6 @@
                     else
                         Arguments.Add(normalizedArg, new ArgumentValue<object>(value, errorMsg));
                 }
-            }
-
-
-            class QueueDefinitionImpl :
-                QueueDefinition
-            {
-                public QueueDefinitionImpl(bool durable,
-                    bool autoDelete,
-                    string node,
-                    IDictionary<string, ArgumentValue<object>> arguments)
-                {
-                    Durable = durable;
-                    AutoDelete = autoDelete;
-                    Node = node;
-
-                    if (arguments.IsNull())
-                        return;
-                    
-                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
-                }
-
-                public string Node { get; }
-                public bool Durable { get; }
-                public bool AutoDelete { get; }
-                public IDictionary<string, object> Arguments { get; }
             }
         }
     }

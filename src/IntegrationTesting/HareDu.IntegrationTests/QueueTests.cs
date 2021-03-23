@@ -97,28 +97,6 @@
         }
 
         [Test]
-        public async Task Verify_can_peek_messages()
-        {
-            var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(5);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                });
-            
-//            Assert.IsFalse(result.HasFaulted);
-            Console.WriteLine(result.ToJsonString(Deserializer.Options));
-        }
-
-        [Test]
         public async Task Verify_can_empty_queue()
         {
             var result = await _container.Resolve<IBrokerObjectFactory>()

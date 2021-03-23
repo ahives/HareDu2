@@ -9,7 +9,7 @@ namespace HareDu.Internal.Model
     {
         public InternalChannelInfo(ChannelInfoImpl item)
         {
-            ReductionDetails = item.ReductionDetails.IsNotNull() ? new InternalRateImpl(item.ReductionDetails) : null;
+            ReductionDetails = item.ReductionDetails.IsNotNull() ? new InternalRate(item.ReductionDetails) : null;
             TotalReductions = item.TotalReductions;
             VirtualHost = item.VirtualHost;
             Node = item.Node;

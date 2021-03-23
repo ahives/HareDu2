@@ -3,17 +3,13 @@ namespace HareDu.Internal.Model
     using Core.Extensions;
     using HareDu.Model;
 
-    class InternalOperationStatsImpl :
-        ChannelOperationStats
+    class InternalMessageStats :
+        QueueMessageStats
     {
-        public InternalOperationStatsImpl(ChannelOperationStatsImpl obj)
+        public InternalMessageStats(QueueMessageStatsImpl obj)
         {
             TotalMessagesPublished = obj.TotalMessagesPublished;
             MessagesPublishedDetails = obj.MessagesPublishedDetails.IsNotNull() ? new InternalRate(obj.MessagesPublishedDetails) : default;
-            TotalMessagesConfirmed = obj.TotalMessagesConfirmed;
-            MessagesConfirmedDetails = obj.MessagesConfirmedDetails.IsNotNull() ? new InternalRate(obj.MessagesConfirmedDetails) : default;
-            TotalMessagesNotRouted = obj.TotalMessagesNotRouted;
-            MessagesNotRoutedDetails = obj.MessagesNotRoutedDetails.IsNotNull() ? new InternalRate(obj.MessagesNotRoutedDetails) : default;
             TotalMessageGets = obj.TotalMessageGets;
             MessageGetDetails = obj.MessageGetDetails.IsNotNull() ? new InternalRate(obj.MessageGetDetails) : default;
             TotalMessageGetsWithoutAck = obj.TotalMessageGetsWithoutAck;
@@ -32,10 +28,6 @@ namespace HareDu.Internal.Model
 
         public ulong TotalMessagesPublished { get; }
         public Rate MessagesPublishedDetails { get; }
-        public ulong TotalMessagesConfirmed { get; }
-        public Rate MessagesConfirmedDetails { get; }
-        public ulong TotalMessagesNotRouted { get; }
-        public Rate MessagesNotRoutedDetails { get; }
         public ulong TotalMessageGets { get; }
         public Rate MessageGetDetails { get; }
         public ulong TotalMessageGetsWithoutAck { get; }

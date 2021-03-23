@@ -8,15 +8,15 @@ namespace HareDu.Internal.Model
     {
         public InternalConnectionInfo(ConnectionInfoImpl obj)
         {
-            ReductionDetails = obj.ReductionDetails.IsNotNull() ? new InternalRateImpl(obj.ReductionDetails) : default;
+            ReductionDetails = obj.ReductionDetails.IsNotNull() ? new InternalRate(obj.ReductionDetails) : default;
             Protocol = obj.Protocol;
             TotalReductions = obj.TotalReductions;
             PacketsReceived = obj.PacketsReceived;
             PacketBytesReceived = obj.PacketBytesReceived;
-            PacketBytesReceivedDetails = obj.PacketBytesReceivedDetails.IsNotNull() ? new InternalRateImpl(obj.PacketBytesReceivedDetails) : default;
+            PacketBytesReceivedDetails = obj.PacketBytesReceivedDetails.IsNotNull() ? new InternalRate(obj.PacketBytesReceivedDetails) : default;
             PacketsSent = obj.PacketsSent;
             PacketBytesSent = obj.PacketBytesSent;
-            PacketBytesSentDetails = obj.PacketBytesSentDetails.IsNotNull() ? new InternalRateImpl(obj.PacketBytesSentDetails) : default;
+            PacketBytesSentDetails = obj.PacketBytesSentDetails.IsNotNull() ? new InternalRate(obj.PacketBytesSentDetails) : default;
             ConnectedAt = obj.ConnectedAt;
             OpenChannelsLimit = obj.OpenChannelsLimit;
             MaxFrameSizeInBytes = obj.MaxFrameSizeInBytes;

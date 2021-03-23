@@ -41,14 +41,6 @@
         Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Pull a specified number of messages from the specified queue on the target virtual host on the current RabbitMQ node. (deprecated)
-        /// </summary>
-        /// <param name="action">Describes how the queue will be purged.</param>
-        /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
-        Task<ResultList<PeekedMessageInfo>> Peek(Action<QueuePeekAction> action, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Creates specified queue on the specified RabbitMQ virtual host and node.
         /// </summary>
         /// <param name="queue">Name of the RabbitMQ broker queue.</param>

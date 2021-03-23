@@ -43,7 +43,7 @@
             var impl = new PolicyCreateActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             PolicyDefinition definition = impl.Definition.Value;
 
@@ -402,7 +402,7 @@
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
                 if (!_policyCalled)
                     _errors.Add(new ErrorImpl("The name of the policy is missing."));

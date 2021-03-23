@@ -79,576 +79,6 @@ namespace HareDu.Tests
         }
 
         [Test]
-        public void Verify_can_peek_messages()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeFalse();
-            result.HasData.ShouldBeTrue();
-            result.Data.ShouldNotBeNull();
-            result.Data[0].ShouldNotBeNull();
-            result.Data[0]?.Exchange.ShouldBe("HareDu.IntegrationTesting.Core:FakeMessage");
-            result.Data[0]?.Payload.ShouldNotBeNull();
-            result.Data[0]?.Payload["messageId"].Cast<string>().ShouldBe("b64a0000-0481-dca9-a948-08d7650c25d3");
-            result.Data[0]?.Payload["conversationId"].Cast<string>().ShouldBe("b64a0000-0481-dca9-aac4-08d7650c25d3");
-            result.Data[0]?.Properties.ShouldNotBeNull();
-            result.Data[0]?.Properties?.ContentType.ShouldNotBeNull();
-            result.Data[0]?.Properties?.ContentType.ShouldBe("application/vnd.masstransit+json");
-            result.Data[0]?.Properties?.CorrelationId.ShouldBe("b64a0000-0481-dca9-8c2c-08d7650c1eeb");
-            result.Data[0]?.Properties?.MessageId.ShouldBe("b64a0000-0481-dca9-a948-08d7650c25d3");
-            result.Data[0]?.Properties?.DeliveryMode.ShouldBe<uint>(2);
-            result.Data[0]?.MessageCount.ShouldBe<ulong>(49999);
-            result.Data[0]?.RoutingKey.ShouldBeNullOrEmpty();
-            result.Data[0]?.Redelivered.ShouldBeTrue();
-            result.Data[0]?.Properties?.Headers.ShouldNotBeNull();
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-
-            result.Data[0]?.Properties?.Headers["Content-Type"].ShouldBe("application/vnd.masstransit+json");
-            result.Data[0]?.Properties?.Headers["publishId"].ShouldBe("1");
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_1()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue(string.Empty);
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(1);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_2()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(1);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_3()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost(string.Empty));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(1);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_4()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => {});
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(1);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_5()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(1);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_6()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue(string.Empty);
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost(string.Empty));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(2);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_7()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => {});
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(2);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_8()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Configure(c =>
-                    {
-                        c.Take(1);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(2);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(1);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_9()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.Take(0);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(1);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_10()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Configure(c =>
-                    {
-                        c.Take(0);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(2);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_11()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue(string.Empty);
-                    x.Configure(c =>
-                    {
-                        c.Take(0);
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(2);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_12()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Configure(c =>
-                    {
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                    x.Targeting(t => t.VirtualHost("HareDu"));
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(2);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_13()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Configure(c =>
-                    {
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                        c.Encoding(MessageEncoding.Auto);
-                    });
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(3);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBe("auto");
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_14()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(4);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBeNullOrEmpty();
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBeNullOrEmpty();
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(0);
-        }
-
-        [Test]
-        public void Verify_cannot_peek_messages_15()
-        {
-            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").BuildServiceProvider();
-            var result = container.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Peek(x =>
-                {
-                    x.Queue("Queue1");
-                    x.Configure(c =>
-                    {
-                        c.AckMode(RequeueMode.AckRequeue);
-                        c.TruncateIfAbove(5000);
-                    });
-                })
-                .GetResult();
-
-            result.HasFaulted.ShouldBeTrue();
-            result.HasData.ShouldBeFalse();
-            result.Data.ShouldBeNull();
-            result.Errors.Count.ShouldBe(3);
-            result.DebugInfo.ShouldNotBeNull();
-            
-            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>(Deserializer.Options);
-            
-            definition.Encoding.ShouldBeNullOrEmpty();
-            definition.Take.ShouldBe<uint>(0);
-            definition.RequeueMode.ShouldBe("ack_requeue_true");
-            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-        }
-
-//        [Test]
-//        public async Task Verify_cannot_peek_messages_()
-//        {
-//            var container = GetContainerBuilder("TestData/PeekedMessageInfo.json").Build();
-//            var result = await container.Resolve<IBrokerObjectFactory>()
-//                .Object<Queue>()
-//                .Peek(x =>
-//                {
-//                    x.Queue("Queue1");
-//                    x.Configure(c =>
-//                    {
-//                        c.Take(1);
-//                        c.AckMode(RequeueMode.AckRequeue);
-//                        c.TruncateIfAbove(5000);
-//                        c.Encoding(MessageEncoding.Auto);
-//                    });
-//                    x.Target(t => t.VirtualHost("HareDu"));
-//                });
-//
-//            result.HasFaulted.ShouldBeTrue();
-//            result.HasData.ShouldBeFalse();
-//            result.Data.ShouldBeNull();
-//            result.Errors.Count.ShouldBe(1);
-//            
-//            QueuePeekDefinition definition = result.DebugInfo.Request.ToObject<QueuePeekDefinition>();
-//            
-//            definition.Encoding.ShouldBe("auto");
-//            definition.Take.ShouldBe<uint>(1);
-//            definition.RequeueMode.ShouldBe("ack_requeue_true");
-//            definition.TruncateMessageThreshold.ShouldBe<ulong>(5000);
-//        }
-
-        [Test]
         public void Verify_can_create_queue()
         {
             var container = GetContainerBuilder().BuildServiceProvider();
@@ -680,8 +110,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
 //            definition.Arguments["x-expires"].ShouldBe(1000);
 //            definition.Arguments["x-message-ttl"].ShouldBe(2000);
             definition.Durable.ShouldBeTrue();
@@ -722,8 +152,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");
@@ -761,8 +191,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");
@@ -801,8 +231,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");
@@ -840,8 +270,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");
@@ -878,8 +308,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");
@@ -916,8 +346,8 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(1000);
-            definition.Arguments["x-message-ttl"].Cast<long>().ShouldBe(2000);
+            definition.Arguments["x-expires"].ToString().ShouldBe("1000");
+            definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");
@@ -955,7 +385,7 @@ namespace HareDu.Tests
             
             QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
             
-            definition.Arguments["x-expires"].Cast<long>().ShouldBe(980);
+            definition.Arguments["x-expires"].ToString().ShouldBe("980");
             definition.Durable.ShouldBeTrue();
             definition.AutoDelete.ShouldBeTrue();
             definition.Node.ShouldBe("Node1");

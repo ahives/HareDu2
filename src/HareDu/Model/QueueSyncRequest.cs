@@ -3,10 +3,19 @@ namespace HareDu.Model
     using System.Text.Json.Serialization;
     using Serialization.Converters;
 
-    public interface QueueSyncRequest
+    public class QueueSyncRequest
     {
+        public QueueSyncRequest(QueueSyncAction action)
+        {
+            Action = action;
+        }
+
+        public QueueSyncRequest()
+        {
+        }
+
         [JsonPropertyName("action")]
         [JsonConverter(typeof(QueueSyncActionEnumConverter))]
-        QueueSyncAction Action { get; }
+        public QueueSyncAction Action { get; set; }
     }
 }

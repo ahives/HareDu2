@@ -3,10 +3,10 @@ namespace HareDu.Internal.Model
     using Core.Extensions;
     using HareDu.Model;
 
-    class InternalRateImpl :
+    class InternalRate :
         Rate
     {
-        public InternalRateImpl(RateImpl obj)
+        public InternalRate(RateImpl obj)
         {
             Value = obj.IsNotNull() ? obj.Value : default;
         }

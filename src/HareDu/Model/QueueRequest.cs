@@ -3,22 +3,34 @@ namespace HareDu.Model
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
-    public interface QueueRequest
+    public class QueueRequest
     {
+        public QueueRequest(string node, bool durable, bool autoDelete, IDictionary<string, object> arguments)
+        {
+            Node = node;
+            Durable = durable;
+            AutoDelete = autoDelete;
+            Arguments = arguments;
+        }
+
+        public QueueRequest()
+        {
+        }
+
         [JsonPropertyName("node")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string Node { get; }
+        public string Node { get; set; }
         
         [JsonPropertyName("durable")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        bool Durable { get; }
+        public bool Durable { get; set; }
         
         [JsonPropertyName("auto_delete")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        bool AutoDelete { get; }
+        public bool AutoDelete { get; set; }
                 
         [JsonPropertyName("arguments")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        IDictionary<string, object> Arguments { get; }
+        public IDictionary<string, object> Arguments { get; set; }
     }
 }

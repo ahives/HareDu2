@@ -2,18 +2,30 @@
 {
     using System.Text.Json.Serialization;
 
-    public interface QueuePeekDefinition
+    public class QueuePeekDefinition
     {
+        public QueuePeekDefinition(uint take, string encoding, ulong truncateMessageThreshold, string requeueMode)
+        {
+            Take = take;
+            Encoding = encoding;
+            TruncateMessageThreshold = truncateMessageThreshold;
+            RequeueMode = requeueMode;
+        }
+
+        public QueuePeekDefinition()
+        {
+        }
+
         [JsonPropertyName("count")]
-        uint Take { get; }
+        public uint Take { get; set; }
         
         [JsonPropertyName("encoding")]
-        string Encoding { get; }
+        public string Encoding { get; set; }
         
         [JsonPropertyName("truncate")]
-        ulong TruncateMessageThreshold { get; }
+        public ulong TruncateMessageThreshold { get; set; }
         
         [JsonPropertyName("ackmode")]
-        string RequeueMode { get; }
+        public string RequeueMode { get; set; }
     }
 }

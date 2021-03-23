@@ -3,18 +3,30 @@
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
-    public interface QueueDefinition
+    public class QueueDefinition
     {
+        public QueueDefinition(string node, bool durable, bool autoDelete, IDictionary<string, object> arguments)
+        {
+            Node = node;
+            Durable = durable;
+            AutoDelete = autoDelete;
+            Arguments = arguments;
+        }
+
+        public QueueDefinition()
+        {
+        }
+
         [JsonPropertyName("node")]
-        string Node { get; }
+        public string Node { get; set; }
         
         [JsonPropertyName("durable")]
-        bool Durable { get; }
+        public bool Durable { get; set; }
         
         [JsonPropertyName("auto_delete")]
-        bool AutoDelete { get; }
+        public bool AutoDelete { get; set; }
                 
         [JsonPropertyName("arguments")]
-        IDictionary<string, object> Arguments { get; }
+        public IDictionary<string, object> Arguments { get; set; }
     }
 }
