@@ -5,13 +5,13 @@ namespace HareDu.Internal.Model
     class InternalGarbageCollectionDetails :
         GarbageCollectionDetails
     {
-        public InternalGarbageCollectionDetails(GarbageCollectionDetailsImpl item)
+        public InternalGarbageCollectionDetails(GarbageCollectionDetailsImpl obj)
         {
-            MinorGarbageCollection = item.MinorGarbageCollection;
-            FullSweepAfter = item.FullSweepAfter;
-            MinimumHeapSize = item.MinimumHeapSize;
-            MinimumBinaryVirtualHeapSize = item.MinimumBinaryVirtualHeapSize;
-            MaximumHeapSize = item.MaximumHeapSize;
+            MinorGarbageCollection = obj.MinorGarbageCollection;
+            FullSweepAfter = obj.FullSweepAfter;
+            MinimumHeapSize = obj.MinimumHeapSize;
+            MinimumBinaryVirtualHeapSize = obj.MinimumBinaryVirtualHeapSize;
+            MaximumHeapSize = obj.MaximumHeapSize;
         }
 
         public string MinorGarbageCollection { get; }

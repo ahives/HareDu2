@@ -6,15 +6,15 @@ namespace HareDu.Internal.Model
     class InternalBindingInfo :
         BindingInfo
     {
-        public InternalBindingInfo(BindingInfoImpl result)
+        public InternalBindingInfo(BindingInfoImpl obj)
         {
-            Source = result.Source;
-            VirtualHost = result.VirtualHost;
-            Destination = result.Destination;
-            DestinationType = result.DestinationType;
-            RoutingKey = result.RoutingKey;
-            Arguments = result.Arguments;
-            PropertiesKey = result.PropertiesKey;
+            Source = obj.Source;
+            VirtualHost = obj.VirtualHost;
+            Destination = obj.Destination;
+            DestinationType = obj.DestinationType;
+            RoutingKey = obj.RoutingKey;
+            Arguments = obj.Arguments;
+            PropertiesKey = obj.PropertiesKey;
         }
 
         public string Source { get; }

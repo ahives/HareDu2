@@ -6,28 +6,28 @@ namespace HareDu.Internal.Model
     class InternalOperationStatsImpl :
         ChannelOperationStats
     {
-        public InternalOperationStatsImpl(ChannelOperationStatsImpl item)
+        public InternalOperationStatsImpl(ChannelOperationStatsImpl obj)
         {
-            TotalMessagesPublished = item.TotalMessagesPublished;
-            MessagesPublishedDetails = item.MessagesPublishedDetails.IsNotNull() ? new InternalRateImpl(item.MessagesPublishedDetails) : default;
-            TotalMessagesConfirmed = item.TotalMessagesConfirmed;
-            MessagesConfirmedDetails = item.MessagesConfirmedDetails.IsNotNull() ? new InternalRateImpl(item.MessagesConfirmedDetails) : default;
-            TotalMessagesNotRouted = item.TotalMessagesNotRouted;
-            MessagesNotRoutedDetails = item.MessagesNotRoutedDetails.IsNotNull() ? new InternalRateImpl(item.MessagesNotRoutedDetails) : default;
-            TotalMessageGets = item.TotalMessageGets;
-            MessageGetDetails = item.MessageGetDetails.IsNotNull() ? new InternalRateImpl(item.MessageGetDetails) : default;
-            TotalMessageGetsWithoutAck = item.TotalMessageGetsWithoutAck;
-            MessageGetsWithoutAckDetails = item.MessageGetsWithoutAckDetails.IsNotNull() ? new InternalRateImpl(item.MessageGetsWithoutAckDetails) : default;
-            TotalMessagesDelivered = item.TotalMessagesDelivered;
-            MessageDeliveryDetails = item.MessageDeliveryDetails.IsNotNull() ? new InternalRateImpl(item.MessageDeliveryDetails) : default;
-            TotalMessageDeliveredWithoutAck = item.TotalMessageDeliveredWithoutAck;
-            MessagesDeliveredWithoutAckDetails = item.MessagesDeliveredWithoutAckDetails.IsNotNull() ? new InternalRateImpl(item.MessagesDeliveredWithoutAckDetails) : default;
-            TotalMessageDeliveryGets = item.TotalMessageDeliveryGets;
-            MessageDeliveryGetDetails = item.MessageDeliveryGetDetails.IsNotNull() ? new InternalRateImpl(item.MessageDeliveryGetDetails) : default;
-            TotalMessagesRedelivered = item.TotalMessagesRedelivered;
-            MessagesRedeliveredDetails = item.MessagesRedeliveredDetails.IsNotNull() ? new InternalRateImpl(item.MessagesRedeliveredDetails) : default;
-            TotalMessagesAcknowledged = item.TotalMessagesAcknowledged;
-            MessagesAcknowledgedDetails = item.MessagesAcknowledgedDetails.IsNotNull() ? new InternalRateImpl(item.MessagesAcknowledgedDetails) : default;
+            TotalMessagesPublished = obj.TotalMessagesPublished;
+            MessagesPublishedDetails = obj.MessagesPublishedDetails.IsNotNull() ? new InternalRateImpl(obj.MessagesPublishedDetails) : default;
+            TotalMessagesConfirmed = obj.TotalMessagesConfirmed;
+            MessagesConfirmedDetails = obj.MessagesConfirmedDetails.IsNotNull() ? new InternalRateImpl(obj.MessagesConfirmedDetails) : default;
+            TotalMessagesNotRouted = obj.TotalMessagesNotRouted;
+            MessagesNotRoutedDetails = obj.MessagesNotRoutedDetails.IsNotNull() ? new InternalRateImpl(obj.MessagesNotRoutedDetails) : default;
+            TotalMessageGets = obj.TotalMessageGets;
+            MessageGetDetails = obj.MessageGetDetails.IsNotNull() ? new InternalRateImpl(obj.MessageGetDetails) : default;
+            TotalMessageGetsWithoutAck = obj.TotalMessageGetsWithoutAck;
+            MessageGetsWithoutAckDetails = obj.MessageGetsWithoutAckDetails.IsNotNull() ? new InternalRateImpl(obj.MessageGetsWithoutAckDetails) : default;
+            TotalMessagesDelivered = obj.TotalMessagesDelivered;
+            MessageDeliveryDetails = obj.MessageDeliveryDetails.IsNotNull() ? new InternalRateImpl(obj.MessageDeliveryDetails) : default;
+            TotalMessageDeliveredWithoutAck = obj.TotalMessageDeliveredWithoutAck;
+            MessagesDeliveredWithoutAckDetails = obj.MessagesDeliveredWithoutAckDetails.IsNotNull() ? new InternalRateImpl(obj.MessagesDeliveredWithoutAckDetails) : default;
+            TotalMessageDeliveryGets = obj.TotalMessageDeliveryGets;
+            MessageDeliveryGetDetails = obj.MessageDeliveryGetDetails.IsNotNull() ? new InternalRateImpl(obj.MessageDeliveryGetDetails) : default;
+            TotalMessagesRedelivered = obj.TotalMessagesRedelivered;
+            MessagesRedeliveredDetails = obj.MessagesRedeliveredDetails.IsNotNull() ? new InternalRateImpl(obj.MessagesRedeliveredDetails) : default;
+            TotalMessagesAcknowledged = obj.TotalMessagesAcknowledged;
+            MessagesAcknowledgedDetails = obj.MessagesAcknowledgedDetails.IsNotNull() ? new InternalRateImpl(obj.MessagesAcknowledgedDetails) : default;
         }
 
         public ulong TotalMessagesPublished { get; }

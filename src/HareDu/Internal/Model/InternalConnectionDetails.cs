@@ -2,14 +2,14 @@ namespace HareDu.Internal.Model
 {
     using HareDu.Model;
 
-    class InternalConnectionDetailsImpl :
+    class InternalConnectionDetails :
         ConnectionDetails
     {
-        public InternalConnectionDetailsImpl(ConnectionDetailsImpl item)
+        public InternalConnectionDetails(ConnectionDetailsImpl obj)
         {
-            PeerHost = item.PeerHost;
-            PeerPort = item.PeerPort;
-            Name = item.Name;
+            PeerHost = obj.PeerHost;
+            PeerPort = obj.PeerPort;
+            Name = obj.Name;
         }
 
         public string PeerHost { get; }

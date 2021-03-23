@@ -31,8 +31,8 @@ namespace HareDu.Tests
             var value = result.Data[3].Value.ToString().ToObject<IDictionary<string, object>>(Deserializer.Options);
             
             value.Count.ShouldBe(2);
-            value["arg1"].ShouldBe("value1");
-            value["arg2"].ShouldBe("value2");
+            value["arg1"].ToString().ShouldBe("value1");
+            value["arg2"].ToString().ShouldBe("value2");
         }
         
         [Test]
@@ -54,7 +54,7 @@ namespace HareDu.Tests
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>(Deserializer.Options);
             
             definition.Name.ShouldBe("fake_param");
-            definition.Value.ShouldBe("fake_value");
+            definition.Value.ToString().ShouldBe("fake_value");
         }
         
         [Test]
@@ -83,12 +83,13 @@ namespace HareDu.Tests
             definition.Value
                 .ToString()
                 .ToObject<IDictionary<string, object>>(Deserializer.Options)["arg1"]
-                .Cast<string>()
+                .ToString()
                 .ShouldBe("value1");
             definition.Value
                 .ToString()
                 .ToObject<IDictionary<string, object>>(Deserializer.Options)["arg2"]
-                .ShouldBe(5);
+                .ToString()
+                .ShouldBe("5");
         }
         
         [Test]
@@ -111,7 +112,7 @@ namespace HareDu.Tests
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>(Deserializer.Options);
             
             definition.Name.ShouldBeNullOrEmpty();
-            definition.Value.ShouldBe("fake_value");
+            definition.Value.ToString().ShouldBe("fake_value");
         }
         
         [Test]
@@ -133,7 +134,7 @@ namespace HareDu.Tests
             GlobalParameterDefinition definition = result.DebugInfo.Request.ToObject<GlobalParameterDefinition>(Deserializer.Options);
             
             definition.Name.ShouldBeNullOrEmpty();
-            definition.Value.ShouldBe("fake_value");
+            definition.Value.ToString().ShouldBe("fake_value");
         }
         
         [Test]

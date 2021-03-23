@@ -30,7 +30,7 @@
 
             string url = "api/exchanges";
 
-            var result = await GetAll<ExchangeInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+            ResultList<ExchangeInfoImpl> result = await GetAll<ExchangeInfoImpl>(url, cancellationToken).ConfigureAwait(false);
 
             ResultList<ExchangeInfo> MapResult(ResultList<ExchangeInfoImpl> result) => new ResultListCopy(result);
 

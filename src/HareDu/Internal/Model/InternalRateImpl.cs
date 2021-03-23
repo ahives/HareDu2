@@ -6,9 +6,9 @@ namespace HareDu.Internal.Model
     class InternalRateImpl :
         Rate
     {
-        public InternalRateImpl(RateImpl rate)
+        public InternalRateImpl(RateImpl obj)
         {
-            Value = rate.IsNotNull() ? rate.Value : default;
+            Value = obj.IsNotNull() ? obj.Value : default;
         }
 
         public decimal Value { get; }

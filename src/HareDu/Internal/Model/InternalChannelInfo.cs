@@ -35,7 +35,7 @@ namespace HareDu.Internal.Model
             PeerPort = item.PeerPort;
             Port = item.Port;
             Type = item.Type;
-            ConnectionDetails = item.ConnectionDetails.IsNotNull() ? new InternalConnectionDetailsImpl(item.ConnectionDetails) : default;
+            ConnectionDetails = item.ConnectionDetails.IsNotNull() ? new InternalConnectionDetails(item.ConnectionDetails) : default;
             GarbageCollectionDetails = item.GarbageCollectionDetails.IsNotNull() ? new InternalGarbageCollectionDetails(item.GarbageCollectionDetails) : default;
             State = item.State;
             TotalChannels = item.TotalChannels;
