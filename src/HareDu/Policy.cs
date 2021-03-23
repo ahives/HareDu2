@@ -17,7 +17,7 @@
         Task<ResultList<PolicyInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// Creates the specified policy on the target virtual host.
+        /// Creates the specified policy on the target virtual host. (deprecated)
         /// </summary>
         /// <param name="action">Describes how the policy will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
@@ -25,7 +25,7 @@
         Task<Result> Create(Action<PolicyCreateAction> action, CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// Delete the specified policy on the target virtual host.
+        /// Delete the specified policy on the target virtual host. (deprecated)
         /// </summary>
         /// <param name="action">Describes how the policy will be deleted.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>

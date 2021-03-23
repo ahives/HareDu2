@@ -12,8 +12,8 @@
         /// <summary>
         /// Returns all bindings on the current RabbitMQ node.
         /// </summary>
-        /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
         Task<ResultList<BindingInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>

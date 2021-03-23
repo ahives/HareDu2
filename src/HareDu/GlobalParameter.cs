@@ -13,7 +13,7 @@
         /// Returns all global parameters on the current RabbitMQ node.
         /// </summary>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        /// <returns></returns>
         Task<ResultList<GlobalParameterInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>

@@ -33,7 +33,7 @@
         Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Purge all messages in the specified queue on the target virtual host on the current RAbbitMQ node. (deprecated)
+        /// Purge all messages in the specified queue on the target virtual host on the current RabbitMQ node. (deprecated)
         /// </summary>
         /// <param name="action">Describes how the queue will be purged.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
