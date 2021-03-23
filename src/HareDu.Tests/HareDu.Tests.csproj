@@ -138,5 +138,13 @@
     <Content Include="TestData\ShovelInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\NodeHealthInfo_Failed.json" />
+    <Content Include="TestData\NodeHealthInfo_Failed.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="TestData\NodeHealthInfo_Ok.json" />
+    <Content Include="TestData\NodeHealthInfo_Ok.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

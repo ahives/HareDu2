@@ -3,6 +3,7 @@ namespace HareDu.Tests
     using Core.Extensions;
     using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
+    using Model;
     using NUnit.Framework;
     using Shouldly;
 
@@ -243,7 +244,7 @@ namespace HareDu.Tests
 
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();
-            result.Data.Status.ShouldBe("ok");
+            result.Data.Status.ShouldBe(NodeStatus.Ok);
         }
 
         [Test]
@@ -257,7 +258,7 @@ namespace HareDu.Tests
             
             result.HasFaulted.ShouldBeFalse();
             result.HasData.ShouldBeTrue();
-            result.Data.Status.ShouldBe("ok");
+            result.Data.Status.ShouldBe(NodeStatus.Ok);
         }
     }
 }

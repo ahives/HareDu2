@@ -29,7 +29,7 @@
 
             string url = "api/global-parameters";
 
-            var result = await GetAll<GlobalParameterInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+            ResultList<GlobalParameterInfoImpl> result = await GetAll<GlobalParameterInfoImpl>(url, cancellationToken).ConfigureAwait(false);
 
             ResultList<GlobalParameterInfo> MapResult(ResultList<GlobalParameterInfoImpl> result) => new ResultListCopy(result);
 
