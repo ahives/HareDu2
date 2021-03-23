@@ -1,12 +1,14 @@
 namespace HareDu.Internal
 {
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using HareDu.Model;
+    using Model;
 
     class ServerImpl :
         BaseBrokerObject,
@@ -17,16 +19,20 @@ namespace HareDu.Internal
         {
         }
 
-        public Task<Result<ServerInfo>> Get(CancellationToken cancellationToken = default)
+        public async Task<Result<ServerInfo>> Get(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/definitions";
-            
-            return Get<ServerInfo>(url, cancellationToken);
+
+            Result<ServerInfoImpl> result = await Get<ServerInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            Result<ServerInfo> MapResult(Result<ServerInfoImpl> result) => new ResultServerCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<Result<ServerHealthInfo>> GetHealth(Action<HealthCheckAction> action,
+        public async Task<Result<ServerHealthInfo>> GetHealth(Action<HealthCheckAction> action,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
@@ -50,10 +56,58 @@ namespace HareDu.Internal
                     throw new ArgumentOutOfRangeException();
             }
 
-            return Get<ServerHealthInfo>(url, cancellationToken);
+            Result<ServerHealthInfoImpl> result = await Get<ServerHealthInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            Result<ServerHealthInfo> MapResult(Result<ServerHealthInfoImpl> result) => new ResultHealthCopy(result);
+
+            return MapResult(result);
         }
 
         
+        class ResultServerCopy :
+            Result<ServerInfo>
+        {
+            public ResultServerCopy(Result<ServerInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+                Data = new InternalServerInfo(result.Data);
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public ServerInfo Data { get; }
+            public bool HasData { get; }
+        }
+
+        
+        class ResultHealthCopy :
+            Result<ServerHealthInfo>
+        {
+            public ResultHealthCopy(Result<ServerHealthInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+                Data = new InternalServerHealthInfo(result.Data);
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public ServerHealthInfo Data { get; }
+            public bool HasData { get; }
+        }
+
+
         class HealthCheckActionImpl :
             HealthCheckAction
         {

@@ -47,7 +47,7 @@ namespace HareDu.Internal.Model
             ConsumerUtilization = obj.ConsumerUtilization;
             IdleSince = obj.IdleSince;
             Memory = obj.Memory;
-            MessageStats = obj.MessageStats.IsNotNull() ? new InternalMessageStats(obj.MessageStats) : default;
+            MessageStats = obj.MessageStats.IsNotNull() ? new InternalQueueMessageStats(obj.MessageStats) : default;
         }
 
         public Rate MessageDetails { get; }

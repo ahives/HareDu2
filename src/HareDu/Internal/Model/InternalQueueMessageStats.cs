@@ -3,10 +3,10 @@ namespace HareDu.Internal.Model
     using Core.Extensions;
     using HareDu.Model;
 
-    class InternalMessageStats :
+    class InternalQueueMessageStats :
         QueueMessageStats
     {
-        public InternalMessageStats(QueueMessageStatsImpl obj)
+        public InternalQueueMessageStats(QueueMessageStatsImpl obj)
         {
             TotalMessagesPublished = obj.TotalMessagesPublished;
             MessagesPublishedDetails = obj.MessagesPublishedDetails.IsNotNull() ? new InternalRate(obj.MessagesPublishedDetails) : default;
