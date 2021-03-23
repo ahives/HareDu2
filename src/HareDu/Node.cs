@@ -1,17 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu
+﻿namespace HareDu
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -22,25 +9,25 @@ namespace HareDu
         BrokerObject
     {
         /// <summary>
-        /// 
+        /// Returns all nodes on the current RabbitMQ cluster.
         /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
         /// <returns></returns>
         Task<ResultList<NodeInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// Runs a test to check if the current RabbitMQ node is healthy.
+        /// Executes test to check if the current RabbitMQ node is healthy.
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="cancellationToken"></param>
+        /// <param name="node">Name of the RabbitMQ node.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
         /// <returns></returns>
         Task<Result<NodeHealthInfo>> GetHealth(string node = null, CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// 
+        /// Returns the memory usage information on the specified RabbitMQ node.
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="cancellationToken"></param>
+        /// <param name="node">Name of the RabbitMQ node.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
         /// <returns></returns>
         Task<Result<NodeMemoryUsageInfo>> GetMemoryUsage(string node, CancellationToken cancellationToken = default);
     }
