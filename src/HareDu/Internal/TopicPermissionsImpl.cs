@@ -11,6 +11,7 @@ namespace HareDu.Internal
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     class TopicPermissionsImpl :
@@ -22,23 +23,27 @@ namespace HareDu.Internal
         {
         }
 
-        public Task<ResultList<TopicPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<TopicPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/topic-permissions";
-            
-            return GetAll<TopicPermissionsInfo>(url, cancellationToken);
+
+            ResultList<TopicPermissionsInfoImpl> result = await GetAll<TopicPermissionsInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<TopicPermissionsInfo> MapResult(ResultList<TopicPermissionsInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<Result> Create(Action<TopicPermissionsCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<TopicPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             var impl = new TopicPermissionsCreateActionImpl();
             action(impl);
 
-            impl.Verify();
+            impl.Validate();
 
             TopicPermissionsDefinition definition = impl.Definition.Value;
 
@@ -47,26 +52,162 @@ namespace HareDu.Internal
             string url = $"api/topic-permissions/{impl.VirtualHostName.Value.ToSanitizedName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options)));
 
-            return Put(url, definition, cancellationToken);
+            return await Put(url, definition, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<Result> Delete(Action<TopicPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<TopicPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             var impl = new TopicPermissionsDeleteActionImpl();
             action(impl);
             
-            impl.Verify();
+            impl.Validate();
 
             string url = $"api/topic-permissions/{impl.VirtualHostName.Value.ToSanitizedName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url));
 
-            return Delete(url, cancellationToken);
+            return await Delete(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Create(string username, string exchange, string vhost, Action<TopicPermissionsConfigurator> configurator,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new TopicPermissionsConfiguratorImpl();
+            configurator?.Invoke(impl);
+
+            impl.Validate();
+
+            var errors = new List<Error>();
+            
+            errors.AddRange(impl.Errors.Value);
+
+            if (string.IsNullOrWhiteSpace(exchange))
+                errors.Add(new ErrorImpl("Then name of the exchange is missing."));
+            
+            if (string.IsNullOrWhiteSpace(username))
+                errors.Add(new ErrorImpl("The username and/or password is missing."));
+            
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            TopicPermissionsRequest request = new TopicPermissionsRequest(exchange, impl.WritePattern.Value, impl.ReadPattern.Value);
+
+            Debug.Assert(request != null);
+
+            string url = $"api/topic-permissions/{vhost.ToSanitizedName()}/{username}";
+            
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+
+            return await PutRequest(url, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Delete(string username, string vhost, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var errors = new List<Error>();
+            
+            if (string.IsNullOrWhiteSpace(username))
+                errors.Add(new ErrorImpl("The username and/or password is missing."));
+            
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            string url = $"api/topic-permissions/{vhost.ToSanitizedName()}/{username}";
+            
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+
+        class TopicPermissionsConfiguratorImpl :
+            TopicPermissionsConfigurator
+        {
+            string _writePattern;
+            string _readPattern;
+            bool _usingWritePatternCalled;
+            bool _usingReadPatternCalled;
+            
+            readonly List<Error> _errors;
+
+            public Lazy<string> WritePattern { get; }
+            public Lazy<string> ReadPattern { get; }
+            public Lazy<List<Error>> Errors { get; }
+
+            public TopicPermissionsConfiguratorImpl()
+            {
+                _errors = new List<Error>();
+                
+                Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
+                WritePattern = new Lazy<string>(() => _writePattern, LazyThreadSafetyMode.PublicationOnly);
+                ReadPattern = new Lazy<string>(() => _readPattern, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void UsingWritePattern(string pattern)
+            {
+                _usingWritePatternCalled = true;
+                
+                _writePattern = pattern;
+                
+                if (string.IsNullOrWhiteSpace(_writePattern))
+                    _errors.Add(new ErrorImpl("The write pattern is missing."));
+            }
+
+            public void UsingReadPattern(string pattern)
+            {
+                _usingReadPatternCalled = true;
+                
+                _readPattern = pattern;
+                
+                if (string.IsNullOrWhiteSpace(_readPattern))
+                    _errors.Add(new ErrorImpl("The read pattern is missing."));
+            }
+
+            public void Validate()
+            {
+                if (!_usingWritePatternCalled)
+                    _errors.Add(new ErrorImpl("The write pattern is missing."));
+                
+                if (!_usingReadPatternCalled)
+                    _errors.Add(new ErrorImpl("The read pattern is missing."));
+            }
+        }
+
+        
+        class ResultListCopy :
+            ResultList<TopicPermissionsInfo>
+        {
+            public ResultListCopy(ResultList<TopicPermissionsInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<TopicPermissionsInfo>();
+                foreach (TopicPermissionsInfoImpl item in result.Data)
+                    data.Add(new InternalTopicPermissionsInfo(item));
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<TopicPermissionsInfo> Data { get; }
+            public bool HasData { get; }
         }
 
         
@@ -112,7 +253,7 @@ namespace HareDu.Internal
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
                 if (!_userCalled)
                     _errors.Add(new ErrorImpl("The username and/or password is missing."));
@@ -147,7 +288,7 @@ namespace HareDu.Internal
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<TopicPermissionsDefinition>(
-                    () => new TopicPermissionsDefinitionImpl(_exchange, _readPattern, _writePattern), LazyThreadSafetyMode.PublicationOnly);
+                    () => new TopicPermissionsDefinition(_exchange, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -193,7 +334,7 @@ namespace HareDu.Internal
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             }
 
-            public void Verify()
+            public void Validate()
             {
                 if (!_userCalled)
                     _errors.Add(new ErrorImpl("The username and/or password is missing."));
@@ -222,22 +363,6 @@ namespace HareDu.Internal
                 public void UsingWritePattern(string pattern) => WritePattern = pattern;
 
                 public void UsingReadPattern(string pattern) => ReadPattern = pattern;
-            }
-
-            
-            class TopicPermissionsDefinitionImpl :
-                TopicPermissionsDefinition
-            {
-                public TopicPermissionsDefinitionImpl(string exchange, string read, string write)
-                {
-                    Exchange = exchange;
-                    Read = read;
-                    Write = write;
-                }
-
-                public string Exchange { get; }
-                public string Read { get; }
-                public string Write { get; }
             }
         }
     }
