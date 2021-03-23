@@ -11,6 +11,7 @@
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     class ScopedParameterImpl :
@@ -22,13 +23,17 @@
         {
         }
 
-        public Task<ResultList<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
-            string url = $"api/parameters";
-            
-            return GetAll<ScopedParameterInfo>(url, cancellationToken);
+            string url = "api/parameters";
+
+            ResultList<ScopedParameterInfoImpl> result = await GetAll<ScopedParameterInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<ScopedParameterInfo> MapResult(ResultList<ScopedParameterInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
         public Task<Result> Create<T>(Action<ScopedParameterCreateAction<T>> action,
@@ -68,6 +73,84 @@
                 return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
+        }
+
+        public async Task<Result> Create<T>(string parameter, T value, string component, string vhost,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            ScopedParameterRequest<T> request = new ScopedParameterRequest<T>(vhost, component, parameter, value);
+
+            Debug.Assert(request != null);
+                
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(parameter))
+                errors.Add(new ErrorImpl("The name of the parameter is missing."));
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (string.IsNullOrWhiteSpace(component))
+                errors.Add(new ErrorImpl("The component name is missing."));
+                    
+            string url = $"api/parameters/{component}/{vhost.ToSanitizedName()}/{parameter}";
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+
+            return await PutRequest(url, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Delete(string parameter, string component, string vhost, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+                
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(parameter))
+                errors.Add(new ErrorImpl("The name of the parameter is missing."));
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (string.IsNullOrWhiteSpace(component))
+                errors.Add(new ErrorImpl("The component name is missing."));
+
+            string url = $"api/parameters/{component}/{vhost.ToSanitizedName()}/{parameter}";
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        
+        class ResultListCopy :
+            ResultList<ScopedParameterInfo>
+        {
+            public ResultListCopy(ResultList<ScopedParameterInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<ScopedParameterInfo>();
+                foreach (ScopedParameterInfoImpl item in result.Data)
+                    data.Add(new InternalScopedParameterInfo(item));
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<ScopedParameterInfo> Data { get; }
+            public bool HasData { get; }
         }
 
         
@@ -149,7 +232,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<ScopedParameterDefinition<T>>(
-                    () => new ScopedParameterDefinitionImpl<T>(_vhost, _component, _scopedParamName, _scopedParamValue), LazyThreadSafetyMode.PublicationOnly);
+                    () => new ScopedParameterDefinition<T>(_vhost, _component, _scopedParamName, _scopedParamValue), LazyThreadSafetyMode.PublicationOnly);
             }
 
             public void Parameter(string name, T value)
@@ -189,24 +272,6 @@
                 public void Component(string component) => ComponentName = component;
 
                 public void VirtualHost(string name) => VirtualHostName = name;
-            }
-
-            
-            class ScopedParameterDefinitionImpl<U> :
-                ScopedParameterDefinition<U>
-            {
-                public ScopedParameterDefinitionImpl(string virtualHost, string component, string name, U value)
-                {
-                    VirtualHost = virtualHost;
-                    Component = component;
-                    ParameterName = name;
-                    ParameterValue = value;
-                }
-
-                public string VirtualHost { get; }
-                public string Component { get; }
-                public string ParameterName { get; }
-                public U ParameterValue { get; }
             }
         }
     }

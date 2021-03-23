@@ -264,7 +264,7 @@
                         : new ArgumentValue<object>(value));
         }
 
-        
+
         class PolicyDeleteActionImpl :
             PolicyDeleteAction
         {
@@ -327,7 +327,7 @@
             }
         }
 
-        
+
         class PolicyCreateActionImpl :
             PolicyCreateAction
         {

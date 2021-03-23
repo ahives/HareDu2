@@ -1,17 +1,4 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu
+﻿namespace HareDu
 {
     using System;
     using System.Threading;
@@ -25,8 +12,8 @@ namespace HareDu
         /// <summary>
         /// Returns all scoped parameters on the current RabbitMQ server.
         /// </summary>
-        /// <param name="cancellationToken">Token used cancel the current thread</param>
-        /// <returns>Asynchronous task of <see cref="HareDu.Core.Result{TResult}"/></returns>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
         Task<ResultList<ScopedParameterInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
@@ -44,5 +31,27 @@ namespace HareDu
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="HareDu.Core.Result{TResult}"/></returns>
         Task<Result> Delete(Action<ScopedParameterDeleteAction> action, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Creates a scoped parameter for a particular RabbitMQ component and virtual host on the current server.
+        /// </summary>
+        /// <param name="parameter">Name of the RabbitMQ parameter.</param>
+        /// <param name="value">Value of the RabbitMQ parameter.</param>
+        /// <param name="component">Name of the RabbitMQ component.</param>
+        /// <param name="vhost">Name of the RabbitMQ virtual host.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        Task<Result> Create<T>(string parameter, T value, string component, string vhost, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// Deletes the specified scoped parameter for a particular RabbitMQ component and virtual host on the current server.
+        /// </summary>
+        /// <param name="parameter">Name of the RabbitMQ parameter.</param>
+        /// <param name="component">Name of the RabbitMQ component.</param>
+        /// <param name="vhost">Name of the RabbitMQ virtual host.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns>Asynchronous task of <see cref="HareDu.Core.Result{TResult}"/></returns>
+        Task<Result> Delete(string parameter, string component, string vhost, CancellationToken cancellationToken = default);
     }
 }

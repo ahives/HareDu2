@@ -76,7 +76,7 @@
             return await Delete(url, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -88,9 +88,9 @@
             string url = $"api/queues/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.QueueName.Value}/contents";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url)));
+                return new FaultedResult<QueueInfo>(impl.Errors.Value, new DebugInfoImpl(url));
 
-            return Delete(url, cancellationToken);
+            return await Delete(url, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<Result> Create(string queue, string vhost, string node, Action<QueueConfigurator> configurator = null,

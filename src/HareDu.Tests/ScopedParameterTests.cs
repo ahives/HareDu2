@@ -28,8 +28,8 @@ namespace HareDu.Tests
             result.Data.Count.ShouldBe(3);
             result.Data[0].ShouldNotBeNull();
             result.Data[0].Value.Count.ShouldBe(2);
-            result.Data[0].Value["max-connections"].Cast<long>().ShouldBe(10);
-            result.Data[0].Value["max-queues"].Cast<string>().ShouldBe("value");
+            result.Data[0].Value["max-connections"].ToString().ShouldBe("10");
+            result.Data[0].Value["max-queues"].ToString().ShouldBe("value");
         }
         
         [Test]
