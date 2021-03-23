@@ -6,6 +6,7 @@ namespace HareDu.Tests
     using HareDu.Extensions;
     using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
+    using Model;
     using NUnit.Framework;
     using Shouldly;
 
@@ -29,7 +30,7 @@ namespace HareDu.Tests
             result.Data[0].Host.ShouldBe("127.0.0.0");
             result.Data[0].Name.ShouldBe("127.0.0.0:79863 -> 127.0.0.0:5672");
             result.Data[0].Node.ShouldBe("rabbit@localhost");
-            result.Data[0].State.ShouldBe("running");
+            result.Data[0].State.ShouldBe(BrokerConnectionState.Running);
             result.Data[0].Type.ShouldBe("network");
             result.Data[0].AuthenticationMechanism.ShouldBe("PLAIN");
             result.Data[0].ConnectedAt.ShouldBe(1572749839566);
@@ -98,7 +99,7 @@ namespace HareDu.Tests
                 Assert.AreEqual("127.0.0.0", result.Data[0].Host);
                 Assert.AreEqual("127.0.0.0:79863 -> 127.0.0.0:5672", result.Data[0].Name);
                 Assert.AreEqual("rabbit@localhost", result.Data[0].Node);
-                Assert.AreEqual("running", result.Data[0].State);
+                Assert.AreEqual(BrokerConnectionState.Running, result.Data[0].State);
                 Assert.AreEqual("network", result.Data[0].Type);
                 Assert.AreEqual("PLAIN", result.Data[0].AuthenticationMechanism);
                 Assert.AreEqual(1572749839566, result.Data[0].ConnectedAt);
@@ -167,7 +168,7 @@ namespace HareDu.Tests
                 Assert.AreEqual("127.0.0.0", result.Data[0].Host);
                 Assert.AreEqual("127.0.0.0:79863 -> 127.0.0.0:5672", result.Data[0].Name);
                 Assert.AreEqual("rabbit@localhost", result.Data[0].Node);
-                Assert.AreEqual("running", result.Data[0].State);
+                Assert.AreEqual(BrokerConnectionState.Running, result.Data[0].State);
                 Assert.AreEqual("network", result.Data[0].Type);
                 Assert.AreEqual("PLAIN", result.Data[0].AuthenticationMechanism);
                 Assert.AreEqual(1572749839566, result.Data[0].ConnectedAt);

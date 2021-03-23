@@ -1,55 +1,42 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Extensions
 {
-    using Model;
+    using HareDu.Model;
 
     public static class ConnectionStateExtensions
     {
-        public static ConnectionState Convert(this string value)
+        public static BrokerConnectionState Convert(this string value)
         {
             switch (value)
             {
                 case "starting":
-                    return ConnectionState.Starting;
+                    return BrokerConnectionState.Starting;
                 
                 case "tuning":
-                    return ConnectionState.Tuning;
+                    return BrokerConnectionState.Tuning;
                 
                 case "opening":
-                    return ConnectionState.Opening;
+                    return BrokerConnectionState.Opening;
                 
                 case "flow":
-                    return ConnectionState.Flow;
+                    return BrokerConnectionState.Flow;
                 
                 case "blocking":
-                    return ConnectionState.Blocking;
+                    return BrokerConnectionState.Blocking;
                 
                 case "blocked":
-                    return ConnectionState.Blocked;
+                    return BrokerConnectionState.Blocked;
                 
                 case "closing":
-                    return ConnectionState.Closing;
+                    return BrokerConnectionState.Closing;
                 
                 case "closed":
-                    return ConnectionState.Closed;
+                    return BrokerConnectionState.Closed;
                 
                 case "running":
-                    return ConnectionState.Running;
+                    return BrokerConnectionState.Running;
 
                 default:
-                    return ConnectionState.Inconclusive;
+                    return BrokerConnectionState.Inconclusive;
             }
         }
     }

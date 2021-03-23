@@ -4,12 +4,11 @@ namespace HareDu.Snapshotting.Tests
     using System.Threading.Tasks;
     using Autofac;
     using Fakes;
+    using HareDu.Model;
     using HareDu.Registration;
     using Model;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
-    using Snapshotting.Extensions;
     using Snapshotting.Registration;
 
     [TestFixture]
@@ -46,7 +45,7 @@ namespace HareDu.Snapshotting.Tests
             result.Snapshot.ClusterName.ShouldBe("fake_cluster");
             result.Snapshot.Connections.ShouldNotBeNull();
             result.Snapshot.Connections[0]?.Identifier.ShouldBe("Connection 1");
-            result.Snapshot.Connections[0]?.State.ShouldBe(ConnectionState.Blocked);
+            result.Snapshot.Connections[0]?.State.ShouldBe(BrokerConnectionState.Blocked);
             result.Snapshot.Connections[0]?.OpenChannelsLimit.ShouldBe<ulong>(982738);
             result.Snapshot.Connections[0]?.VirtualHost.ShouldBe("TestVirtualHost");
             result.Snapshot.Connections[0]?.NodeIdentifier.ShouldBe("Node 1");

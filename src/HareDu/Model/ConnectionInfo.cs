@@ -40,7 +40,7 @@
 
         GarbageCollectionDetails GarbageCollectionDetails { get; }
 
-        string State { get; }
+        BrokerConnectionState State { get; }
 
         string SslHashFunction { get; }
 

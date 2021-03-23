@@ -2,6 +2,7 @@ namespace HareDu.Internal.Model
 {
     using System;
     using System.Text.Json.Serialization;
+    using HareDu.Model;
 
     class ConnectionInfoImpl
     {
@@ -63,7 +64,7 @@ namespace HareDu.Internal.Model
         public GarbageCollectionDetailsImpl GarbageCollectionDetails { get; set; }
 
         [JsonPropertyName("state")]
-        public string State { get; set; }
+        public BrokerConnectionState State { get; set; }
 
         [JsonPropertyName("ssl_hash")]
         public string SslHashFunction { get; set; }

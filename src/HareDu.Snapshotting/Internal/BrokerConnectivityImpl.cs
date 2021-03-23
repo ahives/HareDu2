@@ -155,7 +155,7 @@ namespace HareDu.Snapshotting.Internal
                     OpenChannelsLimit = connection.OpenChannelsLimit;
                     NodeIdentifier = connection.Node;
                     VirtualHost = connection.VirtualHost;
-                    State = connection.State.Convert();
+                    State = connection.State;
                 }
 
                 public string Identifier { get; }
@@ -163,7 +163,7 @@ namespace HareDu.Snapshotting.Internal
                 public ulong OpenChannelsLimit { get; }
                 public string NodeIdentifier { get; }
                 public string VirtualHost { get; }
-                public ConnectionState State { get; }
+                public BrokerConnectionState State { get; }
                 public IReadOnlyList<ChannelSnapshot> Channels { get; }
 
                 

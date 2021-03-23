@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Snapshotting.Tests.Fakes
 {
     using HareDu.Model;
@@ -31,7 +18,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
             PacketsSent = 871998847;
             PacketBytesSent = 83008482374;
             PacketsReceived = 68721979894793;
-            State = "blocked";
+            State = BrokerConnectionState.Blocked;
         }
 
         public Rate ReductionDetails { get; }
@@ -53,7 +40,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong PacketsReceived { get; }
         public string Type { get; }
         public GarbageCollectionDetails GarbageCollectionDetails { get; }
-        public string State { get; }
+        public BrokerConnectionState State { get; }
         public string SslHashFunction { get; }
         public string SslCipherAlgorithm { get; }
         public string SslKeyExchangeAlgorithm { get; }
