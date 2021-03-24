@@ -1,0 +1,12 @@
+[
+  {
+    "vhost": "TestHareDu",
+    "name": "test",
+    "pattern": ".*",
+    "apply-to": "queues",
+    "definition": {
+      "max-length": 100
+    },
+    "priority": 0
+  }
+]
