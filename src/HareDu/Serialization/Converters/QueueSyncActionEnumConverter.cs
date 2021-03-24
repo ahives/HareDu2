@@ -4,7 +4,7 @@ namespace HareDu.Serialization.Converters
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
-    public class QueueSyncActionEnumConverter :
+    class QueueSyncActionEnumConverter :
         JsonConverter<QueueSyncAction>
     {
         public override QueueSyncAction Read(ref Utf8JsonReader reader, Type typeToConvert,

@@ -4,7 +4,7 @@ namespace HareDu.Serialization.Converters
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
-    public class CustomStringConverter :
+    class CustomStringConverter :
         JsonConverter<string>
     {
         public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

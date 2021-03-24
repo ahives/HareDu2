@@ -4,7 +4,7 @@ namespace HareDu.Serialization.Converters
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
-    public class CustomDateTimeConverter :
+    class CustomDateTimeConverter :
         JsonConverter<DateTimeOffset>
     {
         public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert,

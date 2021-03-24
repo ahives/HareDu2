@@ -1,4 +1,4 @@
-﻿namespace HareDu.Internal
+namespace HareDu.Internal
 {
     using System;
     using System.Collections.Generic;
@@ -10,26 +10,35 @@
     using HareDu.Model;
     using Model;
 
-    class SystemOverviewImpl :
+    public class BrokerSystemImpl :
         BaseBrokerObject,
-        SystemOverview
+        BrokerSystem
     {
-        public SystemOverviewImpl(HttpClient client)
+        public BrokerSystemImpl(HttpClient client)
             : base(client)
         {
         }
 
-        public async Task<Result<SystemOverviewInfo>> Get(CancellationToken cancellationToken = default)
+        public async Task<Result<SystemOverviewInfo>> GetSystemOverview(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/overview";
 
-            Result<SystemOverviewInfoImpl> result = await Get<SystemOverviewInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+            Result<SystemOverviewInfoImpl> result = await GetRequest<SystemOverviewInfoImpl>(url, cancellationToken).ConfigureAwait(false);
 
             Result<SystemOverviewInfo> MapResult(Result<SystemOverviewInfoImpl> result) => new ResultCopy(result);
 
             return MapResult(result);
+        }
+
+        public async Task<Result> RebalanceAllQueues(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = "api/rebalance/queues";
+            
+            return await PostEmptyRequest(url, cancellationToken).ConfigureAwait(false);
         }
 
         

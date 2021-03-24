@@ -3,12 +3,12 @@ namespace HareDu.Serialization.Converters
     using System;
     using System.Text.Json;
     using System.Text.Json.Serialization;
-    using Model;
+    using Internal.Model;
 
-    public class InconsistentObjectDataConverter :
-        JsonConverter<SocketOptions>
+    class InconsistentObjectDataConverter :
+        JsonConverter<SocketOptionsImpl>
     {
-        public override SocketOptions? Read(ref Utf8JsonReader reader, Type typeToConvert,
+        public override SocketOptionsImpl? Read(ref Utf8JsonReader reader, Type typeToConvert,
             JsonSerializerOptions options)
         {
             var value = JsonDocument.ParseValue(ref reader);
@@ -18,10 +18,10 @@ namespace HareDu.Serialization.Converters
 
             var text = value.RootElement.GetRawText();
 
-            return JsonSerializer.Deserialize<SocketOptions>(text, options);
+            return JsonSerializer.Deserialize<SocketOptionsImpl>(text, options);
         }
 
-        public override void Write(Utf8JsonWriter writer, SocketOptions value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, SocketOptionsImpl value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }

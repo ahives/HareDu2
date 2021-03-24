@@ -4,7 +4,7 @@ namespace HareDu.Serialization.Converters
     using System.Text.Json;
     using System.Text.Json.Serialization;
 
-    public class CustomLongConverter :
+    class CustomLongConverter :
         JsonConverter<long>
     {
         public override long Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
