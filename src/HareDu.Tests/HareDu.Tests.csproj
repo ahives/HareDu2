@@ -146,5 +146,9 @@
     <Content Include="TestData\NodeHealthInfo_Ok.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="TestData\VirtualHostHealthInfo.json" />
+    <Content Include="TestData\VirtualHostHealthInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

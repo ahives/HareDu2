@@ -26,7 +26,7 @@ namespace HareDu.Internal.Model
         }
 
         public string Name { get; }
-        public string Tracing { get; }
+        public bool Tracing { get; }
         public IDictionary<string, string> ClusterState { get; }
         public VirtualHostMessageStats MessageStats { get; }
         public ulong PacketBytesReceived { get; }

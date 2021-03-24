@@ -11,6 +11,7 @@
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     class VirtualHostImpl :
@@ -22,16 +23,20 @@
         {
         }
 
-        public Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/vhosts";
-            
-            return GetAll<VirtualHostInfo>(url, cancellationToken);
+
+            ResultList<VirtualHostInfoImpl> result = await GetAll<VirtualHostInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<VirtualHostInfo> MapResult(ResultList<VirtualHostInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -45,12 +50,12 @@
             string url = $"api/vhosts/{impl.VirtualHostName.Value.ToSanitizedName()}";
 
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options)));
 
-            return Put(url, definition, cancellationToken);
+            return await Put(url, definition, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -64,15 +69,15 @@
             string url = $"api/vhosts/{vHost}";
 
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url));
 
             if (vHost == "2%f")
-                return Task.FromResult<Result>(new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url)));
+                return new FaultedResult(new List<Error>{ new ErrorImpl("Cannot delete the default virtual host.") }, new DebugInfoImpl(url));
 
-            return Delete(url, cancellationToken);
+            return await Delete(url, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -90,9 +95,192 @@
                 errors.Add(new ErrorImpl("The name of the virtual host is missing."));
             
             if (errors.Any())
-                return Task.FromResult<Result>(new FaultedResult(errors, new DebugInfoImpl(url)));
+                return new FaultedResult(errors, new DebugInfoImpl(url));
 
-            return PostEmpty(url, cancellationToken);
+            return await PostEmpty(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Create(string vhost, Action<VirtualHostConfigurator> configurator, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new VirtualHostConfiguratorImpl();
+            configurator?.Invoke(impl);
+
+            VirtualHostRequest request = impl.Request.Value;
+
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            string url = $"api/vhosts/{vhost.ToSanitizedName()}";
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+
+            return await PutRequest(url, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Delete(string vhost, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var errors = new List<Error>();
+
+            string virtualHost = vhost.ToSanitizedName();
+
+            if (virtualHost == "2%f")
+                errors.Add(new ErrorImpl("Cannot delete the default virtual host."));
+            else
+            {
+                if (string.IsNullOrWhiteSpace(virtualHost))
+                    errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            }
+
+            string url = $"api/vhosts/{virtualHost}";
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Startup(string vhost, string node, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            if (string.IsNullOrWhiteSpace(node))
+                errors.Add(new ErrorImpl("RabbitMQ node is missing."));
+
+            string url = $"/api/vhosts/{vhost.ToSanitizedName()}/start/{node}";
+            
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            return await PostEmptyRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result<ServerHealthInfo>> GetHealth(string vhost, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = $"api/aliveness-test/{vhost.ToSanitizedName()}";;
+
+            Result<ServerHealthInfoImpl> result = await GetRequest<ServerHealthInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            Result<ServerHealthInfo> MapResult(Result<ServerHealthInfoImpl> result) => new ResultCopy(result);
+
+            return MapResult(result);
+        }
+
+        
+        class ResultListCopy :
+            ResultList<VirtualHostInfo>
+        {
+            public ResultListCopy(ResultList<VirtualHostInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<VirtualHostInfo>();
+                foreach (VirtualHostInfoImpl item in result.Data)
+                    data.Add(new InternalVirtualHostInfo(item));
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<VirtualHostInfo> Data { get; }
+            public bool HasData { get; }
+        }
+
+        
+        class ResultCopy :
+            Result<ServerHealthInfo>
+        {
+            public ResultCopy(Result<ServerHealthInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+                Data = new InternalServerHealthInfo(result.Data);
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public ServerHealthInfo Data { get; }
+            public bool HasData { get; }
+        }
+
+
+        class VirtualHostConfiguratorImpl :
+            VirtualHostConfigurator
+        {
+            bool _tracing;
+            string _description;
+            string _tags;
+
+            public Lazy<VirtualHostRequest> Request { get; }
+
+            public VirtualHostConfiguratorImpl()
+            {
+                Request = new Lazy<VirtualHostRequest>(
+                    () => new VirtualHostRequest(_tracing, _description, _tags), LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void WithTracingEnabled() => _tracing = true;
+
+            public void Description(string description) => _description = description;
+
+            public void Tags(Action<VirtualHostTagConfigurator> configurator)
+            {
+                var impl = new VirtualHostTagConfiguratorImpl();
+                configurator?.Invoke(impl);
+
+                StringBuilder builder = new StringBuilder();
+
+                impl.Tags.ForEach(x => builder.AppendFormat("{0},", x));
+
+                _tags = builder.ToString().TrimEnd(',');
+            }
+
+
+            class VirtualHostTagConfiguratorImpl :
+                VirtualHostTagConfigurator
+            {
+                readonly List<string> _tags;
+
+                public List<string> Tags => _tags;
+
+                public VirtualHostTagConfiguratorImpl()
+                {
+                    _tags = new List<string>();
+                }
+
+                public void Add(string tag)
+                {
+                    if (_tags.Contains(tag))
+                        return;
+
+                    _tags.Add(tag);
+                }
+            }
         }
 
         
@@ -169,7 +357,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<VirtualHostDefinition>(
-                    () => new VirtualHostDefinitionImpl(_tracing, _description, _tags), LazyThreadSafetyMode.PublicationOnly);
+                    () => new VirtualHostDefinition(_tracing, _description, _tags), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHostName = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
             }
 
@@ -189,22 +377,6 @@
             {
                 if (string.IsNullOrWhiteSpace(_vhost))
                     _errors.Add(new ErrorImpl("The name of the virtual host is missing."));
-            }
-
-            
-            class VirtualHostDefinitionImpl :
-                VirtualHostDefinition
-            {
-                public bool Tracing { get; }
-                public string Description { get; }
-                public string Tags { get; }
-
-                public VirtualHostDefinitionImpl(bool tracing, string description, string tags)
-                {
-                    Tracing = tracing;
-                    Description = description;
-                    Tags = tags;
-                }
             }
 
             

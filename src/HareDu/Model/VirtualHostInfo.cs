@@ -6,7 +6,7 @@
     {
         string Name { get; }
         
-        string Tracing { get; }
+        bool Tracing { get; }
         
         IDictionary<string, string> ClusterState { get; }
 
