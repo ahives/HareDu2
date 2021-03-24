@@ -352,7 +352,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<PolicyDefinition>(
-                    () => new PolicyDefinitionImpl(_pattern, _arguments, _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
+                    () => new PolicyDefinition(_pattern, _arguments.ToDictionary(x => x.Key, x => x.Value.Value.ToString()), _priority, _applyTo), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 PolicyName = new Lazy<string>(() => _policy, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -561,31 +561,6 @@
                             ? new ArgumentValue<object>(value, $"Argument '{conflictingArg}' has already been set or would conflict with argument '{arg}'")
                             : new ArgumentValue<object>(value));
                 }
-            }
-
-            
-            class PolicyDefinitionImpl :
-                PolicyDefinition
-            {
-                public PolicyDefinitionImpl(string pattern,
-                    IDictionary<string, ArgumentValue<object>> arguments,
-                    int priority,
-                    string applyTo)
-                {
-                    Pattern = pattern;
-                    Priority = priority;
-                    ApplyTo = applyTo;
-
-                    if (arguments.IsNull())
-                        return;
-                    
-                    Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value.ToString());
-                }
-
-                public string Pattern { get; }
-                public IDictionary<string, string> Arguments { get; }
-                public int Priority { get; }
-                public string ApplyTo { get; }
             }
         }
     }

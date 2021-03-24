@@ -3,18 +3,30 @@
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
-    public interface PolicyDefinition
+    public class PolicyDefinition
     {
+        public PolicyDefinition(string pattern, IDictionary<string, string> arguments, int priority, string applyTo)
+        {
+            Pattern = pattern;
+            Arguments = arguments;
+            Priority = priority;
+            ApplyTo = applyTo;
+        }
+
+        public PolicyDefinition()
+        {
+        }
+
         [JsonPropertyName("pattern")]
-        string Pattern { get; }
+        public string Pattern { get; set; }
 
         [JsonPropertyName("definition")]
-        IDictionary<string, string> Arguments { get; }
+        public IDictionary<string, string> Arguments { get; set; }
 
         [JsonPropertyName("priority")]
-        int Priority { get; }
+        public int Priority { get; set; }
 
         [JsonPropertyName("apply-to")]
-        string ApplyTo { get; }
+        public string ApplyTo { get; set; }
     }
 }
