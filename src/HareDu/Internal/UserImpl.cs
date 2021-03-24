@@ -11,6 +11,7 @@
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     class UserImpl :
@@ -22,22 +23,30 @@
         {
         }
 
-        public Task<ResultList<UserInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<UserInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/users";
-            
-            return GetAll<UserInfo>(url, cancellationToken);
+
+            ResultList<UserInfoImpl> result = await GetAll<UserInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<UserInfo> MapResult(ResultList<UserInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<ResultList<UserInfo>> GetAllWithoutPermissions(CancellationToken cancellationToken = default)
+        public async Task<ResultList<UserInfo>> GetAllWithoutPermissions(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/users/without-permissions";
-            
-            return GetAll<UserInfo>(url, cancellationToken);
+
+            ResultList<UserInfoImpl> result = await GetAll<UserInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<UserInfo> MapResult(ResultList<UserInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
         public Task<Result> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default)
@@ -76,6 +85,166 @@
                 return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
 
             return Delete(url, cancellationToken);
+        }
+
+        public async Task<Result> Create(string username, string password, string passwordHash = null,
+            Action<UserConfigurator> configurator = null, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new UserConfiguratorImpl();
+            configurator?.Invoke(impl);
+
+            string Normalize(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+
+            UserRequest request =
+                new UserRequest(!string.IsNullOrWhiteSpace(Normalize(password)) ? null : passwordHash,
+                    Normalize(password), impl.Tags.Value);
+
+            Debug.Assert(request != null);
+                    
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(username))
+                errors.Add(new ErrorImpl("The username is missing."));
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                if (string.IsNullOrWhiteSpace(passwordHash))
+                    errors.Add(new ErrorImpl("The password/hash is missing."));
+            }
+            
+            string url = $"api/users/{username}";
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+
+            return await PutRequest(url, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Delete(string username, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+                
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(username))
+                errors.Add(new ErrorImpl("The username is missing."));
+
+            string url = $"api/users/{username}";
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Delete(IList<string> usernames, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            string url = "api/users/bulk-delete";
+
+            if (usernames.IsEmpty())
+                return new FaultedResult(new DebugInfoImpl(url, new List<Error>{new ErrorImpl("Valid usernames is missing.")}));
+                
+            var errors = new List<Error>();
+
+            for (int i = 0; i < usernames.Count; i++)
+            {
+                if (string.IsNullOrWhiteSpace(usernames[i]))
+                    errors.Add(new ErrorImpl($"The username at index {i} is missing."));
+            }
+
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            BulkUserDeleteRequest request = new BulkUserDeleteRequest(usernames);
+
+            Debug.Assert(request != null);
+
+            return await PostRequest(url, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        
+        class ResultListCopy :
+            ResultList<UserInfo>
+        {
+            public ResultListCopy(ResultList<UserInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<UserInfo>();
+                foreach (UserInfoImpl item in result.Data)
+                    data.Add(new InternalUserInfo(item));
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<UserInfo> Data { get; }
+            public bool HasData { get; }
+        }
+
+
+        class UserConfiguratorImpl :
+            UserConfigurator
+        {
+            string _tags;
+
+            public Lazy<string> Tags { get; }
+
+            public UserConfiguratorImpl()
+            {
+                Tags = new Lazy<string>(() => _tags, LazyThreadSafetyMode.PublicationOnly);
+            }
+
+            public void WithTags(Action<UserAccessOptions> tags)
+            {
+                var impl = new UserAccessOptionsImpl();
+                tags?.Invoke(impl);
+
+                _tags = impl.ToString();
+            }
+
+            
+            class UserAccessOptionsImpl :
+                UserAccessOptions
+            {
+                List<string> Tags { get; }
+                
+                public UserAccessOptionsImpl()
+                {
+                    Tags = new List<string>();
+                }
+
+                public void None() => Tags.Add(UserAccessTag.None);
+
+                public void Administrator() => Tags.Add(UserAccessTag.Administrator);
+
+                public void Monitoring() => Tags.Add(UserAccessTag.Monitoring);
+
+                public void Management() => Tags.Add(UserAccessTag.Management);
+                
+                public void PolicyMaker() => Tags.Add(UserAccessTag.PolicyMaker);
+
+                public void Impersonator() => Tags.Add(UserAccessTag.Impersonator);
+
+                public override string ToString()
+                {
+                    if (Tags.Contains(UserAccessTag.None) || !Tags.Any())
+                        return UserAccessTag.None;
+
+                    return string.Join(",", Tags);
+                }
+            }
         }
 
         
@@ -125,7 +294,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<UserDefinition>(
-                    () => new UserDefinitionImpl(_password, _passwordHash, _tags), LazyThreadSafetyMode.PublicationOnly);
+                    () => new UserDefinition(_passwordHash, _password, _tags), LazyThreadSafetyMode.PublicationOnly);
                 User = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
 
@@ -185,28 +354,6 @@
 
                     return string.Join(",", Tags);
                 }
-            }
-
-
-            class UserDefinitionImpl :
-                UserDefinition
-            {
-                public UserDefinitionImpl(string password, string passwordHash, string tags)
-                {
-                    PasswordHash = passwordHash;
-
-                    string Normalize(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
-
-                    Password = Normalize(password);
-                    Tags = Normalize(tags);
-                    
-                    if (!string.IsNullOrWhiteSpace(Password))
-                        PasswordHash = null;
-                }
-
-                public string PasswordHash { get; }
-                public string Password { get; }
-                public string Tags { get; }
             }
         }
     }

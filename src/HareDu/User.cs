@@ -1,19 +1,7 @@
-﻿// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu
+﻿namespace HareDu
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
@@ -37,7 +25,7 @@ namespace HareDu
         Task<ResultList<UserInfo>> GetAllWithoutPermissions(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Creates a user on the current RabbitMQ server.
+        /// Creates a user on the current RabbitMQ server. (deprecated)
         /// </summary>
         /// <param name="action">Describes how the user permission will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
@@ -45,11 +33,38 @@ namespace HareDu
         Task<Result> Create(Action<UserCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete the specified user on the current RabbitMQ server.
+        /// Delete the specified user on the current RabbitMQ server. (deprecated)
         /// </summary>
         /// <param name="action">Describes how the virtual host will be delete.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="HareDu.Core.Result{TResult}"/></returns>
         Task<Result> Delete(Action<UserDeleteAction> action, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Creates a user on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="username">RabbitMQ broker username.</param>
+        /// <param name="password">RabbitMQ broker password.</param>
+        /// <param name="passwordHash">RabbitMQ broker password hash.</param>
+        /// <param name="configurator">Describes how the user permission will be created.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
+        Task<Result> Create(string username, string password, string passwordHash = null, Action<UserConfigurator> configurator = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes the specified user on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="username">RabbitMQ broker username.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
+        Task<Result> Delete(string username, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// Bulk deletes the specified user on the current RabbitMQ server.
+        /// </summary>
+        /// <param name="usernames">List of RabbitMQ broker usernames.</param>
+        /// <param name="cancellationToken">Token used to cancel the operation running on the current thread.</param>
+        /// <returns></returns>
+        Task<Result> Delete(IList<string> usernames, CancellationToken cancellationToken = default);
     }
 }

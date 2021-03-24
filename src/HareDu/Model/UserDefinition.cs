@@ -2,15 +2,30 @@
 {
     using System.Text.Json.Serialization;
 
-    public interface UserDefinition
+    public class UserDefinition
     {
+        public UserDefinition(string passwordHash, string password, string tags)
+        {
+            string Normalize(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
+
+            Password = Normalize(password);
+            Tags = Normalize(tags);
+                    
+            if (string.IsNullOrWhiteSpace(Password))
+                PasswordHash = passwordHash;
+        }
+
+        public UserDefinition()
+        {
+        }
+
         [JsonPropertyName("password_hash")]
-        string PasswordHash { get; }
+        public string PasswordHash { get; set; }
         
         [JsonPropertyName("password")]
-        string Password { get; }
+        public string Password { get; set; }
         
         [JsonPropertyName("tags")]
-        string Tags { get; }
+        public string Tags { get; set; }
     }
 }
