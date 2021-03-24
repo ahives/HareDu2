@@ -8,7 +8,6 @@ namespace HareDu.AutofacIntegration
     using Diagnostics.KnowledgeBase;
     using Diagnostics.Registration;
     using Microsoft.Extensions.Configuration;
-    using Registration;
     using Snapshotting.Registration;
 
     public static class HareDuExtensions

@@ -4,13 +4,10 @@ namespace HareDu.Snapshotting.Tests
     using System.Threading.Tasks;
     using Autofac;
     using Fakes;
-    using HareDu.Registration;
     using Model;
     using NUnit.Framework;
     using Persistence;
-    using Registration;
     using Shouldly;
-    using Snapshotting.Extensions;
     using Snapshotting.Registration;
 
     [TestFixture]

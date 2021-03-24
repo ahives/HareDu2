@@ -5,7 +5,6 @@ namespace HareDu.IntegrationTests
     using AutofacIntegration;
     using Extensions;
     using NUnit.Framework;
-    using Registration;
 
     [TestFixture]
     public class ConsumerTests

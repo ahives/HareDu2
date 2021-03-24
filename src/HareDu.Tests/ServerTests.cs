@@ -1,7 +1,6 @@
 namespace HareDu.Tests
 {
     using Core.Extensions;
-    using HareDu.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Shouldly;

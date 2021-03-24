@@ -7,7 +7,6 @@ namespace HareDu.IntegrationTests
     using Core.Extensions;
     using Extensions;
     using NUnit.Framework;
-    using Registration;
     using Serialization;
 
     [TestFixture]

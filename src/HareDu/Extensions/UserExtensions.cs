@@ -7,7 +7,6 @@ namespace HareDu.Extensions
     using Core;
     using Core.Extensions;
     using Model;
-    using Registration;
 
     public static class UserExtensions
     {

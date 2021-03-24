@@ -7,7 +7,6 @@ namespace HareDu.IntegrationTests
     using Extensions;
     using Model;
     using NUnit.Framework;
-    using Registration;
 
     [TestFixture]
     public class ServerTests

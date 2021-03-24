@@ -7,7 +7,6 @@ namespace HareDu.Tests.Registration
     using AutofacIntegration;
     using Core;
     using Core.Extensions;
-    using HareDu.Registration;
     using Internal;
     using NUnit.Framework;
     using Shouldly;

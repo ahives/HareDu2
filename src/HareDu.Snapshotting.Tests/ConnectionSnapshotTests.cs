@@ -5,7 +5,6 @@ namespace HareDu.Snapshotting.Tests
     using Autofac;
     using Fakes;
     using HareDu.Model;
-    using HareDu.Registration;
     using Model;
     using NUnit.Framework;
     using Shouldly;

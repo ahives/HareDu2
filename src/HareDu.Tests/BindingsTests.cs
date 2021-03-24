@@ -3,7 +3,6 @@ namespace HareDu.Tests
     using System.Threading.Tasks;
     using Core.Extensions;
     using HareDu.Extensions;
-    using HareDu.Registration;
     using Internal.Model;
     using Microsoft.Extensions.DependencyInjection;
     using Model;

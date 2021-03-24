@@ -4,12 +4,8 @@
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
-    using Core;
-    using Core.Extensions;
     using Extensions;
-    using Model;
     using NUnit.Framework;
-    using Registration;
     using Serialization;
 
     [TestFixture]

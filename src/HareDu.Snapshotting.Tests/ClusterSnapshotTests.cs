@@ -4,7 +4,6 @@ namespace HareDu.Snapshotting.Tests
     using System.Threading.Tasks;
     using Autofac;
     using Fakes;
-    using HareDu.Registration;
     using Model;
     using NUnit.Framework;
     using Shouldly;

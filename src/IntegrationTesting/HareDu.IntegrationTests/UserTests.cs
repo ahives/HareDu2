@@ -6,7 +6,6 @@
     using AutofacIntegration;
     using Extensions;
     using NUnit.Framework;
-    using Registration;
     using Serialization;
 
     [TestFixture]

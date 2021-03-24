@@ -1,13 +1,10 @@
 ﻿namespace HareDu.IntegrationTests
 {
-    using System;
     using System.Threading.Tasks;
     using Autofac;
     using AutofacIntegration;
-    using Core.Extensions;
     using Extensions;
     using NUnit.Framework;
-    using Registration;
 
     [TestFixture]
     public class UserPermissionsTests

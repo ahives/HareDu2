@@ -20,7 +20,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using NUnit.Framework;
     using Observers;
     using Prometheus;
-    using Registration;
     using Snapshotting;
     using Snapshotting.Model;
     using Snapshotting.Registration;

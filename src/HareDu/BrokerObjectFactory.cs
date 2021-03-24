@@ -1,4 +1,4 @@
-﻿namespace HareDu.Registration
+﻿namespace HareDu
 {
     using System;
     using System.Collections.Concurrent;
@@ -143,7 +143,7 @@
         {
             var types = findType.Assembly.GetTypes();
             var interfaces = types
-                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && x.IsInterface && !x.IsNull())
+                .Where(x => typeof(BrokerObject).IsAssignableFrom(x) && x.IsInterface && !ValueExtensions.IsNull<Type>(x))
                 .ToList();
             var typeMap = new Dictionary<string, Type>();
 
