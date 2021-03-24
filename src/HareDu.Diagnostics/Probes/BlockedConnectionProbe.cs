@@ -1,7 +1,6 @@
 namespace HareDu.Diagnostics.Probes
 {
     using System.Collections.Generic;
-    using Core.Extensions;
     using KnowledgeBase;
     using Model;
     using Snapshotting.Model;
@@ -10,9 +9,8 @@ namespace HareDu.Diagnostics.Probes
         BaseDiagnosticProbe,
         DiagnosticProbe
     {
-        public string Id => GetType().GetIdentifier();
-        public string Name => "Blocked Connection Probe";
-        public string Description { get; }
+        public DiagnosticProbeMetadata Metadata =>
+            new DiagnosticProbeMetadataImpl<BlockedConnectionProbe>("Blocked Connection Probe", "");
         public ComponentType ComponentType => ComponentType.Connection;
         public ProbeCategory Category => ProbeCategory.Throughput;
 
@@ -33,22 +31,22 @@ namespace HareDu.Diagnostics.Probes
             
             if (data.State == BrokerConnectionState.Blocked)
             {
-                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Metadata.Id, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
-                    Id,
-                    Name,
+                    Metadata.Id,
+                    Metadata.Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else
             {
-                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Metadata.Id, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.NodeIdentifier,
                     data.Identifier,
-                    Id,
-                    Name,
+                    Metadata.Id,
+                    Metadata.Name,
                     ComponentType,
                     probeData,
                     article);

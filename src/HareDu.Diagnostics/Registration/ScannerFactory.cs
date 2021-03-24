@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Diagnostics.Registration
 {
     using System;
@@ -34,7 +21,7 @@ namespace HareDu.Diagnostics.Registration
         readonly ConcurrentDictionary<string, object> _scannerCache;
         readonly ConcurrentDictionary<string, DiagnosticProbe> _probeCache;
         readonly IList<IDisposable> _observers;
-        HareDuConfig _config;
+        readonly HareDuConfig _config;
 
         public IReadOnlyDictionary<string, DiagnosticProbe> Probes => _probeCache;
 
@@ -80,25 +67,7 @@ namespace HareDu.Diagnostics.Registration
                     continue;
                 
                 for (int j = 0; j < probes.Count; j++)
-                {
                     _observers.Add(probes[j].Subscribe(observers[i]));
-                }
-            }
-        }
-
-        public void RegisterObservers(IReadOnlyList<IObserver<ProbeConfigurationContext>> observers)
-        {
-            var probes = _probeCache.Values.ToList();
-            
-            for (int i = 0; i < observers.Count; i++)
-            {
-                if (observers[i].IsNull())
-                    continue;
-                
-                for (int j = 0; j < probes.Count; j++)
-                {
-                    _observers.Add(probes[j].Subscribe(observers[i]));
-                }
             }
         }
 
@@ -110,22 +79,7 @@ namespace HareDu.Diagnostics.Registration
             var probes = _probeCache.Values.ToList();
             
             for (int j = 0; j < probes.Count; j++)
-            {
                 _observers.Add(probes[j].Subscribe(observer));
-            }
-        }
-
-        public void RegisterObserver(IObserver<ProbeConfigurationContext> observer)
-        {
-            if (observer.IsNull())
-                return;
-            
-            var probes = _probeCache.Values.ToList();
-            
-            for (int j = 0; j < probes.Count; j++)
-            {
-                _observers.Add(probes[j].Subscribe(observer));
-            }
         }
 
         public bool RegisterProbe<T>(T probe)
@@ -182,19 +136,6 @@ namespace HareDu.Diagnostics.Registration
                 _scannerCache.Clear();
 
             return registered;
-        }
-
-        public void UpdateConfiguration(HareDuConfig config)
-        {
-            _config = config;
-            
-            var probes = _probeCache.Values.ToList();
-            
-            for (int i = 0; i < probes.Count; i++)
-            {
-                if (probes[i] is IUpdateProbeConfiguration)
-                    probes[i].Cast<IUpdateProbeConfiguration>().UpdateConfiguration(config.Diagnostics);
-            }
         }
 
         protected virtual bool RegisterScannerInstance(Type type, string key)

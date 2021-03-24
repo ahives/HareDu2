@@ -22,7 +22,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using Prometheus;
     using Snapshotting;
     using Snapshotting.Model;
-    using Snapshotting.Registration;
 
     [TestFixture]
     public class DiagnosticScannerTests

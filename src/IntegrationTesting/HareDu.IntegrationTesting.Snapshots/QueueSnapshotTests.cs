@@ -7,8 +7,8 @@ namespace HareDu.IntegrationTesting.Snapshots
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Observers;
+    using Snapshotting;
     using Snapshotting.Model;
-    using Snapshotting.Registration;
 
     [TestFixture]
     public class QueueSnapshotTests

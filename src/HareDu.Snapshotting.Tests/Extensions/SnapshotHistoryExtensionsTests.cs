@@ -8,10 +8,8 @@ namespace HareDu.Snapshotting.Tests.Extensions
     using Model;
     using NUnit.Framework;
     using Persistence;
-    using Registration;
     using Shouldly;
     using Snapshotting.Extensions;
-    using Snapshotting.Registration;
 
     [TestFixture]
     public class SnapshotHistoryExtensionsTests

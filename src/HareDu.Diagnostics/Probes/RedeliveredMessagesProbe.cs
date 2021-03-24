@@ -1,16 +1,3 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Diagnostics.Probes
 {
     using System;
@@ -22,14 +9,12 @@ namespace HareDu.Diagnostics.Probes
 
     public class RedeliveredMessagesProbe :
         BaseDiagnosticProbe,
-        IUpdateProbeConfiguration,
         DiagnosticProbe
     {
-        DiagnosticsConfig _config;
+        readonly DiagnosticsConfig _config;
         
-        public string Id => GetType().GetIdentifier();
-        public string Name => "Redelivered Messages Probe";
-        public string Description { get; }
+        public DiagnosticProbeMetadata Metadata =>
+            new DiagnosticProbeMetadataImpl<RedeliveredMessagesProbe>("Redelivered Messages Probe", "");
         public ComponentType ComponentType => ComponentType.Queue;
         public ProbeCategory Category => ProbeCategory.FaultTolerance;
 
@@ -46,11 +31,11 @@ namespace HareDu.Diagnostics.Probes
             
             if (_config.IsNull() || _config.Probes.IsNull())
             {
-                _kb.TryGet(Id, ProbeResultStatus.NA, out var article);
+                _kb.TryGet(Metadata.Id, ProbeResultStatus.NA, out var article);
                 result = new NotApplicableProbeResult(!data.IsNull() ? data.Node : string.Empty,
                     !data.IsNull() ? data.Identifier : string.Empty,
-                    Id,
-                    Name,
+                    Metadata.Id,
+                    Metadata.Name,
                     ComponentType,
                     article);
 
@@ -73,33 +58,33 @@ namespace HareDu.Diagnostics.Probes
                 && data.Messages.Redelivered.Total < data.Messages.Incoming.Total
                 && warningThreshold < data.Messages.Incoming.Total)
             {
-                _kb.TryGet(Id, ProbeResultStatus.Warning, out var article);
+                _kb.TryGet(Metadata.Id, ProbeResultStatus.Warning, out var article);
                 result = new WarningProbeResult(data.Node,
                     data.Identifier,
-                    Id,
-                    Name,
+                    Metadata.Id,
+                    Metadata.Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else if (data.Messages.Redelivered.Total >= data.Messages.Incoming.Total)
             {
-                _kb.TryGet(Id, ProbeResultStatus.Unhealthy, out var article);
+                _kb.TryGet(Metadata.Id, ProbeResultStatus.Unhealthy, out var article);
                 result = new UnhealthyProbeResult(data.Node,
                     data.Identifier,
-                    Id,
-                    Name,
+                    Metadata.Id,
+                    Metadata.Name,
                     ComponentType,
                     probeData,
                     article);
             }
             else
             {
-                _kb.TryGet(Id, ProbeResultStatus.Healthy, out var article);
+                _kb.TryGet(Metadata.Id, ProbeResultStatus.Healthy, out var article);
                 result = new HealthyProbeResult(data.Node,
                     data.Identifier,
-                    Id,
-                    Name,
+                    Metadata.Id,
+                    Metadata.Name,
                     ComponentType,
                     probeData,
                     article);
@@ -108,14 +93,6 @@ namespace HareDu.Diagnostics.Probes
             NotifyObservers(result);
 
             return result;
-        }
-
-        public void UpdateConfiguration(DiagnosticsConfig config)
-        {
-            DiagnosticsConfig current = _config;
-            _config = config;
-            
-            NotifyObservers(Id, Name, current, config);
         }
 
         ulong ComputeThreshold(ulong total)

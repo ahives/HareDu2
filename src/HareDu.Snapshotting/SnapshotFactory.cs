@@ -1,4 +1,4 @@
-namespace HareDu.Snapshotting.Registration
+namespace HareDu.Snapshotting
 {
     using System;
     using System.Collections.Generic;

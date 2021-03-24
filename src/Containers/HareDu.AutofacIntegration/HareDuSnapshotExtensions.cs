@@ -1,8 +1,8 @@
 namespace HareDu.AutofacIntegration
 {
     using Autofac;
+    using Snapshotting;
     using Snapshotting.Persistence;
-    using Snapshotting.Registration;
 
     public static class HareDuSnapshotExtensions
     {

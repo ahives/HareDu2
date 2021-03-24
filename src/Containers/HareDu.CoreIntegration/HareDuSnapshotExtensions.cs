@@ -2,8 +2,8 @@ namespace HareDu.CoreIntegration
 {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Snapshotting;
     using Snapshotting.Persistence;
-    using Snapshotting.Registration;
 
     public static class HareDuSnapshotExtensions
     {

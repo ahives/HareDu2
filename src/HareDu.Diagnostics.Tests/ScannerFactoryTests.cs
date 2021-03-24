@@ -1,17 +1,4 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-namespace HareDu.Diagnostics.Tests.Registration
+namespace HareDu.Diagnostics.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -21,10 +8,10 @@ namespace HareDu.Diagnostics.Tests.Registration
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics.Probes;
-    using Diagnostics.Registration;
     using Diagnostics.Scanners;
     using KnowledgeBase;
     using NUnit.Framework;
+    using Registration;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;
@@ -215,68 +202,6 @@ namespace HareDu.Diagnostics.Tests.Registration
             factory.Scanners.Keys.Count().ShouldBe(4);
         }
 
-        [Test]
-        public void Verify_can_override_config()
-        {
-            var configProvider = new YamlFileConfigProvider();
-            configProvider.TryGet($"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml", out HareDuConfig config1);
-
-            var factory = new ScannerFactory(config1, new KnowledgeBaseProvider());
-
-            factory.RegisterObserver(new ConfigOverrideObserver());
-
-            var provider = new HareDuConfigProvider();
-
-            var config2 = provider.Configure(x =>
-            {
-                x.Broker(y =>
-                {
-                    y.ConnectTo("http://localhost:15672");
-                    y.UsingCredentials("guest", "guest");
-                });
-
-                x.Diagnostics(y =>
-                {
-                    y.Probes(z =>
-                    {
-                        z.SetMessageRedeliveryThresholdCoefficient(0.60M);
-                        z.SetSocketUsageThresholdCoefficient(0.60M);
-                        z.SetConsumerUtilizationThreshold(0.65M);
-                        z.SetQueueHighFlowThreshold(90);
-                        z.SetQueueLowFlowThreshold(10);
-                        z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
-                        z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-                        z.SetHighConnectionClosureRateThreshold(90);
-                        z.SetHighConnectionCreationRateThreshold(60);
-                    });
-                });
-            });
-            
-            factory.UpdateConfiguration(config2);
-        }
-
-        
-        class ConfigOverrideObserver :
-            IObserver<ProbeConfigurationContext>
-        {
-            public void OnCompleted() => throw new NotImplementedException();
-
-            public void OnError(Exception error) => throw new NotImplementedException();
-
-            public void OnNext(ProbeConfigurationContext value)
-            {
-                value.Current.Probes.HighConnectionCreationRateThreshold.ShouldNotBe(value.New.Probes.HighConnectionCreationRateThreshold);
-                value.Current.Probes.HighConnectionClosureRateThreshold.ShouldNotBe(value.New.Probes.HighConnectionClosureRateThreshold);
-                value.Current.Probes.ConsumerUtilizationThreshold.ShouldNotBe(value.New.Probes.ConsumerUtilizationThreshold);
-                value.Current.Probes.MessageRedeliveryThresholdCoefficient.ShouldNotBe(value.New.Probes.MessageRedeliveryThresholdCoefficient);
-                value.Current.Probes.QueueHighFlowThreshold.ShouldNotBe(value.New.Probes.QueueHighFlowThreshold);
-                value.Current.Probes.QueueLowFlowThreshold.ShouldNotBe(value.New.Probes.QueueLowFlowThreshold);
-                value.Current.Probes.SocketUsageThresholdCoefficient.ShouldBe(value.New.Probes.SocketUsageThresholdCoefficient);
-                value.Current.Probes.FileDescriptorUsageThresholdCoefficient.ShouldBe(value.New.Probes.FileDescriptorUsageThresholdCoefficient);
-                value.Current.Probes.RuntimeProcessUsageThresholdCoefficient.ShouldBe(value.New.Probes.RuntimeProcessUsageThresholdCoefficient);
-            }
-        }
-
         
         class FakeDiagnosticScanner :
             DiagnosticScanner<FakeSnapshot>
@@ -302,9 +227,7 @@ namespace HareDu.Diagnostics.Tests.Registration
             {
             }
 
-            public string Id { get; }
-            public string Name { get; }
-            public string Description { get; }
+            public DiagnosticProbeMetadata Metadata { get; }
             public ComponentType ComponentType { get; }
             public ProbeCategory Category { get; }
             public ProbeStatus Status { get; }

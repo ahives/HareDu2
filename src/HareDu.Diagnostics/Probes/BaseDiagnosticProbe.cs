@@ -1,36 +1,20 @@
-// Copyright 2013-2020 Albert L. Hives
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 namespace HareDu.Diagnostics.Probes
 {
     using System;
     using System.Collections.Generic;
-    using Core.Configuration;
+    using Core.Extensions;
     using KnowledgeBase;
 
     public abstract class BaseDiagnosticProbe :
-        IObservable<ProbeContext>,
-        IObservable<ProbeConfigurationContext>
+        IObservable<ProbeContext>
     {
         protected readonly IKnowledgeBaseProvider _kb;
         readonly List<IObserver<ProbeContext>> _resultObservers;
-        readonly List<IObserver<ProbeConfigurationContext>> _configObservers;
 
         protected BaseDiagnosticProbe(IKnowledgeBaseProvider kb)
         {
             _kb = kb;
             _resultObservers = new List<IObserver<ProbeContext>>();
-            _configObservers = new List<IObserver<ProbeConfigurationContext>>();
         }
 
         public IDisposable Subscribe(IObserver<ProbeContext> observer)
@@ -41,48 +25,10 @@ namespace HareDu.Diagnostics.Probes
             return new UnsubscribeObserver<ProbeContext>(_resultObservers, observer);
         }
 
-        public IDisposable Subscribe(IObserver<ProbeConfigurationContext> observer)
-        {
-            if (!_configObservers.Contains(observer))
-                _configObservers.Add(observer);
-
-            return new UnsubscribeObserver<ProbeConfigurationContext>(_configObservers, observer);
-        }
-
         protected virtual void NotifyObservers(ProbeResult result)
         {
             foreach (var observer in _resultObservers)
-            {
                 observer.OnNext(new ProbeContextImpl(result));
-            }
-        }
-
-        protected virtual void NotifyObservers(string probeId, string probeName, DiagnosticsConfig current, DiagnosticsConfig @new)
-        {
-            foreach (var observer in _configObservers)
-            {
-                observer.OnNext(new ProbeConfigurationContextImpl(probeId, probeName, current, @new));
-            }
-        }
-
-        
-        class ProbeConfigurationContextImpl :
-            ProbeConfigurationContext
-        {
-            public ProbeConfigurationContextImpl(string probeId, string probeName, DiagnosticsConfig current, DiagnosticsConfig @new)
-            {
-                ProbeId = probeId;
-                ProbeName = probeName;
-                Current = current;
-                New = @new;
-                Timestamp = DateTimeOffset.UtcNow;
-            }
-
-            public string ProbeId { get; }
-            public string ProbeName { get; }
-            public DiagnosticsConfig Current { get; }
-            public DiagnosticsConfig New { get; }
-            public DateTimeOffset Timestamp { get; }
         }
 
 
@@ -97,6 +43,21 @@ namespace HareDu.Diagnostics.Probes
 
             public ProbeResult Result { get; }
             public DateTimeOffset Timestamp { get; }
+        }
+
+        protected class DiagnosticProbeMetadataImpl<T> :
+            DiagnosticProbeMetadata
+        {
+            public DiagnosticProbeMetadataImpl(string name, string description)
+            {
+                Id = typeof(T).GetIdentifier();
+                Name = name;
+                Description = description;
+            }
+
+            public string Id { get; }
+            public string Name { get; }
+            public string Description { get; }
         }
         
         

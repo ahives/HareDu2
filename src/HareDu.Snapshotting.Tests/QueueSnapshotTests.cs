@@ -8,7 +8,6 @@ namespace HareDu.Snapshotting.Tests
     using NUnit.Framework;
     using Persistence;
     using Shouldly;
-    using Snapshotting.Registration;
 
     [TestFixture]
     public class QueueSnapshotTests

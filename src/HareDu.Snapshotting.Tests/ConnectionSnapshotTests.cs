@@ -8,7 +8,6 @@ namespace HareDu.Snapshotting.Tests
     using Model;
     using NUnit.Framework;
     using Shouldly;
-    using Snapshotting.Registration;
 
     [TestFixture]
     public class ConnectionSnapshotTests
