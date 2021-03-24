@@ -1,27 +1,30 @@
-﻿namespace HareDu.Model
+namespace HareDu.Model
 {
     using System.Text.Json.Serialization;
 
-    public class UserPermissionsDefinition
+    public class UserPermissionsRequest
     {
-        public UserPermissionsDefinition(string configure, string write, string read)
+        public UserPermissionsRequest(string configure, string write, string read)
         {
             Configure = configure;
             Write = write;
             Read = read;
         }
 
-        public UserPermissionsDefinition()
+        public UserPermissionsRequest()
         {
         }
 
         [JsonPropertyName("configure")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string Configure { get; set; }
         
         [JsonPropertyName("write")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string Write { get; set; }
         
         [JsonPropertyName("read")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string Read { get; set; }
     }
 }

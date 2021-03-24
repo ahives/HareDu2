@@ -11,6 +11,7 @@
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     class UserPermissionsImpl :
@@ -22,16 +23,20 @@
         {
         }
 
-        public Task<ResultList<UserPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
+        public async Task<ResultList<UserPermissionsInfo>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
             string url = "api/permissions";
-            
-            return GetAll<UserPermissionsInfo>(url, cancellationToken);
+
+            ResultList<UserPermissionsInfoImpl> result = await GetAll<UserPermissionsInfoImpl>(url, cancellationToken).ConfigureAwait(false);
+
+            ResultList<UserPermissionsInfo> MapResult(ResultList<UserPermissionsInfoImpl> result) => new ResultListCopy(result);
+
+            return MapResult(result);
         }
 
-        public Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Create(Action<UserPermissionsCreateAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -47,12 +52,12 @@
             string url = $"api/permissions/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options))));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options)));
 
-            return Put(url, definition, cancellationToken);
+            return await Put(url, definition, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
+        public async Task<Result> Delete(Action<UserPermissionsDeleteAction> action, CancellationToken cancellationToken = default)
         {
             cancellationToken.RequestCanceled();
 
@@ -64,9 +69,99 @@
             string url = $"api/permissions/{impl.VirtualHost.Value.ToSanitizedName()}/{impl.Username.Value}";
             
             if (impl.Errors.Value.Any())
-                return Task.FromResult<Result>(new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url)));
+                return new FaultedResult(impl.Errors.Value, new DebugInfoImpl(url));
 
-            return Delete(url, cancellationToken);
+            return await Delete(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Create(string username, string vhost,
+            Action<UserPermissionsConfigurator> configurator, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var impl = new UserPermissionsConfiguratorImpl();
+            configurator?.Invoke(impl);
+
+            UserPermissionsRequest request = new UserPermissionsRequest(impl.ConfigurePattern, impl.WritePattern, impl.ReadPattern);
+
+            Debug.Assert(request != null);
+
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(username))
+                errors.Add(new ErrorImpl("The username and/or password is missing."));
+            
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+            
+            string url = $"api/permissions/{vhost.ToSanitizedName()}/{username}";
+            
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+
+            return await PutRequest(url, request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Delete(string username, string vhost, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.RequestCanceled();
+
+            var errors = new List<Error>();
+
+            if (string.IsNullOrWhiteSpace(username))
+                errors.Add(new ErrorImpl("The username and/or password is missing."));
+            
+            if (string.IsNullOrWhiteSpace(vhost))
+                errors.Add(new ErrorImpl("The name of the virtual host is missing."));
+
+            string url = $"api/permissions/{vhost.ToSanitizedName()}/{username}";
+            
+            if (errors.Any())
+                return new FaultedResult(new DebugInfoImpl(url, errors));
+
+            return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        
+        class ResultListCopy :
+            ResultList<UserPermissionsInfo>
+        {
+            public ResultListCopy(ResultList<UserPermissionsInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<UserPermissionsInfo>();
+                foreach (UserPermissionsInfoImpl item in result.Data)
+                    data.Add(new InternalUserPermissionsInfo(item));
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<UserPermissionsInfo> Data { get; }
+            public bool HasData { get; }
+        }
+
+
+        class UserPermissionsConfiguratorImpl :
+            UserPermissionsConfigurator
+        {
+            public string ConfigurePattern { get; private set; }
+            public string ReadPattern { get; private set; }
+            public string WritePattern { get; private set; }
+
+            public void UsingConfigurePattern(string pattern) => ConfigurePattern = pattern;
+
+            public void UsingWritePattern(string pattern) => WritePattern = pattern;
+
+            public void UsingReadPattern(string pattern) => ReadPattern = pattern;
         }
 
         
@@ -143,7 +238,7 @@
                 
                 Errors = new Lazy<List<Error>>(() => _errors, LazyThreadSafetyMode.PublicationOnly);
                 Definition = new Lazy<UserPermissionsDefinition>(
-                    () => new UserPermissionsDefinitionImpl(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
+                    () => new UserPermissionsDefinition(_configurePattern, _writePattern, _readPattern), LazyThreadSafetyMode.PublicationOnly);
                 VirtualHost = new Lazy<string>(() => _vhost, LazyThreadSafetyMode.PublicationOnly);
                 Username = new Lazy<string>(() => _user, LazyThreadSafetyMode.PublicationOnly);
             }
@@ -197,22 +292,6 @@
                 public string VirtualHostName { get; private set; }
 
                 public void VirtualHost(string name) => VirtualHostName = name;
-            }
-
-
-            class UserPermissionsDefinitionImpl :
-                UserPermissionsDefinition
-            {
-                public UserPermissionsDefinitionImpl(string configurePattern, string writePattern, string readPattern)
-                {
-                    Configure = configurePattern;
-                    Write = writePattern;
-                    Read = readPattern;
-                }
-
-                public string Configure { get; }
-                public string Write { get; }
-                public string Read { get; }
             }
 
             
