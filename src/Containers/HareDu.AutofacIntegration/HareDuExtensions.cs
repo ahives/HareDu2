@@ -6,7 +6,6 @@ namespace HareDu.AutofacIntegration
     using Core.Extensions;
     using Diagnostics;
     using Diagnostics.KnowledgeBase;
-    using Diagnostics.Registration;
     using Microsoft.Extensions.Configuration;
     using Snapshotting;
 

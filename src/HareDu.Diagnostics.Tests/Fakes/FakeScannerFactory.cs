@@ -3,7 +3,6 @@ namespace HareDu.Diagnostics.Tests.Fakes
     using System;
     using System.Collections.Generic;
     using Diagnostics.Probes;
-    using Registration;
     using Diagnostics.Scanners;
     using Snapshotting;
 

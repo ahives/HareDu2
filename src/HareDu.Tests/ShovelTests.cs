@@ -73,8 +73,6 @@ namespace HareDu.Tests
                     x.Destination("queue2");
                 });
             
-            Console.WriteLine(result.ToJsonString(Deserializer.Options));
-            
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.HasFaulted);

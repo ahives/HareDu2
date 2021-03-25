@@ -11,7 +11,6 @@ namespace HareDu.Diagnostics.Tests
     using Diagnostics.Scanners;
     using KnowledgeBase;
     using NUnit.Framework;
-    using Registration;
     using Shouldly;
     using Snapshotting;
     using Snapshotting.Model;

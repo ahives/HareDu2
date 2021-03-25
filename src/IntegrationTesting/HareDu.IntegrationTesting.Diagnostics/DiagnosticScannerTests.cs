@@ -15,7 +15,6 @@ namespace HareDu.IntegrationTesting.Diagnostics
     using HareDu.Diagnostics.Formatting;
     using HareDu.Diagnostics.KnowledgeBase;
     using HareDu.Diagnostics.Probes;
-    using HareDu.Diagnostics.Registration;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using Observers;

@@ -1,4 +1,4 @@
-namespace HareDu.Diagnostics.Registration
+namespace HareDu.Diagnostics
 {
     using System;
     using System.Collections.Concurrent;
