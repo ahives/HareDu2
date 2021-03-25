@@ -80,9 +80,7 @@ namespace HareDu.Snapshotting.Internal
         public SnapshotLens<BrokerConnectivitySnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerConnectivitySnapshot>> observer)
         {
             if (observer != null)
-            {
                 _observers.Add(Subscribe(observer));
-            }
 
             return this;
         }
@@ -93,9 +91,7 @@ namespace HareDu.Snapshotting.Internal
             if (observers != null)
             {
                 for (int i = 0; i < observers.Count; i++)
-                {
                     _observers.Add(Subscribe(observers[i]));
-                }
             }
 
             return this;

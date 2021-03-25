@@ -17,7 +17,6 @@
 
     <ItemGroup>
       <Compile Remove="Internal\ClusterNodeImpl.cs" />
-      <Content Include="Internal\ClusterNodeImpl.cs" />
     </ItemGroup>
 
 </Project>

@@ -66,9 +66,7 @@ namespace HareDu.Snapshotting.Internal
         public SnapshotLens<BrokerQueuesSnapshot> RegisterObserver(IObserver<SnapshotContext<BrokerQueuesSnapshot>> observer)
         {
             if (observer != null)
-            {
                 _observers.Add(Subscribe(observer));
-            }
 
             return this;
         }
@@ -79,9 +77,7 @@ namespace HareDu.Snapshotting.Internal
             if (observers != null)
             {
                 for (int i = 0; i < observers.Count; i++)
-                {
                     _observers.Add(Subscribe(observers[i]));
-                }
             }
 
             return this;

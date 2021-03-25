@@ -8,9 +8,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
     public class FakeConnectionSnapshot2 :
         ConnectionSnapshot
     {
-        public FakeConnectionSnapshot2(string state)
+        public FakeConnectionSnapshot2(BrokerConnectionState state)
         {
-            State = state.Convert();
+            State = state;
         }
 
         public string Identifier { get; }
