@@ -4,21 +4,6 @@ namespace HareDu.Extensions
 
     public static class EnumConversionExtensions
     {
-        public static string Convert(this DeleteShovelMode mode)
-        {
-            switch (mode)
-            {
-                case DeleteShovelMode.Never:
-                    return "never";
-                
-                case DeleteShovelMode.QueueLength:
-                    return "queue-length";
-                    
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-            }
-        }
-
         public static string Convert(this HighAvailabilityModes mode)
         {
             switch (mode)
@@ -110,6 +95,21 @@ namespace HareDu.Extensions
                 case QueuePromotionShutdownMode.WhenSynced:
                     return "when-synced";
                 
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
+        }
+        
+        public static string ConvertTo(this DeleteShovelMode mode)
+        {
+            switch (mode)
+            {
+                case DeleteShovelMode.Never:
+                    return "never";
+                
+                case DeleteShovelMode.QueueLength:
+                    return "queue-length";
+                    
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }

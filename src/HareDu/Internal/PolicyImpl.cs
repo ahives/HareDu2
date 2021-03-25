@@ -385,8 +385,8 @@
                     return;
                 
                 string mode = haMode.Value.ToString().Trim();
-                if ((mode.ConvertTo() == HighAvailabilityModes.Exactly ||
-                     mode.ConvertTo() == HighAvailabilityModes.Nodes) && !_arguments.ContainsKey("ha-params"))
+                if ((mode.Convert() == HighAvailabilityModes.Exactly ||
+                     mode.Convert() == HighAvailabilityModes.Nodes) && !_arguments.ContainsKey("ha-params"))
                     _errors.Add(new ErrorImpl($"Argument 'ha-mode' has been set to {mode}, which means that argument 'ha-params' has to also be set"));
             }
 
@@ -488,7 +488,7 @@
 
                 public void SetHighAvailabilityMode(HighAvailabilityModes mode)
                 {
-                    SetArg("ha-mode", mode.ConvertTo());
+                    SetArg("ha-mode", mode.Convert());
                 }
 
                 public void SetHighAvailabilityParams(string value)
@@ -496,9 +496,9 @@
                     SetArg("ha-params", value);
                 }
 
-                public void SetHighAvailabilitySyncMode(HighAvailabilitySyncModes mode)
+                public void SetHighAvailabilitySyncMode(HighAvailabilitySyncMode mode)
                 {
-                    SetArg("ha-sync-mode", mode.ConvertTo());
+                    SetArg("ha-sync-mode", mode.Convert());
                 }
 
                 public void SetMessageTimeToLive(long milliseconds)
