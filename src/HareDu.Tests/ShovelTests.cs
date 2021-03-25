@@ -73,6 +73,8 @@ namespace HareDu.Tests
                     x.Destination("queue2");
                 });
             
+            Console.WriteLine(result.ToJsonString(Deserializer.Options));
+            
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(result.HasFaulted);
@@ -83,7 +85,7 @@ namespace HareDu.Tests
                 ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
                 
                 Assert.IsNotNull(request.Value);
-                Assert.AreEqual(AckMode.OnPublish.ConvertTo(), request.Value.AcknowledgeMode);
+                Assert.AreEqual(AckMode.OnPublish, request.Value.AcknowledgeMode);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
                 Assert.AreEqual(ShovelProtocolType.Amqp091, request.Value.SourceProtocol);
                 Assert.AreEqual("queue1", request.Value.SourceQueue);

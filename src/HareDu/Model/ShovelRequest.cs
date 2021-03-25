@@ -2,9 +2,18 @@ namespace HareDu.Model
 {
     using System.Text.Json.Serialization;
 
-    public interface ShovelRequest
+    public class ShovelRequest
     {
+        public ShovelRequest(ShovelRequestParams value)
+        {
+            Value = value;
+        }
+
+        public ShovelRequest()
+        {
+        }
+
         [JsonPropertyName("value")]
-        ShovelRequestParams Value { get; }
+        public ShovelRequestParams Value { get; set; }
     }
 }

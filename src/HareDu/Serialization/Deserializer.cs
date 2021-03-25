@@ -16,6 +16,7 @@ namespace HareDu.Serialization
                     new CustomDateTimeConverter(),
                     new CustomLongConverter(),
                     new CustomStringConverter(),
+                    new AckModeEnumConverter(),
                     new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
                 }
             };

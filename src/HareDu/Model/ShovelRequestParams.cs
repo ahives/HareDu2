@@ -1,77 +1,109 @@
 namespace HareDu.Model
 {
     using System.Text.Json.Serialization;
-    using Serialization.Converters;
 
-    public interface ShovelRequestParams
+    public class ShovelRequestParams
     {
+        public ShovelRequestParams(
+            AckMode acknowledgeMode,
+            int reconnectDelay,
+            ShovelProtocolType sourceProtocol,
+            string sourceUri,
+            string sourceQueue,
+            string sourceExchange,
+            string sourceExchangeRoutingKey,
+            ulong sourcePrefetchCount,
+            object sourceDeleteAfter,
+            ShovelProtocolType destinationProtocol,
+            string destinationUri,
+            string destinationExchange,
+            string destinationExchangeRoutingKey,
+            string destinationQueue,
+            bool destinationAddForwardHeaders,
+            bool destinationAddTimestampHeader)
+        {
+            SourceProtocol = sourceProtocol;
+            SourceUri = sourceUri;
+            SourceQueue = sourceQueue;
+            DestinationProtocol = destinationProtocol;
+            DestinationUri = destinationUri;
+            DestinationQueue = destinationQueue;
+            ReconnectDelay = reconnectDelay;
+            AcknowledgeMode = acknowledgeMode;
+            SourceDeleteAfter = sourceDeleteAfter;
+            SourcePrefetchCount = sourcePrefetchCount;
+            SourceExchange = sourceExchange;
+            SourceExchangeRoutingKey = sourceExchangeRoutingKey;
+            DestinationExchange = destinationExchange;
+            DestinationExchangeRoutingKey = destinationExchangeRoutingKey;
+            // DestinationPublishProperties = destinationPublishProperties;
+            DestinationAddForwardHeaders = destinationAddForwardHeaders;
+            DestinationAddTimestampHeader = destinationAddTimestampHeader;
+        }
+
         [JsonPropertyName("src-protocol")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        ShovelProtocolType SourceProtocol { get; }
+        public ShovelProtocolType SourceProtocol { get; set; }
         
         [JsonPropertyName("src-uri")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string SourceUri { get; }
+        public string SourceUri { get; set; }
         
         [JsonPropertyName("src-queue")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string SourceQueue { get; }
+        public string SourceQueue { get; set; }
 
         [JsonPropertyName("dest-protocol")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        ShovelProtocolType DestinationProtocol { get; }
+        public ShovelProtocolType DestinationProtocol { get; set; }
         
         [JsonPropertyName("dest-uri")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string DestinationUri { get; }
+        public string DestinationUri { get; set; }
         
         [JsonPropertyName("dest-queue")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string DestinationQueue { get; }
+        public string DestinationQueue { get; set; }
         
         [JsonPropertyName("reconnect-delay")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        int ReconnectDelay { get; }
+        public int ReconnectDelay { get; set; }
         
         [JsonPropertyName("ack-mode")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        [JsonConverter(typeof(AckModeEnumConverter))]
-        AckMode AcknowledgeMode { get; }
+        public AckMode AcknowledgeMode { get; set; }
         
         [JsonPropertyName("src-delete-after")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        object SourceDeleteAfter { get; }
+        public object SourceDeleteAfter { get; set; }
         
         [JsonPropertyName("src-prefetch-count")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        ulong SourcePrefetchCount { get; }
+        public ulong SourcePrefetchCount { get; set; }
         
         [JsonPropertyName("src-exchange")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string SourceExchange { get; }
+        public string SourceExchange { get; set; }
         
         [JsonPropertyName("src-exchange-key")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string SourceExchangeRoutingKey { get; }
+        public string SourceExchangeRoutingKey { get; set; }
         
         [JsonPropertyName("dest-exchange")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string DestinationExchange { get; }
+        public string DestinationExchange { get; set; }
         
         [JsonPropertyName("dest-exchange-key")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string DestinationExchangeKey { get; }
+        public string DestinationExchangeRoutingKey { get; set; }
         
-        [JsonPropertyName("dest-publish-properties")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        string DestinationPublishProperties { get; }
+        // [JsonPropertyName("dest-publish-properties")]
+        // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        // public string DestinationPublishProperties { get; set; }
         
         [JsonPropertyName("dest-add-forward-headers")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        bool DestinationAddForwardHeaders { get; }
+        public bool DestinationAddForwardHeaders { get; set; }
         
         [JsonPropertyName("dest-add-timestamp-header")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        bool DestinationAddTimestampHeader { get; }
+        public bool DestinationAddTimestampHeader { get; set; }
     }
 }

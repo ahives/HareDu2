@@ -1,4 +1,4 @@
-namespace HareDu.Tests.Registration
+namespace HareDu.Tests
 {
     using System;
     using System.Net.Http;
