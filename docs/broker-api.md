@@ -4,106 +4,105 @@ The Broker API is the lowest level API because it interacts directly with the Ra
 
 | Broker Object | Operations |
 |---| --- |
-| **Binding** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/binding-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/binding-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/binding-delete.md) |
-| **Channel** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/channel-get.md) |
-| **Connection** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/connection-get.md) |
-| **Consumer** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/consumer-get.md) |
-| **Exchange** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/exchange-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/exchange-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/exchange-delete.md) |
-| **GlobalParameter** | GetAll, Create, Delete |
-| **Node** | GetAll, GetHealth, GetMemoryUsage |
-| **Policy** | GetAll, Create, Delete |
-| **Queue** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/queue-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/queue-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/queue-delete.md), [Empty](https://github.com/ahives/HareDu2/blob/master/docs/queue-empty.md), [Peek](https://github.com/ahives/HareDu2/blob/master/docs/queue-peek.md) |
-| **ScopedParameter** | GetAll, Create, Delete |
-| **Server**  | Get, GetHealth |
-| **SystemOverview** | [Get](https://github.com/ahives/HareDu2/blob/master/docs/system-overview-get.md) |
-| **TopicPermissions** | GetAll, Create, Delete |
-| **User** | GetAll, GetAllWithoutPermissions, Create, Delete |
-| **UserPermissions** | GetAll, Create, Delete |
-| **VirtualHost** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/vhost-get.md), [Create](https://github.com/ahives/HareDu2/blob/master/docs/vhost-create.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/vhost-delete.md), [Startup](https://github.com/ahives/HareDu2/blob/master/docs/vhost-startup.md) |
-| **VirtualHostLimits** | [GetAll](https://github.com/ahives/HareDu2/blob/master/docs/vhost-limits-get.md), [Define](https://github.com/ahives/HareDu2/blob/master/docs/vhost-limits-define.md), [Delete](https://github.com/ahives/HareDu2/blob/master/docs/vhost-limits-delete.md) |
+| **Binding** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/binding-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/binding-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/binding-delete.md) |
+| **Channel** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/channel-get.md) |
+| **Connection** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/connection-get.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/connection-delete.md) |
+| **Consumer** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/consumer-get.md) |
+| **Exchange** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/exchange-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/exchange-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/exchange-delete.md) |
+| **Queue** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/queue-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/queue-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/queue-delete.md), [Empty](https://github.com/ahives/HareDu3/blob/master/docs/queue-empty.md), [Sync](https://github.com/ahives/HareDu3/blob/master/docs/queue-sync.md) |
+| **BrokerSystem** | [GetOverview](https://github.com/ahives/HareDu3/blob/master/docs/broker-system-overview-get.md), [RebalanceAllQueues](https://github.com/ahives/HareDu3/blob/master/docs/broker-system-rebalance-queues.md) |
+| **VirtualHost** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/vhost-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/vhost-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/vhost-delete.md), [Startup](https://github.com/ahives/HareDu3/blob/master/docs/vhost-startup.md), [GetHealth](https://github.com/ahives/HareDu3/blob/master/docs/vhost-health.md) |
+| **VirtualHostLimits** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/vhost-limits-get.md), [Define](https://github.com/ahives/HareDu3/blob/master/docs/vhost-limits-define.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/vhost-limits-delete.md) |
+| **GlobalParameter** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/global-parameter-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/global-parameter-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/global-parameter-delete.md) |
+| **Server**  | [Get](https://github.com/ahives/HareDu3/blob/master/docs/server-get.md) |
+| **Node** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/node-get.md), [GetHealth](https://github.com/ahives/HareDu3/blob/master/docs/node-health.md), [GetMemoryUsage](https://github.com/ahives/HareDu3/blob/master/docs/node-memory-get.md) |
+| **ScopedParameter** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/scoped-parameter-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/scoped-parameter-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/scoped-parameter-delete.md) |
+| **TopicPermissions** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/topic-permissions-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/topic-permissions-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/topic-permissions-delete.md) |
+| **User** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/user-get.md), [GetAllWithoutPermissions](https://github.com/ahives/HareDu3/blob/master/docs/user-get-without-permissions.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/user-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/user-delete.md) |
+| **UserPermissions** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/user-permissions-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/user-permissions-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/user-permissions-delete.md) |
+| **Policy** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/policy-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/policy-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/policy-delete.md) |
+| **OperatorPolicy** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/operator-policy-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/operator-policy-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/operator-policy-delete.md) |
+| **Shovel** | [GetAll](https://github.com/ahives/HareDu3/blob/master/docs/shovel-get.md), [Create](https://github.com/ahives/HareDu3/blob/master/docs/shovel-create.md), [Delete](https://github.com/ahives/HareDu3/blob/master/docs/shovel-delete.md) |
 
-#### Registering API objects
-The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported IoC containers. Currently, HareDu 2 supports only two IoC containers; Autofac and .NET Core, respectively.
+### Registering API Objects
+The very first thing you need to do is register/initialize the appropriate objects you will need to perform operations on the RabbitMQ broker. To do that you have two options, that is, initialize the objects yourself, managing the associated lifetime scopes of said objects or use one of the supported DI containers. Currently, HareDu 3 supports only two DI containers; Autofac and Microsoft, respectively.
 
-Note: The IoC container code that comes with HareDu currently defaults to file based configuration so you will need to make the appropriate changes to the haredu.yaml file.
-
-<br>
-
-#### Performing operations on the broker
+### Performing Broker Operations
 The Broker API is considered the low level API because it allows you to administer RabbitMQ (e.g., users, queues, exchanges, etc.).
 
 **Step 1: Get a broker object**
-```csharp
+```c#
 var factory = new BrokerObjectFactory(config);
 var obj = factory.Object<Queue>();
 ```
 Note: Initializing BrokerObjectFactory should be a one time activity, therefore, should be initialized using the Singleton pattern.
 
 **Step 2: Call methods on broker object**
-```csharp
+```c#
 var result = obj.GetAll();
 ```
 
-Note: The above code will return a `Task<T>` so if you want to return the unwrapped ```Result```, ```Result<T>``` or ```ResultList``` you need to use an ```await``` or call the HareDu ```GetResult``` extension method.
+*Note: The above code will return a ```Task<T>``` so if you want to return the unwrapped ```Result```, ```Result<T>``` or ```ResultList``` you need to use an ```await``` or call the HareDu ```GetResult``` extension method.*
 
 Using the *async/await* pattern...
-```csharp
+```c#
 var result = await obj.GetAll();
 ```
 
 Using the HareDu *GetResult* extension method...
-```csharp
+```c#
 var result = obj.GetAll().GetResult();
 ```
 
-The above steps represent the minimum required code to get something up and working without an IoC container. However, if you want to use IoC then its even easier. Since HareDu is a fluent API, you can method chain everything together like so...
+The above steps represent the minimum required code to get something up and working without a DI container. However, if you want to use DI then its even easier. Since HareDu is a fluent API, you can method chain everything together like so...
 
-*Autofac*
-```csharp
-var result = await container.Resolve<IBrokerObjectFactory>()
-    .Object<Queue>()
+**Autofac**
+
+```c#
+var result = await _container.Resolve<IBrokerObjectFactory>()
+    .Object<Binding>()
     .GetAll();
 ```
 
-*.NET Core*
-```csharp
-var result = await services.GetService<IBrokerObjectFactory>()
-    .Object<Queue>()
+**Microsoft DI**
+
+```c#
+var result = await _services.GetService<IBrokerObjectFactory>()
+    .Object<Binding>()
     .GetAll();
 ```
+
+*Note: if you have one of the above DI usage scenarios, then you can combine steps 1 and 2 because ```IBrokerObjectFactor``` is registered using the Singleton pattern and the ```Object``` method uses memoization and therefore will not take a performance hit for subsequent calls to the same object.*
 
 <br>
 
-*ex: Create a durable queue called *HareDuQueue* on a vhost called *HareDu* on node *rabbit@localhost* that is deleted when not in use with per-message time to live (x-message-ttl) value of 2 seconds*
+*ex: Create a durable queue called *test-queue* on a vhost called *test-vhost* on node *rabbit@localhost* that has a per-message time to live (x-message-ttl) value of 2 seconds*
 
 Here is the code...
 
-```csharp
-var provider = new YamlFileConfigProvider();
+```c#
+var result = await services.GetService<IBrokerObjectFactory>()
+    .Object<Queue>()
+    .Create("test-queue", "test-vhost", "rabbit@localhost", x =>
+    {
+        x.IsDurable();
+        x.HasArguments(arg =>
+        {
+            arg.SetPerQueuedMessageExpiration(2000);
+        });
+    });
+```
 
-provider.TryGet("haredu.yaml", out HareDuConfig config);
+Since HareDu 3 introduces extension methods for ```IBrokerObjectFactory```, you could rewrite the above code example like so...
 
-var factory = new BrokerObjectFactory(config);
-var result = factory
-                .Object<Queue>()
-                .Create(x =>
-                {
-                    x.Queue("HareDuQueue");
-                    x.Configure(c =>
-                    {
-                        c.IsDurable();
-                        c.AutoDeleteWhenNotInUse();
-                        c.HasArguments(arg =>
-                        {
-                            arg.SetQueueExpiration(5000);
-                            arg.SetPerQueuedMessageExpiration(2000);
-                        });
-                    });
-                    x.Targeting(t =>
-                    {
-                        t.VirtualHost("HareDu");
-                        t.Node("rabbit@localhost");
-                    });
-                })
-                .GetResult();
+```c#
+var result = await services.GetService<IBrokerObjectFactory>()
+    .CreateQueue("test-queue", "test-vhost", "rabbit@localhost", x =>
+    {
+        x.IsDurable();
+        x.HasArguments(arg =>
+        {
+            arg.SetPerQueuedMessageExpiration(2000);
+        });
+    });
 ```

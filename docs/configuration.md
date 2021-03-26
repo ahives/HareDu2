@@ -1,6 +1,6 @@
 # Configuration
 
-Configuring your HareDu-powered application can be as simple as modifying the *haredu.yaml* file. At present, there are two sections in the YAML file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API, which all other APIs are built on top of. The section called *diagnostics* has the configuration needed to configure the Diagnostics API.
+Configuring your HareDu-powered application can be as simple as modifying your appsettings.json file by adding a HareDu configuration section. At present, there are two major sections within the settings file to consider, that is, *broker* and *diagnostics*, respectively. The section called *broker* encompasses the configuration needed to use the Broker API, which all other APIs are built on top of. The section called *diagnostics* has the configuration needed to configure the Diagnostics API.
 
 The minimum required configuration to use HareDu requires setting up communication with the RabbitMQ broker. To do so, you must have the following:
 
@@ -8,12 +8,12 @@ The minimum required configuration to use HareDu requires setting up communicati
 
 Defines the url of the RabbitMQ node that has metrics enabled.
 
-*YAML*
-```yaml
-url:  http://localhost:15672
+*JSON*
+```json
+"Url": "http://localhost:15672"
 ```
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -30,13 +30,16 @@ var config = provider.Configure(x =>
 
 Defines the decrypted username and password of a user that has administrative access to the RabbitMQ broker.
 
-*YAML*
-```yaml
-username: guest
-password: guest
-```
+*JSON*
+```json
+"Credentials": {
+    "Username": "guest",
+    "Password": "guest"
+}
+ ```
+
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -53,12 +56,12 @@ var config = provider.Configure(x =>
 
 Defines the maximum amount of time the This user should have administrative access to the RabbitMQ broker.
 
-*YAML*
-```yaml
-timeout: 00:00:30
+*JSON*
+```json
+"Timeout": 00:00:30
 ```
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -76,25 +79,29 @@ var config = provider.Configure(x =>
 
 The Diagnostics API is configured under the following section...
 
-*YAML*
+*JSON*
 
-```yaml
-  diagnostics:
-    probes:
+```json
+"Diagnostics": {
+  "Probes": {
+    ...
+    
+  }
+}
 ```
 <br>
 
 **HighConnectionClosureRateProbe**
 
-Defines the maximum acceptable rate of which connections are closed on the RabbitMQ broker. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. If the rate of closed connections is less than this setting then the system is considered to be operating normally.
+Defines the maximum acceptable rate at which connections can be closed on the RabbitMQ broker. If the rate of which connections are closed is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. If the rate of closed connections is less than this setting then the system is considered to be operating normally.
 
-*YAML*
-```yaml
-high-connection-closure-rate-threshold:  100
+*JSON*
+```json
+"HighConnectionClosureRateThreshold": 100
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     ...
@@ -113,15 +120,15 @@ var config = provider.Configure(x =>
 
 **HighConnectionCreationRateProbe**
 
-Defines the maximum acceptable rate of which connections to the RabbitMQ broker can be established in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally.
+Defines the maximum acceptable rate at which connections to the RabbitMQ broker can be established in order to determine whether or not it is considered healthy. If the rate of which connections are created is greater than or equal to this setting, a warning is generated, which implies that the application communicating with the broker may be experiencing issues. Otherwise, if the rate of created connections is less than this setting then the system is consider to be operating normally.
 
-*YAML*
-```yaml
-high-connection-creation-rate-threshold: 100
+*JSON*
+```json
+"HighConnectionCreationRateThreshold": 100
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -142,13 +149,13 @@ var config = provider.Configure(x =>
 
 Defines the maximum acceptable number of messages that can be published to a queue. If the number of published messages is greater than or equal to this setting, then, a queue is considered unhealthy. Otherwise, the queue is considered healthy.
 
-*YAML*
-```yaml
-queue-high-flow-threshold:  100
+*JSON*
+```json
+"QueueHighFlowThreshold": 100
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -168,15 +175,15 @@ var config = provider.Configure(x =>
 
 **QueueLowFlowProbe**
 
-Defines the minimum acceptable number of messages that is published to a queue. If the number of published messages is less than or equal to this setting, then, a queue is considered unhealthy. Otherwise, the queue is considered healthy.
+Defines the minimum acceptable number of messages that can be published to a queue. If the number of published messages is less than or equal to this setting, then, a queue is considered unhealthy. Otherwise, the queue is considered healthy.
 
-*YAML*
-```yaml
-queue-low-flow-threshold: 20
+*JSON*
+```json
+"QueueLowFlowThreshold": 20
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -197,13 +204,13 @@ var config = provider.Configure(x =>
 
 Defines the coefficient that will be used to calculate the acceptable number of message redelivers. A fractional value of 1 or greater will result in the calculated threshold being equal to the number of incoming messages for a particular queue. A fractional value less than 1 will result in the calculated threshold being derived from said value times the amount of incoming messages. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
 
-*YAML*
-```yaml
-message-redelivery-threshold-coefficient: 0.50
+*JSON*
+```json
+"MessageRedeliveryThresholdCoefficient": 0.50
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -222,15 +229,15 @@ var config = provider.Configure(x =>
 
 **SocketDescriptorThrottlingProbe**
 
-Defines the coefficient that will be used to calculate the acceptable number of sockets that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the number of available sockets. A fractional value less than 1 will result in the calculated threshold being derived from said value times the number of available sockets. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
+Defines the coefficient used to calculate the acceptable number of sockets that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the number of available sockets. A fractional value less than 1 will result in the calculated threshold being derived from said value times the number of available sockets. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
 
-*YAML*
-```yaml
-socket-usage-threshold-coefficient: 0.60
+*JSON*
+```json
+"SocketUsageThresholdCoefficient": 0.60
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -250,15 +257,15 @@ var config = provider.Configure(x =>
 
 **RuntimeProcessLimitProbe**
 
-Defines the coefficient that will be used to calculate the acceptable number of runtime processes that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the upper limit of available runtime processes. A fractional value less than 1 will result in the calculated threshold being derived from said value times the predefined upper limit of available runtime processes. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
+Defines the coefficient used to calculate the acceptable number of runtime processes that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the upper limit of available runtime processes. A fractional value less than 1 will result in the calculated threshold being derived from said value times the predefined upper limit of available runtime processes. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
 
-*YAML*
-```yaml
-runtime-process-usage-threshold-coefficient:  0.65
+*JSON*
+```json
+"RuntimeProcessUsageThresholdCoefficient": 0.65
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -277,15 +284,15 @@ var config = provider.Configure(x =>
 
 **FileDescriptorThrottlingProbe**
 
-Defines the coefficient that will be used to calculate the acceptable number of file descriptors/handles that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the number of available file descriptors/handles. A fractional value less than 1 will result in the calculated threshold being derived from said value times the number of available file descriptors/handles. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
+Defines the coefficient used to calculate the acceptable number of file descriptors/handles that can be used. A fractional value of 1 or greater will result in the calculated threshold being equal to the number of available file descriptors/handles. A fractional value less than 1 will result in the calculated threshold being derived from said value times the number of available file descriptors/handles. The resultant value will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
 
-*YAML*
-```yaml
-file-descriptor-usage-threshold-coefficient:  0.65
+*JSON*
+```json
+"FileDescriptorUsageThresholdCoefficient": 0.65
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -306,13 +313,13 @@ var config = provider.Configure(x =>
 
 Defines the minimum acceptable percentage of consumers that are consuming messages from a particular queue. This value along with the consumer utilization data will determine whether the corresponding RabbitMQ component is *healthy*, *unhealthy*, or *warning*.
 
-*YAML*
-```yaml
-consumer-utilization-threshold: 0.50
+*JSON*
+```json
+"ConsumerUtilizationThreshold": 0.50
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -331,151 +338,139 @@ var config = provider.Configure(x =>
 
 #### Putting it Altogether
 
-The combined YAML configuration looks like this...
-```yaml
----
-  broker:
-      url:  http://localhost:15672
-      username: guest
-      password: guest
-      timeout: 00:00:30
-  diagnostics:
-    probes:
-        high-connection-closure-rate-threshold:  100
-        high-connection-creation-rate-threshold: 100
-        queue-high-flow-threshold:  100
-        queue-low-flow-threshold: 20
-        message-redelivery-threshold-coefficient: 0.50
-        socket-usage-threshold-coefficient: 0.60
-        runtime-process-usage-threshold-coefficient:  0.65
-        file-descriptor-usage-threshold-coefficient:  0.65
-        consumer-utilization-threshold: 0.50
-...
+The combined JSON configuration looks like this...
+```json
+  "HareDuConfig": {
+    "Broker": {
+      "Url": "http://localhost:15672",
+      "Credentials": {
+        "Username": "guest",
+        "Password": "guest"
+      }
+    },
+    "Diagnostics": {
+      "Probes": {
+        "HighConnectionClosureRateThreshold": 100,
+        "HighConnectionCreationRateThreshold": 100,
+        "QueueHighFlowThreshold": 100,
+        "QueueLowFlowThreshold": 20,
+        "MessageRedeliveryThresholdCoefficient": 0.50,
+        "SocketUsageThresholdCoefficient": 0.60,
+        "RuntimeProcessUsageThresholdCoefficient": 0.65,
+        "FileDescriptorUsageThresholdCoefficient": 0.65,
+        "ConsumerUtilizationThreshold": 0.50
+      }
+    }
+  }
 ```
 
-To access the above YAML configuration you can either read said configuration from a file or text.  
-
-If reading from a file, you need to initialize ```YamlFileConfigProvider```...
+If reading from a file, you need to add the following code...
 
 *Do it yourself*
-```csharp
-var provider = new YamlFileConfigProvider();
+```c#
+HareDuConfig config = new HareDuConfig();
+            
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", false)
+    .Build();
+
+configuration.Bind("HareDuConfig", config);
+```
+
+*Using Dependency Injection*
+
+```c#
+.AddHareDu()
+```
+...or  
+```c#
+.AddHareDu("your_settings_file.json", "settings_file_config_section")
 ```
 <br>
 
-*Autofac*
-```csharp
-var provider = _container.Resolve<IFileConfigProvider>();
-```
-<br>
+**Dude, I don't care about configuration files**
 
-*.NET Core DI*
-```csharp
-var provider = _services.GetService<IFileConfigProvider>();
-```
-<br>
-
-If reading text you need to initialize ```YamlConfigProvider```...
+Well, first you need to initialize ```HareDuConfigProvider```...
 
 *Do it yourself*
-```csharp
-var provider = new YamlConfigProvider();
-```
-<br>
-
-*Autofac*
-```csharp
-var provider = _container.Resolve<IConfigProvider>();
-```
-<br>
-
-*.NET Core DI*
-```csharp
-var provider = _services.GetService<IConfigProvider>();
-```
-<br>
-
-Depending on whether you are using the configuration or file provider, you would call the appropriate ```TryGet``` method to return the configuration.
-
-<br>
-
-There are several ways to configure HareDu programmatically. Let's look at the major scenarios.
-
-<br>
-
-**Dude, I don't care about YAML**
-
-First, you need to initialize ```HareDuConfigProvider```...
-
-*Do it yourself*
-```csharp
+```c#
 var provider = new HareDuConfigProvider();
 ```
 
-*Autofac*
-```csharp
-var provider = _container.Resolve<IHareDuConfigProvider>();
-```
-
-*.NET Core DI*
-```csharp
-var provider = _services.GetService<IHareDuConfigProvider>();
-```
-<br>
-
 From here you can use the initialized provider to set configuration settings on all the HareDu APIs like so...
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
-    x.Broker(y =>
+    x.Broker(broker =>
     {
-        y.ConnectTo("http://localhost:15672");
-        y.UsingCredentials("guest", "guest");
-        y.TimeoutAfter(new TimeSpan(0, 0, 30));
+        broker.ConnectTo("http://localhost:15672");
+        broker.UsingCredentials("guest", "guest");
+        broker.TimeoutAfter(new TimeSpan(0, 0, 30));
     });
 
-    x.Diagnostics(y =>
+    x.Diagnostics(diagnostic =>
     {
-        y.Probes(z =>
+        diagnostic.Probes(probe =>
         {
-            z.SetMessageRedeliveryThresholdCoefficient(0.60M);
-            z.SetSocketUsageThresholdCoefficient(0.60M);
-            z.SetConsumerUtilizationThreshold(0.65M);
-            z.SetQueueHighFlowThreshold(90);
-            z.SetQueueLowFlowThreshold(10);
-            z.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
-            z.SetFileDescriptorUsageThresholdCoefficient(0.65M);
-            z.SetHighConnectionClosureRateThreshold(90);
-            z.SetHighConnectionCreationRateThreshold(60);
+            probe.SetMessageRedeliveryThresholdCoefficient(0.60M);
+            probe.SetSocketUsageThresholdCoefficient(0.60M);
+            probe.SetConsumerUtilizationThreshold(0.65M);
+            probe.SetQueueHighFlowThreshold(90);
+            probe.SetQueueLowFlowThreshold(10);
+            probe.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+            probe.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+            probe.SetHighConnectionClosureRateThreshold(90);
+            probe.SetHighConnectionCreationRateThreshold(60);
         });
     });
 });
 ```
+
+...and now you need only call ```config.Broker``` or ```config.Diagnostics``` to access configuration data.
+
 <br>
 
-From here, you need only call ```config.Broker``` or ```config.Diagnostics``` to access configuration data.
+*Using Dependency Injection*
 
-It is assumed that you will not need to change settings after API objects are initialized. HareDu is an immutable API so it is recommended that most API objects be initialized using the Singleton pattern. Because of this, it can be difficult to update configuration. Don't worry, HareDu got you covered! HareDu, not only allows you to safely update configuration after initialization, it also allows you to register observers that will notify you of changes to the original configuration settings.
+```c#
+.AddHareDu(x =>
+    {
+        x.Broker(broker =>
+        {
+            broker.ConnectTo("http://localhost:15672");
+            broker.UsingCredentials("guest", "guest");
+            broker.TimeoutAfter(new TimeSpan(0, 0, 30));
+        });
 
-Updating configuration is as easy as calling the appropriate ```UpdateConfiguration``` method on the corresponding object.
-
-Next, create a class that implements ```IObserver<T>``` like so...
-```csharp
-public class ConfigOverrideObserver :
-    IObserver<ProbeConfigurationContext>
-{
-    public void OnCompleted() => throw new NotImplementedException();
-
-    public void OnError(Exception error) => throw new NotImplementedException();
-
-    public void OnNext(ProbeConfigurationContext value) => throw new NotImplementedException();
-}
+        x.Diagnostics(diagnostic =>
+        {
+            diagnostic.Probes(probe =>
+            {
+                probe.SetMessageRedeliveryThresholdCoefficient(0.60M);
+                probe.SetSocketUsageThresholdCoefficient(0.60M);
+                probe.SetConsumerUtilizationThreshold(0.65M);
+                probe.SetQueueHighFlowThreshold(90);
+                probe.SetQueueLowFlowThreshold(10);
+                probe.SetRuntimeProcessUsageThresholdCoefficient(0.65M);
+                probe.SetFileDescriptorUsageThresholdCoefficient(0.65M);
+                probe.SetHighConnectionClosureRateThreshold(90);
+                probe.SetHighConnectionCreationRateThreshold(60);
+            });
+        });
+    })
 ```
-Call the ```RegisterObserver``` method on ```ScannerFactory``` like so...
-```csharp
-factory.RegisterObserver(new ConfigOverrideObserver());
-```
-Done.
-<br>
 
-*Please note that the above functionality currently only works with the Diagnostics API.*
+...and now you need only reference ```HareDuConfig``` by either referencing within your constructor or resolving the object from the DI container like so...
+
+**Autofac**
+
+```c#
+var config = _container.Resolve<HareDuConfig>();
+```
+
+**Microsoft DI**
+
+```c#
+var config = _services.GetService<HareDuConfig>();
+```
+
