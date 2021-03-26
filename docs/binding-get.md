@@ -1,6 +1,6 @@
 # Get Bindings
 
-The Broker API allows you to get all bindings on the RabbitMQ broker. To do so is pretty simple with HareDu 3. You can do it yourself or the IoC way.
+The Broker API allows you to get all bindings on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 

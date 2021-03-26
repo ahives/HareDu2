@@ -1,6 +1,6 @@
 # Create Queues
 
-The Broker API allows you to create a queue on the RabbitMQ broker. To do so is pretty simple with HareDu 3. You can do it yourself or the DI way.
+The Broker API allows you to create a queue on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 
