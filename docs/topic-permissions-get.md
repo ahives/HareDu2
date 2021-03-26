@@ -1,6 +1,6 @@
 # Get Topic Permissions
 
-The Broker API allows you to get all topic permissions on the RabbitMQ broker. To do so is pretty simple with HareDu 3. You can do it yourself or the DI way.
+The Broker API allows you to get all topic permissions on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 

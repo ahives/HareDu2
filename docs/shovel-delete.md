@@ -1,6 +1,6 @@
 # Delete Shovel
 
-The Broker API allows you to delete a dynamic shovel from RabbitMQ. To do so is pretty simple with HareDu 3. You can do it yourself or the DI way.
+The Broker API allows you to delete a dynamic shovel from RabbitMQ. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 
