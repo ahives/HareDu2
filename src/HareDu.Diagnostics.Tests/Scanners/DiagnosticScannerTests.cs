@@ -20,7 +20,6 @@ namespace HareDu.Diagnostics.Tests.Scanners
             _container = new ContainerBuilder()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
-                .AddHareDuDiagnostics()
                 .Build();
         }
 

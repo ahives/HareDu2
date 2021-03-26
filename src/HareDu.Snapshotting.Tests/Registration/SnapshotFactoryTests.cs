@@ -19,7 +19,6 @@ namespace HareDu.Snapshotting.Tests.Registration
             _container = new ContainerBuilder()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
-                .AddHareDuSnapshot()
                 .Build();
         }
 

@@ -18,7 +18,6 @@ namespace HareDu.IntegrationTesting.Snapshots
         {
             _container = new ContainerBuilder()
                 .AddHareDu()
-                .AddHareDuSnapshot()
                 .Build();
         }
 

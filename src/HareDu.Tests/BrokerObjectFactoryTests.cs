@@ -22,7 +22,6 @@ namespace HareDu.Tests
             _container = new ContainerBuilder()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
-                .AddHareDuSnapshot()
                 .Build();
         }
 

@@ -21,7 +21,6 @@ namespace HareDu.IntegrationTesting.Snapshots
             _container = new ContainerBuilder()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
-                .AddHareDuSnapshot()
                 .Build();
         }
 
@@ -137,7 +136,6 @@ namespace HareDu.IntegrationTesting.Snapshots
             var services = new ServiceCollection()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
-                .AddHareDuSnapshot()
                 .BuildServiceProvider();
 
             var resource = services.GetService<ISnapshotFactory>()

@@ -5,21 +5,15 @@ namespace HareDu.AutofacIntegration
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
+    using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
+    using Diagnostics.Persistence;
     using Microsoft.Extensions.Configuration;
     using Snapshotting;
+    using Snapshotting.Persistence;
 
     public static class HareDuExtensions
     {
-        public static ContainerBuilder AddHareDu(this ContainerBuilder builder)
-        {
-            builder.Register(x => new BrokerObjectFactory(x.Resolve<HareDuConfig>()))
-                .As<IBrokerObjectFactory>()
-                .SingleInstance();
-
-            return builder;
-        }
-        
         /// <summary>
         /// Registers all the necessary components to use the low level HareDu Broker, Diagnostic, and Snapshotting APIs.
         /// </summary>
@@ -61,6 +55,18 @@ namespace HareDu.AutofacIntegration
 
             builder.RegisterType<ScannerResultAnalyzer>()
                 .As<IScannerResultAnalyzer>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticReportTextFormatter>()
+                .As<IDiagnosticReportFormatter>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticWriter>()
+                .As<IDiagnosticWriter>()
                 .SingleInstance();
 
             builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
@@ -107,6 +113,18 @@ namespace HareDu.AutofacIntegration
 
             builder.RegisterType<ScannerResultAnalyzer>()
                 .As<IScannerResultAnalyzer>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticReportTextFormatter>()
+                .As<IDiagnosticReportFormatter>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticWriter>()
+                .As<IDiagnosticWriter>()
                 .SingleInstance();
 
             builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))

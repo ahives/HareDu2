@@ -4,27 +4,16 @@
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
+    using Diagnostics.Formatting;
     using Diagnostics.KnowledgeBase;
+    using Diagnostics.Persistence;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Snapshotting;
+    using Snapshotting.Persistence;
 
     public static class HareDuExtensions
     {
-        /// <summary>
-        /// Registers all the necessary components to use the low level HareDu Broker Object API.
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddHareDu(this IServiceCollection services)
-        {
-            services.TryAddSingleton<IBrokerObjectFactory>(x =>
-                new BrokerObjectFactory(x.GetService<HareDuConfig>()));
-            
-            return services;
-        }
-        
         /// <summary>
         /// Registers all the necessary components to use the low level HareDu Broker, Diagnostic, and Snapshotting APIs.
         /// </summary>
@@ -49,6 +38,9 @@
             services.AddSingleton<IScannerFactory, ScannerFactory>();
             services.AddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();
             services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
+            services.AddSingleton<ISnapshotWriter, SnapshotWriter>();
+            services.AddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
+            services.AddSingleton<IDiagnosticWriter, DiagnosticWriter>();
             
             return services;
         }
@@ -73,6 +65,9 @@
             services.AddSingleton<IScannerFactory, ScannerFactory>();
             services.AddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();
             services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
+            services.AddSingleton<ISnapshotWriter, SnapshotWriter>();
+            services.AddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
+            services.AddSingleton<IDiagnosticWriter, DiagnosticWriter>();
             
             return services;
         }

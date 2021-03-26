@@ -27,7 +27,6 @@ namespace HareDu.Diagnostics.Tests
             _container = new ContainerBuilder()
                 .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .AddHareDu()
-                .AddHareDuDiagnostics()
                 .Build();
 
             var provider = _container.Resolve<IFileConfigProvider>();
