@@ -12,13 +12,13 @@ HareDu is Apache 2.0 licensed.
 | Package Name |  | .NET Runtime |
 |---| --- | --- |
 | **API** |  |  |
-| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | Configuration API | 5.0 |
-| [HareDu](https://www.nuget.org/packages/HareDu/) | Broker API | 5.0 |
-| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | Snapshot API | 5.0 |
-| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | Diagnostics API | 5.0 |
+| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | Configuration API | Core 2.1 |
+| [HareDu](https://www.nuget.org/packages/HareDu/) | Broker API | Core 2.1 |
+| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | Snapshot API | Core 2.1 |
+| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | Diagnostics API | Core 2.1 |
 | **Dependency Injection Containers** | | |
-| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | Autofac Integration API | 5.0 |
-| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | .NET Core DI Integration API| 5.0 |
+| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | Autofac Integration API | Core 2.1 |
+| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | .NET Core DI Integration API| Core 2.1 |
 
 
 # Why HareDu 2?
