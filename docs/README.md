@@ -4,14 +4,14 @@ HareDu 2 comes with four major APIs; that is, Broker, Snapshot, Diagnostics, and
 
 ### HareDu 2 NuGet Packages
 
-| Package Name |  | .NET Standard |
+| Package Name |  | .NET Runtime |
 |---| --- | --- |
 | **API** |  |  |
 | [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | Configuration API | 5.0 |
 | [HareDu](https://www.nuget.org/packages/HareDu/) | Broker API | 5.0 |
 | [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | Snapshot API | 5.0 |
 | [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | Diagnostics API | 5.0 |
-| **Containers** | | |
+| **Dependency Injection Containers** | | |
 | [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | Autofac Integration API | 5.0 |
 | [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | .NET Core DI Integration API| 5.0 |
 
