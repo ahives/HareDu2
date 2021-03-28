@@ -7,8 +7,9 @@ The Broker API allows you to create a simple global parameter on the RabbitMQ br
 ```c#
 var result = await new BrokerObjectFactory(config)
     .Object<GlobalParameter>()
-    .Create("param", x =>
+    .Create(x =>
     {
+        x.Parameter("param");
         x.Value("value");
     });
 ```
@@ -17,7 +18,7 @@ var result = await new BrokerObjectFactory(config)
 ```c#
 var result = await new BrokerObjectFactory(config)
     .Object<GlobalParameter>()
-    .Create("param", x =>
+    .Create(x =>
     {
         x.Parameter("param");
         x.Value(arg =>
@@ -35,8 +36,9 @@ var result = await new BrokerObjectFactory(config)
 ```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
     .Object<GlobalParameter>()
-    .Create("param", x =>
+    .Create(x =>
     {
+        x.Parameter("param");
         x.Value("value");
     });
 ```
@@ -45,8 +47,9 @@ var result = await _container.Resolve<IBrokerObjectFactory>()
 ```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
     .Object<GlobalParameter>()
-    .Create("param", x =>
+    .Create(x =>
     {
+        x.Parameter("param");
         x.Value(arg =>
         {
             arg.Set("arg1", "value");
@@ -62,8 +65,9 @@ var result = await _container.Resolve<IBrokerObjectFactory>()
 ```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
     .Object<GlobalParameter>()
-    .Create("param", x =>
+    .Create(x =>
     {
+        x.Parameter("param");
         x.Value("value");
     });
 ```
@@ -72,8 +76,9 @@ var result = await _services.GetService<IBrokerObjectFactory>()
 ```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
     .Object<GlobalParameter>()
-    .Create("param", x =>
+    .Create(x =>
     {
+        x.Parameter("param");
         x.Value(arg =>
         {
             arg.Set("arg1", "value");
@@ -84,32 +89,7 @@ var result = await _services.GetService<IBrokerObjectFactory>()
 
 <br>
 
-The other way to create a global parameter is to call the extension methods off of ```IBrokerObjectFactory``` like so...
-
-```c#
-var result = await _services.GetService<IBrokerObjectFactory>()
-    .CreateGlobalParameter("param", x =>
-    {
-        x.Value("value");
-    });
-```
-...or
-
-```c#
-var result = await _services.GetService<IBrokerObjectFactory>()
-    .CreateGlobalParameter("param", x =>
-    {
-        x.Value(arg =>
-        {
-            arg.Set("arg1", "value");
-            arg.Set("arg2", 5);
-        });
-    });
-```
-
-<br>
-
-*Please note that subsequent calls to any of the above methods within the Create method will result in overriding the argument.*
+*Please note that subsequent calls to any of the above methods within Create will result in overriding the argument.*
 
 <br>
 
