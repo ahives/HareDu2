@@ -22,7 +22,7 @@ namespace HareDu.AutofacIntegration
         /// <param name="settingsFile">The full path of where the configuration settings file is located.</param>
         /// <param name="configSection">The section found within the configuration file.</param>
         /// <returns></returns>
-        public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string settingsFile = "appsettings.json", string configSection = "HareDuConfig")
+        public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string settingsFile, string configSection)
         {
             builder.Register(x =>
                 {
@@ -77,7 +77,14 @@ namespace HareDu.AutofacIntegration
             return builder;
         }
 
-        public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string settingsFile = "haredu.yaml")
+        /// <summary>
+        /// Registers all the necessary components to use the low level HareDu Broker, Diagnostic, and Snapshotting APIs.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="settingsFile"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuConfigurationException"></exception>
+        public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string settingsFile)
         {
             builder.RegisterType<HareDuConfigProvider>()
                 .As<IHareDuConfigProvider>()
