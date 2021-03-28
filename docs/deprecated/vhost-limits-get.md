@@ -1,33 +1,33 @@
 # Get Virtual Host Limits
 
-The Broker API allows you to get all limits for all virtual hosts on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
+The Broker API allows you to get all limits for all virtual hosts on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 
-```csharp
+```c#
 var result = await new BrokerObjectFactory(config)
-                .Object<VirtualHostLimits>()
-                .GetAll();
+    .Object<VirtualHostLimits>()
+    .GetAll();
 ```
 <br>
 
 **Autofac**
 
-```csharp
+```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<VirtualHostLimits>()
-                .GetAll();
+    .Object<VirtualHostLimits>()
+    .GetAll();
 ```
 <br>
 
-**.NET Core DI**
+**Microsoft DI**
 
-```csharp
+```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
-                .Object<VirtualHostLimits>()
-                .GetAll();
+    .Object<VirtualHostLimits>()
+    .GetAll();
 ```
 <br>
 
-All examples in this document assumes the broker has been configured. If you want to know how then go to the Configuration documentation [here](https://github.com/ahives/HareDu2/blob/master/docs/configuration.md) .
+All examples in this document assumes the broker has been configured. If you want to know how then go to the Configuration documentation [here](https://github.com/ahives/HareDu2/blob/master/docs/deprecated/configuration.md).
 

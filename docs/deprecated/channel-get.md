@@ -4,30 +4,30 @@ The Broker API allows you to get all channels on the RabbitMQ broker. To do so i
 
 **Do It Yourself**
 
-```csharp
+```c#
 var result = await new BrokerObjectFactory(config)
-                .Object<Channel>()
-                .GetAll()
+    .Object<Channel>()
+    .GetAll()
 ```
 <br>
 
 **Autofac**
 
-```csharp
+```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Channel>()
-                .GetAll()
+    .Object<Channel>()
+    .GetAll()
 ```
 <br>
 
-**.NET Core DI**
+**Microsoft DI**
 
-```csharp
+```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
-                .Object<Channel>()
-                .GetAll()
+    .Object<Channel>()
+    .GetAll()
 ```
 <br>
 
-All examples in this document assumes the broker has been configured. If you want to know how then go to the Configuration documentation [here](https://github.com/ahives/HareDu2/blob/master/docs/configuration.md) .
+All examples in this document assumes the broker has been configured. If you want to know how then go to the Configuration documentation [here](https://github.com/ahives/HareDu2/blob/master/docs/deprecated/configuration.md).
 

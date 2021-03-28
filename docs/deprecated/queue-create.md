@@ -1,36 +1,36 @@
-# Creating Queues
+# Create Queue
 
-The Broker API allows you to create a queue on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
+The Broker API allows you to create a queue on the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 
-```csharp
+```c#
 var result = await new BrokerObjectFactory(config)
-                .Object<Queue>()
-                .Create(x =>
-                {
-                    x.Queue("your_queue");
-                    x.Targeting(t => t.VirtualHost("your_vhost"));
-                });
+    .Object<Queue>()
+    .Create(x =>
+    {
+        x.Queue("queue");
+        x.Targeting(t => t.VirtualHost("vhost"));
+    });
 ```
 <br>
 
 **Autofac**
 
-```csharp
+```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Create(x =>
-                {
-                    x.Queue("your_queue");
-                    x.Targeting(t => t.VirtualHost("your_vhost"));
-                });
+    .Object<Queue>()
+    .Create(x =>
+    {
+        x.Queue("queue");
+        x.Targeting(t => t.VirtualHost("vhost"));
+    });
 ```
 <br>
 
-**.NET Core DI**
+**Microsoft DI**
 
-```csharp
+```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
                 .Object<Queue>()
                 .Create(x =>
@@ -43,7 +43,7 @@ var result = await _services.GetService<IBrokerObjectFactory>()
 
 RabbitMQ supports the concept of [durability](https://www.rabbitmq.com/queues.html), which means that if the broker restarts the queues will survive. To configure a queue to be durable during creation, add the ```IsDurable``` method within ```Configure``` like so...
 
-```csharp
+```c#
 c.IsDurable();
 ```
 <br>
@@ -62,39 +62,39 @@ HareDu 2 supports the below RabbitMQ arguments during queue creation.
 
 The addition of the below code to ```Configure``` will set the above RabbitMQ arguments.
 
-```csharp
+```c#
 c.HasArguments(arg =>
 {
     arg.SetQueueExpiration(1000);
-    arg.SetAlternateExchange("your_alternate_exchange_name");
-    arg.SetDeadLetterExchange("your_deadletter_exchange_name");
+    arg.SetAlternateExchange("alternate_exchange_name");
+    arg.SetDeadLetterExchange("deadletter_exchange_name");
     arg.SetPerQueuedMessageExpiration(1000);
-    arg.SetDeadLetterExchangeRoutingKey("your_routing_key");
+    arg.SetDeadLetterExchangeRoutingKey("routing_key");
 });
 ```
 <br>
 
 A complete example would look something like this...
 
-```csharp
+```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
     .Object<Queue>()
     .Create(x =>
     {
-        x.Queue("your_queue");
+        x.Queue("queue");
         x.Configure(c =>
         {
             c.IsDurable();
             c.HasArguments(arg =>
             {
                 arg.SetQueueExpiration(1000);
-                arg.SetAlternateExchange("your_alternate_exchange_name");
-                arg.SetDeadLetterExchange("your_deadletter_exchange_name");
+                arg.SetAlternateExchange("alternate_exchange_name");
+                arg.SetDeadLetterExchange("deadletter_exchange_name");
                 arg.SetPerQueuedMessageExpiration(1000);
-                arg.SetDeadLetterExchangeRoutingKey("your_routing_key");
+                arg.SetDeadLetterExchangeRoutingKey("routing_key");
             });
         });
-        x.Targeting(t => t.VirtualHost("your_vhost"));
+        x.Targeting(t => t.VirtualHost("vhost"));
     });
 ```
 
@@ -104,5 +104,5 @@ var result = await _container.Resolve<IBrokerObjectFactory>()
 
 <br>
 
-All examples in this document assumes the broker has been configured. If you want to know how then go to the Configuration documentation [here](https://github.com/ahives/HareDu2/blob/master/docs/configuration.md) .
+All examples in this document assumes the broker has been configured. If you want to know how then go to the Configuration documentation [here](https://github.com/ahives/HareDu2/blob/master/docs/deprecated/configuration.md).
 

@@ -1,6 +1,6 @@
-# Getting Server Health Details
+# Get Server Health Details
 
-The Broker API allows you to health details on a RabbitMQ server. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
+The Broker API allows you to health details on a RabbitMQ server. To do so is pretty simple with HareDu 2. You can do it yourself or the DI way.
 
 **Do It Yourself**
 

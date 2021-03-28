@@ -1,43 +1,43 @@
-# Deleting Queues
+# Delete Queue
 
 The Broker API allows you to delete a queue from the RabbitMQ broker. To do so is pretty simple with HareDu 2. You can do it yourself or the IoC way.
 
 **Do It Yourself**
 
-```csharp
+```c#
 var result = await new BrokerObjectFactory(config)
-                .Object<Queue>()
-                .Delete(x =>
-                {
-                    x.Queue("your_queue");
-                    x.Targeting(l => l.VirtualHost("your_vhost"));
-                });
+    .Object<Queue>()
+    .Delete(x =>
+    {
+        x.Queue("queue");
+        x.Targeting(l => l.VirtualHost("vhost"));
+    });
 ```
 <br>
 
 **Autofac**
 
-```csharp
+```c#
 var result = await _container.Resolve<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Delete(x =>
-                {
-                    x.Queue("your_queue");
-                    x.Targeting(l => l.VirtualHost("your_vhost"));
-                });
+    .Object<Queue>()
+    .Delete(x =>
+    {
+        x.Queue("queue");
+        x.Targeting(l => l.VirtualHost("vhost"));
+    });
 ```
 <br>
 
-**.NET Core DI**
+**Microsoft DI**
 
-```csharp
+```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Delete(x =>
-                {
-                    x.Queue("your_queue");
-                    x.Targeting(l => l.VirtualHost("your_vhost"));
-                });
+    .Object<Queue>()
+    .Delete(x =>
+    {
+        x.Queue("queue");
+        x.Targeting(l => l.VirtualHost("vhost"));
+    });
 ```
 <br>
 
