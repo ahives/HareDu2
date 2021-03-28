@@ -1,4 +1,4 @@
-namespace HareDu.IntegrationTesting.Snapshots
+namespace HareDu.Snapshotting.IntegrationTests
 {
     using Autofac;
     using AutofacIntegration;
@@ -8,7 +8,7 @@ namespace HareDu.IntegrationTesting.Snapshots
     using NUnit.Framework;
     using Observers;
     using Snapshotting;
-    using Snapshotting.Model;
+    using Model;
 
     [TestFixture]
     public class QueueSnapshotTests

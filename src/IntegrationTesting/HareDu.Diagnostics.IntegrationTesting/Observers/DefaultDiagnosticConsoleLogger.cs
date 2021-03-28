@@ -1,9 +1,8 @@
-namespace HareDu.IntegrationTesting.Diagnostics.Observers
+namespace HareDu.Diagnostics.IntegrationTesting.Observers
 {
     using System;
-    using Core.Extensions;
-    using Extensions;
-    using HareDu.Diagnostics;
+    using Diagnostics;
+    using HareDu.Extensions;
     using Serialization;
 
     public class DefaultDiagnosticConsoleLogger :

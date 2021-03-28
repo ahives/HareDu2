@@ -13,7 +13,7 @@ Defines the url of the RabbitMQ node that has metrics enabled.
 url:  http://localhost:15672
 ```
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -35,8 +35,9 @@ Defines the decrypted username and password of a user that has administrative ac
 username: guest
 password: guest
 ```
+
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -58,7 +59,7 @@ Defines the maximum amount of time the This user should have administrative acce
 timeout: 00:00:30
 ```
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -94,7 +95,7 @@ high-connection-closure-rate-threshold:  100
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
     ...
@@ -121,7 +122,7 @@ high-connection-creation-rate-threshold: 100
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -148,7 +149,7 @@ queue-high-flow-threshold:  100
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -176,7 +177,7 @@ queue-low-flow-threshold: 20
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -203,7 +204,7 @@ message-redelivery-threshold-coefficient: 0.50
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -230,7 +231,7 @@ socket-usage-threshold-coefficient: 0.60
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -258,7 +259,7 @@ runtime-process-usage-threshold-coefficient:  0.65
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -285,7 +286,7 @@ file-descriptor-usage-threshold-coefficient:  0.65
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -312,7 +313,7 @@ consumer-utilization-threshold: 0.50
 ```
 
 *C#*
-```csharp
+```c#
 var config = provider.Configure(x =>
 {
         ...
@@ -332,6 +333,7 @@ var config = provider.Configure(x =>
 #### Putting it Altogether
 
 The combined YAML configuration looks like this...
+
 ```yaml
 ---
   broker:
@@ -357,40 +359,45 @@ To access the above YAML configuration you can either read said configuration fr
 
 If reading from a file, you need to initialize ```YamlFileConfigProvider```...
 
-*Do it yourself*
-```csharp
+**Do It Yourself**
+
+```c#
 var provider = new YamlFileConfigProvider();
 ```
 <br>
 
 *Autofac*
-```csharp
+```c#
 var provider = _container.Resolve<IFileConfigProvider>();
 ```
 <br>
 
-*.NET Core DI*
-```csharp
+**Microsoft DI**
+
+```c#
 var provider = _services.GetService<IFileConfigProvider>();
 ```
 <br>
 
 If reading text you need to initialize ```YamlConfigProvider```...
 
-*Do it yourself*
-```csharp
+**Do It Yourself**
+
+```c#
 var provider = new YamlConfigProvider();
 ```
 <br>
 
-*Autofac*
+**Autofac**
+
 ```csharp
 var provider = _container.Resolve<IConfigProvider>();
 ```
 <br>
 
-*.NET Core DI*
-```csharp
+**Microsoft DI**
+
+```c#
 var provider = _services.GetService<IConfigProvider>();
 ```
 <br>
@@ -407,24 +414,26 @@ There are several ways to configure HareDu programmatically. Let's look at the m
 
 First, you need to initialize ```HareDuConfigProvider```...
 
-*Do it yourself*
-```csharp
+**Do It Yourself**
+
+```c#
 var provider = new HareDuConfigProvider();
 ```
 
-*Autofac*
-```csharp
+**Autofac**
+```c#
 var provider = _container.Resolve<IHareDuConfigProvider>();
 ```
 
-*.NET Core DI*
-```csharp
+**Microsoft DI**
+```c#
 var provider = _services.GetService<IHareDuConfigProvider>();
 ```
 <br>
 
 From here you can use the initialized provider to set configuration settings on all the HareDu APIs like so...
-```csharp
+
+```c#
 var config = provider.Configure(x =>
 {
     x.Broker(y =>
@@ -460,7 +469,8 @@ It is assumed that you will not need to change settings after API objects are in
 Updating configuration is as easy as calling the appropriate ```UpdateConfiguration``` method on the corresponding object.
 
 Next, create a class that implements ```IObserver<T>``` like so...
-```csharp
+
+```c#
 public class ConfigOverrideObserver :
     IObserver<ProbeConfigurationContext>
 {
@@ -472,7 +482,8 @@ public class ConfigOverrideObserver :
 }
 ```
 Call the ```RegisterObserver``` method on ```ScannerFactory``` like so...
-```csharp
+
+```c#
 factory.RegisterObserver(new ConfigOverrideObserver());
 ```
 Done.

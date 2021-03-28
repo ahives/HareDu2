@@ -1,14 +1,11 @@
-namespace HareDu.IntegrationTesting.Snapshots.Observers
+namespace HareDu.Snapshotting.IntegrationTests.Observers
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using Core.Extensions;
-    using Extensions;
+    using HareDu.Extensions;
     using Serialization;
     using Snapshotting;
-    using Snapshotting.Model;
+    using Model;
 
     public class BrokerQueuesJsonExporter :
         IObserver<SnapshotContext<BrokerQueuesSnapshot>>
