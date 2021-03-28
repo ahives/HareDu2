@@ -63,18 +63,18 @@ If the destination binding is a queue then you simply need to set the ```Type```
 
 ```c#
 var result = await new BrokerObjectFactory(config)
-                .Object<Binding>()
-                .Delete(x =>
-                {
-                    x.Binding(b =>
-                    {
-                        b.Name("your_binding_name");
-                        b.Source("your_exchange");
-                        b.Destination("your_queue");
-                        b.Type(BindingType.Queue);
-                    });
-                    x.Targeting(t => t.VirtualHost("your_vhost"));
-                });
+    .Object<Binding>()
+    .Delete(x =>
+    {
+        x.Binding(b =>
+        {
+            b.Name("binding_name");
+            b.Source("source_exchange");
+            b.Destination("destination_exchange");
+            b.Type(BindingType.Queue);
+        });
+        x.Targeting(t => t.VirtualHost("vhost"));
+    });
 ```
 <br>
 

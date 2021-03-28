@@ -32,12 +32,12 @@ var result = await _container.Resolve<IBrokerObjectFactory>()
 
 ```c#
 var result = await _services.GetService<IBrokerObjectFactory>()
-                .Object<Queue>()
-                .Create(x =>
-                {
-                    x.Queue("your_queue");
-                    x.Targeting(t => t.VirtualHost("your_vhost"));
-                });
+    .Object<Queue>()
+    .Create(x =>
+    {
+        x.Queue("queue");
+        x.Targeting(t => t.VirtualHost("vhost"));
+    });
 ```
 <br>
 
