@@ -29,4 +29,8 @@
       <Content Include="Fakes\FakeBrokerSnapshot1.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Registration" />
+    </ItemGroup>
+
 </Project>

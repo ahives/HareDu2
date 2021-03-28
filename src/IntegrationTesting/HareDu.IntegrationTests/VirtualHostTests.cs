@@ -19,8 +19,7 @@
         public void Init()
         {
             _container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
         }
 

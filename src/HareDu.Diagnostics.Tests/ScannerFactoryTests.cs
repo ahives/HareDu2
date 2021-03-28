@@ -25,17 +25,12 @@ namespace HareDu.Diagnostics.Tests
         public void Init()
         {
             _container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
 
-            var provider = _container.Resolve<IFileConfigProvider>();
+            HareDuConfig config = _container.Resolve<HareDuConfig>();
             var kb = _container.Resolve<IKnowledgeBaseProvider>();
-
-            string path = $"{TestContext.CurrentContext.TestDirectory}/haredu_1.yaml";
             
-            provider.TryGet(path, out HareDuConfig config);
-
             _probes = new List<DiagnosticProbe>
             {
                 new HighConnectionCreationRateProbe(config.Diagnostics, kb),

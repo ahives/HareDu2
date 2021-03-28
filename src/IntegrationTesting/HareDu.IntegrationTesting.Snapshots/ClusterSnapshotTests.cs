@@ -17,7 +17,7 @@ namespace HareDu.IntegrationTesting.Snapshots
         public void Init()
         {
             _container = new ContainerBuilder()
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
         }
 

@@ -1,6 +1,7 @@
 ﻿namespace HareDu.CoreIntegration
 {
     using System;
+    using Core;
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
@@ -21,7 +22,7 @@
         /// <param name="settingsFile">The full path of where the configuration settings file is located.</param>
         /// <param name="configSection">The section found within the configuration file.</param>
         /// <returns></returns>
-        public static IServiceCollection AddHareDu(this IServiceCollection services, string settingsFile = "appsettings.json", string configSection = "HareDuConfig")
+        public static IServiceCollection AddHareDu(this IServiceCollection services, string settingsFile, string configSection)
         {
             HareDuConfig config = new HareDuConfigImpl();
             
@@ -32,6 +33,47 @@
             configuration.Bind(configSection, config);
 
             services.AddSingleton(config);
+            services.AddSingleton<IBrokerObjectFactory, BrokerObjectFactory>();
+            services.AddSingleton<IScanner, Scanner>();
+            services.AddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();
+            services.AddSingleton<IScannerFactory, ScannerFactory>();
+            services.AddSingleton<IScannerResultAnalyzer, ScannerResultAnalyzer>();
+            services.AddSingleton<ISnapshotFactory>(x => new SnapshotFactory(x.GetService<IBrokerObjectFactory>()));
+            services.AddSingleton<ISnapshotWriter, SnapshotWriter>();
+            services.AddSingleton<IDiagnosticReportFormatter, DiagnosticReportTextFormatter>();
+            services.AddSingleton<IDiagnosticWriter, DiagnosticWriter>();
+            
+            return services;
+        }
+
+        /// <summary>
+        /// Registers all the necessary components to use the low level HareDu Broker, Diagnostic, and Snapshotting APIs.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="settingsFile"></param>
+        /// <returns></returns>
+        /// <exception cref="HareDuConfigurationException"></exception>
+        public static IServiceCollection AddHareDu(this IServiceCollection services, string settingsFile)
+        {
+            services.AddSingleton<IHareDuConfigProvider, HareDuConfigProvider>();
+            services.AddSingleton<IFileConfigProvider, YamlFileConfigProvider>();
+            services.AddSingleton<IConfigProvider, YamlConfigProvider>();
+            services.AddSingleton<IConfigValidator, HareDuConfigValidator>();
+            services.AddSingleton(x =>
+            {
+                var provider = x.GetService<IFileConfigProvider>();
+            
+                if (!provider.TryGet(settingsFile, out HareDuConfig config))
+                    throw new HareDuConfigurationException($"Not able to get settings from {settingsFile}.");
+
+                var validator = x.GetService<IConfigValidator>();
+
+                if (!validator.IsValid(config))
+                    throw new HareDuConfigurationException($"Invalid settings in {settingsFile}.");
+
+                return config;
+            });
+
             services.AddSingleton<IBrokerObjectFactory, BrokerObjectFactory>();
             services.AddSingleton<IScanner, Scanner>();
             services.AddSingleton<IKnowledgeBaseProvider, KnowledgeBaseProvider>();

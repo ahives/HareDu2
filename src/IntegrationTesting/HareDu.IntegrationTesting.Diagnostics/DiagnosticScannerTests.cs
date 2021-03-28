@@ -29,8 +29,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test1()
         {
             var container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
 
             var scanner = container.Resolve<IScanner>();
@@ -53,8 +52,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test2()
         {
             var container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
 
             var scanner = container.Resolve<IScanner>();
@@ -132,8 +130,7 @@ namespace HareDu.IntegrationTesting.Diagnostics
         public async Task Test3()
         {
             var services = new ServiceCollection()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .BuildServiceProvider();
             
             var lens = services.GetService<ISnapshotFactory>()

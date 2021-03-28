@@ -158,5 +158,9 @@
     <Content Include="TestData\OperatorPolicyInfo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="haredu1.yaml" />
+    <Content Include="haredu1.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

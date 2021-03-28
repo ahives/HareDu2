@@ -1,4 +1,4 @@
-namespace HareDu.Snapshotting.Tests.Registration
+namespace HareDu.Snapshotting.Tests
 {
     using System.Threading.Tasks;
     using Autofac;
@@ -17,8 +17,7 @@ namespace HareDu.Snapshotting.Tests.Registration
         public void Init()
         {
             _container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
         }
 

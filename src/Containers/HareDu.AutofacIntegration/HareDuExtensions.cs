@@ -2,6 +2,7 @@ namespace HareDu.AutofacIntegration
 {
     using System;
     using Autofac;
+    using Core;
     using Core.Configuration;
     using Core.Extensions;
     using Diagnostics;
@@ -35,6 +36,80 @@ namespace HareDu.AutofacIntegration
 
                     return config;
                 })
+                .SingleInstance();
+            
+            builder.RegisterType<BrokerObjectFactory>()
+                .As<IBrokerObjectFactory>()
+                .SingleInstance();
+            
+            builder.RegisterType<Scanner>()
+                .As<IScanner>()
+                .SingleInstance();
+            
+            builder.RegisterType<KnowledgeBaseProvider>()
+                .As<IKnowledgeBaseProvider>()
+                .SingleInstance();
+            
+            builder.RegisterType<ScannerFactory>()
+                .As<IScannerFactory>()
+                .SingleInstance();
+
+            builder.RegisterType<ScannerResultAnalyzer>()
+                .As<IScannerResultAnalyzer>()
+                .SingleInstance();
+
+            builder.RegisterType<SnapshotWriter>()
+                .As<ISnapshotWriter>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticReportTextFormatter>()
+                .As<IDiagnosticReportFormatter>()
+                .SingleInstance();
+
+            builder.RegisterType<DiagnosticWriter>()
+                .As<IDiagnosticWriter>()
+                .SingleInstance();
+
+            builder.Register(x => new SnapshotFactory(x.Resolve<IBrokerObjectFactory>()))
+                .As<ISnapshotFactory>()
+                .SingleInstance();
+
+            return builder;
+        }
+
+        public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string settingsFile = "haredu.yaml")
+        {
+            builder.RegisterType<HareDuConfigProvider>()
+                .As<IHareDuConfigProvider>()
+                .SingleInstance();
+            
+            builder.RegisterType<YamlFileConfigProvider>()
+                .As<IFileConfigProvider>()
+                .SingleInstance();
+            
+            builder.RegisterType<YamlConfigProvider>()
+                .As<IConfigProvider>()
+                .SingleInstance();
+            
+            builder.RegisterType<HareDuConfigValidator>()
+                .As<IConfigValidator>()
+                .SingleInstance();
+
+            builder.Register(x =>
+                {
+                    var provider = x.Resolve<IFileConfigProvider>();
+
+                    if (!provider.TryGet(settingsFile, out HareDuConfig config))
+                        throw new HareDuConfigurationException($"Not able to get settings from {settingsFile}.");
+
+                    var validator = x.Resolve<IConfigValidator>();
+
+                    if (!validator.IsValid(config))
+                        throw new HareDuConfigurationException($"Invalid settings in {settingsFile}.");
+
+                    return config;
+                })
+                .As<HareDuConfig>()
                 .SingleInstance();
             
             builder.RegisterType<BrokerObjectFactory>()

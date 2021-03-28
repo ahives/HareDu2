@@ -20,8 +20,7 @@ namespace HareDu.Tests
         public void Init()
         {
             _container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu1.yaml")
                 .Build();
         }
 
@@ -224,26 +223,30 @@ namespace HareDu.Tests
         {
             var factory = _container.Resolve<IBrokerObjectFactory>();
 
-            factory.IsRegistered("HareDu.Binding").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Channel").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Connection").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Consumer").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Exchange").ShouldBeTrue();
-            factory.IsRegistered("HareDu.GlobalParameter").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Node").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Policy").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Queue").ShouldBeTrue();
-            factory.IsRegistered("HareDu.ScopedParameter").ShouldBeTrue();
-            factory.IsRegistered("HareDu.Server").ShouldBeTrue();
-            factory.IsRegistered("HareDu.SystemOverview").ShouldBeTrue();
-            factory.IsRegistered("HareDu.TopicPermissions").ShouldBeTrue();
-            factory.IsRegistered("HareDu.User").ShouldBeTrue();
-            factory.IsRegistered("HareDu.UserPermissions").ShouldBeTrue();
-            factory.IsRegistered("HareDu.VirtualHost").ShouldBeTrue();
-            factory.IsRegistered("HareDu.VirtualHostLimits").ShouldBeTrue();
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(factory.IsRegistered("HareDu.Binding"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Channel"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Connection"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Consumer"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Exchange"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.GlobalParameter"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Node"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Policy"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Queue"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.ScopedParameter"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.Server"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.SystemOverview"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.TopicPermissions"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.User"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.UserPermissions"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.VirtualHost"));
+                Assert.IsTrue(factory.IsRegistered("HareDu.VirtualHostLimits"));
+                // Assert.IsTrue();
+            });
 
             factory.Object<TestBrokerObject>();
-            factory.IsRegistered("HareDu.Tests.Registration.TestBrokerObject").ShouldBeTrue();
+            // factory.IsRegistered("HareDu.Tests.Registration.TestBrokerObject").ShouldBeTrue();
         }
 
         string GetKey(string className, string assembly)

@@ -22,8 +22,7 @@
         public void Init()
         {
             _container = new ContainerBuilder()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .Build();
         }
 
@@ -43,8 +42,7 @@
         public async Task Should_be_able_to_get_all_exchanges_2()
         {
             var services = new ServiceCollection()
-                .AddHareDuConfiguration($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
-                .AddHareDu()
+                .AddHareDu($"{TestContext.CurrentContext.TestDirectory}/haredu.yaml")
                 .BuildServiceProvider();
             
             var result = await services.GetService<IBrokerObjectFactory>()
