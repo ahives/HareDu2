@@ -26,7 +26,7 @@ HareDu is Apache 2.0 licensed.
 If you are familiar with HareDu, you should know that HareDu 2 introduces some really cool new functionality. HareDu 2 came about from feedback of production deployments and because the original API was lacking in some key areas. In particular, HareDu 2 introduces the following enhancements:
 1. Increased test coverage
 2. Improved low level administrative API (i.e. Broker API)
-3. New APIs - Diagnostics, Snapshot, and IoC Container Integration
+3. New APIs - Diagnostics, Snapshot, and Dependency Injection Container Integration
 4. .NET Core support
 
 
@@ -71,8 +71,6 @@ Note: if you are using JetBrains Rider you can simply configure both projects an
 # Dependencies
 .NET Core 2.1 or above
 
-JSON.NET 12.0.2 or above
-
 ASP.NET WebAPI 5.2.3 or above
 
 
@@ -109,3 +107,6 @@ That's it. So, the resulting output of calling the ```ToJsonString``` extension 
 | Erlang OTP | 22.0.4 (x64) |
 | .NET Runtime | Core 2.1 |
 
+
+# Changelist
+You can find the changelist [here](https://github.com/ahives/HareDu2/blob/master/docs/changelist.md)
