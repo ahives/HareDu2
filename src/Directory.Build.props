@@ -4,9 +4,9 @@
   <!-- These properties will be shared for all projects -->
   <PropertyGroup>
     <Title>HareDu</Title>
-    <Version>2.1.0</Version>
-    <FileVersion>2.0.0.0</FileVersion>
-    <InformationalVersion>2.0.0.0</InformationalVersion>
+    <Version>2.2.0</Version>
+    <FileVersion>2.2.0.0</FileVersion>
+    <InformationalVersion>2.2.0.0</InformationalVersion>
     <Product>HareDu</Product>
     <Description></Description>
     <PackageProjectUrl>https://github.com/ahives/HareDu2</PackageProjectUrl>
@@ -15,7 +15,7 @@
     <PackageTags>RabbitMQ</PackageTags>
     <Authors>Albert L. Hives</Authors>
     <RepositoryType>git</RepositoryType>
-    <Copyright>Copyright 2013-2020 Albert L. Hives</Copyright>
+    <Copyright>Copyright 2013-2021 Albert L. Hives</Copyright>
     <WarningLevel>4</WarningLevel>
     <NoWarn>1587,1591,1998,3008,3001</NoWarn>
   </PropertyGroup>
