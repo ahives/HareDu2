@@ -20,3 +20,8 @@
 | | 16 | Added new metadata property called DiagnosticProbeMetadata on all diagnostic probes that encapsulates miscellaneous information pertinent to putting the specified probe in the proper context | New | No |
 | | 17 | Changed method names of RegisterScanner and RegisterProbe to TryRegisterScanner and TryRegisterProbe, respectively, in IScannerFactory | Enhancement | Yes |
 | | 18 | Added more developer documentation (e.g., API intellisense) | Enhancement | No |
+| **2.2.1** | 1 | Fixed issue with QueueInfo.BackingQueueStatus.TargetTotalMessagesInRAM property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
+| | 2 | Fixed issue with QueueInfo.BackingQueueStatus.BackingQueueMode property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
+| | 3 | Fixed issue with QueueInfo.State property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
+| | 4 | Fixed issue with ChannelInfo.State property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
+| | 5 | Fixed issue with NodeInfo.RatesMode property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |

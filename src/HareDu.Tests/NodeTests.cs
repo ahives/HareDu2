@@ -1,6 +1,7 @@
 namespace HareDu.Tests
 {
     using Core.Extensions;
+    using Internal.Model;
     using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
@@ -67,7 +68,7 @@ namespace HareDu.Tests
             result.Data[0].ProcessUsageDetails.Value.ShouldBe(0.0M);
             result.Data[0].TotalProcesses.ShouldBe<ulong>(1048576);
             result.Data[0].OperatingSystemProcessId.ShouldBe("1864");
-            result.Data[0].RatesMode.ShouldBe("basic");
+            result.Data[0].RatesMode.ShouldBe(RatesMode.Basic);
             result.Data[0].AvailableCoresDetected.ShouldBe<uint>(4);
             result.Data[0].FreeDiskAlarm.ShouldBeFalse();
             result.Data[0].FreeDiskLimit.ShouldBe<ulong>(50000000);

@@ -1,6 +1,7 @@
 ﻿namespace HareDu.Model
 {
     using System.Collections.Generic;
+    using Internal.Model;
 
     public interface NodeInfo
     {
@@ -22,7 +23,7 @@
 
         ulong TotalProcesses { get; }
 
-        string RatesMode { get; }
+        RatesMode RatesMode { get; }
 
         long Uptime { get; }
 

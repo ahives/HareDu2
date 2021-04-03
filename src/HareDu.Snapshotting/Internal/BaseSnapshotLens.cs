@@ -34,17 +34,13 @@ namespace HareDu.Snapshotting.Internal
         protected virtual void NotifyObservers(string identifier, T snapshot, DateTimeOffset timestamp)
         {
             foreach (var observer in _observers)
-            {
                 observer.OnNext(new SnapshotContextImpl(identifier, snapshot, timestamp));
-            }
         }
 
         protected virtual void NotifyObserversOfError(HareDuSnapshotException e)
         {
             foreach (var observer in _observers)
-            {
                 observer.OnError(e);
-            }
         }
 
         protected virtual void SaveSnapshot(string identifier, T snapshot, DateTimeOffset timestamp)
@@ -69,16 +65,10 @@ namespace HareDu.Snapshotting.Internal
                 _snapshots = snapshots;
             }
 
-            public void PurgeAll()
-            {
-                _snapshots.Clear();
-            }
+            public void PurgeAll() => _snapshots.Clear();
 
             public void Purge<U>(SnapshotResult<U> result)
-                where U : Snapshot
-            {
-                _snapshots.Remove(result.Identifier);
-            }
+                where U : Snapshot => _snapshots.Remove(result.Identifier);
         }
 
 

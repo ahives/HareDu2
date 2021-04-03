@@ -122,9 +122,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Remove="TestData\PeekedMessageInfo.json" />
-    <Content Include="TestData\PeekedMessageInfo.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Remove="TestData\Test.json" />
     <Content Include="TestData\Test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

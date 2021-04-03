@@ -1,6 +1,7 @@
 ﻿namespace HareDu.Model
 {
     using System;
+    using Internal.Model;
 
     public interface ChannelInfo
     {
@@ -60,7 +61,7 @@
 
         GarbageCollectionDetails GarbageCollectionDetails { get; }
 
-        string State { get; }
+        ChannelState State { get; }
 
         long TotalChannels { get; }
 

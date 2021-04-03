@@ -65,6 +65,13 @@ namespace HareDu.Tests
                 Assert.AreEqual(6700, result.Data[5].TotalMessages);
                 Assert.AreEqual(30000, result.Data[5].UnacknowledgedMessagesInRAM);
                 Assert.AreEqual(77349645, result.Data[5].TotalReductions);
+                Assert.IsNotNull(result.Data[5].BackingQueueStatus);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q1);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q2);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q3);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q4);
+                Assert.AreEqual(BackingQueueMode.Default, result.Data[5].BackingQueueStatus.Mode);
+                Assert.AreEqual(QueueState.Running, result.Data[5].State);
                 Assert.IsNotNull(result.Data[5].ReductionDetails);
                 Assert.AreEqual(0.0M, result.Data[5].ReductionDetails?.Value);
                 Assert.AreEqual(0.0M, result.Data[5].UnacknowledgedMessageDetails?.Value);
@@ -130,6 +137,13 @@ namespace HareDu.Tests
                 Assert.AreEqual(6700, result.Data[5].TotalMessages);
                 Assert.AreEqual(30000, result.Data[5].UnacknowledgedMessagesInRAM);
                 Assert.AreEqual(77349645, result.Data[5].TotalReductions);
+                Assert.IsNotNull(result.Data[5].BackingQueueStatus);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q1);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q2);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q3);
+                Assert.AreEqual(0, result.Data[5].BackingQueueStatus.Q4);
+                Assert.AreEqual(BackingQueueMode.Default, result.Data[5].BackingQueueStatus.Mode);
+                Assert.AreEqual(QueueState.Running, result.Data[5].State);
                 Assert.IsNotNull(result.Data[5].ReductionDetails);
                 Assert.AreEqual(0.0M, result.Data[5].ReductionDetails?.Value);
                 Assert.AreEqual(0.0M, result.Data[5].UnacknowledgedMessageDetails?.Value);

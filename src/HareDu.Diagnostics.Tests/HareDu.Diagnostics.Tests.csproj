@@ -7,10 +7,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj" />
+      <ProjectReference Include="..\Containers\HareDu.CoreIntegration\HareDu.CoreIntegration.csproj" />
       <ProjectReference Include="..\HareDu.Diagnostics\HareDu.Diagnostics.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
       <PackageReference Include="Moq" Version="4.13.1" />
       <PackageReference Include="NUnit" Version="3.12.0" />
@@ -28,6 +30,10 @@
       </Content>
       <None Remove="haredu1.yaml" />
       <Content Include="haredu_1.yaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="appsettings.json" />
+      <Content Include="appsettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

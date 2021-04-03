@@ -3,6 +3,7 @@ namespace HareDu.Internal.Model
     using System;
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
+    using HareDu.Model;
 
     class QueueInfoImpl
     {
@@ -94,7 +95,7 @@ namespace HareDu.Internal.Model
         public GarbageCollectionDetailsImpl GC { get; set; }
         
         [JsonPropertyName("state")]
-        public string State { get; set; }
+        public QueueState State { get; set; }
         
         [JsonPropertyName("recoverable_slaves")]
         public IList<string> RecoverableSlaves { get; set; }

@@ -63,7 +63,7 @@
         
         GarbageCollectionDetails GC { get; }
         
-        string State { get; }
+        QueueState State { get; }
         
         IList<string> RecoverableSlaves { get; }
         

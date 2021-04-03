@@ -172,7 +172,7 @@ namespace HareDu.Internal.Model
         public ulong FreeDiskLimit { get; }
         public bool FreeDiskAlarm { get; }
         public ulong TotalProcesses { get; }
-        public string RatesMode { get; }
+        public RatesMode RatesMode { get; }
         public long Uptime { get; }
         public int RunQueue { get; }
         public string Type { get; }

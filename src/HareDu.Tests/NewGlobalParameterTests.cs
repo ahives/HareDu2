@@ -49,7 +49,7 @@ namespace HareDu.Tests
                 Assert.AreEqual(5, result.Data.Count);
                 Assert.AreEqual("fake_param1", result.Data[3].Name);
             
-                var value = result.Data[3].Value.ToString().ToObject<IDictionary<string, object>>(Deserializer.Options);
+                var value = result.Data[3].Value.ToString().ToObject<IDictionary<string, object>>();
             
                 Assert.AreEqual(2, value.Count);
                 Assert.AreEqual("value1", value["arg1"].ToString());
@@ -73,7 +73,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.AreEqual("fake_param", request.Name);
                 Assert.AreEqual("fake_value", request.Value.ToString());
@@ -95,7 +95,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.AreEqual("fake_param", request.Name);
                 Assert.AreEqual("fake_value", request.Value.ToString());
@@ -122,7 +122,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.AreEqual("fake_param", request.Name);
                 Assert.AreEqual("value1", request.Value
@@ -151,7 +151,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(1, result.DebugInfo.Errors.Count);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.AreEqual(string.Empty, request.Name);
                 Assert.AreEqual("fake_value", request.Value.ToString());
@@ -175,7 +175,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(1, result.DebugInfo.Errors.Count);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.AreEqual("fake_param", request.Name);
                 Assert.That(request.Value.Cast<string>(), Is.Empty.Or.Null);
@@ -199,7 +199,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.That(request.Name, Is.Empty.Or.Null);
                 Assert.That(request.Value.Cast<string>(), Is.Empty.Or.Null);
@@ -222,7 +222,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>(Deserializer.Options);
+                GlobalParameterRequest request = result.DebugInfo.Request.ToObject<GlobalParameterRequest>();
             
                 Assert.That(request.Name, Is.Empty.Or.Null);
                 Assert.IsNull(request.Value);

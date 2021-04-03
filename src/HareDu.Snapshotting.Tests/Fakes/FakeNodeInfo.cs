@@ -2,6 +2,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
 {
     using System.Collections.Generic;
     using System.Linq;
+    using HareDu.Internal.Model;
     using HareDu.Model;
 
     public class FakeNodeInfo :
@@ -52,7 +53,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong FreeDiskLimit { get; }
         public bool FreeDiskAlarm { get; }
         public ulong TotalProcesses { get; }
-        public string RatesMode { get; }
+        public RatesMode RatesMode { get; }
         public long Uptime { get; }
         public int RunQueue { get; }
         public string Type { get; }

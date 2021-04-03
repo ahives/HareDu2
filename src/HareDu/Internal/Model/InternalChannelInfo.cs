@@ -81,7 +81,7 @@ namespace HareDu.Internal.Model
         public string Type { get; }
         public ConnectionDetails ConnectionDetails { get; }
         public GarbageCollectionDetails GarbageCollectionDetails { get; }
-        public string State { get; }
+        public ChannelState State { get; }
         public long TotalChannels { get; }
         public long SentPending { get; }
         public uint GlobalPrefetchCount { get; }

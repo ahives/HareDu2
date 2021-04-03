@@ -73,7 +73,7 @@ namespace HareDu.Tests
             result.Data[5].Name.ShouldBe("consumer_queue");
             result.Data[5].Node.ShouldBe("rabbit@localhost");
             result.Data[5].IdleSince.ShouldBe(DateTimeOffset.Parse("2019-11-09 11:57:45"));
-            result.Data[5].State.ShouldBe("running");
+            result.Data[5].State.ShouldBe(QueueState.Running);
             result.Data[5].VirtualHost.ShouldBe("HareDu");
         }
 

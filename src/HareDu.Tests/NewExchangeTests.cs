@@ -5,7 +5,6 @@ namespace HareDu.Tests
     using Internal.Model;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
-    using Serialization;
 
     [TestFixture]
     public class NewExchangeTests :
@@ -84,7 +83,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
                 
-                ExchangeRequest request = result.DebugInfo.Request.ToObject<ExchangeRequest>(Deserializer.Options);
+                ExchangeRequest request = result.DebugInfo.Request.ToObject<ExchangeRequest>();
 
                 Assert.IsTrue(request.Durable);
                 Assert.IsTrue(request.Internal);
@@ -117,7 +116,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
                 
-                ExchangeRequest request = result.DebugInfo.Request.ToObject<ExchangeRequest>(Deserializer.Options);
+                ExchangeRequest request = result.DebugInfo.Request.ToObject<ExchangeRequest>();
 
                 Assert.IsTrue(request.Durable);
                 Assert.IsTrue(request.Internal);

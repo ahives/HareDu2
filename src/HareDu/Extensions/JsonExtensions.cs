@@ -15,27 +15,21 @@
         /// <param name="options"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static string ToJsonString<T>(this T obj, JsonSerializerOptions options)
-        {
-            if (obj.IsNull())
-                return string.Empty;
+        public static string ToJsonString<T>(this T obj, JsonSerializerOptions options) =>
+            obj.IsNull()
+                ? string.Empty
+                : JsonSerializer.Serialize(obj, options);
 
-            return JsonSerializer.Serialize(obj, options);
-        }
-        
         /// <summary>
         /// Takes an object and returns the JSON text representation of said object using default serialization options.
         /// </summary>
         /// <param name="obj"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static string ToJsonString<T>(this T obj)
-        {
-            if (obj.IsNull())
-                return string.Empty;
-
-            return JsonSerializer.Serialize(obj, Deserializer.Options);
-        }
+        public static string ToJsonString<T>(this T obj) =>
+            obj.IsNull()
+                ? string.Empty
+                : JsonSerializer.Serialize(obj, Deserializer.Options);
 
         /// <summary>
         /// Deserializes the contents of <see cref="HttpResponseMessage"/> and returns <see cref="Task{T}"/>

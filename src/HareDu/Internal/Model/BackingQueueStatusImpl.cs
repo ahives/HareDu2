@@ -2,11 +2,12 @@ namespace HareDu.Internal.Model
 {
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
+    using HareDu.Model;
 
     class BackingQueueStatusImpl
     {
         [JsonPropertyName("mode")]
-        public string Mode { get; set; }
+        public BackingQueueMode Mode { get; set; }
         
         [JsonPropertyName("q1")]
         public long Q1 { get; set; }

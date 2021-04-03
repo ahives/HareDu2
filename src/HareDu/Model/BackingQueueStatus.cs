@@ -4,7 +4,7 @@
 
     public interface BackingQueueStatus
     {
-        string Mode { get; }
+        BackingQueueMode Mode { get; }
         
         long Q1 { get; }
         

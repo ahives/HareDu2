@@ -79,7 +79,7 @@ namespace HareDu.Internal.Model
         public ulong MessagesReadyForDeliveryInRAM { get; }
         public ulong MessagesInRAM { get; }
         public GarbageCollectionDetails GC { get; }
-        public string State { get; }
+        public QueueState State { get; }
         public IList<string> RecoverableSlaves { get; }
         public ulong Consumers { get; }
         public string ExclusiveConsumerTag { get; }

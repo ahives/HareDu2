@@ -23,7 +23,7 @@ namespace HareDu.Internal.Model
             AvgAcknowledgementEgressRate = obj.AvgAcknowledgementEgressRate;
         }
 
-        public string Mode { get; }
+        public BackingQueueMode Mode { get; }
         public long Q1 { get; }
         public long Q2 { get; }
         public IList<object> Delta { get; }

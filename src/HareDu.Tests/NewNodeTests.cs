@@ -2,6 +2,7 @@ namespace HareDu.Tests
 {
     using System.Threading.Tasks;
     using HareDu.Extensions;
+    using Internal.Model;
     using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
@@ -68,7 +69,7 @@ namespace HareDu.Tests
                 Assert.AreEqual(0.0M, result.Data[0].ProcessUsageDetails?.Value);
                 Assert.AreEqual(1048576, result.Data[0].TotalProcesses);
                 Assert.AreEqual("1864", result.Data[0].OperatingSystemProcessId);
-                Assert.AreEqual("basic", result.Data[0].RatesMode);
+                Assert.AreEqual(RatesMode.Basic, result.Data[0].RatesMode);
                 Assert.AreEqual(4, result.Data[0].AvailableCoresDetected);
                 Assert.IsFalse(result.Data[0].FreeDiskAlarm);
                 Assert.AreEqual(50000000, result.Data[0].FreeDiskLimit);
@@ -209,7 +210,7 @@ namespace HareDu.Tests
                 Assert.AreEqual(0.0M, result.Data[0].ProcessUsageDetails?.Value);
                 Assert.AreEqual(1048576, result.Data[0].TotalProcesses);
                 Assert.AreEqual("1864", result.Data[0].OperatingSystemProcessId);
-                Assert.AreEqual("basic", result.Data[0].RatesMode);
+                Assert.AreEqual(RatesMode.Basic, result.Data[0].RatesMode);
                 Assert.AreEqual(4, result.Data[0].AvailableCoresDetected);
                 Assert.IsFalse(result.Data[0].FreeDiskAlarm);
                 Assert.AreEqual(50000000, result.Data[0].FreeDiskLimit);

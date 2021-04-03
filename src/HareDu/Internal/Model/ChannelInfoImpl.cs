@@ -90,7 +90,7 @@ namespace HareDu.Internal.Model
         public GarbageCollectionDetailsImpl GarbageCollectionDetails { get; set; }
 
         [JsonPropertyName("state")]
-        public string State { get; set; }
+        public ChannelState State { get; set; }
 
         [JsonPropertyName("channels")]
         public long TotalChannels { get; set; }
