@@ -25,3 +25,4 @@
 | | 3 | Fixed issue with QueueInfo.State property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
 | | 4 | Fixed issue with ChannelInfo.State property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
 | | 5 | Fixed issue with NodeInfo.RatesMode property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |
+| | 6 | Fixed issue with ConnectionInfo.Type property not being deserialized correctly from the RabbitMQ HTTP queues API | Bug Fix | Yes |

@@ -80,7 +80,6 @@ namespace HareDu.Tests
                 Assert.AreEqual("consumer_queue", result.Data[5].Name);
                 Assert.AreEqual("rabbit@localhost", result.Data[5].Node);
                 Assert.AreEqual(DateTimeOffset.Parse("2019-11-09 11:57:45"), result.Data[5].IdleSince);
-                Assert.AreEqual("running", result.Data[5].State);
                 Assert.AreEqual("HareDu", result.Data[5].VirtualHost);
             });
         }
@@ -152,7 +151,6 @@ namespace HareDu.Tests
                 Assert.AreEqual("consumer_queue", result.Data[5].Name);
                 Assert.AreEqual("rabbit@localhost", result.Data[5].Node);
                 Assert.AreEqual(DateTimeOffset.Parse("2019-11-09 11:57:45"), result.Data[5].IdleSince);
-                Assert.AreEqual("running", result.Data[5].State);
                 Assert.AreEqual("HareDu", result.Data[5].VirtualHost);
             });
         }

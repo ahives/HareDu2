@@ -1,6 +1,5 @@
 namespace HareDu.Internal.Model
 {
-    using System;
     using System.Text.Json.Serialization;
     using HareDu.Model;
 
@@ -58,7 +57,7 @@ namespace HareDu.Internal.Model
         public ulong SendPending { get; set; }
 
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public ConnectionType Type { get; set; }
 
         [JsonPropertyName("garbage_collection")]
         public GarbageCollectionDetailsImpl GarbageCollectionDetails { get; set; }
@@ -116,71 +115,5 @@ namespace HareDu.Internal.Model
 
         [JsonPropertyName("client_properties")]
         public ConnectionClientPropertiesImpl ConnectionClientProperties { get; set; }
-    }
-
-    class ConnectionClientPropertiesImpl
-    {
-        [JsonPropertyName("assembly")]
-        public string Assembly { get; set; }
-
-        [JsonPropertyName("assembly_version")]
-        public string AssemblyVersion { get; set; }
-
-        [JsonPropertyName("capabilities")]
-        public ConnectionCapabilitiesImpl Capabilities { get; set; }
-
-        [JsonPropertyName("client_api")]
-        public string ClientApi { get; set; }
-
-        [JsonPropertyName("connected")]
-        public DateTimeOffset Connected { get; set; }
-
-        [JsonPropertyName("connection_name")]
-        public string ConnectionName { get; set; }
-
-        [JsonPropertyName("copyright")]
-        public string Copyright { get; set; }
-
-        [JsonPropertyName("hostname")]
-        public string Host { get; set; }
-
-        [JsonPropertyName("information")]
-        public string Information { get; set; }
-
-        [JsonPropertyName("platform")]
-        public string Platform { get; set; }
-
-        [JsonPropertyName("process_id")]
-        public string ProcessId { get; set; }
-
-        [JsonPropertyName("process_name")]
-        public string ProcessName { get; set; }
-
-        [JsonPropertyName("product")]
-        public string Product { get; set; }
-
-        [JsonPropertyName("version")]
-        public string Version { get; set; }
-    }
-
-    class ConnectionCapabilitiesImpl
-    {
-        [JsonPropertyName("authentication_failure_close")]
-        public bool AuthenticationFailureNotificationEnabled { get; set; }
-
-        [JsonPropertyName("basic.nack")]
-        public bool NegativeAcknowledgmentNotificationsEnabled { get; set; }
-
-        [JsonPropertyName("connection.blocked")]
-        public bool ConnectionBlockedNotificationsEnabled { get; set; }
-
-        [JsonPropertyName("consumer_cancel_notify")]
-        public bool ConsumerCancellationNotificationsEnabled { get; set; }
-
-        [JsonPropertyName("exchange_exchange_bindings")]
-        public bool ExchangeBindingEnabled { get; set; }
-
-        [JsonPropertyName("publisher_confirms")]
-        public bool PublisherConfirmsEnabled { get; set; }
     }
 }

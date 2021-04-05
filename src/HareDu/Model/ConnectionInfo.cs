@@ -36,7 +36,7 @@
 
         ulong SendPending { get; }
 
-        string Type { get; }
+        ConnectionType Type { get; }
 
         GarbageCollectionDetails GarbageCollectionDetails { get; }
 

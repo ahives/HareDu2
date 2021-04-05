@@ -64,7 +64,7 @@ namespace HareDu.Internal.Model
         public string Name { get; }
         public ulong Channels { get; }
         public ulong SendPending { get; }
-        public string Type { get; }
+        public ConnectionType Type { get; }
         public GarbageCollectionDetails GarbageCollectionDetails { get; }
         public BrokerConnectionState State { get; }
         public string SslHashFunction { get; }

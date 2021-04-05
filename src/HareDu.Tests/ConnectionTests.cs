@@ -28,7 +28,7 @@ namespace HareDu.Tests
             result.Data[0].Name.ShouldBe("127.0.0.0:79863 -> 127.0.0.0:5672");
             result.Data[0].Node.ShouldBe("rabbit@localhost");
             result.Data[0].State.ShouldBe(BrokerConnectionState.Running);
-            result.Data[0].Type.ShouldBe("network");
+            result.Data[0].Type.ShouldBe(ConnectionType.Network);
             result.Data[0].AuthenticationMechanism.ShouldBe("PLAIN");
             result.Data[0].ConnectedAt.ShouldBe(1572749839566);
             result.Data[0].MaxFrameSizeInBytes.ShouldBe<ulong>(131072);

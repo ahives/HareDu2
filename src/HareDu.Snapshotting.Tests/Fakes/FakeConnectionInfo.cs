@@ -38,7 +38,7 @@ namespace HareDu.Snapshotting.Tests.Fakes
         public ulong PacketsSent { get; }
         public ulong PacketBytesSent { get; }
         public ulong PacketsReceived { get; }
-        public string Type { get; }
+        public ConnectionType Type { get; }
         public GarbageCollectionDetails GarbageCollectionDetails { get; }
         public BrokerConnectionState State { get; }
         public string SslHashFunction { get; }

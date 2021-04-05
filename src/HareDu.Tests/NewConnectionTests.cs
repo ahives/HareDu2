@@ -29,7 +29,7 @@ namespace HareDu.Tests
                 Assert.AreEqual("127.0.0.0:79863 -> 127.0.0.0:5672", result.Data[0].Name);
                 Assert.AreEqual("rabbit@localhost", result.Data[0].Node);
                 Assert.AreEqual(BrokerConnectionState.Running, result.Data[0].State);
-                Assert.AreEqual("network", result.Data[0].Type);
+                Assert.AreEqual(ConnectionType.Network, result.Data[0].Type);
                 Assert.AreEqual("PLAIN", result.Data[0].AuthenticationMechanism);
                 Assert.AreEqual(1572749839566, result.Data[0].ConnectedAt);
                 Assert.AreEqual(131072, result.Data[0].MaxFrameSizeInBytes);
@@ -98,7 +98,7 @@ namespace HareDu.Tests
                 Assert.AreEqual("127.0.0.0:79863 -> 127.0.0.0:5672", result.Data[0].Name);
                 Assert.AreEqual("rabbit@localhost", result.Data[0].Node);
                 Assert.AreEqual(BrokerConnectionState.Running, result.Data[0].State);
-                Assert.AreEqual("network", result.Data[0].Type);
+                Assert.AreEqual(ConnectionType.Network, result.Data[0].Type);
                 Assert.AreEqual("PLAIN", result.Data[0].AuthenticationMechanism);
                 Assert.AreEqual(1572749839566, result.Data[0].ConnectedAt);
                 Assert.AreEqual(131072, result.Data[0].MaxFrameSizeInBytes);
