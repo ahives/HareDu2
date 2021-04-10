@@ -8,23 +8,26 @@ namespace HareDu.Diagnostics.Scanners
     using Snapshotting.Model;
 
     public class BrokerQueuesScanner :
+        BaseDiagnosticScanner,
         DiagnosticScanner<BrokerQueuesSnapshot>
     {
-        public string Identifier => GetType().GetIdentifier();
+        IReadOnlyList<DiagnosticProbe> _queueProbes;
+        IReadOnlyList<DiagnosticProbe> _exchangeProbes;
 
-        readonly IReadOnlyList<DiagnosticProbe> _queueProbes;
-        readonly List<DiagnosticProbe> _exchangeProbes;
+        public DiagnosticScannerMetadata Metadata => new DiagnosticScannerMetadataImpl(GetType().GetIdentifier());
 
         public BrokerQueuesScanner(IReadOnlyList<DiagnosticProbe> probes)
         {
-            if (probes.IsNull())
-                throw new ArgumentNullException(nameof(probes));
-            
+            Configure(probes.IsNotNull() ? probes : throw new ArgumentNullException(nameof(probes)));
+        }
+
+        public void Configure(IReadOnlyList<DiagnosticProbe> probes)
+        {
             _queueProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Queue)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.Queue)
                 .ToList();
             _exchangeProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Exchange)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.Exchange)
                 .ToList();
         }
 

@@ -8,35 +8,38 @@ namespace HareDu.Diagnostics.Scanners
     using Snapshotting.Model;
 
     public class ClusterScanner :
+        BaseDiagnosticScanner,
         DiagnosticScanner<ClusterSnapshot>
     {
-        public string Identifier => GetType().GetIdentifier();
+        IReadOnlyList<DiagnosticProbe> _nodeProbes;
+        IReadOnlyList<DiagnosticProbe> _diskProbes;
+        IReadOnlyList<DiagnosticProbe> _memoryProbes;
+        IReadOnlyList<DiagnosticProbe> _runtimeProbes;
+        IReadOnlyList<DiagnosticProbe> _osProbes;
 
-        readonly IReadOnlyList<DiagnosticProbe> _nodeProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _diskProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _memoryProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _runtimeProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _osProbes;
+        public DiagnosticScannerMetadata Metadata => new DiagnosticScannerMetadataImpl(GetType().GetIdentifier());
 
         public ClusterScanner(IReadOnlyList<DiagnosticProbe> probes)
         {
-            if (probes.IsNull())
-                throw new ArgumentNullException(nameof(probes));
-            
+            Configure(probes.IsNotNull() ? probes : throw new ArgumentNullException(nameof(probes)));
+        }
+
+        public void Configure(IReadOnlyList<DiagnosticProbe> probes)
+        {
             _nodeProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Node)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.Node)
                 .ToList();
             _diskProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Disk)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.Disk)
                 .ToList();
             _memoryProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Memory)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.Memory)
                 .ToList();
             _runtimeProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.Runtime)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.Runtime)
                 .ToList();
             _osProbes = probes
-                .Where(x => !x.IsNull() && x.ComponentType == ComponentType.OperatingSystem)
+                .Where(x => x.IsNotNull() && x.ComponentType == ComponentType.OperatingSystem)
                 .ToList();
         }
 

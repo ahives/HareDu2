@@ -22,6 +22,9 @@ namespace HareDu.Diagnostics.Tests.Fakes
         public void RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers) => throw new NotImplementedException();
 
         public void RegisterObserver(IObserver<ProbeContext> observer) => throw new NotImplementedException();
+        public bool TryRegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
+
+        public bool TryRegisterScanner<T>(DiagnosticScanner<T> scanner) where T : Snapshot => throw new NotImplementedException();
 
         public bool RegisterProbe<T>(T probe) where T : DiagnosticProbe => throw new NotImplementedException();
         public bool RegisterScanner<T>(DiagnosticScanner<T> scanner) where T : Snapshot => throw new NotImplementedException();

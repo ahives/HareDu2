@@ -24,7 +24,7 @@ namespace HareDu.Diagnostics
             
             var results = scanner.Scan(snapshot);
             
-            return new SuccessfulScannerResult(scanner.Identifier, results);
+            return new SuccessfulScannerResult(scanner.Metadata.Identifier, results);
         }
 
         public IScanner RegisterObservers(IReadOnlyList<IObserver<ProbeContext>> observers)

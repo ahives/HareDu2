@@ -4,9 +4,9 @@
   <!-- These properties will be shared for all projects -->
   <PropertyGroup>
     <Title>HareDu</Title>
-    <Version>2.2.1</Version>
-    <FileVersion>2.2.1.0</FileVersion>
-    <InformationalVersion>2.2.1.0</InformationalVersion>
+    <Version>2.2.2</Version>
+    <FileVersion>2.2.2.0</FileVersion>
+    <InformationalVersion>2.2.2.0</InformationalVersion>
     <Product>HareDu</Product>
     <Description></Description>
     <PackageProjectUrl>https://github.com/ahives/HareDu2</PackageProjectUrl>

@@ -8,33 +8,36 @@ namespace HareDu.Diagnostics.Scanners
     using Snapshotting.Model;
 
     public class BrokerConnectivityScanner :
+        BaseDiagnosticScanner,
         DiagnosticScanner<BrokerConnectivitySnapshot>
     {
-        public string Identifier => GetType().GetIdentifier();
+        IReadOnlyList<DiagnosticProbe> _channelProbes;
+        IReadOnlyList<DiagnosticProbe> _connectionProbes;
+        IReadOnlyList<DiagnosticProbe> _connectivityProbes;
 
-        readonly IReadOnlyList<DiagnosticProbe> _channelProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _connectionProbes;
-        readonly IReadOnlyList<DiagnosticProbe> _connectivityProbes;
+        public DiagnosticScannerMetadata Metadata => new DiagnosticScannerMetadataImpl(GetType().GetIdentifier());
 
         public BrokerConnectivityScanner(IReadOnlyList<DiagnosticProbe> probes)
         {
-            if (probes.IsNull())
-                throw new ArgumentNullException(nameof(probes));
+            Configure(probes.IsNotNull() ? probes : throw new ArgumentNullException(nameof(probes)));
+        }
 
+        public void Configure(IReadOnlyList<DiagnosticProbe> probes)
+        {
             _connectionProbes = probes
-                .Where(x => !x.IsNull()
-                            && x.ComponentType == ComponentType.Connection
-                            && x.Category != ProbeCategory.Connectivity)
+                .Where(x => x.IsNotNull()
+                    && x.ComponentType == ComponentType.Connection
+                    && x.Category != ProbeCategory.Connectivity)
                 .ToList();
             _channelProbes = probes
-                .Where(x => !x.IsNull()
-                            && x.ComponentType == ComponentType.Channel
-                            && x.Category != ProbeCategory.Connectivity)
+                .Where(x => x.IsNotNull()
+                    && x.ComponentType == ComponentType.Channel
+                    && x.Category != ProbeCategory.Connectivity)
                 .ToList();
             _connectivityProbes = probes
-                .Where(x => !x.IsNull()
-                            && (x.ComponentType == ComponentType.Connection || x.ComponentType == ComponentType.Channel)
-                            && x.Category == ProbeCategory.Connectivity)
+                .Where(x => x.IsNotNull()
+                    && (x.ComponentType == ComponentType.Connection || x.ComponentType == ComponentType.Channel)
+                    && x.Category == ProbeCategory.Connectivity)
                 .ToList();
         }
 

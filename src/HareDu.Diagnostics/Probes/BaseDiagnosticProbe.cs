@@ -213,18 +213,6 @@ namespace HareDu.Diagnostics.Probes
                 Timestamp = DateTimeOffset.UtcNow;
             }
 
-            public InconclusiveProbeResult(string parentComponentId, string componentId,
-                string probeId, ComponentType componentType)
-            {
-                ParentComponentId = parentComponentId;
-                ComponentId = componentId;
-                ComponentType = componentType;
-                Id = probeId;
-                Data = DiagnosticCache.EmptyProbeData;
-                Status = ProbeResultStatus.Inconclusive;
-                Timestamp = DateTimeOffset.Now;
-            }
-
             public string ParentComponentId { get; }
             public string ComponentId { get; }
             public ComponentType ComponentType { get; }

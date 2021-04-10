@@ -100,6 +100,30 @@ namespace HareDu.Diagnostics
             return _scannerCache.TryAdd(typeof(T).FullName, scanner);
         }
 
+        public bool TryRegisterProbe<T>(T probe)
+            where T : DiagnosticProbe
+        {
+            bool added = _probeCache.TryAdd(typeof(T).FullName, probe);
+
+            if (probe.IsNull() || !added)
+                return false;
+            
+            foreach (var scanner in _scannerCache)
+            {
+                var method = scanner.Value
+                    .GetType()
+                    .GetMethod("Configure");
+                
+                method.Invoke(scanner.Value, new[] {_probeCache.Values});
+            }
+
+            return added;
+        }
+
+        public bool TryRegisterScanner<T>(DiagnosticScanner<T> scanner)
+            where T : Snapshot =>
+            scanner.IsNotNull() && _scannerCache.TryAdd(typeof(T).FullName, scanner);
+
         public bool TryRegisterAllProbes()
         {
             var typeMap = GetProbeTypeMap(GetType());
