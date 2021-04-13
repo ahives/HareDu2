@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// ````
+    /// 
     /// </summary>
     public interface Result
     {

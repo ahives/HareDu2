@@ -5,7 +5,6 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Net.Http;
-    using System.Text.Json.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
@@ -445,81 +444,6 @@
                             : new ArgumentValue<object>(value));
                 }
             }
-
-
-            // class ExchangeDefinitionImpl :
-            //     ExchangeDefinition
-            // {
-            //     public ExchangeDefinitionImpl(string routingType,
-            //         bool durable,
-            //         bool autoDelete,
-            //         bool @internal,
-            //         IDictionary<string, ArgumentValue<object>> arguments)
-            //     {
-            //         RoutingType = routingType;
-            //         Durable = durable;
-            //         AutoDelete = autoDelete;
-            //         Internal = @internal;
-            //
-            //         if (arguments.IsNull())
-            //             return;
-            //         
-            //         Arguments = arguments.ToDictionary(x => x.Key, x => x.Value.Value);
-            //     }
-            //
-            //     public string RoutingType { get; }
-            //     public bool Durable { get; }
-            //     public bool AutoDelete { get; }
-            //     public bool Internal { get; }
-            //     public IDictionary<string, object> Arguments { get; }
-            // }
         }
-    }
-
-    class InternalExchangeInfo :
-        ExchangeInfo
-    {
-        public InternalExchangeInfo(ExchangeInfoImpl obj)
-        {
-            Name = obj.Name;
-            VirtualHost = obj.VirtualHost;
-            RoutingType = obj.RoutingType;
-            Durable = obj.Durable;
-            AutoDelete = obj.AutoDelete;
-            Internal = obj.Internal;
-            Arguments = obj.Arguments;
-        }
-
-        public string Name { get; }
-        public string VirtualHost { get; }
-        public ExchangeRoutingType RoutingType { get; }
-        public bool Durable { get; }
-        public bool AutoDelete { get; }
-        public bool Internal { get; }
-        public IDictionary<string, object> Arguments { get; }
-    }
-
-    class ExchangeInfoImpl
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-        
-        [JsonPropertyName("vhost")]
-        public string VirtualHost { get; set; }
-        
-        [JsonPropertyName("type")]
-        public ExchangeRoutingType RoutingType { get; set; }
-        
-        [JsonPropertyName("durable")]
-        public bool Durable { get; set; }
-        
-        [JsonPropertyName("auto_delete")]
-        public bool AutoDelete { get; set; }
-        
-        [JsonPropertyName("internal")]
-        public bool Internal { get; set; }
-        
-        [JsonPropertyName("arguments")]
-        public IDictionary<string, object> Arguments { get; set; }
     }
 }

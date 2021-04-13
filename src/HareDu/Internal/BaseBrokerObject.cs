@@ -220,7 +220,6 @@
             }
         }
 
-
         protected async Task<ResultList<T>> GetAllRequest<T>(string url, CancellationToken cancellationToken = default)
         {
             string rawResponse = null;

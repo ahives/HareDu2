@@ -5,13 +5,13 @@ namespace HareDu.Internal
     using System.Diagnostics;
     using System.Linq;
     using System.Net.Http;
-    using System.Text.Json.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
     using Core.Extensions;
     using Extensions;
     using HareDu.Model;
+    using Model;
     using Serialization;
 
     public class OperatorPolicyImpl :
@@ -34,32 +34,6 @@ namespace HareDu.Internal
             ResultList<OperatorPolicyInfo> MapResult(ResultList<OperatorPolicyInfoImpl> result) => new ResultListCopy(result);
 
             return MapResult(result);
-        }
-
-        class ResultListCopy :
-            ResultList<OperatorPolicyInfo>
-        {
-            public ResultListCopy(ResultList<OperatorPolicyInfoImpl> result)
-            {
-                Timestamp = result.Timestamp;
-                DebugInfo = result.DebugInfo;
-                Errors = result.Errors;
-                HasFaulted = result.HasFaulted;
-                HasData = result.HasData;
-
-                var data = new List<OperatorPolicyInfo>();
-                foreach (OperatorPolicyInfoImpl item in result.Data)
-                    data.Add(new InternalOperatorPolicyInfo(item));
-
-                Data = data;
-            }
-
-            public DateTimeOffset Timestamp { get; }
-            public DebugInfo DebugInfo { get; }
-            public IReadOnlyList<Error> Errors { get; }
-            public bool HasFaulted { get; }
-            public IReadOnlyList<OperatorPolicyInfo> Data { get; }
-            public bool HasData { get; }
         }
 
         public async Task<Result> Create(string policy, string pattern, string vhost, Action<OperatorPolicyConfigurator> configurator,
@@ -114,6 +88,33 @@ namespace HareDu.Internal
             return await DeleteRequest(url, cancellationToken).ConfigureAwait(false);
         }
 
+        
+        class ResultListCopy :
+            ResultList<OperatorPolicyInfo>
+        {
+            public ResultListCopy(ResultList<OperatorPolicyInfoImpl> result)
+            {
+                Timestamp = result.Timestamp;
+                DebugInfo = result.DebugInfo;
+                Errors = result.Errors;
+                HasFaulted = result.HasFaulted;
+                HasData = result.HasData;
+
+                var data = new List<OperatorPolicyInfo>();
+                foreach (OperatorPolicyInfoImpl item in result.Data)
+                    data.Add(new InternalOperatorPolicyInfo(item));
+
+                Data = data;
+            }
+
+            public DateTimeOffset Timestamp { get; }
+            public DebugInfo DebugInfo { get; }
+            public IReadOnlyList<Error> Errors { get; }
+            public bool HasFaulted { get; }
+            public IReadOnlyList<OperatorPolicyInfo> Data { get; }
+            public bool HasData { get; }
+        }
+
 
         class OperatorPolicyConfiguratorImpl :
             OperatorPolicyConfigurator
@@ -159,53 +160,5 @@ namespace HareDu.Internal
                         ? new ArgumentValue<ulong>(value, $"Argument '{arg}' has already been set")
                         : new ArgumentValue<ulong>(value));
         }
-    }
-
-    class InternalOperatorPolicyInfo :
-        OperatorPolicyInfo
-    {
-        public InternalOperatorPolicyInfo(OperatorPolicyInfoImpl obj)
-        {
-            VirtualHost = obj.VirtualHost;
-            Name = obj.Name;
-            Pattern = obj.Pattern;
-            AppliedTo = obj.AppliedTo;
-            Definition = obj.Definition;
-            Priority = obj.Priority;
-        }
-
-        public string VirtualHost { get; }
-        public string Name { get; }
-        public string Pattern { get; }
-        public string AppliedTo { get; }
-        public IDictionary<string, ulong> Definition { get; }
-        public int Priority { get; }
-    }
-
-    class OperatorPolicyInfoImpl
-    {
-        [JsonPropertyName("vhost")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string VirtualHost { get; set; }
-        
-        [JsonPropertyName("name")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string Name { get; set; }
-        
-        [JsonPropertyName("pattern")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string Pattern { get; set; }
-        
-        [JsonPropertyName("apply-to")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string AppliedTo { get; set; }
-        
-        [JsonPropertyName("definition")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public IDictionary<string, ulong> Definition { get; set; }
-        
-        [JsonPropertyName("priority")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int Priority { get; set; }
     }
 }

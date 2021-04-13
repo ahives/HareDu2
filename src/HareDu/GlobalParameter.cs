@@ -49,30 +49,4 @@
         /// <returns></returns>
         Task<Result> Delete(string parameter, CancellationToken cancellationToken = default);
     }
-
-    public interface GlobalParameterConfigurator
-    {
-        /// <summary>
-        /// Specify global parameter arguments.
-        /// </summary>
-        /// <param name="configurator"></param>
-        void Value(Action<GlobalParameterArgumentConfigurator> configurator);
-        
-        /// <summary>
-        /// Specify global parameter argument.
-        /// </summary>
-        /// <param name="arguments"></param>
-        void Value<T>(T argument);
-    }
-
-    public interface GlobalParameterArgumentConfigurator
-    {
-        /// <summary>
-        /// Create a new argument.
-        /// </summary>
-        /// <param name="arg">Name of the argument.</param>
-        /// <param name="value">Value of the argument.</param>
-        /// <typeparam name="T"></typeparam>
-        void Add<T>(string arg, T value);
-    }
 }

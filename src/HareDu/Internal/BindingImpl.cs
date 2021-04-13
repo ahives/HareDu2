@@ -59,7 +59,7 @@
                 : $"api/bindings/{vhost}/e/{sourceBinding}/q/{destinationBinding}";
 
             if (impl.Errors.Value.Any())
-                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString(Deserializer.Options)));
+                return new FaultedResult<BindingInfo>(impl.Errors.Value, new DebugInfoImpl(url, definition.ToJsonString()));
 
             return await Post<BindingInfo, BindingDefinition>(url, definition, cancellationToken);
         }
@@ -123,7 +123,7 @@
                 : $"api/bindings/{virtualHost}/e/{sourceBinding}/q/{destinationBinding}";
 
             if (errors.Any())
-                return new FaultedResult<BindingInfo>(new DebugInfoImpl(url, request.ToJsonString(Deserializer.Options), errors));
+                return new FaultedResult<BindingInfo>(new DebugInfoImpl(url, request.ToJsonString(), errors));
 
             Result<BindingInfoImpl> result = await PostRequest<BindingInfoImpl, BindingRequest>(url, request, cancellationToken).ConfigureAwait(false);
 
