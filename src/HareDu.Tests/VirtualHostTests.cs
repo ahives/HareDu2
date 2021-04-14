@@ -92,7 +92,7 @@ namespace HareDu.Tests
             
             result.DebugInfo.ShouldNotBeNull();
             
-            VirtualHostDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostDefinition>(Deserializer.Options);
+            VirtualHostDefinition definition = result.DebugInfo.Request.ToObject<VirtualHostDefinition>();
 
             definition.Tracing.ShouldBeTrue();
         }

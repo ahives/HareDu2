@@ -75,7 +75,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -101,7 +101,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -129,7 +129,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -156,7 +156,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -184,7 +184,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -211,7 +211,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -239,7 +239,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);
@@ -266,7 +266,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>(Deserializer.Options);
+                OperatorPolicyRequest request = result.DebugInfo.Request.ToObject<OperatorPolicyRequest>();
 
                 Assert.AreEqual("^amq.", request.Pattern);
                 Assert.AreEqual(0, request.Priority);

@@ -63,7 +63,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>(Deserializer.Options);
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
             definition.Pattern.ShouldBe("^amq.");
             definition.Priority.ShouldBe(0);
@@ -100,7 +100,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
 
-            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>(Deserializer.Options);
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
             definition.Pattern.ShouldBe("^amq.");
             definition.Priority.ShouldBe(0);
@@ -138,7 +138,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
 
-            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>(Deserializer.Options);
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
             definition.Pattern.ShouldBe("^amq.");
             definition.Priority.ShouldBe(0);
@@ -176,7 +176,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
 
-            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>(Deserializer.Options);
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
             definition.Pattern.ShouldBe("^amq.");
             definition.Priority.ShouldBe(0);
@@ -213,7 +213,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeTrue();
             result.DebugInfo.ShouldNotBeNull();
 
-            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>(Deserializer.Options);
+            PolicyDefinition definition = result.DebugInfo.Request.ToObject<PolicyDefinition>();
             
             definition.Pattern.ShouldBe("^amq.");
             definition.Priority.ShouldBe(0);

@@ -80,7 +80,7 @@ namespace HareDu.Tests
                 
                 Console.WriteLine(result.DebugInfo.Request);
                 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(AckMode.OnPublish, request.Value.AcknowledgeMode);
@@ -115,7 +115,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
@@ -153,7 +153,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
@@ -192,7 +192,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
@@ -232,7 +232,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
@@ -271,7 +271,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
@@ -311,7 +311,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);
@@ -350,7 +350,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>(Deserializer.Options);
+                ShovelRequest request = result.DebugInfo.Request.ToObject<ShovelRequest>();
                 
                 Assert.IsNotNull(request.Value);
                 Assert.AreEqual(1000, request.Value.SourcePrefetchCount);

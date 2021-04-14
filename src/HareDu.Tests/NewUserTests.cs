@@ -117,7 +117,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("testuserpwd3", request.Password);
                 Assert.AreEqual("administrator", request.Tags);
@@ -143,7 +143,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("testuserpwd3", request.Password);
                 Assert.AreEqual("administrator", request.Tags);
@@ -172,7 +172,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.That(request.Password, Is.Empty.Or.Null);
                 Assert.AreEqual("administrator", request.Tags);
@@ -199,7 +199,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.AreEqual("testuserpwd3", request.Password);
@@ -228,7 +228,7 @@ namespace HareDu.Tests
                 Assert.IsFalse(result.HasFaulted);
                 Assert.IsNotNull(result.DebugInfo);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.That(request.Password, Is.Empty.Or.Null);
@@ -256,7 +256,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(1, result.DebugInfo.Errors.Count);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.AreEqual("testuserpwd3", request.Password);
@@ -284,7 +284,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(1, result.DebugInfo.Errors.Count);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.That(request.Password, Is.Empty.Or.Null);
@@ -312,7 +312,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(1, result.DebugInfo.Errors.Count);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.That(request.Password, Is.Empty.Or.Null);
@@ -340,7 +340,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.That(request.Password, Is.Empty.Or.Null);
@@ -362,7 +362,7 @@ namespace HareDu.Tests
                 Assert.IsNotNull(result.DebugInfo);
                 Assert.AreEqual(2, result.DebugInfo.Errors.Count);
 
-                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>(Deserializer.Options);
+                UserRequest request = result.DebugInfo.Request.ToObject<UserRequest>();
             
                 Assert.AreEqual("administrator", request.Tags);
                 Assert.That(request.Password, Is.Empty.Or.Null);
@@ -403,7 +403,7 @@ namespace HareDu.Tests
             {
                 Assert.IsFalse(result.HasFaulted);
 
-                BulkUserDeleteRequest request = result.DebugInfo.Request.ToObject<BulkUserDeleteRequest>(Deserializer.Options);
+                BulkUserDeleteRequest request = result.DebugInfo.Request.ToObject<BulkUserDeleteRequest>();
                 
                 Assert.IsNotNull(request.Users);
                 Assert.AreEqual("fake_user1", request.Users[0]);
@@ -423,7 +423,7 @@ namespace HareDu.Tests
             {
                 Assert.IsFalse(result.HasFaulted);
 
-                BulkUserDeleteRequest request = result.DebugInfo.Request.ToObject<BulkUserDeleteRequest>(Deserializer.Options);
+                BulkUserDeleteRequest request = result.DebugInfo.Request.ToObject<BulkUserDeleteRequest>();
                 
                 Assert.IsNotNull(request.Users);
                 Assert.AreEqual("fake_user1", request.Users[0]);

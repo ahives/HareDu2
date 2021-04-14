@@ -73,7 +73,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Password.ShouldBe("testuserpwd3");
             definition.Tags.ShouldBe("administrator");
@@ -102,7 +102,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBeNullOrEmpty();
@@ -129,7 +129,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBe("testuserpwd3");
@@ -159,7 +159,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBeNullOrEmpty();
@@ -188,7 +188,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Password.ShouldBe("testuserpwd3");
             definition.Tags.ShouldBe("administrator");
@@ -217,7 +217,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBeNullOrEmpty();
@@ -244,7 +244,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBeNullOrEmpty();
@@ -273,7 +273,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBeNullOrEmpty();
@@ -301,7 +301,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>(Deserializer.Options);
+            UserDefinition definition = result.DebugInfo.Request.ToObject<UserDefinition>();
             
             definition.Tags.ShouldBe("administrator");
             definition.Password.ShouldBeNullOrEmpty();

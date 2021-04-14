@@ -107,7 +107,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -149,7 +149,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -188,7 +188,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -228,7 +228,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -267,7 +267,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -305,7 +305,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -343,7 +343,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("1000");
             definition.Arguments["x-message-ttl"].ToString().ShouldBe("2000");
@@ -382,7 +382,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
             
-            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>(Deserializer.Options);
+            QueueDefinition definition = result.DebugInfo.Request.ToObject<QueueDefinition>();
             
             definition.Arguments["x-expires"].ToString().ShouldBe("980");
             definition.Durable.ShouldBeTrue();

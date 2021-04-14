@@ -5,7 +5,6 @@ namespace HareDu.Tests
     using Microsoft.Extensions.DependencyInjection;
     using Model;
     using NUnit.Framework;
-    using Serialization;
     using Shouldly;
 
     [TestFixture]
@@ -169,7 +168,7 @@ namespace HareDu.Tests
             result.HasFaulted.ShouldBeFalse();
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -199,7 +198,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -228,7 +227,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -258,7 +257,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -288,7 +287,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -317,7 +316,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -347,7 +346,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -377,7 +376,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -406,7 +405,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");
@@ -434,7 +433,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>(Deserializer.Options);
+            UserPermissionsDefinition definition = result.DebugInfo.Request.ToObject<UserPermissionsDefinition>();
             
             definition.Configure.ShouldBe(".*");
             definition.Write.ShouldBe(".*");

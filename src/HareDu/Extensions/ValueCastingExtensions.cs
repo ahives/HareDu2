@@ -1,4 +1,4 @@
-namespace HareDu
+namespace HareDu.Extensions
 {
     public static class ValueCastingExtensions
     {

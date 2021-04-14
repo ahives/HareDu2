@@ -4,7 +4,6 @@ namespace HareDu.Tests
     using HareDu.Extensions;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
-    using Serialization;
     using Shouldly;
 
     [TestFixture]
@@ -68,7 +67,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBe(".*");
@@ -97,7 +96,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBe(".*");
@@ -127,7 +126,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBe(".*");
@@ -156,7 +155,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBe(".*");
@@ -186,7 +185,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBeNullOrEmpty();
             definition.Read.ShouldBe(".*");
@@ -215,7 +214,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(1);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBeNullOrEmpty();
             definition.Read.ShouldBe(".*");
@@ -245,7 +244,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(2);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBe(".*");
@@ -272,7 +271,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(4);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBeNullOrEmpty();
             definition.Read.ShouldBeNullOrEmpty();
@@ -298,7 +297,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(4);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBeNullOrEmpty();
             definition.Read.ShouldBeNullOrEmpty();
@@ -325,7 +324,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(3);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBeNullOrEmpty();
@@ -352,7 +351,7 @@ namespace HareDu.Tests
             result.Errors.Count.ShouldBe(3);
             result.DebugInfo.ShouldNotBeNull();
 
-            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>(Deserializer.Options);
+            TopicPermissionsDefinition definition = result.DebugInfo.Request.ToObject<TopicPermissionsDefinition>();
             
             definition.Exchange.ShouldBe("E4");
             definition.Read.ShouldBe(".*");
