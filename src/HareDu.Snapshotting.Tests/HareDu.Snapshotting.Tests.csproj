@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <LangVersion>7.2</LangVersion>
+        <LangVersion>9</LangVersion>
         <TargetFramework>netcoreapp2.1</TargetFramework>
     </PropertyGroup>
 
@@ -27,10 +27,6 @@
     <ItemGroup>
       <Compile Remove="Fakes\FakeBrokerSnapshot1.cs" />
       <Content Include="Fakes\FakeBrokerSnapshot1.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Registration" />
     </ItemGroup>
 
 </Project>

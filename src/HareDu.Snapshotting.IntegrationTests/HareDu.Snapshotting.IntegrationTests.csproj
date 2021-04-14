@@ -14,11 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj" />
-      <ProjectReference Include="..\..\Containers\HareDu.CoreIntegration\HareDu.CoreIntegration.csproj" />
-      <ProjectReference Include="..\..\HareDu.Core\HareDu.Core.csproj" />
-      <ProjectReference Include="..\..\HareDu.Snapshotting\HareDu.Snapshotting.csproj" />
-      <ProjectReference Include="..\..\HareDu\HareDu.csproj" />
+      <ProjectReference Include="..\Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj" />
+      <ProjectReference Include="..\Containers\HareDu.CoreIntegration\HareDu.CoreIntegration.csproj" />
+      <ProjectReference Include="..\HareDu.Snapshotting\HareDu.Snapshotting.csproj" />
     </ItemGroup>
 
     <ItemGroup>

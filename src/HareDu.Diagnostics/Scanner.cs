@@ -13,7 +13,7 @@ namespace HareDu.Diagnostics
 
         public Scanner(IScannerFactory factory)
         {
-            _factory = !factory.IsNull() ? factory : throw new HareDuDiagnosticsException();
+            _factory = factory.IsNotNull() ? factory : throw new HareDuDiagnosticsException();
         }
 
         public ScannerResult Scan<T>(T snapshot)
