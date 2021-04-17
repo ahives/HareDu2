@@ -3,6 +3,7 @@
     using System;
     using Core;
     using Core.Configuration;
+    using Core.Configuration.Internal;
     using Core.Extensions;
     using Diagnostics;
     using Diagnostics.Formatting;
@@ -24,13 +25,15 @@
         /// <returns></returns>
         public static IServiceCollection AddHareDu(this IServiceCollection services, string settingsFile, string configSection)
         {
-            HareDuConfig config = new HareDuConfigImpl();
+            var internalConfig = new InternalHareDuConfig();
             
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile(settingsFile, false)
                 .Build();
 
-            configuration.Bind(configSection, config);
+            configuration.Bind(configSection, internalConfig);
+
+            HareDuConfig config = ConfigMapper.Map(internalConfig);
 
             services.AddSingleton(config);
             services.AddSingleton<IBrokerObjectFactory, BrokerObjectFactory>();
@@ -53,6 +56,7 @@
         /// <param name="settingsFile"></param>
         /// <returns></returns>
         /// <exception cref="HareDuConfigurationException"></exception>
+        [Obsolete("This method is deprecated, please use one of the overloaded method signatures instead.")]
         public static IServiceCollection AddHareDu(this IServiceCollection services, string settingsFile)
         {
             services.AddSingleton<IHareDuConfigProvider, HareDuConfigProvider>();

@@ -17,19 +17,21 @@ namespace HareDu
         Task<ResultList<VirtualHostLimitsInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Defines specified limits on the virtual host on the current RabbitMQ server. (deprecated)
+        /// Defines specified limits on the virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Define(Action<VirtualHostConfigureLimitsAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete the limits for the specified virtual host on the current RabbitMQ server. (deprecated)
+        /// Delete the limits for the specified virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Delete(Action<VirtualHostDeleteLimitsAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>

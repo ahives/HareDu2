@@ -84,6 +84,7 @@ namespace HareDu.AutofacIntegration
         /// <param name="settingsFile"></param>
         /// <returns></returns>
         /// <exception cref="HareDuConfigurationException"></exception>
+        [Obsolete("This method is deprecated, please use one of the overloaded method signatures instead.")]
         public static ContainerBuilder AddHareDu(this ContainerBuilder builder, string settingsFile)
         {
             builder.RegisterType<HareDuConfigProvider>()

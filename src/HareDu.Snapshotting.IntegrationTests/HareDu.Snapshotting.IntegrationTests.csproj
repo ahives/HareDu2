@@ -20,6 +20,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="haredu.yaml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>

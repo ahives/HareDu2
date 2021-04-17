@@ -21,6 +21,13 @@ namespace HareDu.Snapshotting.Tests.Fakes
                 return (T) obj;
             }
 
+            if (typeof(T) == typeof(BrokerSystem))
+            {
+                BrokerSystem obj = new FakeBrokerSystemObject();
+
+                return (T) obj;
+            }
+
             if (typeof(T) == typeof(Node))
             {
                 Node obj = new FakeNodeObject();

@@ -14,7 +14,7 @@ namespace HareDu.Diagnostics.Extensions
         /// <param name="aggregationKey"></param>
         /// <returns></returns>
         public static IReadOnlyList<AnalyzerSummary> Analyze(this ScannerResult report, IScannerResultAnalyzer analyzer, Func<ProbeResult, string> aggregationKey)
-            => !analyzer.IsNull()
+            => analyzer.IsNotNull()
                 ? analyzer.Analyze(report, aggregationKey)
                 : DiagnosticCache.EmptyAnalyzerSummary;
     }

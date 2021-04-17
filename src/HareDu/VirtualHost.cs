@@ -17,28 +17,31 @@
         Task<ResultList<VirtualHostInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Creates the specified virtual host on the current RabbitMQ server. (deprecated)
+        /// Creates the specified virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the virtual host will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Create(Action<VirtualHostCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete the specified virtual host on the current RabbitMQ server. (deprecated)
+        /// Delete the specified virtual host on the current RabbitMQ server.
         /// </summary>
         /// <param name="action">Describes how the virtual host will be delete.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Delete(Action<VirtualHostDeleteAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Starts up the specified RabbitMQ virtual host on the specified node. (deprecated)
+        /// Starts up the specified RabbitMQ virtual host on the specified node.
         /// </summary>
         /// <param name="vhost"></param>
         /// <param name="action"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Startup(string vhost, Action<VirtualHostStartupAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>

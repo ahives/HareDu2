@@ -17,27 +17,30 @@
         Task<ResultList<QueueInfo>> GetAll(CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// Creates the specified queue on the target virtual host and perhaps RabbitMQ node. (deprecated)
+        /// Creates the specified queue on the target virtual host and perhaps RabbitMQ node.
         /// </summary>
         /// <param name="action">Describes how the queue will be created.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Create(Action<QueueCreateAction> action, CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// Delete the specified queue on the target virtual host and perhaps RabbitMQ node. (deprecated)
+        /// Delete the specified queue on the target virtual host and perhaps RabbitMQ node.
         /// </summary>
         /// <param name="action">Describes how the queue will be deleted.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Delete(Action<QueueDeleteAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Purge all messages in the specified queue on the target virtual host on the current RabbitMQ node. (deprecated)
+        /// Purge all messages in the specified queue on the target virtual host on the current RabbitMQ node.
         /// </summary>
         /// <param name="action">Describes how the queue will be purged.</param>
         /// <param name="cancellationToken">Token used cancel the current thread</param>
         /// <returns>Asynchronous task of <see cref="Result{T}"/></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Empty(Action<QueueEmptyAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>

@@ -17,19 +17,21 @@ namespace HareDu
         Task<ResultList<TopicPermissionsInfo>> GetAll(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Creates a new topic permission for the specified user per a particular RabbitMQ exchange and virtual host. (deprecated)
+        /// Creates a new topic permission for the specified user per a particular RabbitMQ exchange and virtual host.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Create(Action<TopicPermissionsCreateAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Deletes all topic permissions associate with the specified user on the specified RabbitMQ virtual host. (deprecated)
+        /// Deletes all topic permissions associate with the specified user on the specified RabbitMQ virtual host.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        [Obsolete("This method is deprecated, please use the overloaded method signature instead.")]
         Task<Result> Delete(Action<TopicPermissionsDeleteAction> action, CancellationToken cancellationToken = default);
 
         /// <summary>

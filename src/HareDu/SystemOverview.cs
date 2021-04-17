@@ -1,10 +1,12 @@
 ﻿namespace HareDu
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Core;
     using Model;
 
+    [Obsolete("This interface is deprecated, please use the BrokerSystem interface instead.")]
     public interface SystemOverview :
         BrokerObject
     {

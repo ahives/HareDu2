@@ -58,7 +58,7 @@ namespace HareDu.Snapshotting.Tests
             result.Snapshot.Queues[0].Messages.DeliveredWithoutAck.ShouldNotBeNull();
             result.Snapshot.Queues[0].Messages.GetsWithoutAck.ShouldNotBeNull();
             result.Snapshot.Churn.ShouldNotBeNull();
-            result.Snapshot.Churn.Acknowledged.Total.ShouldNotBeNull();
+            result.Snapshot.Churn.Acknowledged.ShouldNotBeNull();
             result.Snapshot.Churn.Broker.ShouldNotBeNull();
             result.Snapshot.Churn.Delivered.ShouldNotBeNull();
             result.Snapshot.Churn.Gets.ShouldNotBeNull();
