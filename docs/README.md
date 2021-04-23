@@ -2,18 +2,22 @@
 
 HareDu 2 comes with four major APIs; that is, Broker, Snapshot, Diagnostics, and Configuration, respectively.
 
+<br>
+
+**Note: if you are using HareDu 1.2 and want the latest updates, HareDu 2 now ships with bindings for .NET Framework 4.6.2 (minimum) with HareDu 2.2.4. There will be some breaking changes but its well worth it. If possible, upgrade to HareDu 3, which supports .NET 5, natively.**
+
 ### HareDu 2 NuGet Packages
 
 | Package Name |  | .NET Runtime |
 |---| --- | --- |
 | **API** |  |  |
-| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | Configuration API | Core 2.1 |
-| [HareDu](https://www.nuget.org/packages/HareDu/) | Broker API | Core 2.1 |
-| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | Snapshot API | Core 2.1 |
-| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | Diagnostics API | Core 2.1 |
+| [HareDu.Core](https://www.nuget.org/packages/HareDu.Core/) | Configuration API | Core 2.0, Framework 4.6.2 |
+| [HareDu](https://www.nuget.org/packages/HareDu/) | Broker API | Core 2.0, Framework 4.6.2 |
+| [HareDu.Snapshotting](https://www.nuget.org/packages/HareDu.Snapshotting/) | Snapshot API | Core 2.0, Framework 4.6.2 |
+| [HareDu.Diagnostics](https://www.nuget.org/packages/HareDu.Diagnostics/) | Diagnostics API | Core 2.0, Framework 4.6.2 |
 | **Dependency Injection Containers** | | |
-| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | Autofac Integration API | Core 2.1 |
-| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | .NET Core DI Integration API| Core 2.1 |
+| [HareDu.AutofacIntegration](https://www.nuget.org/packages/HareDu.AutofacIntegration/) | Autofac Integration API | Core 2.0, Framework 4.6.2 |
+| [HareDu.CoreIntegration](https://www.nuget.org/packages/HareDu.CoreIntegration/) | Microsoft DI Integration API| Core 2.0, Framework 4.6.2 |
 
 <br>
 

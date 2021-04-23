@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DebugType>portable</DebugType>
     <LangVersion>9</LangVersion>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>net462;netcoreapp2.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Containers\HareDu.AutofacIntegration\HareDu.AutofacIntegration.csproj" />

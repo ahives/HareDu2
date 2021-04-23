@@ -33,3 +33,4 @@
 | | | | | |
 | **2.2.3** | 1 | Fixed issue with configuration serialization | Bug Fix | No |
 | | 2 | Marked API methods that are obsolete in developer documentation | New | No |
+| | 3 | Added minimum support for .NET Framework 4.6.2 | Enhancement | No |
